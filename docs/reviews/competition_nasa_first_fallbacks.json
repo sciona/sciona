@@ -1,0 +1,41 @@
+{
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "baseline_rows": 6,
+  "control_flow_cases": 4,
+  "nondefault_index_counterexamples": 4,
+  "corrected_available_baseline_rows": 6,
+  "corrected_future_estimate_isolation": true,
+  "corrected_control_flow_cases": 4,
+  "corrected_nondefault_index_rows": 6,
+  "implementation_sha256": {
+    "sciona/time_estimate_fallback.py": "883fad1b0dde1af7adec8de68a099efe46ee8b2848ca16ab8ef628252ca42665",
+    "tests/test_time_estimate_fallback.py": "71bf90c1b244c0c62a1873c032421684e668080bb61824c00b2af06adcd5d365",
+    "sciona/asof_estimate_fallback.py": "046d4dbb775744405bb3896cfee2906f9de3315b65ec5d520aa7c5c8e3a0f876",
+    "tests/test_asof_estimate_fallback.py": "07409ff6ab2fa3b15503802b3ddf6a560768fb4fdf1287a6ba18447c9271a00d",
+    "sciona/prediction_fallback_chain.py": "8a26f7c7d0c817810c6bf181f324d5c786be624f570bd056d8494462c3f49177",
+    "tests/test_prediction_fallback_chain.py": "855c95c56bac6af41a7f0af69a12dd618757f2b83fccb77c3ed8e8ea3d5594e7"
+  },
+  "source_sha256": {
+    "1st Place/Phase 1/submission/solution.py": "854eb1f0874fa77748b26673cc848c8fe4dde38c76e7b474694069c05741e917",
+    "1st Place/Phase 1/submission/utilities.py": "8b9776ae0e7fdbb48e2bee64ee442ca1d2d4023309f953092dba108f93e6896c"
+  },
+  "validator_sha256": "37718bdd0b3b504b543b5066dbbe07524864be62a261166e2a51f45b45e80072",
+  "findings": [
+    "Grouped last-value selection skips missing estimates; it is not the estimate from the latest row unconditionally.",
+    "Baseline subtracts a fixed offset, clips to bounds, fills missing values and retains fractional predictions.",
+    "Primary errors and absent model entries select the baseline; a second failure selects the constant fallback.",
+    "Nondefault caller indices cause merge/subtraction misalignment and default predictions in the synthetic counterexample.",
+    "The constant fallback mutates the caller table, and two bare exception handlers catch beyond ordinary exceptions."
+  ],
+  "required_corrections": [
+    "Corrected baseline uses explicit positional alignment; retain this source divergence in the final review.",
+    "Define caller-input ownership and exception handling in the reusable execution API; preserve numeric fallback rules without silently inheriting mutation or catching process-control exceptions."
+  ],
+  "limitations": [
+    "Synthetic baseline execution and fault-injected outer routing; feature extraction and native model errors are not simulated end to end.",
+    "Corrected availability-aware baseline and routing are checked; complete native workflow fallback integration, CDG registration and publication approval remain outstanding."
+  ]
+}

@@ -1,0 +1,99 @@
+"""Read back served first-wave dynamics versions and execute the catalog graph against the validated derived runtime."""
+import argparse
+import asyncio
+import hashlib
+import importlib
+import inspect
+import json
+from pathlib import Path
+import signal
+from unittest.mock import patch
+
+import psycopg
+from dotenv import dotenv_values
+from psycopg.rows import dict_row
+
+from sciona.services.catalog_artifact_retrieval import _artifact_document_to_cdg
+from sciona.services.execution_graph_codec import encode_execution_graph
+import sys
+sys.path.insert(0,str(Path(__file__).resolve().parent))
+from scripts import validate_first_wave_dynamics_graph as comparison
+
+
+def verify(root, source_root):
+    from scripts.review_first_wave_immutable_source import review
+    immutable_review=review(root)
+    comparison.runner._ensure_atoms_imported()
+    expected = json.loads((root / 'docs/reviews/physics_first_wave_dynamics_graph.json').read_text())
+
+    with psycopg.connect(dotenv_values(root / '.env')['SCIONA_DATA_CATALOG_DATABASE_URL'], row_factory=dict_row,
+            options='-c default_transaction_read_only=on -c statement_timeout=30000') as db:
+        fqdn=db.execute('SELECT a.fqdn FROM artifacts a JOIN artifact_versions v USING(artifact_id) WHERE v.version_id=%s',('693697cf-a97c-53bd-8d6b-19dc3c7697c1',)).fetchone()['fqdn']+'.execution'
+        rows = db.execute("SELECT a.artifact_id,v.version_id,v.content_hash,v.trust_tier FROM catalog_artifacts_served a JOIN artifact_versions v USING(artifact_id) WHERE a.fqdn=%s AND v.is_latest", (fqdn,)).fetchall()
+        assert len(rows) == 1 and rows[0]['trust_tier'] == 3
+        record = rows[0]
+        assert record['content_hash'] == expected['serialized_graph_sha256']
+        approval = db.execute("SELECT details FROM artifact_audit_evidence WHERE version_id=%s AND runner_version='first_wave_dynamics-execution-community.v1' AND passed AND status='completed' AND source_kind='automated'", (record['version_id'],)).fetchall()
+        assert len(approval) == 1 and approval[0]['details']['publication_tier'] == 3
+        details = approval[0]['details']
+        assert details['execution_graph_sha256'] == record['content_hash']
+        for name, digest in details['evidence_sha256'].items():
+            assert hashlib.sha256((root / 'docs/reviews' / name).read_bytes()).hexdigest() == digest
+        for name, digest in details['implementation_sha256'].items():
+            assert hashlib.sha256((root / name).read_bytes()).hexdigest() == digest
+        doc = db.execute('SELECT get_artifact_document(%s) AS d', (fqdn,)).fetchone()['d']
+        graph = _artifact_document_to_cdg(doc, version_id=str(record['version_id']), content_hash=record['content_hash'], require_execution_envelope=True)
+        assert encode_execution_graph(graph)[0] == record['content_hash']
+        bindings = db.execute('SELECT * FROM artifact_cdg_bindings WHERE version_id=%s', (record['version_id'],)).fetchall()
+        assert len(bindings) == len(graph.nodes) == 1
+        for binding in bindings:
+            assert binding['status'] == 'active'
+            node = next(n for n in graph.nodes if n.node_id == binding['node_id'])
+            atom = db.execute("SELECT a.atom_id,p.import_module,p.source_symbol,v.version_id,v.content_hash,v.trust_tier FROM catalog_atoms_served a JOIN atoms p USING(atom_id) JOIN atom_versions v USING(atom_id) WHERE a.fqdn=%s AND v.is_latest", (binding['bound_artifact_fqdn'],)).fetchall()
+            assert len(atom) == 1
+            atom = atom[0]
+            assert atom['content_hash'] == binding['bound_version_content_hash'] and atom['trust_tier'] == 3
+            assert node.matched_primitive == atom['import_module'] + '.' + atom['source_symbol']
+            assert db.execute('SELECT 1 FROM catalog_artifacts_served a JOIN artifact_versions v USING(artifact_id) WHERE a.artifact_id=%s AND v.version_id=%s AND v.is_latest AND v.content_hash=%s AND v.trust_tier=3', (atom['atom_id'], atom['version_id'], atom['content_hash'])).fetchone()
+            fn = getattr(importlib.import_module(atom['import_module']), atom['source_symbol'])
+            for table in ['artifact_io_specs', 'atom_io_specs']:
+                ports = db.execute('SELECT name,required,default_value_repr FROM ' + table + " WHERE version_id=%s AND direction='input' ORDER BY ordinal", (atom['version_id'],)).fetchall()
+                wanted = [dict(name=name, required=p.default is p.empty, default_value_repr='' if p.default is p.empty else repr(p.default)) for name, p in inspect.signature(fn).parameters.items()]
+                assert ports == wanted
+            approval = db.execute("SELECT details FROM artifact_audit_evidence WHERE version_id=%s AND runner_version='first_wave_dynamics-execution-community.v1' AND passed AND status='completed' AND source_kind='automated'", (atom['version_id'],)).fetchall()
+            assert len(approval) == 1 and approval[0]['details']['publication_tier'] == 3
+            assert approval[0]['details']['runtime_fqdn'] == node.matched_primitive
+            reviewed = approval[0]['details']['provider_versions'][node.node_id]
+            assert reviewed['version_id'] == str(atom['version_id']) and reviewed['content_hash'] == atom['content_hash']
+            assert reviewed['source_sha256'] == hashlib.sha256(Path(inspect.getfile(inspect.unwrap(fn))).read_bytes()).hexdigest()
+        outputs = db.execute("SELECT name FROM artifact_io_specs WHERE version_id=%s AND direction='output'", (record['version_id'],)).fetchall()
+        assert {r['name'] for r in outputs} == {'result'}
+        dependency = db.execute('SELECT dependency_artifact_fqdn,dependency_content_hash,dependency_role,optional FROM artifact_dependencies WHERE dependent_version_id=%s', (record['version_id'],)).fetchall()
+        assert dependency == [dict(dependency_artifact_fqdn=fqdn.removesuffix('.execution'), dependency_content_hash='97dbc4000139b6514d678829e16c39e045f02f47ecbe91356863028decb932b3', dependency_role='cdg', optional=False)]
+        source = db.execute('SELECT status,is_publishable FROM artifacts WHERE fqdn=%s', (fqdn.removesuffix('.execution'),)).fetchone()
+        assert source in [dict(status='draft',is_publishable=False),dict(status='approved',is_publishable=True)]
+        if source['status']=='approved':
+            latest=db.execute('SELECT v.derives_from::text,v.trust_tier FROM artifacts a JOIN artifact_versions v USING(artifact_id) WHERE a.fqdn=%s AND v.is_latest',(fqdn.removesuffix('.execution'),)).fetchall()
+            assert latest==[dict(derives_from='693697cf-a97c-53bd-8d6b-19dc3c7697c1',trust_tier=3)]
+        served = db.execute("SELECT count(*) AS n FROM catalog_artifacts_served WHERE artifact_kind='cdg'").fetchone()['n']
+    # Only replace the candidate graph constructor; the reference source path
+    # and its numerical comparisons are unchanged. The runner uses catalog rows.
+    with patch.object(comparison, 'build_first_wave_dynamics_graph', return_value=graph):
+        result = comparison.validate(root)
+    assert result == expected
+    return dict(read_only=True, synthetic_only=True, trust_tier=3, provider_versions_verified=1,
+        served_cdg_count=served, catalog_graph_runtime_comparison='passed', serialized_graph_cases=result['checks']['serialized_graph_cases'],
+        graph_sha256=record['content_hash'], version_id=str(record['version_id']), immutable_source_review=immutable_review,
+        source_review_sha256=hashlib.sha256((root/'scripts/review_first_wave_immutable_source.py').read_bytes()).hexdigest(),
+        verifier_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest())
+
+
+if __name__ == '__main__':
+    signal.alarm(180)
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--source-root', type=Path, required=True)
+    args = parser.parse_args()
+    root = Path(__file__).resolve().parents[1]
+    report = verify(root, args.source_root)
+    (root / 'docs/reviews/physics_first_wave_revision_parent_verification.json').write_text(json.dumps(report, indent=2) + '\n')
+    print(json.dumps(report, indent=2))

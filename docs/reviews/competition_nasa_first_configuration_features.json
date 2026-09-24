@@ -1,0 +1,40 @@
+{
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "source_sha256": "8b9776ae0e7fdbb48e2bee64ee442ca1d2d4023309f953092dba108f93e6896c",
+  "configuration_grid_rows": 7,
+  "corrected_asof_grid_points": 7,
+  "future_configuration_feature_changes": 4,
+  "category_cases": 7,
+  "corrected_configuration_value_comparisons": 2900,
+  "corrected_future_state_invariance": true,
+  "event_count_comparisons": 96,
+  "tied_timestamp_count_mismatches": 16,
+  "corrected_event_count_comparisons": 96,
+  "findings": [
+    "Configuration boundary padding backward-fills from a later observation; changing that observation changes earlier features.",
+    "Category encoding uses substring membership and R-before-L-before-C priority, not exact token matching.",
+    "Event counts use observation timestamps and left-open/right-closed windows; marker rows at tied timestamps can depend on row order."
+  ],
+  "requirements": [
+    "Define prior-state availability at the configuration-grid start rather than borrowing a future observation.",
+    "Retain or explicitly correct substring encoding with a declared vocabulary; injected synthetic tokens do not qualify the original configuration.",
+    "Use explicit timestamp-window membership for event counts and enforce actual-event availability before joining query rows."
+  ],
+  "limitations": [
+    "Synthetic configuration vocabulary and software-only inputs; original configuration and empirical source records are not evaluated.",
+    "Full adapters, training-feature parity and catalog publication remain outstanding."
+  ],
+  "implementation_sha256": {
+    "scripts/validate_nasa_first_configuration_features.py": "1d092502180969486805a59c5d3ac8920a9f68f99039f4a256ed3131f46858a6",
+    "sciona/fixed_window_statistics.py": "d9d0437aaad6a071e13c3d0cbf8b9ee7ca11af7f6a25ab8092fd15eb41c13daf",
+    "sciona/asof_indices.py": "16eff287c9d8eec9af68254f9729babd3adee8392d54d2e3241e6be38be19c95",
+    "tests/test_asof_indices.py": "81cd48031386594c2c9c8410088e6feb5c9db188aa719f54035fb5c00e8515df",
+    "sciona/configuration_state_features.py": "3faa7a4c5b46f2e0359ac2124912db40c7b2d30f3e881b1b85cb51a42d46bed5",
+    "tests/test_configuration_state_features.py": "20d2efd45efe73a23e83ba829df8aff3615715878a4a28ce13902440d89afdc1",
+    "sciona/event_count_windows.py": "35bf666b7a56cfae80d88d0fb57337d561e25657a158489ee825c5c0dd314c5f",
+    "tests/test_event_count_windows.py": "544261118f7b444bdfa528a2a47db08428554dc01951efb70dabd740e5258306"
+  }
+}

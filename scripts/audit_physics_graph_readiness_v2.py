@@ -54,7 +54,11 @@ def audit(root, rule_file):
                         rules_used[rule.name] += 1
                         blockers.update(contract_blockers(signature,rule))
             else: blockers['missing_or_ambiguous_rule_pin'] += 1
-            evidence = db.execute("SELECT e.runner_version,e.passed,e.details->>'blocker' AS blocker FROM artifact_audit_evidence e WHERE e.artifact_id=%s AND e.runner_version IN ('pdg-graph-replay.v1','pdg-source-graph-replay.v2') ORDER BY e.runner_version,e.passed", (graph['artifact_id'],)).fetchall()
+            evidence = db.execute("SELECT e.runner_version,e.passed,e.details->>'blocker' AS blocker, "
+                "e.version_id::text AS evidence_version_id,ev.derives_from::text AS derives_from,ev.is_latest AS evidence_version_is_latest "
+                "FROM artifact_audit_evidence e JOIN artifact_versions ev ON ev.version_id=e.version_id "
+                "WHERE e.artifact_id=%s AND e.runner_version IN ('pdg-graph-replay.v1','pdg-source-graph-replay.v2','pdg-graph-replay.v3') "
+                "ORDER BY e.runner_version,e.passed,e.version_id", (graph['artifact_id'],)).fetchall()
             realizations = db.execute("SELECT count(DISTINCT a.artifact_id) AS n FROM artifact_dependencies d JOIN artifact_versions v ON v.version_id=d.dependent_version_id JOIN catalog_artifacts_served a USING(artifact_id) WHERE d.dependency_artifact_fqdn=%s AND d.dependency_role='cdg' AND a.artifact_kind='cdg' AND v.is_latest", (graph['fqdn'],)).fetchone()['n']
             reports.append(dict(artifact_id=str(graph['artifact_id']),version_id=str(graph['version_id']),content_hash=graph['content_hash'],
                 source_step_projection=source_steps,nodes=len(nodes),bindings=len(bindings),eligible_expression_bindings=eligible,

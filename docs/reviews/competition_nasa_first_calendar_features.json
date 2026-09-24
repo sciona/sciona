@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "source_sha256": "8b9776ae0e7fdbb48e2bee64ee442ca1d2d4023309f953092dba108f93e6896c",
+  "unique_queries": 2047,
+  "features": 8,
+  "exact_feature_values": 16376,
+  "source_horizon_failure_reproduced": true,
+  "explicit_horizon_rejection": true,
+  "implementation_sha256": {
+    "sciona/calendar_time_features.py": "f32feddb5c4e9f6a3b5acad5c6e042cd19310888de753815006743f002f9b86a",
+    "tests/test_calendar_time_features.py": "637db34c503ed72d5522ee8ad25fa9bb657b8847156fe4a976b85d75c8b73997",
+    "scripts/validate_nasa_first_calendar_features.py": "437837f502caad94c5bdbb6d7a048118e735a9153501409ace998db8f0d6c4ac"
+  },
+  "semantics": [
+    "Holiday membership uses the calendar date; countdown compares exact timestamp to holiday midnights and floors elapsed days.",
+    "Timezone-naive queries and a sorted, unique explicit holiday schedule; duplicate source query timestamps are projected explicitly.",
+    "Schedule exhaustion is rejected clearly instead of relying on min of an empty sequence."
+  ],
+  "limitations": [
+    "Calendar provider and configured coverage are injected synthetic inputs; no specific regional holiday rules or original configuration qualification.",
+    "No full raw-feature graph or publication approval applied."
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "source_commit": "09f2f5d2940dd6b63b93115a0e9fb9e8a964c700",
+  "software_sha256": {
+    "1st Place/Phase 1/training/src/pushback_nasa/pipeline_registry.py": "75645934d354b4637d5613a072e08720ac463dbae2382ded8ad9a7070727b5e3",
+    "1st Place/Phase 1/training/src/pushback_nasa/pipelines/train_models/pipeline.py": "c410432dc7466851ce9650c4e5c141031f83bc80cdf743f38cb323b3eb0cf99a",
+    "1st Place/Phase 1/training/src/pushback_nasa/pipelines/generate_predictions/pipeline.py": "fa5c9896ec542febbbedc8751abc6c4bdf51b8742a5b05fbc8eeeb8b778d134c",
+    "1st Place/Phase 1/training/src/pushback_nasa/pipelines/train_models/nodes.py": "9b96dd580d39b9ae6126c380c390f57c21b10d3cbc7d028af5a6639799da271d"
+  },
+  "populations": 10,
+  "training_fit_nodes": 21,
+  "residual_fits": 10,
+  "local_direct_fits": 10,
+  "global_direct_fits": 1,
+  "model_output_slots": 31,
+  "feature_importance_output_slots": 10,
+  "residual_alias_pairs": 10,
+  "downstream_model_references_not_produced": 10,
+  "findings": [
+    "The residual trainer returns the same fitted object to two model output slots per population; 31 model slots do not imply 31 independent fits.",
+    "A global direct-target fit is explicitly wired in the training pipeline.",
+    "The retained prediction pipeline requests ten unsuffixed model names absent from the training outputs. External catalog aliases or corrected wiring must be established."
+  ],
+  "remaining": [
+    "Establish upstream global population construction and any external catalog aliases.",
+    "Recover exact inference ensemble, residual offsets, clipping and population-specific branches.",
+    "Implement reusable training/state/routing operations with synthetic parity and at most four total workers; source thread_count=-1 must be bounded explicitly.",
+    "Complete native execution, licensing, source-intake correction and Tier 3 publication gates."
+  ],
+  "scope": "Static software AST and exact source-byte audit only. No fit, runtime parity, upstream population closure or full-solution approval claim. No source dataset records or identifying metadata included.",
+  "validator_sha256": "1897b49b61ce3e4e314130349d94c7d35df0a1c2f40b7a5caa19a62320c5f15a"
+}

@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "cases": 7,
+  "synthetic_rows_per_case": 264,
+  "exact_compared_predictions": 1848,
+  "shortcut_counterexamples": 209,
+  "source_sha256": "8b9776ae0e7fdbb48e2bee64ee442ca1d2d4023309f953092dba108f93e6896c",
+  "implementation_sha256": {
+    "sciona/prediction_postprocessing.py": "3d251735d5a4900ead071d6da57eefdeee13e26993673de1bd9baae4c8644fc2",
+    "tests/test_prediction_postprocessing.py": "d4d3d5b6ad52b39144804ac8fc38bdd1e8b02d70f8b19900e45ffff43a45b67f",
+    "scripts/validate_nasa_first_prediction_arithmetic.py": "8f2d27570d7c92f1da8664fd81f460f1dc6ba7d76736a546188d7f856bd26600"
+  },
+  "semantics": [
+    "Offset two residual branches before per-branch clipping and integer truncation.",
+    "Sum three truncated local branches in source order, add unrounded global predictions and divide by four before final clipping/truncation.",
+    "Three case-insensitive population routes override the ensemble with the direct branch."
+  ],
+  "limits": [
+    "Constructed predictor outputs isolate submission arithmetic; no native CatBoost training or feature-extraction parity.",
+    "Reusable clipping/truncation supports aligned finite real arrays and explicit bounds; source-specific constants and routing remain in the adapter.",
+    "Training-helper rounding differs from submission behavior; full wiring and model-state closure remain outstanding."
+  ]
+}

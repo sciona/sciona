@@ -1,0 +1,274 @@
+{
+  "format": "conditional-correction-promotion-plan.v1",
+  "catalog_mutations": 0,
+  "approved": false,
+  "fqdn": "cdg.ml.calibration.conditional_residual_correction",
+  "artifact_id": "167f8b4e-196a-59ee-90f5-1f1ce03bf47a",
+  "version_id": "f0074afe-ca26-5c11-9ff6-2d58891017d5",
+  "trust_tier": 3,
+  "graph_sha256": "b8cf6d4b112d13ffda179bd25475ef7dc1e4e7f5903b806d54e3f473dc938180",
+  "bindings": [
+    {
+      "node_id": "calibrate",
+      "fqdn": "sciona.atoms.ml.calibration.conditional_residuals.estimate_conditional_offsets",
+      "artifact_id": "4a26f9a6-fed8-56f3-aa8d-fc1c18c7f2d4",
+      "version_id": "b27e2ecb-7f02-568f-a635-2c36e34820db",
+      "content_hash": "5a2ec8a69c20ff79541602715db8f56fe5dedb4ba22b7f40e4f272781a3f5b3e",
+      "runtime_fqdn": "sciona.atoms.ml.calibration.conditional_residuals.estimate_conditional_offsets",
+      "inputs": [
+        {
+          "name": "observed",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Nonempty finite float64 vector; aligned with calibration_predictions; same target units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "calibration_predictions",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Nonempty finite float64 vector; aligned with observed and calibration_probabilities; target units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "calibration_probabilities",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Nonempty finite float64 vector in [0,1]; aligned with calibration_predictions; both strictly above and strictly below threshold groups populated; probability of underestimation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "threshold",
+          "type_desc": "float",
+          "constraints": "Finite scalar in [0,1]; dimensionless; explicit decision threshold; equality receives no correction.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "offsets",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Finite float64 vector of length 2 in target units; signed [median(observed-predicted | q>threshold), median(predicted-observed | q<threshold)].",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "existing_catalog_state": [
+        {
+          "artifact_id": "4a26f9a6-fed8-56f3-aa8d-fc1c18c7f2d4",
+          "status": "draft",
+          "is_publishable": false
+        }
+      ],
+      "existing_legacy_state": [
+        {
+          "atom_id": "4a26f9a6-fed8-56f3-aa8d-fc1c18c7f2d4",
+          "status": "flagged",
+          "is_publishable": false
+        }
+      ]
+    },
+    {
+      "node_id": "correct",
+      "fqdn": "sciona.atoms.ml.calibration.conditional_residuals.apply_conditional_offsets",
+      "artifact_id": "4dc6c8cc-4ddf-52e0-8155-9d7bc6a82b79",
+      "version_id": "594f0332-210f-5f7d-b339-987c10560170",
+      "content_hash": "3cad4d0f1d0ef14ca8937f8309b0e0f20d807588485520c97cda690e2e23f48d",
+      "runtime_fqdn": "sciona.atoms.ml.calibration.conditional_residuals.apply_conditional_offsets",
+      "inputs": [
+        {
+          "name": "predictions",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Nonempty finite float64 vector; aligned with probabilities; same target units as calibration and offsets; independent application population size allowed.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "probabilities",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Nonempty finite float64 vector in [0,1]; aligned with predictions; probability of underestimation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "offsets",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Finite float64 vector of length 2 in target units; signed [median(observed-predicted | q>threshold), median(predicted-observed | q<threshold)].",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "threshold",
+          "type_desc": "float",
+          "constraints": "Finite scalar in [0,1]; dimensionless; explicit decision threshold; equality receives no correction.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "corrected_predictions",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Finite float64 vector aligned with predictions, in unchanged target units; ties unchanged; no rounding or clipping.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "existing_catalog_state": [
+        {
+          "artifact_id": "4dc6c8cc-4ddf-52e0-8155-9d7bc6a82b79",
+          "status": "draft",
+          "is_publishable": false
+        }
+      ],
+      "existing_legacy_state": [
+        {
+          "atom_id": "4dc6c8cc-4ddf-52e0-8155-9d7bc6a82b79",
+          "status": "flagged",
+          "is_publishable": false
+        }
+      ]
+    }
+  ],
+  "existing_graph_state": [
+    {
+      "artifact_id": "167f8b4e-196a-59ee-90f5-1f1ce03bf47a",
+      "status": "draft",
+      "is_publishable": false
+    }
+  ],
+  "boundary_inputs": [
+    {
+      "name": "observed",
+      "type_desc": "NDArray[np.float64]",
+      "constraints": "Nonempty finite float64 vector; aligned with calibration_predictions; same target units.",
+      "data_kind": "",
+      "time_basis": "",
+      "provenance": "",
+      "required": true,
+      "default_value_repr": "",
+      "dim_signature": ""
+    },
+    {
+      "name": "calibration_predictions",
+      "type_desc": "NDArray[np.float64]",
+      "constraints": "Nonempty finite float64 vector; aligned with observed and calibration_probabilities; target units.",
+      "data_kind": "",
+      "time_basis": "",
+      "provenance": "",
+      "required": true,
+      "default_value_repr": "",
+      "dim_signature": ""
+    },
+    {
+      "name": "calibration_probabilities",
+      "type_desc": "NDArray[np.float64]",
+      "constraints": "Nonempty finite float64 vector in [0,1]; aligned with calibration_predictions; both strictly above and strictly below threshold groups populated; probability of underestimation.",
+      "data_kind": "",
+      "time_basis": "",
+      "provenance": "",
+      "required": true,
+      "default_value_repr": "",
+      "dim_signature": ""
+    },
+    {
+      "name": "threshold",
+      "type_desc": "float",
+      "constraints": "Finite scalar in [0,1]; dimensionless; explicit decision threshold; equality receives no correction.",
+      "data_kind": "",
+      "time_basis": "",
+      "provenance": "",
+      "required": true,
+      "default_value_repr": "",
+      "dim_signature": ""
+    },
+    {
+      "name": "predictions",
+      "type_desc": "NDArray[np.float64]",
+      "constraints": "Nonempty finite float64 vector; aligned with probabilities; same target units as calibration and offsets; independent application population size allowed.",
+      "data_kind": "",
+      "time_basis": "",
+      "provenance": "",
+      "required": true,
+      "default_value_repr": "",
+      "dim_signature": ""
+    },
+    {
+      "name": "probabilities",
+      "type_desc": "NDArray[np.float64]",
+      "constraints": "Nonempty finite float64 vector in [0,1]; aligned with predictions; probability of underestimation.",
+      "data_kind": "",
+      "time_basis": "",
+      "provenance": "",
+      "required": true,
+      "default_value_repr": "",
+      "dim_signature": ""
+    }
+  ],
+  "boundary_outputs": [
+    {
+      "name": "corrected_predictions",
+      "type_desc": "NDArray[np.float64]",
+      "constraints": "Finite float64 vector aligned with predictions, in unchanged target units; ties unchanged; no rounding or clipping.",
+      "data_kind": "",
+      "time_basis": "",
+      "provenance": "",
+      "required": true,
+      "default_value_repr": "",
+      "dim_signature": ""
+    }
+  ],
+  "mandatory_provenance": {
+    "fqdn": "cdg.competition.solution.kaggle.nasa_airport_pushback_phase_1_3rd_place_1st",
+    "version_id": "7d6f7b78-1dff-5757-9326-4edad55aaa68",
+    "content_hash": "5a9856b1f6a4db73e7ce12809248de193b63ad06401a6e73b8322744cb7c44bd",
+    "scope": "Original conceptual intake provenance; partial correction subgraph only"
+  },
+  "publication_blockers": [
+    "Declared transitive dependency closure incomplete",
+    "Installed provider metadata differs from source manifest",
+    "Negative publication gates and transactional rollback/apply/idempotency/served verification pending"
+  ],
+  "planner_sha256": "2fa0d78a805f64e4a10b3093326a9363db5641326a52e627370e40aced3b5063"
+}

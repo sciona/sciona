@@ -1,0 +1,309 @@
+{
+  "passed": true,
+  "approved_original": false,
+  "catalog_mutations": 0,
+  "execution": {
+    "graph_digest": "bf93caa9bf493667cc920f3a580af7c7f90993c61d152232adc0e69c62725a19",
+    "execution_graph": {
+      "nodes": [
+        {
+          "node_id": "recoil",
+          "parent_id": null,
+          "name": "Compute recoil momentum and squared norm",
+          "description": "Real 3D momentum difference and squared Euclidean norm under explicit conservation premises.",
+          "concept_type": "custom",
+          "inputs": [
+            {
+              "name": "incoming_momentum",
+              "type_desc": "numpy.ndarray",
+              "constraints": "finite real momentum in kg*m/s, nonempty shape (...,3); same shape and orthonormal frame for both inputs",
+              "data_kind": "",
+              "time_basis": "",
+              "provenance": "",
+              "required": true,
+              "default_value_repr": "",
+              "dim_signature": "M1 L1 T-1"
+            },
+            {
+              "name": "outgoing_momentum",
+              "type_desc": "numpy.ndarray",
+              "constraints": "finite real momentum in kg*m/s, nonempty shape (...,3); same shape and orthonormal frame for both inputs",
+              "data_kind": "",
+              "time_basis": "",
+              "provenance": "",
+              "required": true,
+              "default_value_repr": "",
+              "dim_signature": "M1 L1 T-1"
+            }
+          ],
+          "outputs": [
+            {
+              "name": "recoil_momentum",
+              "type_desc": "numpy.ndarray",
+              "constraints": "finite float64 kg*m/s; input shape preserved",
+              "data_kind": "",
+              "time_basis": "",
+              "provenance": "",
+              "required": true,
+              "default_value_repr": "",
+              "dim_signature": "M1 L1 T-1"
+            },
+            {
+              "name": "squared_momentum",
+              "type_desc": "numpy.ndarray",
+              "constraints": "nonnegative finite float64 kg^2*m^2/s^2; input shape without final axis",
+              "data_kind": "",
+              "time_basis": "",
+              "provenance": "",
+              "required": true,
+              "default_value_repr": "",
+              "dim_signature": "M2 L2 T-2"
+            }
+          ],
+          "status": "atomic",
+          "children": [],
+          "depth": 0,
+          "type_signature": "",
+          "matched_primitive": "sciona.atoms.physical_quantities.momentum_recoil.momentum_recoil",
+          "primitive_binding_confidence": 0.0,
+          "primitive_binding_source": "",
+          "action_class": "replace_stage",
+          "resolution_reason": "",
+          "resolved_by": "",
+          "is_optional": false,
+          "is_opaque": false,
+          "is_external": false,
+          "parallelizable": false,
+          "conceptual_summary": "",
+          "critic_notes": "",
+          "decomposition_rationale": "",
+          "fixed_point_max_iterations": 0,
+          "fixed_point_convergence_field": "",
+          "map_window_size": 0,
+          "map_hop_size": 0,
+          "boundary_kind": "none",
+          "boundary_port_name": ""
+        }
+      ],
+      "edges": [],
+      "planning_artifact": null,
+      "metadata": {
+        "artifact_source": "physics_reconstructed_numerical_realization",
+        "publication_status": "draft",
+        "source_version_id": "dbd302ec-4598-54ba-a2b4-2f828a22d66d",
+        "source_content_hash": "2bcac89ca8aed9e452f613f5605412eb0147f4cef04356c23de70a1aa9970265",
+        "literal_source_parity": false,
+        "physical_regime": "Momentum conservation in a common orthonormal frame; no energy or scattering-event validity claim.",
+        "num_nodes": 1,
+        "num_edges": 0
+      }
+    },
+    "full_runner_cases": 5,
+    "synthetic_vectors": 84,
+    "maximum_ulp_error": 0,
+    "source_proof": {
+      "kind": "explicit_real3d_momentum_reconstruction.v1",
+      "source_version_id": "dbd302ec-4598-54ba-a2b4-2f828a22d66d",
+      "source_content_hash": "2bcac89ca8aed9e452f613f5605412eb0147f4cef04356c23de70a1aa9970265",
+      "source_parity_claim": false,
+      "domain": "Real three-dimensional Euclidean momentum components in one orthonormal frame and consistent units; three conservation premises.",
+      "premises": [
+        [
+          "Equality(Symbol('before_x', real=True), Symbol('p1_x', real=True))",
+          "Equality(Symbol('before_y', real=True), Symbol('p1_y', real=True))",
+          "Equality(Symbol('before_z', real=True), Symbol('p1_z', real=True))"
+        ],
+        [
+          "Equality(Symbol('before_x', real=True), Symbol('after_x', real=True))",
+          "Equality(Symbol('before_y', real=True), Symbol('after_y', real=True))",
+          "Equality(Symbol('before_z', real=True), Symbol('after_z', real=True))"
+        ],
+        [
+          "Equality(Symbol('after_x', real=True), Add(Symbol('electron_x', real=True), Symbol('p2_x', real=True)))",
+          "Equality(Symbol('after_y', real=True), Add(Symbol('electron_y', real=True), Symbol('p2_y', real=True)))",
+          "Equality(Symbol('after_z', real=True), Add(Symbol('electron_z', real=True), Symbol('p2_z', real=True)))"
+        ]
+      ],
+      "vector_steps": [
+        [
+          "Equality(Symbol('after_x', real=True), Symbol('p1_x', real=True))",
+          "Equality(Symbol('after_y', real=True), Symbol('p1_y', real=True))",
+          "Equality(Symbol('after_z', real=True), Symbol('p1_z', real=True))"
+        ],
+        [
+          "Equality(Symbol('p1_x', real=True), Add(Symbol('electron_x', real=True), Symbol('p2_x', real=True)))",
+          "Equality(Symbol('p1_y', real=True), Add(Symbol('electron_y', real=True), Symbol('p2_y', real=True)))",
+          "Equality(Symbol('p1_z', real=True), Add(Symbol('electron_z', real=True), Symbol('p2_z', real=True)))"
+        ],
+        [
+          "Equality(Add(Symbol('p1_x', real=True), Mul(Integer(-1), Symbol('p2_x', real=True))), Symbol('electron_x', real=True))",
+          "Equality(Add(Symbol('p1_y', real=True), Mul(Integer(-1), Symbol('p2_y', real=True))), Symbol('electron_y', real=True))",
+          "Equality(Add(Symbol('p1_z', real=True), Mul(Integer(-1), Symbol('p2_z', real=True))), Symbol('electron_z', real=True))"
+        ],
+        [
+          "Equality(Symbol('electron_x', real=True), Add(Symbol('p1_x', real=True), Mul(Integer(-1), Symbol('p2_x', real=True))))",
+          "Equality(Symbol('electron_y', real=True), Add(Symbol('p1_y', real=True), Mul(Integer(-1), Symbol('p2_y', real=True))))",
+          "Equality(Symbol('electron_z', real=True), Add(Symbol('p1_z', real=True), Mul(Integer(-1), Symbol('p2_z', real=True))))"
+        ]
+      ],
+      "norm_squared": "Equality(Add(Pow(Symbol('electron_x', real=True), Integer(2)), Pow(Symbol('electron_y', real=True), Integer(2)), Pow(Symbol('electron_z', real=True), Integer(2))), Add(Pow(Symbol('p1_x', real=True), Integer(2)), Mul(Integer(-1), Integer(2), Symbol('p1_x', real=True), Symbol('p2_x', real=True)), Pow(Symbol('p1_y', real=True), Integer(2)), Mul(Integer(-1), Integer(2), Symbol('p1_y', real=True), Symbol('p2_y', real=True)), Pow(Symbol('p1_z', real=True), Integer(2)), Mul(Integer(-1), Integer(2), Symbol('p1_z', real=True), Symbol('p2_z', real=True)), Pow(Symbol('p2_x', real=True), Integer(2)), Pow(Symbol('p2_y', real=True), Integer(2)), Pow(Symbol('p2_z', real=True), Integer(2))))",
+      "checks": {
+        "componentwise_composition": true,
+        "dot_product_expansion": true
+      },
+      "limitations": [
+        "No energy conservation, scattering angle, wavelength shift or physical-event validity claim.",
+        "Before=p1 assumes any other initial momentum is zero in the chosen frame.",
+        "Missing source symbolic dot-product side is explicitly reconstructed, not automatically parsed or repaired."
+      ],
+      "publication": "Unapproved reconstructed proof; source checks and numerical realization remain required.",
+      "read_only": true,
+      "approval_applied": false,
+      "selected_source_bindings": 12,
+      "vector_equations_matched": 7,
+      "explicitly_reconstructed_dot_products": 1,
+      "source_records": {
+        "4b2a339b-8570-5c71-af6d-f11567ecf8b4": {
+          "version_id": "339cbdba-2232-50a7-93e7-49770cd9f8cc",
+          "candidate_id": "fffeaa23-62b3-5a76-b9fa-2b6c96d56d93",
+          "candidate_payload_sha256": "d2a8aa8c38767ee7291efbdaa1aaf8877556c3d93f9ae04f1bf5d5612b9ed085",
+          "fresh_source_evidence_sha256": "98563ae60da075b4449e636095fb4be6c11797c7359a43e60dd3a9505685f692",
+          "upstream_status": "roundtrip_passed"
+        },
+        "b3dde95f-d075-56f4-a117-2ac0de316f28": {
+          "version_id": "5a35c61a-9ed1-5b78-8a56-1c8a8277a5dd",
+          "candidate_id": "35ca51ca-f5e8-51b7-859e-3ae441c3670a",
+          "candidate_payload_sha256": "5afba33f6b36dc1a54576a73a5d37ebaec5f29f50ee2d25ff7ac5850ccd03c5d",
+          "fresh_source_evidence_sha256": "851572bfc0afcc1d028206dc07d7f47dca94da3f8705e0cf7a3ee779470f4ed6",
+          "upstream_status": "roundtrip_passed"
+        },
+        "59b2de8a-ec81-55e6-abf1-5324162ec446": {
+          "version_id": "81678286-2050-5108-abc7-527d331ea004",
+          "candidate_id": "d4caa8d4-bf7f-5fea-ae2c-75a571d5cbe6",
+          "candidate_payload_sha256": "efa0f8e063da29aaee98e6eb7fc2ae209b98ec087707d7c21d4a76974c694666",
+          "fresh_source_evidence_sha256": "85f9c35b893fb99be61b4220ee70f295703fefc8aaa5b60d999ace87bf2d1b11",
+          "upstream_status": "roundtrip_passed"
+        },
+        "246bb6f9-5d61-50ca-be99-2e800ddcf1e3": {
+          "version_id": "5791d6cb-1774-59b6-93f0-87745833367a",
+          "candidate_id": "7572ea7a-c031-561f-9016-83a727c036b7",
+          "candidate_payload_sha256": "e0a7c9ed20dfdfed50de570ef06ddc73dda05508378cf6c5f07a1082a2f52751",
+          "fresh_source_evidence_sha256": "5d24731114d24836e027daa1b2e9a2694b4917079e03827730ff832b9ec5714a",
+          "upstream_status": "roundtrip_passed"
+        },
+        "c02c3280-e054-5a97-b198-af25c26084db": {
+          "version_id": "35a0c76e-7f6e-5202-896e-002afb685871",
+          "candidate_id": "0b77f633-ce36-514c-aa7d-fd3b2107fc6a",
+          "candidate_payload_sha256": "0787b75acf04e7026bd1140b36779d1a6298c097efbe4dd5a4bea45048801cec",
+          "fresh_source_evidence_sha256": "22f6db82eec0d9317dd98983db0d78a31e7f87a6814e673bb1dfaab254f2bd4e",
+          "upstream_status": "roundtrip_passed"
+        },
+        "118da9a5-f6fd-5fb6-92de-590e48a91b1c": {
+          "version_id": "91236d15-5ce3-59cb-b8d9-9e122dbec6ae",
+          "candidate_id": "4f1491fe-f8aa-5a34-92db-a2f63c5bb20b",
+          "candidate_payload_sha256": "a2cbca0160079fd533ac92c36946d0fc5cd2a01d69d0cb770e38980bce88ed42",
+          "fresh_source_evidence_sha256": "061be2ea03d4274f79e7d2ed0b12ffa3115aa5c90881aa712df1cbaa4046eff7",
+          "upstream_status": "roundtrip_passed"
+        },
+        "65a0da97-e070-502b-83fd-7b5e7245ecdf": {
+          "version_id": "c16be878-853e-5732-af40-b42147203f66",
+          "candidate_id": "1a964723-28d6-5b53-810d-889d085aa388",
+          "candidate_payload_sha256": "ed412e26603dc146b043b3596563b801d0d5ec27d470fe2a1ef96568a3e0b544",
+          "fresh_source_evidence_sha256": "e473cdbe9e0182c2a35baa1e107e59b5b3ce80fdce11c6718da57658c5bd7843",
+          "upstream_status": "roundtrip_passed"
+        },
+        "e45d375a-c67b-57b5-a975-bf278b482b9c": {
+          "version_id": "f3ed11c3-201f-56f6-88fa-c0abc331b0b9",
+          "candidate_id": "62563f3e-abf8-5a7b-a1db-6ba9d9074324",
+          "candidate_payload_sha256": "a74f1e1379ca463a0b6a7a3a644cecd7966ec6f36df03784e0aeb3d261bba152",
+          "fresh_source_evidence_sha256": "5cc2f46f5f75c2099332b21915d1967747c6faee1494d420075daa8f1718d5ba",
+          "upstream_status": "unsupported",
+          "explicit_reconstruction": {
+            "source_latex": {
+              "latex_lhs": "\\vec{p}_{electron}\\cdot\\vec{p}_{electron}",
+              "latex_rhs": "( \\vec{p}_{1}\\cdot\\vec{p}_{1})+( \\vec{p}_{2}\\cdot\\vec{p}_{2})-2( \\vec{p}_{1}\\cdot\\vec{p}_{2})",
+              "sympy_lhs": "Symbol('pdg0004299')",
+              "sympy_rhs": "",
+              "latex_relation": "="
+            },
+            "interpretation": "Real 3D Euclidean dot products; exact reviewed LaTeX pattern, not scalar parsing.",
+            "discrepancy": "Source symbolic LHS is a vector identity instead of a squared norm; RHS is empty."
+          }
+        }
+      },
+      "source_operations": [
+        {
+          "node_id": "pdg_step_1",
+          "rule": "substitute LHS of expr 1 into expr 2",
+          "inputs": [
+            "59b2de8a-ec81-55e6-abf1-5324162ec446",
+            "4b2a339b-8570-5c71-af6d-f11567ecf8b4"
+          ],
+          "output": "b3dde95f-d075-56f4-a117-2ac0de316f28"
+        },
+        {
+          "node_id": "pdg_step_2",
+          "rule": "substitute LHS of expr 1 into expr 2",
+          "inputs": [
+            "b3dde95f-d075-56f4-a117-2ac0de316f28",
+            "c02c3280-e054-5a97-b198-af25c26084db"
+          ],
+          "output": "246bb6f9-5d61-50ca-be99-2e800ddcf1e3"
+        },
+        {
+          "node_id": "pdg_step_3",
+          "rule": "subtract X from both sides",
+          "inputs": [
+            "246bb6f9-5d61-50ca-be99-2e800ddcf1e3"
+          ],
+          "output": "118da9a5-f6fd-5fb6-92de-590e48a91b1c"
+        },
+        {
+          "node_id": "pdg_step_4",
+          "rule": "swap LHS with RHS",
+          "inputs": [
+            "118da9a5-f6fd-5fb6-92de-590e48a91b1c"
+          ],
+          "output": "65a0da97-e070-502b-83fd-7b5e7245ecdf"
+        },
+        {
+          "node_id": "pdg_step_5",
+          "rule": "multiply expr 1 by expr 2",
+          "inputs": [
+            "65a0da97-e070-502b-83fd-7b5e7245ecdf",
+            "65a0da97-e070-502b-83fd-7b5e7245ecdf"
+          ],
+          "output": "e45d375a-c67b-57b5-a975-bf278b482b9c"
+        }
+      ],
+      "symbol_file_sha256": "c5a744d3829273e4984a823dde93721ac96a2c6aa35e2a8d2c54c174bc6dd30d",
+      "rule_file_sha256": "cc70d58dfa8c1e903bdb77be47adb65e2ef2e65e949c65433718ca4f9ba944e5",
+      "implementation_sha256": {
+        "scripts/validate_momentum_immutable_source.py": "f42b563e94c33cb77ef9c7bef4062f8f50dc6fad146a90d8fc95e824c7a3aa87",
+        "sciona/physics_ingest/momentum_vector_proof.py": "1ff3667bc7636cfb37361a5d4f4983b1da1f5068ee8b9e971af814eb20911e37",
+        "tests/physics_ingest/test_momentum_vector_proof.py": "e69e585c227f0c6146364689ca780726fa246e1843fcc46c725ac8d0366a45ec",
+        "sciona/physics_ingest/pdg_evidence.py": "8b5591e823e11edc3414bff89daac0905c79bcf5c104473ff46e77be4cfb31c7",
+        "sciona/physics_ingest/pdg_symbols.py": "d63f45f44802f470ef437e72649d32344e9623beceb7ba559522022df2371c73",
+        "sciona/physics_ingest/pdg_rule_contracts.py": "0c6abb7ea356a9766c1f7b14203a10f73b994fa1b6cf9291803f878ea6de824e"
+      }
+    },
+    "provider_sha256": "7b63a8580e67a2b85cf48ddce1147d3a3d156f5b8aa4529034d479153abb0b8a",
+    "implementation_sha256": {
+      "sciona/physics_ingest/momentum_execution.py": "528ae65852de1fe0ce8504ab257f3e7e77d231835b369b15b04be326167be821",
+      "scripts/validate_momentum_execution.py": "e7c5f1f24156b1396fc746e1426b79dffdf062f2d49919349ba76e5a8e006902",
+      "tests/physics_ingest/test_momentum_recoil.py": "60720a157a74736502f4fca6499984c56b995ab152129328ac5307a446840ed4",
+      "sciona/services/execution_graph_codec.py": "1ad42332f8e28adf4ee3f8d53184a4af8351f66304efa1703c63ed32989082a6",
+      "sciona/visualizer/runner.py": "ff289eda92093a164f1691e2453622579cd6357e6292267833f5873a97ad6aa3"
+    },
+    "limitations": [
+      "Real Euclidean three-vectors in one orthonormal frame and consistent SI momentum units.",
+      "Conservation premises required for recoil interpretation; no energy or full scattering-event validation.",
+      "Squared norm uses exact converted-input differences before rounding; it need not equal the norm of the rounded vector.",
+      "Nonzero outputs rounding to zero and nonfinite outputs rejected; exact zeros and subnormals supported."
+    ]
+  },
+  "scope_sha256": "69cc7fae2006665c01b6252129298ff8dddb360e3acab8536f081afd22b2cf0d",
+  "validator_sha256": "6e074f585b36a46b78e9006657d4e837cd277e204f07b974414715714b453084",
+  "source_validator_sha256": "f42b563e94c33cb77ef9c7bef4062f8f50dc6fad146a90d8fc95e824c7a3aa87",
+  "scope": "Unchanged Decimal/reference/runtime checks with explicit immutable-version source validator injection. No database state is mocked or rewritten."
+}

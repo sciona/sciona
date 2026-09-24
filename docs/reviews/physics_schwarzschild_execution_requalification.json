@@ -1,0 +1,214 @@
+{
+  "graph_digest": "22766e242165b51543a6faf7a6eb7e3363a998435d0aa2b8039d375543d09647",
+  "execution_graph": {
+    "nodes": [
+      {
+        "node_id": "radius",
+        "parent_id": null,
+        "name": "Compute Schwarzschild length scale",
+        "description": "Evaluate the source conclusion 2GM/c^2 for positive SI inputs; no black-hole classification.",
+        "concept_type": "custom",
+        "inputs": [
+          {
+            "name": "mass_kg",
+            "type_desc": "numpy.ndarray",
+            "constraints": "nonempty finite positive real mass in kilograms",
+            "data_kind": "",
+            "time_basis": "",
+            "provenance": "",
+            "required": true,
+            "default_value_repr": "",
+            "dim_signature": "M1"
+          },
+          {
+            "name": "gravitational_constant",
+            "type_desc": "float",
+            "constraints": "finite positive scalar G in SI",
+            "data_kind": "",
+            "time_basis": "",
+            "provenance": "",
+            "required": true,
+            "default_value_repr": "",
+            "dim_signature": "L3 M-1 T-2"
+          },
+          {
+            "name": "speed_of_light",
+            "type_desc": "float",
+            "constraints": "finite positive scalar vacuum light speed in SI",
+            "data_kind": "",
+            "time_basis": "",
+            "provenance": "",
+            "required": true,
+            "default_value_repr": "",
+            "dim_signature": "L1 T-1"
+          }
+        ],
+        "outputs": [
+          {
+            "name": "radius_metres",
+            "type_desc": "numpy.ndarray",
+            "constraints": "positive finite float64 metres; mass shape preserved",
+            "data_kind": "",
+            "time_basis": "",
+            "provenance": "",
+            "required": true,
+            "default_value_repr": "",
+            "dim_signature": "L1"
+          }
+        ],
+        "status": "atomic",
+        "children": [],
+        "depth": 0,
+        "type_signature": "",
+        "matched_primitive": "sciona.atoms.physical_quantities.schwarzschild_radius.schwarzschild_radius",
+        "primitive_binding_confidence": 0.0,
+        "primitive_binding_source": "",
+        "action_class": "replace_stage",
+        "resolution_reason": "",
+        "resolved_by": "",
+        "is_optional": false,
+        "is_opaque": false,
+        "is_external": false,
+        "parallelizable": false,
+        "conceptual_summary": "",
+        "critic_notes": "",
+        "decomposition_rationale": "",
+        "fixed_point_max_iterations": 0,
+        "fixed_point_convergence_field": "",
+        "map_window_size": 0,
+        "map_hop_size": 0,
+        "boundary_kind": "none",
+        "boundary_port_name": ""
+      }
+    ],
+    "edges": [],
+    "planning_artifact": null,
+    "metadata": {
+      "artifact_source": "physics_numerical_realization",
+      "publication_status": "draft",
+      "source_version_id": "f05dd820-e273-506d-87a3-625d4cd08e76",
+      "source_content_hash": "1281198730365e9b8a3c1fc0f0ac941cd9e82bc4d9ac63964ae30d9a8a0aba01",
+      "physical_regime": "Schwarzschild length scale; horizon interpretation limited to spherical nonrotating uncharged asymptotically flat vacuum exterior",
+      "num_nodes": 1,
+      "num_edges": 0
+    }
+  },
+  "full_runner_cases": 5,
+  "synthetic_numeric_cases": 208,
+  "maximum_ulp_error": 1.0,
+  "ulp_tolerance": 3,
+  "exact_rational_proof_cases": 3,
+  "source_proof": {
+    "read_only": true,
+    "approval_applied": false,
+    "graphs": [
+      {
+        "runner_version": "pdg-graph-replay.v3",
+        "scope": "composed source algebra including forward real-root squaring under explicit conditions; not physical or publication approval",
+        "steps": [
+          {
+            "node_id": "pdg_step_1",
+            "output_expression_id": "0582e156-dd6f-5a14-8c60-975d0b40b0a1",
+            "computed_srepr": "Equality(Pow(Symbol('pdg0008656'), Integer(2)), Mul(Integer(2), Pow(Symbol('pdg0002530'), Integer(-1)), Symbol('pdg0005156'), Symbol('pdg0006277')))",
+            "required_conditions": [
+              "GreaterThan(Integer(2), Integer(0))",
+              "GreaterThan(Mul(Pow(Symbol('pdg0002530'), Integer(-1)), Symbol('pdg0005156'), Symbol('pdg0006277')), Integer(0))",
+              "Unequality(Symbol('pdg0002530'), Integer(0))"
+            ]
+          },
+          {
+            "node_id": "pdg_step_2",
+            "output_expression_id": "3ab62f38-7eac-54b0-8b2c-89bd33a0129e",
+            "computed_srepr": "Equality(Pow(Symbol('pdg0004567'), Integer(2)), Mul(Integer(2), Pow(Symbol('pdg0004518'), Integer(-1)), Symbol('pdg0005156'), Symbol('pdg0006277')))",
+            "required_conditions": [
+              "GreaterThan(Integer(2), Integer(0))",
+              "GreaterThan(Mul(Pow(Symbol('pdg0002530'), Integer(-1)), Symbol('pdg0005156'), Symbol('pdg0006277')), Integer(0))",
+              "GreaterThan(Mul(Pow(Symbol('pdg0004518'), Integer(-1)), Symbol('pdg0005156'), Symbol('pdg0006277')), Integer(0))",
+              "Unequality(Symbol('pdg0002530'), Integer(0))",
+              "Unequality(Symbol('pdg0004518'), Integer(0))"
+            ]
+          },
+          {
+            "node_id": "pdg_step_3",
+            "output_expression_id": "aac6bfaf-d977-5460-afa4-6f2e1bd0f0d8",
+            "computed_srepr": "Equality(Mul(Symbol('pdg0004518'), Pow(Symbol('pdg0004567'), Integer(2))), Mul(Integer(2), Symbol('pdg0005156'), Symbol('pdg0006277')))",
+            "required_conditions": [
+              "GreaterThan(Integer(2), Integer(0))",
+              "GreaterThan(Mul(Pow(Symbol('pdg0002530'), Integer(-1)), Symbol('pdg0005156'), Symbol('pdg0006277')), Integer(0))",
+              "GreaterThan(Mul(Pow(Symbol('pdg0004518'), Integer(-1)), Symbol('pdg0005156'), Symbol('pdg0006277')), Integer(0))",
+              "Unequality(Symbol('pdg0002530'), Integer(0))",
+              "Unequality(Symbol('pdg0004518'), Integer(0))"
+            ]
+          },
+          {
+            "node_id": "pdg_step_4",
+            "output_expression_id": "3c44ca5c-0b44-5df9-bfb5-1a65eca51ad1",
+            "computed_srepr": "Equality(Symbol('pdg0004518'), Mul(Integer(2), Pow(Symbol('pdg0004567'), Integer(-2)), Symbol('pdg0005156'), Symbol('pdg0006277')))",
+            "required_conditions": [
+              "GreaterThan(Integer(2), Integer(0))",
+              "GreaterThan(Mul(Pow(Symbol('pdg0002530'), Integer(-1)), Symbol('pdg0005156'), Symbol('pdg0006277')), Integer(0))",
+              "GreaterThan(Mul(Pow(Symbol('pdg0004518'), Integer(-1)), Symbol('pdg0005156'), Symbol('pdg0006277')), Integer(0))",
+              "Unequality(Pow(Symbol('pdg0004567'), Integer(2)), Integer(0))",
+              "Unequality(Symbol('pdg0002530'), Integer(0))",
+              "Unequality(Symbol('pdg0004518'), Integer(0))",
+              "Unequality(Symbol('pdg0004567'), Integer(0))"
+            ]
+          }
+        ],
+        "root_expression_ids": [
+          "8c841e77-745c-52ef-86c7-22098ac482f3"
+        ],
+        "terminal_expression_ids": [
+          "3c44ca5c-0b44-5df9-bfb5-1a65eca51ad1"
+        ],
+        "required_conditions": [
+          "GreaterThan(Integer(2), Integer(0))",
+          "GreaterThan(Mul(Pow(Symbol('pdg0002530'), Integer(-1)), Symbol('pdg0005156'), Symbol('pdg0006277')), Integer(0))",
+          "GreaterThan(Mul(Pow(Symbol('pdg0004518'), Integer(-1)), Symbol('pdg0005156'), Symbol('pdg0006277')), Integer(0))",
+          "Unequality(Pow(Symbol('pdg0004567'), Integer(2)), Integer(0))",
+          "Unequality(Symbol('pdg0002530'), Integer(0))",
+          "Unequality(Symbol('pdg0004518'), Integer(0))",
+          "Unequality(Symbol('pdg0004567'), Integer(0))"
+        ],
+        "version_id": "f05dd820-e273-506d-87a3-625d4cd08e76",
+        "content_hash": "1281198730365e9b8a3c1fc0f0ac941cd9e82bc4d9ac63964ae30d9a8a0aba01",
+        "prior_failed_evidence_id": "49dfbc49-0554-54ba-88f3-d278ace2e4aa",
+        "prior_evidence_sha256": "3c5d09f88375eb5336b5d8e5ae1b579a9bf371f3739720e55b29494110cbb0c0",
+        "expression_evidence_sha256": {
+          "0582e156-dd6f-5a14-8c60-975d0b40b0a1": "eb7f2033a87d9d940f80bc031182711ca511fb41d0b9416d4e46f14ef374588b",
+          "3ab62f38-7eac-54b0-8b2c-89bd33a0129e": "1970ee2bf0352c9cfe374c4f0887eed255f29ac88f0640f888a9ab7973521830",
+          "3c44ca5c-0b44-5df9-bfb5-1a65eca51ad1": "319f1d82da5faad1e0cfc7e1534182ba18c0b82df5f5675d6649cd25245c310a",
+          "8c841e77-745c-52ef-86c7-22098ac482f3": "02ee3592b226e39edc9ba3cb0b9f3ab42bd0b1e493e7f2063b63a58ec0852f4a",
+          "aac6bfaf-d977-5460-afa4-6f2e1bd0f0d8": "6562e599b1cbcb3371cfe7f65ffa2fbb17dc51a59cf8ba418f36d394a7477ea1"
+        },
+        "passed": true
+      }
+    ],
+    "implementation_sha256": {
+      "sciona/physics_ingest/pdg_graph_replay_v3.py": "c5b513117b1adb619df42d0e76ae7db2b81f06bd84a70f931bde5b426ee60899",
+      "sciona/physics_ingest/pdg_real_power_rules.py": "fb87ebf6c7375982f48c8618387fc8fbe5145b2b25d77b2e9e8cd45da444745c",
+      "sciona/physics_ingest/pdg_rational_rules_v2.py": "9578184be24eb1197ecabb7a3a9a78e81ad27ab3869f21b3680f53e4f9221f31",
+      "sciona/physics_ingest/pdg_rule_contracts.py": "0c6abb7ea356a9766c1f7b14203a10f73b994fa1b6cf9291803f878ea6de824e",
+      "scripts/validate_physics_real_power_replay.py": "92655f2773a5da828d49834ad13bbd4c373e3d6e92384b44ea9cfdcb26ac1842",
+      "tests/physics_ingest/test_pdg_real_power_rules.py": "c9ad43e6103cb08370a71caf2c720b59bb92fd9ef2e76aedf65b1890eb37201f"
+    },
+    "limitations": [
+      "Conditional source-algebra consequences only; no reverse square-root inference or physical regime certification.",
+      "Previous failed replay evidence is retained; this validator does not modify catalog state."
+    ]
+  },
+  "provider_sha256": "9cbfd7a5ed070fa0dc5959cbdf5bcebe376efc1ea41bf13171f0c6d4eb60079d",
+  "implementation_sha256": {
+    "sciona/physics_ingest/schwarzschild_execution.py": "a28da701bcc40fcd6863113c76785b2b6666d1993cbb692d069821cadd3c641c",
+    "scripts/validate_schwarzschild_execution.py": "5c6c16cd89ae403070a5cacd28da8a84afaac61bacb66f6310db1b68d6939aeb",
+    "tests/physics_ingest/test_schwarzschild_radius.py": "524831053363c271857a263f7aa74d4b096f5baf4d6e375996ccf5a9a98f1556",
+    "sciona/services/execution_graph_codec.py": "1ad42332f8e28adf4ee3f8d53184a4af8351f66304efa1703c63ed32989082a6",
+    "sciona/visualizer/runner.py": "ff289eda92093a164f1691e2453622579cd6357e6292267833f5873a97ad6aa3",
+    "sciona/physics_ingest/pdg_symbols.py": "d63f45f44802f470ef437e72649d32344e9623beceb7ba559522022df2371c73"
+  },
+  "limitations": [
+    "Formula and conditional proof realization; not a general-relativistic field-equation solver.",
+    "Physical horizon interpretation requires caller-established Schwarzschild regime; no black-hole classification.",
+    "Constants and units are explicit caller inputs; positive subnormal outputs can have reduced relative precision."
+  ]
+}

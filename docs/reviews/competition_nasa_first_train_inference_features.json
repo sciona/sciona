@@ -1,0 +1,70 @@
+{
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "source_sha256": {
+    "training/src/pushback_nasa/pipelines/feature_extraction/nodes.py": "6d725c9b7537e98a734ee79d4856e4f2469a852bab7446b9580910e3d0883729",
+    "training/src/pushback_nasa/pipelines/feature_extraction/pipeline.py": "b082e740fde9f2fd03455332e89bda94c30b6b12e19aa11f260478c66c123d0e",
+    "training/src/pushback_nasa/pipelines/create_master/nodes.py": "3a4c406754609073c75b67de7832d5eda4f45d20e1081042206ee8a797753061",
+    "training/src/pushback_nasa/pipelines/create_master/pipeline.py": "cf83439cfdb3b9e49174a2b3db7d884db46c3d7050cf89d285e48115ac49aba1",
+    "submission/utilities.py": "8b9776ae0e7fdbb48e2bee64ee442ca1d2d4023309f953092dba108f93e6896c"
+  },
+  "shared_functions": [
+    {
+      "function": "extract_config_features",
+      "ast_equal": true,
+      "ast_sha256": "0522039a63470373ac39f4bae654d2e75b7fdaf3bb219c9551005a87fadd3518"
+    },
+    {
+      "function": "extract_etd_features",
+      "ast_equal": true,
+      "ast_sha256": "892ed67ed211262c9a0bb003027e8eb1f2a02a123d18d7b65586d5289b3fa32e"
+    },
+    {
+      "function": "extract_mfs_features",
+      "ast_equal": true,
+      "ast_sha256": "da52423f12720d410526edcf34fd8fbf702cf5c2846507be54d675c9254a1c4c"
+    },
+    {
+      "function": "extract_moment_features",
+      "ast_equal": true,
+      "ast_sha256": "2c7ed4fedd0f1e42f65b99e97cca02b447c2566a26871687a2ab6b183264ece1"
+    },
+    {
+      "function": "extract_runway_features",
+      "ast_equal": true,
+      "ast_sha256": "d5b0dd6d178d677e77a0e3a09807004278775a2ed8507c3984a71eb4116644c3"
+    },
+    {
+      "function": "extract_standtime_features",
+      "ast_equal": true,
+      "ast_sha256": "66ef7b97b2256cf2cbb5e15606db8d749e9f4dab7ec842ff14eeeea1cd42091c"
+    },
+    {
+      "function": "extract_weather_features",
+      "ast_equal": true,
+      "ast_sha256": "b63762e41c5888a759013ecc62d0a82c2d54adf4bfd5f06bc6dbc042f450406d"
+    }
+  ],
+  "populations": 10,
+  "active_population_nodes": 80,
+  "active_feature_nodes": 70,
+  "perimeter_nodes": 10,
+  "defined_but_excluded_branches": [
+    "extract_tbfm_features",
+    "extract_tfm_features"
+  ],
+  "unused_master_argument_count": 2,
+  "configuration_value_equivalence_verified": false,
+  "findings": [
+    "All seven shared feature functions have identical complete ASTs, including signatures and annotations.",
+    "Only perimeter plus seven feature families enter the returned training feature pipeline.",
+    "Two other declared branches are excluded, and the corresponding master-function arguments are unused. Historical pipeline wiring still references them; external catalog resolution is not established by this audit.",
+    "Corrected shared feature implementations can serve training and inference, but source configuration values and query-population construction need separate qualification."
+  ],
+  "limitations": [
+    "AST equality is structural code evidence, not equality of configuration, training populations, runtime environments or complete fitted outputs.",
+    "No complete source graph, corrected raw-feature execution or publication approval claim."
+  ],
+  "validator_sha256": "f775350f53cc899528bb5099ba66fde17b3aef09e820f21292fb5c695adb49c5"
+}

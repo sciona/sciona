@@ -1,0 +1,156 @@
+{
+  "eligible_for_approval_transaction": true,
+  "approved": false,
+  "proposed_tier": 3,
+  "review_source": "automated",
+  "catalog_mutations": 0,
+  "graphs": [
+    {
+      "family": "first_wave_dynamics",
+      "artifact_id": "93997609-5796-5a3e-8824-85448fad3dd2",
+      "version_id": "bc667b9b-f816-597c-b3df-f308a506de6b",
+      "graph_sha256": "34c0be00a4946cc6b944c934b6aa682faaea85c38bd6f62320d06338667f7132",
+      "approved_family_qualification": {
+        "read_only": true,
+        "synthetic_only": true,
+        "trust_tier": 3,
+        "provider_versions_verified": 1,
+        "catalog_graph_runtime_comparison": "passed",
+        "serialized_graph_cases": 3,
+        "graph_sha256": "c066e7425a566d0753301e27bcbba60e387707eb5399bdc738c1768b59e2dac6",
+        "version_id": "83cb2c13-5dde-5b20-be61-2306f5aa321d",
+        "immutable_source_review": {
+          "read_only": true,
+          "approved": false,
+          "source_version_id": "693697cf-a97c-53bd-8d6b-19dc3c7697c1",
+          "source_hash": "97dbc4000139b6514d678829e16c39e045f02f47ecbe91356863028decb932b3",
+          "source_expressions": [
+            {
+              "fqdn": "physics.pdg.first_wave.equation.eq_acceleration_solved",
+              "content_hash": "a16acbe89caf16f1a2526ba0c48e8a9eb42823dd6500b1471bf59c30892c2254",
+              "version_id": "f6cb2225-a698-5d35-b408-079bca1d4247",
+              "raw_formula": "a = F / m",
+              "sympy_srepr": "Equality(Symbol('a'), Mul(Symbol('F'), Pow(Symbol('m'), Integer(-1))))"
+            },
+            {
+              "fqdn": "physics.pdg.first_wave.equation.eq_constant_mass_force",
+              "content_hash": "8a181e8e72499adbe83a1e75e548d08a5c228f045822f1e228a67003879b028f",
+              "version_id": "7fb7db3c-23b3-564d-a86f-52e3b89e19d5",
+              "raw_formula": "F(t) = m \\frac{d^2 x}{dt^2}",
+              "sympy_srepr": "Equality(Function('F')(Symbol('t')), Mul(Symbol('m'), Mul(Mul(Pow(Symbol('d'), Integer(2)), Symbol('x')), Pow(Pow(Symbol('dt'), Integer(2)), Integer(-1)))))"
+            },
+            {
+              "fqdn": "physics.pdg.first_wave.equation.eq_newton_second_law",
+              "content_hash": "5d5c2212cdac7d4db02e845f4ee79d734702fc39499bfa7e09a93cfe3145f67f",
+              "version_id": "cb3666b1-4b72-5899-92cf-8ab2c2a99b25",
+              "raw_formula": "F = m a",
+              "sympy_srepr": "Equality(Symbol('F'), Mul(Symbol('a'), Symbol('m')))"
+            }
+          ],
+          "source_nodes": [
+            {
+              "node_id": "pdg_step_1",
+              "type_signature": "{\"assumptions\":[],\"dimensions\":{},\"inference_rule_id\":\"solve_for_acceleration\",\"inputs\":[\"d81a1afd-19fc-5104-8b38-f87f5843e72e\"],\"operation_kind\":\"solve\",\"output\":\"13d98092-31ea-55a2-a3a0-b1f8820ccd63\",\"relationship_kind\":\"algebraic_rearrangement_of\",\"source_pdg_inference_id\":\"edge:solve_for_a\",\"variable_bindings\":{\"solve_for\":\"a\"}}"
+            },
+            {
+              "node_id": "pdg_step_2",
+              "type_signature": "{\"assumptions\":[\"mass is constant\"],\"dimensions\":{},\"inference_rule_id\":\"substitution\",\"inputs\":[\"13d98092-31ea-55a2-a3a0-b1f8820ccd63\"],\"operation_kind\":\"substitute\",\"output\":\"f80a4411-adcd-57e7-9e1e-3d134b786ff3\",\"relationship_kind\":\"derives_from\",\"source_pdg_inference_id\":\"edge:substitute_acceleration\",\"variable_bindings\":{}}"
+            }
+          ],
+          "corrected_proof": {
+            "equations": {
+              "newton": "Equality(Function('F')(Symbol('t', real=True)), Mul(Symbol('m', positive=True), Function('a')(Symbol('t', real=True))))",
+              "solved": "Equality(Function('a')(Symbol('t', real=True)), Mul(Pow(Symbol('m', positive=True), Integer(-1)), Function('F')(Symbol('t', real=True))))",
+              "kinematics": "Equality(Function('a')(Symbol('t', real=True)), Derivative(Function('x')(Symbol('t', real=True)), Tuple(Symbol('t', real=True), Integer(2))))",
+              "result": "Equality(Function('F')(Symbol('t', real=True)), Mul(Symbol('m', positive=True), Derivative(Function('x')(Symbol('t', real=True)), Tuple(Symbol('t', real=True), Integer(2)))))"
+            },
+            "checks": {
+              "solve_residual_zero": true,
+              "substitution_residual_zero": true,
+              "actual_second_derivative": true
+            },
+            "assumptions": [
+              "Positive constant mass",
+              "One Cartesian component in an inertial frame",
+              "Twice differentiable position",
+              "Acceleration equals second time derivative of position"
+            ],
+            "dimensions": {
+              "t": "T",
+              "m": "M",
+              "x": "L",
+              "a": "L/T^2",
+              "F": "M*L/T^2"
+            },
+            "limitations": [
+              "Original source graph omits kinematic premise and nonzero mass condition",
+              "Legacy symbolic derivative parse is invalid",
+              "Not a time integration algorithm"
+            ]
+          },
+          "checks": {
+            "exact_symbolic_examples": 18,
+            "missing_premise_counterexample": 1,
+            "invalid_legacy_derivative_confirmed": 1
+          },
+          "hashes": {
+            "scripts/review_first_wave_immutable_source.py": "9d8de8e6db37f20d9feb8b805e3bd82501d9cc58daa23a6ce9ff341aef034537",
+            "sciona/physics_ingest/first_wave_dynamics_proof.py": "fd8838b6be62291e1f8ad80a6874787bd691cb7c480ab9a4c7a86e3f89fef6dd"
+          },
+          "historical_review_sha256": "8dcf00518e6be2061d439b1eed7b5226858aaad0bdce174230ab36271b331c1f",
+          "scope": "Immutable original expressions and corrected premises; no artifact approval is inferred from this review"
+        },
+        "source_review_sha256": "9d8de8e6db37f20d9feb8b805e3bd82501d9cc58daa23a6ce9ff341aef034537",
+        "verifier_sha256": "1581cc431cd21cb0e358ecb863c464c64e46e5a4ba68795d9526f4a6f15185ff"
+      },
+      "original_history_sha256": {
+        "artifact_versions": "92511733ff251f48b88fc11e5d29c3d19f021797115aacb8788b6c7a851862a1",
+        "artifact_cdg_nodes": "1bb3f35559aeeb740f9dc55ba0c1cd78d810c77dc2cbc22b78685deaed55db91",
+        "artifact_cdg_edges": "1670fdd96cd28749b9e123346800c96f4811b3693249d33d7c2d462b6acacc0e",
+        "artifact_cdg_bindings": "5124b328b53686308b1624274ad701a65e771c824de24ccecc7b91d57605ccfb",
+        "artifact_io_specs": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "artifact_audit_evidence": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "artifact_validity_bounds": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "artifact_dependencies": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "limitations": [
+        "Corrected differential dynamics with explicitly added kinematic premise and positive constant mass.",
+        "Historical derivative parse remains invalid and preserved. This is not literal proof parity or approval.",
+        "Reusable symbolic differentiation and point evaluation in a stated inertial Cartesian regime; no time integration or unqualified cross-domain transfer.",
+        "Time integration",
+        "Global smoothness certification",
+        "Original malformed proof certification",
+        "Tier1 human certification"
+      ],
+      "reused_atoms": 1,
+      "new_atoms": 0,
+      "publication": {
+        "technical": "Compute symbolic and sampled position, acceleration and net force for a supplied position expression in one inertial Cartesian component, using positive constant mass and explicit acceleration/position kinematics. Corrected realization; the historical derivative parse and missing premise are preserved as provenance.",
+        "plain": "Given how position changes over time and a positive constant mass, calculate acceleration and force, optionally at chosen times. Use consistent SI units in an inertial frame. This differentiates the supplied motion; it does not simulate motion from a force.",
+        "bound": {
+          "validity_statement": "Positive finite constant mass; one inertial Cartesian component; position twice differentiable throughout the evaluation domain; coefficients and sample times in consistent SI units. Acceleration is the second time derivative of position and net force is mass times acceleration. Sampled expressions must evaluate to finite real values. Historical derivative parsing is corrected and the kinematic premise is explicitly supplied. No numerical time integration, global smoothness certification, or human expert certification.",
+          "evidence_ref_key": "first-wave-dynamics-openstax-v1"
+        },
+        "reference": {
+          "ref_id": "first-wave-dynamics-openstax-v1",
+          "ref_key": "first-wave-dynamics-openstax-v1",
+          "title": "OpenStax University Physics: Newton second law",
+          "url": "https://openstax.org/books/university-physics-volume-1/pages/5-3-newtons-second-law",
+          "source": "llm_extracted",
+          "verified": true,
+          "confidence": "high",
+          "relevance_note": "Pinned public software source; automated synthetic computation parity under documented adaptations and runtime requirements."
+        }
+      }
+    }
+  ],
+  "evidence_sha256": {
+    "first_wave_identity_execution_scope.json": "755131c4684f4845926e3404fe4ccc0a70884a3f3123eb8ecbe4799b7706e1a0",
+    "first_wave_identity_revision_transaction.json": "616bb491c6a8106a531a645f50d224b70ebdea72908a93cc62e365cfd8bdb6f7",
+    "first_wave_identity_revision_import.json": "aee2bd905470b4337cec69cc7aaab2952c4d85f9c4bdb1b1f4fae7da7c31ca85",
+    "first_wave_identity_revision_repeat.json": "736cd65f802b81d92d989137f38b7789d0d7cc09d162ba4360b1a0c3d700ece2",
+    "first_wave_identity_catalog_execution.json": "826692c1eeab2a4c244392f4b0e688849e098c6de49607afda20fb3697423420",
+    "first_wave_identity_database_gates.json": "f51aaf1daca5852c09035129d5724ad761f1024c8ace2e060a5b4654ef52c4f1"
+  },
+  "reviewer_sha256": "df5892b500e421a6508813af3d215985c8cbd16b799221683175f52cddd51d86"
+}

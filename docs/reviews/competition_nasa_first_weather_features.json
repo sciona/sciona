@@ -1,0 +1,36 @@
+{
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "source_sha256": "8b9776ae0e7fdbb48e2bee64ee442ca1d2d4023309f953092dba108f93e6896c",
+  "synthetic_forecast_rows": 16,
+  "grid_rows": 13,
+  "feature_columns": 162,
+  "independent_lead_and_difference_checks": 8,
+  "future_issue_changed_earlier_features": 6,
+  "corrected_lead_feature_comparisons": 72,
+  "corrected_future_issue_isolation": true,
+  "corrected_dense_feature_comparisons": 162,
+  "findings": [
+    "Boundary padding and backward fill allow a later forecast issue to populate earlier grid points when no prior issue exists.",
+    "Future-change features subtract a longer-lead forecast from the half-hour forecast for the same issue; they are forecast contrasts, not observed future outcomes.",
+    "Near-term lead selection is <=3.5 hours without a lower bound; the following band is (3.5,6.5].",
+    "Historical revisions group by forecast valid time, so issue time and valid time must remain separate contracts."
+  ],
+  "requirements": [
+    "Select only forecasts issued by each query before computing features; preserve valid-time/lead semantics independently.",
+    "Define missing prior-issue and missing-horizon policies without backward filling from unavailable issues.",
+    "Retain categorical mapping and unknown-value behavior explicitly in the domain adapter."
+  ],
+  "limitations": [
+    "Synthetic software comparison with two issue times; not a full forecast adapter or original-data leakage claim.",
+    "Corrected history windows advance at each query, do not insert padding observations and do not fill missing horizons/revisions from other issues; retraining is required.",
+    "Dense historical/revision parity is synthetic; categorical unknown policies, full training/inference composition and publication remain outstanding."
+  ],
+  "implementation_sha256": {
+    "sciona/forecast_history_features.py": "d3a54cd2a8515cf4714860c2a0ec0c3336c19f18e165c01f24e599c64e89ffc1",
+    "tests/test_forecast_history_features.py": "2c4d84d1bae93b667679d143997b216cd03ed969be8ecb0797e6a4f62fc200ea"
+  },
+  "validator_sha256": "fc535fe28d316f2138ea9da41bcac0fa7fdb78bd9c17ecc55c4d75fec9c0d54f"
+}

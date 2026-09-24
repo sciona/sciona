@@ -1,0 +1,46 @@
+{
+  "format": "nasa-feature-orchestration.v1",
+  "passed": true,
+  "approved": false,
+  "synthetic_only": true,
+  "catalog_mutations": 0,
+  "source_sha256": {
+    "helper.py": "cbcbe972af0d63a240923570e840744d573d972ee0bce19e04bf55a2c8b01444",
+    "Feature_Processing-ETD_no_PQDM.source.py": "02a1bd1e20c41ed5084a7363165211713c70291efa2695d7f45306801f1fdb70",
+    "Feature_Processing-TaxiTimeToGate.source.py": "7f40bff888af396be3ca42879f1306a7f36407b205ecf17e257f82ee6c818b8e",
+    "Feature_Processing-AirplaneCodes.source.py": "862049a092252f1a23683acaf7fbf080f438e4abc42ab545622863970c8ff098",
+    "Train_Models.source.py": "2f8c7b7eb6c6c174128c37bc7d53c1db3236a9320699017f02387b406964fc03",
+    "Run_Inference.source.py": "5d78b1dd59c14597deac54ce482ef08150eb6cc4dad99166cc8dfd7a49374c44"
+  },
+  "feature_branches_executed": 3,
+  "training_feature_joins_executed": true,
+  "synthetic_input_rows": 26,
+  "training_rows_retained": 25,
+  "inference_feature_joins_executed": true,
+  "inference_rows_retained": 26,
+  "findings": {
+    "etd_final_group_omitted": true,
+    "etd_singleton_output_empty": true,
+    "categorical_output_with_rare_category": true,
+    "categorical_no_rare_category_raises": true,
+    "adaptive_history_statistics_match": true,
+    "future_observations_included": true,
+    "joined_features_numeric_and_finite": true,
+    "inference_retains_missing_etd_row": true,
+    "shared_training_inference_features_equal": true
+  },
+  "dependency_versions": {
+    "numpy": "2.4.2",
+    "pandas": "2.3.3"
+  },
+  "validator_sha256": "b5064d790f2e49d85208107191f9de7a0710a135fc80552d3829e66234c999c4",
+  "limitations": [
+    "Pinned serial feature branches and training/inference feature joins; file loaders replaced with synthetic frames and outputs captured in memory. Model metadata supplies feature names only; execution stops before inference.",
+    "Passed means source behavior reproduced, including defects; it is not a publication qualification.",
+    "Source serial ETD branch omits its final entity. Parallel helper also has a removed pandas append call.",
+    "Source categorical feature export fails when no rare category creates Other.",
+    "Arrival features include observations recorded after the query; historical availability must be enforced by an explicit upstream contract or a documented correction.",
+    "Training inner join drops the omitted ETD entity; inference left join retains it with missing ETD features. No imputation was added.",
+    "No full raw-file loading, all-airport model fitting or final submission coverage claim."
+  ]
+}

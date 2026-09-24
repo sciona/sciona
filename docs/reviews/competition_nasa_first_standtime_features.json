@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "source_sha256": "8b9776ae0e7fdbb48e2bee64ee442ca1d2d4023309f953092dba108f93e6896c",
+  "kernel_source_comparisons": 54,
+  "event_delay_adapter_source_comparisons": 54,
+  "corrected_future_value_outputs": 12,
+  "implementation_sha256": {
+    "sciona/fixed_window_statistics.py": "d9d0437aaad6a071e13c3d0cbf8b9ee7ca11af7f6a25ab8092fd15eb41c13daf",
+    "tests/test_fixed_window_statistics.py": "e4df778ef021e33a0bdf3bf94f7ac0764cce5e80627e7462c7431d19557f9937",
+    "sciona/event_delay_windows.py": "d6632e2ea5e9245cca73e108a8af98c51bc0348d3c0f5e076873bd84f90db155",
+    "tests/test_event_delay_windows.py": "09ef235ded003a883a536f76c7d2d3774deea7f4d57e47a869c350ed0a448ac9"
+  },
+  "synthetic_events": 14,
+  "unique_queries": 3,
+  "rolling_statistics_checked": 54,
+  "availability_counterexample_outputs": 12,
+  "findings": [
+    "Six time windows match independent right-closed, left-open references after upward 15-minute observation rounding.",
+    "Duplicate query times collapse to one feature row; later keyed query joins must preserve requested row identities.",
+    "The first estimate lookup has no query-time availability filter. An unrestricted future-observed estimate changes twelve synthetic delay aggregates.",
+    "Event count is based on nonmissing identifiers, while delay aggregates ignore missing estimates; these populations can differ."
+  ],
+  "required_contract": "Caller must establish observation and actual-event availability for each query, or a corrected as-of implementation must filter explicitly and be requalified.",
+  "limitations": [
+    "Synthetic software behavior, not a claim of leakage in the original competition inputs or scorer.",
+    "Corrected numerical event-delay adapter matches qualified cases; full raw-feature pipeline and publication approval remain outstanding."
+  ],
+  "validator_sha256": "14c7e6b5a2e1ca82f89dcbfa48f6d7eeae48793e7ab0ad0399ae072fd7901d29"
+}

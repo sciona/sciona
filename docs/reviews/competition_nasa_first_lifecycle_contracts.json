@@ -1,0 +1,4458 @@
+{
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "candidate_tier": 3,
+  "providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.domain_adapters.first_place_fallback.baseline_inputs",
+      "fqdn": "sciona.atoms.ml.domain_adapters.first_place_fallback.baseline_inputs",
+      "role": "domain_adapter",
+      "version_id": "8ed0ab3d-5e6e-51df-93c0-f95a1ca2c32a",
+      "content_hash": "61609b480110f0ced7dc45b4c5ecdae72faf1ce0e052b7724ae20d5ef880997c",
+      "provider_source": "src/sciona/atoms/ml/domain_adapters/first_place_fallback.py",
+      "provider_sha256": "de715476f16e118ce3165fe7e6c9ee53c04bf47ef0176fcc9946c8bed7604f88",
+      "inputs": [
+        {
+          "name": "queries",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Query identities and naive timestamps in original row order.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "raw_options",
+          "type_desc": "dict",
+          "constraints": "Runtime estimate history with per-record observation time.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "entity_ids",
+          "type_desc": "NDArray[str]",
+          "constraints": "Nonempty string identifiers aligned to estimate history rows; repeated identities are allowed.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "observed_at",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "One-dimensional int64 observation times on the shared caller-declared clock, aligned to history rows.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "estimates",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "One-dimensional int64 estimated event times, aligned to history identifiers; estimate_valid governs missing placeholders.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "estimate_valid",
+          "type_desc": "NDArray[np.bool_]",
+          "constraints": "Boolean vector aligned to estimate history; false values mask placeholder estimates.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "query_ids",
+          "type_desc": "NDArray[str]",
+          "constraints": "Nonempty string query identifiers; order and duplicates are preserved.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "query_times",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "One-dimensional int64 query times on the shared clock; no future observations may contribute. Configuration queries form a regular increasing grid.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "ticks_per_unit",
+          "type_desc": "float",
+          "constraints": "Finite positive clock ticks per fallback output unit.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "offset",
+          "type_desc": "float",
+          "constraints": "Finite scalar subtracted after conversion to fallback output units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "lower",
+          "type_desc": "float",
+          "constraints": "Finite ordered clipping bound in fallback output units; missing must lie within bounds.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "upper",
+          "type_desc": "float",
+          "constraints": "Finite ordered clipping bound in fallback output units; missing must lie within bounds.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "missing",
+          "type_desc": "float",
+          "constraints": "Finite fallback output value within [lower, upper], in the declared prediction units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.domain_adapters.first_place_fallback.execution_inputs",
+      "fqdn": "sciona.atoms.ml.domain_adapters.first_place_fallback.execution_inputs",
+      "role": "domain_adapter",
+      "version_id": "d6ed9bb0-385f-53c7-9b3b-0133ef993cb5",
+      "content_hash": "abeb756ac4840f5bd57ec2560c72e8706b797082d889cd63fc80f0fe231c44d8",
+      "provider_source": "src/sciona/atoms/ml/domain_adapters/first_place_fallback.py",
+      "provider_sha256": "de715476f16e118ce3165fe7e6c9ee53c04bf47ef0176fcc9946c8bed7604f88",
+      "inputs": [
+        {
+          "name": "queries",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Caller query identities in original order; empty and duplicate rows supported.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "models",
+          "type_desc": "dict",
+          "constraints": "Local slots 0/1/2 and shared global model; invalid or missing models may select baseline.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population",
+          "type_desc": "str",
+          "constraints": "Explicit source population label.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "raw_options",
+          "type_desc": "dict",
+          "constraints": "Explicit raw tables and availability/policy context.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "feature_columns",
+          "type_desc": "list",
+          "constraints": "Ordered model features.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "numeric_fills",
+          "type_desc": "dict",
+          "constraints": "Fixed numeric fills.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "categorical_fills",
+          "type_desc": "dict",
+          "constraints": "Fixed category fills.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "primary",
+          "type_desc": "dict",
+          "constraints": "Hash-bound primary branch envelope.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "baseline",
+          "type_desc": "dict",
+          "constraints": "Hash-bound baseline branch envelope.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "inputs",
+          "type_desc": "dict",
+          "constraints": "Private caller-owned branch inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "count",
+          "type_desc": "int",
+          "constraints": "Nonnegative query row count.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "constant",
+          "type_desc": "float",
+          "constraints": "Source constant fallback in minutes.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.domain_adapters.first_place_fallback.prediction_values",
+      "fqdn": "sciona.atoms.ml.domain_adapters.first_place_fallback.prediction_values",
+      "role": "domain_adapter",
+      "version_id": "cd5e79b5-54de-5a0f-8cff-fd7a3d10b310",
+      "content_hash": "03467ca8508131fc8080127370f7dc5bda928af08b0b119217466673b525aada",
+      "provider_source": "src/sciona/atoms/ml/domain_adapters/first_place_fallback.py",
+      "provider_sha256": "de715476f16e118ce3165fe7e6c9ee53c04bf47ef0176fcc9946c8bed7604f88",
+      "inputs": [
+        {
+          "name": "predictions",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Primary query table with aligned predictions.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "values",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "Owned positional primary prediction vector in minutes.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.domain_adapters.first_place_features.prepare",
+      "fqdn": "sciona.atoms.ml.domain_adapters.first_place_features.prepare",
+      "role": "domain_adapter",
+      "version_id": "c7fbaf16-44bf-53c6-ab6e-fb90f795c957",
+      "content_hash": "0fd5c80b72e6f1749a3a01673fd7230b8a968b4b7f589177c30ef45e1e516c06",
+      "provider_source": "src/sciona/atoms/ml/domain_adapters/first_place_features.py",
+      "provider_sha256": "222999d47f9e00b5716c2cfb7a98bc8d50feff8b5ff916d63a278bbd497844fa",
+      "inputs": [
+        {
+          "name": "queries",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Caller-owned public-software query fields on one naive clock; duplicate rows and input index retained.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "raw_options",
+          "type_desc": "dict",
+          "constraints": "Explicit raw tables, context interval, vocabularies, holiday schedule and entity snapshot availability; never inferred from private files.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "context",
+          "type_desc": "dict",
+          "constraints": "Private runtime row identities, grid and explicit naming policies for output projection; no learned parameters.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "lexical_query_ids",
+          "type_desc": "NDArray[str]",
+          "constraints": "Nonempty string query identifiers; order and duplicates are preserved.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "lexical_query_times",
+          "type_desc": "pd.DatetimeIndex",
+          "constraints": "Nonmissing timezone-naive query timestamps on the declared reference/calendar clock.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "lexical_record_ids",
+          "type_desc": "NDArray[str]",
+          "constraints": "Unique nonempty string identifiers aligned to authoritative snapshot rows; caller establishes snapshot availability.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "lexical_delimiter",
+          "type_desc": "str",
+          "constraints": "Explicit nonempty identifier field delimiter.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "lexical_minimum_parts",
+          "type_desc": "int",
+          "constraints": "Integer minimum identifier field count of at least two; all parsed fields must be nonempty.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "lexical_primary_part",
+          "type_desc": "int",
+          "constraints": "Nonnegative primary-token field index below minimum_parts.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "lexical_category_part",
+          "type_desc": "int",
+          "constraints": "Nonnegative category field index below minimum_parts.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "lexical_reference_parts",
+          "type_desc": "list",
+          "constraints": "Nonempty ordered list of field indices below minimum_parts, concatenated to parse the reference time.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "lexical_reference_format",
+          "type_desc": "str",
+          "constraints": "Explicit pandas strptime format producing nonmissing timezone-naive reference times.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "lexical_vocabularies",
+          "type_desc": "dict",
+          "constraints": "Explicit unique string vocabularies. Entity keys identify attribute columns; identifier keys are primary, numeric and category.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "lexical_fallback",
+          "type_desc": "str",
+          "constraints": "Explicit nonempty string category fallback; no inference-row category fitting occurs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "lexical_seconds_per_unit",
+          "type_desc": "float",
+          "constraints": "Finite positive seconds per output elapsed-time unit; query and reference clocks must agree.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "attributes_query_ids",
+          "type_desc": "NDArray[str]",
+          "constraints": "Nonempty string query identifiers; order and duplicates are preserved.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "attributes_record_ids",
+          "type_desc": "NDArray[str]",
+          "constraints": "Unique nonempty string identifiers aligned to authoritative snapshot rows; caller establishes snapshot availability.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "attributes_attributes",
+          "type_desc": "pd.DataFrame",
+          "constraints": "DataFrame aligned positionally to unique record_ids; columns must be unique; caller establishes authoritative snapshot availability.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "attributes_vocabularies",
+          "type_desc": "dict",
+          "constraints": "Explicit unique string vocabularies. Entity keys identify attribute columns; identifier keys are primary, numeric and category.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "attributes_fallback",
+          "type_desc": "str",
+          "constraints": "Explicit nonempty string category fallback; no inference-row category fitting occurs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "configuration_observed_at",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "One-dimensional int64 observation times on the shared caller-declared clock, aligned to history rows.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "configuration_states",
+          "type_desc": "NDArray[str]",
+          "constraints": "Observation-by-channel string matrix with no missing strings; comma and literal substring semantics are explicit.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "configuration_query_times",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "One-dimensional int64 query times on the shared clock; no future observations may contribute. Configuration queries form a regular increasing grid.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "configuration_vocabulary",
+          "type_desc": "list",
+          "constraints": "Unique ordered nonempty literal tokens supplied by the caller; never learned from query rows.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "configuration_suffixes",
+          "type_desc": "list",
+          "constraints": "Unique ordered nonempty suffixes defining match priority; no domain suffixes are inferred.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "configuration_change_windows",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "Nonempty positive int64 grid-row counts; a full available window is required before its mask is true.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "configuration_grid_step",
+          "type_desc": "int",
+          "constraints": "Positive integer spacing in the shared clock; query grid must be strictly increasing and regular.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "estimates_entity_ids",
+          "type_desc": "NDArray[str]",
+          "constraints": "Nonempty string identifiers aligned to estimate history rows; repeated identities are allowed.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "estimates_observed_at",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "One-dimensional int64 observation times on the shared caller-declared clock, aligned to history rows.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "estimates_estimates",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "One-dimensional int64 estimated event times, aligned to history identifiers; estimate_valid governs missing placeholders.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "estimates_estimate_valid",
+          "type_desc": "NDArray[np.bool_]",
+          "constraints": "Boolean vector aligned to estimate history; false values mask placeholder estimates.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "estimates_query_ids",
+          "type_desc": "NDArray[str]",
+          "constraints": "Nonempty string query identifiers; order and duplicates are preserved.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "estimates_query_times",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "One-dimensional int64 query times on the shared clock; no future observations may contribute. Configuration queries form a regular increasing grid.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "estimates_lookbacks",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "Nonempty positive int64 widths on the shared clock. Membership is (query-width, query].",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "estimates_rounding_step",
+          "type_desc": "int",
+          "constraints": "Positive integer observation ceiling-grid spacing on the shared clock; overflow is rejected.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "estimates_ticks_per_output_unit",
+          "type_desc": "int",
+          "constraints": "Positive integer clock ticks per output time unit; applies consistently to time differences.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "calendar_query_times",
+          "type_desc": "pd.DatetimeIndex",
+          "constraints": "Nonmissing timezone-naive query timestamps on the declared reference/calendar clock.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "calendar_holiday_midnights",
+          "type_desc": "pd.DatetimeIndex",
+          "constraints": "Sorted unique nonmissing timezone-naive holiday midnights covering the query horizon; caller chooses calendar rules.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "forecasts_issued_at",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "One-dimensional int64 forecast issue times; only issues at or before each query are available.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "forecasts_valid_at",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "One-dimensional int64 forecast valid times aligned to issue/value rows; issue-valid pairs must be unique.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "forecasts_values",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Aligned forecast-row by field float64 matrix; NaN means missing and infinity is rejected. Fields use explicit linear scalar units; circular statistics are not inferred.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "forecasts_query_times",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "One-dimensional int64 query times on the shared clock; no future observations may contribute. Configuration queries form a regular increasing grid.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "forecasts_history_window",
+          "type_desc": "int",
+          "constraints": "Positive integer clock width; historical issue membership is (query-width, query].",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "forecasts_lead_bands",
+          "type_desc": "list",
+          "constraints": "Nonempty list of (lower, upper] integer lead bounds; lower=None means unbounded below.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "forecasts_contrast_leads",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "Int64 matrix with two lead values per row; subtract right forecast from left within the latest issue only.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "forecasts_revision_lags",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "Nonempty positive int64 issue-row lags for the same valid time; missing revisions remain unavailable.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "counts_observed_at",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "One-dimensional int64 observation times on the shared caller-declared clock, aligned to history rows.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "counts_actual_at",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "Int64 actual-event times on the observation clock; events cannot count before both actual and observed time. Shape is event rows by channels; masked placeholders are ignored.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "counts_countable",
+          "type_desc": "NDArray[np.bool_]",
+          "constraints": "Boolean event-by-channel mask aligned to actual_at; false entries exclude missing identities, categories or actual times.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "counts_query_times",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "One-dimensional int64 query times on the shared clock; no future observations may contribute. Configuration queries form a regular increasing grid.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "counts_lookbacks",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "Nonempty positive int64 widths on the shared clock. Membership is (query-width, query].",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "delay_event_ids",
+          "type_desc": "NDArray[str]",
+          "constraints": "Nonempty string identifiers aligned to event rows; events are counted independently without implicit deduplication.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "delay_observed_at",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "One-dimensional int64 observation times on the shared caller-declared clock, aligned to history rows.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "delay_actual_at",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "Int64 actual-event times on the observation clock; events cannot count before both actual and observed time.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "delay_estimate_ids",
+          "type_desc": "NDArray[str]",
+          "constraints": "Nonempty string identifiers aligned to estimate history rows.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "delay_estimate_observed_at",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "One-dimensional int64 estimate observation times on the event/query clock.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "delay_estimate_times",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "One-dimensional int64 estimated event times aligned to estimate identifiers and availability.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "delay_estimate_valid",
+          "type_desc": "NDArray[np.bool_]",
+          "constraints": "Boolean vector aligned to estimate history; false values mask placeholder estimates.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "delay_query_times",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "One-dimensional int64 query times on the shared clock; no future observations may contribute. Configuration queries form a regular increasing grid.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "delay_lookbacks",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "Nonempty positive int64 widths on the shared clock. Membership is (query-width, query].",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "delay_rounding_step",
+          "type_desc": "int",
+          "constraints": "Positive integer observation ceiling-grid spacing on the shared clock; overflow is rejected.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "delay_ticks_per_output_unit",
+          "type_desc": "int",
+          "constraints": "Positive integer clock ticks per output time unit; applies consistently to time differences.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.domain_adapters.first_place_features.project",
+      "fqdn": "sciona.atoms.ml.domain_adapters.first_place_features.project",
+      "role": "domain_adapter",
+      "version_id": "c835ea18-cb92-5587-90e0-9ca92e0170c4",
+      "content_hash": "175d1c0523a5c41f16bcb3deb53a20be7d102511fa4c1ce926789176f0ca07a7",
+      "provider_source": "src/sciona/atoms/ml/domain_adapters/first_place_features.py",
+      "provider_sha256": "222999d47f9e00b5716c2cfb7a98bc8d50feff8b5ff916d63a278bbd497844fa",
+      "inputs": [
+        {
+          "name": "context",
+          "type_desc": "dict",
+          "constraints": "Private runtime row identities, grid and explicit naming policies for output projection; no learned parameters.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "lexical",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Positional query-aligned lexical and time features; time features require a known authoritative identity; fallback derivation order is preserved.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "attributes",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Positional query-aligned DataFrame with explicit category fallbacks; unknown passthrough values remain missing.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "configuration",
+          "type_desc": "dict",
+          "constraints": "Category/count/change arrays with state_valid and window_valid masks; unavailable placeholders are not observations.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "estimates",
+          "type_desc": "dict",
+          "constraints": "Query-aligned remaining/change features and query-by-window sum/max/sample-std arrays in declared output units; unavailable features are NaN.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "calendar",
+          "type_desc": "dict",
+          "constraints": "Eight query-aligned calendar arrays; holiday membership uses date, countdown uses the next midnight and whole elapsed days.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "forecasts",
+          "type_desc": "dict",
+          "constraints": "Query-aligned historical, band, contrast and revision arrays in input channel units; missing values stay NaN and issue_available is explicit.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "counts",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "Int64 array shaped queries by channels by lookback windows; tied events are counted independently.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "delay_count",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "Query-by-window event counts.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "delay_value_count",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "Query-by-window available delay counts.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "delay_mean",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Query-by-window mean delay in declared output units; NaN for no available values.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "delay_maximum",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Query-by-window maximum delay in declared output units; NaN for no available values.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "queries",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Query DataFrame with unique columns and nonmissing declared join keys. Preserve original row order, duplicates and index.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "feature_tables",
+          "type_desc": "list",
+          "constraints": "Ordered (DataFrame, key-list) pairs. Keys must be unique/nonmissing on feature side; non-key collisions are rejected.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.domain_adapters.first_place_fit_review.residual_outputs",
+      "fqdn": "sciona.atoms.ml.domain_adapters.first_place_fit_review.residual_outputs",
+      "role": "domain_adapter",
+      "version_id": "3ebd9ed9-6517-5778-9e65-d06bbc0bbd3a",
+      "content_hash": "50364fbf0da30d5949953255082a3c1eabf6c6875a40be7261a3ec796c1bf1f7",
+      "provider_source": "src/sciona/atoms/ml/domain_adapters/first_place_fit_review.py",
+      "provider_sha256": "ddae4b547adacccb4c3cd23e433ce548a26ecc5fcbf78fc184e7b2a2e412f556",
+      "inputs": [
+        {
+          "name": "model",
+          "type_desc": "object",
+          "constraints": "Materialized validation value; aligned rows and common target units, finite scores, explicit source policy.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "importance",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Materialized validation value; aligned rows and common target units, finite scores, explicit source policy.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "model_v0",
+          "type_desc": "object",
+          "constraints": "Materialized validation value; aligned rows and common target units, finite scores, explicit source policy.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "model_v2",
+          "type_desc": "object",
+          "constraints": "Materialized validation value; aligned rows and common target units, finite scores, explicit source policy.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "feature_importance",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Materialized validation value; aligned rows and common target units, finite scores, explicit source policy.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.domain_adapters.first_place_fit_review.score_policy",
+      "fqdn": "sciona.atoms.ml.domain_adapters.first_place_fit_review.score_policy",
+      "role": "domain_adapter",
+      "version_id": "b1423966-c6bb-5671-b5b5-40059009ea55",
+      "content_hash": "37d0967bb76f882326ce62a89a786dd7f85a48a20eb40504c4d1647ff2f508f5",
+      "provider_source": "src/sciona/atoms/ml/domain_adapters/first_place_fit_review.py",
+      "provider_sha256": "ddae4b547adacccb4c3cd23e433ce548a26ecc5fcbf78fc184e7b2a2e412f556",
+      "inputs": [
+        {
+          "name": "frame",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Materialized validation value; aligned rows and common target units, finite scores, explicit source policy.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "offset",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Materialized validation value; aligned rows and common target units, finite scores, explicit source policy.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "lower",
+          "type_desc": "int",
+          "constraints": "Materialized validation value; aligned rows and common target units, finite scores, explicit source policy.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "upper",
+          "type_desc": "int",
+          "constraints": "Materialized validation value; aligned rows and common target units, finite scores, explicit source policy.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "ceiling",
+          "type_desc": "float",
+          "constraints": "Materialized validation value; aligned rows and common target units, finite scores, explicit source policy.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.domain_adapters.first_place_policy.capture",
+      "fqdn": "sciona.atoms.ml.domain_adapters.first_place_policy.capture",
+      "role": "domain_adapter",
+      "version_id": "2262106b-b659-5476-8e5e-e01a24d9f51f",
+      "content_hash": "8c75fcf87214c97b27da3e38651f126853385e018cf9d1f91c1a0805e1018c9b",
+      "provider_source": "src/sciona/atoms/ml/domain_adapters/first_place_policy.py",
+      "provider_sha256": "148bc78409563446be0c7f6eb3959db3538179435902c9a861dd4675116db264",
+      "inputs": [
+        {
+          "name": "bank",
+          "type_desc": "dict",
+          "constraints": "Private runtime model/policy state; preserve integrity, schema and training/inference policy agreement.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "raw_populations",
+          "type_desc": "dict",
+          "constraints": "Private runtime model/policy state; preserve integrity, schema and training/inference policy agreement.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "policy",
+          "type_desc": "dict",
+          "constraints": "Private runtime model/policy state; preserve integrity, schema and training/inference policy agreement.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.domain_adapters.first_place_policy.prediction_inputs",
+      "fqdn": "sciona.atoms.ml.domain_adapters.first_place_policy.prediction_inputs",
+      "role": "domain_adapter",
+      "version_id": "3e3dd4db-631b-5be3-853c-8b457022238d",
+      "content_hash": "e915f9c7a7c44057b7049f66efb54bd8780499b26d8275a60b2b053b10f45cdb",
+      "provider_source": "src/sciona/atoms/ml/domain_adapters/first_place_policy.py",
+      "provider_sha256": "148bc78409563446be0c7f6eb3959db3538179435902c9a861dd4675116db264",
+      "inputs": [
+        {
+          "name": "bank",
+          "type_desc": "dict",
+          "constraints": "Private runtime model/policy state; preserve integrity, schema and training/inference policy agreement.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "policy",
+          "type_desc": "dict",
+          "constraints": "Private runtime model/policy state; preserve integrity, schema and training/inference policy agreement.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population",
+          "type_desc": "str",
+          "constraints": "Private runtime model/policy state; preserve integrity, schema and training/inference policy agreement.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "raw_options",
+          "type_desc": "dict",
+          "constraints": "Private runtime model/policy state; preserve integrity, schema and training/inference policy agreement.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "models",
+          "type_desc": "dict",
+          "constraints": "Private runtime model/policy state; preserve integrity, schema and training/inference policy agreement.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "raw_options",
+          "type_desc": "dict",
+          "constraints": "Private runtime model/policy state; preserve integrity, schema and training/inference policy agreement.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "feature_columns",
+          "type_desc": "list",
+          "constraints": "Private runtime model/policy state; preserve integrity, schema and training/inference policy agreement.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "numeric_fills",
+          "type_desc": "dict",
+          "constraints": "Private runtime model/policy state; preserve integrity, schema and training/inference policy agreement.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "categorical_fills",
+          "type_desc": "dict",
+          "constraints": "Private runtime model/policy state; preserve integrity, schema and training/inference policy agreement.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.domain_adapters.first_place_populations.model_bindings",
+      "fqdn": "sciona.atoms.ml.domain_adapters.first_place_populations.model_bindings",
+      "role": "domain_adapter",
+      "version_id": "dcde60ce-2624-5725-85ad-75cb33fd5157",
+      "content_hash": "d0c3608823f61d2505205aef8705476256727e04b82f9c4057dad97f197828df",
+      "provider_source": "src/sciona/atoms/ml/domain_adapters/first_place_populations.py",
+      "provider_sha256": "fa91db4712713fe32f9c2dc369d937e8dad46e8929179a35c02c7db3965273d3",
+      "inputs": [
+        {
+          "name": "residual0",
+          "type_desc": "object",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "direct0",
+          "type_desc": "object",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "residual1",
+          "type_desc": "object",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "direct1",
+          "type_desc": "object",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "residual2",
+          "type_desc": "object",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "direct2",
+          "type_desc": "object",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "residual3",
+          "type_desc": "object",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "direct3",
+          "type_desc": "object",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "residual4",
+          "type_desc": "object",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "direct4",
+          "type_desc": "object",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "residual5",
+          "type_desc": "object",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "direct5",
+          "type_desc": "object",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "residual6",
+          "type_desc": "object",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "direct6",
+          "type_desc": "object",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "residual7",
+          "type_desc": "object",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "direct7",
+          "type_desc": "object",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "residual8",
+          "type_desc": "object",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "direct8",
+          "type_desc": "object",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "residual9",
+          "type_desc": "object",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "direct9",
+          "type_desc": "object",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "global_model",
+          "type_desc": "object",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "models",
+          "type_desc": "dict",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population_bindings",
+          "type_desc": "dict",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "shared_bindings",
+          "type_desc": "dict",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.domain_adapters.first_place_populations.training_tables",
+      "fqdn": "sciona.atoms.ml.domain_adapters.first_place_populations.training_tables",
+      "role": "domain_adapter",
+      "version_id": "93120cc0-c448-5a3f-8d37-17a676fbb0fd",
+      "content_hash": "d48b6b627d239062ae3d2dc5f54efff990e870cf6ef5d0f6b83a122462e1cdac",
+      "provider_source": "src/sciona/atoms/ml/domain_adapters/first_place_populations.py",
+      "provider_sha256": "fa91db4712713fe32f9c2dc369d937e8dad46e8929179a35c02c7db3965273d3",
+      "inputs": [
+        {
+          "name": "population_tables",
+          "type_desc": "dict",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "target_name",
+          "type_desc": "str",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "table_0",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "table_1",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "table_2",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "table_3",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "table_4",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "table_5",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "table_6",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "table_7",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "table_8",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "table_9",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "tables",
+          "type_desc": "list",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "labels",
+          "type_desc": "list",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "columns",
+          "type_desc": "list",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "label_column",
+          "type_desc": "str",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "order_column",
+          "type_desc": "str",
+          "constraints": "Explicit source-ordered runtime population, model or policy value; private for non-public inputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.domain_adapters.first_place_prediction.ensemble_inputs",
+      "fqdn": "sciona.atoms.ml.domain_adapters.first_place_prediction.ensemble_inputs",
+      "role": "domain_adapter",
+      "version_id": "27f516e9-5838-53fa-8ee9-1d3d793e8ef9",
+      "content_hash": "f6c71410ea661344e2db988ed99e521d0744d74cae3dc2bee86096201038864a",
+      "provider_source": "src/sciona/atoms/ml/domain_adapters/first_place_prediction.py",
+      "provider_sha256": "711f5e359c31268a6e7b1e6f06cc440d0685fa5b76fa5a7f4a77f8f56e2ecffb",
+      "inputs": [
+        {
+          "name": "local0",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "Clipped, truncated row-aligned integer predictions in minutes; no broadcasting.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "local1",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "Clipped, truncated row-aligned integer predictions in minutes; no broadcasting.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "local2",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "Clipped, truncated row-aligned integer predictions in minutes; no broadcasting.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "global_values",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Finite row-aligned prediction vector in minutes; no broadcasting.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population",
+          "type_desc": "str",
+          "constraints": "Explicit public-software population label for global feature and override routing.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "vectors",
+          "type_desc": "list",
+          "constraints": "Ordered finite aligned prediction vectors; equal weights and common target units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.domain_adapters.first_place_prediction.format_predictions",
+      "fqdn": "sciona.atoms.ml.domain_adapters.first_place_prediction.format_predictions",
+      "role": "domain_adapter",
+      "version_id": "168278ef-6d22-5ad4-adbb-efd1a3e1e33b",
+      "content_hash": "6d2a25c23ef5dcd2e09fa3e3fd339ac5b3d8393aa337639dbb0a56be8e7a7454",
+      "provider_source": "src/sciona/atoms/ml/domain_adapters/first_place_prediction.py",
+      "provider_sha256": "711f5e359c31268a6e7b1e6f06cc440d0685fa5b76fa5a7f4a77f8f56e2ecffb",
+      "inputs": [
+        {
+          "name": "queries",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Caller query identities in original order; empty and duplicate rows supported. Caller query table with original identities, row order and duplicate index retained.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "values",
+          "type_desc": "np.ndarray",
+          "constraints": "Positional query-aligned prediction vector in minutes; preserve int64 primary values and fractional float64 fallback values without casting. Empty output is float64.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "predictions",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Owned input query table with positional prediction values. Owned query table with aligned int64 primary predictions in minutes.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.domain_adapters.first_place_prediction.prediction_inputs",
+      "fqdn": "sciona.atoms.ml.domain_adapters.first_place_prediction.prediction_inputs",
+      "role": "domain_adapter",
+      "version_id": "43252406-85e5-52c4-ba27-85a6e3180f45",
+      "content_hash": "fef66203049db739b7c0a9903b98e8f0489a519d21a0e02dcae0cc4e00d05dc1",
+      "provider_source": "src/sciona/atoms/ml/domain_adapters/first_place_prediction.py",
+      "provider_sha256": "711f5e359c31268a6e7b1e6f06cc440d0685fa5b76fa5a7f4a77f8f56e2ecffb",
+      "inputs": [
+        {
+          "name": "frame",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Ordered materialized named model features; preserve query row order and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "models",
+          "type_desc": "dict",
+          "constraints": "Explicit slots 0/1/2 and global_model; residual aliases must be preserved.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population",
+          "type_desc": "str",
+          "constraints": "Explicit public-software population label for global feature and override routing.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "model_0",
+          "type_desc": "object",
+          "constraints": "Private runtime predictor with ordered feature_names_ and predict(frame, thread_count=1).",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "frame_0",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Ordered materialized named model features; preserve query row order and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "model_1",
+          "type_desc": "object",
+          "constraints": "Private runtime predictor with ordered feature_names_ and predict(frame, thread_count=1).",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "frame_1",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Ordered materialized named model features; preserve query row order and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "model_2",
+          "type_desc": "object",
+          "constraints": "Private runtime predictor with ordered feature_names_ and predict(frame, thread_count=1).",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "frame_2",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Ordered materialized named model features; preserve query row order and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "model_global",
+          "type_desc": "object",
+          "constraints": "Private runtime predictor with ordered feature_names_ and predict(frame, thread_count=1).",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "frame_global",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Ordered materialized named model features; preserve query row order and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "baseline",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Finite row-aligned prediction vector in minutes; no broadcasting.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "zeros",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Finite row-aligned prediction vector in minutes; no broadcasting.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "local_lower",
+          "type_desc": "int",
+          "constraints": "Exact source clipping bound in minutes.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "local_upper",
+          "type_desc": "int",
+          "constraints": "Exact source clipping bound in minutes.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "final_lower",
+          "type_desc": "int",
+          "constraints": "Exact source clipping bound in minutes.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "final_upper",
+          "type_desc": "int",
+          "constraints": "Exact source clipping bound in minutes.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.domain_adapters.first_place_raw_training.attach_target",
+      "fqdn": "sciona.atoms.ml.domain_adapters.first_place_raw_training.attach_target",
+      "role": "domain_adapter",
+      "version_id": "c29d3854-0367-5997-9ab7-46b407da6076",
+      "content_hash": "5fe96d47c96bb38278e5ad1f3680cf75bee403ad7231afc81ad2b5064e84a62e",
+      "provider_source": "src/sciona/atoms/ml/domain_adapters/first_place_raw_training.py",
+      "provider_sha256": "913af41d111633e8f3e491f42829014bb1a409dc9c5e369ac06e5969c7e37dc0",
+      "inputs": [
+        {
+          "name": "queries",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "frame",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "target_name",
+          "type_desc": "str",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "table",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.domain_adapters.first_place_raw_training.collect_tables",
+      "fqdn": "sciona.atoms.ml.domain_adapters.first_place_raw_training.collect_tables",
+      "role": "domain_adapter",
+      "version_id": "134c86ba-3a20-5081-9a10-5da868692def",
+      "content_hash": "589ad71858f71809c660186080a6876ee32c6137b4d8e0ae2f4081ce0f8c9976",
+      "provider_source": "src/sciona/atoms/ml/domain_adapters/first_place_raw_training.py",
+      "provider_sha256": "913af41d111633e8f3e491f42829014bb1a409dc9c5e369ac06e5969c7e37dc0",
+      "inputs": [
+        {
+          "name": "table0",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "table1",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "table2",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "table3",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "table4",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "table5",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "table6",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "table7",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "table8",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "table9",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "population_tables",
+          "type_desc": "dict",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.domain_adapters.first_place_raw_training.raw_inputs",
+      "fqdn": "sciona.atoms.ml.domain_adapters.first_place_raw_training.raw_inputs",
+      "role": "domain_adapter",
+      "version_id": "8244a435-2803-5760-99d1-742d0fc22a05",
+      "content_hash": "16f53eb469d572a3281986002ea790500d93a4b96f5d6e5e249aab4174a3d23d",
+      "provider_source": "src/sciona/atoms/ml/domain_adapters/first_place_raw_training.py",
+      "provider_sha256": "913af41d111633e8f3e491f42829014bb1a409dc9c5e369ac06e5969c7e37dc0",
+      "inputs": [
+        {
+          "name": "raw_populations",
+          "type_desc": "dict",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "population0_queries",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population0_raw_options",
+          "type_desc": "dict",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population0_feature_columns",
+          "type_desc": "list",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population0_numeric_fills",
+          "type_desc": "dict",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population0_categorical_fills",
+          "type_desc": "dict",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population0_integer_dtype",
+          "type_desc": "str",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population1_queries",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population1_raw_options",
+          "type_desc": "dict",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population1_feature_columns",
+          "type_desc": "list",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population1_numeric_fills",
+          "type_desc": "dict",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population1_categorical_fills",
+          "type_desc": "dict",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population1_integer_dtype",
+          "type_desc": "str",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population2_queries",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population2_raw_options",
+          "type_desc": "dict",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population2_feature_columns",
+          "type_desc": "list",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population2_numeric_fills",
+          "type_desc": "dict",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population2_categorical_fills",
+          "type_desc": "dict",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population2_integer_dtype",
+          "type_desc": "str",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population3_queries",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population3_raw_options",
+          "type_desc": "dict",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population3_feature_columns",
+          "type_desc": "list",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population3_numeric_fills",
+          "type_desc": "dict",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population3_categorical_fills",
+          "type_desc": "dict",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population3_integer_dtype",
+          "type_desc": "str",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population4_queries",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population4_raw_options",
+          "type_desc": "dict",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population4_feature_columns",
+          "type_desc": "list",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population4_numeric_fills",
+          "type_desc": "dict",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population4_categorical_fills",
+          "type_desc": "dict",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population4_integer_dtype",
+          "type_desc": "str",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population5_queries",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population5_raw_options",
+          "type_desc": "dict",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population5_feature_columns",
+          "type_desc": "list",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population5_numeric_fills",
+          "type_desc": "dict",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population5_categorical_fills",
+          "type_desc": "dict",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population5_integer_dtype",
+          "type_desc": "str",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population6_queries",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population6_raw_options",
+          "type_desc": "dict",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population6_feature_columns",
+          "type_desc": "list",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population6_numeric_fills",
+          "type_desc": "dict",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population6_categorical_fills",
+          "type_desc": "dict",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population6_integer_dtype",
+          "type_desc": "str",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population7_queries",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population7_raw_options",
+          "type_desc": "dict",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population7_feature_columns",
+          "type_desc": "list",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population7_numeric_fills",
+          "type_desc": "dict",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population7_categorical_fills",
+          "type_desc": "dict",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population7_integer_dtype",
+          "type_desc": "str",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population8_queries",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population8_raw_options",
+          "type_desc": "dict",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population8_feature_columns",
+          "type_desc": "list",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population8_numeric_fills",
+          "type_desc": "dict",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population8_categorical_fills",
+          "type_desc": "dict",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population8_integer_dtype",
+          "type_desc": "str",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population9_queries",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population9_raw_options",
+          "type_desc": "dict",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population9_feature_columns",
+          "type_desc": "list",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population9_numeric_fills",
+          "type_desc": "dict",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population9_categorical_fills",
+          "type_desc": "dict",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population9_integer_dtype",
+          "type_desc": "str",
+          "constraints": "Explicit caller-owned training population values and fixed policy; preserve row alignment and declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.domain_adapters.first_place_training.direct_inputs",
+      "fqdn": "sciona.atoms.ml.domain_adapters.first_place_training.direct_inputs",
+      "role": "domain_adapter",
+      "version_id": "118aaf65-6503-53c8-aa49-d68988282879",
+      "content_hash": "e021322ffd7c5aacc5e11c534a08ab4c2b3b8859cba43ff7f04e30c19cdaeb21",
+      "provider_source": "src/sciona/atoms/ml/domain_adapters/first_place_training.py",
+      "provider_sha256": "b645deea112e7c074021bae9dab1a6f1ecf983306709760153cecdafe2aa3c31",
+      "inputs": [
+        {
+          "name": "table",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Named materialized feature rows; preserve source column order and row identity.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "target_name",
+          "type_desc": "str",
+          "constraints": "Target column name.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "end_train",
+          "type_desc": "str",
+          "constraints": "Explicit training/validation cutoff.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "frame",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Named materialized feature rows; preserve source column order and row identity.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "targets",
+          "type_desc": "np.ndarray",
+          "constraints": "Aligned raw target values in minutes.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "times",
+          "type_desc": "pd.DatetimeIndex",
+          "constraints": "Aligned naive timestamps.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "eligible",
+          "type_desc": "np.ndarray",
+          "constraints": "Aligned boolean eligibility mask.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "cutoff",
+          "type_desc": "object",
+          "constraints": "Declared naive cutoff; equality belongs to validation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "offsets",
+          "type_desc": "np.ndarray",
+          "constraints": "Aligned target offsets in minutes; baseline for residual, zero for direct.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "categorical_columns",
+          "type_desc": "list",
+          "constraints": "Explicit ordered categorical feature names.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "parameters",
+          "type_desc": "dict",
+          "constraints": "Pinned source CatBoost parameters; CPU execution and file/thread restrictions enforced by fit.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "early_stopping_rounds",
+          "type_desc": "int",
+          "constraints": "Positive validation stopping patience; source value 60.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.domain_adapters.first_place_training.residual_inputs",
+      "fqdn": "sciona.atoms.ml.domain_adapters.first_place_training.residual_inputs",
+      "role": "domain_adapter",
+      "version_id": "ce5a293a-b4b9-5556-85a1-0e73e4240c0c",
+      "content_hash": "c4f0e13e1e1b4a5ee81140d508740578ba4ad80ea446f5458c55b69bcebb1697",
+      "provider_source": "src/sciona/atoms/ml/domain_adapters/first_place_training.py",
+      "provider_sha256": "b645deea112e7c074021bae9dab1a6f1ecf983306709760153cecdafe2aa3c31",
+      "inputs": [
+        {
+          "name": "table",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Named materialized feature rows; preserve source column order and row identity.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "target_name",
+          "type_desc": "str",
+          "constraints": "Target column name.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "end_train",
+          "type_desc": "str",
+          "constraints": "Explicit training/validation cutoff.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "frame",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Named materialized feature rows; preserve source column order and row identity.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "targets",
+          "type_desc": "np.ndarray",
+          "constraints": "Aligned raw target values in minutes.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "times",
+          "type_desc": "pd.DatetimeIndex",
+          "constraints": "Aligned naive timestamps.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "eligible",
+          "type_desc": "np.ndarray",
+          "constraints": "Aligned boolean eligibility mask.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "cutoff",
+          "type_desc": "object",
+          "constraints": "Declared naive cutoff; equality belongs to validation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "offsets",
+          "type_desc": "np.ndarray",
+          "constraints": "Aligned target offsets in minutes; baseline for residual, zero for direct.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "categorical_columns",
+          "type_desc": "list",
+          "constraints": "Explicit ordered categorical feature names.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "parameters",
+          "type_desc": "dict",
+          "constraints": "Pinned source CatBoost parameters; CPU execution and file/thread restrictions enforced by fit.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "early_stopping_rounds",
+          "type_desc": "int",
+          "constraints": "Positive validation stopping patience; source value 60.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.fit_review.absolute_error",
+      "fqdn": "sciona.atoms.ml.model_selection.fit_review.absolute_error",
+      "role": "reusable_operation",
+      "version_id": "20a7bc77-a976-5c6f-ac0d-c6530d702862",
+      "content_hash": "75d24d3218c4913135930bdb91f4ef26e7bb70d1f1fdf7efa187ef7418c36de9",
+      "provider_source": "src/sciona/atoms/ml/model_selection/fit_review.py",
+      "provider_sha256": "606e381f56aaf65db590a7746a582a4647c3f101da0298112186c1a97f3806f3",
+      "inputs": [
+        {
+          "name": "observed",
+          "type_desc": "np.ndarray",
+          "constraints": "Nonempty finite real vector of observed scalar targets.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "predicted",
+          "type_desc": "np.ndarray",
+          "constraints": "Finite real vector with identical shape and target units; no broadcasting.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "score",
+          "type_desc": "float",
+          "constraints": "Mean absolute error in the caller-declared target units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.fit_review.accept",
+      "fqdn": "sciona.atoms.ml.model_selection.fit_review.accept",
+      "role": "reusable_operation",
+      "version_id": "875d4f7c-2ed8-52d7-b890-25bc5bd8522d",
+      "content_hash": "b58442122572f6b728ae1021598265ca73e5effea9d4a8fa3041938e6f513d54",
+      "provider_source": "src/sciona/atoms/ml/model_selection/fit_review.py",
+      "provider_sha256": "606e381f56aaf65db590a7746a582a4647c3f101da0298112186c1a97f3806f3",
+      "inputs": [
+        {
+          "name": "model",
+          "type_desc": "object",
+          "constraints": "Nonmissing opaque model object; backend qualification is separate.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "score",
+          "type_desc": "float",
+          "constraints": "Finite scalar score in caller-declared units; lower is better.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "ceiling",
+          "type_desc": "float",
+          "constraints": "Finite acceptance ceiling in the same units; equality is rejected. Negative scores and ceilings are permitted.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "model",
+          "type_desc": "object",
+          "constraints": "Same object identity, returned only when score is strictly below ceiling.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.fit_review.importance",
+      "fqdn": "sciona.atoms.ml.model_selection.fit_review.importance",
+      "role": "reusable_operation",
+      "version_id": "1a78f4ea-5443-550b-bcea-0ce1f1fad66c",
+      "content_hash": "4cad9bec0f498c2c62c7fd3267ab1a3bf6bc23c548b86fb608fa007a205d44f7",
+      "provider_source": "src/sciona/atoms/ml/model_selection/fit_review.py",
+      "provider_sha256": "606e381f56aaf65db590a7746a582a4647c3f101da0298112186c1a97f3806f3",
+      "inputs": [
+        {
+          "name": "model",
+          "type_desc": "object",
+          "constraints": "Fitted native model supporting ordered feature names and single-thread feature importance.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "names",
+          "type_desc": "list",
+          "constraints": "Ordered feature names from the fitted model.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "values",
+          "type_desc": "np.ndarray",
+          "constraints": "Aligned one-dimensional native feature importance weights; normalization is separate.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.fit_review.normalize",
+      "fqdn": "sciona.atoms.ml.model_selection.fit_review.normalize",
+      "role": "reusable_operation",
+      "version_id": "940a7fed-15b7-5ab9-8f17-8463a7f3da39",
+      "content_hash": "9a931fa1412b9ad9c29862bb925952589cef88d35360eb3f5421d078fe13cc57",
+      "provider_source": "src/sciona/atoms/ml/model_selection/fit_review.py",
+      "provider_sha256": "606e381f56aaf65db590a7746a582a4647c3f101da0298112186c1a97f3806f3",
+      "inputs": [
+        {
+          "name": "names",
+          "type_desc": "list",
+          "constraints": "Unique nonempty ordered string feature names.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "values",
+          "type_desc": "np.ndarray",
+          "constraints": "Aligned finite nonnegative weights with strictly positive total.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "importance",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Columns feature and importance; weights sum to one, descending order, original positional indices retained.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.graph_fallbacks.emit",
+      "fqdn": "sciona.atoms.ml.model_selection.graph_fallbacks.emit",
+      "role": "reusable_operation",
+      "version_id": "f72838eb-6812-5c67-b3d9-75461ecdcfdf",
+      "content_hash": "4039147657ee32c51253c3d44b7492606dc2a4e2483b1ac695b2e87d6d58e485",
+      "provider_source": "src/sciona/atoms/ml/model_selection/graph_fallbacks.py",
+      "provider_sha256": "dfdfcea235a16748b149dce9f711f47fdb8ba0801a10741dc267cd534fa2751b",
+      "inputs": [
+        {
+          "name": "value",
+          "type_desc": "object",
+          "constraints": "Materialized branch output, with type and units established by the branch contract.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "receive",
+          "type_desc": "object",
+          "constraints": "Controller-owned callable invoked once with value; never deserialized from model state.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "result",
+          "type_desc": "object",
+          "constraints": "Same branch value after delivery to its controller.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.graph_fallbacks.predict",
+      "fqdn": "sciona.atoms.ml.model_selection.graph_fallbacks.predict",
+      "role": "reusable_operation",
+      "version_id": "b3f2e218-462b-5f02-bd44-f3302ec51d07",
+      "content_hash": "73eb413f9a0c86d8a5576bb3f21e7278c7cf37efa6335d15045e80f67ed1a946",
+      "provider_source": "src/sciona/atoms/ml/model_selection/graph_fallbacks.py",
+      "provider_sha256": "dfdfcea235a16748b149dce9f711f47fdb8ba0801a10741dc267cd534fa2751b",
+      "inputs": [
+        {
+          "name": "primary",
+          "type_desc": "dict",
+          "constraints": "Complete hash-bound executable graph descriptor with declared output node and port.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "baseline",
+          "type_desc": "dict",
+          "constraints": "Complete hash-bound fallback graph descriptor; validated even for empty queries.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "inputs",
+          "type_desc": "dict",
+          "constraints": "Explicit runtime branch inputs; no discovery of datasets or models.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "count",
+          "type_desc": "int",
+          "constraints": "Nonnegative positional row count shared by both branch outputs.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "constant",
+          "type_desc": "float",
+          "constraints": "Finite scalar last-resort output in the same caller-declared units as both branches.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "values",
+          "type_desc": "np.ndarray",
+          "constraints": "Finite aligned real vector. Primary then baseline execute lazily and sequentially; ordinary exceptions fall through. Empty returns float64 without executing branches.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "route",
+          "type_desc": "str",
+          "constraints": "Exactly primary, baseline, constant or empty. Malformed graph descriptors and process-control exceptions propagate.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.labeled_populations.concatenate",
+      "fqdn": "sciona.atoms.ml.model_selection.labeled_populations.concatenate",
+      "role": "reusable_operation",
+      "version_id": "5fef3795-e8c1-510d-9440-5ca67dfba6c2",
+      "content_hash": "7dd94ef87cbc44e4d052cbf36db127214ec4935e99d01465204af1cc37f47d9f",
+      "provider_source": "src/sciona/atoms/ml/model_selection/labeled_populations.py",
+      "provider_sha256": "8bbae5fbae44d1e45a751d08bf7cc16de466c8f1394bd3087cadc201b6d09e5c",
+      "inputs": [
+        {
+          "name": "tables",
+          "type_desc": "list",
+          "constraints": "Nonempty ordered DataFrames with unique columns; caller establishes availability.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "labels",
+          "type_desc": "list",
+          "constraints": "Aligned unique nonempty string population labels.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "columns",
+          "type_desc": "list",
+          "constraints": "Aligned nonempty unique ordered column-name lists; each includes order_column. Different selections form a union with pandas missing values.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "label_column",
+          "type_desc": "str",
+          "constraints": "New nonempty label column absent from all tables and distinct from order_column.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "order_column",
+          "type_desc": "str",
+          "constraints": "Present in each selected schema; values share comparable type and units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "table",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Owned selected/labeled concatenation sorted by order_column using quicksort with reset index. Equal-key order is not guaranteed.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.materialized_prediction.average",
+      "fqdn": "sciona.atoms.ml.model_selection.materialized_prediction.average",
+      "role": "reusable_operation",
+      "version_id": "fbea5906-9987-5e67-88c4-5ffe3d971e66",
+      "content_hash": "280b371b126f6d7f580dd169289280af76fc50d64350b784c3aefd346df18af5",
+      "provider_source": "src/sciona/atoms/ml/model_selection/materialized_prediction.py",
+      "provider_sha256": "961ecaf2d804a77e9e3d89d002ef52a7c77427984e0b3261a49fde98546ae7f7",
+      "inputs": [
+        {
+          "name": "vectors",
+          "type_desc": "list",
+          "constraints": "Nonempty ordered list of finite real vectors with identical shape and physical units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "values",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Owned positional arithmetic mean using caller order; rejects nonfinite sum or incompatible shapes.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.materialized_prediction.predict",
+      "fqdn": "sciona.atoms.ml.model_selection.materialized_prediction.predict",
+      "role": "reusable_operation",
+      "version_id": "51b825e1-99af-5b6d-97f4-4fa3a85ccb0b",
+      "content_hash": "bf0af04ced44fecf06bc2afda7b6a91416c4bff370be84fe497d76f0df856f8a",
+      "provider_source": "src/sciona/atoms/ml/model_selection/materialized_prediction.py",
+      "provider_sha256": "961ecaf2d804a77e9e3d89d002ef52a7c77427984e0b3261a49fde98546ae7f7",
+      "inputs": [
+        {
+          "name": "model",
+          "type_desc": "object",
+          "constraints": "Fitted native regressor with ordered feature_names_ and predict(thread_count=1).",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "frame",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Feature names and order exactly match the fitted schema; caller supplies training-compatible units, encodings and availability.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "values",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Owned finite scalar predictions aligned to frame rows in model target units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.model_banks.assemble_bank",
+      "fqdn": "sciona.atoms.ml.model_selection.model_banks.assemble_bank",
+      "role": "reusable_operation",
+      "version_id": "059a5a01-149b-5cf6-bdfb-920c55a17f7d",
+      "content_hash": "a461e52b1bda3bf2c7ac30fe7d2df0ff55bf22fdefb8f1b0dde61465a44c8ff8",
+      "provider_source": "src/sciona/atoms/ml/model_selection/model_banks.py",
+      "provider_sha256": "77d767cfd745983c9be3f73e317618b4c5ee27030d697f906c8741fd38162a58",
+      "inputs": [
+        {
+          "name": "models",
+          "type_desc": "dict",
+          "constraints": "Unique nonempty string model names mapped to nonmissing opaque objects.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "population_bindings",
+          "type_desc": "dict",
+          "constraints": "Explicit named populations mapped to nonempty local slot-to-model-name mappings; no implicit normalization.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "shared_bindings",
+          "type_desc": "dict",
+          "constraints": "Shared slot-to-model-name mapping disjoint from local slots. All named models must be referenced; shared slots require populations.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "bank",
+          "type_desc": "dict",
+          "constraints": "Owned population/slot containers preserving model identities and aliases; backend validation and serialization are separate.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.named_regression.fit",
+      "fqdn": "sciona.atoms.ml.model_selection.named_regression.fit",
+      "role": "reusable_operation",
+      "version_id": "124250d6-5452-5a40-8b51-744e9cae5f2c",
+      "content_hash": "92227c4e93ea004b266b98c4c525041641e41d96dbd22412c9999436008e3b05",
+      "provider_source": "src/sciona/atoms/ml/model_selection/named_regression.py",
+      "provider_sha256": "06b77d55d692b444df647d480307c199299ec81f7f633295f0a01f413a667990",
+      "inputs": [
+        {
+          "name": "x_train",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Nonempty unique ordered training feature schema with fixed units and categorical encodings.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "y_train",
+          "type_desc": "pd.Series",
+          "constraints": "Finite positional target vector; Series index must equal training frame index.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "x_valid",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Nonempty validation frame with identical ordered feature schema and units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "y_valid",
+          "type_desc": "pd.Series",
+          "constraints": "Finite aligned validation targets in training target units, with matching row index.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "categorical_indices",
+          "type_desc": "list",
+          "constraints": "Unique integer indices within the feature schema.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "parameters",
+          "type_desc": "dict",
+          "constraints": "Explicit CatBoost CPU constructor settings. thread_count, allow_writing_files, train_dir, devices and device_config overrides are rejected.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "early_stopping_rounds",
+          "type_desc": "int",
+          "constraints": "Strictly positive integer patience; validation selects the best model.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "model",
+          "type_desc": "object",
+          "constraints": "Fitted CatBoostRegressor with one native thread, no backend file writes, explicit validation and best-model selection. Empirical performance is not guaranteed.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.named_regression.temporal_split",
+      "fqdn": "sciona.atoms.ml.model_selection.named_regression.temporal_split",
+      "role": "reusable_operation",
+      "version_id": "87dcb64d-dab3-51d0-b901-33a20e29aa59",
+      "content_hash": "6fe6faf0fa64fbbe7396bbab062bf9833c04192e879752de82a2c4d594a93090",
+      "provider_source": "src/sciona/atoms/ml/model_selection/named_regression.py",
+      "provider_sha256": "06b77d55d692b444df647d480307c199299ec81f7f633295f0a01f413a667990",
+      "inputs": [
+        {
+          "name": "frame",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Named feature table with nonempty unique columns; positional row alignment is authoritative.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "targets",
+          "type_desc": "np.ndarray",
+          "constraints": "Aligned scalar target vector, finite on eligible rows, in caller-declared units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "times",
+          "type_desc": "pd.DatetimeIndex",
+          "constraints": "Aligned nonmissing timezone-naive times on one declared clock.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "eligible",
+          "type_desc": "np.ndarray",
+          "constraints": "Boolean vector aligned to frame; explicitly determines eligible training and validation rows.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "cutoff",
+          "type_desc": "object",
+          "constraints": "Nonmissing timezone-naive pandas-compatible timestamp on the times clock. Equality belongs to validation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "offsets",
+          "type_desc": "np.ndarray",
+          "constraints": "Aligned target-unit offsets, finite on eligible rows; subtracted before fitting.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "categorical_columns",
+          "type_desc": "list",
+          "constraints": "Unique explicit names in frame; categorical columns are not inferred from domain naming.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "x_train",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Owned eligible rows strictly before cutoff, preserving original order and index.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "y_train",
+          "type_desc": "pd.Series",
+          "constraints": "Aligned float64 target minus offset, retaining frame index.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "x_valid",
+          "type_desc": "pd.DataFrame",
+          "constraints": "Owned eligible rows at or after cutoff; both splits must be nonempty.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "y_valid",
+          "type_desc": "pd.Series",
+          "constraints": "Aligned float64 validation target minus offset in target units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "categorical_indices",
+          "type_desc": "list",
+          "constraints": "Ordered categorical column positions in the unchanged feature schema.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.native_model_state.pack_bank",
+      "fqdn": "sciona.atoms.ml.model_selection.native_model_state.pack_bank",
+      "role": "reusable_operation",
+      "version_id": "40d42a99-d4f9-5f66-888f-e61062e7f020",
+      "content_hash": "d3fe4196cad7b67b3b931348b47d3b25e1f3d52ca71e7b78985b3f5a9bcbf654",
+      "provider_source": "src/sciona/atoms/ml/model_selection/native_model_state.py",
+      "provider_sha256": "9233fe76c926ea918ce0ca741de4e7ceb3d5b0b291f78579e41ff33c11010033",
+      "inputs": [
+        {
+          "name": "bank",
+          "type_desc": "dict",
+          "constraints": "Population slot maps containing fitted CatBoost regressors; shared object identities and typed slots are preserved.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "model_state",
+          "type_desc": "dict",
+          "constraints": "JSON-compatible native model-bank envelope, encoding each distinct object once with integrity hashes and exact backend/schema metadata. Private runtime state; hashes are not authentication.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.native_model_state.unpack_bank",
+      "fqdn": "sciona.atoms.ml.model_selection.native_model_state.unpack_bank",
+      "role": "reusable_operation",
+      "version_id": "815a15b5-2ed5-59ec-9e6f-8b1d746295bf",
+      "content_hash": "e626ec958fc719a21cc2959991546bec525eeeec922f2852e0d45672e3475d76",
+      "provider_source": "src/sciona/atoms/ml/model_selection/native_model_state.py",
+      "provider_sha256": "9233fe76c926ea918ce0ca741de4e7ceb3d5b0b291f78579e41ff33c11010033",
+      "inputs": [
+        {
+          "name": "state",
+          "type_desc": "dict",
+          "constraints": "Model-bank envelope with valid integrity, references, typed slots and exact supported backend version; treat payload as private runtime state.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "bank",
+          "type_desc": "dict",
+          "constraints": "Restored native model objects with shared identities and slot types; schema and all references verified.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.policy_state.bind",
+      "fqdn": "sciona.atoms.ml.model_selection.policy_state.bind",
+      "role": "reusable_operation",
+      "version_id": "9da94193-53b9-5f55-b6f2-b55e564ae6cc",
+      "content_hash": "e975550f65944114b3a58e1e1922f541330ad49c97ac26dfb794cd478495a1fd",
+      "provider_source": "src/sciona/atoms/ml/model_selection/policy_state.py",
+      "provider_sha256": "c998bb005903b155d45e6da1e5cf48356955d210978f0e7a11eaf2f740c1ff82",
+      "inputs": [
+        {
+          "name": "model_state",
+          "type_desc": "dict",
+          "constraints": "JSON-compatible finite model-state dictionary; backend validation is separate.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "policy",
+          "type_desc": "dict",
+          "constraints": "Explicit JSON-compatible finite policy dictionary; caller defines units, schemas and availability semantics.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "state",
+          "type_desc": "dict",
+          "constraints": "Owned canonical JSON payload with format and SHA256 binding model state to policy. Integrity only, not authentication.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.policy_state.unbind",
+      "fqdn": "sciona.atoms.ml.model_selection.policy_state.unbind",
+      "role": "reusable_operation",
+      "version_id": "20060f14-36c3-57a5-88ea-f6dec18cc0db",
+      "content_hash": "0339a4a51602fcbb15a98f0df0d78cd9e3603abf6ba72ae6972607c4cbcf0ff0",
+      "provider_source": "src/sciona/atoms/ml/model_selection/policy_state.py",
+      "provider_sha256": "c998bb005903b155d45e6da1e5cf48356955d210978f0e7a11eaf2f740c1ff82",
+      "inputs": [
+        {
+          "name": "state",
+          "type_desc": "dict",
+          "constraints": "Exact supported envelope fields, format and verified SHA256 of the canonical finite JSON payload.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "model_state",
+          "type_desc": "dict",
+          "constraints": "Owned restored model-state dictionary; backend decoding remains separate.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "policy",
+          "type_desc": "dict",
+          "constraints": "Owned restored policy dictionary; application-specific policy validation remains separate.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    }
+  ],
+  "provider_count": 35,
+  "reusable_operations": 16,
+  "domain_adapters": 19,
+  "graphs": {
+    "training": {
+      "sha256": "c9b7fecd61ef2d147eac81844dae7eab1a66c949525a2e0effb483eac8171136",
+      "nodes": 337,
+      "edges": 1481
+    },
+    "inference": {
+      "sha256": "633488a8c80992a7ad314acdef40720334790edc7d33a29564633270ef959a66",
+      "nodes": 6,
+      "edges": 14
+    },
+    "inference/primary_branch": {
+      "sha256": "248235492e4389dc49f7b0040287dc2c480a21adef71e68befa61805b9bea029",
+      "nodes": 25,
+      "edges": 106
+    },
+    "inference/baseline_branch": {
+      "sha256": "da0264d56238d7582ecc5f87016f57f4658dfd65388d9a5fcdc1a1ecba5f53af",
+      "nodes": 2,
+      "edges": 11
+    }
+  },
+  "source_sha256": {
+    "sciona/lifecycle_provider_contracts.py": "f0783199e5b4f412f19755bd226de6064bddfd5fc7d10a54b1abe4df76b6d70c",
+    "scripts/plan_nasa_first_lifecycle_contracts.py": "326423a553f2f400271c3547fd4bf0f8236948c9e1717e4a21dcec22df65861e",
+    "scripts/inventory_nasa_first_workflow_providers.py": "aca3801a908557385988ef75309ee588a511ce3ab5f1d9efbad3adf514446410"
+  },
+  "limitations": [
+    "Candidate semantic contracts, not catalog staging or approval.",
+    "Domain adapter ports retain source-specific constraints from the qualified graphs.",
+    "Runtime/license evidence, cross-domain execution and database gates remain required."
+  ]
+}

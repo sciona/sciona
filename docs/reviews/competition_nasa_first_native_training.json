@@ -1,0 +1,42 @@
+{
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "source_sha256": "9b96dd580d39b9ae6126c380c390f57c21b10d3cbc7d028af5a6639799da271d",
+  "backend_version": "1.2.10",
+  "numpy_version": "2.4.2",
+  "pandas_version": "2.3.3",
+  "native_threads": 1,
+  "maximum_trees": 20000,
+  "early_stopping_rounds": 60,
+  "fits": [
+    {
+      "trainer": "train_catboost_diff",
+      "training_rows": 16384,
+      "validation_rows": 8192,
+      "retained_trees": 208,
+      "best_iteration": 207,
+      "residual_state_alias": true,
+      "prediction_roundtrip_exact": true,
+      "feature_importance_finite": true
+    },
+    {
+      "trainer": "train_catboost",
+      "training_rows": 16384,
+      "validation_rows": 8192,
+      "retained_trees": 241,
+      "best_iteration": 240,
+      "residual_state_alias": false,
+      "prediction_roundtrip_exact": true,
+      "feature_importance_finite": null
+    }
+  ],
+  "validator_sha256": "03907e83ca6b289dbd69b5de39698c578bcc59174b6d1c7ccea7cf3c720ed486",
+  "limitations": [
+    "Two isolated native source trainers on synthetic numeric features; not the full 21-fit workflow or real competition data.",
+    "Source CatBoost 1.1.1 is not reproduced; this qualifies the current provisioned backend only.",
+    "Source constructor thread count and prediction/importance threads explicitly bounded to one; native file logging disabled.",
+    "Feature extraction, categorical coverage, global population construction, routing and catalog publication remain separate gates."
+  ]
+}

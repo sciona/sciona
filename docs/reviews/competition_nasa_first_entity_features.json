@@ -1,0 +1,38 @@
+{
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "source_sha256": "8b9776ae0e7fdbb48e2bee64ee442ca1d2d4023309f953092dba108f93e6896c",
+  "synthetic_queries": 3,
+  "signed_time_checks": 3,
+  "vocabulary_controls": 7,
+  "duplicate_order_dependent_columns": 5,
+  "corrected_attribute_values_checked": 15,
+  "corrected_duplicate_rejection": true,
+  "corrected_total_feature_values_checked": 45,
+  "complete_synthetic_feature_column_coverage": true,
+  "findings": [
+    "Derived time differences preserve sign before and after the encoded reference time.",
+    "Unknown identifiers are replaced before numeric-suffix extraction; the fallback label consequently yields its final character as another category.",
+    "Dictionary construction chooses the last input record for duplicate identities without an observation-time contract.",
+    "Malformed structured identifiers raise an index error; a corrected adapter requires explicit format validation."
+  ],
+  "requirements": [
+    "Caller supplies explicit reviewed vocabularies and well-formed identifier semantics; none may be inferred from inference rows.",
+    "Require unique authoritative entity records or an explicit available-at lookup policy for repeated records.",
+    "Preserve source fallback-derived categories or record and requalify a correction consistently in training and inference."
+  ],
+  "limitations": [
+    "Injected synthetic vocabularies; original configuration and real entity records are not inspected.",
+    "Structured identifier parsing and unique-snapshot attribute projection are checked under explicit synthetic policies; snapshot availability remains a caller obligation.",
+    "No complete entity adapter, full raw-feature workflow or publication approval applied."
+  ],
+  "implementation_sha256": {
+    "sciona/unique_entity_features.py": "54ef0c7f30f0bd607d3f4bda099180a1cfbccb16d846e08c47522739247126b2",
+    "tests/test_unique_entity_features.py": "df6cd8fc5ea12801c96ac142a9120ac058bea9a8d6071fff06c9ddc404214984",
+    "sciona/structured_identity_features.py": "805c5c94aecc92bee38bd4b12c517026720e2e40b10e598982e788015e9d7063",
+    "tests/test_structured_identity_features.py": "fbf9c7e0e94dc31835e013cdfe327eade79367a6dfe762eb8632ad48f29e8250"
+  },
+  "validator_sha256": "d2770e567efec057d67473eb5689f178bb515ee2e72b4224bb26b4893396c72b"
+}

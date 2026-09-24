@@ -1,0 +1,218 @@
+{
+  "graph_digest": "0da8924b6ecac0c5130dc5ebee5cb486ea472724095677a42dcc2c9d4ec3e002",
+  "execution_graph": {
+    "nodes": [
+      {
+        "node_id": "period",
+        "parent_id": null,
+        "name": "Compute circular two-body period",
+        "description": "Compute positive orbital period from separation, both masses and explicit SI G under the isolated Newtonian circular-orbit model.",
+        "concept_type": "custom",
+        "inputs": [
+          {
+            "name": "separation_metres",
+            "type_desc": "numpy.ndarray",
+            "constraints": "nonempty finite positive real separation in metres",
+            "data_kind": "",
+            "time_basis": "",
+            "provenance": "",
+            "required": true,
+            "default_value_repr": "",
+            "dim_signature": "L1"
+          },
+          {
+            "name": "mass1_kg",
+            "type_desc": "numpy.ndarray",
+            "constraints": "finite positive first mass in kilograms; same shape as separation",
+            "data_kind": "",
+            "time_basis": "",
+            "provenance": "",
+            "required": true,
+            "default_value_repr": "",
+            "dim_signature": "M1"
+          },
+          {
+            "name": "mass2_kg",
+            "type_desc": "numpy.ndarray",
+            "constraints": "finite positive second mass in kilograms; same shape as separation",
+            "data_kind": "",
+            "time_basis": "",
+            "provenance": "",
+            "required": true,
+            "default_value_repr": "",
+            "dim_signature": "M1"
+          },
+          {
+            "name": "gravitational_constant",
+            "type_desc": "float",
+            "constraints": "finite positive scalar G in SI",
+            "data_kind": "",
+            "time_basis": "",
+            "provenance": "",
+            "required": true,
+            "default_value_repr": "",
+            "dim_signature": "L3 M-1 T-2"
+          }
+        ],
+        "outputs": [
+          {
+            "name": "period_seconds",
+            "type_desc": "numpy.ndarray",
+            "constraints": "positive finite float64 seconds; input shape preserved",
+            "data_kind": "",
+            "time_basis": "",
+            "provenance": "",
+            "required": true,
+            "default_value_repr": "",
+            "dim_signature": "T1"
+          }
+        ],
+        "status": "atomic",
+        "children": [],
+        "depth": 0,
+        "type_signature": "",
+        "matched_primitive": "sciona.atoms.physical_quantities.circular_orbital_period.circular_orbital_period",
+        "primitive_binding_confidence": 0.0,
+        "primitive_binding_source": "",
+        "action_class": "replace_stage",
+        "resolution_reason": "",
+        "resolved_by": "",
+        "is_optional": false,
+        "is_opaque": false,
+        "is_external": false,
+        "parallelizable": false,
+        "conceptual_summary": "",
+        "critic_notes": "",
+        "decomposition_rationale": "",
+        "fixed_point_max_iterations": 0,
+        "fixed_point_convergence_field": "",
+        "map_window_size": 0,
+        "map_hop_size": 0,
+        "boundary_kind": "none",
+        "boundary_port_name": ""
+      }
+    ],
+    "edges": [],
+    "planning_artifact": null,
+    "metadata": {
+      "artifact_source": "physics_corrected_numerical_realization",
+      "publication_status": "draft",
+      "source_version_id": "ffb043f3-05a3-5ca6-9d94-87a17ff512d3",
+      "source_content_hash": "4d2810f058da2f5d3ec97b8de34b7219dee8b7c1715d99d37f3544fe3e9df9c4",
+      "literal_source_parity": false,
+      "physical_regime": "Isolated Newtonian point masses in a circular orbit; separation is not a barycentric radius.",
+      "num_nodes": 1,
+      "num_edges": 0
+    }
+  },
+  "full_runner_cases": 5,
+  "synthetic_numeric_cases": 208,
+  "maximum_ulp_error": 1.0,
+  "ulp_tolerance": 1,
+  "source_proof": {
+    "kind": "explicit_corrected_two_body_proof.v1",
+    "source_version_id": "ffb043f3-05a3-5ca6-9d94-87a17ff512d3",
+    "source_parity_claim": false,
+    "domain": "All named symbols positive real; stated premise schema and five equations required.",
+    "premise_schema": "Premise 0 is the centripetal-force schema instantiated with mass m2 and orbital radius d2; it is not inferred by renaming a fixed-object fact.",
+    "pi_interpretation": "Separately reviewed specialization of positive p to exact mathematical pi, based on exact source identity pdg0003141.",
+    "premises": [
+      "Equality(Symbol('Fc', positive=True), Mul(Symbol('m', positive=True), Symbol('r', positive=True), Pow(Symbol('w', positive=True), Integer(2))))",
+      "Equality(Symbol('F', positive=True), Symbol('Fc', positive=True))",
+      "Equality(Symbol('F', positive=True), Mul(Symbol('G', positive=True), Symbol('m1', positive=True), Symbol('m2', positive=True), Pow(Symbol('r', positive=True), Integer(-2))))",
+      "Equality(Symbol('w', positive=True), Mul(Integer(2), Pow(Symbol('T', positive=True), Integer(-1)), Symbol('p', positive=True)))",
+      "Equality(Symbol('r', positive=True), Add(Symbol('d1', positive=True), Symbol('d2', positive=True)))",
+      "Equality(Mul(Symbol('d1', positive=True), Symbol('m1', positive=True)), Mul(Symbol('d2', positive=True), Symbol('m2', positive=True)))"
+    ],
+    "steps": [
+      "Equality(Symbol('Fc', positive=True), Mul(Symbol('d2', positive=True), Symbol('m2', positive=True), Pow(Symbol('w', positive=True), Integer(2))))",
+      "Equality(Symbol('Fc', positive=True), Mul(Symbol('G', positive=True), Symbol('m1', positive=True), Symbol('m2', positive=True), Pow(Symbol('r', positive=True), Integer(-2))))",
+      "Equality(Mul(Symbol('d2', positive=True), Symbol('m2', positive=True), Pow(Symbol('w', positive=True), Integer(2))), Mul(Symbol('G', positive=True), Symbol('m1', positive=True), Symbol('m2', positive=True), Pow(Symbol('r', positive=True), Integer(-2))))",
+      "Equality(Mul(Integer(4), Pow(Symbol('T', positive=True), Integer(-2)), Symbol('d2', positive=True), Symbol('m2', positive=True), Pow(Symbol('p', positive=True), Integer(2))), Mul(Symbol('G', positive=True), Symbol('m1', positive=True), Symbol('m2', positive=True), Pow(Symbol('r', positive=True), Integer(-2))))",
+      "Equality(Mul(Integer(4), Pow(Symbol('T', positive=True), Integer(-2)), Symbol('d2', positive=True), Pow(Symbol('p', positive=True), Integer(2))), Mul(Symbol('G', positive=True), Symbol('m1', positive=True), Pow(Symbol('r', positive=True), Integer(-2))))",
+      "Equality(Pow(Symbol('T', positive=True), Integer(-2)), Mul(Rational(1, 4), Symbol('G', positive=True), Pow(Symbol('d2', positive=True), Integer(-1)), Symbol('m1', positive=True), Pow(Symbol('p', positive=True), Integer(-2)), Pow(Symbol('r', positive=True), Integer(-2))))",
+      "Equality(Pow(Symbol('T', positive=True), Integer(2)), Mul(Integer(4), Pow(Symbol('G', positive=True), Integer(-1)), Symbol('d2', positive=True), Pow(Symbol('m1', positive=True), Integer(-1)), Pow(Symbol('p', positive=True), Integer(2)), Pow(Symbol('r', positive=True), Integer(2))))",
+      "Equality(Pow(Symbol('T', positive=True), Integer(2)), Mul(Integer(4), Pow(Symbol('G', positive=True), Integer(-1)), Symbol('d2', positive=True), Pow(Symbol('m1', positive=True), Integer(-1)), Pow(Symbol('p', positive=True), Integer(2)), Pow(Symbol('r', positive=True), Integer(2))))",
+      "Equality(Pow(Symbol('T', positive=True), Integer(2)), Mul(Integer(4), Pow(Symbol('G', positive=True), Integer(-1)), Symbol('d2', positive=True), Pow(Symbol('m1', positive=True), Integer(-1)), Pow(Symbol('p', positive=True), Integer(2)), Pow(Symbol('r', positive=True), Integer(3)), Pow(Add(Symbol('d1', positive=True), Symbol('d2', positive=True)), Integer(-1))))",
+      "Equality(Pow(Symbol('T', positive=True), Integer(2)), Mul(Integer(4), Pow(Symbol('G', positive=True), Integer(-1)), Symbol('d2', positive=True), Pow(Symbol('m1', positive=True), Integer(-1)), Pow(Symbol('p', positive=True), Integer(2)), Pow(Symbol('r', positive=True), Integer(3)), Pow(Add(Symbol('d1', positive=True), Symbol('d2', positive=True)), Integer(-1))))",
+      "Equality(Pow(Symbol('T', positive=True), Integer(2)), Mul(Integer(4), Pow(Symbol('G', positive=True), Integer(-1)), Pow(Symbol('p', positive=True), Integer(2)), Pow(Symbol('r', positive=True), Integer(3)), Pow(Add(Mul(Symbol('d1', positive=True), Pow(Symbol('d2', positive=True), Integer(-1)), Symbol('m1', positive=True)), Symbol('m1', positive=True)), Integer(-1))))",
+      "Equality(Mul(Symbol('d1', positive=True), Pow(Symbol('d2', positive=True), Integer(-1)), Symbol('m1', positive=True)), Symbol('m2', positive=True))",
+      "Equality(Pow(Symbol('T', positive=True), Integer(2)), Mul(Integer(4), Pow(Symbol('G', positive=True), Integer(-1)), Pow(Symbol('p', positive=True), Integer(2)), Pow(Symbol('r', positive=True), Integer(3)), Pow(Add(Symbol('m1', positive=True), Symbol('m2', positive=True)), Integer(-1))))"
+    ],
+    "corrections": [
+      "Insert RHS at steps 3, 4, 13",
+      "Explicitly divide by positive m2 at step 5",
+      "Use separation premise for rational rewrite at step 9"
+    ],
+    "checks": {
+      "composed_algebra": true,
+      "denominator_domain": true,
+      "terminal_formula": true
+    },
+    "publication": "Unapproved corrected proof; physical review and runtime realization remain required.",
+    "selected_source_equations_matched": 13,
+    "selected_source_premises_matched": 6,
+    "equation_comparison_scope": "Rational equation agreement under explicit positive-real identity mapping; original inference labels and rules are not certified.",
+    "source_symbol_mapping": {
+      "pdg0001687": "Fc",
+      "pdg0002867": "F",
+      "pdg0002321": "w",
+      "pdg0002530": "r",
+      "pdg0002798": "d2",
+      "pdg0007652": "d1",
+      "pdg0005156": "m",
+      "pdg0004851": "m2",
+      "pdg0005022": "m1",
+      "pdg0006277": "G",
+      "pdg0003141": "p",
+      "pdg0009491": "T"
+    },
+    "pi_source_declaration": {
+      "reference_latex": "",
+      "dimension_time": "0",
+      "dimension_electric_charge": "0",
+      "dimension_luminous_intensity": "0",
+      "dimension_length": "0",
+      "dimension_amount_of_substance": "0",
+      "dimension_mass": "0",
+      "dimension_temperature": "0",
+      "description_latex": "",
+      "latex": "\\pi",
+      "name_latex": "pi",
+      "variable_or_constant": "constant",
+      "author_name_latex": "ben.is.located@gmail.com",
+      "scope": "real",
+      "domain": "any"
+    },
+    "physical_terminal": "Equality(Pow(Symbol('T', positive=True), Integer(2)), Mul(Integer(4), Pow(pi, Integer(2)), Pow(Symbol('G', positive=True), Integer(-1)), Pow(Symbol('r', positive=True), Integer(3)), Pow(Add(Symbol('m1', positive=True), Symbol('m2', positive=True)), Integer(-1))))",
+    "physical_scope": "Isolated Newtonian two point masses in a circular orbit; r is their separation and d1,d2 are positive barycentric distances. No orbit-validity classifier, relativistic correction, extended-body or perturbed-orbit claim.",
+    "reference": "https://openstax.org/books/calculus-volume-3/pages/3-4-motion-in-space",
+    "reference_scope": "Equation 3.30 supports the total-mass period formula. Circular separation semantics follow the explicit premises here.",
+    "symbol_file_sha256": "c5a744d3829273e4984a823dde93721ac96a2c6aa35e2a8d2c54c174bc6dd30d",
+    "selection_sha256": "2b0b5f4a739ff9a4ceb7951ee8a2cf1e822dd093295b9694e31a6c0bd5ca446c"
+  },
+  "source_selection_implementation_sha256": {
+    "scripts/validate_repaired_source_graph.py": "a4c8ea43b4b90c1acdea9683ac29c23b32cd40f9733f162ee8d6438274c25c82",
+    "sciona/physics_ingest/pdg_graph_replay_v4.py": "d45ea28e5d8251bb356a1774fb9d91bcf430dd4437f244addf12fb693d39593f",
+    "sciona/physics_ingest/pdg_rational_rules_v4.py": "484f0f7837ad876bc3e77b7642986fa24915a96269d628be8f7e0434bdfeefd9",
+    "sciona/physics_ingest/pdg_real_power_rules.py": "fb87ebf6c7375982f48c8618387fc8fbe5145b2b25d77b2e9e8cd45da444745c",
+    "sciona/physics_ingest/pdg_rational_rules_v2.py": "9578184be24eb1197ecabb7a3a9a78e81ad27ab3869f21b3680f53e4f9221f31",
+    "sciona/physics_ingest/pdg_rule_contracts.py": "0c6abb7ea356a9766c1f7b14203a10f73b994fa1b6cf9291803f878ea6de824e"
+  },
+  "provider_sha256": "8639ec6f42e86a53815fbbe3089a61ad5f47550aa653a77647adcd446aabec85",
+  "implementation_sha256": {
+    "sciona/physics_ingest/two_body_execution.py": "04201847db9f392e70b2c141735e47d16fb725642a2b4e0992301c64043999b0",
+    "sciona/physics_ingest/two_body_corrected_proof.py": "ce57899ce7623a15ba96e2d27856e4fb1d3f33efa0bf5dd5a76e9c35470ae7e3",
+    "scripts/validate_two_body_execution.py": "5bd9afae0e027406a041d50c21aa0353594f6e4b7ddd690ed9f1840ca9579273",
+    "scripts/validate_two_body_corrected_proof.py": "cb35f934cb769f8d90c7c4d862b91f3f7389bd19217a3165e4ea78a5572256c9",
+    "tests/physics_ingest/test_circular_orbital_period.py": "ec562d2503b3beee801af9004716e79b52eabacdca89f7324d6d05ebe905c342",
+    "tests/physics_ingest/test_two_body_corrected_proof.py": "d13355fa66e9e0c34af06027a5df14a22656f5bff2641bbeac3ec7e16108d25c",
+    "sciona/services/execution_graph_codec.py": "1ad42332f8e28adf4ee3f8d53184a4af8351f66304efa1703c63ed32989082a6",
+    "sciona/visualizer/runner.py": "ff289eda92093a164f1691e2453622579cd6357e6292267833f5873a97ad6aa3"
+  },
+  "limitations": [
+    "Caller must establish isolated Newtonian circular two-point-mass model and SI units.",
+    "Corrected inference operations; no literal source-proof parity.",
+    "Binary64 pi; positive subnormals may lose relative precision; per-element Decimal prioritizes range over throughput."
+  ]
+}

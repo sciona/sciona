@@ -1,0 +1,2353 @@
+{
+  "fqdn": "cdg.ml.calibration.grouped_residual_classifier",
+  "artifact_id": "947df1fd-f3fa-5e5e-b0b6-0273d7e2cfe2",
+  "version_id": "9ec72f57-a020-528a-8633-cd3f1d9f8de8",
+  "graph_sha256": "dd89ad47afcc80b3bad608068c18fb08e8e591c9d4c6f21b9e3d7c9e02eadb6c",
+  "atoms": [
+    {
+      "fqdn": "sciona.atoms.ml.model_selection.training_contracts.training_inputs",
+      "artifact_id": "c63754b8-3708-5774-bd77-31f0c755bcd9",
+      "version_id": "ed457598-f283-5d5c-a2f0-7af057a95e78",
+      "content_hash": "73f0f90e0ccdb3ad9bc215bc9afa9f6c9ce41f8961e0fa05360a574542c212e5",
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.training_contracts.training_inputs",
+      "inputs": [
+        {
+          "name": "features",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Tested graph contexts: Nonempty float64 rows/features matrix. NaN uses backend missing-value behavior; infinities rejected. Preserve declared column order, meanings and units. Classifier matrices append exactly one prediction column; training and query row counts may differ.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "targets",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Tested graph contexts: Finite float64 observations aligned to original training rows in caller-declared target units, shared with predictions, offsets and maximum_error.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "groups",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "Tested graph contexts: Int64 group identifiers aligned to training rows; at least two distinct groups; dimensionless. Identity encoding must preserve group membership.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "feature_names",
+          "type_desc": "list",
+          "constraints": "Tested graph contexts: Unique ordered nonempty backend-compatible names, one per feature column. Preserve this order through native model state; classifier schema appends the explicit prediction feature name.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "features",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Tested graph contexts: Nonempty float64 rows/features matrix. NaN uses backend missing-value behavior; infinities rejected. Preserve declared column order, meanings and units. Classifier matrices append exactly one prediction column; training and query row counts may differ.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "targets",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Tested graph contexts: Finite float64 observations aligned to original training rows in caller-declared target units, shared with predictions, offsets and maximum_error.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "groups",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "Tested graph contexts: Int64 group identifiers aligned to training rows; at least two distinct groups; dimensionless. Identity encoding must preserve group membership.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "feature_names",
+          "type_desc": "list",
+          "constraints": "Tested graph contexts: Unique ordered nonempty backend-compatible names, one per feature column. Preserve this order through native model state; classifier schema appends the explicit prediction feature name.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "fqdn": "sciona.atoms.ml.model_selection.training_contracts.prediction_inputs",
+      "artifact_id": "539eddd8-2b42-58c5-b26a-afd853834586",
+      "version_id": "061a7849-aabe-5904-b1b3-b06f183224d2",
+      "content_hash": "81cde94eb386a4e84d2867795b965b511ae1f1408602ee10b31209ce5fc3d7c3",
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.training_contracts.prediction_inputs",
+      "inputs": [
+        {
+          "name": "prediction_features",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Tested graph contexts: Nonempty float64 rows/features matrix. NaN uses backend missing-value behavior; infinities rejected. Preserve declared column order, meanings and units. Classifier matrices append exactly one prediction column; training and query row counts may differ.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "feature_names",
+          "type_desc": "list",
+          "constraints": "Tested graph contexts: Unique ordered nonempty backend-compatible names, one per feature column. Preserve this order through native model state; classifier schema appends the explicit prediction feature name.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "features",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Tested graph contexts: Nonempty float64 rows/features matrix. NaN uses backend missing-value behavior; infinities rejected. Preserve declared column order, meanings and units. Classifier matrices append exactly one prediction column; training and query row counts may differ.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "fqdn": "sciona.atoms.ml.model_selection.population_masks.grouped_holdout_masks",
+      "artifact_id": "528b4355-6777-50a6-8c16-689f30119dae",
+      "version_id": "357908d3-44b2-55ee-b934-c43b30ee21b1",
+      "content_hash": "da50d631a576511e84e8d951f933817b92ce9fd2c5a2af5d033b6ec104fe536b",
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.population_masks.grouped_holdout_masks",
+      "inputs": [
+        {
+          "name": "groups",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "Tested graph contexts: Int64 group identifiers aligned to training rows; at least two distinct groups; dimensionless. Identity encoding must preserve group membership.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "train_fraction",
+          "type_desc": "float",
+          "constraints": "Tested graph contexts: Finite float fraction strictly between zero and one, applied to unique groups. Must leave nonempty training and complementary held-out groups.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "seed",
+          "type_desc": "int",
+          "constraints": "Tested graph contexts: Explicit unsigned 32-bit integer random seed for the group split; dimensionless.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "train",
+          "type_desc": "NDArray[np.bool_]",
+          "constraints": "Tested graph contexts: Boolean vector aligned to original training rows; dimensionless. Split masks exhaustively partition rows by group. Retained mask intersects held-out membership with inclusive residual eligibility. Fit selections must be nonempty; selected classifier rows need both classes.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "held",
+          "type_desc": "NDArray[np.bool_]",
+          "constraints": "Tested graph contexts: Boolean vector aligned to original training rows; dimensionless. Split masks exhaustively partition rows by group. Retained mask intersects held-out membership with inclusive residual eligibility. Fit selections must be nonempty; selected classifier rows need both classes.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "fqdn": "sciona.atoms.ml.model_selection.masked_operations.fit_masked_regression",
+      "artifact_id": "79cabe5e-ea36-510f-af78-0c733ae3d450",
+      "version_id": "2860cf97-ce33-5fbc-b9da-859efac8cf62",
+      "content_hash": "5d5b82b6dc93361221a09fd26fdc438dd29e997488f1229787acf1e0b3380953",
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.masked_operations.fit_masked_regression",
+      "inputs": [
+        {
+          "name": "features",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Tested graph contexts: Nonempty float64 rows/features matrix. NaN uses backend missing-value behavior; infinities rejected. Preserve declared column order, meanings and units. Classifier matrices append exactly one prediction column; training and query row counts may differ.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "targets",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Tested graph contexts: Finite float64 observations aligned to original training rows in caller-declared target units, shared with predictions, offsets and maximum_error.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "feature_names",
+          "type_desc": "list",
+          "constraints": "Tested graph contexts: Unique ordered nonempty backend-compatible names, one per feature column. Preserve this order through native model state; classifier schema appends the explicit prediction feature name.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "selection",
+          "type_desc": "NDArray[np.bool_]",
+          "constraints": "Tested graph contexts: Boolean vector aligned to original training rows; dimensionless. Split masks exhaustively partition rows by group. Retained mask intersects held-out membership with inclusive residual eligibility. Fit selections must be nonempty; selected classifier rows need both classes.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "state",
+          "type_desc": "dict",
+          "constraints": "Tested graph contexts: JSON-compatible native UBJ model state with exact task, backend version, ordered feature names and payload integrity digest. Private runtime material for non-public training inputs; one CPU thread per model operation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "fqdn": "sciona.atoms.ml.xgboost.model_io.predict_regression_model",
+      "artifact_id": "c21cd1fa-1012-5318-8a1e-0ad30550f9d6",
+      "version_id": "96a67837-e821-5887-bfa2-2ad9579951bd",
+      "content_hash": "95c1ea04d67f16d78960cfc8f26d0bf64a10bc5dee3181e6cbd4c1cf4820a9db",
+      "runtime_fqdn": "sciona.atoms.ml.xgboost.model_io.predict_regression_model",
+      "inputs": [
+        {
+          "name": "prediction_features",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Tested graph contexts: Nonempty float64 rows/features matrix. NaN uses backend missing-value behavior; infinities rejected. Preserve declared column order, meanings and units. Classifier matrices append exactly one prediction column; training and query row counts may differ.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "feature_names",
+          "type_desc": "list",
+          "constraints": "Tested graph contexts: Unique ordered nonempty backend-compatible names, one per feature column. Preserve this order through native model state; classifier schema appends the explicit prediction feature name.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "state",
+          "type_desc": "dict",
+          "constraints": "Tested graph contexts: JSON-compatible native UBJ model state with exact task, backend version, ordered feature names and payload integrity digest. Private runtime material for non-public training inputs; one CPU thread per model operation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "predictions",
+          "type_desc": "NDArray[np.float32]",
+          "constraints": "Tested graph contexts: Row-aligned numeric prediction in target units with the declared dtype. Training rounds float32 predictions to nearest-even int32 then widens exactly; inference classifier inputs remain unrounded. Final int32 conversion rejects overflow; no clipping, scaling or imputation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "fqdn": "sciona.atoms.ml.calibration.prediction_features.round_to_int32",
+      "artifact_id": "9351b1e7-93d6-58ad-be3e-c7ff038aadcd",
+      "version_id": "ee4b7247-4005-5e9c-82d3-10b17cd67feb",
+      "content_hash": "5c9381d8b6bdd4c29c18c488602b8fae106a859dd9b87080a2137716b2337daf",
+      "runtime_fqdn": "sciona.atoms.ml.calibration.prediction_features.round_to_int32",
+      "inputs": [
+        {
+          "name": "values",
+          "type_desc": "NDArray[np.float32]",
+          "constraints": "Tested graph contexts: Row-aligned numeric prediction in target units with the declared dtype. Training rounds float32 predictions to nearest-even int32 then widens exactly; inference classifier inputs remain unrounded. Final int32 conversion rejects overflow; no clipping, scaling or imputation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "values",
+          "type_desc": "NDArray[np.int32]",
+          "constraints": "Tested graph contexts: Row-aligned numeric prediction in target units with the declared dtype. Training rounds float32 predictions to nearest-even int32 then widens exactly; inference classifier inputs remain unrounded. Final int32 conversion rejects overflow; no clipping, scaling or imputation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "fqdn": "sciona.atoms.ml.calibration.prediction_features.widen_prediction_values",
+      "artifact_id": "88c501f1-eabd-5832-b08e-7230789241b0",
+      "version_id": "ace5d2dc-95c5-5a34-adca-d8b33834cb53",
+      "content_hash": "fde02b68910ffeaca10e1e1aa9696e2a608a69644fcebc4475ec50eec3e7d42d",
+      "runtime_fqdn": "sciona.atoms.ml.calibration.prediction_features.widen_prediction_values",
+      "inputs": [
+        {
+          "name": "values",
+          "type_desc": "NDArray[np.int32] | NDArray[np.float32]",
+          "constraints": "Tested graph contexts: Row-aligned numeric prediction in target units with the declared dtype. Training rounds float32 predictions to nearest-even int32 then widens exactly; inference classifier inputs remain unrounded. Final int32 conversion rejects overflow; no clipping, scaling or imputation. Finite row-aligned probability of strict underestimation in [0,1], dimensionless. Float32 model probabilities widen exactly for calibration.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "values",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Tested graph contexts: Row-aligned numeric prediction in target units with the declared dtype. Training rounds float32 predictions to nearest-even int32 then widens exactly; inference classifier inputs remain unrounded. Final int32 conversion rejects overflow; no clipping, scaling or imputation. Finite row-aligned probability of strict underestimation in [0,1], dimensionless. Float32 model probabilities widen exactly for calibration.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "fqdn": "sciona.atoms.ml.model_selection.population_masks.residual_threshold_mask",
+      "artifact_id": "f5aedc21-cadf-59ef-bffa-292c09c07f7d",
+      "version_id": "43430381-6fb4-5a08-958f-15f1e2ea5e43",
+      "content_hash": "48c70ddebd3308da24f24bbe5619cf4adcb7d121bc365d982d3bcac83721276a",
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.population_masks.residual_threshold_mask",
+      "inputs": [
+        {
+          "name": "observed",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Tested graph contexts: Finite float64 observations aligned to original training rows in caller-declared target units, shared with predictions, offsets and maximum_error.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "predictions",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Tested graph contexts: Row-aligned numeric prediction in target units with the declared dtype. Training rounds float32 predictions to nearest-even int32 then widens exactly; inference classifier inputs remain unrounded. Final int32 conversion rejects overflow; no clipping, scaling or imputation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "maximum_error",
+          "type_desc": "float",
+          "constraints": "Tested graph contexts: Finite nonnegative float threshold in target units. Retain abs(observed-rounded_internal_prediction) <= maximum_error; equality included.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "selection",
+          "type_desc": "NDArray[np.bool_]",
+          "constraints": "Tested graph contexts: Boolean vector aligned to original training rows; dimensionless. Split masks exhaustively partition rows by group. Retained mask intersects held-out membership with inclusive residual eligibility. Fit selections must be nonempty; selected classifier rows need both classes.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "fqdn": "sciona.atoms.ml.model_selection.masked_operations.intersect_masks",
+      "artifact_id": "24f783dd-26ed-5614-9fee-ff8fc7ff3f22",
+      "version_id": "5646e46d-b39b-5c84-b2ce-2d8ddfce9dd7",
+      "content_hash": "68879fb09f5871add95ef2a3966b18e45b91149874a93d3eec9b613a901cb3dd",
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.masked_operations.intersect_masks",
+      "inputs": [
+        {
+          "name": "left",
+          "type_desc": "NDArray[np.bool_]",
+          "constraints": "Tested graph contexts: Boolean vector aligned to original training rows; dimensionless. Split masks exhaustively partition rows by group. Retained mask intersects held-out membership with inclusive residual eligibility. Fit selections must be nonempty; selected classifier rows need both classes.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "right",
+          "type_desc": "NDArray[np.bool_]",
+          "constraints": "Tested graph contexts: Boolean vector aligned to original training rows; dimensionless. Split masks exhaustively partition rows by group. Retained mask intersects held-out membership with inclusive residual eligibility. Fit selections must be nonempty; selected classifier rows need both classes.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "selection",
+          "type_desc": "NDArray[np.bool_]",
+          "constraints": "Tested graph contexts: Boolean vector aligned to original training rows; dimensionless. Split masks exhaustively partition rows by group. Retained mask intersects held-out membership with inclusive residual eligibility. Fit selections must be nonempty; selected classifier rows need both classes.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "fqdn": "sciona.atoms.ml.calibration.prediction_features.underestimation_labels",
+      "artifact_id": "7e0d51e7-54ef-5adf-b770-3382d9e21b45",
+      "version_id": "19e692dd-8dd5-57fa-8554-61b35bf55cf9",
+      "content_hash": "e9ead0e4dd1ada3495d490a7d13f46ca91e3bb7a62dd9eea50189920209efb47",
+      "runtime_fqdn": "sciona.atoms.ml.calibration.prediction_features.underestimation_labels",
+      "inputs": [
+        {
+          "name": "observed",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Tested graph contexts: Finite float64 observations aligned to original training rows in caller-declared target units, shared with predictions, offsets and maximum_error.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "predictions",
+          "type_desc": "NDArray[np.int32]",
+          "constraints": "Tested graph contexts: Row-aligned numeric prediction in target units with the declared dtype. Training rounds float32 predictions to nearest-even int32 then widens exactly; inference classifier inputs remain unrounded. Final int32 conversion rejects overflow; no clipping, scaling or imputation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "labels",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "Tested graph contexts: Int64 strict-underestimation labels aligned to training rows: 1 when rounded prediction is below observation, otherwise 0. Selected classifier population must contain both classes.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "fqdn": "sciona.atoms.ml.calibration.prediction_features.append_prediction_feature",
+      "artifact_id": "4ba44dfc-f783-5e7a-bcf0-0861d1e22cec",
+      "version_id": "3d6b934b-87ea-5d55-affb-94d3b902d204",
+      "content_hash": "191fe88efc32170e5aa5c890aa30d0237c522243b3d6f152611eb92012913768",
+      "runtime_fqdn": "sciona.atoms.ml.calibration.prediction_features.append_prediction_feature",
+      "inputs": [
+        {
+          "name": "features",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Tested graph contexts: Nonempty float64 rows/features matrix. NaN uses backend missing-value behavior; infinities rejected. Preserve declared column order, meanings and units. Classifier matrices append exactly one prediction column; training and query row counts may differ.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "predictions",
+          "type_desc": "NDArray[np.int32] | NDArray[np.float32]",
+          "constraints": "Tested graph contexts: Row-aligned numeric prediction in target units with the declared dtype. Training rounds float32 predictions to nearest-even int32 then widens exactly; inference classifier inputs remain unrounded. Final int32 conversion rejects overflow; no clipping, scaling or imputation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "features",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Tested graph contexts: Nonempty float64 rows/features matrix. NaN uses backend missing-value behavior; infinities rejected. Preserve declared column order, meanings and units. Classifier matrices append exactly one prediction column; training and query row counts may differ.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "fqdn": "sciona.atoms.ml.model_selection.training_contracts.append_feature_name",
+      "artifact_id": "082b9e7f-7210-536f-bc56-129b6776c952",
+      "version_id": "1020da80-2b3c-580a-a54b-0fd7bebc3a9c",
+      "content_hash": "cb32a02ae7ac3075f7472ef90cad2b349d0a74a79754fcf59f6e1110cbd4aff0",
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.training_contracts.append_feature_name",
+      "inputs": [
+        {
+          "name": "feature_names",
+          "type_desc": "list",
+          "constraints": "Tested graph contexts: Unique ordered nonempty backend-compatible names, one per feature column. Preserve this order through native model state; classifier schema appends the explicit prediction feature name.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "prediction_feature_name",
+          "type_desc": "str",
+          "constraints": "Tested graph contexts: Nonempty backend-compatible new feature name, absent from the base schema; identifies the appended prediction in target units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "names",
+          "type_desc": "list",
+          "constraints": "Tested graph contexts: Unique ordered nonempty backend-compatible names, one per feature column. Preserve this order through native model state; classifier schema appends the explicit prediction feature name.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "fqdn": "sciona.atoms.ml.model_selection.masked_operations.fit_masked_binary",
+      "artifact_id": "f6eb5465-a3b4-5259-b6a2-f4ac454afa7f",
+      "version_id": "399ce09f-3694-532d-9dfc-4146147a234b",
+      "content_hash": "36b982c3d92d7b9671a4f428389892d9c9b67786ef2f7a44b23a09acd26710d0",
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.masked_operations.fit_masked_binary",
+      "inputs": [
+        {
+          "name": "features",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Tested graph contexts: Nonempty float64 rows/features matrix. NaN uses backend missing-value behavior; infinities rejected. Preserve declared column order, meanings and units. Classifier matrices append exactly one prediction column; training and query row counts may differ.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "targets",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "Tested graph contexts: Int64 strict-underestimation labels aligned to training rows: 1 when rounded prediction is below observation, otherwise 0. Selected classifier population must contain both classes.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "feature_names",
+          "type_desc": "list",
+          "constraints": "Tested graph contexts: Unique ordered nonempty backend-compatible names, one per feature column. Preserve this order through native model state; classifier schema appends the explicit prediction feature name.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "selection",
+          "type_desc": "NDArray[np.bool_]",
+          "constraints": "Tested graph contexts: Boolean vector aligned to original training rows; dimensionless. Split masks exhaustively partition rows by group. Retained mask intersects held-out membership with inclusive residual eligibility. Fit selections must be nonempty; selected classifier rows need both classes.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "state",
+          "type_desc": "dict",
+          "constraints": "Tested graph contexts: JSON-compatible native UBJ model state with exact task, backend version, ordered feature names and payload integrity digest. Private runtime material for non-public training inputs; one CPU thread per model operation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "fqdn": "sciona.atoms.ml.xgboost.model_io.predict_binary_model",
+      "artifact_id": "5c87d640-95e9-593d-88f2-f6cf39170d01",
+      "version_id": "bfbe2718-4248-51c5-9983-c98d874d51eb",
+      "content_hash": "d6630caffe4b6a37f8caa005cb075a3505e1992b8d875d66bd10378ac8f3f7cc",
+      "runtime_fqdn": "sciona.atoms.ml.xgboost.model_io.predict_binary_model",
+      "inputs": [
+        {
+          "name": "prediction_features",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Tested graph contexts: Nonempty float64 rows/features matrix. NaN uses backend missing-value behavior; infinities rejected. Preserve declared column order, meanings and units. Classifier matrices append exactly one prediction column; training and query row counts may differ.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "feature_names",
+          "type_desc": "list",
+          "constraints": "Tested graph contexts: Unique ordered nonempty backend-compatible names, one per feature column. Preserve this order through native model state; classifier schema appends the explicit prediction feature name.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "state",
+          "type_desc": "dict",
+          "constraints": "Tested graph contexts: JSON-compatible native UBJ model state with exact task, backend version, ordered feature names and payload integrity digest. Private runtime material for non-public training inputs; one CPU thread per model operation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "probabilities",
+          "type_desc": "NDArray[np.float32]",
+          "constraints": "Tested graph contexts: Finite row-aligned probability of strict underestimation in [0,1], dimensionless. Float32 model probabilities widen exactly for calibration.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "fqdn": "sciona.atoms.ml.model_selection.masked_operations.estimate_masked_offsets",
+      "artifact_id": "e10a76b9-217c-55e6-afaa-31be7c62bcd4",
+      "version_id": "d369e2bb-9db6-5a85-b6b7-101e61fce23e",
+      "content_hash": "9d0b48ba64bf4007bff0fd20fef37aedaedaa0a2013eb03ef03f7cd00ea2680f",
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.masked_operations.estimate_masked_offsets",
+      "inputs": [
+        {
+          "name": "observed",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Tested graph contexts: Finite float64 observations aligned to original training rows in caller-declared target units, shared with predictions, offsets and maximum_error.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "calibration_predictions",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Tested graph contexts: Row-aligned numeric prediction in target units with the declared dtype. Training rounds float32 predictions to nearest-even int32 then widens exactly; inference classifier inputs remain unrounded. Final int32 conversion rejects overflow; no clipping, scaling or imputation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "calibration_probabilities",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Tested graph contexts: Finite row-aligned probability of strict underestimation in [0,1], dimensionless. Float32 model probabilities widen exactly for calibration.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "threshold",
+          "type_desc": "float",
+          "constraints": "Tested graph contexts: Finite float probability threshold in [0,1], dimensionless. Both strict calibration groups must be populated inside the held-out mask; equality is excluded from offset estimation and unchanged during correction.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "selection",
+          "type_desc": "NDArray[np.bool_]",
+          "constraints": "Tested graph contexts: Boolean vector aligned to original training rows; dimensionless. Split masks exhaustively partition rows by group. Retained mask intersects held-out membership with inclusive residual eligibility. Fit selections must be nonempty; selected classifier rows need both classes.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "offsets",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Tested graph contexts: Finite float64 pair [median(observed-predicted | q>threshold), median(predicted-observed | q<threshold)] estimated only on held-out rows; signed target units. Application explicitly narrows offsets to float32 and rejects overflow.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    },
+    {
+      "fqdn": "sciona.atoms.ml.calibration.float32_correction.apply_float32_offsets",
+      "artifact_id": "87973dc6-b417-5d03-915f-2a6622b482ee",
+      "version_id": "23241c8e-9ea1-5854-9c37-120434d287a7",
+      "content_hash": "59bb63d8a6de668a7be74ea8f418eec165dd6c1088eb5cb38e04284e1286ab0c",
+      "runtime_fqdn": "sciona.atoms.ml.calibration.float32_correction.apply_float32_offsets",
+      "inputs": [
+        {
+          "name": "predictions",
+          "type_desc": "NDArray[np.float32]",
+          "constraints": "Tested graph contexts: Row-aligned numeric prediction in target units with the declared dtype. Training rounds float32 predictions to nearest-even int32 then widens exactly; inference classifier inputs remain unrounded. Final int32 conversion rejects overflow; no clipping, scaling or imputation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "probabilities",
+          "type_desc": "NDArray[np.float32]",
+          "constraints": "Tested graph contexts: Finite row-aligned probability of strict underestimation in [0,1], dimensionless. Float32 model probabilities widen exactly for calibration.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "offsets",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Tested graph contexts: Finite float64 pair [median(observed-predicted | q>threshold), median(predicted-observed | q<threshold)] estimated only on held-out rows; signed target units. Application explicitly narrows offsets to float32 and rejects overflow.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "threshold",
+          "type_desc": "float",
+          "constraints": "Tested graph contexts: Finite float probability threshold in [0,1], dimensionless. Both strict calibration groups must be populated inside the held-out mask; equality is excluded from offset estimation and unchanged during correction.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "predictions",
+          "type_desc": "NDArray[np.float32]",
+          "constraints": "Tested graph contexts: Row-aligned numeric prediction in target units with the declared dtype. Training rounds float32 predictions to nearest-even int32 then widens exactly; inference classifier inputs remain unrounded. Final int32 conversion rejects overflow; no clipping, scaling or imputation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ]
+    }
+  ],
+  "bindings": [
+    {
+      "fqdn": "sciona.atoms.ml.model_selection.training_contracts.training_inputs",
+      "artifact_id": "c63754b8-3708-5774-bd77-31f0c755bcd9",
+      "version_id": "ed457598-f283-5d5c-a2f0-7af057a95e78",
+      "content_hash": "73f0f90e0ccdb3ad9bc215bc9afa9f6c9ce41f8961e0fa05360a574542c212e5",
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.training_contracts.training_inputs",
+      "inputs": [
+        {
+          "name": "features",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Nonempty float64 rows/features matrix. NaN uses backend missing-value behavior; infinities rejected. Preserve declared column order, meanings and units. Classifier matrices append exactly one prediction column; training and query row counts may differ.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "targets",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Finite float64 observations aligned to original training rows in caller-declared target units, shared with predictions, offsets and maximum_error.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "groups",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "Int64 group identifiers aligned to training rows; at least two distinct groups; dimensionless. Identity encoding must preserve group membership.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "feature_names",
+          "type_desc": "list",
+          "constraints": "Unique ordered nonempty backend-compatible names, one per feature column. Preserve this order through native model state; classifier schema appends the explicit prediction feature name.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "features",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Nonempty float64 rows/features matrix. NaN uses backend missing-value behavior; infinities rejected. Preserve declared column order, meanings and units. Classifier matrices append exactly one prediction column; training and query row counts may differ.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "targets",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Finite float64 observations aligned to original training rows in caller-declared target units, shared with predictions, offsets and maximum_error.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "groups",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "Int64 group identifiers aligned to training rows; at least two distinct groups; dimensionless. Identity encoding must preserve group membership.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "feature_names",
+          "type_desc": "list",
+          "constraints": "Unique ordered nonempty backend-compatible names, one per feature column. Preserve this order through native model state; classifier schema appends the explicit prediction feature name.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "node_id": "training"
+    },
+    {
+      "fqdn": "sciona.atoms.ml.model_selection.training_contracts.prediction_inputs",
+      "artifact_id": "539eddd8-2b42-58c5-b26a-afd853834586",
+      "version_id": "061a7849-aabe-5904-b1b3-b06f183224d2",
+      "content_hash": "81cde94eb386a4e84d2867795b965b511ae1f1408602ee10b31209ce5fc3d7c3",
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.training_contracts.prediction_inputs",
+      "inputs": [
+        {
+          "name": "prediction_features",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Nonempty float64 rows/features matrix. NaN uses backend missing-value behavior; infinities rejected. Preserve declared column order, meanings and units. Classifier matrices append exactly one prediction column; training and query row counts may differ.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "feature_names",
+          "type_desc": "list",
+          "constraints": "Unique ordered nonempty backend-compatible names, one per feature column. Preserve this order through native model state; classifier schema appends the explicit prediction feature name.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "features",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Nonempty float64 rows/features matrix. NaN uses backend missing-value behavior; infinities rejected. Preserve declared column order, meanings and units. Classifier matrices append exactly one prediction column; training and query row counts may differ.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "node_id": "query"
+    },
+    {
+      "fqdn": "sciona.atoms.ml.model_selection.population_masks.grouped_holdout_masks",
+      "artifact_id": "528b4355-6777-50a6-8c16-689f30119dae",
+      "version_id": "357908d3-44b2-55ee-b934-c43b30ee21b1",
+      "content_hash": "da50d631a576511e84e8d951f933817b92ce9fd2c5a2af5d033b6ec104fe536b",
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.population_masks.grouped_holdout_masks",
+      "inputs": [
+        {
+          "name": "groups",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "Int64 group identifiers aligned to training rows; at least two distinct groups; dimensionless. Identity encoding must preserve group membership.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "train_fraction",
+          "type_desc": "float",
+          "constraints": "Finite float fraction strictly between zero and one, applied to unique groups. Must leave nonempty training and complementary held-out groups.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "seed",
+          "type_desc": "int",
+          "constraints": "Explicit unsigned 32-bit integer random seed for the group split; dimensionless.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "train",
+          "type_desc": "NDArray[np.bool_]",
+          "constraints": "Boolean vector aligned to original training rows; dimensionless. Split masks exhaustively partition rows by group. Retained mask intersects held-out membership with inclusive residual eligibility. Fit selections must be nonempty; selected classifier rows need both classes.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "held",
+          "type_desc": "NDArray[np.bool_]",
+          "constraints": "Boolean vector aligned to original training rows; dimensionless. Split masks exhaustively partition rows by group. Retained mask intersects held-out membership with inclusive residual eligibility. Fit selections must be nonempty; selected classifier rows need both classes.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "node_id": "split"
+    },
+    {
+      "fqdn": "sciona.atoms.ml.model_selection.masked_operations.fit_masked_regression",
+      "artifact_id": "79cabe5e-ea36-510f-af78-0c733ae3d450",
+      "version_id": "2860cf97-ce33-5fbc-b9da-859efac8cf62",
+      "content_hash": "5d5b82b6dc93361221a09fd26fdc438dd29e997488f1229787acf1e0b3380953",
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.masked_operations.fit_masked_regression",
+      "inputs": [
+        {
+          "name": "features",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Nonempty float64 rows/features matrix. NaN uses backend missing-value behavior; infinities rejected. Preserve declared column order, meanings and units. Classifier matrices append exactly one prediction column; training and query row counts may differ.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "targets",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Finite float64 observations aligned to original training rows in caller-declared target units, shared with predictions, offsets and maximum_error.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "feature_names",
+          "type_desc": "list",
+          "constraints": "Unique ordered nonempty backend-compatible names, one per feature column. Preserve this order through native model state; classifier schema appends the explicit prediction feature name.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "selection",
+          "type_desc": "NDArray[np.bool_]",
+          "constraints": "Boolean vector aligned to original training rows; dimensionless. Split masks exhaustively partition rows by group. Retained mask intersects held-out membership with inclusive residual eligibility. Fit selections must be nonempty; selected classifier rows need both classes.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "state",
+          "type_desc": "dict",
+          "constraints": "JSON-compatible native UBJ model state with exact task, backend version, ordered feature names and payload integrity digest. Private runtime material for non-public training inputs; one CPU thread per model operation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "node_id": "internal_fit"
+    },
+    {
+      "fqdn": "sciona.atoms.ml.model_selection.masked_operations.fit_masked_regression",
+      "artifact_id": "79cabe5e-ea36-510f-af78-0c733ae3d450",
+      "version_id": "2860cf97-ce33-5fbc-b9da-859efac8cf62",
+      "content_hash": "5d5b82b6dc93361221a09fd26fdc438dd29e997488f1229787acf1e0b3380953",
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.masked_operations.fit_masked_regression",
+      "inputs": [
+        {
+          "name": "features",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Nonempty float64 rows/features matrix. NaN uses backend missing-value behavior; infinities rejected. Preserve declared column order, meanings and units. Classifier matrices append exactly one prediction column; training and query row counts may differ.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "targets",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Finite float64 observations aligned to original training rows in caller-declared target units, shared with predictions, offsets and maximum_error.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "feature_names",
+          "type_desc": "list",
+          "constraints": "Unique ordered nonempty backend-compatible names, one per feature column. Preserve this order through native model state; classifier schema appends the explicit prediction feature name.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "selection",
+          "type_desc": "NDArray[np.bool_]",
+          "constraints": "Boolean vector aligned to original training rows; dimensionless. Split masks exhaustively partition rows by group. Retained mask intersects held-out membership with inclusive residual eligibility. Fit selections must be nonempty; selected classifier rows need both classes.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "state",
+          "type_desc": "dict",
+          "constraints": "JSON-compatible native UBJ model state with exact task, backend version, ordered feature names and payload integrity digest. Private runtime material for non-public training inputs; one CPU thread per model operation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "node_id": "lower_fit"
+    },
+    {
+      "fqdn": "sciona.atoms.ml.xgboost.model_io.predict_regression_model",
+      "artifact_id": "c21cd1fa-1012-5318-8a1e-0ad30550f9d6",
+      "version_id": "96a67837-e821-5887-bfa2-2ad9579951bd",
+      "content_hash": "95c1ea04d67f16d78960cfc8f26d0bf64a10bc5dee3181e6cbd4c1cf4820a9db",
+      "runtime_fqdn": "sciona.atoms.ml.xgboost.model_io.predict_regression_model",
+      "inputs": [
+        {
+          "name": "prediction_features",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Nonempty float64 rows/features matrix. NaN uses backend missing-value behavior; infinities rejected. Preserve declared column order, meanings and units. Classifier matrices append exactly one prediction column; training and query row counts may differ.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "feature_names",
+          "type_desc": "list",
+          "constraints": "Unique ordered nonempty backend-compatible names, one per feature column. Preserve this order through native model state; classifier schema appends the explicit prediction feature name.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "state",
+          "type_desc": "dict",
+          "constraints": "JSON-compatible native UBJ model state with exact task, backend version, ordered feature names and payload integrity digest. Private runtime material for non-public training inputs; one CPU thread per model operation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "predictions",
+          "type_desc": "NDArray[np.float32]",
+          "constraints": "Row-aligned numeric prediction in target units with the declared dtype. Training rounds float32 predictions to nearest-even int32 then widens exactly; inference classifier inputs remain unrounded. Final int32 conversion rejects overflow; no clipping, scaling or imputation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "node_id": "internal_predict"
+    },
+    {
+      "fqdn": "sciona.atoms.ml.xgboost.model_io.predict_regression_model",
+      "artifact_id": "c21cd1fa-1012-5318-8a1e-0ad30550f9d6",
+      "version_id": "96a67837-e821-5887-bfa2-2ad9579951bd",
+      "content_hash": "95c1ea04d67f16d78960cfc8f26d0bf64a10bc5dee3181e6cbd4c1cf4820a9db",
+      "runtime_fqdn": "sciona.atoms.ml.xgboost.model_io.predict_regression_model",
+      "inputs": [
+        {
+          "name": "prediction_features",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Nonempty float64 rows/features matrix. NaN uses backend missing-value behavior; infinities rejected. Preserve declared column order, meanings and units. Classifier matrices append exactly one prediction column; training and query row counts may differ.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "feature_names",
+          "type_desc": "list",
+          "constraints": "Unique ordered nonempty backend-compatible names, one per feature column. Preserve this order through native model state; classifier schema appends the explicit prediction feature name.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "state",
+          "type_desc": "dict",
+          "constraints": "JSON-compatible native UBJ model state with exact task, backend version, ordered feature names and payload integrity digest. Private runtime material for non-public training inputs; one CPU thread per model operation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "predictions",
+          "type_desc": "NDArray[np.float32]",
+          "constraints": "Row-aligned numeric prediction in target units with the declared dtype. Training rounds float32 predictions to nearest-even int32 then widens exactly; inference classifier inputs remain unrounded. Final int32 conversion rejects overflow; no clipping, scaling or imputation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "node_id": "lower_training_predict"
+    },
+    {
+      "fqdn": "sciona.atoms.ml.xgboost.model_io.predict_regression_model",
+      "artifact_id": "c21cd1fa-1012-5318-8a1e-0ad30550f9d6",
+      "version_id": "96a67837-e821-5887-bfa2-2ad9579951bd",
+      "content_hash": "95c1ea04d67f16d78960cfc8f26d0bf64a10bc5dee3181e6cbd4c1cf4820a9db",
+      "runtime_fqdn": "sciona.atoms.ml.xgboost.model_io.predict_regression_model",
+      "inputs": [
+        {
+          "name": "prediction_features",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Nonempty float64 rows/features matrix. NaN uses backend missing-value behavior; infinities rejected. Preserve declared column order, meanings and units. Classifier matrices append exactly one prediction column; training and query row counts may differ.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "feature_names",
+          "type_desc": "list",
+          "constraints": "Unique ordered nonempty backend-compatible names, one per feature column. Preserve this order through native model state; classifier schema appends the explicit prediction feature name.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "state",
+          "type_desc": "dict",
+          "constraints": "JSON-compatible native UBJ model state with exact task, backend version, ordered feature names and payload integrity digest. Private runtime material for non-public training inputs; one CPU thread per model operation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "predictions",
+          "type_desc": "NDArray[np.float32]",
+          "constraints": "Row-aligned numeric prediction in target units with the declared dtype. Training rounds float32 predictions to nearest-even int32 then widens exactly; inference classifier inputs remain unrounded. Final int32 conversion rejects overflow; no clipping, scaling or imputation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "node_id": "query_predict"
+    },
+    {
+      "fqdn": "sciona.atoms.ml.calibration.prediction_features.round_to_int32",
+      "artifact_id": "9351b1e7-93d6-58ad-be3e-c7ff038aadcd",
+      "version_id": "ee4b7247-4005-5e9c-82d3-10b17cd67feb",
+      "content_hash": "5c9381d8b6bdd4c29c18c488602b8fae106a859dd9b87080a2137716b2337daf",
+      "runtime_fqdn": "sciona.atoms.ml.calibration.prediction_features.round_to_int32",
+      "inputs": [
+        {
+          "name": "values",
+          "type_desc": "NDArray[np.float32]",
+          "constraints": "Row-aligned numeric prediction in target units with the declared dtype. Training rounds float32 predictions to nearest-even int32 then widens exactly; inference classifier inputs remain unrounded. Final int32 conversion rejects overflow; no clipping, scaling or imputation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "values",
+          "type_desc": "NDArray[np.int32]",
+          "constraints": "Row-aligned numeric prediction in target units with the declared dtype. Training rounds float32 predictions to nearest-even int32 then widens exactly; inference classifier inputs remain unrounded. Final int32 conversion rejects overflow; no clipping, scaling or imputation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "node_id": "internal_round"
+    },
+    {
+      "fqdn": "sciona.atoms.ml.calibration.prediction_features.round_to_int32",
+      "artifact_id": "9351b1e7-93d6-58ad-be3e-c7ff038aadcd",
+      "version_id": "ee4b7247-4005-5e9c-82d3-10b17cd67feb",
+      "content_hash": "5c9381d8b6bdd4c29c18c488602b8fae106a859dd9b87080a2137716b2337daf",
+      "runtime_fqdn": "sciona.atoms.ml.calibration.prediction_features.round_to_int32",
+      "inputs": [
+        {
+          "name": "values",
+          "type_desc": "NDArray[np.float32]",
+          "constraints": "Row-aligned numeric prediction in target units with the declared dtype. Training rounds float32 predictions to nearest-even int32 then widens exactly; inference classifier inputs remain unrounded. Final int32 conversion rejects overflow; no clipping, scaling or imputation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "values",
+          "type_desc": "NDArray[np.int32]",
+          "constraints": "Row-aligned numeric prediction in target units with the declared dtype. Training rounds float32 predictions to nearest-even int32 then widens exactly; inference classifier inputs remain unrounded. Final int32 conversion rejects overflow; no clipping, scaling or imputation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "node_id": "lower_round"
+    },
+    {
+      "fqdn": "sciona.atoms.ml.calibration.prediction_features.round_to_int32",
+      "artifact_id": "9351b1e7-93d6-58ad-be3e-c7ff038aadcd",
+      "version_id": "ee4b7247-4005-5e9c-82d3-10b17cd67feb",
+      "content_hash": "5c9381d8b6bdd4c29c18c488602b8fae106a859dd9b87080a2137716b2337daf",
+      "runtime_fqdn": "sciona.atoms.ml.calibration.prediction_features.round_to_int32",
+      "inputs": [
+        {
+          "name": "values",
+          "type_desc": "NDArray[np.float32]",
+          "constraints": "Row-aligned numeric prediction in target units with the declared dtype. Training rounds float32 predictions to nearest-even int32 then widens exactly; inference classifier inputs remain unrounded. Final int32 conversion rejects overflow; no clipping, scaling or imputation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "predictions",
+          "type_desc": "NDArray[np.int32]",
+          "constraints": "Row-aligned numeric prediction in target units with the declared dtype. Training rounds float32 predictions to nearest-even int32 then widens exactly; inference classifier inputs remain unrounded. Final int32 conversion rejects overflow; no clipping, scaling or imputation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "node_id": "final"
+    },
+    {
+      "fqdn": "sciona.atoms.ml.calibration.prediction_features.widen_prediction_values",
+      "artifact_id": "88c501f1-eabd-5832-b08e-7230789241b0",
+      "version_id": "ace5d2dc-95c5-5a34-adca-d8b33834cb53",
+      "content_hash": "fde02b68910ffeaca10e1e1aa9696e2a608a69644fcebc4475ec50eec3e7d42d",
+      "runtime_fqdn": "sciona.atoms.ml.calibration.prediction_features.widen_prediction_values",
+      "inputs": [
+        {
+          "name": "values",
+          "type_desc": "NDArray[np.int32]",
+          "constraints": "Row-aligned numeric prediction in target units with the declared dtype. Training rounds float32 predictions to nearest-even int32 then widens exactly; inference classifier inputs remain unrounded. Final int32 conversion rejects overflow; no clipping, scaling or imputation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "values",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Row-aligned numeric prediction in target units with the declared dtype. Training rounds float32 predictions to nearest-even int32 then widens exactly; inference classifier inputs remain unrounded. Final int32 conversion rejects overflow; no clipping, scaling or imputation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "node_id": "internal_widen"
+    },
+    {
+      "fqdn": "sciona.atoms.ml.calibration.prediction_features.widen_prediction_values",
+      "artifact_id": "88c501f1-eabd-5832-b08e-7230789241b0",
+      "version_id": "ace5d2dc-95c5-5a34-adca-d8b33834cb53",
+      "content_hash": "fde02b68910ffeaca10e1e1aa9696e2a608a69644fcebc4475ec50eec3e7d42d",
+      "runtime_fqdn": "sciona.atoms.ml.calibration.prediction_features.widen_prediction_values",
+      "inputs": [
+        {
+          "name": "values",
+          "type_desc": "NDArray[np.float32]",
+          "constraints": "Finite row-aligned probability of strict underestimation in [0,1], dimensionless. Float32 model probabilities widen exactly for calibration.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "values",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Finite row-aligned probability of strict underestimation in [0,1], dimensionless. Float32 model probabilities widen exactly for calibration.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "node_id": "probability_widen"
+    },
+    {
+      "fqdn": "sciona.atoms.ml.calibration.prediction_features.widen_prediction_values",
+      "artifact_id": "88c501f1-eabd-5832-b08e-7230789241b0",
+      "version_id": "ace5d2dc-95c5-5a34-adca-d8b33834cb53",
+      "content_hash": "fde02b68910ffeaca10e1e1aa9696e2a608a69644fcebc4475ec50eec3e7d42d",
+      "runtime_fqdn": "sciona.atoms.ml.calibration.prediction_features.widen_prediction_values",
+      "inputs": [
+        {
+          "name": "values",
+          "type_desc": "NDArray[np.int32]",
+          "constraints": "Row-aligned numeric prediction in target units with the declared dtype. Training rounds float32 predictions to nearest-even int32 then widens exactly; inference classifier inputs remain unrounded. Final int32 conversion rejects overflow; no clipping, scaling or imputation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "values",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Row-aligned numeric prediction in target units with the declared dtype. Training rounds float32 predictions to nearest-even int32 then widens exactly; inference classifier inputs remain unrounded. Final int32 conversion rejects overflow; no clipping, scaling or imputation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "node_id": "lower_widen"
+    },
+    {
+      "fqdn": "sciona.atoms.ml.model_selection.population_masks.residual_threshold_mask",
+      "artifact_id": "f5aedc21-cadf-59ef-bffa-292c09c07f7d",
+      "version_id": "43430381-6fb4-5a08-958f-15f1e2ea5e43",
+      "content_hash": "48c70ddebd3308da24f24bbe5619cf4adcb7d121bc365d982d3bcac83721276a",
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.population_masks.residual_threshold_mask",
+      "inputs": [
+        {
+          "name": "observed",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Finite float64 observations aligned to original training rows in caller-declared target units, shared with predictions, offsets and maximum_error.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "predictions",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Row-aligned numeric prediction in target units with the declared dtype. Training rounds float32 predictions to nearest-even int32 then widens exactly; inference classifier inputs remain unrounded. Final int32 conversion rejects overflow; no clipping, scaling or imputation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "maximum_error",
+          "type_desc": "float",
+          "constraints": "Finite nonnegative float threshold in target units. Retain abs(observed-rounded_internal_prediction) <= maximum_error; equality included.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "selection",
+          "type_desc": "NDArray[np.bool_]",
+          "constraints": "Boolean vector aligned to original training rows; dimensionless. Split masks exhaustively partition rows by group. Retained mask intersects held-out membership with inclusive residual eligibility. Fit selections must be nonempty; selected classifier rows need both classes.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "node_id": "residual"
+    },
+    {
+      "fqdn": "sciona.atoms.ml.model_selection.masked_operations.intersect_masks",
+      "artifact_id": "24f783dd-26ed-5614-9fee-ff8fc7ff3f22",
+      "version_id": "5646e46d-b39b-5c84-b2ce-2d8ddfce9dd7",
+      "content_hash": "68879fb09f5871add95ef2a3966b18e45b91149874a93d3eec9b613a901cb3dd",
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.masked_operations.intersect_masks",
+      "inputs": [
+        {
+          "name": "left",
+          "type_desc": "NDArray[np.bool_]",
+          "constraints": "Boolean vector aligned to original training rows; dimensionless. Split masks exhaustively partition rows by group. Retained mask intersects held-out membership with inclusive residual eligibility. Fit selections must be nonempty; selected classifier rows need both classes.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "right",
+          "type_desc": "NDArray[np.bool_]",
+          "constraints": "Boolean vector aligned to original training rows; dimensionless. Split masks exhaustively partition rows by group. Retained mask intersects held-out membership with inclusive residual eligibility. Fit selections must be nonempty; selected classifier rows need both classes.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "selection",
+          "type_desc": "NDArray[np.bool_]",
+          "constraints": "Boolean vector aligned to original training rows; dimensionless. Split masks exhaustively partition rows by group. Retained mask intersects held-out membership with inclusive residual eligibility. Fit selections must be nonempty; selected classifier rows need both classes.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "node_id": "retained"
+    },
+    {
+      "fqdn": "sciona.atoms.ml.calibration.prediction_features.underestimation_labels",
+      "artifact_id": "7e0d51e7-54ef-5adf-b770-3382d9e21b45",
+      "version_id": "19e692dd-8dd5-57fa-8554-61b35bf55cf9",
+      "content_hash": "e9ead0e4dd1ada3495d490a7d13f46ca91e3bb7a62dd9eea50189920209efb47",
+      "runtime_fqdn": "sciona.atoms.ml.calibration.prediction_features.underestimation_labels",
+      "inputs": [
+        {
+          "name": "observed",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Finite float64 observations aligned to original training rows in caller-declared target units, shared with predictions, offsets and maximum_error.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "predictions",
+          "type_desc": "NDArray[np.int32]",
+          "constraints": "Row-aligned numeric prediction in target units with the declared dtype. Training rounds float32 predictions to nearest-even int32 then widens exactly; inference classifier inputs remain unrounded. Final int32 conversion rejects overflow; no clipping, scaling or imputation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "labels",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "Int64 strict-underestimation labels aligned to training rows: 1 when rounded prediction is below observation, otherwise 0. Selected classifier population must contain both classes.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "node_id": "labels"
+    },
+    {
+      "fqdn": "sciona.atoms.ml.calibration.prediction_features.append_prediction_feature",
+      "artifact_id": "4ba44dfc-f783-5e7a-bcf0-0861d1e22cec",
+      "version_id": "3d6b934b-87ea-5d55-affb-94d3b902d204",
+      "content_hash": "191fe88efc32170e5aa5c890aa30d0237c522243b3d6f152611eb92012913768",
+      "runtime_fqdn": "sciona.atoms.ml.calibration.prediction_features.append_prediction_feature",
+      "inputs": [
+        {
+          "name": "features",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Nonempty float64 rows/features matrix. NaN uses backend missing-value behavior; infinities rejected. Preserve declared column order, meanings and units. Classifier matrices append exactly one prediction column; training and query row counts may differ.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "predictions",
+          "type_desc": "NDArray[np.int32]",
+          "constraints": "Row-aligned numeric prediction in target units with the declared dtype. Training rounds float32 predictions to nearest-even int32 then widens exactly; inference classifier inputs remain unrounded. Final int32 conversion rejects overflow; no clipping, scaling or imputation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "features",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Nonempty float64 rows/features matrix. NaN uses backend missing-value behavior; infinities rejected. Preserve declared column order, meanings and units. Classifier matrices append exactly one prediction column; training and query row counts may differ.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "node_id": "classifier_features"
+    },
+    {
+      "fqdn": "sciona.atoms.ml.calibration.prediction_features.append_prediction_feature",
+      "artifact_id": "4ba44dfc-f783-5e7a-bcf0-0861d1e22cec",
+      "version_id": "3d6b934b-87ea-5d55-affb-94d3b902d204",
+      "content_hash": "191fe88efc32170e5aa5c890aa30d0237c522243b3d6f152611eb92012913768",
+      "runtime_fqdn": "sciona.atoms.ml.calibration.prediction_features.append_prediction_feature",
+      "inputs": [
+        {
+          "name": "features",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Nonempty float64 rows/features matrix. NaN uses backend missing-value behavior; infinities rejected. Preserve declared column order, meanings and units. Classifier matrices append exactly one prediction column; training and query row counts may differ.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "predictions",
+          "type_desc": "NDArray[np.float32]",
+          "constraints": "Row-aligned numeric prediction in target units with the declared dtype. Training rounds float32 predictions to nearest-even int32 then widens exactly; inference classifier inputs remain unrounded. Final int32 conversion rejects overflow; no clipping, scaling or imputation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "features",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Nonempty float64 rows/features matrix. NaN uses backend missing-value behavior; infinities rejected. Preserve declared column order, meanings and units. Classifier matrices append exactly one prediction column; training and query row counts may differ.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "node_id": "query_classifier_features"
+    },
+    {
+      "fqdn": "sciona.atoms.ml.model_selection.training_contracts.append_feature_name",
+      "artifact_id": "082b9e7f-7210-536f-bc56-129b6776c952",
+      "version_id": "1020da80-2b3c-580a-a54b-0fd7bebc3a9c",
+      "content_hash": "cb32a02ae7ac3075f7472ef90cad2b349d0a74a79754fcf59f6e1110cbd4aff0",
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.training_contracts.append_feature_name",
+      "inputs": [
+        {
+          "name": "feature_names",
+          "type_desc": "list",
+          "constraints": "Unique ordered nonempty backend-compatible names, one per feature column. Preserve this order through native model state; classifier schema appends the explicit prediction feature name.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "prediction_feature_name",
+          "type_desc": "str",
+          "constraints": "Nonempty backend-compatible new feature name, absent from the base schema; identifies the appended prediction in target units.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "names",
+          "type_desc": "list",
+          "constraints": "Unique ordered nonempty backend-compatible names, one per feature column. Preserve this order through native model state; classifier schema appends the explicit prediction feature name.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "node_id": "classifier_names"
+    },
+    {
+      "fqdn": "sciona.atoms.ml.model_selection.masked_operations.fit_masked_binary",
+      "artifact_id": "f6eb5465-a3b4-5259-b6a2-f4ac454afa7f",
+      "version_id": "399ce09f-3694-532d-9dfc-4146147a234b",
+      "content_hash": "36b982c3d92d7b9671a4f428389892d9c9b67786ef2f7a44b23a09acd26710d0",
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.masked_operations.fit_masked_binary",
+      "inputs": [
+        {
+          "name": "features",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Nonempty float64 rows/features matrix. NaN uses backend missing-value behavior; infinities rejected. Preserve declared column order, meanings and units. Classifier matrices append exactly one prediction column; training and query row counts may differ.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "targets",
+          "type_desc": "NDArray[np.int64]",
+          "constraints": "Int64 strict-underestimation labels aligned to training rows: 1 when rounded prediction is below observation, otherwise 0. Selected classifier population must contain both classes.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "feature_names",
+          "type_desc": "list",
+          "constraints": "Unique ordered nonempty backend-compatible names, one per feature column. Preserve this order through native model state; classifier schema appends the explicit prediction feature name.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "selection",
+          "type_desc": "NDArray[np.bool_]",
+          "constraints": "Boolean vector aligned to original training rows; dimensionless. Split masks exhaustively partition rows by group. Retained mask intersects held-out membership with inclusive residual eligibility. Fit selections must be nonempty; selected classifier rows need both classes.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "state",
+          "type_desc": "dict",
+          "constraints": "JSON-compatible native UBJ model state with exact task, backend version, ordered feature names and payload integrity digest. Private runtime material for non-public training inputs; one CPU thread per model operation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "node_id": "classifier_fit"
+    },
+    {
+      "fqdn": "sciona.atoms.ml.xgboost.model_io.predict_binary_model",
+      "artifact_id": "5c87d640-95e9-593d-88f2-f6cf39170d01",
+      "version_id": "bfbe2718-4248-51c5-9983-c98d874d51eb",
+      "content_hash": "d6630caffe4b6a37f8caa005cb075a3505e1992b8d875d66bd10378ac8f3f7cc",
+      "runtime_fqdn": "sciona.atoms.ml.xgboost.model_io.predict_binary_model",
+      "inputs": [
+        {
+          "name": "prediction_features",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Nonempty float64 rows/features matrix. NaN uses backend missing-value behavior; infinities rejected. Preserve declared column order, meanings and units. Classifier matrices append exactly one prediction column; training and query row counts may differ.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "feature_names",
+          "type_desc": "list",
+          "constraints": "Unique ordered nonempty backend-compatible names, one per feature column. Preserve this order through native model state; classifier schema appends the explicit prediction feature name.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "state",
+          "type_desc": "dict",
+          "constraints": "JSON-compatible native UBJ model state with exact task, backend version, ordered feature names and payload integrity digest. Private runtime material for non-public training inputs; one CPU thread per model operation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "probabilities",
+          "type_desc": "NDArray[np.float32]",
+          "constraints": "Finite row-aligned probability of strict underestimation in [0,1], dimensionless. Float32 model probabilities widen exactly for calibration.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "node_id": "calibration_probabilities"
+    },
+    {
+      "fqdn": "sciona.atoms.ml.xgboost.model_io.predict_binary_model",
+      "artifact_id": "5c87d640-95e9-593d-88f2-f6cf39170d01",
+      "version_id": "bfbe2718-4248-51c5-9983-c98d874d51eb",
+      "content_hash": "d6630caffe4b6a37f8caa005cb075a3505e1992b8d875d66bd10378ac8f3f7cc",
+      "runtime_fqdn": "sciona.atoms.ml.xgboost.model_io.predict_binary_model",
+      "inputs": [
+        {
+          "name": "prediction_features",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Nonempty float64 rows/features matrix. NaN uses backend missing-value behavior; infinities rejected. Preserve declared column order, meanings and units. Classifier matrices append exactly one prediction column; training and query row counts may differ.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "feature_names",
+          "type_desc": "list",
+          "constraints": "Unique ordered nonempty backend-compatible names, one per feature column. Preserve this order through native model state; classifier schema appends the explicit prediction feature name.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "state",
+          "type_desc": "dict",
+          "constraints": "JSON-compatible native UBJ model state with exact task, backend version, ordered feature names and payload integrity digest. Private runtime material for non-public training inputs; one CPU thread per model operation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "probabilities",
+          "type_desc": "NDArray[np.float32]",
+          "constraints": "Finite row-aligned probability of strict underestimation in [0,1], dimensionless. Float32 model probabilities widen exactly for calibration.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "node_id": "query_probabilities"
+    },
+    {
+      "fqdn": "sciona.atoms.ml.model_selection.masked_operations.estimate_masked_offsets",
+      "artifact_id": "e10a76b9-217c-55e6-afaa-31be7c62bcd4",
+      "version_id": "d369e2bb-9db6-5a85-b6b7-101e61fce23e",
+      "content_hash": "9d0b48ba64bf4007bff0fd20fef37aedaedaa0a2013eb03ef03f7cd00ea2680f",
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.masked_operations.estimate_masked_offsets",
+      "inputs": [
+        {
+          "name": "observed",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Finite float64 observations aligned to original training rows in caller-declared target units, shared with predictions, offsets and maximum_error.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "calibration_predictions",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Row-aligned numeric prediction in target units with the declared dtype. Training rounds float32 predictions to nearest-even int32 then widens exactly; inference classifier inputs remain unrounded. Final int32 conversion rejects overflow; no clipping, scaling or imputation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "calibration_probabilities",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Finite row-aligned probability of strict underestimation in [0,1], dimensionless. Float32 model probabilities widen exactly for calibration.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "threshold",
+          "type_desc": "float",
+          "constraints": "Finite float probability threshold in [0,1], dimensionless. Both strict calibration groups must be populated inside the held-out mask; equality is excluded from offset estimation and unchanged during correction.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "selection",
+          "type_desc": "NDArray[np.bool_]",
+          "constraints": "Boolean vector aligned to original training rows; dimensionless. Split masks exhaustively partition rows by group. Retained mask intersects held-out membership with inclusive residual eligibility. Fit selections must be nonempty; selected classifier rows need both classes.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "offsets",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Finite float64 pair [median(observed-predicted | q>threshold), median(predicted-observed | q<threshold)] estimated only on held-out rows; signed target units. Application explicitly narrows offsets to float32 and rejects overflow.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "node_id": "offsets"
+    },
+    {
+      "fqdn": "sciona.atoms.ml.calibration.float32_correction.apply_float32_offsets",
+      "artifact_id": "87973dc6-b417-5d03-915f-2a6622b482ee",
+      "version_id": "23241c8e-9ea1-5854-9c37-120434d287a7",
+      "content_hash": "59bb63d8a6de668a7be74ea8f418eec165dd6c1088eb5cb38e04284e1286ab0c",
+      "runtime_fqdn": "sciona.atoms.ml.calibration.float32_correction.apply_float32_offsets",
+      "inputs": [
+        {
+          "name": "predictions",
+          "type_desc": "NDArray[np.float32]",
+          "constraints": "Row-aligned numeric prediction in target units with the declared dtype. Training rounds float32 predictions to nearest-even int32 then widens exactly; inference classifier inputs remain unrounded. Final int32 conversion rejects overflow; no clipping, scaling or imputation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "probabilities",
+          "type_desc": "NDArray[np.float32]",
+          "constraints": "Finite row-aligned probability of strict underestimation in [0,1], dimensionless. Float32 model probabilities widen exactly for calibration.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "offsets",
+          "type_desc": "NDArray[np.float64]",
+          "constraints": "Finite float64 pair [median(observed-predicted | q>threshold), median(predicted-observed | q<threshold)] estimated only on held-out rows; signed target units. Application explicitly narrows offsets to float32 and rejects overflow.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        },
+        {
+          "name": "threshold",
+          "type_desc": "float",
+          "constraints": "Finite float probability threshold in [0,1], dimensionless. Both strict calibration groups must be populated inside the held-out mask; equality is excluded from offset estimation and unchanged during correction.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "outputs": [
+        {
+          "name": "predictions",
+          "type_desc": "NDArray[np.float32]",
+          "constraints": "Row-aligned numeric prediction in target units with the declared dtype. Training rounds float32 predictions to nearest-even int32 then widens exactly; inference classifier inputs remain unrounded. Final int32 conversion rejects overflow; no clipping, scaling or imputation.",
+          "data_kind": "",
+          "time_basis": "",
+          "provenance": "",
+          "required": true,
+          "default_value_repr": "",
+          "dim_signature": ""
+        }
+      ],
+      "node_id": "correct"
+    }
+  ],
+  "boundary_inputs": [
+    {
+      "name": "features",
+      "type_desc": "NDArray[np.float64]",
+      "constraints": "Nonempty float64 rows/features matrix. NaN uses backend missing-value behavior; infinities rejected. Preserve declared column order, meanings and units. Classifier matrices append exactly one prediction column; training and query row counts may differ.",
+      "data_kind": "",
+      "time_basis": "",
+      "provenance": "",
+      "required": true,
+      "default_value_repr": "",
+      "dim_signature": ""
+    },
+    {
+      "name": "targets",
+      "type_desc": "NDArray[np.float64]",
+      "constraints": "Finite float64 observations aligned to original training rows in caller-declared target units, shared with predictions, offsets and maximum_error.",
+      "data_kind": "",
+      "time_basis": "",
+      "provenance": "",
+      "required": true,
+      "default_value_repr": "",
+      "dim_signature": ""
+    },
+    {
+      "name": "groups",
+      "type_desc": "NDArray[np.int64]",
+      "constraints": "Int64 group identifiers aligned to training rows; at least two distinct groups; dimensionless. Identity encoding must preserve group membership.",
+      "data_kind": "",
+      "time_basis": "",
+      "provenance": "",
+      "required": true,
+      "default_value_repr": "",
+      "dim_signature": ""
+    },
+    {
+      "name": "feature_names",
+      "type_desc": "list",
+      "constraints": "Unique ordered nonempty backend-compatible names, one per feature column. Preserve this order through native model state; classifier schema appends the explicit prediction feature name.",
+      "data_kind": "",
+      "time_basis": "",
+      "provenance": "",
+      "required": true,
+      "default_value_repr": "",
+      "dim_signature": ""
+    },
+    {
+      "name": "prediction_features",
+      "type_desc": "NDArray[np.float64]",
+      "constraints": "Nonempty float64 rows/features matrix. NaN uses backend missing-value behavior; infinities rejected. Preserve declared column order, meanings and units. Classifier matrices append exactly one prediction column; training and query row counts may differ.",
+      "data_kind": "",
+      "time_basis": "",
+      "provenance": "",
+      "required": true,
+      "default_value_repr": "",
+      "dim_signature": ""
+    },
+    {
+      "name": "train_fraction",
+      "type_desc": "float",
+      "constraints": "Finite float fraction strictly between zero and one, applied to unique groups. Must leave nonempty training and complementary held-out groups.",
+      "data_kind": "",
+      "time_basis": "",
+      "provenance": "",
+      "required": true,
+      "default_value_repr": "",
+      "dim_signature": ""
+    },
+    {
+      "name": "seed",
+      "type_desc": "int",
+      "constraints": "Explicit unsigned 32-bit integer random seed for the group split; dimensionless.",
+      "data_kind": "",
+      "time_basis": "",
+      "provenance": "",
+      "required": true,
+      "default_value_repr": "",
+      "dim_signature": ""
+    },
+    {
+      "name": "maximum_error",
+      "type_desc": "float",
+      "constraints": "Finite nonnegative float threshold in target units. Retain abs(observed-rounded_internal_prediction) <= maximum_error; equality included.",
+      "data_kind": "",
+      "time_basis": "",
+      "provenance": "",
+      "required": true,
+      "default_value_repr": "",
+      "dim_signature": ""
+    },
+    {
+      "name": "prediction_feature_name",
+      "type_desc": "str",
+      "constraints": "Nonempty backend-compatible new feature name, absent from the base schema; identifies the appended prediction in target units.",
+      "data_kind": "",
+      "time_basis": "",
+      "provenance": "",
+      "required": true,
+      "default_value_repr": "",
+      "dim_signature": ""
+    },
+    {
+      "name": "threshold",
+      "type_desc": "float",
+      "constraints": "Finite float probability threshold in [0,1], dimensionless. Both strict calibration groups must be populated inside the held-out mask; equality is excluded from offset estimation and unchanged during correction.",
+      "data_kind": "",
+      "time_basis": "",
+      "provenance": "",
+      "required": true,
+      "default_value_repr": "",
+      "dim_signature": ""
+    }
+  ],
+  "boundary_outputs": [
+    {
+      "name": "predictions",
+      "type_desc": "NDArray[np.int32]",
+      "constraints": "Row-aligned numeric prediction in target units with the declared dtype. Training rounds float32 predictions to nearest-even int32 then widens exactly; inference classifier inputs remain unrounded. Final int32 conversion rejects overflow; no clipping, scaling or imputation.",
+      "data_kind": "",
+      "time_basis": "",
+      "provenance": "",
+      "required": true,
+      "default_value_repr": "",
+      "dim_signature": ""
+    }
+  ],
+  "mandatory_provenance": {
+    "fqdn": "cdg.competition.solution.kaggle.nasa_airport_pushback_phase_1_3rd_place_1st",
+    "scope": "Mandatory original intake provenance; numerical reconstruction only, not completion or approval of the domain workflow."
+  }
+}

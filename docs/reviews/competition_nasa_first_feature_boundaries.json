@@ -1,0 +1,47 @@
+{
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "feature_extractors": [
+    "extract_mfs_features",
+    "extract_config_features",
+    "extract_etd_features",
+    "extract_moment_features",
+    "extract_weather_features",
+    "extract_runway_features",
+    "extract_standtime_features"
+  ],
+  "feature_function_sha256": {
+    "extract_mfs_features": "da52423f12720d410526edcf34fd8fbf702cf5c2846507be54d675c9254a1c4c",
+    "extract_config_features": "0522039a63470373ac39f4bae654d2e75b7fdaf3bb219c9551005a87fadd3518",
+    "extract_etd_features": "892ed67ed211262c9a0bb003027e8eb1f2a02a123d18d7b65586d5289b3fa32e",
+    "extract_moment_features": "2c7ed4fedd0f1e42f65b99e97cca02b447c2566a26871687a2ab6b183264ece1",
+    "extract_weather_features": "b63762e41c5888a759013ecc62d0a82c2d54adf4bfd5f06bc6dbc042f450406d",
+    "extract_runway_features": "d5b0dd6d178d677e77a0e3a09807004278775a2ed8507c3984a71eb4116644c3",
+    "extract_standtime_features": "66ef7b97b2256cf2cbb5e15606db8d749e9f4dab7ec842ff14eeeea1cd42091c",
+    "adjust_master": "e1d3294c0ec1d1e463a48f9bc4e28673e66fcc6c747ac137579cba6ab768af1d"
+  },
+  "source_sha256": "8b9776ae0e7fdbb48e2bee64ee442ca1d2d4023309f953092dba108f93e6896c",
+  "numeric_boundary_counterexamples": 4,
+  "ungrouped_estimate_shift_calls": 5,
+  "findings": [
+    "A missing numeric query alone receives zero; adding another query changes it to that query value through whole-table backward filling.",
+    "Forward filling also crosses row/entity boundaries because adjustment has no grouping contract.",
+    "Out-of-range numeric values silently wrap during signed int16 conversion; fractional values truncate toward zero.",
+    "Seven feature families precede this boundary; similarly named third-place adapters are not interchangeable without source comparison.",
+    "Estimated-time feature code includes ungrouped shifts; boundary behavior needs isolated runtime validation before reuse."
+  ],
+  "required_gates": [
+    "Explicit per-feature missing-value policy independent of unrelated inference queries, qualified consistently for training and inference.",
+    "Explicit truncation/range contract; reject unsupported values or document an independently reviewed wider representation.",
+    "Complete source comparison for all seven feature families, including time availability, grouped differences, categorical mappings and joins.",
+    "Training/inference corrected feature compatibility with all 21 fitted-model slots and fallback routing."
+  ],
+  "limitations": [
+    "Numeric-boundary execution uses an explicitly empty categorical exemption list; no full categorical-config or raw-feature runtime claim.",
+    "Ungrouped-shift finding is static evidence, not yet a demonstrated numerical defect.",
+    "No corrected feature adapter, CDG registration or approval applied."
+  ],
+  "validator_sha256": "39894cff62f5bb04aeb2d00a2c89b4381531e4312e2ab7af6118f1d9238193d4"
+}

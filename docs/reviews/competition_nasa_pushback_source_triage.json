@@ -1,0 +1,1005 @@
+{
+  "status": "phase1_sources_pinned_material_intake_correction_required",
+  "repository": "https://github.com/drivendataorg/nasa-airport-pushback",
+  "commit": "09f2f5d2940dd6b63b93115a0e9fb9e8a964c700",
+  "license": "MIT",
+  "catalog_mutations": 0,
+  "approved": false,
+  "intakes": [
+    {
+      "version_id": "0e37a912-48ef-5551-90a3-08290faccb9a",
+      "content_hash": "8d6045e9fed77a170a2b1f4eca2210522cf2eccc5e0b404cfddd8a73ff829e04",
+      "placement": 1
+    },
+    {
+      "version_id": "7d6f7b78-1dff-5757-9326-4edad55aaa68",
+      "content_hash": "5a9856b1f6a4db73e7ce12809248de193b63ad06401a6e73b8322744cb7c44bd",
+      "placement": 3
+    }
+  ],
+  "first_place_findings": [
+    "Phase 1 ensembles per-airport CatBoost regressors; sequential training across airlines belongs to Phase 2 and must not be attributed to Phase 1.",
+    "Submission loads three versions per airport and a shared global model: 31 distinct models across ten airport slots.",
+    "Training code exposes direct-target and residual-target regressors, 20000-tree ceiling, MAE, CPU execution and early stopping patience60. Complete variant/global training closure remains to be established.",
+    "Submission has model-failure baseline and constant fallback paths; these are part of its runtime behavior, not training evidence."
+  ],
+  "third_place_findings": [
+    "Separate XGBoost pipeline, not a duplicate of the first-place solution.",
+    "A grouped40/60 split trains an internal regressor; rounded residuals filter the second population before a new regressor is fitted.",
+    "A classifier uses base features plus rounded regressor predictions to label underestimation during training. Its training-population probabilities select two signed median corrections.",
+    "Inference supplies unrounded regressor predictions to the classifier, applies the under-correction only above0.5 and over-correction only below0.5, then rounds to int32; equality leaves predictions unchanged.",
+    "Correction magnitudes are conditional medians, not probability-weighted offsets.",
+    "Published environment declares XGBoost1.7.5, scikit-learn1.2.2, NumPy1.23.5 and pandas2.0.1.",
+    "Source residual filter keeps absolute rounded-prediction errors at or below the explicit cutoff; source adapter chooses20 or30.",
+    "Source uses set-derived feature ordering; cross-process estimator feature-order compatibility is unresolved.",
+    "Inference obtains feature ordering from the trained regressor; training still uses set-derived ordering and is not established deterministic across fresh processes.",
+    "Current pandas source correction retains float32 prediction arithmetic before int32 rounding; NumPy float64 promotion is not an exact replacement."
+  ],
+  "files_sha256": {
+    "README.md": "d66c3a7d2650e1c7bbc7e98b6949771db1a0597ba30e79181f857151018183a9",
+    "LICENSE": "0d6822721946585bb39e5ced6cd594f658a9321c36a78ccd41d20001fae39e1e",
+    "1st Place/Phase 1/README.md": "df1c9a01d5040b42da3c88368a206799565ae46e26a03a862d3f5e9666a18847",
+    "1st Place/Phase 1/requirements.txt": "a1474fb472876ac310fe247e21034f664ea876e9c328aca2e64157650e0f3169",
+    "1st Place/Phase 1/training/src/pushback_nasa/pipelines/train_models/nodes.py": "9b96dd580d39b9ae6126c380c390f57c21b10d3cbc7d028af5a6639799da271d",
+    "1st Place/Phase 1/training/src/pushback_nasa/pipelines/generate_predictions/nodes.py": "7785a8993f8f9a6fe67ee9a3c496aaf659d2b384967c032465ec5a2e3c186ece",
+    "1st Place/Phase 1/submission/solution.py": "854eb1f0874fa77748b26673cc848c8fe4dde38c76e7b474694069c05741e917",
+    "3rd Place/Phase 1/README.md": "4121ea80a003cdffe6d1569db4faa7e032a44f0fb4105b6da7b6b06469ce00f5",
+    "3rd Place/Phase 1/helper.py": "cbcbe972af0d63a240923570e840744d573d972ee0bce19e04bf55a2c8b01444",
+    "3rd Place/Phase 1/run_model.py": "d05a725f0e251c1eec0858fc10c5b70fd1425befd04557aa9b36b62e44ff067e",
+    "3rd Place/Phase 1/Train_Models.source.py": "2f8c7b7eb6c6c174128c37bc7d53c1db3236a9320699017f02387b406964fc03",
+    "3rd Place/Phase 1/Run_Inference.source.py": "5d78b1dd59c14597deac54ce482ef08150eb6cc4dad99166cc8dfd7a49374c44",
+    "3rd Place/Phase 1/pushback_plane_tf_deb.yml": "368528daa393a0f0e66151cebad3ec7c856ae60be1b356e35670a1597a723ca6",
+    "1st Place/Phase 1/submission/utilities.py": "8b9776ae0e7fdbb48e2bee64ee442ca1d2d4023309f953092dba108f93e6896c"
+  },
+  "source_handling": [
+    "Only selected software/readmes/license downloaded into private reference storage; notebook outputs and markdown discarded from extracted code.",
+    "No model weights, competition records or dataset archives downloaded."
+  ],
+  "next_steps": [
+    "Complete software closure for both Phase 1 methods, including first-place ensemble/global variants and third-place raw feature generation.",
+    "Reconstruct training/inference semantics with synthetic runtime inputs, preserving the original intake identities as mandatory provenance.",
+    "Qualify dependencies, licensing, complete execution and negative publication gates before Tier3 rollback/apply/idempotency/served verification."
+  ],
+  "reusable_correction_progress": {
+    "status": "tier3_approved_for_provisioned_in_process_execution",
+    "report": "docs/reviews/conditional_correction_reuse.json",
+    "report_sha256": "58882f4b5ee71a8a43212a0771fa0749d720fbcb65ed02a85f4bbf3576c8cd9b",
+    "source_float64_cases": 64,
+    "tests_passed": 17,
+    "synthetic_domains": [
+      "manufacturing_dimensions",
+      "energy_forecasts"
+    ],
+    "explicit_graph_inputs": 6,
+    "source_intake_scope": "Third-place conditional correction subgraph only",
+    "approved": true,
+    "catalog_mutations": 60,
+    "limits": [
+      "Float64 numeric source comparison; original estimator float32 and submission rounding remain separate.",
+      "Constructed probabilities and calibration residuals, not trained classifiers or empirical domain validation.",
+      "Calibration population quality and target units must be established by the caller.",
+      "Complete NASA pipelines and publication qualification remain pending."
+    ],
+    "interface_contracts": "All ports specify finite numeric values, alignment, target-unit consistency, probability semantics and threshold ties; separate calibration/application population sizes supported.",
+    "draft_import_report": "docs/reviews/conditional_correction_draft_import.json",
+    "catalog_execution_report": "docs/reviews/conditional_correction_catalog_execution.json",
+    "database_gates_report": "docs/reviews/conditional_correction_database_gates.json",
+    "trust_tier": 3,
+    "publication_report": "docs/reviews/conditional_correction_publication.json"
+  },
+  "third_place_training_progress": {
+    "report": "docs/reviews/competition_nasa_third_training_sequence.json",
+    "report_sha256": "95030f584f4a99ad8e7850107c6855ab28f9fe16b13daeed8e3eeab8d3eda602",
+    "scope": "Pinned numerical training and inference statements on synthetic inputs using current XGBoost; same-environment pickle roundtrip exact; historical backend parity and raw feature closure pending",
+    "approved": false
+  },
+  "feature_source_recovery": {
+    "software_artifacts": [
+      {
+        "software": "Feature_Processing-AirplaneCodes",
+        "source_sha256": "862049a092252f1a23683acaf7fbf080f438e4abc42ab545622863970c8ff098",
+        "code_cells": 3,
+        "discarded_output_blocks": 2
+      },
+      {
+        "software": "Feature_Processing-ETD_PQDM",
+        "source_sha256": "186d1c4e6c4a151b53b27658f4ac9d2013382017775435abc5abca43ae672862",
+        "code_cells": 3,
+        "discarded_output_blocks": 20
+      },
+      {
+        "software": "Feature_Processing-ETD_no_PQDM",
+        "source_sha256": "02a1bd1e20c41ed5084a7363165211713c70291efa2695d7f45306801f1fdb70",
+        "code_cells": 3,
+        "discarded_output_blocks": 22
+      },
+      {
+        "software": "Feature_Processing-TaxiTimeToGate",
+        "source_sha256": "7f40bff888af396be3ca42879f1306a7f36407b205ecf17e257f82ee6c818b8e",
+        "code_cells": 4,
+        "discarded_output_blocks": 25
+      }
+    ],
+    "scope": "Pinned software code cells only; all notebook output blocks discarded. No source records or weights retained."
+  },
+  "feature_diagnostic": {
+    "report": "docs/reviews/competition_nasa_feature_diagnostic.json",
+    "report_sha256": "45797c6336e0f8beda52843c5494d1b92c8155de49a64da0be565dee6ae55e48",
+    "findings": [
+      "Grouped ETD orchestration omits its final group, including the only group in a singleton population.",
+      "Current pandas rejects the source DataFrame.append call.",
+      "Adaptive taxi-time lookback widens directly from60 to180 minutes when initially empty; otherwise fewer than3 records selects120 once."
+    ],
+    "approved": false
+  },
+  "adaptive_history_progress": {
+    "report": "docs/reviews/adaptive_history_source_comparison.json",
+    "report_sha256": "017ae98bbf85e417904f00af61a8cad2a0da1e0191fe145d497d20586c5fd636",
+    "source_cases": 128,
+    "maximum_absolute_error": 0.0,
+    "tests_passed": 20,
+    "approved": true,
+    "catalog_mutations": 44,
+    "scope": "Reusable one-shot adaptive history statistics; explicit integer time units and policy controls. Qualified in-process execution only. Full NASA domain adapters and workflows remain pending.",
+    "graph_execution_report": "docs/reviews/adaptive_history_graph_execution.json",
+    "graph_execution_report_sha256": "7009f31ab69f7813cdb4ce8be74461e17df95285501a143d1ec3c52bc4890a5a",
+    "graph_scenarios_passed": 4,
+    "output_ports": 3,
+    "semantic_review": "docs/reviews/adaptive_history_semantic_review.json",
+    "status": "tier3_approved_for_provisioned_in_process_execution",
+    "draft_import_report": "docs/reviews/adaptive_history_draft_import.json",
+    "trust_tier": 3,
+    "publication_report": "docs/reviews/adaptive_history_publication.json",
+    "served_verification_report": "docs/reviews/adaptive_history_served_verification.json",
+    "served_verification_report_sha256": "48861a2385eab03b047f09a96aa3d64d35b678c3cc40525663d7060bdd880f76",
+    "limitations": [
+      "Empty windows produce count zero and NaN statistics; consumers must inspect count. Strict JSON transport is not qualified.",
+      "Cross-domain examples are synthetic; empirical domain suitability, Tier 2 usage qualification and Tier 1 human review are not claimed."
+    ]
+  },
+  "feature_orchestration_progress": {
+    "report": "docs/reviews/competition_nasa_feature_orchestration.json",
+    "report_sha256": "2524faa2650cade8a03773355423eda81bb62e01e4e17fab8c230f77bee51400",
+    "scope": "Pinned serial ETD, airline and arrival-history feature processing plus training/inference joins executed on synthetic frames. Source defects preserved and verified.",
+    "approved": false,
+    "findings": {
+      "etd_final_group_omitted": true,
+      "etd_singleton_output_empty": true,
+      "categorical_output_with_rare_category": true,
+      "categorical_no_rare_category_raises": true,
+      "adaptive_history_statistics_match": true,
+      "future_observations_included": true,
+      "joined_features_numeric_and_finite": true,
+      "inference_retains_missing_etd_row": true,
+      "shared_training_inference_features_equal": true
+    },
+    "remaining_contracts": [
+      "A corrected grouped ETD adapter must cover every eligible entity, retain strict timestamp inequalities and document its departure from the source final-group omission.",
+      "Categorical training must define the fallback column even without rare categories; inference must reuse the training vocabulary and feature order.",
+      "Arrival-history selection must distinguish event occurrence from observation availability; a historical query cannot implicitly receive later observations.",
+      "Preserve and test training inner-join versus inference left-join behavior and downstream missing-feature handling.",
+      "Connect feature outputs to the qualified training/inference numerical sequence and execute the complete per-airport workflow before original-intake promotion."
+    ]
+  },
+  "corrected_feature_adapters_progress": {
+    "status": "implemented_and_synthetic_kernel_qualified_not_published",
+    "approved": false,
+    "catalog_mutations": 0,
+    "implementation": "sciona/nasa_feature_adapters.py",
+    "report": "docs/reviews/competition_nasa_feature_adapter_parity.json",
+    "report_sha256": "bf054bf1b9c2b0c9ce477508f7a0f74939602f189ee8ca60434b718b2df02328",
+    "tests_passed": 32,
+    "test_scope": "12 adapter contracts plus 20 existing reusable adaptive-history tests",
+    "source_kernel_cases": 128,
+    "changes_from_source": [
+      "All eligible ETD groups processed, including singleton and final group.",
+      "Fixed training vocabulary, lexical frequency ties and always-present fallback category.",
+      "Both observation streams filtered strictly before the query; latest complete snapshot per entity replaces source many-to-many joins.",
+      "Ambiguous revisions, negative completed durations and invalid adapter inputs rejected explicitly."
+    ],
+    "next_steps": [
+      "Decompose fitting and application into computationally reusable atoms with explicit matrix, target, group, feature-order and model-state contracts.",
+      "Replace source set-derived feature ordering with an explicit stable caller-visible order in the corrected implementation; compare source computation using that same order.",
+      "Construct and validate full corrected-workflow graph, with source identities as mandatory provenance and domain-specific adapters separately identified.",
+      "Qualify dependencies, licensing and catalog publication transactions before approval."
+    ]
+  },
+  "corrected_workflow_progress": {
+    "status": "all_source_control_slots_synthetic_integration_passed_not_published",
+    "approved": false,
+    "catalog_mutations": 0,
+    "report": "docs/reviews/competition_nasa_corrected_workflow.json",
+    "report_sha256": "bf5f30ae151d32812c821e33f810488fda8c548683157ad6cdd0b4dffffb5fa8",
+    "airport_slots": 10,
+    "synthetic_training_rows_per_slot": 480,
+    "synthetic_predictions_total": 640,
+    "scope": "Corrected feature adapters feed pinned source joins, grouped training, residual filtering, classifier calibration and inference arithmetic. Actual models trained; in-memory serialization roundtrip exact.",
+    "remaining": [
+      "Decompose fitting and application into computationally reusable atoms with explicit matrix, target, group, feature-order and model-state contracts.",
+      "Construct and validate full corrected-workflow graph, with source identities as mandatory provenance and domain-specific adapters separately identified.",
+      "Qualify dependencies, licensing and catalog publication transactions before approval."
+    ],
+    "stable_feature_order_progress": {
+      "status": "implemented_and_fresh_process_replay_passed",
+      "report": "docs/reviews/competition_nasa_feature_order_replay.json",
+      "report_sha256": "1b78e4db4f645711ff251e6e5bcf6c4ae0e9a0ef9d7f6d892f9c145c0c78de16",
+      "hash_seeds": [
+        11,
+        97
+      ],
+      "synthetic_predictions_compared": 640,
+      "tests_passed": 32,
+      "test_scope": "10 tabular contracts and 22 population mask tests",
+      "limitation": "Retraining determinism checked; cross-process model file interchange remains unqualified."
+    }
+  },
+  "population_atom_progress": {
+    "status": "implemented_and_source_population_compared_not_published",
+    "approved": false,
+    "catalog_mutations": 0,
+    "provider": "sciona.atoms.ml.model_selection.population_masks",
+    "operations": [
+      "grouped_holdout_masks",
+      "residual_threshold_mask"
+    ],
+    "provider_sha256": "2a9c0398eded882c39c3bde70753befc82e0546c62ae50dfe7a4b123215a7fcf",
+    "tests_passed": 22,
+    "synthetic_domains": [
+      "manufacturing_dimensions",
+      "energy_forecasts"
+    ],
+    "source_control_slots_compared": 10,
+    "limits": [
+      "Population selection only; XGBoost fitting and model state still require reusable implementations and graph integration.",
+      "Group split is not temporal validation; masks do not establish empirical predictive quality.",
+      "Catalog import and publication gates remain pending."
+    ]
+  },
+  "native_model_atom_progress": {
+    "status": "implemented_and_full_corrected_workflow_substitution_passed_not_published",
+    "approved": false,
+    "catalog_mutations": 0,
+    "report": "docs/reviews/competition_nasa_native_models.json",
+    "report_sha256": "30f1830184331b3b33e4756b7311ba8d83f7688d0ba4c2391b18098ff6f18e87",
+    "provider_sha256": "2b57431a96c5b4ff232d0868222c4bc29eef378cd0b9cd4a8e42059618a8765a",
+    "operations": [
+      "fit_regression_model",
+      "predict_regression_model",
+      "fit_binary_model",
+      "predict_binary_model"
+    ],
+    "tests_passed": 13,
+    "native_model_fits": 30,
+    "predictions_compared": 640,
+    "source_populations_and_final_predictions_exact": true,
+    "cpu_threads_per_operation": 1,
+    "model_serialization": "Native UBJ in JSON-compatible state; fresh-process load tested with synthetic models",
+    "remaining": [
+      "Assemble complete corrected CDG with reusable population/model/correction stages and explicit domain adapter boundaries.",
+      "Verify ghost metadata and real graph execution, including model state through runner ports.",
+      "Complete license/environment review and rollback/apply/idempotency/served publication gates."
+    ],
+    "graph_execution": {
+      "report": "docs/reviews/xgboost_model_graph_execution.json",
+      "report_sha256": "9ec9c4a753ec825ac094a330e464fb58d74e8531b18e68ea9cf9b454e7f1152a",
+      "graphs": 2,
+      "synthetic_scenarios": 4,
+      "native_state_edge_exact": true,
+      "independent_prediction_population": true,
+      "symbolic_model_handoff_passed": true,
+      "publication_status": "unpublished"
+    }
+  },
+  "prediction_boundary_atom_progress": {
+    "status": "implemented_source_compared_not_published",
+    "approved": false,
+    "catalog_mutations": 0,
+    "operations": [
+      "round_to_int32",
+      "widen_prediction_values",
+      "underestimation_labels",
+      "append_prediction_feature"
+    ],
+    "provider_sha256": "cd70aa9f2a8dc26ef331fa5d3e3a184903529dda10e18de58880f4080a166c6c",
+    "report": "docs/reviews/nasa_prediction_feature_boundaries.json",
+    "report_sha256": "621bfcaf891c13628783efef64a30992deeee6b1752464cab2b3ee9203616716",
+    "tests_passed": 6,
+    "synthetic_cases": 128,
+    "limits": [
+      "Primitive composition boundaries only; full graph assembly remains pending.",
+      "Source in-range rounding and strict label statements compared; overflow is explicitly rejected.",
+      "Training prediction rounding and unrounded inference feature semantics remain separate."
+    ]
+  },
+  "masked_composition_progress": {
+    "status": "implemented_and_population_equivalence_tested_not_published",
+    "approved": false,
+    "catalog_mutations": 0,
+    "operations": [
+      "intersect_masks",
+      "fit_masked_regression",
+      "fit_masked_binary",
+      "estimate_masked_offsets"
+    ],
+    "provider_sha256": "e5301f1176000692107ec2c4fc582bc21a70d21b3fccaf6883f2cde269d5fce8",
+    "tests": "tests/test_masked_operations.py",
+    "tests_sha256": "0952cb930932b48b0817dcbb3c83dc2f246c8a09077d4453731be4c47b35c116",
+    "tests_passed": 5,
+    "verified": [
+      "Masked model predictions equal explicit selected-population fits.",
+      "Changes to excluded feature rows do not change fitted predictions.",
+      "Masked calibration excludes extreme residuals outside its population.",
+      "Empty fitting selections, one-class selections and absent conditional calibration groups fail explicitly."
+    ],
+    "remaining": [
+      "Full computational graph composition and actual runner/source comparison.",
+      "Complete corrected domain workflow graph and publication qualification."
+    ]
+  },
+  "complete_numerical_graph_progress": {
+    "status": "numerical_graph_approved_tier3_fresh_served_execution_passed",
+    "approved": true,
+    "catalog_mutations": 0,
+    "report": "docs/reviews/residual_classifier_graph_execution.json",
+    "report_sha256": "06c3f015991f2dcf38560eb132eb9c1f89db615f2233361fa6a5cd891c49aa10",
+    "nodes": 25,
+    "edges": 53,
+    "graph_sha256": "dd89ad47afcc80b3bad608068c18fb08e8e591c9d4c6f21b9e3d7c9e02eadb6c",
+    "synthetic_predictions_compared": 640,
+    "populations_offsets_predictions_exact": true,
+    "boundary_tests_passed": 4,
+    "remaining": [
+      "Catalog-facing corrected domain adapter graph and multi-airport dispatch qualification.",
+      "Complete original NASA workflows, including source-specific policies and performance qualification; reusable numerical publication does not complete original intake."
+    ],
+    "symbolic_validation": {
+      "report": "docs/reviews/residual_classifier_graph_witnesses.json",
+      "report_sha256": "091ae1a1bad3bc75d9df107a355a214c012b28ed6074ff413e11355368c629fe",
+      "nodes_visited": 25,
+      "rejected_faults": [
+        "target_rows",
+        "query_columns",
+        "threshold_units",
+        "held_mask_rows",
+        "classifier_task"
+      ],
+      "target_dimension_preserved": true
+    },
+    "port_contracts": "Explicit row, dtype, feature-order, missing-value, population, quantization, model-state and unit contracts on every input/output.",
+    "domain_adapter_integration": {
+      "status": "source_level_tables_to_numerical_runner_passed",
+      "implementation": "sciona/nasa_workflow_inputs.py",
+      "implementation_sha256": "c875da10e78c53c90cd44604ad32ca9a13d757bade18e41508b9df0cc5d734cd",
+      "tests_passed": 4,
+      "airport_slots": 10,
+      "predictions_compared": 640,
+      "query_identity_alignment_exact": true,
+      "missing_prediction_features": "Retained as NaN; no imputation or query-row dropping",
+      "limits": [
+        "Adapters currently execute before/after the numerical graph; they are not yet catalog-facing graph nodes.",
+        "All source-level inputs are synthetic runtime tables; filesystem loaders and real competition performance are unqualified."
+      ]
+    },
+    "cross_domain_execution": {
+      "report": "docs/reviews/residual_classifier_reuse.json",
+      "report_sha256": "22d3b0dddacb36d952e33fd9283bcb14be7101ae5609852c41abb35012ec2981",
+      "domains": [
+        "manufacturing_cycle_duration",
+        "energy_interval_consumption"
+      ],
+      "predictions_compared": 128,
+      "populations_offsets_predictions_exact": true,
+      "synthetic_only": true,
+      "approved": false,
+      "limits": [
+        "Constructed examples establish compositional execution, not empirical model quality in these applications.",
+        "Targets must support nearest-integer output quantization; error thresholds and offsets use the chosen target unit.",
+        "Caller supplies ordered numeric features and aligned grouping; domain extraction and observation availability remain adapter responsibilities.",
+        "In-process execution only; model persistence is intercepted and no domain tables or models are published."
+      ]
+    }
+  },
+  "numerical_publication_preflight": {
+    "status": "source_bound_execution_passed_dependency_notice_gaps_recorded",
+    "approved": false,
+    "catalog_mutations": 0,
+    "binding_review": "docs/reviews/residual_classifier_binding_review.json",
+    "binding_review_sha256": "9ea95851a89bdb4136f588a1c83baef34f4e45a6bd673ab86d5ecfafdda9e75e",
+    "unique_runtime_bindings": 16,
+    "declared_dependency_packages": 44,
+    "provider_dependency_review": "docs/reviews/residual_classifier_provider_dependencies.json",
+    "provider_dependency_review_sha256": "9a177494da8f185e4ca49c273d2296b44366ca1f653ba413011e5b3ba477cb2d",
+    "provider_modules_pinned": 7,
+    "numerical_notice_files_retained": 7,
+    "remaining": [
+      "Catalog-facing corrected domain adapter graph and multi-airport dispatch qualification.",
+      "Complete original NASA workflows, including source-specific policies and performance qualification; reusable numerical publication does not complete original intake."
+    ],
+    "bound_execution": {
+      "report": "docs/reviews/residual_classifier_bound_execution.json",
+      "report_sha256": "504abea55c597c9f9f89e079c619a4677028a8ac8e46c6a7a108fd237fd4855c",
+      "source_files_verified": 19,
+      "scenarios_passed": 10,
+      "predictions_compared": 640
+    },
+    "dependency_notice_inventory": {
+      "report": "docs/reviews/residual_classifier_dependency_notices.json",
+      "report_sha256": "8dfd557e59449c3eb6cb8b73ee886d38f1dea2dc5837862b86db9bc1747ddd22",
+      "packages": 44,
+      "retained_notice_entries": 73,
+      "packages_without_installed_notices": [
+        "sciona",
+        "sciona-atoms-ml",
+        "tokenizers"
+      ],
+      "approved": false
+    }
+  },
+  "numerical_catalog_staging": {
+    "status": "draft_import_catalog_execution_negative_gates_and_runtime_profile_passed",
+    "approved": false,
+    "draft_atoms": 16,
+    "draft_cdgs": 1,
+    "rows_created": 328,
+    "second_apply_rows_created": 0,
+    "graph_version_id": "9ec72f57-a020-528a-8633-cd3f1d9f8de8",
+    "graph_sha256": "dd89ad47afcc80b3bad608068c18fb08e8e591c9d4c6f21b9e3d7c9e02eadb6c",
+    "exact_bindings_verified": 25,
+    "served_artifacts": 0,
+    "evidence_sha256": {
+      "docs/reviews/residual_classifier_draft_plan.json": "e371c7bf4812f322d1bfe4bb1222d4a3047159690a91e5695571a604c010ef3a",
+      "docs/reviews/residual_classifier_draft_import.json": "a0ba365806423edaf75c2c6cf8f1f403b1510c45b56e6d2d4089b5e0c484afbc",
+      "docs/reviews/residual_classifier_catalog_execution.json": "8041ebf26e15367b58237c5b61cf583e7f02a1ba8200c9ace86b316bdf16bbad"
+    },
+    "remaining": [
+      "Catalog-facing corrected domain adapter graph and multi-airport dispatch qualification.",
+      "Complete original NASA workflows, including source-specific policies and performance qualification; reusable numerical publication does not complete original intake."
+    ],
+    "database_fault_injection": {
+      "report": "docs/reviews/residual_classifier_database_gates.json",
+      "report_sha256": "7821ed03db993a4f5744f93dd6005670b917673660bb6150bb6040933ffb69a0",
+      "faults_rejected": 119,
+      "rollback_verified": true,
+      "committed_catalog_mutations": 0,
+      "scope": "Application prepublication integrity checker exercised against injected database faults; not a claim that database triggers alone enforce these checks. License/runtime publication review and approval transaction remain pending."
+    },
+    "runtime_profile": {
+      "report": "docs/reviews/residual_classifier_runtime_profile.json",
+      "report_sha256": "5dc1342da6f2c8ba8e8a19f6549db9fda3d73cf3a94535f973fbdbca76ef5a5f",
+      "dependency_packages": 44,
+      "psycopg_implementation": "python",
+      "excluded_optional_packages": [
+        "httptools",
+        "psycopg_binary",
+        "uvloop",
+        "watchfiles"
+      ],
+      "passed": true
+    }
+  },
+  "numerical_tier3_publication": {
+    "status": "approved_and_fresh_served_execution_verified",
+    "approved": true,
+    "trust_tier": 3,
+    "served_atoms": 16,
+    "served_cdgs": 1,
+    "version_id": "9ec72f57-a020-528a-8633-cd3f1d9f8de8",
+    "graph_sha256": "dd89ad47afcc80b3bad608068c18fb08e8e591c9d4c6f21b9e3d7c9e02eadb6c",
+    "approval_rows_created": 84,
+    "second_apply_rows_created": 0,
+    "synthetic_cross_domain_predictions": 128,
+    "source_intake_remains_draft": true,
+    "evidence_sha256": {
+      "docs/reviews/residual_classifier_publication_review.json": "546763b7a01793be374e274ca6ab9b10fce03c2eed598c4f1ebdf2f3a6d32993",
+      "docs/reviews/residual_classifier_publication_transaction_gates.json": "dd8af39a5dce0cbc432d47f5a2979252c739838ca6d5a4a70dd24da878755bfe",
+      "docs/reviews/residual_classifier_publication.json": "e0156ae4cb4e7dd6dcb0f797253ce78f086aa9b31a1ab261624a794efc097d5b",
+      "docs/reviews/residual_classifier_served_verification.json": "ca65e87ebce4562840d24b7a9c97f557da773a3b28e3fb9db189b6be4285880e"
+    },
+    "limitations": [
+      "Automated Tier 3 numerical workflow only; original NASA domain workflows, Tier 2 empirical usage and Tier 1 human certification remain unqualified.",
+      "Provisioned in-process execution with Python psycopg/system libpq. HTTP deployment, clean installation, binary/package redistribution and full native dependency licensing are outside this approval.",
+      "Current source manifests override stale installed provider dependency metadata.",
+      "Caller supplies aligned numeric matrices, independent query rows, explicit group identities, ordered feature schema and common target units.",
+      "Nearest-even int32 quantization is explicit and required; this workflow is unsuitable when continuous unquantized outputs are required.",
+      "Group holdout and residual filtering must leave sufficient fit rows, both classifier classes and both strict calibration groups; unsupported populations fail.",
+      "Training uses rounded predictions in the classifier feature; inference uses unrounded predictions and explicit float32 signed-offset arithmetic.",
+      "Native model state is an in-memory private runtime value for non-public inputs. No model or training data is published by this catalog transaction.",
+      "Synthetic cross-domain execution establishes computational reuse, not empirical predictive quality or historical XGBoost engine identity.",
+      "No repository-wide license is assigned to the local provider. Source attribution and dependency notices are retained; package redistribution requires a separate review."
+    ]
+  },
+  "population_dispatch_progress": {
+    "status": "implemented_and_all_source_slots_executed_with_served_numerical_core",
+    "approved": false,
+    "catalog_mutations": 0,
+    "report": "docs/reviews/competition_nasa_population_dispatch.json",
+    "report_sha256": "de6c79a8f27fcce82cdf0201006fafa6bd0b0896400cd1fff99be585106b8992",
+    "implementation_sha256": "9484ea6bfce006b1edc691a85d509cf5eef7c405e3bff6fcdff083df50199d90",
+    "tests_passed": 12,
+    "source_slots": 10,
+    "predictions_compared": 640,
+    "original_query_order_preserved": true,
+    "verified": [
+      "Combined event streams yield the same per-slot features as isolated event streams.",
+      "Missing or duplicate results, unknown slots, cross-slot identities and non-int32 outputs are rejected.",
+      "Query order is restored from complete identities, independently of slot execution order."
+    ],
+    "remaining": [
+      "Domain adapters and dispatch are runtime orchestration, not yet catalog-facing graph nodes.",
+      "Synthetic execution is not empirical competition performance or completion of both original NASA intakes.",
+      "Only queried slots execute here; persistent model-training lifecycle and empty-population policies remain explicit separate work."
+    ],
+    "latest_qualification": "docs/reviews/competition_nasa_population_graphs.json"
+  },
+  "domain_graph_progress": {
+    "status": "approved_tier3_and_fresh_served_execution_verified",
+    "approved": true,
+    "catalog_mutations": 0,
+    "report": "docs/reviews/competition_nasa_domain_graph.json",
+    "report_sha256": "cfef671a714f28bfa7f32561429a178a15fdc002fb16b04938fa97febb0d4181",
+    "graph_sha256": "9cfdd7718fbeaf96a7ded355e5f2e9ed5f9049c38206c2db76752409430d460f",
+    "nodes": 40,
+    "edges": 99,
+    "domain_nodes": 15,
+    "unique_domain_operations": 12,
+    "raw_records_only_graph_inputs": true,
+    "predictions_compared": 640,
+    "source_slots": 10,
+    "whole_graph_symbolic_qualified": false,
+    "remaining": [
+      "Lifecycle negative database and publication gates, runtime/scope review, and atomic Tier 3 approval with fresh served execution.",
+      "Multi-airport graph composition and original-intake completion.",
+      "Whole-graph static table propagation remains outside this runtime qualification."
+    ],
+    "boundary_tests_passed": 32,
+    "execution_source_files_pinned": 23,
+    "port_contracts": "Explicit table fields, clocks, units, join cardinality, learned schema, missing-value and row-identity requirements.",
+    "materialized_metadata_checkpoint": {
+      "implemented": true,
+      "before_model_fitting": true,
+      "numerical_nodes_checked": 25,
+      "target_dimension": "time",
+      "static_join_cardinality_claimed": false,
+      "tests": "tests/test_residual_metadata_preflight.py",
+      "scope": "Observed arrays and schema are propagated through numerical witnesses; model-dependent selected populations remain runtime checks."
+    },
+    "catalog_staging": {
+      "new_draft_atoms": 12,
+      "new_draft_cdgs": 1,
+      "reused_approved_atoms": 16,
+      "bindings_verified": 40,
+      "version_id": "865cc9e9-7e5b-5246-ae0d-4c55a0c6b29f",
+      "rows_created": 391,
+      "second_apply_rows_created": 0,
+      "source_oracle_predictions": 640,
+      "evidence_sha256": {
+        "docs/reviews/nasa_domain_draft_plan.json": "a4131364a5321ac9732151bf3e468c5b6e70f33af432bd86147ed29acb293140",
+        "docs/reviews/nasa_domain_draft_import.json": "2142346a621e8fce28ec2dde9f30c118d584934482ffeab9d262a146e8767b0c",
+        "docs/reviews/nasa_domain_catalog_execution.json": "90b8ffd8a84bee3012152a35a20a04195239c79eb9a91a72d62ad8a7a344602d"
+      }
+    },
+    "publication": {
+      "trust_tier": 3,
+      "newly_approved_atoms": 12,
+      "reused_approved_atoms": 16,
+      "approved_cdgs": 1,
+      "version_id": "865cc9e9-7e5b-5246-ae0d-4c55a0c6b29f",
+      "source_intake_remains_draft": true,
+      "rejected_database_faults": 167,
+      "approval_rows_created": 64,
+      "second_apply_rows_created": 0,
+      "fresh_served_source_predictions": 640,
+      "evidence_sha256": {
+        "docs/reviews/nasa_domain_database_gates.json": "62f281df154d473f7b0ad5849b82eb8d14b9989533675ea80cd050168e37ce88",
+        "docs/reviews/nasa_domain_runtime_profile.json": "0e20f5adf68d955fe646f4c92926b1a5b642e40ac4a12e076768b3f78047da0f",
+        "docs/reviews/nasa_domain_publication_review.json": "35a30a5d6d1acec7d48ff05b9483505e030a8b3573ecb1dae1f29698c9af93e7",
+        "docs/reviews/nasa_domain_publication_transaction_gates.json": "ec5addf9b7ed4e1dd6fe31f515e9bc735c7dda6bcb48a9a271038955646aa4c9",
+        "docs/reviews/nasa_domain_publication.json": "6700e11646c498206229a41154e109b7726b5d27934feae0921c53f084d73a95",
+        "docs/reviews/nasa_domain_served_verification.json": "eb9079493515446d520c665d146f3d5ce749957e07c0a57034ff0bff46a21c3e"
+      },
+      "limitations": [
+        "Automated Tier 3 corrected single-airport domain workflow in the provisioned in-process runner only; no Tier 1 human certification or Tier 2 empirical usage claim.",
+        "Whole-graph static table propagation is unsupported. Do not select these adapters for workflows requiring a successful pre-execution whole-graph Ghost simulation.",
+        "After the feature joins materialize, a mandatory checkpoint validates observed array shapes, schema and time dimension through all 25 numerical witnesses before model fitting.",
+        "Caller supplies explicit runtime tables in one timezone-naive clock, one airport per invocation, and the documented public software identity convention. No implicit dataset discovery or loading.",
+        "Corrected behavior includes final/singleton entities, fixed fallback categories, deterministic vocabulary order and observation-availability-safe history snapshots; original bugs are not reproduced.",
+        "Training uses source inner/left joins and complete-row filtering; inference retains missing features as NaN and restores original query identities.",
+        "Inputs, derived tables, learned category names and native model state remain private runtime material when inputs are non-public. This transaction publishes catalog metadata, not records or model files.",
+        "HTTP transport, clean installation and binary/package redistribution are not qualified. Existing dependency-notice scope and local package dispositions remain unchanged.",
+        "Synthetic source comparisons establish implemented behavior, not empirical competition performance. Multi-airport graph composition and persistent training lifecycle remain separate work.",
+        "The numerical atoms remain cross-domain reusable; these domain adapters deliberately expose airport-specific field and clock semantics."
+      ]
+    }
+  },
+  "persistent_state_progress": {
+    "status": "complete_state_reloaded_and_raw_query_inference_verified_in_fresh_processes",
+    "approved": false,
+    "catalog_mutations": 0,
+    "report": "docs/reviews/competition_nasa_state_lifecycle.json",
+    "report_sha256": "bd9fc91eb5acfd1b071380b624cc1497fb6480cd5e4ded573868279a86f56d26",
+    "fresh_processes": 10,
+    "predictions_compared": 640,
+    "refitting_disabled": true,
+    "state_includes": [
+      "ordered_feature_schema",
+      "prediction_feature_name",
+      "native_regressor",
+      "native_classifier",
+      "signed_offsets",
+      "probability_threshold",
+      "adapter_vocabulary_airport_and_target_unit"
+    ],
+    "state_boundary_tests_passed": 11,
+    "model_and_query_files_retained": false,
+    "remaining": [
+      "Multi-airport graph composition and original-intake completion.",
+      "Whole-graph static table propagation remains outside this runtime qualification."
+    ],
+    "latest_qualification": "docs/reviews/nasa_lifecycle_served_verification.json",
+    "publication_status": "Qualified through approved paired lifecycle graphs; initial standalone report remains historical."
+  },
+  "lifecycle_graph_progress": {
+    "status": "tier3_approved_and_fresh_served_lifecycle_execution_passed",
+    "approved": true,
+    "report": "docs/reviews/competition_nasa_lifecycle_graphs.json",
+    "report_sha256": "492975f7ed32967da29f368e49ce99611eb5281342421cf9fefc47279c8446bb",
+    "training_nodes": 28,
+    "inference_nodes": 14,
+    "training_graph_sha256": "4f9c01281f1f933d7ba5ea1dc6906dd0845b81a378dfe6ebf88130074c5a2d2e",
+    "inference_graph_sha256": "8401aac4a2bdcee8d69e1e09821ac1c5d73823059164edb34847e31105782bee",
+    "training_requires_query_records": false,
+    "inference_refitting_disabled": true,
+    "fresh_processes": 10,
+    "source_predictions_compared": 640,
+    "graph_and_state_tests_passed": 14,
+    "remaining": [
+      "Multi-airport graph composition and original-intake completion.",
+      "Whole-graph static table propagation remains outside this runtime qualification."
+    ],
+    "catalog_staging": {
+      "new_draft_atoms": 3,
+      "new_draft_cdgs": 2,
+      "reused_approved_atoms": 27,
+      "bindings": 42,
+      "rows_created": 301,
+      "second_apply_rows_created": 0,
+      "version_ids": {
+        "training": "928f3ab0-c463-5ba8-83c0-3b438988d96e",
+        "inference": "0bf54869-5e51-512f-9d04-c3184bdadaeb"
+      },
+      "catalog_inference_children": 10,
+      "source_predictions_compared": 640,
+      "evidence_sha256": {
+        "docs/reviews/nasa_lifecycle_draft_plan.json": "93ca4e3b2a6795adae1ebf37ca8462393d17739cb1cc32b74e2e743634a38a4d",
+        "docs/reviews/nasa_lifecycle_draft_import.json": "fbad92803b140ae8f08fefff7922d7ea07925417771831e8d0a41de4a55d1ce5",
+        "docs/reviews/nasa_lifecycle_catalog_execution.json": "3ae1cddeb09408bc93dd710ee94b6c59b09bbf6bbb6443b3f77f034c28393c59"
+      }
+    },
+    "publication": {
+      "trust_tier": 3,
+      "newly_approved_atoms": 3,
+      "reused_approved_atoms": 27,
+      "approved_cdgs": 2,
+      "version_ids": {
+        "training": "928f3ab0-c463-5ba8-83c0-3b438988d96e",
+        "inference": "0bf54869-5e51-512f-9d04-c3184bdadaeb"
+      },
+      "source_intake_remains_draft": true,
+      "rejected_database_faults": 164,
+      "approval_rows_created": 22,
+      "second_apply_rows_created": 0,
+      "fresh_served_source_predictions": 640,
+      "fresh_inference_children": 10,
+      "refitting_disabled": true,
+      "evidence_sha256": {
+        "docs/reviews/nasa_lifecycle_database_gates.json": "4d5b5011c5d34f7cfb25ef8dbf39d0c0a0927b10d1673c17e1feed65f82fb03c",
+        "docs/reviews/nasa_lifecycle_runtime_profile.json": "5ad7872b7d46ca26abfcfeceab088350079ca264269183974ee87919be727125",
+        "docs/reviews/nasa_lifecycle_publication_review.json": "85576f2eb39791e812df7def38e9bd122914aa0f32d17821273ab9acfbc7fcc9",
+        "docs/reviews/nasa_lifecycle_publication_transaction_gates.json": "4abfa19cf69b50d556d2b9897baa036b5ff345418b681b1756919210416998b1",
+        "docs/reviews/nasa_lifecycle_publication.json": "58047a0f6f5699cb5396723cb2136eb78da23d66b7e00e060f2ae8d7547d8a74",
+        "docs/reviews/nasa_lifecycle_publication_repeat.json": "0e614aa924892d41158a544f964ce579b15f9229c18d471de70ded07de80153e",
+        "docs/reviews/nasa_lifecycle_served_verification.json": "2856202b90850b8d2ec795069e9c5f9549490eeb944ddd5a4912d19325848bc3"
+      },
+      "limitations": [
+        "Automated Tier 3 corrected single-airport training and inference graphs in the provisioned in-process runtime; no Tier 1 human certification or Tier 2 empirical-performance claim.",
+        "Training accepts no future query records. Its metadata check uses the observed training matrix as a shape probe; unseen queries are validated when inference runs.",
+        "Whole-graph static table propagation remains unsupported. These graphs are not qualified for workflows requiring a successful pre-execution static table simulation.",
+        "Complete state carries native regressor/classifier models, ordered feature names, prediction feature name, signed calibration offsets, probability threshold and airport vocabulary/unit metadata.",
+        "State is tied to the exact installed backend version. Digests detect corruption but do not establish authenticity; native model contents are also checked during prediction.",
+        "Learned models, feature names, vocabulary and derived tables from non-public inputs are private runtime material. This catalog approval publishes no model files, records or data-derived metadata.",
+        "Inference recomputes corrected domain features using the saved vocabulary and performs no fitting. Missing features retain NaN backend semantics; output rows retain query identity order.",
+        "The source correction policy and explicit minute/int32/float32 boundaries remain those of the approved domain graph; original source bugs are not reproduced.",
+        "Both parent and fresh inference children were qualified with optional server packages blocked. HTTP transport, clean installation and binary/package redistribution remain unqualified.",
+        "Synthetic comparisons establish execution behavior, not empirical domain effectiveness. Multi-airport graph composition and original-intake completion remain separate work."
+      ]
+    }
+  },
+  "population_graph_progress": {
+    "status": "tier3_approved_and_fresh_served_population_family_execution_passed",
+    "approved": true,
+    "training_nodes": 312,
+    "training_populations": 10,
+    "training_graph_sha256": "c56d602feb81ba8b8f6a8994882c69e91aebe68ddda265e86b7f8fd8f66d5932",
+    "inference_graphs": {
+      "1": {
+        "nodes": 20,
+        "graph_sha256": "de3dfc684e407772c621af2ac338b0bc1cf89502c2e298ef4e83fa99b0dd9bb1",
+        "rows": 64
+      },
+      "2": {
+        "nodes": 37,
+        "graph_sha256": "8276cbcf051381e4acf2b2dc4e1d9b500ea82e7463fdd60b709d29503b4b602f",
+        "rows": 128
+      },
+      "3": {
+        "nodes": 54,
+        "graph_sha256": "89adea0b0a7a7d55ebf705955d7e629959e796d38ca4122b483fb42c950a63a8",
+        "rows": 192
+      },
+      "4": {
+        "nodes": 71,
+        "graph_sha256": "8a8252437248956620a6a433f57a6078707732c3f266931a0f785060fcbc34a6",
+        "rows": 256
+      },
+      "5": {
+        "nodes": 88,
+        "graph_sha256": "bfe819db626d14f73d2e585b2d1d81bafd12f64dc5227859e0c05655b4841278",
+        "rows": 320
+      },
+      "6": {
+        "nodes": 105,
+        "graph_sha256": "baa427bd8f223519bfa2a433a15443285ea26936711a273717f7eb75221e2c2a",
+        "rows": 384
+      },
+      "7": {
+        "nodes": 122,
+        "graph_sha256": "b81f1ad4d47a5f31bdda79afe486b907b92e3367da2d426283c535ea072d72c5",
+        "rows": 448
+      },
+      "8": {
+        "nodes": 139,
+        "graph_sha256": "534bfc70f9673abb766ceeb79235053616fc3fd269eb097758315272395aa800",
+        "rows": 512
+      },
+      "9": {
+        "nodes": 156,
+        "graph_sha256": "7d696d80ba6e1ca11b73e398408c1a7d35a8b94046a389c479f819e72450dfc6",
+        "rows": 576
+      },
+      "10": {
+        "nodes": 173,
+        "graph_sha256": "0719776c515586ab17387ac34bef062245cb328f340ab39feb452343bb4c535d",
+        "rows": 640
+      }
+    },
+    "inference_variants": 10,
+    "fresh_inference_processes": 10,
+    "source_predictions_compared": 3520,
+    "training_without_queries": true,
+    "inference_refitting_disabled": true,
+    "active_population_selection_executed": true,
+    "routing_and_boundary_tests_passed": 31,
+    "required_providers": 39,
+    "cold_standard_loader_registration_passed": true,
+    "reuse": "Four generic keyed routing operations preserve explicit lifecycle branches; five airport adapters partition, pair state and reassemble identity-aligned results. No nested whole-solution execution atom.",
+    "evidence_sha256": {
+      "docs/reviews/competition_nasa_population_graphs.json": "b4860ad4e0447bf4a864cc2926739f4380b239124fac0b1065cbd58f21c68c32",
+      "docs/reviews/nasa_population_registration.json": "3365c4aa7926b559eab0c05f950393037a262419928ef12dc814e8c591f5e03f"
+    },
+    "limitations": [
+      "Explicit finite graph variants require active count selection before execution; exhaustion rejects count mismatches.",
+      "Nonempty query batches only; training requires every declared population. No implicit missing-model fallback.",
+      "Synthetic behavior qualification only; static table propagation, catalog promotion and original-intake completion remain pending.",
+      "All models, query tables and intermediate files are private temporary runtime values and are deleted."
+    ],
+    "remaining": [
+      "Original third-place intake scope audit, correction and promotion; first-place NASA workflow remains separate.",
+      "The broad competition and physics promotion goal remains open."
+    ],
+    "catalog_staging": {
+      "new_draft_atoms": 9,
+      "new_draft_cdgs": 11,
+      "reused_approved_atoms": 30,
+      "bindings_verified": 1277,
+      "rows_created": 5827,
+      "second_apply_rows_created": 0,
+      "rollback_and_injected_failure_verified": true,
+      "version_ids": {
+        "training_10": "95e80317-d8da-5242-8e05-99eb45b7beb8",
+        "inference_1": "b4a6d40c-3bbc-54a0-8275-55c728b3574d",
+        "inference_2": "df100e96-9968-5e6d-9abe-ca8edb732283",
+        "inference_3": "0d35ac9d-51e8-5fef-9d4b-91460a5904dd",
+        "inference_4": "b314372d-edaf-5912-a639-29849d0bdf86",
+        "inference_5": "a6151119-648a-5d7a-aadb-4c535a0ea153",
+        "inference_6": "818da257-77cc-5137-990b-7a64080ed975",
+        "inference_7": "1bdcea1a-4bfe-593b-ba18-25b5b69acde7",
+        "inference_8": "51ecebb5-b7dd-504e-ad64-496a43826ab1",
+        "inference_9": "a33f545a-12cd-5d04-805a-b80675a119ba",
+        "inference_10": "62f31d9a-8b84-5900-8545-1afac2ee263d"
+      },
+      "catalog_inference_children": 10,
+      "source_predictions_compared": 3520,
+      "evidence_sha256": {
+        "docs/reviews/nasa_population_draft_plan.json": "c51cba62c52fcb1983f5fd24f9f9cdc67ee30cb582ee4647db8fe6a8bc6d28a8",
+        "docs/reviews/nasa_population_draft_transaction_gates.json": "219816609a8dbeb89fb0ccc73e84bfa3a398b50c256058d8fdbf8302af869eb1",
+        "docs/reviews/nasa_population_draft_import.json": "2ddf8f96e331dbe6e08c9cf91e943f1a0048845aa4176ccc15bbe2062ee9707d",
+        "docs/reviews/nasa_population_draft_import_repeat.json": "547f4e8d67af6331a589e042a37a5fb2d2af97cfcb7821f4a9ea500b7df6f809",
+        "docs/reviews/nasa_population_catalog_execution.json": "85233af23193b5a25b08851f94b707b0a773f315a324d4e1d8beedb6f7a8841f"
+      }
+    },
+    "publication": {
+      "trust_tier": 3,
+      "newly_approved_atoms": 9,
+      "reused_approved_atoms": 30,
+      "approved_cdgs": 11,
+      "version_ids": {
+        "training_10": "95e80317-d8da-5242-8e05-99eb45b7beb8",
+        "inference_1": "b4a6d40c-3bbc-54a0-8275-55c728b3574d",
+        "inference_2": "df100e96-9968-5e6d-9abe-ca8edb732283",
+        "inference_3": "0d35ac9d-51e8-5fef-9d4b-91460a5904dd",
+        "inference_4": "b314372d-edaf-5912-a639-29849d0bdf86",
+        "inference_5": "a6151119-648a-5d7a-aadb-4c535a0ea153",
+        "inference_6": "818da257-77cc-5137-990b-7a64080ed975",
+        "inference_7": "1bdcea1a-4bfe-593b-ba18-25b5b69acde7",
+        "inference_8": "51ecebb5-b7dd-504e-ad64-496a43826ab1",
+        "inference_9": "a33f545a-12cd-5d04-805a-b80675a119ba",
+        "inference_10": "62f31d9a-8b84-5900-8545-1afac2ee263d"
+      },
+      "source_intake_remains_draft": true,
+      "rejected_database_faults": 251,
+      "approval_rows_created": 79,
+      "second_apply_rows_created": 0,
+      "fresh_served_source_predictions": 3520,
+      "fresh_inference_children": 10,
+      "bindings_verified": 1277,
+      "refitting_disabled": true,
+      "evidence_sha256": {
+        "docs/reviews/nasa_population_database_gates.json": "f2a8bc12ec2eb020b8dedb987762303f493931169d1aa54eb982bfe7009756be",
+        "docs/reviews/nasa_population_runtime_profile.json": "88a48d49f65ccce500215a2c5dd2e70a44a5c7ce4fd8936e3009b1116880b80d",
+        "docs/reviews/nasa_population_publication_review.json": "d6c7a5f557fea65885c6025202cc3331c6f4fa1fd9bf8f83ed4e0b2a747a45c5",
+        "docs/reviews/nasa_population_publication_transaction_gates.json": "f76257f63cabdab234cd21782aa35c6ed122fa7afe8cff9c3aa62327990ce084",
+        "docs/reviews/nasa_population_publication.json": "ea0c3a0792abfdce9b7320dd4b40117bb536eeb0e055f8f12e86f903371c8201",
+        "docs/reviews/nasa_population_publication_repeat.json": "8f00635b8d82f2ca95e5d6fcdcfcad0002522bd16bfc4fe6243a85753b9ab133",
+        "docs/reviews/nasa_population_served_verification.json": "f2e9f92747754b2a0e680bc920fe8042d40e7acea78050b36b99f53205e542ac"
+      },
+      "limitations": [
+        "Automated Tier 3 explicit ten-population training and inference variants for one through ten active populations in the provisioned in-process runtime; no Tier 1 certification or Tier 2 empirical-effectiveness claim.",
+        "Select the fixed graph variant from validated active population count before execution. Every lifecycle branch remains visible; routing atoms do not execute nested graphs or models. Exhaustion checks reject count mismatches.",
+        "Training requires labeled rows and an explicit finite nonnegative residual cutoff for every declared slot. Inference requires a nonempty query batch and complete matching saved states; unqueried states may be present but their prediction branches do not execute.",
+        "Four keyed routing atoms operate on domain-independent mappings without mutating caller-owned values. Five airport adapters enforce domain partitioning, saved-state identity and int32 minute output alignment; all thirty reused atoms keep their prior contracts.",
+        "The graph documents retain their draft-generation metadata. Current catalog approval, trust tier and this review govern selection; original-intake completion is not established by publishing these realizations.",
+        "Training accepts no future query records. Its metadata check uses the observed training matrix as a shape probe; unseen queries are validated when inference runs.",
+        "Whole-graph static table propagation remains unsupported. These graphs are not qualified for workflows requiring a successful pre-execution static table simulation.",
+        "Complete state carries native regressor/classifier models, ordered feature names, prediction feature name, signed calibration offsets, probability threshold and airport vocabulary/unit metadata.",
+        "State is tied to the exact installed backend version. Digests detect corruption but do not establish authenticity; native model contents are also checked during prediction.",
+        "Learned models, feature names, vocabulary and derived tables from non-public inputs are private runtime material. This catalog approval publishes no model files, records or data-derived metadata.",
+        "Inference recomputes corrected domain features using the saved vocabulary and performs no fitting. Missing features retain NaN backend semantics; output rows retain query identity order.",
+        "The source correction policy and explicit minute/int32/float32 boundaries remain those of the approved domain graph; original source bugs are not reproduced.",
+        "Both parent and fresh inference children were qualified with optional server packages blocked. HTTP transport, clean installation and binary/package redistribution remain unqualified.",
+        "Synthetic evidence covers source calibration, all ten source configurations, shuffled query identities, every active-count inference variant and normal cold provider discovery. It does not establish empirical competition effectiveness."
+      ]
+    }
+  },
+  "original_intake_scope_followup": {
+    "status": "corrected_original_version_approved_tier3_and_fresh_served_verified",
+    "source_version_id": "7d6f7b78-1dff-5757-9326-4edad55aaa68",
+    "stage_count": 5,
+    "observations": [
+      "The active source feature construction does not support the intake weather-severity operation.",
+      "Residual filtering precedes the second regression fit; the old linear five-stage placeholders need an executable revision.",
+      "All approved lifecycle nodes have an exact disjoint source-region mapping.",
+      "Historical provenance validators require draft source status; new intake qualification must preserve immutable version/hash provenance without that permanent status restriction."
+    ],
+    "checker": "scripts/validate_residual_classifier_database_gates.py",
+    "next_actions": [
+      "Negative version/provenance/publication checks, runtime and scope review for this corrected intake version.",
+      "Atomic Tier 3 promotion, corrected artifact descriptions and audit rollup, latest-version activation, repeat application and fresh retrieval/selection/execution verification.",
+      "First-place NASA and the broader competition/physics promotion objective remain open."
+    ],
+    "source_scope_audit": "docs/reviews/nasa_original_intake_scope_audit.json",
+    "scope_audit_sha256": "d23c5f13c42bb98346e120d80f27ff1188ecb9a17c5fa2bc2d326f660966e7ec",
+    "corrected_active_feature_families": [
+      "etd_features",
+      "airlinecode_features",
+      "taxitime_to_gate_features"
+    ]
+  },
+  "latest_scope_status": "Third-place original artifact now serves a corrected Tier 3 executable revision; its original snapshot/history are preserved. Earlier unapproved fields describe historical audits. First-place and broader competition/physics work remain open.",
+  "complete_workflow_candidate": {
+    "status": "source_parity_execution_passed",
+    "approved": false,
+    "catalog_mutations": 0,
+    "new_atoms": 0,
+    "reuses_approved_atoms": 39,
+    "composition": "Approved training and inference regions connected by one forward complete-state edge.",
+    "structural_count_variants_tested": 10,
+    "execution_cases": [
+      {
+        "active_query_populations": 10,
+        "training_populations": 10,
+        "nodes": 485,
+        "edges": 1245,
+        "graph_sha256": "eae0c1a7277fdccccbbceb556038616e375fa39b944864e82c5e73ccb3865ad7",
+        "predictions": 640,
+        "regressor_fits": 20,
+        "classifier_fits": 10,
+        "source_predictions_exact": true,
+        "source_masks_and_offsets_exact": true,
+        "no_fitting_after_state_handoff": true,
+        "original_query_order_preserved": true
+      },
+      {
+        "active_query_populations": 2,
+        "training_populations": 10,
+        "nodes": 349,
+        "edges": 925,
+        "graph_sha256": "0fa393f3f69e5915e943c5cfdfcd1b61c3a8956a500892f153f01f03ae6481f9",
+        "predictions": 128,
+        "regressor_fits": 20,
+        "classifier_fits": 10,
+        "source_predictions_exact": true,
+        "source_masks_and_offsets_exact": true,
+        "no_fitting_after_state_handoff": true,
+        "original_query_order_preserved": true
+      }
+    ],
+    "predictions_compared": 768,
+    "report": "docs/reviews/nasa_complete_workflow_execution.json",
+    "report_sha256": "8aa0ee69547c625e130c393f432c9bc4cc57a65f0253f039a64f1f734c18ab1b",
+    "limitations": [
+      "A corrected executable intake candidate, not approval of the old placeholder template.",
+      "Full and sparse complete-workflow cases execute here; all ten inference regions were separately qualified in the approved population family.",
+      "Runtime records and state replace notebook, filesystem-discovery and pickle orchestration; no historical backend or empirical-quality claim.",
+      "Original-intake versioning, immutable provenance checks, catalog qualification and promotion remain pending."
+    ]
+  },
+  "corrected_intake_progress": {
+    "status": "corrected_original_version_approved_tier3_and_fresh_served_verified",
+    "approved": true,
+    "artifact_id": "60331cce-3af5-55d4-bce4-aa6217fcbe62",
+    "version_id": "7829db4a-7706-5c53-b3ab-3231b9bf1252",
+    "graph_sha256": "eae0c1a7277fdccccbbceb556038616e375fa39b944864e82c5e73ccb3865ad7",
+    "original_version_id": "7d6f7b78-1dff-5757-9326-4edad55aaa68",
+    "original_records_preserved": true,
+    "new_atoms": 0,
+    "reused_atoms": 39,
+    "nodes": 485,
+    "edges": 1245,
+    "rows_created": 2229,
+    "repeat_rows_created": 0,
+    "rollback_and_injected_failure_verified": true,
+    "stored_predictions_compared": 640,
+    "additional_unpublished_sparse_candidate_predictions": 128,
+    "source_provenance_policy": "Original version identity, snapshot and graph records are immutable; canonical approval state may advance only through qualified version promotion.",
+    "evidence_sha256": {
+      "docs/reviews/nasa_corrected_intake_plan.json": "99bf6b896defc7c0dc63a9942225f3dba979fe00b2236d229e58f39c8692b47f",
+      "docs/reviews/nasa_corrected_intake_draft_transaction.json": "13140807dd4d4066ed6d201beeb12094b7312a4a1ae6d1590e836753090a277e",
+      "docs/reviews/nasa_corrected_intake_draft_import.json": "b0321bb721b08e49c0cccb8d6d72225e96983abe59214802d3d193f71c308f8c",
+      "docs/reviews/nasa_corrected_intake_draft_repeat.json": "e1648af8803ba8806c9e15ab9288dd5431969a063af7c625e02fa5e8abb5863c",
+      "docs/reviews/nasa_corrected_intake_catalog_execution.json": "3b9e2e813bf74f4c658dbb96c334a70f4ebd424406d1217a70998d57b3cbf98a",
+      "docs/reviews/nasa_corrected_intake_database_gates.json": "a4070cba4759a9ac32a02f7b5e4d6cdc222fdb93256d5c848ed912aacdcbcc57",
+      "docs/reviews/nasa_corrected_intake_runtime_profile.json": "5cb4a488af13e7a823bf4df4609aec4ec8796e3c70449bb59fbe2189d29d8257",
+      "docs/reviews/nasa_corrected_intake_publication_review.json": "6207efbeed12648f714a8827ed096a49c0fd4e44af7c15077f0b39ef79b9e5c6",
+      "docs/reviews/nasa_corrected_intake_publication_transaction_gates.json": "120257403976e9e61e1956ada55e89138c43c16f3afa5bff49ef611c27194f99",
+      "docs/reviews/nasa_corrected_intake_publication.json": "1d308331a7c83df74a4910b857459444d7e41919bcf9d71cf80ffdcc35ad305a",
+      "docs/reviews/nasa_corrected_intake_publication_repeat.json": "de28b7645f5b90203c731304584188cba1b2f146fbe11f4ec4842a6a56b590d3",
+      "docs/reviews/nasa_corrected_intake_served_verification.json": "f9ccaa4d7bcf073394f5867e4e5ec89cb212f5068a66707c4cffce031510271a"
+    },
+    "selection_scope": "Corrected original entrypoint requires ten labeled training populations and ten queried populations; the separately approved lifecycle family supports sparse inference.",
+    "remaining": [
+      "HTTP transport and semantic search ranking are outside the direct SQL/catalog-converter qualification.",
+      "First-place NASA and the broader competition/physics promotion objective remain open; refresh readiness accounting to distinguish original snapshot placeholders from corrected served versions."
+    ],
+    "database_faults_rejected": 95,
+    "guarded_runtime_packages": 44,
+    "guarded_runtime_stored_predictions": 640,
+    "qualification_catalog_mutations": 0,
+    "trust_tier": 3,
+    "publication_rows_created": 4,
+    "publication_rows_updated": 3,
+    "repeat_rows_updated": 0,
+    "post_activation_failure_rollback_verified": true,
+    "fresh_served_predictions_compared": 640,
+    "latest_version_selection_verified": true
+  }
+}

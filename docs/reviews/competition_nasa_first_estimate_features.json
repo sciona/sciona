@@ -1,0 +1,36 @@
+{
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "source_sha256": "8b9776ae0e7fdbb48e2bee64ee442ca1d2d4023309f953092dba108f93e6896c",
+  "synthetic_entities": 2,
+  "source_output_rows": 6,
+  "query_output_rows": 2,
+  "rolling_statistics_checked": 36,
+  "rounded_availability_queries": 2,
+  "last_nonmissing_bin_verified": true,
+  "boundary_reset_verified": true,
+  "unrelated_entity_perturbation_invariant": true,
+  "future_observation_invariant": true,
+  "distinct_time_shuffle_invariant": true,
+  "extra_query_changed_rolling_statistics": 6,
+  "corrected_rolling_source_comparisons": 36,
+  "corrected_query_population_invariance": true,
+  "findings": [
+    "Ungrouped shifts are followed by an explicit entity-boundary reset. The tested entity boundary does not leak changes across entities.",
+    "The source returns history rows as well as query rows; the later keyed query join is required.",
+    "Six time windows produce sum, maximum and sample-standard-deviation change features; all query statistics match independent references.",
+    "Adding an earlier query for the same entity inserts a zero change into each window and changes six standard-deviation features at an existing query."
+  ],
+  "limitations": [
+    "Synthetic two-entity execution, distinct observation times plus one off-grid/null bin; broader duplicate histories, exact window boundaries and timezone regimes remain to be checked.",
+    "The corrected component evaluates history bins plus each current query independently; it changes source batch-dependent statistics and requires retraining with the same policy.",
+    "Full raw-field adaptation and catalog publication remain outstanding."
+  ],
+  "implementation_sha256": {
+    "sciona/estimate_history_features.py": "271168104ba0f41c5a0151d41f9ce8cb7b0febe2a0ab7f140ddf166980be94cd",
+    "tests/test_estimate_history_features.py": "e5a5700465d3f1bad0584267d340f851b1926c99ff211b81b31d6e43235c398e"
+  },
+  "validator_sha256": "8bed68619532985ada62c8f54492a4d9b3d20ff6ca7693cc59bc064783bb5a46"
+}

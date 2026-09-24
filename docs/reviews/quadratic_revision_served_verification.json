@@ -1,0 +1,218 @@
+{
+  "passed": true,
+  "approved": true,
+  "trust_tier": 3,
+  "selection": {
+    "passed": true,
+    "version_id": "f144d5c8-ed2d-5102-9478-ae4d61225ade",
+    "graph_sha256": "8b4af08d349fe37939b866d4b1a900387028857268086cfceeea9c19ff27567a",
+    "trust_tier": 3,
+    "semantic_approval_verified": true,
+    "corrected_descriptions_verified": true,
+    "original_history_preserved": true,
+    "scope": "Direct served SQL view, latest-version predicate, get_artifact_document and production candidate converter; HTTP transport and semantic search ranking not covered."
+  },
+  "execution": {
+    "corrected_proof": {
+      "source_version_id": "40ae98f0-f033-5861-870c-6d6408edbd2b",
+      "kind": "explicit_corrected_quadratic_proof.v1",
+      "source_parity_claim": false,
+      "domain": [
+        "a,b,c,x real",
+        "a != 0",
+        "b^2-4*a*c >= 0"
+      ],
+      "branch_semantics": "Two alternative real solutions, lower then upper; repeated root appears twice.",
+      "steps": {
+        "original": "Equality(Add(Mul(Symbol('a', real=True, nonzero=True), Pow(Symbol('x', real=True), Integer(2))), Mul(Symbol('b', real=True), Symbol('x', real=True)), Symbol('c', real=True)), Integer(0))",
+        "divided": "Equality(Add(Pow(Symbol('x', real=True), Integer(2)), Mul(Pow(Symbol('a', real=True, nonzero=True), Integer(-1)), Symbol('b', real=True), Symbol('x', real=True)), Mul(Pow(Symbol('a', real=True, nonzero=True), Integer(-1)), Symbol('c', real=True))), Integer(0))",
+        "shifted": "Equality(Add(Pow(Symbol('x', real=True), Integer(2)), Mul(Pow(Symbol('a', real=True, nonzero=True), Integer(-1)), Symbol('b', real=True), Symbol('x', real=True))), Mul(Integer(-1), Pow(Symbol('a', real=True, nonzero=True), Integer(-1)), Symbol('c', real=True)))",
+        "completed": "Equality(Add(Pow(Symbol('x', real=True), Integer(2)), Mul(Pow(Symbol('a', real=True, nonzero=True), Integer(-1)), Symbol('b', real=True), Symbol('x', real=True)), Mul(Rational(1, 4), Pow(Symbol('a', real=True, nonzero=True), Integer(-2)), Pow(Symbol('b', real=True), Integer(2)))), Add(Mul(Integer(-1), Pow(Symbol('a', real=True, nonzero=True), Integer(-1)), Symbol('c', real=True)), Mul(Rational(1, 4), Pow(Symbol('a', real=True, nonzero=True), Integer(-2)), Pow(Symbol('b', real=True), Integer(2)))))",
+        "squared": "Equality(Pow(Add(Symbol('x', real=True), Mul(Rational(1, 2), Pow(Symbol('a', real=True, nonzero=True), Integer(-1)), Symbol('b', real=True))), Integer(2)), Add(Mul(Integer(-1), Pow(Symbol('a', real=True, nonzero=True), Integer(-1)), Symbol('c', real=True)), Mul(Rational(1, 4), Pow(Symbol('a', real=True, nonzero=True), Integer(-2)), Pow(Symbol('b', real=True), Integer(2)))))",
+        "negative": "Equality(Add(Symbol('x', real=True), Mul(Rational(1, 2), Pow(Symbol('a', real=True, nonzero=True), Integer(-1)), Symbol('b', real=True))), Mul(Integer(-1), Pow(Add(Mul(Integer(-1), Pow(Symbol('a', real=True, nonzero=True), Integer(-1)), Symbol('c', real=True)), Mul(Rational(1, 4), Pow(Symbol('a', real=True, nonzero=True), Integer(-2)), Pow(Symbol('b', real=True), Integer(2)))), Rational(1, 2))))",
+        "positive": "Equality(Add(Symbol('x', real=True), Mul(Rational(1, 2), Pow(Symbol('a', real=True, nonzero=True), Integer(-1)), Symbol('b', real=True))), Pow(Add(Mul(Integer(-1), Pow(Symbol('a', real=True, nonzero=True), Integer(-1)), Symbol('c', real=True)), Mul(Rational(1, 4), Pow(Symbol('a', real=True, nonzero=True), Integer(-2)), Pow(Symbol('b', real=True), Integer(2)))), Rational(1, 2)))",
+        "lower": "Equality(Symbol('x', real=True), Add(Mul(Integer(-1), Rational(1, 2), Pow(Add(Mul(Integer(-1), Integer(4), Symbol('a', real=True, nonzero=True), Symbol('c', real=True)), Pow(Symbol('b', real=True), Integer(2))), Rational(1, 2)), Pow(Abs(Symbol('a', real=True, nonzero=True)), Integer(-1))), Mul(Integer(-1), Rational(1, 2), Pow(Symbol('a', real=True, nonzero=True), Integer(-1)), Symbol('b', real=True))))",
+        "upper": "Equality(Symbol('x', real=True), Add(Mul(Rational(1, 2), Pow(Add(Mul(Integer(-1), Integer(4), Symbol('a', real=True, nonzero=True), Symbol('c', real=True)), Pow(Symbol('b', real=True), Integer(2))), Rational(1, 2)), Pow(Abs(Symbol('a', real=True, nonzero=True)), Integer(-1))), Mul(Integer(-1), Rational(1, 2), Pow(Symbol('a', real=True, nonzero=True), Integer(-1)), Symbol('b', real=True))))"
+      },
+      "corrected_steps": [
+        "retain b/a in divided equation",
+        "preserve branch sign when subtracting offset",
+        "use abs(a) when simplifying sqrt(a^2), preserving root order for either sign of a"
+      ],
+      "checks": {
+        "arithmetic_transforms": true,
+        "original_polynomial_roots": true,
+        "complete_factorization": true,
+        "ordered_branches": true
+      },
+      "publication": "unapproved corrected proof; numerical realization and review remain required"
+    },
+    "execution_graph": {
+      "nodes": [
+        {
+          "node_id": "roots",
+          "parent_id": null,
+          "name": "Solve real quadratic with ordered roots",
+          "description": "Complete explicitly corrected real quadratic solver; preserves both alternative roots.",
+          "concept_type": "custom",
+          "inputs": [
+            {
+              "name": "a",
+              "type_desc": "numpy.ndarray",
+              "constraints": "finite real coefficients, identical nonempty shapes; a != 0; discriminant >= 0; consistent polynomial units",
+              "data_kind": "",
+              "time_basis": "",
+              "provenance": "",
+              "required": true,
+              "default_value_repr": "",
+              "dim_signature": ""
+            },
+            {
+              "name": "b",
+              "type_desc": "numpy.ndarray",
+              "constraints": "finite real coefficients, identical nonempty shapes; a != 0; discriminant >= 0; consistent polynomial units",
+              "data_kind": "",
+              "time_basis": "",
+              "provenance": "",
+              "required": true,
+              "default_value_repr": "",
+              "dim_signature": ""
+            },
+            {
+              "name": "c",
+              "type_desc": "numpy.ndarray",
+              "constraints": "finite real coefficients, identical nonempty shapes; a != 0; discriminant >= 0; consistent polynomial units",
+              "data_kind": "",
+              "time_basis": "",
+              "provenance": "",
+              "required": true,
+              "default_value_repr": "",
+              "dim_signature": ""
+            }
+          ],
+          "outputs": [
+            {
+              "name": "lower_root",
+              "type_desc": "numpy.ndarray",
+              "constraints": "finite real root in coefficient shape; lower <= upper; repeated roots retained twice",
+              "data_kind": "",
+              "time_basis": "",
+              "provenance": "",
+              "required": true,
+              "default_value_repr": "",
+              "dim_signature": ""
+            },
+            {
+              "name": "upper_root",
+              "type_desc": "numpy.ndarray",
+              "constraints": "finite real root in coefficient shape; lower <= upper; repeated roots retained twice",
+              "data_kind": "",
+              "time_basis": "",
+              "provenance": "",
+              "required": true,
+              "default_value_repr": "",
+              "dim_signature": ""
+            }
+          ],
+          "status": "atomic",
+          "children": [],
+          "depth": 0,
+          "type_signature": "",
+          "matched_primitive": "sciona.atoms.physical_quantities.quadratic_roots.real_quadratic_roots",
+          "primitive_binding_confidence": 0.0,
+          "primitive_binding_source": "",
+          "action_class": "replace_stage",
+          "resolution_reason": "",
+          "resolved_by": "",
+          "is_optional": false,
+          "is_opaque": false,
+          "is_external": false,
+          "parallelizable": false,
+          "conceptual_summary": "",
+          "critic_notes": "",
+          "decomposition_rationale": "",
+          "fixed_point_max_iterations": 0,
+          "fixed_point_convergence_field": "",
+          "map_window_size": 0,
+          "map_hop_size": 0,
+          "boundary_kind": "none",
+          "boundary_port_name": ""
+        }
+      ],
+      "edges": [],
+      "planning_artifact": null,
+      "metadata": {
+        "artifact_source": "corrected_physics_numerical_realization",
+        "num_edges": 0,
+        "num_nodes": 1,
+        "original_artifact_id": "41b208a7-9b47-5b0e-920e-c2480a73c193",
+        "original_version_id": "b8971460-66c8-50be-a7ce-5532d3133860",
+        "publication_status": "draft",
+        "qualified_numerical_parent_version_id": "25734209-2f61-59da-9be9-70020245ae1d",
+        "revision_scope": "Explicitly corrected complete real quadratic solution under original identity; defective original and replay equations remain immutable provenance; no source-parity claim.",
+        "source_parity_claim": false,
+        "source_version_id": "40ae98f0-f033-5861-870c-6d6408edbd2b"
+      }
+    },
+    "graph_digest": "8b4af08d349fe37939b866d4b1a900387028857268086cfceeea9c19ff27567a",
+    "full_runner_cases": 5,
+    "synthetic_polynomials": 305,
+    "maximum_ulp_error": 0.0,
+    "provider_sha256": "e9b5b8ed3fc5e3f4d2314e6b4e87620c2cab8675061bf7128905c8119aaa47d7",
+    "implementation_sha256": {
+      "sciona/physics_ingest/quadratic_corrected_proof.py": "deff657153fc5e36f79b8e0a0bd696d9397e34fbcfd598e2f3aedb561a48ca39",
+      "sciona/physics_ingest/quadratic_execution.py": "94ee71d90cb13ebb751d41fd06947c9a8f777dd1e09521392acca98b99ec7b08",
+      "tests/physics_ingest/test_quadratic_corrected_proof.py": "892720dcc28ace7fe5751ee14acef0ea5ad34ada580065b681189af2446ae0ce",
+      "tests/physics_ingest/test_real_quadratic_roots.py": "0c7173bc54b513a3d9d6a510bd2054117f643490f00a891fbde0d7b3f86696a4",
+      "scripts/validate_quadratic_execution.py": "75591503bb7198a77c7679d904d24b707d44c11ed4448406f4686897e6397400",
+      "sciona/services/execution_graph_codec.py": "1ad42332f8e28adf4ee3f8d53184a4af8351f66304efa1703c63ed32989082a6",
+      "sciona/visualizer/runner.py": "ff289eda92093a164f1691e2453622579cd6357e6292267833f5873a97ad6aa3"
+    },
+    "publication": "unapproved numerical realization; source-correction review and catalog intake pending"
+  },
+  "reuse": {
+    "passed": true,
+    "approved": true,
+    "catalog_mutations": 0,
+    "version_id": "f144d5c8-ed2d-5102-9478-ae4d61225ade",
+    "graph_sha256": "8b4af08d349fe37939b866d4b1a900387028857268086cfceeea9c19ff27567a",
+    "reused_atoms": 1,
+    "new_atoms": 0,
+    "domains": [
+      {
+        "domain": "constant_acceleration",
+        "synthetic_cases": 128,
+        "both_roots_exact": true,
+        "independent_model_residuals_exact": true,
+        "signed_coefficient_rescaling_verified": true
+      },
+      {
+        "domain": "quadratic_revenue_linear_cost",
+        "synthetic_cases": 128,
+        "both_roots_exact": true,
+        "independent_model_residuals_exact": true,
+        "signed_coefficient_rescaling_verified": true
+      }
+    ],
+    "full_runner_cases": 4,
+    "distinct_synthetic_cases": 256,
+    "contracts": [
+      "Mechanics adapter supplies coefficients in metres/seconds^2, metres/second and metres; outputs are times in seconds. Constant acceleration and zero initial height are constructed assumptions, not inferred by the solver.",
+      "Cost adapter supplies coefficients in currency/quantity^2, currency/quantity and currency; roots are break-even quantities for constructed quadratic revenue and linear costs.",
+      "Both algebraic roots are returned. A consumer chooses any physically admissible root using its own application constraints. No hidden event selection or rounding is applied.",
+      "Numerical core receives finite real coefficients with identical shapes and consistent polynomial units; physical/economic validity is caller-owned."
+    ],
+    "limitations": [
+      "Synthetic constructed transfer evidence, not empirical motion validation, economic prediction or financial advice.",
+      "No complex roots, linear fallback, arbitrary physical model, unit inference or implicit root selection.",
+      "Provisioned in-process runner only; no HTTP, clean-install or performance claim."
+    ],
+    "validator_sha256": "6b12934a926c2711c47528bd42068fe808bee8d15e32df15160453e7be02d015",
+    "checker_sha256": "81ef98dd91ebbc2fd05f80ed9100c7d7a380b6c67b54384ac4ca3d4401c23725",
+    "runner_sha256": "ff289eda92093a164f1691e2453622579cd6357e6292267833f5873a97ad6aa3"
+  },
+  "catalog_mutations": 0,
+  "validator_sha256": "97da195d46b605e6d01122b55909023fdde3d0643afd75f461dd41ba607f27dc",
+  "execution_validator_sha256": "75591503bb7198a77c7679d904d24b707d44c11ed4448406f4686897e6397400",
+  "retriever_sha256": "f6b6357b8dfc42d1ad253d0be277a440c1284124c6c525d7421b242885dc34e4"
+}
