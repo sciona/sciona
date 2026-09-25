@@ -1115,3 +1115,34 @@ publication-hash-bound source whitespace exceptions are intentionally retained.
 See cdg_checkpoint_validation.json. This checkpoint does not add new publication
 claims or certify a clean installation/full test suite. Resume the remaining
 competition and physics original-identity promotions after pushing it.
+
+Both integration-by-parts originals (derivation 000009) are now approved and
+served at automated Tier 3. Exact source grouping, expression-pair multiplicity,
+bindings and implied dependency edges match. The immutable source reviewer
+reproduces the retained four-equation parametrized differential reconstruction,
+while original source validators and incomplete AST histories remain unchanged.
+The existing provider is reused under each original identity; no new atoms.
+
+Staging created 25 rows, full rollback and cross-identity failure after sixteen
+writes passed, and repeat staging made no changes. All 34 candidate/parent
+corruption checks passed with rollback. Each stored graph passed the same six
+symbolic cases: derivative verification, residual integral retention, portable
+AST string transport and cache preservation. Publication created twelve review,
+description, reference and regime rows and updated six selection rows; partial
+and post-activation rollback passed, and repeat publication made no changes.
+Fresh served SQL, document lookup, candidate conversion and execution passed
+for both corrected identities. Scope remains scalar commutative C1 functions
+on a caller-established common connected real interval, with an independent
+constant and explicit pole/branch exclusions; no numerical quadrature or
+automatic domain certification is claimed.
+
+See integration_parts_identity_execution_scope.json,
+integration_parts_identity_database_gates.json,
+integration_parts_identity_catalog_execution.json,
+integration_parts_identity_publication_transaction.json,
+integration_parts_identity_publication.json,
+integration_parts_identity_publication_repeat.json and
+integration_parts_identity_served_verification.json. The fresh physics-only
+count is 80 approved/served and 64 draft CDGs, recorded in
+physics_post_integration_parts_identity_status.json. The full competition and
+physics objective remains active; this checkpoint completes only this pair.
