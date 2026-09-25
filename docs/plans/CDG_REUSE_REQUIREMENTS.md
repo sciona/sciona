@@ -1146,3 +1146,32 @@ integration_parts_identity_served_verification.json. The fresh physics-only
 count is 80 approved/served and 64 draft CDGs, recorded in
 physics_post_integration_parts_identity_status.json. The full competition and
 physics objective remains active; this checkpoint completes only this pair.
+
+Both sine double-angle originals (derivation 000016) are now approved and
+served at automated Tier 3. Fresh immutable source review checked all eight
+source equations, including three recovered from pinned public Cypher bytes,
+and preserved the explicit imaginary-unit interpretation. Grouped inference
+scope, bindings, pair multiplicities and dependency edges match between originals.
+The same approved real-radian provider is reused; no new atoms were introduced.
+
+Staging created seventeen rows; full rollback, failure after eleven writes
+across the identities and zero-change repeat staging passed. All 34 corruption
+checks passed. Each stored graph passed six production-runner cases over the
+same 29 numeric states with zero ULP error. Publication rollback passed after
+cross-identity writes and after both latest versions activated. Publication
+created twelve review/description/reference/regime rows and updated six
+activation rows; repeat publication made no changes. Fresh served SQL,
+document retrieval, production candidate conversion and stored execution passed.
+Finite real-radian float64 conversion and shape preservation remain explicit;
+no degree or complex-input semantics or unqualified domain transfer are claimed.
+
+See sine_double_angle_identity_execution_scope.json,
+sine_double_angle_identity_database_gates.json,
+sine_double_angle_identity_catalog_execution.json,
+sine_double_angle_identity_publication_transaction.json,
+sine_double_angle_identity_publication.json,
+sine_double_angle_identity_publication_repeat.json and
+sine_double_angle_identity_served_verification.json. The authoritative physics
+count is 82 approved/served and 62 drafts, recorded in
+physics_post_sine_double_angle_identity_status.json. The wider competition
+backlog remains part of the active objective; physics progress does not close it.
