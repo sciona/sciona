@@ -1175,3 +1175,25 @@ sine_double_angle_identity_served_verification.json. The authoritative physics
 count is 82 approved/served and 62 drafts, recorded in
 physics_post_sine_double_angle_identity_status.json. The wider competition
 backlog remains part of the active objective; physics progress does not close it.
+
+Otto original-identity review now explicitly rejects copying the existing
+prepare/execute wrapper as sufficient compositional reuse. The complete source
+workflow must expose its reusable operations and source-specific adapters before
+promotion. The draft probability_ensemble module separates bag averaging from
+geometric/arithmetic combination, with explicit weights and arbitrary categorical
+class counts. The separate ensemble_otto_adapter retains nine classes and the
+250/600/250 source bag sizes. It is outside the immutable historical otto_*
+implementation inventory, is not imported by served providers, and must receive
+its own provider/graph qualification. Historical implementation files are unchanged.
+
+Synthetic three-class machine-fault and five-class land-cover examples check
+the numeric operation against an 80-digit Decimal oracle; they demonstrate
+constructed transfer of the probability contract, not empirical effectiveness.
+Source-adapter parity, class permutations, row independence, input preservation,
+invalid inputs and zero-support behavior are covered in
+tests/test_probability_ensemble.py. These draft operations do not complete the
+33-entry stacking workflow or authorize any new catalog selection. A fresh
+runtime audit also found a missing native dependency from the retained closure;
+competition_otto_original_identity_scope.json records the failure. Repair or
+explicit requalification of the dependency closure remains required alongside
+decomposition, full execution and publication gates. No new approval is claimed.
