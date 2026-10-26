@@ -1197,3 +1197,24 @@ runtime audit also found a missing native dependency from the retained closure;
 competition_otto_original_identity_scope.json records the failure. Repair or
 explicit requalification of the dependency closure remains required alongside
 decomposition, full execution and publication gates. No new approval is claimed.
+
+The native-environment follow-up checked all 273 historical library records:
+266 still match and seven old Homebrew version paths are absent. Their installed
+replacements have different bytes, so historical runtime evidence remains
+historical. Fresh candidate traversal resolves 275 files, including two added
+Brotli libraries. Candidate runtime checks loaded all 14 expected Python
+dependencies, the patched CPU Lasagne/Theano pair, three R packages and Java.
+The Java identity probe explicitly limits active processors to one and uses
+serial garbage collection; numerical pools were limited to one throughout.
+
+New notice evidence covers all 19 Homebrew packages in that closure, with
+55 distinct notices and 132 origins. The new GLib source archive was checked
+against the installed formula's source hash before retaining its notices.
+An independent consistency review checks current native bytes, dependency
+targets, script/evidence hashes, installed formulas and retained notices across
+the candidate reports. See competition_otto_native_drift.json and
+competition_otto_candidate_{native_links,runtime_identity,native_notices,
+runtime_review}.json. The historical reports were not replaced. These checks
+clear candidate runtime investigation for further qualification; they do not
+qualify model fits, a decomposed graph or a new catalog approval. The complete
+competition and physics promotion objective remains active.
