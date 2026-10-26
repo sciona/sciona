@@ -1218,3 +1218,32 @@ runtime_review}.json. The historical reports were not replaced. These checks
 clear candidate runtime investigation for further qualification; they do not
 qualify model fits, a decomposed graph or a new catalog approval. The complete
 competition and physics promotion objective remains active.
+
+Otto's meta stage now has a draft 12-node, 19-edge CDG with visible preparation,
+three candidate-selection nodes, three complete-reference refit nodes, three
+reusable probability means, source-policy blending and result assembly. Eight
+draft provider functions implement these boundaries. The general mean operation
+supports other categorical class/run counts; four folds, nine classes and
+250/600/250 model bags remain explicit Otto adapter policy. Prepared inputs are
+detached from caller-owned values, and refits reject selections from a different
+prepared population or altered selected controls. Witnesses only express stage
+kinds; runtime checks remain mandatory and static shape proof is not claimed.
+
+All 39 focused checks passed, including exact historical-result and fitting-operand
+parity with deterministic test learners, invalid-input rejection before fitting,
+short/invalid bag rejection, selection ownership, codec round-trip and actual
+production-runner wiring. Separate native execution then completed all 27 bags:
+8,800 tuning fits and 1,100 refits across the three real learner families. All
+12 nodes executed on synthetic meta features, probabilities normalized, strict
+JSON output passed, and code/provider/runtime hashes matched before and after.
+Numerical pools were restricted to one thread and graph execution was sequential.
+
+See competition_otto_decomposed_meta_execution.json and
+scripts/validate_stacking_meta_graph.py. This evidence qualifies the tested
+meta-stage computation only, with 36 synthetic training rows and nine queries;
+it does not execute or qualify the 33 first-level producers or supplemental
+feature construction. The objects are qualified only within one uncached,
+in-process graph execution. New providers and the graph remain unapproved.
+First-level/supplemental decomposition, full-stack execution and all version-bound
+publication gates remain necessary for the original Otto intake. Other competition
+and physics backlog items remain part of the same open goal.
