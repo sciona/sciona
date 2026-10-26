@@ -1247,3 +1247,42 @@ in-process graph execution. New providers and the graph remain unapproved.
 First-level/supplemental decomposition, full-stack execution and all version-bound
 publication gates remain necessary for the original Otto intake. Other competition
 and physics backlog items remain part of the same open goal.
+
+The first-level source adapters now expose all 33 entries in a draft graph.
+For the retained synthetic policy, 37 nodes execute one shared ten-column KNN
+bank; a separate test uses 38 nodes and two distinct control groups. Six provider
+functions are reused across entry nodes, with explicit source-index policy
+outputs rather than one provider per entry. Controls, input populations, fold
+assignments and all source dispatch arguments match the historical implementation
+in the orchestration tests. Wrong population ownership, incompatible neighbor
+controls, missing entries and misaligned collection outputs are rejected.
+
+Fresh native graph execution completed all 33 entries on the full synthetic
+first-level fixture, including the complete H2O and 120-model neural families.
+All 37 nodes completed, emitting the declared 293 columns over 1,350 synthetic
+training rows and nine query rows. The five-feature embedding interpretation
+and unresolved historical 297-column claim remain explicit. Code/provider and
+candidate-runtime evidence hashes matched before and after execution. Numerical
+pools were set to one thread; Java used one active processor, serial garbage
+collection and one non-tiered compiler thread. See
+competition_otto_decomposed_first_execution.json and
+scripts/validate_stacking_first_graph.py. No model state or feature values are
+retained in that report.
+
+The supplemental stage also has a draft nine-node graph with separate raw,
+fold-local TF-IDF and embedding distances, reference-only cluster fitting and
+assignment, nonzero counts, raw neural features and aligned collection. The
+53 focused checks across the first-level and supplemental work passed. These
+include actual native execution of all supplemental nodes on constructed inputs,
+exact comparison with the retained implementation, independent nearest-distance
+calculations, held-fold label isolation and collection corruption checks.
+Supplemental node execution is exercised by
+tests/test_stacking_supplemental_operations.py; it is not yet a separately
+published catalog qualification. Witnesses remain stage-kind checks only.
+
+The first-level, supplemental and meta components now have explicit graphs,
+but they have not yet been qualified together as the complete corrected Otto
+workflow. Composition, complete graph execution, provider qualification and
+version-bound publication/rollback/selection gates remain required. No original
+intake or new provider approval is claimed by this checkpoint. The full
+competition and physics promotion objective remains open.
