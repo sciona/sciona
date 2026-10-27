@@ -1315,3 +1315,33 @@ historical evidence remain unchanged.
 The shared four-core ceiling remains mandatory. Numerical pools run with one
 thread and compute jobs run sequentially; the older 16-worker job remains
 suspended. The full competition and physics promotion objective remains open.
+
+### Complete Otto draft staging
+
+The local catalog connection was restored by starting its existing database
+container with a one-CPU quota and CPU affinity. The complete read-only scope
+review then passed, including the original source snapshot and immutable
+history. The database service and one-thread foreground scripts remain within
+the shared four-core budget.
+
+The pre-catalog review rejected 21 injected evidence faults, with the unchanged
+baseline reaching an explicit database stop sentinel before and after those
+checks. This offline gate does not simulate catalog success. The separate real
+database transaction checks staged and rolled back 862 rows, verified exact
+catalog graph reconstruction, and injected failures after writes 1, 431 and
+862. Snapshots across 16 canonical and legacy tables remained identical after
+each rollback.
+
+The qualified draft transaction was applied under the original Otto artifact
+identity. Corrected version 98596890-736d-5a34-a31f-5c61c24ba3e7 derives from the
+preserved original intake and contains 62 nodes, 198 edges and exact bindings
+to 27 new draft providers. Repeating the operation created zero rows. The
+original version stays latest; the corrected version and providers are not
+served or approved. Evidence is retained in the
+competition_otto_decomposed_complete_scope, review_gates, draft_transaction,
+draft_import and draft_repeat JSON reports under docs/reviews.
+
+Stored-catalog corruption qualification, atomic Tier 3 publication and its
+rollback/idempotence checks, and fresh served selection/execution remain open.
+The complete competition and physics backlog is still the goal; this is one
+original identity's staging checkpoint, not completion of that goal.
