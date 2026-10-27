@@ -1424,3 +1424,37 @@ competition original intake identities select approved served corrected Tier 3
 versions. Derived competition graphs are not counted as completed originals.
 These totals are catalog state, not a substitute for per-version qualification;
 the remaining competition and physics promotion objective is still open.
+
+### Brewster-angle original identities
+
+Both original Brewster-angle source identities now select corrected Tier 3
+versions using the existing approved provider. No new atom was needed. Fresh
+source comparison covered all ten steps, grouped relation multiplicities,
+bindings and dependency edges, with the fourteen public source equations
+rechecked against their retained hashes. Reciprocal-ratio, degree/radian,
+malformed-angle-expression and renaming-direction corrections remain explicit;
+original histories and historical failed evidence are preserved.
+
+The contract accepts positive incident and transmitted refractive indices in
+identically shaped nonempty arrays. It returns independently rounded incidence
+and refraction angles in radians from the normal. Physical applicability is a
+planar lossless isotropic nonmagnetic interface with p-polarization. Equal indices
+use the documented pi/4 convention, not a unique reflection-zero claim. Rounded
+near-grazing angles do not certify exact Fresnel equality. No lossy, anisotropic,
+magnetic or negative-index extension is claimed.
+
+Each stored and served revision passed six runner cases covering 29 synthetic
+states against unchanged independent high-precision references, with zero
+observed ULP error. All 38 corruption cases were rejected, including altered
+parent regime and staged evidence. Staging and paired-publication rollback
+passed, including failure after activation. Repeat staging and publication
+made zero changes. Fresh served SQL selection, production candidate conversion,
+descriptions, validity bounds and execution passed for both originals. See
+brewster_angle_identity_served_verification.json and its associated evidence.
+
+The aggregate catalog audit now reports 86 approved/served physics.pdg CDGs and
+58 drafts, including original and derived entries. Competition corrected-original
+coverage remains 3 of 142 intakes. The next source pair, wave interference, has
+a retained projected-only relation and differing binding inventory; it requires
+explicit reconciliation rather than the equal-scope pair assertion used here.
+The complete competition and physics promotion goal remains open.
