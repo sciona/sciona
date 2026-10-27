@@ -1499,3 +1499,23 @@ See wave_interference_identity_served_verification.json and associated reports.
 The aggregate audit now reports 88 approved/served physics.pdg CDGs and 56
 drafts, counting original and derived entries. Competition corrected-original
 coverage remains 3 of 142 intakes. The overall promotion objective remains open.
+
+### Escape-speed original source reconciliation
+
+The two escape-speed originals agree on all 18 grouped source steps, relation
+multiplicities, dependencies and bound equation versions. Fresh source review
+and six runner cases covering 29 synthetic states match the retained evidence,
+with zero observed ULP error. The existing derived realization still selects
+the unchanged approved infall provider. See
+escape_speed_original_reconciliation.json. This checkpoint makes no catalog
+changes and does not approve either original identity.
+
+Reuse must preserve the positional output aliases: positive escape threshold,
+negative inward counterpart velocity, required positive launch energy and
+negative potential energy. The inward counterpart is not outward escape
+velocity. The model requires a fixed exterior spherical Newtonian field,
+negligible test mass and asymptotic rest at infinity; callers establish the
+outward trajectory's clearance. Before original promotion, qualify exact
+parent/provider ports and bounds, stage corrected versions, and complete stored
+execution, corruption, rollback and fresh served execution checks. Existing
+hash-bound source and execution validators remain unchanged.
