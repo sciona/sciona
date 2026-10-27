@@ -1519,3 +1519,31 @@ outward trajectory's clearance. Before original promotion, qualify exact
 parent/provider ports and bounds, stage corrected versions, and complete stored
 execution, corruption, rollback and fresh served execution checks. Existing
 hash-bound source and execution validators remain unchanged.
+
+### Escape-speed original identities approved at Tier 3
+
+Both originals now select corrected Tier 3 versions, reusing the unchanged
+infall provider with the escape-specific output aliases and validity bounds.
+The provider's own output names, ports, bounds, approval and full retained
+catalog snapshot were checked independently of the escape graph. No provider
+was duplicated or modified. Original versions and their evidence remain intact.
+
+Staging created 29 rows; repeat staging changed none. Both stored and served
+versions passed six cases covering 29 synthetic states each against the
+unchanged 2500-digit Decimal energy/square-root references, with zero observed
+ULP error. All 44 corruption checks passed, including provider ports, regime and
+approval. The initial provider-port fault expectation named the explicit port
+comparison, but the served view rejected the corrupted provider first. That
+test attempt rolled back; the expected rejection was corrected to the earlier
+served-view gate, with no checker weakening or catalog repair.
+
+Staging rollback and publication rollback passed, including injected failure
+after both originals were activated. Publication created 12 rows and updated
+6; repeat publication changed zero rows. Fresh served selection, production
+candidate conversion, descriptions, validity bounds and actual execution passed
+for both. See escape_speed_identity_served_verification.json and associated
+qualification reports.
+
+The aggregate catalog audit now reports 90 approved/served physics.pdg CDGs
+and 54 drafts, including original and derived entries. Corrected competition
+originals remain 3 of 142 intakes. The full promotion goal remains open.
