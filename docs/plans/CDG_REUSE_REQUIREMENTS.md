@@ -1378,3 +1378,49 @@ allowed the current run to begin. This did not change numerical qualification.
 HTTP transport, search ranking, clean installation and empirical effectiveness
 remain outside this provisioned in-process synthetic qualification. Competition
 and physics promotion beyond this identity remains the active objective.
+
+### Otto served completion and mechanical-energy originals
+
+The full fresh Otto served run has now passed all 62 nodes, 33 first-level
+entries, seven supplemental blocks and 9,900 native meta fits. The retained
+blend comparison, independent 80-digit numerical oracle and all nine synthetic
+query classifications passed. Served selection was identical before and after
+execution, and the earlier native qualification report stayed byte-identical.
+See competition_otto_decomposed_served_execution.json. This completes the
+outstanding served-run check for this corrected identity, not the full backlog.
+
+Both original mechanical-energy identities now select corrected Tier 3
+execution versions using the existing approved constant-force provider; no new
+atom was added. Fresh source comparison covered all 23 steps, grouped relation
+multiplicities, bindings and dependency edges. Four missing equations, the
+malformed initial-energy identifier and interval-average velocity semantics
+remain explicit corrections, with original source and failed evidence preserved.
+Temporary public source files were restored from the original repository commit
+and all six files matched the retained ingestion hashes before use.
+
+The numerical contract is one-dimensional Newtonian motion with positive
+constant mass, constant signed conservative force, nonnegative elapsed time and
+time-independent U=-F*x with its zero at x=0. Five dimensioned inputs produce
+position, velocity, kinetic/potential/total energy and signed work. Zero force,
+zero duration and reversal are supported. Exact rational intermediates follow
+float64 input conversion; independently rounded outputs do not imply an exact
+floating-point energy sum. Callers establish physical applicability; variable
+force, dissipation, relativistic motion and time-dependent potentials are out
+of scope.
+
+Each stored and subsequently served revision passed six runner cases covering
+29 synthetic states against unchanged independent high-precision references,
+with zero observed ULP error. All 38 database corruption cases were rejected,
+including parent regime and staged-evidence mutations. Staging and publication
+rollback checks passed, including failure after activation; repeat staging and
+publication changed zero rows. Fresh served SQL selection, production candidate
+conversion, descriptions, validity bounds and execution passed for both originals.
+See mechanical_energy_identity_served_verification.json and the associated
+source, transaction, execution and corruption evidence.
+
+The read-only aggregate audit now reports 84 approved/served physics.pdg CDGs
+and 60 drafts (including original and derived entries). Separately, 3 of 142
+competition original intake identities select approved served corrected Tier 3
+versions. Derived competition graphs are not counted as completed originals.
+These totals are catalog state, not a substitute for per-version qualification;
+the remaining competition and physics promotion objective is still open.
