@@ -1458,3 +1458,44 @@ coverage remains 3 of 142 intakes. The next source pair, wave interference, has
 a retained projected-only relation and differing binding inventory; it requires
 explicit reconciliation rather than the equal-scope pair assertion used here.
 The complete competition and physics promotion goal remains open.
+
+### Wave-interference source reconciliation and original promotion
+
+Both original wave-interference identities now select corrected Tier 3
+executions using their existing approved provider. Their historical graphs are
+not equivalent: the legacy representation contains 26 source steps and the
+projection contains 27. The legacy graph omits malformed source step 6988426,
+which binds a phase feed as an equation and places the polar-Z equation among
+its feeds. The pinned source confirms the malformed relationships. All 26
+shared grouped contracts and pair multiplicities agree; the exact differences
+are that step's relation, one phase-feed binding and two downstream dependencies.
+See wave_interference_original_reconciliation.json. No original graph is
+certified as a valid literal proof.
+
+The already-reviewed reconstruction restores the polar expression and both
+variable substitutions. The corrected legacy version explicitly recovers its
+omitted step; the projected version corrects its retained malformed step.
+Separate provenance-bound versions preserve both original histories and failed
+evidence. Parent/provider identity, bindings, ports, evidence and physical
+validity bounds were freshly checked before staging.
+
+Reuse is bounded to two normalized scalar waves in a common mode/polarization
+and intensity scale, with fixed finite nonnegative magnitudes not both zero and
+a finite relative phase in radians. Outputs distinguish fixed-phase intensity,
+incoherent mean, constructive/destructive extrema, cross term and ratio.
+Coherence does not imply constructive alignment. The mean requires vanishing
+averaged cosine, and the factor-two ratio additionally requires equal amplitudes
+and constructive phase. Propagation, arbitrary polarization, stochastic
+amplitudes, partial coherence and absolute SI calibration remain out of scope.
+
+Both stored and served corrected versions passed six runner cases covering 29
+synthetic states each against unchanged 2000-digit complex-field references,
+with zero observed ULP error. All 38 corruption cases and staging/publication
+rollback checks passed, including rollback after paired activation. Repeat
+staging and publication changed zero rows. Fresh served selection, production
+candidate conversion, descriptions, bounds and execution passed for both.
+See wave_interference_identity_served_verification.json and associated reports.
+
+The aggregate audit now reports 88 approved/served physics.pdg CDGs and 56
+drafts, counting original and derived entries. Competition corrected-original
+coverage remains 3 of 142 intakes. The overall promotion objective remains open.
