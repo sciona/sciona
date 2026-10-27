@@ -1345,3 +1345,36 @@ Stored-catalog corruption qualification, atomic Tier 3 publication and its
 rollback/idempotence checks, and fresh served selection/execution remain open.
 The complete competition and physics backlog is still the goal; this is one
 original identity's staging checkpoint, not completion of that goal.
+
+### Corrected Otto Tier 3 publication
+
+The corrected original Otto identity and all 27 decomposed providers are now
+approved and served at automated Tier 3. Original intake rows remain unchanged;
+latest selection advances to version 98596890-736d-5a34-a31f-5c61c24ba3e7.
+The 62-node, 198-edge graph preserves explicit source policies and caller-owned
+feature/class semantics. General probability averaging remains independently
+callable across supported class and run counts; other adapters state their
+nine-class source constraints rather than implying unrestricted reuse.
+
+The stored-contract checker rejected 288 rollback-only corruption cases,
+including canonical and legacy identity, version, tier, implementation, port
+and evidence mutations for every provider. Original history, graph edges,
+bindings, provenance and latest-selection faults were also rejected. Publication
+rollback was verified across 17 tables after all metadata writes and after full
+activation. Applying publication created 139 rows and updated 58; repeating it
+created and updated zero rows. Fresh served SQL selection and the production
+candidate converter selected the exact corrected graph, descriptions and tier.
+
+Full native execution of that freshly served candidate is still in progress
+at this checkpoint. scripts/verify_stacking_complete_served.py reuses the
+complete native validator with only graph acquisition and the success-report
+destination redirected; no numerical learner, count, fixture or oracle is
+replaced. Existing native qualification evidence stays unchanged. The served
+execution report must be inspected before calling this item's verification
+complete. The first launch stopped before training because its restricted PATH
+omitted pg_config discovery; adding the existing PostgreSQL client directory
+allowed the current run to begin. This did not change numerical qualification.
+
+HTTP transport, search ranking, clean installation and empirical effectiveness
+remain outside this provisioned in-process synthetic qualification. Competition
+and physics promotion beyond this identity remains the active objective.
