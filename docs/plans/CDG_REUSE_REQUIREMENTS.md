@@ -1286,3 +1286,32 @@ workflow. Composition, complete graph execution, provider qualification and
 version-bound publication/rollback/selection gates remain required. No original
 intake or new provider approval is claimed by this checkpoint. The full
 competition and physics promotion objective remains open.
+
+### Complete Otto composition checkpoint
+
+The complete draft graph now connects 62 nodes and 198 edges through 27
+separately callable providers. Source-specific nine-class, feature-layout and
+fold policies remain explicit; general probability operations retain their
+independent contracts. Qualification covers the default shared-neighbor-bank
+composition, not alternate compiled groupings or arbitrary application domains.
+
+The full native run passed all 33 first-level entries, seven supplemental
+blocks and 9,900 meta fits. Its final blend exactly matched the retained
+formula and passed an independent 80-digit Decimal calculation. All nine
+synthetic queries were classified correctly. The 76 focused checks passed;
+learner stand-ins in wiring tests are distinct from the retained full native
+execution evidence. See competition_otto_decomposed_complete_execution.json.
+No real dataset values or identifying metadata are included.
+
+The read-only scope reviewer passed its local implementation, runtime,
+historical evidence, provider-contract and witness-flow checks, but could not
+complete the catalog lineage check on October 27, 2026: the configured local
+database refused connections, including outside the filesystem sandbox. No
+scope-pass report or catalog approval was produced. Corrected-version staging,
+stored-graph corruption and rollback checks, Tier 3 publication, idempotence
+and fresh served selection/execution remain required. The original intake and
+historical evidence remain unchanged.
+
+The shared four-core ceiling remains mandatory. Numerical pools run with one
+thread and compute jobs run sequentially; the older 16-worker job remains
+suspended. The full competition and physics promotion objective remains open.
