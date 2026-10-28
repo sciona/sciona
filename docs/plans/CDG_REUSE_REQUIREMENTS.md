@@ -1773,3 +1773,24 @@ free_schrodinger_identity_served_verification.json.
 Aggregate totals are 102 approved/served physics.pdg CDGs and 42 drafts,
 including originals and derivatives. Competition corrected-original coverage
 remains 3 of 142 intakes. The full promotion goal remains open.
+
+### Sine-squared source-order reconciliation
+
+Both sine-squared originals have identical 13 grouped step contracts, binding
+inventories, pair multiplicities and eleven stored dependency edges. Both omit
+the edge from source step 5832058 (step four) to 9582956 (step two). The former
+produces the expansion consumed by the latter. The retained reconstructed proof
+already uses the explicit order 1,3,4,2,5,6,7,8,9,10,11,12,13. The read-only
+reconciler checks the exact missing edge, rule identities and shared expression;
+it does not rewrite history or certify the original graphs as complete proofs.
+
+Fresh source review and six symbolic runner cases match retained qualification,
+including general-angle preservation, the certificate and cached AST strings.
+See sine_squared_original_reconciliation.json. Existing derived execution is
+served, but neither original identity is promoted by this checkpoint.
+
+Next required gates are exact parent/provider contracts, corrected versions
+carrying the reconciliation, stored execution, corruption and rollback checks,
+and fresh served selection/execution. Reuse remains the squared identity for a
+finite real dimensionless angle in radians, with no sine-sign inference or
+principal-square-root claim. The full promotion objective remains open.
