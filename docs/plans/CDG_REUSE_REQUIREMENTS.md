@@ -1878,3 +1878,27 @@ changing the verified output arrays.
 This checkpoint makes no catalog changes and approves neither original.
 Staging, stored-version execution, corruption/rollback, publication and fresh
 served checks remain required. The full promotion goal remains open.
+
+### Ideal-gas-compressibility original identities approved at Tier 3
+
+Both original identities now select corrected Tier 3 executable versions under
+the qualified fixed-temperature ideal-gas contract above. Original histories
+remain intact. Fresh served source proofs match the retained historical proof,
+with only the immutable validator hash added.
+
+Staging created 17 rows; repeat staging created zero. Staging rollback and an
+injected failure after 11 actual writes passed. Each stored and served version
+passed six runner cases covering 29 synthetic states against unchanged
+2500-digit Decimal reciprocal references, with zero observed ULP error. All
+38 corruption checks passed. Publication rollback, failure after nine writes
+and failure after paired activation passed. Publication created 12 rows and
+updated six; repeat publication changed zero. Fresh served SQL selection,
+production candidate conversion, descriptions, bounds and stored execution
+passed for both. See ideal_gas_compressibility_identity_served_verification.json.
+HTTP transport and semantic search ranking were not tested. The known runner
+summary-standard-deviation overflow limitation does not change the verified
+saved output arrays.
+
+The read-only aggregate audit now reports 108 approved/served physics.pdg CDGs
+and 36 drafts, including originals and derivatives. Competition corrected-original
+coverage remains three of 142 intakes. The full promotion goal remains open.
