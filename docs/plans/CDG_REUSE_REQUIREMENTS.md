@@ -1547,3 +1547,37 @@ qualification reports.
 The aggregate catalog audit now reports 90 approved/served physics.pdg CDGs
 and 54 drafts, including original and derived entries. Corrected competition
 originals remain 3 of 142 intakes. The full promotion goal remains open.
+
+### Radial-infall original identities approved at Tier 3
+
+Both infall originals now select corrected Tier 3 versions. Their 17 grouped
+source steps, relation multiplicities, bindings and dependency edges agree.
+Fresh source review matches the retained corrected proof, including inward
+force sign, scalar radial work, restored boundary terms, asymptotic infinity
+and the distinction between positive speed and signed radial velocity.
+Original histories and prior evidence remain intact.
+
+The existing provider remains unchanged and shared with escape speed. Infall
+exposes positive speed, negative inward radial velocity, positive gravitational
+work on the falling particle and negative potential energy. Its domain remains
+a fixed exterior spherical Newtonian field with negligible test mass, inward
+radial zero-energy motion and asymptotic rest at infinity; it does not establish
+finite fall time, general two-body motion, drag, relativity or exterior clearance.
+
+Staging created 29 rows; repeat staging changed zero. Stored and served versions
+each passed six runner cases covering 29 synthetic states against the unchanged
+2500-digit Decimal split-work integral reference, with zero observed ULP error.
+All 38 corruption checks passed. Staging and publication rollback passed,
+including injected failure after both originals were activated. Publication
+created 12 rows and updated 6; repeat publication changed zero rows. Fresh
+served selection, candidate conversion, descriptions, bounds and execution
+passed for both. See infall_speed_identity_served_verification.json.
+
+A separate read-only regression check confirms both approved escape originals
+still pass their exact source, parent, port and shared-provider snapshot checks
+after infall promotion. No additional escape numerical run is claimed by that
+check. See infall_speed_shared_provider_regression.json.
+
+Aggregate totals are now 92 approved/served physics.pdg CDGs and 52 drafts,
+including originals and derivatives. Competition corrected-original coverage
+remains 3 of 142 intakes. The full promotion goal remains open.
