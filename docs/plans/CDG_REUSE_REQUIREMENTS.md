@@ -2111,3 +2111,38 @@ projectile_motion_identity_served_verification.json.
 The read-only aggregate audit reports 118 approved/served physics.pdg CDGs and
 26 drafts, including originals and derivatives. Competition corrected-original
 coverage remains three of 142 intakes. The full promotion goal remains open.
+
+### Gravitational-mass original identities approved at Tier 3
+
+Both originals now select corrected executable Tier 3 versions using the
+unchanged approved provider. All ten grouped transitions, relation
+multiplicities, bindings and dependency edges agree. Fresh source review
+reproduces 21 bindings, ten stored equations and two equations recovered from
+the pinned public source. The original numerical example disagrees with its
+displayed inputs; this discrepancy and the corrected result remain explicit.
+Mass aliases, malformed units and numerical ASTs are reconstructed without
+rewriting original histories or claiming literal source parity.
+
+Reuse accepts positive finite pure gravitational acceleration, distance from
+the source center and an explicit gravitational constant in SI, with identical
+nonempty shapes and no broadcasting. The inferred mass assumes a Newtonian
+spherical source with the observation at its surface or exterior. Callers must
+isolate gravitational acceleration; no rotation correction, nonspherical mass
+inference or precision Earth mass certification is supplied. Exact rational
+arithmetic precedes output rounding and requires a positive finite representable
+mass. The corrected public example does not establish empirical applicability.
+
+Staging created 21 rows; repeat staging changed zero. Staging rollback and
+failure after 13 actual writes passed. Each stored and served version passed
+six runner cases covering 29 numerical states against unchanged independent
+2500-digit Decimal references, with zero observed ULP error. All 38 corruption
+checks passed. Publication rollback, failure after nine writes and failure
+after paired activation passed. Publication created 12 rows and updated six;
+repeat publication changed zero. Fresh served SQL, latest selection, production
+candidate conversion, descriptions, bounds and stored execution passed.
+HTTP transport and semantic search ranking were not tested. See
+gravity_mass_identity_served_verification.json.
+
+The read-only aggregate audit reports 120 approved/served physics.pdg CDGs and
+24 drafts, including originals and derivatives. Competition corrected-original
+coverage remains three of 142 intakes. The full promotion goal remains open.
