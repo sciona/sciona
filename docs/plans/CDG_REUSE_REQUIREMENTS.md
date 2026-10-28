@@ -1855,3 +1855,26 @@ both. See langmuir_identity_served_verification.json.
 Aggregate totals are 106 approved/served physics.pdg CDGs and 38 drafts,
 including originals and derivatives. Competition corrected-original coverage
 remains 3 of 142 intakes. The full promotion goal remains open.
+
+### Ideal-gas-compressibility original scope qualification
+
+Both original representations agree on all six grouped source transitions,
+relation multiplicities, binding inventories and dependency edges. Fresh
+immutable source review reproduces the retained functional pressure-path
+derivative and the corrected amount and inverse-pressure dimensions. Exact
+approved parent/provider identities, ports, bounds, provenance and evidence
+were checked. Six runner cases covering 29 synthetic states match retained
+qualification with zero observed ULP error. See
+ideal_gas_compressibility_identity_execution_scope.json.
+
+Reuse requires positive absolute pressure in pascals and ideal-gas behavior at
+fixed positive temperature and fixed amount in moles. The output is local
+isothermal volume compressibility in inverse pascals. Isentropic paths, bulk
+modulus, finite changes and real-gas or phase-transition behavior are outside
+this contract. Extreme numerical cases establish arithmetic behavior only.
+The known runner summary-standard-deviation overflow warning recurred without
+changing the verified output arrays.
+
+This checkpoint makes no catalog changes and approves neither original.
+Staging, stored-version execution, corruption/rollback, publication and fresh
+served checks remain required. The full promotion goal remains open.
