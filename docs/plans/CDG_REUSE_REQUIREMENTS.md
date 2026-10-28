@@ -1823,3 +1823,35 @@ See sine_squared_identity_served_verification.json.
 Aggregate totals are 104 approved/served physics.pdg CDGs and 40 drafts,
 including originals and derivatives. Competition corrected-original coverage
 remains 3 of 142 intakes. The full promotion goal remains open.
+
+### Langmuir original identities approved at Tier 3
+
+Both Langmuir originals now select corrected Tier 3 versions using the unchanged
+provider. Their 13 grouped source transitions, relation multiplicities, binding
+inventories and dependency edges agree. Fresh immutable source review matches
+the retained correction of the missing desorption coefficient in the divisor
+and the independent zero-pressure rate/site-balance solution. The reciprocal
+source steps are not asserted valid at zero pressure. Original histories and
+prior evidence remain intact.
+
+Reuse takes positive adsorption/desorption coefficients and total site density,
+nonnegative partial pressure and identical nonempty shapes. The model assumes
+one non-dissociative species, identical independent monolayer sites and fixed
+temperature at equilibrium. Coverage, occupied density, vacant density and the
+common event rate are independently rounded from exact rational arithmetic.
+Vacancy is evaluated directly near saturation; event rate is not net
+accumulation. Competition, dissociation, multilayers, transient dynamics and
+fitted-material validity remain outside the qualified scope.
+
+Staging created 29 rows and repeat staging changed zero. Each stored and served
+version passed six runner cases covering 29 synthetic states against unchanged
+2500-digit Decimal linear-system references, with zero observed ULP error.
+All 38 corruption checks and staging/publication rollback checks passed,
+including rollback after paired activation. Publication created 12 rows and
+updated 6; repeat publication changed zero. Fresh served selection, production
+candidate conversion, descriptions, bounds and actual execution passed for
+both. See langmuir_identity_served_verification.json.
+
+Aggregate totals are 106 approved/served physics.pdg CDGs and 38 drafts,
+including originals and derivatives. Competition corrected-original coverage
+remains 3 of 142 intakes. The full promotion goal remains open.
