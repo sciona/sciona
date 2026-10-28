@@ -2040,3 +2040,37 @@ Geostationarity additionally requires equatorial prograde circular motion and
 the sidereal period. Exact parent/provider qualification, corrected original
 versions, stored execution, corruption/rollback, publication and served checks
 remain required. The full promotion goal remains open.
+
+### Orbital-radius original identities approved at Tier 3
+
+Both originals now select corrected executable Tier 3 versions using the
+unchanged approved provider. Qualification binds the retained rule discrepancy,
+pinned public source, distinct original grouped scopes and original history
+hashes. The four-variable rule with only six feeds remains preserved in the
+legacy history; its projected three-variable correction is explicit. All other
+contracts, pair multiplicities and all 12 dependency edges agree. Fresh source
+review matches retained evidence without claiming literal source parity.
+
+Reuse retains explicit G, central mass and period, positive finite values and
+identical nonempty shapes. Radius from the center and circular orbital speed
+are independently rounded under the Newtonian exterior circular test-mass
+model. Caller-owned geometry and clearance checks remain required; period alone
+does not certify geostationarity. No finite two-body, perturbation, relativistic
+or station-keeping result is claimed. The numerical qualification covers the
+provisioned provider and does not add empirical transfer evidence.
+
+Staging created 23 rows; repeat staging changed zero. Staging rollback and
+failure after 15 actual writes passed. Each stored and served version passed
+six runner cases covering 29 synthetic states against unchanged independent
+1200-digit logarithmic radius and direct Kepler-speed references, with zero
+observed ULP error for both outputs. All 40 corruption checks passed, including
+explicit mutation of the disputed historical rule in each original. Publication
+rollback, failure after nine writes and failure after paired activation passed.
+Publication created 12 rows and updated six; repeat publication changed zero.
+Fresh served SQL, latest selection, production candidate conversion,
+descriptions, bounds and stored execution passed. HTTP transport and semantic
+search ranking were not tested. See orbit_radius_identity_served_verification.json.
+
+The read-only aggregate audit reports 116 approved/served physics.pdg CDGs and
+28 drafts, including originals and derivatives. Competition corrected-original
+coverage remains three of 142 intakes. The full promotion goal remains open.
