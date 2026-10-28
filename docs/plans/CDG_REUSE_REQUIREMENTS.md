@@ -2012,3 +2012,31 @@ not tested. See spring_mass_identity_served_verification.json.
 The read-only aggregate audit reports 114 approved/served physics.pdg CDGs and
 30 drafts, including originals and derivatives. Competition corrected-original
 coverage remains three of 142 intakes. The full promotion goal remains open.
+
+### Orbital-radius original rule discrepancy reconciled
+
+The two orbital-radius originals agree on all 13 grouped transitions after one
+explicit rule correction. Source step 1306821 retains rule 111777, change four
+variables, in the legacy graph and pinned public step file. That rule requires
+eight feeds, but the step supplies six feeds for three replacements: force,
+mass and speed. The projected history uses rule 111236, change three variables,
+whose six-feed contract matches the supplied step. Both pinned rule definitions
+and the exact public input/output/feed relations were checked.
+
+The reconciliation permits only that rule ID change in memory. All remaining
+rule/feed/expression contracts, pair multiplicities, binding versions and all
+12 dependency edges agree. Both original histories and their distinct grouped
+scope hashes are preserved. This is not a claim of literal source proof parity.
+Fresh source review and six runner cases covering 29 synthetic states reproduce
+the retained orbital-radius evidence exactly, except for the added immutable
+validator hash. The existing derived parent remains approved; neither original
+was approved by this read-only reconciliation. See
+orbit_radius_original_reconciliation.json.
+
+Reuse remains bounded to Newtonian circular exterior test-mass motion, with
+explicit G, central mass and period. The outputs are center radius and circular
+speed; radius is not altitude. Geometry and clearance remain caller obligations.
+Geostationarity additionally requires equatorial prograde circular motion and
+the sidereal period. Exact parent/provider qualification, corrected original
+versions, stored execution, corruption/rollback, publication and served checks
+remain required. The full promotion goal remains open.
