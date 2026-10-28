@@ -1581,3 +1581,34 @@ check. See infall_speed_shared_provider_regression.json.
 Aggregate totals are now 92 approved/served physics.pdg CDGs and 52 drafts,
 including originals and derivatives. Competition corrected-original coverage
 remains 3 of 142 intakes. The full promotion goal remains open.
+
+### Projectile-range original identities approved at Tier 3
+
+Both projectile-range originals now select corrected Tier 3 versions. The
+17 grouped source steps, relation multiplicities, bound equation versions and
+dependency edges agree. Fresh immutable source review reproduces the retained
+corrections and recovery of the two missing stored expressions from pinned
+public files; no literal source-AST parity is claimed. Original histories and
+prior evidence are preserved.
+
+The unchanged provider computes flight time, horizontal displacement, rounded
+maximizing angle and independently rounded exact maximum range. Reuse requires
+fixed positive launch speed, constant positive gravity, no drag and equal
+launch/landing heights. Landing conditions are explicit premises. Zero angle
+is a limiting zero-time extension, and literal float64 angles are not snapped
+to exact symbolic endpoints. Rounded pi/4 and the exact optimum used for range
+are distinct. Unequal heights and speed that varies with angle remain outside
+the qualified optimization model.
+
+Staging created 27 rows and repeat staging changed zero. Each stored and served
+version passed six runner cases covering 29 synthetic states against unchanged
+1200-digit Cartesian complex-exponential landing references, with zero observed
+ULP error. All 38 corruption checks and staging/publication rollback checks
+passed, including rollback after activating both originals. Publication created
+12 rows and updated 6; repeat publication changed zero. Fresh served selection,
+production candidate conversion, descriptions, validity bounds and execution
+passed for both. See projectile_range_identity_served_verification.json.
+
+Aggregate totals now show 94 approved/served physics.pdg CDGs and 50 drafts,
+including originals and derivatives. Competition corrected-original coverage
+remains 3 of 142 intakes. The full promotion goal remains open.
