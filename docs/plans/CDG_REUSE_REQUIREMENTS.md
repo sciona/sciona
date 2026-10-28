@@ -1974,3 +1974,41 @@ isobaric_energy_identity_served_verification.json.
 The read-only aggregate audit reports 112 approved/served physics.pdg CDGs and
 32 drafts, including originals and derivatives. Competition corrected-original
 coverage remains three of 142 intakes. The full promotion goal remains open.
+
+### Spring-mass original identities approved at Tier 3
+
+Both original identities now select corrected executable Tier 3 versions using
+the unchanged approved provider. All 11 grouped transitions, relation
+multiplicities, bindings and dependency edges agree. Fresh source review
+matches retained evidence for 28 bindings, 14 stored equations and one equation
+recovered from the pinned public source. Original histories remain intact.
+The correction restores the missing square root, reconstructs derivatives and
+aliases, replaces singular pointwise division, retains alternative signed
+frequency branches and independently verifies zero amplitude.
+
+Reuse accepts positive constant mass and stiffness, signed initial displacement
+from equilibrium and signed time since release with identical nonempty shapes.
+The spring supplies the net linear restoring force; initial velocity is zero,
+with no damping or driving. Outputs include positive natural angular frequency,
+displacement, velocity and acceleration. This qualifies the complete bounded
+motion realization, not only its frequency. Nonlinear forces, arbitrary initial
+velocity and driven motion remain outside scope. Local 1200-digit arithmetic
+evaluates all four outputs before independent float64 rounding. Exact zeros and
+subnormals are supported; nonzero underflow and overflow are rejected. Large
+phase calculations treat converted inputs as exact and do not establish physical
+measurement precision. No additional empirical transfer claim is made.
+
+Staging created 29 rows; repeat staging changed zero. Staging rollback and
+failure after 18 actual writes passed. Each stored and served version passed
+seven runner cases covering 30 synthetic states against unchanged independent
+1800-digit complex-exponential references, with zero observed ULP error for all
+four outputs. All 38 corruption checks passed. Publication rollback, failure
+after nine writes and failure after paired activation passed. Publication
+created 12 rows and updated six; repeat publication changed zero. Fresh served
+SQL, latest selection, production candidate conversion, descriptions, bounds
+and stored execution passed. HTTP transport and semantic search ranking were
+not tested. See spring_mass_identity_served_verification.json.
+
+The read-only aggregate audit reports 114 approved/served physics.pdg CDGs and
+30 drafts, including originals and derivatives. Competition corrected-original
+coverage remains three of 142 intakes. The full promotion goal remains open.
