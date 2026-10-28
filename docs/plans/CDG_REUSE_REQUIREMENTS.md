@@ -2074,3 +2074,40 @@ search ranking were not tested. See orbit_radius_identity_served_verification.js
 The read-only aggregate audit reports 116 approved/served physics.pdg CDGs and
 28 drafts, including originals and derivatives. Competition corrected-original
 coverage remains three of 142 intakes. The full promotion goal remains open.
+
+### Time-based projectile-motion originals approved at Tier 3
+
+Both originals now select corrected executable Tier 3 versions using the
+unchanged approved provider. All 30 grouped transitions, relation multiplicities,
+bindings and dependency edges agree. Fresh source review reproduces 40 stored
+expressions and 70 bindings, with corrections to time-dependent functions,
+component aliases, inverted trigonometric AST ratios and integration constants.
+Original histories remain intact; reconstructed behavior does not certify the
+literal uncorrected source proof.
+
+Reuse accepts signed initial positions, a literal launch angle in radians from
+positive x, and nonnegative speed, gravity and elapsed time with identical
+nonempty shapes. Fixed Cartesian axes, upward-positive y, constant downward
+gravity and no drag define the model. All four signed outputs x, y, vx and vy
+are supplied, including zero-speed/time/gravity limits, without division by
+horizontal velocity. There is no terrain cutoff, landing event, path-length or
+variable-gravity model. Converted pi/2 is not snapped to exact vertical. Local
+2000-digit calculations precede independent float64 rounding; exact zeros and
+subnormals are accepted, while nonzero output underflow or overflow rejects the
+call. No universal rounding or empirical transfer claim is added.
+
+Staging created 33 rows; repeat staging changed zero. Staging rollback and
+failure after 20 actual writes passed. Each stored and served version passed
+six runner cases covering 29 synthetic states against unchanged independent
+3000-digit complex-velocity and endpoint-average integration references, with
+zero observed ULP error for all four outputs. All 38 corruption checks passed.
+Publication rollback, failure after nine writes and failure after paired
+activation passed. Publication created 12 rows and updated six; repeat
+publication changed zero. Fresh served SQL, latest selection, production
+candidate conversion, descriptions, bounds and stored execution passed.
+HTTP transport and semantic search ranking were not tested. See
+projectile_motion_identity_served_verification.json.
+
+The read-only aggregate audit reports 118 approved/served physics.pdg CDGs and
+26 drafts, including originals and derivatives. Competition corrected-original
+coverage remains three of 142 intakes. The full promotion goal remains open.
