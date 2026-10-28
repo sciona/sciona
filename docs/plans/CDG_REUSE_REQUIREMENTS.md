@@ -1939,3 +1939,38 @@ tested. See newton_force_identity_served_verification.json.
 The read-only aggregate audit reports 110 approved/served physics.pdg CDGs and
 34 drafts, including originals and derivatives. Competition corrected-original
 coverage remains three of 142 intakes. The full promotion goal remains open.
+
+### Isobaric internal-energy original identities approved at Tier 3
+
+Both original identities now select corrected executable Tier 3 versions using
+the unchanged approved provider. The two representations agree on all five
+grouped transitions, relation multiplicities, bindings and dependency edges.
+Fresh source review reproduces all nine equations and 13 bindings, the local
+chain-rule reconstruction and the correction of internal-pressure units from
+force to pressure. Original histories, metadata and ASTs remain intact.
+
+Reuse accepts finite real Cv in J/K, internal pressure in Pa, positive volume
+in cubic meters and signed thermal expansion in inverse kelvin, with identical
+nonempty shapes and no broadcasting. Callers supply consistent local derivatives
+at the same state and fixed composition/amount, for differentiable U(T,V) and
+V(T,p). The output is dU/dT at fixed pressure, not Cp or dH/dT. Internal pressure
+is the volume derivative of internal energy at fixed temperature, not mechanical
+pressure. No material equation of state, stability or finite-change integral is
+inferred. Exact rational evaluation of converted binary64 inputs rounds once;
+exact zeros and subnormals are supported, while nonzero underflow and overflow
+are rejected. This checkpoint makes no additional empirical transfer claim.
+
+Staging created 23 rows; repeat staging created zero. Staging rollback and
+failure after 15 actual writes passed. Each stored and served version passed
+six runner cases covering 29 synthetic states against unchanged 2500-digit
+Decimal references, with zero observed ULP error. All 38 corruption checks
+passed. Publication rollback, failure after nine writes and failure after
+paired activation passed. Publication created 12 rows and updated six; repeat
+publication changed zero. Fresh served SQL, latest selection, production
+candidate conversion, descriptions, bounds and stored execution passed.
+HTTP transport and semantic search ranking were not tested. See
+isobaric_energy_identity_served_verification.json.
+
+The read-only aggregate audit reports 112 approved/served physics.pdg CDGs and
+32 drafts, including originals and derivatives. Competition corrected-original
+coverage remains three of 142 intakes. The full promotion goal remains open.
