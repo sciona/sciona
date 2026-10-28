@@ -1902,3 +1902,40 @@ saved output arrays.
 The read-only aggregate audit now reports 108 approved/served physics.pdg CDGs
 and 36 drafts, including originals and derivatives. Competition corrected-original
 coverage remains three of 142 intakes. The full promotion goal remains open.
+
+### Conditional Newtonian interaction original identities approved at Tier 3
+
+Both Newtonian-force originals now select corrected executable Tier 3 versions
+using the unchanged approved interaction provider. All 13 grouped source
+transitions, relation multiplicities, bindings and dependency edges agree
+between the original representations. Fresh source review matches retained
+history, including 18 source records and 32 bindings. The original inference
+remains explicitly invalid without added mass-scaling, inverse-square and
+universal-G premises. Approval qualifies the assumed constitutive law; it does
+not certify the source as a derivation from F=ma. Original histories remain intact.
+
+The reusable interaction accepts positive finite G, two masses in kilograms
+and separation in meters with identical nonempty shapes. It returns force
+magnitude, the acceleration magnitude of each body due to the other, and
+negative interaction potential energy with zero at infinity. Callers establish
+Newtonian point-mass or exterior non-overlapping spherical-body applicability.
+Direction vectors, body geometry, orbit integration, arbitrary extended bodies
+and relativistic behavior are outside the contract. Exact rational arithmetic
+independently rounds converted binary64 inputs; representable subnormals are
+accepted and nonzero underflow or overflow rejected. This checkpoint establishes
+no additional cross-disciplinary empirical claim.
+
+Staging created 29 rows; repeat staging changed zero. Rollback after a complete
+first family and 17 actual writes passed. Each stored and served version passed
+six runner cases covering 29 synthetic states, matching unchanged 2500-digit
+Decimal potential-to-force references at zero observed ULP error for all four
+outputs. All 38 corruption checks passed. Publication rollback, failure after
+nine writes and failure after paired activation passed. Publication created
+12 rows and updated six; repeat publication changed zero. Fresh served SQL,
+latest selection, production candidate conversion, descriptions, bounds and
+stored execution passed. HTTP transport and semantic search ranking were not
+tested. See newton_force_identity_served_verification.json.
+
+The read-only aggregate audit reports 110 approved/served physics.pdg CDGs and
+34 drafts, including originals and derivatives. Competition corrected-original
+coverage remains three of 142 intakes. The full promotion goal remains open.
