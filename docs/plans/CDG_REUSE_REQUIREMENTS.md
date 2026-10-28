@@ -1649,3 +1649,38 @@ runner was not changed during this promotion.
 Aggregate totals are 96 approved/served physics.pdg CDGs and 48 drafts,
 including original and derived entries. Competition corrected-original
 coverage remains 3 of 142 intakes. The full promotion goal remains open.
+
+### Ideal-gas-expansion original identities approved at Tier 3
+
+Both ideal-gas-expansion originals now select corrected Tier 3 versions using
+the unchanged provider. Their five grouped source transitions, relation
+multiplicities, bound versions and dependency edges agree. Fresh immutable
+source review matches the retained proof and recovery of three missing stored
+expressions from pinned public files. Corrections preserve functional derivative
+semantics, restore the missing inverse volume-pressure factor and give the gas
+amount its required molar dimension. Original histories remain intact.
+
+Reuse requires positive absolute temperature in kelvin and ideal-gas behavior
+at fixed positive pressure and fixed amount in moles. The output is the
+volumetric isobaric coefficient in inverse kelvin, not linear expansion.
+Exact reciprocals of converted binary64 inputs are rounded once with shape
+preserved. Numerical extrema do not establish real-gas, low-temperature or
+phase-transition validity; finite-temperature-change behavior is not claimed.
+
+Staging created 17 rows; repeat staging changed zero. Both stored and served
+versions passed six runner cases covering 29 synthetic states each against
+unchanged 2500-digit Decimal references, with zero observed ULP error. All
+38 corruption checks passed. Staging and publication rollback passed, including
+rollback after paired activation. Publication created 12 rows and updated 6;
+repeat publication changed zero. Fresh served selection, candidate conversion,
+descriptions, bounds and execution passed for both. See
+ideal_gas_expansion_identity_served_verification.json.
+
+Extreme values again emitted the runner summary-standard-deviation overflow
+warning documented in circular_orbit_speed_metadata_limitation.json. Numerical
+output arrays matched the reference; summary-statistics accuracy is not part
+of that output claim. The hash-bound runner and provider were not modified.
+
+Aggregate totals are 98 approved/served physics.pdg CDGs and 46 drafts,
+including originals and derivatives. Competition corrected-original coverage
+remains 3 of 142 intakes. The full promotion goal remains open.
