@@ -1743,3 +1743,33 @@ bounded to a free nonrelativistic scalar plane wave with constant parameters,
 positive mass/hbar, real momentum and finite complex amplitude; no normalized
 state, arbitrary solution, boundary or potential model is claimed. The full
 competition and physics promotion goal remains open.
+
+### Free-Schrödinger original identities approved at Tier 3
+
+Both free-Schrödinger originals now select corrected symbolic executions at
+Tier 3. Each version's scope and staging evidence bind the prior reconciliation
+and explicitly retain the five missing expression-overlap edges. The 29 grouped
+source contracts, pair multiplicities, binding inventories and stored dependency
+edges were freshly compared; immutable historical rows remain unchanged. No
+complete or literal historical source-proof claim is introduced.
+
+The unchanged provider constructs a three-dimensional free scalar plane wave,
+kinetic energy, gradient, Laplacian, time derivative and differential certificate.
+Reuse requires constant positive mass/hbar, real Cartesian momentum and finite
+complex amplitude with compatible units. Zero momentum/amplitude and general
+symbolic parameters are supported. No potential, boundary, relativistic, spin,
+arbitrary-solution or infinite-space normalized-state claim is made.
+
+Staging created 33 rows; repeat staging changed zero. Both stored and served
+versions passed six symbolic runner cases, including zero momentum/amplitude
+and general/composite parameters, against independently differentiated separable
+space/time fields. Certificate identities and cached AST strings passed. All
+38 corruption checks and staging/publication rollback checks passed, including
+rollback after paired activation. Publication created 12 rows and updated 6;
+repeat publication changed zero. Fresh served selection, production candidate
+conversion, descriptions, bounds and symbolic execution passed for both. See
+free_schrodinger_identity_served_verification.json.
+
+Aggregate totals are 102 approved/served physics.pdg CDGs and 42 drafts,
+including originals and derivatives. Competition corrected-original coverage
+remains 3 of 142 intakes. The full promotion goal remains open.
