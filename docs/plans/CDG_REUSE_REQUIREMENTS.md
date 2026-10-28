@@ -1794,3 +1794,32 @@ carrying the reconciliation, stored execution, corruption and rollback checks,
 and fresh served selection/execution. Reuse remains the squared identity for a
 finite real dimensionless angle in radians, with no sine-sign inference or
 principal-square-root claim. The full promotion objective remains open.
+
+### Sine-squared original identities approved at Tier 3
+
+Both sine-squared originals now select corrected symbolic executions at Tier 3.
+Each version's scope and staging evidence bind the reconciliation and explicitly
+retain the missing step-four to step-two edge. The 13 grouped contracts, pair
+multiplicities, binding inventories and eleven stored edges were freshly checked;
+historical source rows remain unchanged and are not certified as complete proofs.
+
+The unchanged provider constructs both squared-identity expressions and the
+full reconstructed 13-step certificate for finite real dimensionless radians.
+General symbolic angles are preserved. Euler and Pythagorean prerequisites and
+the independent endpoint ODE check remain part of the qualification. The result
+does not infer the sign of sine, justify a principal square root, or guarantee
+cancellation-free floating-point evaluation by a later consumer.
+
+Staging created 21 rows and repeat staging changed zero. Both stored and served
+versions passed six symbolic runner cases including zero, negative angle, tiny
+exact rational, irrational, general symbol and composite expression. Certificate
+verification, general-angle preservation and cached AST strings passed. All
+38 corruption checks and staging/publication rollback checks passed, including
+rollback after paired activation. Publication created 12 rows and updated 6;
+repeat publication changed zero. Fresh served selection, production candidate
+conversion, descriptions, bounds and actual symbolic execution passed for both.
+See sine_squared_identity_served_verification.json.
+
+Aggregate totals are 104 approved/served physics.pdg CDGs and 40 drafts,
+including originals and derivatives. Competition corrected-original coverage
+remains 3 of 142 intakes. The full promotion goal remains open.
