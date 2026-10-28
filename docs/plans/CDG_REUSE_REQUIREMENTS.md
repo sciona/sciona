@@ -1717,3 +1717,29 @@ ULP metrics from unrelated numerical families are not used for this evidence.
 Aggregate totals are 100 approved/served physics.pdg CDGs and 44 drafts,
 including originals and derivatives. Competition corrected-original coverage
 remains 3 of 142 intakes. The full promotion goal remains open.
+
+### Free-Schrödinger source-edge reconciliation
+
+The two free-Schrödinger originals have identical 29 grouped step contracts,
+binding inventories, relation multiplicities and 32 stored dependency edges.
+Both omit the same five edges that a full output/input expression-overlap
+construction would add: 1341141 to 5354635 and 5858694, and 2454535 to 1347587,
+2454535 and 2464445. Step 2454535 is the malformed gradient placeholder whose
+input and output are the same expression. The existing source review explicitly
+restores its missing gradient output. The self-edge and other discrepancies
+are retained as evidence; neither original is certified as a complete executable
+source proof, and no historical edges were rewritten.
+
+Fresh immutable source review and all six symbolic runner cases match retained
+qualification, including general parameter preservation, differential
+certificates and cached expression strings. Existing derived execution remains
+served. See free_schrodinger_original_reconciliation.json. This checkpoint is
+read-only and does not approve either original identity.
+
+Promotion still requires exact parent/provider port and bound qualification,
+separate corrected versions carrying the reconciliation, stored execution,
+corruption/rollback checks and fresh served selection/execution. Reuse remains
+bounded to a free nonrelativistic scalar plane wave with constant parameters,
+positive mass/hbar, real momentum and finite complex amplitude; no normalized
+state, arbitrary solution, boundary or potential model is claimed. The full
+competition and physics promotion goal remains open.
