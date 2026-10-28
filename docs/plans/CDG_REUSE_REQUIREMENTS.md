@@ -1684,3 +1684,36 @@ of that output claim. The hash-bound runner and provider were not modified.
 Aggregate totals are 98 approved/served physics.pdg CDGs and 46 drafts,
 including originals and derivatives. Competition corrected-original coverage
 remains 3 of 142 intakes. The full promotion goal remains open.
+
+### Dirichlet-mode original identities approved at Tier 3
+
+Both Dirichlet-mode originals now select corrected Tier 3 symbolic versions
+using the unchanged provider. Their 31 grouped source steps, relation
+multiplicities, bound versions and dependency edges agree. Fresh immutable
+source review matches the retained reconstruction of derivative and boundary
+expressions, coordinate aliases, definite normalization and paired amplitude
+signs. Original histories and prior evidence remain intact.
+
+Reuse accepts guarded symbolic expressions for positive finite interval width,
+positive integer mode index and constant finite real phase. General symbolic
+parameters are preserved. Outputs include the normalized mode, opposite sign,
+wavenumber, two interior derivatives and a checked certificate. Both signs are
+global-phase representatives, not additional degenerate modes. The contract
+asserts the interior differential equation, zero endpoint values and unit L2
+norm; it does not claim exterior derivatives, finite-well behavior, quantum
+energy conversion or completeness.
+
+Staging created 31 rows and repeat staging changed zero. Each stored and served
+version passed six symbolic runner cases, including general and composite
+parameters. Independent direct normalization, boundary checks, certificate
+identities and preservation of cached AST strings passed. All 38 corruption
+checks and staging/publication rollback checks passed, including rollback after
+paired activation. Publication created 12 rows and updated 6; repeat publication
+changed zero. Fresh served selection, production candidate conversion,
+descriptions, bounds and actual symbolic execution passed for both. See
+dirichlet_mode_identity_served_verification.json. Numerical state counts and
+ULP metrics from unrelated numerical families are not used for this evidence.
+
+Aggregate totals are 100 approved/served physics.pdg CDGs and 44 drafts,
+including originals and derivatives. Competition corrected-original coverage
+remains 3 of 142 intakes. The full promotion goal remains open.
