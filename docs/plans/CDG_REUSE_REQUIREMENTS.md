@@ -1612,3 +1612,40 @@ passed for both. See projectile_range_identity_served_verification.json.
 Aggregate totals now show 94 approved/served physics.pdg CDGs and 50 drafts,
 including originals and derivatives. Competition corrected-original coverage
 remains 3 of 142 intakes. The full promotion goal remains open.
+
+### Circular-path-speed original identities approved at Tier 3
+
+Both circular-orbit-speed originals now select corrected Tier 3 versions of
+the general circular-path circumference and circuit-average-speed calculation.
+Their eight grouped source steps, relation multiplicities, bound versions and
+dependency edges agree. Fresh source review matches the retained reconstruction
+of missing scientific notation, unit conversion and two missing expressions
+from pinned public files. The source educational Earth example and its
+prematurely rounded period contrast are retained; no ephemeris is claimed.
+
+Reuse accepts positive SI radius and period in matching nonempty arrays, with
+explicit calendar conversion by the caller. Circumference and speed are rounded
+independently from high precision; speed does not reuse a rounded circumference.
+Instantaneous interpretation requires uniform circular motion. Eccentric-orbit
+and gravitational-dynamics claims remain outside the qualified model. The
+provider, original histories and historical evidence remain unchanged.
+
+Staging created 21 rows; repeat staging changed zero. Each stored and served
+version passed six runner cases covering 29 synthetic states against unchanged
+1000-digit references, with zero observed ULP error. All 38 corruption checks
+and staging/publication rollback checks passed, including rollback after paired
+activation. Publication created 12 rows and updated 6; repeat publication changed
+zero. Fresh served selection, candidate conversion, descriptions, bounds and
+execution passed. See circular_orbit_speed_identity_served_verification.json.
+
+Extreme-scale execution emitted a warning from the runner's summary-statistics
+standard deviation. A separate synthetic reproduction confirms that metadata
+calculation can overflow even for finite inputs; it does not change the saved
+arrays checked against the numerical reference. Metadata standard-deviation
+accuracy is not covered by the numerical-output qualification. This limitation
+is recorded in circular_orbit_speed_metadata_limitation.json; the hash-bound
+runner was not changed during this promotion.
+
+Aggregate totals are 96 approved/served physics.pdg CDGs and 48 drafts,
+including original and derived entries. Competition corrected-original
+coverage remains 3 of 142 intakes. The full promotion goal remains open.
