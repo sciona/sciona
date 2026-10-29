@@ -2356,3 +2356,39 @@ search ranking were not tested. See euler_formula_identity_served_verification.j
 The read-only aggregate audit reports 132 approved/served physics.pdg CDGs and
 12 drafts, including originals and derivatives. Competition corrected-original
 coverage remains three of 142 intakes. The full promotion goal remains open.
+
+### Helmholtz original identities approved at Tier 3
+
+Both originals now select corrected executable Tier 3 versions using the
+unchanged approved provider. All seven grouped transitions, relation
+multiplicities, bindings and dependency edges agree. Fresh source review
+reproduces 17 bindings and all ten stored source equations. Differential
+operators, imaginary-unit and exponential semantics are reconstructed while
+retaining the harmonic ansatz as an explicit assumption. Original histories
+remain intact without claiming literal source parity.
+
+Reuse accepts a time-independent C2 Cartesian vector amplitude, real constant
+frequency and positive constant speed. It returns the harmonic field with
+exp(+i omega t), formal spatial Laplacian and complete Helmholtz residual.
+Nonzero residuals and zero or negative frequencies are retained. Cancellation
+uses only the nonzero exponential, never amplitude or frequency. Callers
+establish consistent units, smoothness and a common domain. Residual equivalence
+holds for the component wave equation; a zero residual does not certify
+Maxwell divergence constraints or solve boundary conditions. Symbolic outputs
+remain available for downstream composition beyond the source electric-field
+application, within the stated component-wave assumptions.
+
+Staging created 27 rows; repeat staging changed zero. Staging rollback and
+failure after 16 actual writes passed. Each stored and served version passed
+six symbolic runner cases covering derivative checks, wave-residual equivalence,
+non-solutions, zero/negative frequency, longitudinal fields, formal derivatives
+and cached AST-string transport. All 38 corruption checks passed. Publication
+rollback, failure after nine writes and failure after paired activation passed.
+Publication created 12 rows and updated six; repeat publication changed zero.
+Fresh served SQL, latest selection, production candidate conversion,
+descriptions, bounds and stored execution passed. HTTP transport and semantic
+search ranking were not tested. See helmholtz_identity_served_verification.json.
+
+The read-only aggregate audit reports 134 approved/served physics.pdg CDGs and
+10 drafts, including originals and derivatives. Competition corrected-original
+coverage remains three of 142 intakes. The full promotion goal remains open.
