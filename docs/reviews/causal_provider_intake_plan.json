@@ -1,0 +1,2309 @@
+{
+  "approved": false,
+  "catalog_mutations": 0,
+  "new_providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.causal_inference.conditional_statistics.source_entropy.discretized_conditional_entropy_variance",
+      "catalog_fqdn": "sciona.atoms.causal_inference.conditional_statistics.source_entropy.discretized_conditional_entropy_variance",
+      "version_id": "284e17f0-cdd3-5925-aeaf-243e8c4b87e5",
+      "content_hash": "a0efc07bd14b3adba2197fdd45b2f7a1189381abe4f1095c2ccc85d926287c7b",
+      "provider_sha256": "410116e36632b71c8f658f5113e743c491c6a8c33755dad9354761d9e1e9fea4",
+      "directly_bound": false,
+      "dependencies": [
+        "sciona.atoms.causal_inference.feature_primitives.atoms.discretize_and_bin"
+      ],
+      "canonical_latest": [],
+      "canonical_exact_approved": false,
+      "legacy_latest": [],
+      "legacy_exact_approved": false,
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "x",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "tx",
+          "ordinal": 1,
+          "type_desc": "str",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "y",
+          "ordinal": 2,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "ty",
+          "ordinal": 3,
+          "type_desc": "str",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "ffactor",
+          "ordinal": 4,
+          "type_desc": "int",
+          "required": false,
+          "nullable_annotation": false,
+          "default_value_repr": "3"
+        },
+        {
+          "direction": "input",
+          "name": "maxdev",
+          "ordinal": 5,
+          "type_desc": "int",
+          "required": false,
+          "nullable_annotation": false,
+          "default_value_repr": "3"
+        },
+        {
+          "direction": "input",
+          "name": "minc",
+          "ordinal": 6,
+          "type_desc": "int",
+          "required": false,
+          "nullable_annotation": false,
+          "default_value_repr": "10"
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": ""
+        }
+      ],
+      "contract": "Evaluate the source fit_noise_entropy definition on discretized X and Y.\n\nInclude X bins with strictly more than minc samples. Compute bias-corrected\ndiscrete entropy of discretized Y in each bin and divide their standard\ndeviation by log of the source-defined discretized Y alphabet size.\nReturns zero when no X bin qualifies or the Y alphabet has one value.\nDistinct from the older atom that measures entropy of raw Y values.\nSource: jarfo/cause-effect features.py, fit_noise_entropy.",
+      "graph_nodes": [],
+      "omitted_native_defaults": {},
+      "atom_id": "8f3f59f6-e95b-50dd-9c1d-11801f4b4831",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.causal_inference.conditional_statistics.source_entropy.discretized_conditional_entropy_variance",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "causal_inference.conditional_statistics.source_entropy",
+        "repo_name": "sciona-atoms",
+        "source_module_path": "causal_inference.conditional_statistics.source_entropy",
+        "import_module": "sciona.atoms.causal_inference.conditional_statistics.source_entropy",
+        "source_symbol": "discretized_conditional_entropy_variance",
+        "description": "",
+        "domain_tags": [
+          "causal_inference"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.a0efc07bd14b",
+      "fingerprint": "e5a780a2a7f42c7168ae987b5aeefa21886025efefc5ddbd09aa552f7283fc22"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.causal_inference.estimators.probabilities.binary_positive_class_probability",
+      "catalog_fqdn": "sciona.atoms.causal_inference.estimators.probabilities.binary_positive_class_probability",
+      "version_id": "cee90480-ea12-501d-90fb-9a3ed3712b10",
+      "content_hash": "3b5a4cb09b1f0f57578cde6fa952f41b89ae9ab2ae19124d9406a3ebe4d9d5c8",
+      "provider_sha256": "32a6891be811e7652dbcdc584bf3d8b9bde678696ad46a5aad322747b6ad3ac5",
+      "directly_bound": true,
+      "dependencies": [],
+      "canonical_latest": [],
+      "canonical_exact_approved": false,
+      "legacy_latest": [],
+      "legacy_exact_approved": false,
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "probabilities",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "class_labels",
+          "ordinal": 1,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "scores",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": ""
+        }
+      ],
+      "contract": "Select P(label=1) from a binary {0,1} or {-1,1} classifier.\n\nExplicit labels determine column order. Reject nonfinite, negative,\nnonnormalized or otherwise malformed distributions. Does not rescale\na binary probability into a signed score or infer classifier semantics.",
+      "graph_nodes": [
+        "positive_independence",
+        "positive_direction",
+        "positive_left",
+        "positive_right"
+      ],
+      "omitted_native_defaults": {
+        "positive_independence": {},
+        "positive_direction": {},
+        "positive_left": {},
+        "positive_right": {}
+      },
+      "atom_id": "728312ca-3e3d-5238-8d9d-b8a9130f5c20",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.causal_inference.estimators.probabilities.binary_positive_class_probability",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "causal_inference.estimators.probabilities",
+        "repo_name": "sciona-atoms",
+        "source_module_path": "causal_inference.estimators.probabilities",
+        "import_module": "sciona.atoms.causal_inference.estimators.probabilities",
+        "source_symbol": "binary_positive_class_probability",
+        "description": "Select P(label=1) from a binary {0,1} or {-1,1} classifier. Explicit labels determine column order. Reject nonfinite, negative, nonnormalized or otherwise malformed distributions. Does not rescale a binary probability into a signed score or infer classifier semantics.",
+        "domain_tags": [
+          "causal_inference"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.3b5a4cb09b1f",
+      "fingerprint": "59b303d0c230ca6687f1164c9dbeead7457bbe17c1f2a032b11f8f3c3080b0fc"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.causal_inference.feature_primitives.batched_statistics.typed_pair_statistic",
+      "catalog_fqdn": "sciona.atoms.causal_inference.feature_primitives.batched_statistics.typed_pair_statistic",
+      "version_id": "723f5615-eaf2-5fd1-95a2-c9167b3eec8d",
+      "content_hash": "f57e9f964cc4389858e0e8ad2dbb7f10bb6a1d7e74ebc6ce7902bd7861b85ef0",
+      "provider_sha256": "13ee3dead20729506b5d5233b5221403e0d2418e91ff0fe16df0240c25b874f8",
+      "directly_bound": true,
+      "dependencies": [
+        "sciona.atoms.causal_inference.conditional_statistics.atoms.conditional_distribution_similarity",
+        "sciona.atoms.causal_inference.conditional_statistics.atoms.conditional_noise_kurtosis_variance",
+        "sciona.atoms.causal_inference.conditional_statistics.atoms.conditional_noise_skewness_variance",
+        "sciona.atoms.causal_inference.conditional_statistics.source_entropy.discretized_conditional_entropy_variance",
+        "sciona.atoms.causal_inference.feature_primitives.atoms.discretize_and_bin",
+        "sciona.atoms.causal_inference.feature_primitives.atoms.hsic_independence_test",
+        "sciona.atoms.causal_inference.feature_primitives.atoms.igci_asymmetry_score",
+        "sciona.atoms.causal_inference.feature_primitives.atoms.knn_entropy_estimator",
+        "sciona.atoms.causal_inference.feature_primitives.atoms.normalized_error_probability",
+        "sciona.atoms.causal_inference.feature_primitives.atoms.polyfit_nonlinearity_asymmetry",
+        "sciona.atoms.causal_inference.feature_primitives.atoms.polyfit_residual_error",
+        "sciona.atoms.causal_inference.feature_primitives.atoms.uniform_divergence",
+        "sciona.atoms.numerical.statistics.empirical_features.empirical_entropy",
+        "sciona.atoms.numerical.statistics.empirical_features.mixed_power_moment"
+      ],
+      "canonical_latest": [],
+      "canonical_exact_approved": false,
+      "legacy_latest": [],
+      "legacy_exact_approved": false,
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "xs",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "x_types",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "ys",
+          "ordinal": 2,
+          "type_desc": "list",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "y_types",
+          "ordinal": 3,
+          "type_desc": "list",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "statistic",
+          "ordinal": 4,
+          "type_desc": "str",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "column",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": ""
+        }
+      ],
+      "contract": "Compute one named statistic serially for each aligned typed pair.\n\nEvery variable is a finite, nonconstant real vector with at least three\nsamples; Binary has exactly two values. Pair lengths match, but may vary\nacross rows. Explicit Numerical/Categorical/Binary types retain the reviewed\nscalar algorithms' conventions, including frequency-rank normalization,\ncategorical dependence dispatch and 0.7-corrected binned entropy. These\nconventions are part of this version's contract, not inferred from data.\nNo labels or population-wide statistics are used. Undefined/nonfinite\nresults are rejected. A returned statistic is not proof of causality.",
+      "graph_nodes": [
+        "training_adjusted_mi",
+        "training_conditional_entropy_ab",
+        "training_conditional_entropy_ba",
+        "training_conditional_kurtosis_ab",
+        "training_conditional_kurtosis_ba",
+        "training_conditional_similarity_ab",
+        "training_conditional_similarity_ba",
+        "training_conditional_skewness_ab",
+        "training_conditional_skewness_ba",
+        "training_discrete_conditional_entropy_ab",
+        "training_discrete_conditional_entropy_ba",
+        "training_discrete_entropy_a",
+        "training_discrete_entropy_b",
+        "training_discrete_mi",
+        "training_hsic",
+        "training_igci_ab",
+        "training_igci_ba",
+        "training_kurtosis_a",
+        "training_kurtosis_b",
+        "training_log_sample_count",
+        "training_log_unique_a",
+        "training_log_unique_b",
+        "training_moment21_ab",
+        "training_moment21_ba",
+        "training_moment31_ab",
+        "training_moment31_ba",
+        "training_normalized_discrete_entropy_a",
+        "training_normalized_discrete_entropy_b",
+        "training_mi_over_joint_entropy",
+        "training_mi_over_min_entropy",
+        "training_normalized_entropy_a",
+        "training_normalized_entropy_b",
+        "training_error_probability_ab",
+        "training_error_probability_ba",
+        "training_correlation",
+        "training_polyfit_error_ab",
+        "training_polyfit_error_ba",
+        "training_polyfit_ab",
+        "training_polyfit_ba",
+        "training_skewness_a",
+        "training_skewness_b",
+        "training_uniform_divergence_a",
+        "training_uniform_divergence_b",
+        "prediction_adjusted_mi",
+        "prediction_conditional_entropy_ab",
+        "prediction_conditional_entropy_ba",
+        "prediction_conditional_kurtosis_ab",
+        "prediction_conditional_kurtosis_ba",
+        "prediction_conditional_similarity_ab",
+        "prediction_conditional_similarity_ba",
+        "prediction_conditional_skewness_ab",
+        "prediction_conditional_skewness_ba",
+        "prediction_discrete_conditional_entropy_ab",
+        "prediction_discrete_conditional_entropy_ba",
+        "prediction_discrete_entropy_a",
+        "prediction_discrete_entropy_b",
+        "prediction_discrete_mi",
+        "prediction_hsic",
+        "prediction_igci_ab",
+        "prediction_igci_ba",
+        "prediction_kurtosis_a",
+        "prediction_kurtosis_b",
+        "prediction_log_sample_count",
+        "prediction_log_unique_a",
+        "prediction_log_unique_b",
+        "prediction_moment21_ab",
+        "prediction_moment21_ba",
+        "prediction_moment31_ab",
+        "prediction_moment31_ba",
+        "prediction_normalized_discrete_entropy_a",
+        "prediction_normalized_discrete_entropy_b",
+        "prediction_mi_over_joint_entropy",
+        "prediction_mi_over_min_entropy",
+        "prediction_normalized_entropy_a",
+        "prediction_normalized_entropy_b",
+        "prediction_error_probability_ab",
+        "prediction_error_probability_ba",
+        "prediction_correlation",
+        "prediction_polyfit_error_ab",
+        "prediction_polyfit_error_ba",
+        "prediction_polyfit_ab",
+        "prediction_polyfit_ba",
+        "prediction_skewness_a",
+        "prediction_skewness_b",
+        "prediction_uniform_divergence_a",
+        "prediction_uniform_divergence_b"
+      ],
+      "omitted_native_defaults": {
+        "training_adjusted_mi": {},
+        "training_conditional_entropy_ab": {},
+        "training_conditional_entropy_ba": {},
+        "training_conditional_kurtosis_ab": {},
+        "training_conditional_kurtosis_ba": {},
+        "training_conditional_similarity_ab": {},
+        "training_conditional_similarity_ba": {},
+        "training_conditional_skewness_ab": {},
+        "training_conditional_skewness_ba": {},
+        "training_discrete_conditional_entropy_ab": {},
+        "training_discrete_conditional_entropy_ba": {},
+        "training_discrete_entropy_a": {},
+        "training_discrete_entropy_b": {},
+        "training_discrete_mi": {},
+        "training_hsic": {},
+        "training_igci_ab": {},
+        "training_igci_ba": {},
+        "training_kurtosis_a": {},
+        "training_kurtosis_b": {},
+        "training_log_sample_count": {},
+        "training_log_unique_a": {},
+        "training_log_unique_b": {},
+        "training_moment21_ab": {},
+        "training_moment21_ba": {},
+        "training_moment31_ab": {},
+        "training_moment31_ba": {},
+        "training_normalized_discrete_entropy_a": {},
+        "training_normalized_discrete_entropy_b": {},
+        "training_mi_over_joint_entropy": {},
+        "training_mi_over_min_entropy": {},
+        "training_normalized_entropy_a": {},
+        "training_normalized_entropy_b": {},
+        "training_error_probability_ab": {},
+        "training_error_probability_ba": {},
+        "training_correlation": {},
+        "training_polyfit_error_ab": {},
+        "training_polyfit_error_ba": {},
+        "training_polyfit_ab": {},
+        "training_polyfit_ba": {},
+        "training_skewness_a": {},
+        "training_skewness_b": {},
+        "training_uniform_divergence_a": {},
+        "training_uniform_divergence_b": {},
+        "prediction_adjusted_mi": {},
+        "prediction_conditional_entropy_ab": {},
+        "prediction_conditional_entropy_ba": {},
+        "prediction_conditional_kurtosis_ab": {},
+        "prediction_conditional_kurtosis_ba": {},
+        "prediction_conditional_similarity_ab": {},
+        "prediction_conditional_similarity_ba": {},
+        "prediction_conditional_skewness_ab": {},
+        "prediction_conditional_skewness_ba": {},
+        "prediction_discrete_conditional_entropy_ab": {},
+        "prediction_discrete_conditional_entropy_ba": {},
+        "prediction_discrete_entropy_a": {},
+        "prediction_discrete_entropy_b": {},
+        "prediction_discrete_mi": {},
+        "prediction_hsic": {},
+        "prediction_igci_ab": {},
+        "prediction_igci_ba": {},
+        "prediction_kurtosis_a": {},
+        "prediction_kurtosis_b": {},
+        "prediction_log_sample_count": {},
+        "prediction_log_unique_a": {},
+        "prediction_log_unique_b": {},
+        "prediction_moment21_ab": {},
+        "prediction_moment21_ba": {},
+        "prediction_moment31_ab": {},
+        "prediction_moment31_ba": {},
+        "prediction_normalized_discrete_entropy_a": {},
+        "prediction_normalized_discrete_entropy_b": {},
+        "prediction_mi_over_joint_entropy": {},
+        "prediction_mi_over_min_entropy": {},
+        "prediction_normalized_entropy_a": {},
+        "prediction_normalized_entropy_b": {},
+        "prediction_error_probability_ab": {},
+        "prediction_error_probability_ba": {},
+        "prediction_correlation": {},
+        "prediction_polyfit_error_ab": {},
+        "prediction_polyfit_error_ba": {},
+        "prediction_polyfit_ab": {},
+        "prediction_polyfit_ba": {},
+        "prediction_skewness_a": {},
+        "prediction_skewness_b": {},
+        "prediction_uniform_divergence_a": {},
+        "prediction_uniform_divergence_b": {}
+      },
+      "atom_id": "f1b6e883-c783-5938-ab06-1eb191fb6f43",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.causal_inference.feature_primitives.batched_statistics.typed_pair_statistic",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "causal_inference.feature_primitives.batched_statistics",
+        "repo_name": "sciona-atoms",
+        "source_module_path": "causal_inference.feature_primitives.batched_statistics",
+        "import_module": "sciona.atoms.causal_inference.feature_primitives.batched_statistics",
+        "source_symbol": "typed_pair_statistic",
+        "description": "Compute one named statistic serially for each aligned typed pair. Every variable is a finite, nonconstant real vector with at least three samples; Binary has exactly two values. Pair lengths match, but may vary across rows. Explicit Numerical/Categorical/Binary types retain the reviewed scalar algorithms' conventions, including frequency-rank normalization, categorical dependence dispatch and 0.7-corrected binned entropy. These conventions are part of this version's contract, not inferred from data. No labels or population-wide statistics are used. Undefined/nonfinite results are rejected. A returned statistic is not proof of causality.",
+        "domain_tags": [
+          "causal_inference"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.f57e9f964cc4",
+      "fingerprint": "e238b72350686bc8a0b2e0d0d656765944c5238e52e55f26cefd899839abc86c"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.causal_inference.feature_primitives.feature_recipe_ports.assemble_selected_columns",
+      "catalog_fqdn": "sciona.atoms.causal_inference.feature_primitives.feature_recipe_ports.assemble_selected_columns",
+      "version_id": "2cbad0a1-603c-5039-a22d-9c408d47d88d",
+      "content_hash": "186f20a4c99038a2d4efe0485af38ba4a392a5c590b7224e0ce74937d6528c13",
+      "provider_sha256": "b765fbcbc44915f3d8d6d27bedccc8406a550311750eb4dab80c4b983bd617d6",
+      "directly_bound": true,
+      "dependencies": [
+        "sciona.atoms.numerical.statistics.empirical_features.stack_feature_columns"
+      ],
+      "canonical_latest": [],
+      "canonical_exact_approved": false,
+      "legacy_latest": [],
+      "legacy_exact_approved": false,
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "adjusted_mi",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "conditional_entropy_ab",
+          "ordinal": 1,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "conditional_entropy_ba",
+          "ordinal": 2,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "conditional_kurtosis_ab",
+          "ordinal": 3,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "conditional_kurtosis_ba",
+          "ordinal": 4,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "conditional_similarity_ab",
+          "ordinal": 5,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "conditional_similarity_ba",
+          "ordinal": 6,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "conditional_skewness_ab",
+          "ordinal": 7,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "conditional_skewness_ba",
+          "ordinal": 8,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "discrete_conditional_entropy_ab",
+          "ordinal": 9,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "discrete_conditional_entropy_ba",
+          "ordinal": 10,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "discrete_entropy_a",
+          "ordinal": 11,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "discrete_entropy_b",
+          "ordinal": 12,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "discrete_mi",
+          "ordinal": 13,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "hsic",
+          "ordinal": 14,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "igci_ab",
+          "ordinal": 15,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "igci_ba",
+          "ordinal": 16,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "kurtosis_a",
+          "ordinal": 17,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "kurtosis_b",
+          "ordinal": 18,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "log_sample_count",
+          "ordinal": 19,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "log_unique_a",
+          "ordinal": 20,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "log_unique_b",
+          "ordinal": 21,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "moment21_ab",
+          "ordinal": 22,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "moment21_ba",
+          "ordinal": 23,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "moment31_ab",
+          "ordinal": 24,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "moment31_ba",
+          "ordinal": 25,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "normalized_discrete_entropy_a",
+          "ordinal": 26,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "normalized_discrete_entropy_b",
+          "ordinal": 27,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "mi_over_joint_entropy",
+          "ordinal": 28,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "mi_over_min_entropy",
+          "ordinal": 29,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "normalized_entropy_a",
+          "ordinal": 30,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "normalized_entropy_b",
+          "ordinal": 31,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "error_probability_ab",
+          "ordinal": 32,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "error_probability_ba",
+          "ordinal": 33,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "correlation",
+          "ordinal": 34,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "polyfit_error_ab",
+          "ordinal": 35,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "polyfit_error_ba",
+          "ordinal": 36,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "polyfit_ab",
+          "ordinal": 37,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "polyfit_ba",
+          "ordinal": 38,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "skewness_a",
+          "ordinal": 39,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "skewness_b",
+          "ordinal": 40,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "uniform_divergence_a",
+          "ordinal": 41,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "uniform_divergence_b",
+          "ordinal": 42,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "matrix",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": ""
+        }
+      ],
+      "contract": "Assemble all 43 explicitly supplied columns in fixed source recipe order.\n\nEvery numerical statistic is computed upstream; this adapter only fixes\ncolumn order and delegates finite, aligned matrix assembly to a generic atom.",
+      "graph_nodes": [
+        "training_matrix",
+        "prediction_matrix"
+      ],
+      "omitted_native_defaults": {
+        "training_matrix": {},
+        "prediction_matrix": {}
+      },
+      "atom_id": "01a05282-55fd-5afe-bbe9-5f91051f0889",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.causal_inference.feature_primitives.feature_recipe_ports.assemble_selected_columns",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "causal_inference.feature_primitives.feature_recipe_ports",
+        "repo_name": "sciona-atoms",
+        "source_module_path": "causal_inference.feature_primitives.feature_recipe_ports",
+        "import_module": "sciona.atoms.causal_inference.feature_primitives.feature_recipe_ports",
+        "source_symbol": "assemble_selected_columns",
+        "description": "Assemble all 43 explicitly supplied columns in fixed source recipe order. Every numerical statistic is computed upstream; this adapter only fixes column order and delegates finite, aligned matrix assembly to a generic atom.",
+        "domain_tags": [
+          "causal_inference"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.186f20a4c990",
+      "fingerprint": "f26ed136a8e1a66b67fa9256ff14430567aba51df131760841e41dc8ec9aae56"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.causal_inference.feature_primitives.feature_recipe_ports.feature_statistic_configuration",
+      "catalog_fqdn": "sciona.atoms.causal_inference.feature_primitives.feature_recipe_ports.feature_statistic_configuration",
+      "version_id": "a5fccd67-2a8c-5a81-bb56-93f607dc8cb9",
+      "content_hash": "3cdd34381e806af2d1a8b584080d6ad3c3cc8f7743e6c7cf0234a37194b777ce",
+      "provider_sha256": "b765fbcbc44915f3d8d6d27bedccc8406a550311750eb4dab80c4b983bd617d6",
+      "directly_bound": true,
+      "dependencies": [],
+      "canonical_latest": [],
+      "canonical_exact_approved": false,
+      "legacy_latest": [],
+      "legacy_exact_approved": false,
+      "interfaces": [
+        {
+          "direction": "output",
+          "name": "adjusted_mi",
+          "ordinal": 0,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "conditional_entropy_ab",
+          "ordinal": 1,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "conditional_entropy_ba",
+          "ordinal": 2,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "conditional_kurtosis_ab",
+          "ordinal": 3,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "conditional_kurtosis_ba",
+          "ordinal": 4,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "conditional_similarity_ab",
+          "ordinal": 5,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "conditional_similarity_ba",
+          "ordinal": 6,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "conditional_skewness_ab",
+          "ordinal": 7,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "conditional_skewness_ba",
+          "ordinal": 8,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "discrete_conditional_entropy_ab",
+          "ordinal": 9,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "discrete_conditional_entropy_ba",
+          "ordinal": 10,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "discrete_entropy_a",
+          "ordinal": 11,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "discrete_entropy_b",
+          "ordinal": 12,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "discrete_mi",
+          "ordinal": 13,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "hsic",
+          "ordinal": 14,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "igci_ab",
+          "ordinal": 15,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "igci_ba",
+          "ordinal": 16,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "kurtosis_a",
+          "ordinal": 17,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "kurtosis_b",
+          "ordinal": 18,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "log_sample_count",
+          "ordinal": 19,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "log_unique_a",
+          "ordinal": 20,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "log_unique_b",
+          "ordinal": 21,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "moment21_ab",
+          "ordinal": 22,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "moment21_ba",
+          "ordinal": 23,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "moment31_ab",
+          "ordinal": 24,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "moment31_ba",
+          "ordinal": 25,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "normalized_discrete_entropy_a",
+          "ordinal": 26,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "normalized_discrete_entropy_b",
+          "ordinal": 27,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "mi_over_joint_entropy",
+          "ordinal": 28,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "mi_over_min_entropy",
+          "ordinal": 29,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "normalized_entropy_a",
+          "ordinal": 30,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "normalized_entropy_b",
+          "ordinal": 31,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "error_probability_ab",
+          "ordinal": 32,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "error_probability_ba",
+          "ordinal": 33,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "correlation",
+          "ordinal": 34,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "polyfit_error_ab",
+          "ordinal": 35,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "polyfit_error_ba",
+          "ordinal": 36,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "polyfit_ab",
+          "ordinal": 37,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "polyfit_ba",
+          "ordinal": 38,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "skewness_a",
+          "ordinal": 39,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "skewness_b",
+          "ordinal": 40,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "uniform_divergence_a",
+          "ordinal": 41,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "uniform_divergence_b",
+          "ordinal": 42,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": ""
+        }
+      ],
+      "contract": "Return one explicit statistic name per source-selected feature column.",
+      "graph_nodes": [
+        "feature_configuration"
+      ],
+      "omitted_native_defaults": {
+        "feature_configuration": {}
+      },
+      "atom_id": "94ebe138-e3cd-56f9-802d-d0e5042b23bf",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.causal_inference.feature_primitives.feature_recipe_ports.feature_statistic_configuration",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "causal_inference.feature_primitives.feature_recipe_ports",
+        "repo_name": "sciona-atoms",
+        "source_module_path": "causal_inference.feature_primitives.feature_recipe_ports",
+        "import_module": "sciona.atoms.causal_inference.feature_primitives.feature_recipe_ports",
+        "source_symbol": "feature_statistic_configuration",
+        "description": "Return one explicit statistic name per source-selected feature column.",
+        "domain_tags": [
+          "causal_inference"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.3cdd34381e80",
+      "fingerprint": "ad9cffe88525803a87099faab47d74532e66e18b4a40a4c9ff06c8886dc6b5c6"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.causal_inference.feature_primitives.feature_recipe_ports.route_feature_populations",
+      "catalog_fqdn": "sciona.atoms.causal_inference.feature_primitives.feature_recipe_ports.route_feature_populations",
+      "version_id": "d96ea411-8833-5631-8325-25c7d23e5423",
+      "content_hash": "d054ae7abdf18249119f2eed713f53fe7bd704e24665b2e18045c175380b4626",
+      "provider_sha256": "b765fbcbc44915f3d8d6d27bedccc8406a550311750eb4dab80c4b983bd617d6",
+      "directly_bound": true,
+      "dependencies": [],
+      "canonical_latest": [],
+      "canonical_exact_approved": false,
+      "legacy_latest": [],
+      "legacy_exact_approved": false,
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "training_pairs",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "prediction_pairs",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "training_types",
+          "ordinal": 2,
+          "type_desc": "list",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "prediction_types",
+          "ordinal": 3,
+          "type_desc": "list",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "training_pairs",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "prediction_pairs",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "training_types",
+          "ordinal": 2,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "prediction_types",
+          "ordinal": 3,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": ""
+        }
+      ],
+      "contract": "Route independently named populations to shared generic pair interfaces.",
+      "graph_nodes": [
+        "feature_inputs"
+      ],
+      "omitted_native_defaults": {
+        "feature_inputs": {}
+      },
+      "atom_id": "2e50b35b-d9f6-5894-9787-286dee4a6e4c",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.causal_inference.feature_primitives.feature_recipe_ports.route_feature_populations",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "causal_inference.feature_primitives.feature_recipe_ports",
+        "repo_name": "sciona-atoms",
+        "source_module_path": "causal_inference.feature_primitives.feature_recipe_ports",
+        "import_module": "sciona.atoms.causal_inference.feature_primitives.feature_recipe_ports",
+        "source_symbol": "route_feature_populations",
+        "description": "Route independently named populations to shared generic pair interfaces.",
+        "domain_tags": [
+          "causal_inference"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.d054ae7abdf1",
+      "fingerprint": "09c128036b87ba5dccdabe4bcaa0355b972646036c445784ad2e2222be39b38d"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.causal_inference.feature_primitives.pair_orientation.augment_pair_labels",
+      "catalog_fqdn": "sciona.atoms.causal_inference.feature_primitives.pair_orientation.augment_pair_labels",
+      "version_id": "455cac36-9e6d-55fd-9649-231952304add",
+      "content_hash": "40fa491290c178589455a4167a72d6d44edc214402bd9b203e08d62bd8e793b9",
+      "provider_sha256": "a24fef0e61e1dd7cb0df9b979b3e2dbc4eac28e87d444d9367b77ad3a96bf899",
+      "directly_bound": true,
+      "dependencies": [],
+      "canonical_latest": [],
+      "canonical_exact_approved": false,
+      "legacy_latest": [],
+      "legacy_exact_approved": false,
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "pair_labels",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "pairs",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "labels",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": ""
+        }
+      ],
+      "contract": "Interleave each {-1,0,+1} integer label with its signed negation.\n\nRequires one label per nonempty input pair list; observations are not read.\nConverts to int64 before negation, including unsigned inputs, so reverse\nlabels cannot wrap to large positive values. Does not modify caller labels.",
+      "graph_nodes": [
+        "augment_labels"
+      ],
+      "omitted_native_defaults": {
+        "augment_labels": {}
+      },
+      "atom_id": "141537d6-702d-512f-b0eb-1bac460bc59c",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.causal_inference.feature_primitives.pair_orientation.augment_pair_labels",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "causal_inference.feature_primitives.pair_orientation",
+        "repo_name": "sciona-atoms",
+        "source_module_path": "causal_inference.feature_primitives.pair_orientation",
+        "import_module": "sciona.atoms.causal_inference.feature_primitives.pair_orientation",
+        "source_symbol": "augment_pair_labels",
+        "description": "Interleave each {-1,0,+1} integer label with its signed negation. Requires one label per nonempty input pair list; observations are not read. Converts to int64 before negation, including unsigned inputs, so reverse labels cannot wrap to large positive values. Does not modify caller labels.",
+        "domain_tags": [
+          "causal_inference"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.40fa491290c1",
+      "fingerprint": "e9de518f3b4d630efa2e5cc96f64467cdd3414e84d94409ef66e6064396afb32"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.causal_inference.feature_primitives.pair_orientation.orient_typed_pairs",
+      "catalog_fqdn": "sciona.atoms.causal_inference.feature_primitives.pair_orientation.orient_typed_pairs",
+      "version_id": "74cc03de-3104-584a-991f-7226b838eb24",
+      "content_hash": "23e03c321bbc555f66d9f4d13ceb20dc7432d8ff3ba631240df99e799593dc20",
+      "provider_sha256": "a24fef0e61e1dd7cb0df9b979b3e2dbc4eac28e87d444d9367b77ad3a96bf899",
+      "directly_bound": true,
+      "dependencies": [],
+      "canonical_latest": [],
+      "canonical_exact_approved": false,
+      "legacy_latest": [],
+      "legacy_exact_approved": false,
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "pairs",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "variable_types",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "xs",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "x_types",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "ys",
+          "ordinal": 2,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "y_types",
+          "ordinal": 3,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": ""
+        }
+      ],
+      "contract": "Validate then expose adjacent forward/reverse samples and explicit types.\n\nReturns four aligned lists: x samples, x types, y samples, y types. Each\ninput pair contributes (x,y) then (y,x). Vectors may differ in length across\npairs; within a pair lengths match and are at least three. Samples are\nfinite real and nonconstant; Binary requires exactly two observed values.\nCopies every output array into float64. Computes no statistics or features.",
+      "graph_nodes": [
+        "training_orientation",
+        "prediction_orientation"
+      ],
+      "omitted_native_defaults": {
+        "training_orientation": {},
+        "prediction_orientation": {}
+      },
+      "atom_id": "9fa89cae-3b0e-5fdd-bcde-c245a8434f34",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.causal_inference.feature_primitives.pair_orientation.orient_typed_pairs",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "causal_inference.feature_primitives.pair_orientation",
+        "repo_name": "sciona-atoms",
+        "source_module_path": "causal_inference.feature_primitives.pair_orientation",
+        "import_module": "sciona.atoms.causal_inference.feature_primitives.pair_orientation",
+        "source_symbol": "orient_typed_pairs",
+        "description": "Validate then expose adjacent forward/reverse samples and explicit types. Returns four aligned lists: x samples, x types, y samples, y types. Each input pair contributes (x,y) then (y,x). Vectors may differ in length across pairs; within a pair lengths match and are at least three. Samples are finite real and nonconstant; Binary requires exactly two observed values. Copies every output array into float64. Computes no statistics or features.",
+        "domain_tags": [
+          "causal_inference"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.23e03c321bbc",
+      "fingerprint": "b721866b400a95b3650580056e33b9c242bd218e16e6239a076783f9d4eb3e25"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.sklearn.ensemble.gradient_boosting.causal_model_roles.validate_causal_model_roles",
+      "catalog_fqdn": "sciona.atoms.ml.sklearn.ensemble.gradient_boosting.causal_model_roles.validate_causal_model_roles",
+      "version_id": "4bde4997-9101-5850-8411-75fd78e0a766",
+      "content_hash": "3553c1885d6796f3e65c87fd728feecb61a05998d8b1883cc95a34e31e3c0662",
+      "provider_sha256": "3fde2f1adf152f156339b203f2e450f67704284c89a0bd23a1419d910a739870",
+      "directly_bound": true,
+      "dependencies": [],
+      "canonical_latest": [],
+      "canonical_exact_approved": false,
+      "legacy_latest": [],
+      "legacy_exact_approved": false,
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "one_step_model",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "independence_model",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "direction_model",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "left_model",
+          "ordinal": 3,
+          "type_desc": "object",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "right_model",
+          "ordinal": 4,
+          "type_desc": "object",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "one_step_model",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "independence_model",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "direction_model",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "left_model",
+          "ordinal": 3,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "right_model",
+          "ordinal": 4,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": ""
+        }
+      ],
+      "contract": "Check source role label sets and return the same five models unchanged.\n\nRequires fitted sklearn GradientBoostingClassifiers. One-step labels are\n{-1,0,1}; direction labels are {-1,1}; independence/left/right are {0,1}.\nNo probabilities are computed and no model is trained, copied or mutated.\nActual generic prediction nodes check feature widths and finite outputs.\nShape-only model metadata cannot prove these label contracts.",
+      "graph_nodes": [
+        "model_roles"
+      ],
+      "omitted_native_defaults": {
+        "model_roles": {}
+      },
+      "atom_id": "5c1ae51d-5b2f-5f20-8240-0c97b5180b47",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.sklearn.ensemble.gradient_boosting.causal_model_roles.validate_causal_model_roles",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.sklearn.ensemble.gradient_boosting.causal_model_roles",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.sklearn.ensemble.gradient_boosting.causal_model_roles",
+        "import_module": "sciona.atoms.ml.sklearn.ensemble.gradient_boosting.causal_model_roles",
+        "source_symbol": "validate_causal_model_roles",
+        "description": "Check source role label sets and return the same five models unchanged. Requires fitted sklearn GradientBoostingClassifiers. One-step labels are {-1,0,1}; direction labels are {-1,1}; independence/left/right are {0,1}. No probabilities are computed and no model is trained, copied or mutated. Actual generic prediction nodes check feature widths and finite outputs. Shape-only model metadata cannot prove these label contracts.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.3553c1885d67",
+      "fingerprint": "87059499d99fa9ad75fc1eb9d0cc4fa9dcc244b3a5bfb4030f13222d75f2baba"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.sklearn.ensemble.gradient_boosting.causal_partitions.prepare_causal_training_partitions",
+      "catalog_fqdn": "sciona.atoms.ml.sklearn.ensemble.gradient_boosting.causal_partitions.prepare_causal_training_partitions",
+      "version_id": "dcb9499d-e1c4-532a-8624-02d3be395800",
+      "content_hash": "6d4d29b4ea0328e7018f4e1b915c684988c26ad770fbb10b785e6506a674bee6",
+      "provider_sha256": "2a2dd90d89739084c5800ec788b33c8004e3aac762bfb46426a8660b5465e68e",
+      "directly_bound": true,
+      "dependencies": [],
+      "canonical_latest": [],
+      "canonical_exact_approved": false,
+      "legacy_latest": [],
+      "legacy_exact_approved": false,
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "training_features",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "training_labels",
+          "ordinal": 1,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "one_step_features",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "one_step_labels",
+          "ordinal": 1,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "one_step_weight",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "independence_features",
+          "ordinal": 3,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "independence_labels",
+          "ordinal": 4,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "independence_weight",
+          "ordinal": 5,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "direction_features",
+          "ordinal": 6,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "direction_labels",
+          "ordinal": 7,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "direction_weight",
+          "ordinal": 8,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "left_features",
+          "ordinal": 9,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "left_labels",
+          "ordinal": 10,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "left_weight",
+          "ordinal": 11,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "right_features",
+          "ordinal": 12,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "right_labels",
+          "ordinal": 13,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "right_weight",
+          "ordinal": 14,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": ""
+        }
+      ],
+      "contract": "Return explicit (features, labels, weights) ports for each source role.\n\nFlattened order is one-step, independence, direction, left, right. Uses\nthe reviewed source partition rules, including adjacent reversed labels,\nexclusion of independent rows from direction training, unit direction\nweights and negative-class balancing for the three binary indicator tasks.\nOne-step weights remain None. No fitting or prediction occurs here.\nThis is a recipe adapter; the downstream weighted fitter is generic.\nAll arrays are copied so one consumer cannot mutate another role's inputs.\nAbstract-only shape propagation is unsupported because direction row count\ndepends on actual labels; concrete execution remains supported.",
+      "graph_nodes": [
+        "partitions"
+      ],
+      "omitted_native_defaults": {
+        "partitions": {}
+      },
+      "atom_id": "788ae726-f058-580d-8187-e549a9c2de96",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.sklearn.ensemble.gradient_boosting.causal_partitions.prepare_causal_training_partitions",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.sklearn.ensemble.gradient_boosting.causal_partitions",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.sklearn.ensemble.gradient_boosting.causal_partitions",
+        "import_module": "sciona.atoms.ml.sklearn.ensemble.gradient_boosting.causal_partitions",
+        "source_symbol": "prepare_causal_training_partitions",
+        "description": "Return explicit (features, labels, weights) ports for each source role. Flattened order is one-step, independence, direction, left, right. Uses the reviewed source partition rules, including adjacent reversed labels, exclusion of independent rows from direction training, unit direction weights and negative-class balancing for the three binary indicator tasks. One-step weights remain None. No fitting or prediction occurs here. This is a recipe adapter; the downstream weighted fitter is generic. All arrays are copied so one consumer cannot mutate another role's inputs. Abstract-only shape propagation is unsupported because direction row count depends on actual labels; concrete execution remains supported.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.6d4d29b4ea03",
+      "fingerprint": "e6d3dc6e40b1a48f0624041431981ef752ed8411d5719d3b09f11e9fc89076fa"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.sklearn.ensemble.gradient_boosting.prediction.gradient_boosting_class_probabilities",
+      "catalog_fqdn": "sciona.atoms.ml.sklearn.ensemble.gradient_boosting.prediction.gradient_boosting_class_probabilities",
+      "version_id": "2a7c398d-8b9c-5732-8b2b-c14c32b5b222",
+      "content_hash": "fa69b487b99d5753a9bc7760d849a679b15b1f55d027019d1c4e020c054a5355",
+      "provider_sha256": "2800071848c8bae87bd702fe93f0f2bcadd82c62b6d14c1dcfc79e61d3b75c26",
+      "directly_bound": true,
+      "dependencies": [],
+      "canonical_latest": [],
+      "canonical_exact_approved": false,
+      "legacy_latest": [],
+      "legacy_exact_approved": false,
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "estimator",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "X",
+          "ordinal": 1,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "probabilities",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "class_labels",
+          "ordinal": 1,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": ""
+        }
+      ],
+      "contract": "Predict probabilities and return a copy of their corresponding class labels.\n\nRequires an in-memory fitted sklearn GradientBoostingClassifier and a finite\nreal, nonempty feature matrix with the trained number of columns. The model\nis supplied by the caller; this function does not fit or deserialize models.\nClass order comes from classes_, never an assumed ordering. Prediction\nsemantics follow sklearn's public predict_proba API.",
+      "graph_nodes": [
+        "predict_one_step",
+        "predict_independence",
+        "predict_direction",
+        "predict_left",
+        "predict_right"
+      ],
+      "omitted_native_defaults": {
+        "predict_one_step": {},
+        "predict_independence": {},
+        "predict_direction": {},
+        "predict_left": {},
+        "predict_right": {}
+      },
+      "atom_id": "a6d2d0a3-3eba-5c85-991d-65b53dadab2c",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.sklearn.ensemble.gradient_boosting.prediction.gradient_boosting_class_probabilities",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.sklearn.ensemble.gradient_boosting.prediction",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.sklearn.ensemble.gradient_boosting.prediction",
+        "import_module": "sciona.atoms.ml.sklearn.ensemble.gradient_boosting.prediction",
+        "source_symbol": "gradient_boosting_class_probabilities",
+        "description": "Predict probabilities and return a copy of their corresponding class labels. Requires an in-memory fitted sklearn GradientBoostingClassifier and a finite real, nonempty feature matrix with the trained number of columns. The model is supplied by the caller; this function does not fit or deserialize models. Class order comes from classes_, never an assumed ordering. Prediction semantics follow sklearn's public predict_proba API.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.fa69b487b99d",
+      "fingerprint": "7cff9638f8f4e967b0e565c7fbdacb746e64d7de59a4f400fc5a33b91c2cfd7d"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.sklearn.ensemble.gradient_boosting.weighted_fit.fit_weighted_gradient_boosting",
+      "catalog_fqdn": "sciona.atoms.ml.sklearn.ensemble.gradient_boosting.weighted_fit.fit_weighted_gradient_boosting",
+      "version_id": "783f0557-d25d-50c3-94a6-9cafba585344",
+      "content_hash": "2d110694368f62e1488777d7e880260f48b9e715b2407195dade050210e59401",
+      "provider_sha256": "d947cecea626e074fb4fbd1d1a84ac6908bdb5930da17b3b13ec5e5f801c064a",
+      "directly_bound": true,
+      "dependencies": [],
+      "canonical_latest": [],
+      "canonical_exact_approved": false,
+      "legacy_latest": [],
+      "legacy_exact_approved": false,
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "X",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "labels",
+          "ordinal": 1,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "sample_weight",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": false,
+          "nullable_annotation": false,
+          "default_value_repr": "None"
+        },
+        {
+          "direction": "input",
+          "name": "n_estimators",
+          "ordinal": 3,
+          "type_desc": "int",
+          "required": false,
+          "nullable_annotation": false,
+          "default_value_repr": "500"
+        },
+        {
+          "direction": "input",
+          "name": "max_depth",
+          "ordinal": 4,
+          "type_desc": "int",
+          "required": false,
+          "nullable_annotation": false,
+          "default_value_repr": "9"
+        },
+        {
+          "direction": "input",
+          "name": "min_samples_split",
+          "ordinal": 5,
+          "type_desc": "int",
+          "required": false,
+          "nullable_annotation": false,
+          "default_value_repr": "8"
+        },
+        {
+          "direction": "input",
+          "name": "learning_rate",
+          "ordinal": 6,
+          "type_desc": "float",
+          "required": false,
+          "nullable_annotation": false,
+          "default_value_repr": "0.1"
+        },
+        {
+          "direction": "input",
+          "name": "random_state",
+          "ordinal": 7,
+          "type_desc": "int",
+          "required": false,
+          "nullable_annotation": false,
+          "default_value_repr": "1"
+        },
+        {
+          "direction": "output",
+          "name": "model",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": ""
+        }
+      ],
+      "contract": "Fit one in-memory classifier with explicit labels and optional weights.\n\nAccepts a finite nonempty real matrix and an aligned integer label vector\ncontaining at least two classes. Labels are arbitrary integers; there are no\ncausal roles, paired-row assumptions, feature recipes or balancing rules.\nOptional weights must be finite, strictly positive and aligned. None is\npassed through unchanged. Uses sklearn log_loss and explicit deterministic\nsettings; native thread pools are limited to one for this fit. Returns the\nfitted model without reading or writing files or mutating caller arrays.\nZero/negative weights, missing values and single-class fits are outside this\nversion's contract. No prediction quality or historical-library claim.",
+      "graph_nodes": [
+        "fit_one_step",
+        "fit_independence",
+        "fit_direction",
+        "fit_left",
+        "fit_right"
+      ],
+      "omitted_native_defaults": {
+        "fit_one_step": {},
+        "fit_independence": {},
+        "fit_direction": {},
+        "fit_left": {},
+        "fit_right": {}
+      },
+      "atom_id": "a58c8f98-395b-5025-a1e2-1cafa5626b2b",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.sklearn.ensemble.gradient_boosting.weighted_fit.fit_weighted_gradient_boosting",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.sklearn.ensemble.gradient_boosting.weighted_fit",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.sklearn.ensemble.gradient_boosting.weighted_fit",
+        "import_module": "sciona.atoms.ml.sklearn.ensemble.gradient_boosting.weighted_fit",
+        "source_symbol": "fit_weighted_gradient_boosting",
+        "description": "Fit one in-memory classifier with explicit labels and optional weights. Accepts a finite nonempty real matrix and an aligned integer label vector containing at least two classes. Labels are arbitrary integers; there are no causal roles, paired-row assumptions, feature recipes or balancing rules. Optional weights must be finite, strictly positive and aligned. None is passed through unchanged. Uses sklearn log_loss and explicit deterministic settings; native thread pools are limited to one for this fit. Returns the fitted model without reading or writing files or mutating caller arrays. Zero/negative weights, missing values and single-class fits are outside this version's contract. No prediction quality or historical-library claim.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.2d110694368f",
+      "fingerprint": "c7c6c3ed7bdb84bf6249a7d1a4c577dbd872f540e08c3533472f2fe0391878b8"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.numerical.statistics.empirical_features.empirical_entropy",
+      "catalog_fqdn": "sciona.atoms.numerical.statistics.empirical_features.empirical_entropy",
+      "version_id": "a58c1251-ebc3-5aed-80b8-5b594f5c974c",
+      "content_hash": "db4b7989a9203c78cd1f83c922bfebd608e24d35d689da6e7dded01dcff6d90b",
+      "provider_sha256": "63e240defcfa76bfc699f34b9ac719f171ab9d6dfa411e8c2cd0fef16f1d61a1",
+      "directly_bound": false,
+      "dependencies": [],
+      "canonical_latest": [],
+      "canonical_exact_approved": false,
+      "legacy_latest": [],
+      "legacy_exact_approved": false,
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "samples",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "correction",
+          "ordinal": 1,
+          "type_desc": "float",
+          "required": false,
+          "nullable_annotation": false,
+          "default_value_repr": "0.0"
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": ""
+        }
+      ],
+      "contract": "Natural-log empirical entropy with optional finite-count correction.\n\nEach scalar (1D) or entire row (2D) is a discrete symbol; finite real values\nare compared exactly, without binning. Returns -sum(p log p) plus\ncorrection*(observed_symbols-1)/(2*sample_count). Correction must be finite\nand nonnegative; zero is the ordinary plug-in estimator. Keeps first-seen\nsymbol order for reproducible summation. No task or distribution inference.",
+      "graph_nodes": [],
+      "omitted_native_defaults": {},
+      "atom_id": "f8eb614f-2446-52a2-bbf7-0b5d3ae5bca2",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.numerical.statistics.empirical_features.empirical_entropy",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "numerical.statistics.empirical_features",
+        "repo_name": "sciona-atoms",
+        "source_module_path": "numerical.statistics.empirical_features",
+        "import_module": "sciona.atoms.numerical.statistics.empirical_features",
+        "source_symbol": "empirical_entropy",
+        "description": "Natural-log empirical entropy with optional finite-count correction. Each scalar (1D) or entire row (2D) is a discrete symbol; finite real values are compared exactly, without binning. Returns -sum(p log p) plus correction*(observed_symbols-1)/(2*sample_count). Correction must be finite and nonnegative; zero is the ordinary plug-in estimator. Keeps first-seen symbol order for reproducible summation. No task or distribution inference.",
+        "domain_tags": [
+          "numerical"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.db4b7989a920",
+      "fingerprint": "5d62769f3a8be4bee9d1acbde24bd5cb5c5307b663baa2b93db6b4b5f43a52b4"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.numerical.statistics.empirical_features.mixed_power_moment",
+      "catalog_fqdn": "sciona.atoms.numerical.statistics.empirical_features.mixed_power_moment",
+      "version_id": "ad9e2a58-ca55-5a00-bd0a-7a1843f3b8d5",
+      "content_hash": "5d179e5b45b71e8892a6e65ee3d7aa4b9953787ce39402e79a543618b335f14a",
+      "provider_sha256": "63e240defcfa76bfc699f34b9ac719f171ab9d6dfa411e8c2cd0fef16f1d61a1",
+      "directly_bound": false,
+      "dependencies": [],
+      "canonical_latest": [],
+      "canonical_exact_approved": false,
+      "legacy_latest": [],
+      "legacy_exact_approved": false,
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "x",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "y",
+          "ordinal": 1,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "x_power",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "input",
+          "name": "y_power",
+          "ordinal": 3,
+          "type_desc": "int",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": ""
+        }
+      ],
+      "contract": "Mean of x**x_power * y**y_power for aligned finite real vectors.\n\nPowers are nonnegative integers. Inputs are converted to float64 before\nexponentiation, preventing integer overflow. No centering or scaling is\nperformed: callers supply normalized samples when that is their intended\nstatistic. Rejects nonfinite arithmetic and leaves inputs unchanged.",
+      "graph_nodes": [],
+      "omitted_native_defaults": {},
+      "atom_id": "0e9015bb-dd51-5eb3-8a04-bdd23de31dae",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.numerical.statistics.empirical_features.mixed_power_moment",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "numerical.statistics.empirical_features",
+        "repo_name": "sciona-atoms",
+        "source_module_path": "numerical.statistics.empirical_features",
+        "import_module": "sciona.atoms.numerical.statistics.empirical_features",
+        "source_symbol": "mixed_power_moment",
+        "description": "Mean of x**x_power * y**y_power for aligned finite real vectors. Powers are nonnegative integers. Inputs are converted to float64 before exponentiation, preventing integer overflow. No centering or scaling is performed: callers supply normalized samples when that is their intended statistic. Rejects nonfinite arithmetic and leaves inputs unchanged.",
+        "domain_tags": [
+          "numerical"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.5d179e5b45b7",
+      "fingerprint": "5b55f18ae0e2898a4a8d38f1fcac9b3ba493700720ea6943c5759fb05ca3a2a0"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.numerical.statistics.empirical_features.stack_feature_columns",
+      "catalog_fqdn": "sciona.atoms.numerical.statistics.empirical_features.stack_feature_columns",
+      "version_id": "8b4977a3-a04a-5e30-ae56-92e40f1d0dc1",
+      "content_hash": "41958e96fc224d0fdd57b97724b37c03090fc67955a8717c2a4318b56b2acf85",
+      "provider_sha256": "63e240defcfa76bfc699f34b9ac719f171ab9d6dfa411e8c2cd0fef16f1d61a1",
+      "directly_bound": false,
+      "dependencies": [],
+      "canonical_latest": [],
+      "canonical_exact_approved": false,
+      "legacy_latest": [],
+      "legacy_exact_approved": false,
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "columns",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "nullable_annotation": false,
+          "default_value_repr": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": ""
+        }
+      ],
+      "contract": "Stack finite real vectors in caller-specified column order, without fitting.\n\nEvery column must have the same positive row count. No feature selection,\nname inference, normalization, imputation or broadcasting occurs. Output is\na new float64 matrix. Column semantics and row alignment belong to callers.",
+      "graph_nodes": [],
+      "omitted_native_defaults": {},
+      "atom_id": "430bd0a2-97c2-5e2c-b5e5-4678d68650d3",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.numerical.statistics.empirical_features.stack_feature_columns",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "numerical.statistics.empirical_features",
+        "repo_name": "sciona-atoms",
+        "source_module_path": "numerical.statistics.empirical_features",
+        "import_module": "sciona.atoms.numerical.statistics.empirical_features",
+        "source_symbol": "stack_feature_columns",
+        "description": "Stack finite real vectors in caller-specified column order, without fitting. Every column must have the same positive row count. No feature selection, name inference, normalization, imputation or broadcasting occurs. Output is a new float64 matrix. Column semantics and row alignment belong to callers.",
+        "domain_tags": [
+          "numerical"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.41958e96fc22",
+      "fingerprint": "7dc6c112144a0b867bb0f7b0cfd587bd1ccfa05706657b1b0df47bb8338a6761"
+    }
+  ],
+  "owners": {
+    "sciona-atoms": {
+      "owner_id": "33ed07a2-1bea-5b17-8b71-d6d0e590fdd9",
+      "source_repo_id": "3bff5d3b-7b24-45c0-b688-1edb61107107"
+    },
+    "sciona-atoms-ml": {
+      "owner_id": "33ed07a2-1bea-5b17-8b71-d6d0e590fdd9",
+      "source_repo_id": "27b787a0-27ed-4760-92b7-ad8e8b4b815c"
+    }
+  },
+  "graph_digest": "565be2dffb56f8917bd0c030f60df2084264229a25771c775d6c820afa06d6cb",
+  "execution_evidence_sha256": "829777a1b42ae34760c88600f421bcf20756eb2edc64f9f1d2fe5d3aecb632f4",
+  "interface_review_sha256": "f3b28a52400f68bc69a16e348d099c9d16567e95a61202ad6ffaaf33a61a6141",
+  "preserved_identities": [
+    "49eae995-4294-4165-83fc-cd4f300b4db4",
+    "11f8c682-01f9-43f8-b7b0-8dc75916cc66",
+    "ec2eb2e6-1783-45ea-a367-f3150dea9667",
+    "0265b81a-9a83-412f-afbc-bc0be1d5684c",
+    "77766f16-c90d-42bd-aeda-ee593d6eb45b",
+    "d08847bc-bf77-45a6-96a6-7d8b0ea7ca66",
+    "cfb3c5bf-7074-42c8-8aca-c4b724abd4a8",
+    "a51e2e0a-6145-5254-98a5-df93ce7a1505",
+    "a97d57be-839a-5315-8c0c-c1c2a5e230de",
+    "d62ccefc-a23b-4f14-9122-96974f740810",
+    "8cccc143-54d9-4b53-9921-014111b89cea",
+    "286b3e6b-ac61-43fd-ab60-7c60927fbde8",
+    "58481f95-6884-4028-88d4-a1b536f496db",
+    "929d2129-9609-45da-b397-165c5231a2ef",
+    "89ef0f22-8ae5-45b8-a2c4-51de9367d340",
+    "99b9c180-b532-4bce-8f3e-63bd1bbb6cbc",
+    "f47f28eb-f463-42f7-935c-c6a00ea0181c",
+    "8d79ca4b-4091-5a72-ae1e-1798bb23ba37",
+    "ea3ebc4d-4220-578c-8c06-5ad1f606328e"
+  ],
+  "preserved_history": {
+    "atoms": "bc8e7442dbd78f18def93c8d463a0f52983adcb4cc0130641fefc99305d3b457",
+    "atom_versions": "18b6c3c340ea9998d10ab9bbd084517b5f1504f1cdcee3491f8f7f8a0b01eeaa",
+    "atom_io_specs": "a0cad177c0f7bbce6041e9490e2e0c412b6b0f4de2b8237b27e0a3967c0aa833",
+    "artifacts": "824952b8f3e922ad6aa1eac07024435846eb2f6c598e277723f9281388f81c2e",
+    "artifact_versions": "dc1a065b9e570ea46e39682991ecc049f30443f25cb49df5a0696c235c5388ae",
+    "artifact_io_specs": "636c74c7beafcee34eb4559cc07d471b2b38a4566eb1cc9337378cc1808061f3",
+    "artifact_audit_evidence": "a78eaf4ab8e7d91ee66286e97df12f4b3a91868f6867932079a9444e49e6f770"
+  },
+  "limitations": [
+    "Unpublished drafts only; semantic review and promotion remain separate",
+    "Existing providers, original and derivative records are protected by history digests"
+  ]
+}
