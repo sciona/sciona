@@ -2428,3 +2428,38 @@ search ranking were not tested. See lorentz_boost_identity_served_verification.j
 The read-only aggregate audit reports 136 approved/served physics.pdg CDGs and
 8 drafts, including originals and derivatives. Competition corrected-original
 coverage remains three of 142 intakes. The full promotion goal remains open.
+
+### Hermitian-expectation original identities approved at Tier 3
+
+Both originals now select corrected executable Tier 3 versions using the
+unchanged approved provider. All four grouped transitions, relation
+multiplicities, bindings and dependency edges agree. Fresh source review
+reproduces ten bindings and all six source equations. Incomplete symbolic sides
+are reconstructed through the finite-dimensional adjoint proof. Original
+histories remain intact without claiming literal source parity.
+
+Reuse computes a normalized Hermitian quadratic form for a nonzero vector in
+a common orthonormal basis, retaining the pure-state expectation interpretation
+when applicable. Explicit positive norm division supports arbitrary nonzero
+state scale. Operators must be exactly Hermitian after finite complex128
+conversion, with matching batch/basis shapes and no broadcasting or silent
+symmetrization. Exact rational converted-input algebra precedes one float64
+rounding; nonzero underflow to zero and overflow are rejected. No
+infinite-dimensional operator-domain or measurement-sampling claim is made.
+
+Staging created 19 rows; repeat staging changed zero. Staging rollback and
+failure after 12 actual writes passed. Each stored and served version passed
+five runner cases covering 12 synthetic states against independent 2500-digit
+mpmath complex matrix algebra, with zero observed ULP error. All 38 corruption
+checks passed. Publication rollback, failure after nine writes and failure
+after paired activation passed. Publication created 12 rows and updated six;
+repeat publication changed zero. Fresh served SQL, latest selection, production
+candidate conversion, descriptions, bounds and stored execution passed.
+Generic runner summaries still warn when casting complex values or aggregating
+extreme inputs; full complex arrays and independently validated outputs remain
+preserved. HTTP transport and semantic search ranking were not tested. See
+hermitian_identity_served_verification.json.
+
+The read-only aggregate audit reports 138 approved/served physics.pdg CDGs and
+6 drafts, including originals and derivatives. Competition corrected-original
+coverage remains three of 142 intakes. The full promotion goal remains open.
