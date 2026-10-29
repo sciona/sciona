@@ -2620,3 +2620,62 @@ adapter/computation mismatches, 29 with missing/ambiguous catalog versions, four
 with unregistered callables and five keyword-compatible stages. Competition
 work must continue with full source scope and reusable decomposition, without
 turning those coverage counts into approval evidence.
+
+### Eleven-model ensemble original-intake reconciliation
+
+The next original-intake candidate has an existing served derivative with 155
+nodes, 523 edges and 59 exact provider versions. The new read-only
+`audit_ensemble_original_intake_scope.py` verifies its stored graph, all 155
+bindings, mandatory provider dependency closure, original snapshot/history and
+retained parent approval evidence. It partitions every graph node into explicit
+regions and maps all seven original stage claims. Six upstream component
+qualifications and the adapter evidence pass fresh integrity checks against
+hash-pinned public source. This is structural/source reconciliation, not fresh
+full execution or original-intake approval.
+
+Required corrections preserve the actual method: Alex windows are
+nonoverlapping; Feng and Andriy keep separate framing and population rules.
+The claimed iterative affine-invariant mean is replaced by the actual
+identity/False autocorrelation and logeuclid/True coherence configurations.
+Coherence uses the entire prediction batch to update its reference, so batch
+composition affects predictions. Weighted tangent coordinates do not justify a
+global metric-isometry claim. Maximum aggregation is specific to the Alex
+branches. The complete eleven-vector rank blend retains physical-identity
+alignment, full-vector ranks before output selection, equal weights and an
+explicit baseline. Source configuration remains separate from reusable
+windowing, PSD transformations, feature extraction, fitting and score-routing
+operations. No empirical cross-domain predictive-quality claim is made.
+
+Two prerequisites prevent promotion: the recorded external R binary
+qualification does not cover the restored library, and the audio window helper
+is served through the legacy catalog without canonical approval. The
+report exposes both gaps and remains explicitly ineligible for approval.
+`restore_ensemble_r_runtime.py` restores only hash-pinned source archives into
+an ignored local library, with one make job and one native thread. Its output
+requires requalification even if historical binary hashes happen to match.
+The original intake and existing historical approvals remain unchanged.
+
+The restore completed: all 14 hash-pinned packages built and loaded under
+R 4.6.1. The rebuilt shared-library hashes differ from the historical binaries.
+A fresh synthetic R API/class-orientation audit matches the historical report
+exactly except for those binary hashes. Evidence is preserved separately in
+`ensemble_r_runtime_restoration.json` and
+`ensemble_restored_r_contract_audit.json`; the old evidence is unchanged. Full
+model and graph numerical requalification remains outstanding.
+
+Next: complete numerical requalification, resolve the canonical provider gap,
+verify complete interfaces and bounds, stage a corrected
+original version, and run stored execution, corruption, rollback, idempotency
+and served-selection checks. The full competition/physics objective stays open.
+
+The restored XGBoost, SVM and GLM branches have now passed their complete
+source-versus-provider numerical validators sequentially. The wrapper selects
+only the new runtime API audit at the historical file-read boundary; original
+source programs, synthetic populations, model budgets, exact array comparisons
+and invalid-window checks are unchanged and their validator hashes are checked.
+Each resulting report matches its historical counterpart exactly except for
+compiled-library hashes. Historical evidence files remain byte-for-byte intact.
+See `ensemble_restored_r_models.json` and its three branch reports. This resolves
+standalone R model requalification; raw feature-to-ensemble execution and the
+canonical window-provider qualification remain outstanding. No catalog rows
+were changed in this checkpoint.
