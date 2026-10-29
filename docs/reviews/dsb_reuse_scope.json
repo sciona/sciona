@@ -1,0 +1,562 @@
+{
+  "read_only": true,
+  "catalog_mutations": 0,
+  "approved": false,
+  "catalog": [
+    {
+      "artifact_id": "1983806e-6945-5d7c-9338-ca56ba96186d",
+      "fqdn": "cdg.competition.solution.kaggle.dsb2017_1st",
+      "status": "draft",
+      "is_publishable": false,
+      "version_id": "6625a41e-b5a7-5ee2-86e5-1d2c60d6d185",
+      "content_hash": "641e41bc1adb24d96850eb4974f5a39e807bbadbabb7f9dee2a8dc33222b3c9d",
+      "trust_tier": 3,
+      "nodes": 10,
+      "served": false
+    },
+    {
+      "artifact_id": "e4ec1abe-0cec-575a-b7a1-126ebff07391",
+      "fqdn": "cdg.competition.solution.kaggle.dsb2017_1st.execution",
+      "status": "approved",
+      "is_publishable": true,
+      "version_id": "56f29a87-40dc-5038-97e8-ab5eb099cfbd",
+      "content_hash": "21c64c5e8d85593534d568543d01b27f32a32c34ad909e153cf4057f637ea962",
+      "trust_tier": 3,
+      "nodes": 8,
+      "served": true
+    }
+  ],
+  "original_stage_implementations": {
+    "lung_mask_with_bone_removal": [
+      "dsb_components:mask_and_remove_bone",
+      "dsb_training_preprocessing:prepare_training_masks"
+    ],
+    "volume_split_combine": [
+      "dsb_components:split_volume",
+      "dsb_components:combine_volume"
+    ],
+    "coordinate_aware_3d_unet": [
+      "dsb_network:Net.forward",
+      "dsb_network:DetectorNet.forward"
+    ],
+    "anchor_label_mapping_with_iou_dilation": [
+      "dsb_components:assign_anchor_labels"
+    ],
+    "online_hard_negative_mining": [
+      "dsb_losses:detector_loss"
+    ],
+    "size_aware_nodule_oversampling": [
+      "dsb_components:oversample_by_size"
+    ],
+    "softmax_temperature_proposal_sampling": [
+      "dsb_components:sample_proposals"
+    ],
+    "center_feature_extraction_3d": [
+      "dsb_network:CaseNet.forward"
+    ],
+    "noisy_or_pooling": [
+      "dsb_network:CaseNet.forward"
+    ],
+    "miss_penalty_loss": [
+      "dsb_losses:classifier_loss"
+    ]
+  },
+  "derivative_graph_sha256": "21c64c5e8d85593534d568543d01b27f32a32c34ad909e153cf4057f637ea962",
+  "direct_bindings": [
+    {
+      "node_id": "initialize_classifier",
+      "bound_artifact_fqdn": "sciona.atoms.dl.detection.dsb_training_execution.dsb_adapt_detector",
+      "bound_version_content_hash": "e24020132f41946f12795ad8ac2d2ff2c69104e4eba929494f469c76b61c8726",
+      "status": "active",
+      "atom_id": "ca1e41ee-1b6b-5bf3-9520-50cd6abedc08",
+      "legacy_status": "approved",
+      "legacy_publishable": true,
+      "legacy_native_eligible": false,
+      "canonical_native_eligible": false
+    },
+    {
+      "node_id": "models",
+      "bound_artifact_fqdn": "sciona.atoms.dl.detection.dsb_execution.restore_dsb_models",
+      "bound_version_content_hash": "baec1f5040ad33f91f1e71a4474e007a5565694359c37d5ee89e082651b3eaf3",
+      "status": "active",
+      "atom_id": "8f38e251-ad9b-58f1-b575-9243fda0d321",
+      "legacy_status": "approved",
+      "legacy_publishable": true,
+      "legacy_native_eligible": false,
+      "canonical_native_eligible": false
+    },
+    {
+      "node_id": "prediction",
+      "bound_artifact_fqdn": "sciona.atoms.dl.detection.dsb_execution.dsb_predict",
+      "bound_version_content_hash": "0cf7d8eebc9ec47c6964ffd06b3876f43a637402a1d2f5083c68c61f93947095",
+      "status": "active",
+      "atom_id": "6b62f2a3-6a54-56f0-adad-e7dcaa3a5302",
+      "legacy_status": "approved",
+      "legacy_publishable": true,
+      "legacy_native_eligible": false,
+      "canonical_native_eligible": false
+    },
+    {
+      "node_id": "preprocess",
+      "bound_artifact_fqdn": "sciona.atoms.dl.detection.dsb_execution.dsb_preprocess",
+      "bound_version_content_hash": "20888e9ff8d72f8c4dff8be1b9dcae3e076ffcbc7c5f3087ae81d5fe5e134120",
+      "status": "active",
+      "atom_id": "38725767-8d21-5171-b08f-74b1ce15ce59",
+      "legacy_status": "approved",
+      "legacy_publishable": true,
+      "legacy_native_eligible": false,
+      "canonical_native_eligible": false
+    },
+    {
+      "node_id": "raw_preparation",
+      "bound_artifact_fqdn": "sciona.atoms.dl.detection.dsb_training_execution.dsb_raw_collections",
+      "bound_version_content_hash": "8400f77d508dd9c446564750832c8e49255401c3e4b651fae3eca9b775ae9b56",
+      "status": "active",
+      "atom_id": "6402b419-90a1-5b70-b386-afb9adc63b22",
+      "legacy_status": "approved",
+      "legacy_publishable": true,
+      "legacy_native_eligible": false,
+      "canonical_native_eligible": false
+    },
+    {
+      "node_id": "training",
+      "bound_artifact_fqdn": "sciona.atoms.dl.detection.dsb_training_execution.dsb_train_range",
+      "bound_version_content_hash": "14d21dec15e15b585a027433f391bcbd2782cbbb2484d70936828b82d46a72ce",
+      "status": "active",
+      "atom_id": "35c56bca-15bf-5009-a96b-209e3713c678",
+      "legacy_status": "approved",
+      "legacy_publishable": true,
+      "legacy_native_eligible": false,
+      "canonical_native_eligible": false
+    },
+    {
+      "node_id": "training_batches",
+      "bound_artifact_fqdn": "sciona.atoms.dl.detection.dsb_training_execution.dsb_training_batches",
+      "bound_version_content_hash": "44f8e96085051443d5f5b1847329d6eb2a0f82bb8c9a157a26da5cd8a7c6df72",
+      "status": "active",
+      "atom_id": "a40d6f51-b93a-50be-9b3c-34931f85f2ab",
+      "legacy_status": "approved",
+      "legacy_publishable": true,
+      "legacy_native_eligible": false,
+      "canonical_native_eligible": false
+    },
+    {
+      "node_id": "validation_batches",
+      "bound_artifact_fqdn": "sciona.atoms.dl.detection.dsb_training_execution.dsb_validation_batches",
+      "bound_version_content_hash": "3c611806efd63e5fe2d61d6a028ab953cb521c28866405706a1fa1cbcb0cdb68",
+      "status": "active",
+      "atom_id": "bf47a8c8-397a-5302-b8f5-ee2e7a5b12c3",
+      "legacy_status": "approved",
+      "legacy_publishable": true,
+      "legacy_native_eligible": false,
+      "canonical_native_eligible": false
+    }
+  ],
+  "provider_metadata_counts": [
+    {
+      "node_id": "initialize_classifier",
+      "atom": {
+        "parameters": 0,
+        "descriptions": 0,
+        "references": 1,
+        "audit_rollups": 1
+      },
+      "artifact": {
+        "parameters": 0,
+        "descriptions": 0,
+        "references": 1,
+        "audit_rollups": 1
+      }
+    },
+    {
+      "node_id": "models",
+      "atom": {
+        "parameters": 0,
+        "descriptions": 0,
+        "references": 1,
+        "audit_rollups": 1
+      },
+      "artifact": {
+        "parameters": 0,
+        "descriptions": 0,
+        "references": 1,
+        "audit_rollups": 1
+      }
+    },
+    {
+      "node_id": "prediction",
+      "atom": {
+        "parameters": 0,
+        "descriptions": 0,
+        "references": 1,
+        "audit_rollups": 1
+      },
+      "artifact": {
+        "parameters": 0,
+        "descriptions": 0,
+        "references": 1,
+        "audit_rollups": 1
+      }
+    },
+    {
+      "node_id": "preprocess",
+      "atom": {
+        "parameters": 0,
+        "descriptions": 0,
+        "references": 1,
+        "audit_rollups": 1
+      },
+      "artifact": {
+        "parameters": 0,
+        "descriptions": 0,
+        "references": 1,
+        "audit_rollups": 1
+      }
+    },
+    {
+      "node_id": "raw_preparation",
+      "atom": {
+        "parameters": 0,
+        "descriptions": 0,
+        "references": 1,
+        "audit_rollups": 1
+      },
+      "artifact": {
+        "parameters": 0,
+        "descriptions": 0,
+        "references": 1,
+        "audit_rollups": 1
+      }
+    },
+    {
+      "node_id": "training",
+      "atom": {
+        "parameters": 0,
+        "descriptions": 0,
+        "references": 1,
+        "audit_rollups": 1
+      },
+      "artifact": {
+        "parameters": 0,
+        "descriptions": 0,
+        "references": 1,
+        "audit_rollups": 1
+      }
+    },
+    {
+      "node_id": "training_batches",
+      "atom": {
+        "parameters": 0,
+        "descriptions": 0,
+        "references": 1,
+        "audit_rollups": 1
+      },
+      "artifact": {
+        "parameters": 0,
+        "descriptions": 0,
+        "references": 1,
+        "audit_rollups": 1
+      }
+    },
+    {
+      "node_id": "validation_batches",
+      "atom": {
+        "parameters": 0,
+        "descriptions": 0,
+        "references": 1,
+        "audit_rollups": 1
+      },
+      "artifact": {
+        "parameters": 0,
+        "descriptions": 0,
+        "references": 1,
+        "audit_rollups": 1
+      }
+    }
+  ],
+  "direct_graph_providers": {
+    "models": "sciona.atoms.dl.detection.dsb_execution.restore_dsb_models",
+    "preprocess": "sciona.atoms.dl.detection.dsb_execution.dsb_preprocess",
+    "prediction": "sciona.atoms.dl.detection.dsb_execution.dsb_predict",
+    "training_batches": "sciona.atoms.dl.detection.dsb_training_execution.dsb_training_batches",
+    "training": "sciona.atoms.dl.detection.dsb_training_execution.dsb_train_range",
+    "validation_batches": "sciona.atoms.dl.detection.dsb_training_execution.dsb_validation_batches",
+    "initialize_classifier": "sciona.atoms.dl.detection.dsb_training_execution.dsb_adapt_detector",
+    "raw_preparation": "sciona.atoms.dl.detection.dsb_training_execution.dsb_raw_collections"
+  },
+  "retained_evidence_sha256": "264e76542de6720cb38a9e67a9985006da478b382216696eed77ee3754a5653e",
+  "evidence_freshness": [
+    {
+      "source": "sciona/dsb_anchor_mapping.py",
+      "matches": true
+    },
+    {
+      "source": "sciona/dsb_augmentation.py",
+      "matches": true
+    },
+    {
+      "source": "sciona/dsb_batches.py",
+      "matches": true
+    },
+    {
+      "source": "sciona/dsb_checkpoint.py",
+      "matches": true
+    },
+    {
+      "source": "sciona/dsb_checkpoint_adaptation.py",
+      "matches": true
+    },
+    {
+      "source": "sciona/dsb_components.py",
+      "matches": true
+    },
+    {
+      "source": "sciona/dsb_detector_crop.py",
+      "matches": true
+    },
+    {
+      "source": "sciona/dsb_execution.py",
+      "matches": true
+    },
+    {
+      "source": "sciona/dsb_intake.py",
+      "matches": true
+    },
+    {
+      "source": "sciona/dsb_losses.py",
+      "matches": true
+    },
+    {
+      "source": "sciona/dsb_network.py",
+      "matches": true
+    },
+    {
+      "source": "sciona/dsb_pipeline.py",
+      "matches": true
+    },
+    {
+      "source": "sciona/dsb_raw_inputs.py",
+      "matches": true
+    },
+    {
+      "source": "sciona/dsb_runtime.py",
+      "matches": true
+    },
+    {
+      "source": "sciona/dsb_sampling.py",
+      "matches": true
+    },
+    {
+      "source": "sciona/dsb_schedule.py",
+      "matches": true
+    },
+    {
+      "source": "sciona/dsb_segmentation.py",
+      "matches": true
+    },
+    {
+      "source": "sciona/dsb_training.py",
+      "matches": true
+    },
+    {
+      "source": "sciona/dsb_training_preprocessing.py",
+      "matches": true
+    },
+    {
+      "source": "sciona/dsb_training_range.py",
+      "matches": true
+    },
+    {
+      "source": "sciona/dsb_validation.py",
+      "matches": true
+    },
+    {
+      "source": "sciona/dsb_validation_batches.py",
+      "matches": true
+    },
+    {
+      "source": "sciona/dsb_world_preprocessing.py",
+      "matches": true
+    },
+    {
+      "source": "scripts/dsb_source_batches.py",
+      "matches": true
+    },
+    {
+      "source": "scripts/dsb_source_inference.py",
+      "matches": true
+    },
+    {
+      "source": "scripts/dsb_source_lifecycle.py",
+      "matches": true
+    },
+    {
+      "source": "scripts/dsb_source_preparation.py",
+      "matches": true
+    },
+    {
+      "source": "scripts/validate_dsb_serialized_training.py",
+      "matches": true
+    },
+    {
+      "source": "scripts/audit_competition_dsb_semantics.py",
+      "matches": true
+    },
+    {
+      "source": "scripts/validate_dsb_validation_samples.py",
+      "matches": true
+    },
+    {
+      "source": "scripts/validate_dsb_epoch.py",
+      "matches": true
+    },
+    {
+      "source": "scripts/validate_dsb_validation.py",
+      "matches": true
+    },
+    {
+      "source": "scripts/validate_dsb_network.py",
+      "matches": true
+    },
+    {
+      "source": "sciona/visualizer/runner.py",
+      "matches": true
+    },
+    {
+      "source": "sciona/services/execution_graph_codec.py",
+      "matches": true
+    },
+    {
+      "source": "docs/reviews/competition_dsb_source_pins.json",
+      "matches": true
+    },
+    {
+      "source": "sciona-atoms-dl/src/sciona/atoms/dl/detection/dsb_execution.py",
+      "matches": true
+    },
+    {
+      "source": "sciona-atoms-dl/src/sciona/atoms/dl/detection/dsb_training_execution.py",
+      "matches": true
+    }
+  ],
+  "stale_sources": [],
+  "retained_synthetic_cases": [
+    {
+      "variant": 3,
+      "start_epoch": 49,
+      "end_epoch": 51,
+      "exact_checkpoint_rng_validation": true,
+      "validation_passes": 9,
+      "executed_nodes": 8,
+      "exact_final_inference": true,
+      "proposal_count": 77
+    },
+    {
+      "variant": 4,
+      "start_epoch": 159,
+      "end_epoch": 161,
+      "exact_checkpoint_rng_validation": true,
+      "validation_passes": 7,
+      "executed_nodes": 8,
+      "exact_final_inference": true,
+      "proposal_count": 0
+    }
+  ],
+  "decomposition_required": [
+    {
+      "nodes": [
+        "preprocess",
+        "raw_preparation"
+      ],
+      "classification": "recipe_adapter_with_reusable_geometry",
+      "finding": "Lung segmentation, masking, spatial resampling, cropping, coordinate conversion and population routing are bundled.",
+      "expose": [
+        "Separate spatial resampling and coordinate transforms from lung-specific segmentation and mask thresholds.",
+        "Keep world versus voxel coordinate adapters explicit and route training/validation populations without hidden file lookup."
+      ],
+      "invariants": [
+        "Retain effective spacing, crop bounds and annotation-frame transforms.",
+        "Preserve train/inference mask differences and caller-provided proposal coordinates."
+      ]
+    },
+    {
+      "nodes": [
+        "prediction"
+      ],
+      "classification": "recipe_adapter_with_reusable_inference_operations",
+      "finding": "One node tiles, runs the detector, combines tiles, decodes boxes, filters, suppresses, crops and scores.",
+      "expose": [
+        "Explicit tile/grid outputs and reconstruction inputs; batched model inference with explicit model state.",
+        "Separate score filtering, cubic-box suppression, crop selection, classifier scoring and noisy-OR reduction."
+      ],
+      "invariants": [
+        "Preserve tile order, margin removal and padded-grid extent.",
+        "Keep strict confidence filter before NMS, top-k order, empty-proposal behavior and both score outputs.",
+        "Network architecture and coordinate channels remain model-specific contracts."
+      ]
+    },
+    {
+      "nodes": [
+        "training_batches",
+        "validation_batches"
+      ],
+      "classification": "recipe_adapter_with_reusable_sampling",
+      "finding": "Factories hide size multiplicities, sequential softmax sampling, crops, augmentation and anchor assignment.",
+      "expose": [
+        "Separate generic threshold-based row repetition and sequential weighted sampling from anatomical units and schedules.",
+        "Expose crop/augmentation/anchor operations with explicit RNG and retain distinct training/validation policies."
+      ],
+      "invariants": [
+        "Strict thresholds and additive repetition counts, including omitted rows below all thresholds.",
+        "Sequential probability floor and RNG consumption remain source-compatible.",
+        "Retain source augmentation conventions, including documented coordinate asymmetries."
+      ]
+    },
+    {
+      "nodes": [
+        "training"
+      ],
+      "classification": "stateful_training_recipe",
+      "finding": "One node restores models, owns optimizers, schedules epochs, computes losses, validates and exports a checkpoint.",
+      "expose": [
+        "Separate runtime restoration, source pass scheduling, differentiable loss operations, validation and checkpoint export.",
+        "Keep the stateful loop explicit; do not replace consecutive training with repeated warm restarts."
+      ],
+      "invariants": [
+        "Preserve shared model parameters, optimizer momentum, RNG state and batch-normalization modes across epochs.",
+        "Preserve detector hard-negative mining, classifier miss penalty and learned noisy-OR baseline.",
+        "Retain zero-learning-rate initialization, schedule boundaries and all validation/metric outputs."
+      ]
+    },
+    {
+      "nodes": [
+        "models",
+        "initialize_classifier"
+      ],
+      "classification": "model_specific_state_adapters",
+      "finding": "Restoration and detector-to-classifier transfer require exact architectures and checkpoint schemas.",
+      "expose": [
+        "Declare architecture and state compatibility explicitly; reuse generic state handling only where contracts match."
+      ],
+      "invariants": [
+        "Separate inference detector state from the trained classifier state.",
+        "Preserve shared-weight transfer, head initialization and model-only checkpoint semantics."
+      ]
+    }
+  ],
+  "qualification_limits": [
+    "Existing full-graph evidence covers two three-epoch windows, not complete competition training.",
+    "World-coordinate preparation is covered end-to-end; voxel preparation has separate component evidence.",
+    "Explicit runtime checkpoints, proposal arrays and sample orders remain caller requirements.",
+    "No predictive-quality, anatomical transfer, historical-library or causal-validity claim."
+  ],
+  "promotion_gates": [
+    "Qualify and publish separately reusable numerical providers with exact interfaces and dependencies.",
+    "Preserve numerical behavior, optimizer continuity, model-state sharing and random streams during decomposition.",
+    "Independently compare the complete corrected stored graph against pinned source.",
+    "Preserve original identity/version history; prove corruption rejection and transactional rollback.",
+    "Verify native catalog eligibility and production-selected stored execution."
+  ],
+  "tier_policy": "Automated Tier 3 only; Tier 2 needs community usage and Tier 1 needs human review.",
+  "auditor_sha256": "b239e6842fc7f4b2d88e6915b82df2d7bdd6115f0e40448776df7713a5c118a8"
+}
