@@ -2146,3 +2146,38 @@ gravity_mass_identity_served_verification.json.
 The read-only aggregate audit reports 120 approved/served physics.pdg CDGs and
 24 drafts, including originals and derivatives. Competition corrected-original
 coverage remains three of 142 intakes. The full promotion goal remains open.
+
+### Conditional sound-scale original identities approved at Tier 3
+
+Both originals now select corrected executable Tier 3 versions using the
+unchanged approved provider. All 12 grouped transitions, relation multiplicities,
+bindings and dependency edges agree. Fresh source review reproduces 19 stored
+equations and 30 bindings. The missing factor two, mathematical pi and bulk
+modulus aliases are corrected while retaining the omitted prefactor and shear
+approximations explicitly. Original histories remain intact without literal
+source parity or universal material-speed certification.
+
+Reuse requires the conditional Rydberg bonding-energy model and isotropic
+longitudinal elasticity. Inputs expose A=m/mp >=1, positive constants and bulk
+prefactor, and nonnegative shear-to-bulk ratio with identical nonempty shapes.
+All five outputs remain available: scaling estimate, upper scale, bulk model
+speed, longitudinal model speed and shear factor. The upper scale bounds only
+the unit-prefactor bulk-only curve; the diagnostic models may exceed it.
+Callers establish material applicability. Local 450-digit arithmetic precedes
+independent float64 rounding; positive representable outputs are required.
+This checkpoint adds no empirical material certification or universal bound.
+
+Staging created 37 rows; repeat staging changed zero. Staging rollback and
+failure after 21 actual writes passed. Each stored and served version passed
+six runner cases covering 29 synthetic states against unchanged independent
+2500-digit Decimal energy-density-moduli references, with zero observed ULP
+error for all five outputs. All 38 corruption checks passed. Publication
+rollback, failure after nine writes and failure after paired activation passed.
+Publication created 12 rows and updated six; repeat publication changed zero.
+Fresh served SQL, latest selection, production candidate conversion,
+descriptions, bounds and stored execution passed. HTTP transport and semantic
+search ranking were not tested. See sound_scale_identity_served_verification.json.
+
+The read-only aggregate audit reports 122 approved/served physics.pdg CDGs and
+22 drafts, including originals and derivatives. Competition corrected-original
+coverage remains three of 142 intakes. The full promotion goal remains open.
