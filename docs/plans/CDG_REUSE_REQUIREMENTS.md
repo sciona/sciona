@@ -2181,3 +2181,38 @@ search ranking were not tested. See sound_scale_identity_served_verification.jso
 The read-only aggregate audit reports 122 approved/served physics.pdg CDGs and
 22 drafts, including originals and derivatives. Competition corrected-original
 coverage remains three of 142 intakes. The full promotion goal remains open.
+
+### Work-energy original identities approved at Tier 3
+
+Both originals now select corrected executable Tier 3 versions using the
+unchanged approved provider. All seven grouped transitions, relation
+multiplicities, bindings and dependency edges agree. Fresh source review
+reproduces 18 bindings, ten stored equations and two equations recovered from
+the pinned public source. The initial work reference, definite integration and
+endpoint renaming are corrected, with a separate zero-acceleration proof.
+Original histories remain intact without claiming literal source parity.
+
+Reuse accepts positive constant mass and signed one-dimensional endpoint
+velocities in SI, with identical nonempty shapes and no broadcasting. Outputs
+are both endpoint kinetic energies and signed net translational work. Net work
+is independently rounded from the exact energy difference, rather than
+subtracted from rounded outputs. Callers establish endpoint and force/trajectory
+consistency under the classical source assumptions. This contract does not
+certify a trajectory or work by an individual force, heat, rotation, relativity
+or variable-mass dynamics. Exact zeros and subnormals are supported; all outputs
+must be finite representable values.
+
+Staging created 25 rows; repeat staging changed zero. Staging rollback and
+failure after 15 actual writes passed. Each stored and served version passed
+six runner cases covering 29 synthetic states against unchanged independent
+2500-digit Decimal factored-work references, with zero observed ULP error.
+All 38 corruption checks passed. Publication rollback, failure after nine
+writes and failure after paired activation passed. Publication created 12 rows
+and updated six; repeat publication changed zero. Fresh served SQL, latest
+selection, production candidate conversion, descriptions, bounds and stored
+execution passed. HTTP transport and semantic search ranking were not tested.
+See work_energy_identity_served_verification.json.
+
+The read-only aggregate audit reports 124 approved/served physics.pdg CDGs and
+20 drafts, including originals and derivatives. Competition corrected-original
+coverage remains three of 142 intakes. The full promotion goal remains open.
