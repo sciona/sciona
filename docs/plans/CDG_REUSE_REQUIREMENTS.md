@@ -2392,3 +2392,39 @@ search ranking were not tested. See helmholtz_identity_served_verification.json.
 The read-only aggregate audit reports 134 approved/served physics.pdg CDGs and
 10 drafts, including originals and derivatives. Competition corrected-original
 coverage remains three of 142 intakes. The full promotion goal remains open.
+
+### Lorentz-boost original identities approved at Tier 3
+
+Both originals now select corrected executable Tier 3 versions using the
+unchanged approved provider. All 23 grouped transitions, relation
+multiplicities, bindings and dependency edges agree. Fresh source review
+reproduces 55 bindings and all 30 stored source equations. Spatial aliases,
+malformed time-transform ASTs, expansions and denominator/feed errors are
+explicitly corrected. Coefficient comparison applies to all null events under
+the assumed linear reciprocal boost; time and cross coefficients exclude the
+extraneous gamma branch. Original histories remain intact without claiming
+literal source parity.
+
+Reuse transforms all four event coordinates in a standard inertial x-axis
+boost with aligned axes and common origin, explicit positive light speed and
+signed subluminal velocity. Inputs have identical nonempty shapes and consistent
+units. Positive gamma and the zero-velocity identity are explicit; transverse
+coordinates remain available in independent output arrays. Callers establish
+frame applicability. Independent float64 output rounding does not certify exact
+numerical interval preservation or lossless inversion. There is no accelerated
+frame, arbitrary-axis rotation or general-relativistic extension claim.
+
+Staging created 35 rows; repeat staging changed zero. Staging rollback and
+failure after 21 actual writes passed. Each stored and served version passed
+six runner cases covering 29 synthetic states against independent 2500-digit
+Decimal null-coordinate Doppler references, with zero observed ULP error for
+all five outputs. All 38 corruption checks passed. Publication rollback,
+failure after nine writes and failure after paired activation passed.
+Publication created 12 rows and updated six; repeat publication changed zero.
+Fresh served SQL, latest selection, production candidate conversion,
+descriptions, bounds and stored execution passed. HTTP transport and semantic
+search ranking were not tested. See lorentz_boost_identity_served_verification.json.
+
+The read-only aggregate audit reports 136 approved/served physics.pdg CDGs and
+8 drafts, including originals and derivatives. Competition corrected-original
+coverage remains three of 142 intakes. The full promotion goal remains open.
