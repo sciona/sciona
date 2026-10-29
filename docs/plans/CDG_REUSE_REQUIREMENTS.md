@@ -2525,3 +2525,38 @@ This checkpoint performs no catalog mutation or original-identity approval.
 Exact parent/provider qualification, corrected original versions, stored
 execution, corruption rejection, publication rollback and served verification
 remain required. See wave_relations_original_reconciliation.json.
+
+### Reconciled wave-relations originals approved at Tier 3
+
+Both originals now select corrected executable Tier 3 versions using the
+unchanged approved provider. Fresh qualification binds the exact reconciliation
+report, reconciler implementation and original histories. Six grouped steps,
+relation multiplicities and binding inventories agree. Both histories retain
+four edges and the missing step-six to step-one dependency; they are not
+certified as complete executable source proofs. The corrected proof follows
+4,5,6,1,2,3 and fixes the unrelated dimensionless frequency feed.
+
+Reuse retains all four outputs: period, wavelength, angular frequency and
+angular wavenumber magnitude. Inputs are positive ordinary frequency in cycles
+per second and positive phase-speed magnitude for one periodic mode, with
+matching nonempty shapes. Every output must be positive finite representable.
+Mathematical pi, angular units and magnitude semantics remain explicit. No group
+velocity, propagation direction, dispersion law or broadband behavior is
+inferred. The original histories and source discrepancies remain unchanged.
+
+Staging created 25 rows; repeat staging changed zero. Staging rollback and
+failure after 16 actual writes passed. Each stored and served version passed
+six runner cases covering 29 synthetic states, with zero observed ULP error
+against independent 2500-digit Decimal period/wavelength and 1000-digit mpmath
+angular references. All 38 corruption checks passed. Publication rollback,
+failure after nine writes and failure after paired activation passed.
+Publication created 12 rows and updated six; repeat publication changed zero.
+Fresh served SQL, latest selection, production candidate conversion,
+descriptions, bounds and stored execution passed. The known extreme-input
+summary-statistics overflow warning remains; validated outputs pass. HTTP
+transport and semantic search ranking were not tested. See
+wave_relations_identity_served_verification.json.
+
+The read-only aggregate audit reports 142 approved/served physics.pdg CDGs and
+2 drafts, including originals and derivatives. Competition corrected-original
+coverage remains three of 142 intakes. The full promotion goal remains open.
