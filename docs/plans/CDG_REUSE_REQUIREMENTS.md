@@ -2286,3 +2286,37 @@ trig_exponential_identity_served_verification.json.
 The read-only aggregate audit reports 128 approved/served physics.pdg CDGs and
 16 drafts, including originals and derivatives. Competition corrected-original
 coverage remains three of 142 intakes. The full promotion goal remains open.
+
+### Curl-curl original identities approved at Tier 3
+
+Both originals now select corrected executable Tier 3 versions using the
+unchanged approved provider. All six grouped transitions, relation
+multiplicities, bindings and dependency edges agree. Fresh source review
+reproduces 13 bindings and all eight stored source equations. Repeated-index
+Levi-Civita contraction, unmatched Kronecker indices, gradient grouping and
+malformed component ASTs are explicitly corrected. Original histories remain
+intact without claiming literal source parity.
+
+Reuse returns formal curl-curl, gradient of divergence and componentwise
+Laplacian for general C2 vector fields in a fixed right-handed orthonormal
+Cartesian frame. The nonzero divergence term is retained, with no Maxwell or
+divergence-free assumption. Callers establish consistent units, smoothness and
+a common open region including branch/pole exclusions. Complex representations
+and composed functions remain available for downstream symbolic composition.
+There is no curvilinear or distributional interpretation, boundary-value
+solver or empirical applicability claim.
+
+Staging created 23 rows; repeat staging changed zero. Staging rollback and
+failure after 14 actual writes passed. Each stored and served version passed
+six symbolic runner cases, preserving formal derivatives, nonzero divergence
+and cached AST-string transport. The explicit polynomial oracle checks all
+three outputs independently. All 38 corruption checks passed. Publication
+rollback, failure after nine writes and failure after paired activation passed.
+Publication created 12 rows and updated six; repeat publication changed zero.
+Fresh served SQL, latest selection, production candidate conversion,
+descriptions, bounds and stored execution passed. HTTP transport and semantic
+search ranking were not tested. See curl_curl_identity_served_verification.json.
+
+The read-only aggregate audit reports 130 approved/served physics.pdg CDGs and
+14 drafts, including originals and derivatives. Competition corrected-original
+coverage remains three of 142 intakes. The full promotion goal remains open.
