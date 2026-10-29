@@ -19,7 +19,7 @@ def run_training_epoch(detector, classifier, detector_optimizer, classifier_opti
     """
     import torch
     from sciona.dsb_schedule import CLASSIFIER_PROFILES, epoch_steps, training_mode
-    from sciona.dsb_losses import detector_loss
+    from sciona.dsb_decomposed_losses import detector_loss
     from sciona.dsb_decomposed_losses import classifier_loss
     if classifier.NoduleNet is not detector:
         raise ValueError('alternating training requires the same feature network instance')

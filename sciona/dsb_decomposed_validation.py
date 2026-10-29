@@ -1,7 +1,7 @@
 """Aggregate-only source validation metrics for runtime-provided batches."""
 import numpy as np
 import torch
-from sciona.dsb_losses import detector_loss
+from sciona.dsb_decomposed_losses import detector_loss
 from sciona.dsb_decomposed_losses import classifier_loss
 
 
