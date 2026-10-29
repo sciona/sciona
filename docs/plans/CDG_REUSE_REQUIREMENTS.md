@@ -2498,3 +2498,30 @@ eigenstate_orthogonality_identity_served_verification.json.
 The read-only aggregate audit reports 140 approved/served physics.pdg CDGs and
 4 drafts, including originals and derivatives. Competition corrected-original
 coverage remains three of 142 intakes. The full promotion goal remains open.
+
+### Wave-relations source dependency reconciled before original promotion
+
+Fresh read-only reconciliation confirms that both original identities retain
+six matching grouped source steps, identical relation multiplicities and
+binding versions, and the same four stored dependency edges. Both omit the
+step-six angular-frequency output consumed by step one. The reconciler pins
+that exact producer, consumer, rule pair and expression identity and rejects
+any other missing or extra dependency. Original histories and edges remain
+unchanged; neither historical graph is certified as a complete executable
+source proof.
+
+The existing corrected proof executes steps 4,5,6,1,2,3 and explicitly repairs
+the unrelated dimensionless frequency feed. Fresh immutable source review
+reproduces four stored equations and six equations recovered from pinned public
+source. Full runner execution reproduces six cases, 29 synthetic states and
+zero observed ULP error. The independent source proof and all prior execution
+implementation hashes remain unchanged. The known extreme-input runner
+summary-statistics overflow warning recurs; validated numerical outputs pass.
+
+The reusable contract retains period, wavelength, angular frequency and angular
+wavenumber magnitude for positive frequency and phase-speed magnitude. It does
+not infer group velocity, signed wavevector, dispersion or broadband behavior.
+This checkpoint performs no catalog mutation or original-identity approval.
+Exact parent/provider qualification, corrected original versions, stored
+execution, corruption rejection, publication rollback and served verification
+remain required. See wave_relations_original_reconciliation.json.
