@@ -1,0 +1,131 @@
+{
+  "scope": "Read-only source/decomposition inventory; not promotion evidence",
+  "catalog": [
+    {
+      "fqdn": "cdg.competition.solution.kaggle.cause_effect_2nd",
+      "status": "draft",
+      "is_publishable": false,
+      "version_id": "c11cc672-d9e4-5b04-934c-738af6fb4ef3",
+      "content_hash": "7becb35b36ad541e494a80483c95388322b5155e6d9e6984af25e47b5549debb",
+      "trust_tier": 3,
+      "nodes": 17,
+      "served": false
+    },
+    {
+      "fqdn": "cdg.competition.solution.kaggle.cause_effect_2nd.execution",
+      "status": "approved",
+      "is_publishable": true,
+      "version_id": "bcb11605-b773-532e-a2f6-e9f1c0b213ef",
+      "content_hash": "c00084a0586b7c5ef230dce8ac56d79ad444b50eadd725ba2f441057f7b4349e",
+      "trust_tier": 3,
+      "nodes": 8,
+      "served": true
+    }
+  ],
+  "source_hashes": {
+    "sciona.atoms.causal_inference.feature_primitives.selected_features": "98e353b180574cef7b52bf89d435f905cf5e87df8c331e19eef281578908d022",
+    "sciona.atoms.ml.sklearn.ensemble.gradient_boosting.causal_training": "98dc6da5c75909eb6fd784b5894a376b7a3f36195797352dc4c0a05f27343d69",
+    "sciona.atoms.ml.sklearn.ensemble.gradient_boosting.causal_predictions": "65e33ea858e55dd6d43d45830e6d09de7eace62ce593b2ddb24035338abc163d"
+  },
+  "execution_graph_hash": "c00084a0586b7c5ef230dce8ac56d79ad444b50eadd725ba2f441057f7b4349e",
+  "selected_feature_order": [
+    "adjusted_mi",
+    "conditional_entropy_ab",
+    "conditional_entropy_ba",
+    "conditional_kurtosis_ab",
+    "conditional_kurtosis_ba",
+    "conditional_similarity_ab",
+    "conditional_similarity_ba",
+    "conditional_skewness_ab",
+    "conditional_skewness_ba",
+    "discrete_conditional_entropy_ab",
+    "discrete_conditional_entropy_ba",
+    "discrete_entropy_a",
+    "discrete_entropy_b",
+    "discrete_mi",
+    "hsic",
+    "igci_ab",
+    "igci_ba",
+    "kurtosis_a",
+    "kurtosis_b",
+    "log_sample_count",
+    "log_unique_a",
+    "log_unique_b",
+    "moment21_ab",
+    "moment21_ba",
+    "moment31_ab",
+    "moment31_ba",
+    "normalized_discrete_entropy_a",
+    "normalized_discrete_entropy_b",
+    "mi_over_joint_entropy",
+    "mi_over_min_entropy",
+    "normalized_entropy_a",
+    "normalized_entropy_b",
+    "error_probability_ab",
+    "error_probability_ba",
+    "correlation",
+    "polyfit_error_ab",
+    "polyfit_error_ba",
+    "polyfit_ab",
+    "polyfit_ba",
+    "skewness_a",
+    "skewness_b",
+    "uniform_divergence_a",
+    "uniform_divergence_b"
+  ],
+  "direct_graph_providers": {
+    "features": "sciona.atoms.causal_inference.feature_primitives.selected_features.prepare_causal_feature_matrices",
+    "training": "sciona.atoms.ml.sklearn.ensemble.gradient_boosting.causal_training.train_causal_classifiers",
+    "classifiers": "sciona.atoms.ml.sklearn.ensemble.gradient_boosting.causal_predictions.causal_classifier_predictions",
+    "class_score": "sciona.atoms.causal_inference.estimators.probabilities.causal_direction_probability_score",
+    "paired_score": "sciona.atoms.causal_inference.estimators.atoms.symmetrized_prediction_fusion",
+    "independence_direction": "sciona.atoms.causal_inference.estimators.atoms.two_stage_independence_direction",
+    "left_right": "sciona.atoms.causal_inference.estimators.atoms.left_right_decomposed_prediction",
+    "ensemble": "sciona.atoms.causal_inference.estimators.ensemble_ports.three_system_causal_ensemble"
+  },
+  "decomposition_required": [
+    {
+      "node": "features",
+      "finding": "One node extracts both populations, reverses observations and labels, and computes all 43 features.",
+      "required": "Expose typed pair validation/orientation, label augmentation, reusable statistics, and ordered feature assembly. Keep source-specific feature order in a recipe adapter.",
+      "invariants": [
+        "No prediction-population statistics or labels enter fitting",
+        "Adjacent forward/reverse rows and negated labels",
+        "Categorical correlation and HSIC dispatch preserved",
+        "Undefined feature regimes rejected, not silently imputed"
+      ]
+    },
+    {
+      "node": "training",
+      "finding": "One node partitions labels, computes weights and fits five classifiers.",
+      "required": "Expose partition/weight preparation and five separate generic weighted gradient-boosting fits.",
+      "invariants": [
+        "One-step uses all three labels and no sample weights",
+        "Direction excludes zero labels and uses unit weights",
+        "Dependence/left/right use source negative-class balancing",
+        "Retain all five fits and source default 500 estimators"
+      ]
+    },
+    {
+      "node": "classifiers",
+      "finding": "One node predicts five models and extracts four positive-class columns.",
+      "required": "Use five generic probability-prediction nodes and explicit labelled-column selection; retain role validation.",
+      "invariants": [
+        "One-step class set {-1,0,1}",
+        "Direction class set {-1,1}; other binary roles {0,1}",
+        "Direction output is P(+1), not a signed score",
+        "Identical feature column and observation orientation order"
+      ]
+    }
+  ],
+  "promotion_gates": [
+    "Decompose all three orchestration nodes while preserving source behavior",
+    "Qualify generic providers independently of this competition recipe",
+    "Run pinned-source feature and full five-model parity including 500-estimator case",
+    "Check negative contracts, codec roundtrip and uncached production execution",
+    "Publish exact provider versions and mandatory numerical dependencies",
+    "Preserve original identity/history and validate transactional promotion guards",
+    "Execute the production-selected stored graph before claiming original completion"
+  ],
+  "tier_policy": "Automated Tier 3; no Tier 2 community-usage or Tier 1 human-review claim"
+}
