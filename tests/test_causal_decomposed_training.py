@@ -38,6 +38,10 @@ def test_partition_adapter_preserves_label_contract_rejections(labels):
 
 @pytest.mark.asyncio
 async def test_full_default_five_fit_graph_matches_previous_ensemble(tmp_path,monkeypatch):
+    await check_full_default_five_fit_graph(tmp_path,monkeypatch,expected_nodes=13)
+
+
+async def check_full_default_five_fit_graph(tmp_path,monkeypatch,expected_nodes):
     from sciona.causal_decomposed_training import build_explicit_causal_training_graph
     from sciona.atoms.causal_inference.feature_primitives.selected_features import prepare_causal_feature_matrices
     from sciona.services.execution_graph_codec import encode_execution_graph
@@ -60,7 +64,7 @@ async def test_full_default_five_fit_graph_matches_previous_ensemble(tmp_path,mo
                +.247*(raw[i]-raw[i+1])/2)
         expected.extend([value,-value])
     graph=build_explicit_causal_training_graph()
-    assert len(graph.nodes)==13
+    assert len(graph.nodes)==expected_nodes
     assert len([n for n in graph.nodes if n.node_id.startswith('fit_')])==5
     digest,nodes,edges=encode_execution_graph(graph)
     restored=_artifact_document_to_cdg({'cdg_nodes':[{**n,'version_id':'test'} for n in nodes],
@@ -69,7 +73,7 @@ async def test_full_default_five_fit_graph_matches_previous_ensemble(tmp_path,mo
         'training_pairs':train,'prediction_pairs':query,'training_types':train_types,
         'prediction_types':query_types,'pair_labels':labels,'weights':np.array([.383,.370,.247])},cdg=restored)
     assert result['status']=='completed'
-    assert len(result['trace'])==13
+    assert len(result['trace'])==expected_nodes
     assert {entry['node_id'] for entry in result['trace']}=={node.node_id for node in graph.nodes}
     assert all(not entry['cached'] for entry in result['trace'])
     np.testing.assert_allclose(np.load(tmp_path/'explicit'/'ensemble'/'out_causal_scores.npy'),expected,rtol=1e-12,atol=1e-15)
