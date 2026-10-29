@@ -5,6 +5,7 @@ from sciona.flavours_features import prepare_features,classifier_views
 from sciona.atoms.ml.flavours_feature_views import (
     positive_longitudinal_kinematics,assemble_source_feature_views,enrich_corrected_mass_views,
     witness_positive_longitudinal_kinematics,
+    witness_enrich_corrected_mass_views,
 )
 from sciona.ghost.abstract import AbstractArray
 from sciona.ghost.dimensions import DimensionalSignature
@@ -28,6 +29,8 @@ def test_feature_assembly_and_enrichment_match_retained_reference(excluded):
     actual_views=enrich_corrected_mass_views(observed,mass)
     expected_views=classifier_views(reference,mass)
     for key in expected_views:np.testing.assert_array_equal(actual_views[key],expected_views[key])
+    metadata=witness_enrich_corrected_mass_views({k:AbstractArray(shape=v.shape) for k,v in observed.items()},AbstractArray(shape=mass.shape))
+    for key,value in actual_views.items():assert metadata[key].shape==value.shape
     for actual,old in zip((base,*inputs),before):np.testing.assert_array_equal(actual,old)
 
 
