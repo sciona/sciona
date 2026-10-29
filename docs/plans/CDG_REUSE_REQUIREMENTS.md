@@ -2463,3 +2463,38 @@ hermitian_identity_served_verification.json.
 The read-only aggregate audit reports 138 approved/served physics.pdg CDGs and
 6 drafts, including originals and derivatives. Competition corrected-original
 coverage remains three of 142 intakes. The full promotion goal remains open.
+
+### Eigenstate-orthogonality original identities approved at Tier 3
+
+Both originals now select corrected executable Tier 3 versions using the
+unchanged approved provider. All seven grouped transitions, relation
+multiplicities, bindings and dependency edges agree. Fresh source review
+reproduces 15 bindings and all eight source equations. Ordered matrix products,
+empty symbolic sides and the incorrectly repeated eigenvalue are explicitly
+reconstructed. Original histories remain intact without claiming literal
+source parity.
+
+Reuse verifies a finite Hermitian matrix and two nonzero exact eigenvectors
+with finite real eigenvalues in a common orthonormal basis, then returns complex
+overlap, matrix element and eigenvalue-gap times overlap. Degenerate eigenvalues
+are accepted and may have nonzero overlap. No division by the gap or vector
+normalization is required. Callers establish consistent operator units. Invalid
+or undecidable premises are rejected; no approximate eigensolver or
+infinite-dimensional operator-domain claim is made. All three symbolic outputs
+remain available for downstream composition beyond the original quantum
+interpretation, within the exact finite-matrix assumptions.
+
+Staging created 29 rows; repeat staging changed zero. Staging rollback and
+failure after 17 actual writes passed. Each stored and served version passed
+six symbolic runner cases against independent exact scalar sums, preserving
+nonzero degenerate overlap and cached AST strings. All 38 corruption checks
+passed. Publication rollback, failure after nine writes and failure after
+paired activation passed. Publication created 12 rows and updated six; repeat
+publication changed zero. Fresh served SQL, latest selection, production
+candidate conversion, descriptions, bounds and stored execution passed.
+HTTP transport and semantic search ranking were not tested. See
+eigenstate_orthogonality_identity_served_verification.json.
+
+The read-only aggregate audit reports 140 approved/served physics.pdg CDGs and
+4 drafts, including originals and derivatives. Competition corrected-original
+coverage remains three of 142 intakes. The full promotion goal remains open.
