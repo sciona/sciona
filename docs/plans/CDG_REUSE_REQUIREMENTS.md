@@ -2216,3 +2216,39 @@ See work_energy_identity_served_verification.json.
 The read-only aggregate audit reports 124 approved/served physics.pdg CDGs and
 20 drafts, including originals and derivatives. Competition corrected-original
 coverage remains three of 142 intakes. The full promotion goal remains open.
+
+### Vacuum-wave original identities approved at Tier 3
+
+Both originals now select corrected executable Tier 3 versions using the
+unchanged approved provider. All six grouped transitions, relation
+multiplicities, bindings and dependency edges agree. Fresh source review
+reproduces 16 bindings, nine stored equations and two equations recovered from
+the pinned public source. Vector ASTs, curl-curl operand grouping and SI
+field/charge dimensions are corrected. Original histories remain intact
+without claiming literal source parity.
+
+Reuse constructs formal componentwise spatial Laplacians, scaled second time
+derivatives and a separate Gauss divergence constraint for C2 Cartesian electric
+fields. Callers establish units, a common open space-time region, smoothness and
+branch/pole exclusions. Constant positive vacuum coefficients and zero charge
+and current are premises for equality of the wave-equation sides. Complex
+representations are supported. A longitudinal counterexample explicitly proves
+that wave-equation satisfaction alone does not certify the Gauss constraint.
+These symbolic outputs do not certify Maxwell compliance or provide a PDE or
+initial/boundary-value solver. Formal derivatives and guarded AST-string
+transport remain available for downstream symbolic composition.
+
+Staging created 27 rows; repeat staging changed zero. Staging rollback and
+failure after 16 actual writes passed. Each stored and served version passed
+six symbolic runner cases, preserving formal derivatives, the longitudinal
+counterexample and cached AST-string types. All 38 corruption checks passed.
+Publication rollback, failure after nine writes and failure after paired
+activation passed. Publication created 12 rows and updated six; repeat
+publication changed zero. Fresh served SQL, latest selection, production
+candidate conversion, descriptions, bounds and stored execution passed.
+HTTP transport and semantic search ranking were not tested. See
+vacuum_wave_identity_served_verification.json.
+
+The read-only aggregate audit reports 126 approved/served physics.pdg CDGs and
+18 drafts, including originals and derivatives. Competition corrected-original
+coverage remains three of 142 intakes. The full promotion goal remains open.
