@@ -1,0 +1,52 @@
+{
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "native_threads": 1,
+  "test_results": {
+    "tests": 13,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "source_sha256": {
+    "tests/test_prediction_accumulation.py": "9c6250a9508a06470ee0c2c0843cf4d303e6bfd8429e2c040b530e460564d1b9",
+    "tests/test_flavours_decomposed_mass_fits.py": "b29ecead02a0e96752a3c42b29b6284678e076ce349dbaaf666989610fe40462",
+    "sciona/flavours_mass_correction.py": "68b1d27af6c035ac7d998e8ce582c289787b1e6f2848a1eba7a08d5e508a8f9d",
+    "../sciona-atoms-ml/src/sciona/atoms/ml/model_selection/prediction_accumulation.py": "6e445f92d5bf4f35dc40857499c72e09cb3c2c89dcd5edfc0a5b5adaadbbff00",
+    "../sciona-atoms-ml/src/sciona/atoms/ml/model_selection/configured_crossfit.py": "b8b4972033feae9384dfbc4e2efaef4260a75bf01535dc30a3da2e99102458e3",
+    "../sciona-atoms-ml/src/sciona/atoms/ml/model_selection/masked_operations.py": "e5301f1176000692107ec2c4fc582bc21a70d21b3fccaf6883f2cde269d5fce8",
+    "../sciona-atoms-ml/src/sciona/atoms/ml/xgboost/configured_model_io.py": "9bf956400f16f316e27b0565589d443977d446c0b1196e8b9dcb13e9a4b7c8aa",
+    "../sciona-atoms-ml/src/sciona/atoms/ml/xgboost/model_io.py": "2b57431a96c5b4ff232d0868222c4bc29eef378cd0b9cd4a8e42059618a8765a"
+  },
+  "runtime_versions": {
+    "numpy": "2.4.2",
+    "xgboost": "3.4.1",
+    "scikit-learn": "1.8.0",
+    "threadpoolctl": "3.6.0"
+  },
+  "full_budget_composition": {
+    "synthetic_cases": 2,
+    "fits_per_composition": 35,
+    "rounds_per_fit": 2800,
+    "exact_reference_oof": true,
+    "exact_reference_query": true,
+    "held_coverage": 7,
+    "query_coverage": 35
+  },
+  "contracts": [
+    "Float32 and float64 inputs become float64 contributions; unselected nonfinite values are discarded.",
+    "Exact row alignment and expected coverage; gaps, excess contributions, invalid counts and overflow rejected.",
+    "Prediction units preserved; count and mask metadata dimensionless.",
+    "Ordered sequential accumulation matches retained full-budget reconstruction."
+  ],
+  "limitations": [
+    "Qualification of reusable numerical composition only; no stored CDG execution or catalog approval.",
+    "Counts cannot establish unique folds or training isolation; graph wiring must prove those properties.",
+    "Historical engine equivalence and predictive quality are not claimed.",
+    "Full classifiers, neural ensemble, feature adapters, blend and diagnostics remain outstanding."
+  ],
+  "previous_composition_evidence": "docs/reviews/flavours_decomposed_mass_fits_qualification.json",
+  "validation_command": ".venv/bin/python -m pytest -q tests/test_prediction_accumulation.py tests/test_flavours_decomposed_mass_fits.py"
+}

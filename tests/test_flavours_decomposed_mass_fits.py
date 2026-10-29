@@ -12,6 +12,9 @@ from sciona.atoms.ml.model_selection.configured_crossfit import (
     shuffled_kfold_masks, fit_masked_configured_regression,
 )
 from sciona.atoms.ml.xgboost.model_io import predict_regression_model
+from sciona.atoms.ml.model_selection.prediction_accumulation import (
+    masked_prediction_contribution,merge_prediction_sums,finalize_prediction_mean,
+)
 
 
 @pytest.mark.parametrize('rows,width,seed', [(63,3,812), (81,5,917)])
@@ -28,6 +31,7 @@ def test_all_reusable_mass_fits_match_retained_full_budget(rows,width,seed):
     sums=np.zeros(rows,dtype=np.float64)
     coverage=np.zeros(rows,dtype=np.int64)
     query_sum=np.zeros(len(query),dtype=np.float64)
+    query_counts=np.zeros(len(query),dtype=np.int64)
     rounds=[]
     # Explicitly retain source fold order and float64 accumulation of native
     # float32 predictions. All training/query/control rows remain separate.
@@ -39,14 +43,16 @@ def test_all_reusable_mass_fits_match_retained_full_budget(rows,width,seed):
                 state,actual=fit_masked_configured_regression(
                     train,target,names,selected,config,2800)
                 predictions=predict_regression_model(train,names,state)
-                sums[held]+=predictions[held]
-                coverage[held]+=1
-                query_sum+=predict_regression_model(query,names,state)
+                contribution,counts=masked_prediction_contribution(predictions,held)
+                sums,coverage=merge_prediction_sums(sums,coverage,contribution,counts)
+                contribution,counts=masked_prediction_contribution(
+                    predict_regression_model(query,names,state),np.ones(len(query),dtype=np.bool_))
+                query_sum,query_counts=merge_prediction_sums(query_sum,query_counts,contribution,counts)
                 rounds.append(actual)
     assert rounds==[2800]*35
     np.testing.assert_array_equal(coverage,np.full(rows,7,dtype=np.int64))
     np.testing.assert_array_equal(coverage,reference['oof_coverage'])
-    np.testing.assert_array_equal(sums/coverage,reference['oof_mass'])
-    np.testing.assert_array_equal(query_sum/35,reference['query_mass'])
+    np.testing.assert_array_equal(finalize_prediction_mean(sums,coverage,7),reference['oof_mass'])
+    np.testing.assert_array_equal(finalize_prediction_mean(query_sum,query_counts,35),reference['query_mass'])
     assert tuple(rounds)==reference['fit_rounds']
     assert np.ptp(query_sum/35)>0
