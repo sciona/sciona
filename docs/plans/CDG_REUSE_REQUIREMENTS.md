@@ -2585,3 +2585,38 @@ under both original identities, stored execution, corruption rejection,
 transaction rollback and served execution. Competition promotion also remains
 incomplete. Execution was serial with native pools capped at one thread; the
 database remains capped at one CPU and the older 16-worker job remains suspended.
+
+### Hyperbolic originals approved at automated Tier 3
+
+Both original identities now select corrected executable versions that reuse the
+existing qualified provider. The contract accepts a finite real commutative
+dimensionless symbolic argument and retains all six function forms, eighteen
+identities and the exponential-definition certificate. General symbolic inputs
+remain available for composition. Complex sine/cosine definitions are checked
+directly; quotient identities retain their real-domain restriction. Original
+histories, both missing expression-overlap edges and corrected inference
+directions remain explicit. No literal source replay or floating-point
+cancellation guarantee is claimed.
+
+Staging created 21 rows; an injected failure after 13 writes and a complete dry
+run both rolled back. Repeat staging created zero rows. Both stored revisions
+passed six synthetic runner cases each, including general symbolic arguments,
+certificate checks and cached-string preservation. All 38 catalog corruption
+cases were rejected with rollback verified. Publication dry run, failure after
+nine writes and failure after both activations rolled back. Publication created
+12 rows and updated six; repeat publication changed zero rows. Fresh served SQL,
+latest-version selection, production candidate conversion and actual stored
+execution passed for both versions. HTTP transport and semantic ranking remain
+outside this qualification. See the hyperbolic_identities_identity reports.
+
+A fresh aggregate audit reports 144 approved/served physics.pdg CDGs and zero
+drafts in that namespace, including originals and derivatives. This is not a
+claim that the full promotion objective is complete. The refreshed competition
+audit still finds three approved corrected original identities among 142
+intakes. Forty-one intakes have direct served provenance, which can represent
+partial or opaque implementations and does not qualify the original workflows.
+Historical stage coverage remains 552 without a named implementation, 193 with
+adapter/computation mismatches, 29 with missing/ambiguous catalog versions, four
+with unregistered callables and five keyword-compatible stages. Competition
+work must continue with full source scope and reusable decomposition, without
+turning those coverage counts into approval evidence.
