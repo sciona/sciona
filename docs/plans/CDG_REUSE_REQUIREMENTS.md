@@ -2560,3 +2560,28 @@ wave_relations_identity_served_verification.json.
 The read-only aggregate audit reports 142 approved/served physics.pdg CDGs and
 2 drafts, including originals and derivatives. Competition corrected-original
 coverage remains three of 142 intakes. The full promotion goal remains open.
+
+### Hyperbolic original-pair reconciliation checkpoint
+
+The read-only reconciliation matches all 18 grouped source steps, duplicate
+self-product inputs, binding versions and stored dependency edges between the
+legacy and projected originals. Both histories omit two expression-overlap
+edges: stored step 8 to step 1 and step 10 to step 2. Stored steps 7, 8 and 10
+also have inference directions different from the corrected exponential proof.
+These discrepancies are retained explicitly; neither original is certified as
+an executable proof and no catalog rows changed at this checkpoint.
+
+The immutable source validator reproduces the complete retained qualification,
+including original implementation hashes. Six fresh serialized-runner cases
+match the retained evidence and preserve general real symbolic arguments,
+certificates and cached strings. The reusable contract covers the full
+hyperbolic function and identity collection for finite real dimensionless
+arguments, with separately checked complex sine/cosine exponential definitions.
+It does not claim a global complex quotient domain or stable floating-point
+subtraction of squared hyperbolic functions.
+
+Promotion remains pending: exact parent/provider contracts, corrected versions
+under both original identities, stored execution, corruption rejection,
+transaction rollback and served execution. Competition promotion also remains
+incomplete. Execution was serial with native pools capped at one thread; the
+database remains capped at one CPU and the older 16-worker job remains suspended.
