@@ -25,6 +25,10 @@ def validate():
         ('provenance','DELETE FROM artifact_dependencies WHERE dependent_version_id=%s',(version,), 'Corrected provenance'),
         ('staging_evidence',"UPDATE artifact_audit_evidence SET details=jsonb_set(details,'{planner_sha256}','\"corrupt\"') WHERE version_id=%s AND runner_version='ensemble-corrected-intake-draft.v1'",(version,), 'Corrected staging evidence'),
         ('failed_audit','UPDATE artifact_audit_evidence SET passed=false WHERE version_id=%s',(version,), 'Unresolved corrected-version failure'),
+        ('node_projection',"UPDATE artifact_cdg_nodes SET matched_primitive='corrupt' WHERE version_id=%s AND node_id=%s",(version,first['node_id']), 'execution graph projection drift'),
+        ('edge_projection','DELETE FROM artifact_cdg_edges WHERE version_id=%s',(version,), 'execution graph projection drift'),
+        ('original_selection','UPDATE artifact_versions SET is_latest=false WHERE version_id=%s',(proposed['original_version_id'],), 'Intake latest-version selection'),
+        ('provider_tier','UPDATE artifact_versions SET trust_tier=2 WHERE version_id=%s',(first['version_id'],), 'Approved provider version'),
     ]
     results={}
     with psycopg.connect(dotenv_values(ROOT/'.env')['SCIONA_DATA_CATALOG_DATABASE_URL'],row_factory=dict_row,
