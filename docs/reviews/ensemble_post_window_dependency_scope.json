@@ -1,0 +1,648 @@
+{
+  "passed": true,
+  "read_only": true,
+  "catalog_mutations": 0,
+  "eligible_for_approval": false,
+  "source_version_id": "e2128626-2edb-50fc-bb4f-2bf32456a3f9",
+  "source_content_hash": "5e96b80dd4b205ff643ce3968cd7a2efa4f4c4c1219cda0719fef0e80c6f6b7e",
+  "original_state": {
+    "artifact_id": "a9eed402-7daa-5d35-a268-be73b47d4278",
+    "status": "draft",
+    "is_publishable": false,
+    "content_hash": "5e96b80dd4b205ff643ce3968cd7a2efa4f4c4c1219cda0719fef0e80c6f6b7e"
+  },
+  "original_history_sha256": {
+    "artifact_versions": "1dfa648389dbd0f0bb945abe08dc05200a7ed16709a1d5b6b34d66bb73189389",
+    "artifact_cdg_nodes": "e3bce094beea0eea63305def5ad34529903f5653b6f3c3b22d17083c123922ab",
+    "artifact_cdg_edges": "e128c7235f4569325f20f89be365d5c11520ba14b36bea1d5fbd650e414269a3",
+    "artifact_cdg_bindings": "bde86ed1ed481b09de2fcd0fd5c5af7b43772ccf9af407aeef9baef370904095",
+    "artifact_io_specs": "edb133a4039647d27f682baec2fb7b5b5c309b6d6db96f423c272f1be0c8e14b",
+    "artifact_audit_evidence": "9db75ffb5da1eca8bb0f7957a18447a20d7a4739fe5a82d0da1a4c86cf4f4353",
+    "artifact_validity_bounds": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_dependencies": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "parent_version_id": "65759b82-3166-5b2c-ae50-de7be3b3ab20",
+  "parent_graph_sha256": "3ef7247266b95358ec9405b4fd8222a7904a01e1274b862be83d872679869a64",
+  "source_stage_mapping": {
+    "windower": {
+      "nodes": [
+        "alex_population0_riemannian_windows",
+        "alex_population0_combined_windows",
+        "alex_population0_relative_windows",
+        "alex_population1_riemannian_windows",
+        "alex_population1_combined_windows",
+        "alex_population1_relative_windows",
+        "alex_population2_riemannian_windows",
+        "alex_population2_combined_windows",
+        "alex_population2_relative_windows"
+      ],
+      "correction": "Correct overlapping-window claim: Alex uses nonoverlapping source windows. Feng and Andriy retain separate filtering, windowing and population contracts."
+    },
+    "autocorrelation_covariance_matrix": {
+      "nodes": [
+        "alex_population0_riemannian_autocorrelation_training",
+        "alex_population0_riemannian_autocorrelation_prediction",
+        "alex_population1_riemannian_autocorrelation_training",
+        "alex_population1_riemannian_autocorrelation_prediction",
+        "alex_population2_riemannian_autocorrelation_training",
+        "alex_population2_riemannian_autocorrelation_prediction"
+      ],
+      "correction": "Retain explicit delay list, subsampling, channel axes and positive-semidefinite input-to-tangent contract."
+    },
+    "cross_frequency_coherence_matrix": {
+      "nodes": [
+        "alex_population0_riemannian_coherence_training",
+        "alex_population0_riemannian_coherence_prediction",
+        "alex_population1_riemannian_coherence_training",
+        "alex_population1_riemannian_coherence_prediction",
+        "alex_population2_riemannian_coherence_training",
+        "alex_population2_riemannian_coherence_prediction"
+      ],
+      "correction": "Retain fixed source bands and frequency-by-frequency channel matrices; this is not a general physiological inference."
+    },
+    "riemannian_mean_spd": {
+      "nodes": [
+        "alex_population0_riemannian_autocorrelation_tangent",
+        "alex_population0_riemannian_coherence_tangent",
+        "alex_population1_riemannian_autocorrelation_tangent",
+        "alex_population1_riemannian_coherence_tangent",
+        "alex_population2_riemannian_autocorrelation_tangent",
+        "alex_population2_riemannian_coherence_tangent"
+      ],
+      "correction": "Replace unsupported iterative affine-invariant mean claim: autocorrelation uses identity/False; coherence uses logeuclid/True with whole-prediction-batch reference update."
+    },
+    "tangent_space_projection": {
+      "nodes": [
+        "alex_population0_riemannian_autocorrelation_tangent",
+        "alex_population0_riemannian_coherence_tangent",
+        "alex_population1_riemannian_autocorrelation_tangent",
+        "alex_population1_riemannian_coherence_tangent",
+        "alex_population2_riemannian_autocorrelation_tangent",
+        "alex_population2_riemannian_coherence_tangent"
+      ],
+      "correction": "Retain fixed shrinkage, matrix logarithm, weighted upper triangle and channel concatenation. Prediction-batch dependence is explicit; no global distance-isometry claim."
+    },
+    "segment_max_aggregation": {
+      "nodes": [
+        "alex_population0_riemannian_autocorrelation_segments",
+        "alex_population0_riemannian_coherence_segments",
+        "alex_population0_combined_segments",
+        "alex_population0_relative_segments",
+        "alex_population1_riemannian_autocorrelation_segments",
+        "alex_population1_riemannian_coherence_segments",
+        "alex_population1_combined_segments",
+        "alex_population1_relative_segments",
+        "alex_population2_riemannian_autocorrelation_segments",
+        "alex_population2_riemannian_coherence_segments",
+        "alex_population2_combined_segments",
+        "alex_population2_relative_segments"
+      ],
+      "correction": "Maximum aggregation applies to the Alex branches. Feng and Andriy retain their own aggregation; historical performance numbers do not qualify this implementation."
+    },
+    "ranked_prediction_blend": {
+      "nodes": [
+        "blend"
+      ],
+      "correction": "Replace placeholder dictionary interface with eleven ordered vectors and opaque identities. Rank complete vectors before output selection, add equal-weight scores to caller baseline, without clipping or reranking."
+    }
+  },
+  "graph_regions": {
+    "population_routing": [
+      "families",
+      "indices",
+      "alex_population0",
+      "alex_population1",
+      "alex_population2",
+      "feng_population0",
+      "feng_population1",
+      "feng_population2",
+      "andriy_ids"
+    ],
+    "alex_riemannian": [
+      "alex_population0_riemannian_configuration",
+      "alex_population0_riemannian_windows",
+      "alex_population0_riemannian_autocorrelation_training",
+      "alex_population0_riemannian_autocorrelation_prediction",
+      "alex_population0_riemannian_autocorrelation_tangent",
+      "alex_population0_riemannian_autocorrelation_classifier",
+      "alex_population0_riemannian_autocorrelation_segments",
+      "alex_population0_riemannian_coherence_training",
+      "alex_population0_riemannian_coherence_prediction",
+      "alex_population0_riemannian_coherence_tangent",
+      "alex_population0_riemannian_coherence_classifier",
+      "alex_population0_riemannian_coherence_segments",
+      "alex_population1_riemannian_configuration",
+      "alex_population1_riemannian_windows",
+      "alex_population1_riemannian_autocorrelation_training",
+      "alex_population1_riemannian_autocorrelation_prediction",
+      "alex_population1_riemannian_autocorrelation_tangent",
+      "alex_population1_riemannian_autocorrelation_classifier",
+      "alex_population1_riemannian_autocorrelation_segments",
+      "alex_population1_riemannian_coherence_training",
+      "alex_population1_riemannian_coherence_prediction",
+      "alex_population1_riemannian_coherence_tangent",
+      "alex_population1_riemannian_coherence_classifier",
+      "alex_population1_riemannian_coherence_segments",
+      "alex_population2_riemannian_configuration",
+      "alex_population2_riemannian_windows",
+      "alex_population2_riemannian_autocorrelation_training",
+      "alex_population2_riemannian_autocorrelation_prediction",
+      "alex_population2_riemannian_autocorrelation_tangent",
+      "alex_population2_riemannian_autocorrelation_classifier",
+      "alex_population2_riemannian_autocorrelation_segments",
+      "alex_population2_riemannian_coherence_training",
+      "alex_population2_riemannian_coherence_prediction",
+      "alex_population2_riemannian_coherence_tangent",
+      "alex_population2_riemannian_coherence_classifier",
+      "alex_population2_riemannian_coherence_segments"
+    ],
+    "alex_combined": [
+      "alex_population0_combined_configuration",
+      "alex_population0_combined_windows",
+      "alex_population0_combined_training_power",
+      "alex_population0_combined_prediction_power",
+      "alex_population0_combined_vectorize",
+      "alex_population0_combined_classifier",
+      "alex_population0_combined_segments",
+      "alex_population0_combined_training_ar_standard_errors",
+      "alex_population0_combined_training_basic_statistics",
+      "alex_population0_combined_training_fractal_features",
+      "alex_population0_combined_training_combined",
+      "alex_population0_combined_prediction_ar_standard_errors",
+      "alex_population0_combined_prediction_basic_statistics",
+      "alex_population0_combined_prediction_fractal_features",
+      "alex_population0_combined_prediction_combined",
+      "alex_population1_combined_configuration",
+      "alex_population1_combined_windows",
+      "alex_population1_combined_training_power",
+      "alex_population1_combined_prediction_power",
+      "alex_population1_combined_vectorize",
+      "alex_population1_combined_classifier",
+      "alex_population1_combined_segments",
+      "alex_population1_combined_training_ar_standard_errors",
+      "alex_population1_combined_training_basic_statistics",
+      "alex_population1_combined_training_fractal_features",
+      "alex_population1_combined_training_combined",
+      "alex_population1_combined_prediction_ar_standard_errors",
+      "alex_population1_combined_prediction_basic_statistics",
+      "alex_population1_combined_prediction_fractal_features",
+      "alex_population1_combined_prediction_combined",
+      "alex_population2_combined_configuration",
+      "alex_population2_combined_windows",
+      "alex_population2_combined_training_power",
+      "alex_population2_combined_prediction_power",
+      "alex_population2_combined_vectorize",
+      "alex_population2_combined_classifier",
+      "alex_population2_combined_segments",
+      "alex_population2_combined_training_ar_standard_errors",
+      "alex_population2_combined_training_basic_statistics",
+      "alex_population2_combined_training_fractal_features",
+      "alex_population2_combined_training_combined",
+      "alex_population2_combined_prediction_ar_standard_errors",
+      "alex_population2_combined_prediction_basic_statistics",
+      "alex_population2_combined_prediction_fractal_features",
+      "alex_population2_combined_prediction_combined"
+    ],
+    "alex_relative": [
+      "alex_population0_relative_configuration",
+      "alex_population0_relative_windows",
+      "alex_population0_relative_training_power",
+      "alex_population0_relative_prediction_power",
+      "alex_population0_relative_vectorize",
+      "alex_population0_relative_classifier",
+      "alex_population0_relative_segments",
+      "alex_population1_relative_configuration",
+      "alex_population1_relative_windows",
+      "alex_population1_relative_training_power",
+      "alex_population1_relative_prediction_power",
+      "alex_population1_relative_vectorize",
+      "alex_population1_relative_classifier",
+      "alex_population1_relative_segments",
+      "alex_population2_relative_configuration",
+      "alex_population2_relative_windows",
+      "alex_population2_relative_training_power",
+      "alex_population2_relative_prediction_power",
+      "alex_population2_relative_vectorize",
+      "alex_population2_relative_classifier",
+      "alex_population2_relative_segments"
+    ],
+    "feng_knn": [
+      "feng_population0_knn_filter",
+      "feng_population0_knn_features",
+      "feng_population0_knn_classifier",
+      "feng_population1_knn_filter",
+      "feng_population1_knn_features",
+      "feng_population1_knn_classifier",
+      "feng_population2_knn_filter",
+      "feng_population2_knn_features",
+      "feng_population2_knn_classifier"
+    ],
+    "feng_xgb": [
+      "feng_population0_xgb_filter",
+      "feng_population0_xgb_features",
+      "feng_population0_xgb_classifier",
+      "feng_population1_xgb_filter",
+      "feng_population1_xgb_features",
+      "feng_population1_xgb_classifier",
+      "feng_population2_xgb_filter",
+      "feng_population2_xgb_features",
+      "feng_population2_xgb_classifier"
+    ],
+    "feng_expanded": [
+      "feng_population0_expanded_filter",
+      "feng_population0_expanded_features",
+      "feng_population0_expanded_knn",
+      "feng_population0_expanded_glm",
+      "feng_population1_expanded_filter",
+      "feng_population1_expanded_features",
+      "feng_population1_expanded_knn",
+      "feng_population1_expanded_glm",
+      "feng_population2_expanded_filter",
+      "feng_population2_expanded_features",
+      "feng_population2_expanded_knn",
+      "feng_population2_expanded_glm"
+    ],
+    "population_score_collection": [
+      "collect_combined",
+      "collect_autocorrelation",
+      "collect_coherence",
+      "collect_relative_power",
+      "collect_feng_xgb",
+      "collect_feng_knn",
+      "collect_feng_expanded_knn",
+      "collect_feng_glm"
+    ],
+    "andriy": [
+      "andriy_populations",
+      "andriy_xgb",
+      "andriy_svm",
+      "andriy_glm"
+    ],
+    "identity_aligned_blend": [
+      "pack",
+      "blend"
+    ]
+  },
+  "nodes": 155,
+  "edges": 523,
+  "provider_versions": [
+    {
+      "runtime_fqdn": "sciona.atoms.audio_speech.atoms.audio_windows",
+      "version_id": "a00a4320-92d1-5c10-aa72-361d5494040f",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.glmnet.andriy_r_glm.andriy_r_glm_segment_probabilities",
+      "version_id": "97f1b48e-ec6b-55cb-9422-3b8edd2f1ddd",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.liblinear.andriy_r_svm.andriy_r_svm_segment_probabilities",
+      "version_id": "aa891771-5d46-5408-a5df-8a324b58119e",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.sklearn.linear_model.feng_glm.feng_glm_segment_probabilities",
+      "version_id": "45353401-c86d-533a-a638-e541d1b9bfca",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.sklearn.neighbors.feng_expanded_knn.feng_expanded_knn_segment_probabilities",
+      "version_id": "6f18ab9b-aba1-5ac6-99d6-ea9969d831eb",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.sklearn.neighbors.feng_knn.feng_knn_segment_probabilities",
+      "version_id": "dc0a926f-9da6-5134-a096-6a3e7be127fa",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.xgboost.andriy_r_xgb.andriy_r_xgb_segment_probabilities",
+      "version_id": "fa9be2be-621f-5924-8784-c8b541c14986",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.xgboost.competition_bagging.bagged_window_probabilities",
+      "version_id": "a5402dee-d313-55c4-a698-0f50895ee430",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.xgboost.feng_xgb.feng_xgb_segment_probabilities",
+      "version_id": "ec716c87-fdc1-5c85-87d9-d43900a95db1",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.covariance_features.delay_correlation.channel_delay_correlations",
+      "version_id": "e20c613a-1800-5b47-8204-f4c04615fdde",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.covariance_features.frequency_coherence.frequency_band_coherence",
+      "version_id": "021e410f-daa5-5a5e-aeff-c5773dc3d940",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.covariance_features.relative_power.relative_log_band_power",
+      "version_id": "e448d3fb-333b-5e60-aef1-c4f8fcf72e05",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.covariance_features.source_tangent.channel_tangent_features",
+      "version_id": "6e6880f0-7d7c-568a-b834-48ae0c65618f",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.andriy_ar_coefficients.andriy_ar_coefficients",
+      "version_id": "115015a1-0dcc-5e12-bdec-48474aa6b5fe",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.andriy_ar_features.andriy_documented_ar_features",
+      "version_id": "6893d9ff-3dda-5aaa-90d9-b739633733be",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.andriy_clip_features.andriy_documented_clip_features",
+      "version_id": "73cbeb3c-438d-56fc-8a0d-aa386a1e35d4",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.andriy_connectivity_features.andriy_connectivity_features",
+      "version_id": "2b098fb6-2840-571d-b85c-55acf4bcda3f",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.andriy_csp.andriy_csp_filters",
+      "version_id": "7e2b4897-1adc-5f6e-87a2-217e519545cd",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.andriy_csp.andriy_csp_project",
+      "version_id": "678d1b43-a9b5-57ff-8c15-1d42ff8b4b56",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.andriy_distribution_features.andriy_distribution_features",
+      "version_id": "6e297288-9af8-5254-ba41-8a71363e6205",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.andriy_feature_assembly.andriy_assemble_clip_features",
+      "version_id": "b2b28e38-e629-5873-99b8-5a95fcafa45b",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.andriy_filter.andriy_filter_trim",
+      "version_id": "54e9ff7f-2a34-573d-b7ab-887aae52fc86",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.andriy_mainstream_features.andriy_documented_mainstream_features",
+      "version_id": "b84d2b38-2f7f-5e3d-95f2-de5e4864424b",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.andriy_nonlinear_features.andriy_nonlinear_features",
+      "version_id": "80f10623-a8ee-5bae-ae95-efe8b417b8e0",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.andriy_normalization.andriy_joint_normalization",
+      "version_id": "38508677-c6c5-5ce7-a577-5f409045be6c",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.andriy_population.andriy_documented_population",
+      "version_id": "3ce1c6a6-f7b4-5ba4-b49a-cf8f0762dd45",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.andriy_population_inputs.andriy_population_inputs",
+      "version_id": "c99525e8-280d-5307-b77c-8308eedd4211",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.andriy_populations.andriy_documented_populations",
+      "version_id": "cf2fbcd8-a117-5b24-831c-ee4d75adb10d",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.andriy_preprocessing.andriy_csp_training_classes",
+      "version_id": "ec867dfc-9ac5-534a-a1f7-91c3472b9652",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.andriy_preprocessing.andriy_documented_preprocess_clip",
+      "version_id": "1e413882-b6fc-5559-a034-002bed17488d",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.andriy_resampling.andriy_documented_resample",
+      "version_id": "dccaa3ef-6712-55d3-82b4-ecf87411c493",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.andriy_spectral_features.andriy_spectral_features",
+      "version_id": "b4e72074-c5a0-5612-a864-c0ff316a2c0a",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.andriy_time_features.andriy_time_features",
+      "version_id": "7c1885d9-042a-5f4a-a1e3-d36fb9f8bcce",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.andriy_wavelet_features.andriy_wavelet_features",
+      "version_id": "1862a03e-e547-589b-8031-1c54f796b5a4",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.andriy_welch_features.andriy_documented_welch_features",
+      "version_id": "2dfe06e8-b79c-5e67-97ea-785cc21418a7",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.ar_standard_errors.channel_ar_standard_errors",
+      "version_id": "674cb9f4-f499-5bcf-9411-3f06c6eedab7",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.basic_statistics.channel_basic_statistics",
+      "version_id": "8e9a3ea9-7463-56eb-8c7a-97c3084f3334",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.combined_feature_inputs.combined_feature_configuration",
+      "version_id": "7d6196e5-10a3-5d6f-a25a-286bd9a5915d",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.ensemble_alignment.aligned_eleven_model_blend",
+      "version_id": "3cd8b612-9a60-5cba-ab45-3417e16d7df9",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.ensemble_partitions.collect_population_scores",
+      "version_id": "5c878259-9b7e-5ee5-9b26-6360002601d9",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.ensemble_partitions.ensemble_population_indices",
+      "version_id": "29243e8a-d0e1-502c-8eae-a238891a6da8",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.ensemble_partitions.ordered_prediction_ids",
+      "version_id": "5e7c1739-1908-5c2b-b68a-9b3074fa8fab",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.ensemble_partitions.select_ensemble_population",
+      "version_id": "dfba0187-a66a-5cac-8c67-10a4340b9e11",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.ensemble_wiring.ensemble_family_inputs",
+      "version_id": "88b457e4-1d9d-575f-b4f6-f4f44a11e88a",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.ensemble_wiring.pack_eleven_predictions",
+      "version_id": "2d1da033-a606-50e1-a340-b25c78a0a219",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.feature_concatenation.concatenate_channel_features",
+      "version_id": "c49a5b77-23fc-5a16-ae64-aa7044c66c06",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.feature_vectorization.vectorize_feature_partitions",
+      "version_id": "b05ce571-57a9-5edb-a047-a5e74f8a2eca",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.feng_expanded_features.feng_expanded_features",
+      "version_id": "3e9e7bf9-8395-5a0f-b915-b567de6a0e3d",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.feng_expanded_partitions.feng_expanded_partitions",
+      "version_id": "f3ac4477-a52b-5f75-bf0d-32fce86517ec",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.feng_fft.feng_fft_features",
+      "version_id": "47418509-7ef2-5e8b-bc95-4c94a14162b3",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.feng_filter.feng_resample_filter",
+      "version_id": "b22bac76-f0cf-5e58-a3b7-7cba9d6bda8b",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.feng_partitions.feng_feature_partitions",
+      "version_id": "60b88f2c-64bf-5ce4-828a-8fd660e1b976",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.feng_partitions.feng_filter_partitions",
+      "version_id": "f7afbe65-a760-5a47-a947-5e2922629366",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.fractal_features.channel_fractal_features",
+      "version_id": "7f814971-b6fa-581d-98fe-f521abd90a10",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.relative_power_inputs.relative_power_configuration",
+      "version_id": "ed3f10b5-b762-50b7-a6ca-64661d6114ea",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.segment_scores.segment_probability_max",
+      "version_id": "581268f0-37bf-5f59-a2b0-4642b55c8f96",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.segment_windows.window_signal_segments",
+      "version_id": "7cc9a7ed-79da-53de-890e-796bbf5a4576",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.source_inputs.prepare_segment_windows",
+      "version_id": "7a84a508-48e1-54f0-b4b5-ba89d94c5f1e",
+      "canonical_approved": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.riemannian_bci.signal_processing.source_inputs.source_riemann_configuration",
+      "version_id": "4ca9a95a-8fd5-53da-991f-05f1a3553913",
+      "canonical_approved": true
+    }
+  ],
+  "canonical_provider_gaps": [],
+  "provider_closure_sha256": "c6c28b9c27cca1f37fddfd0ab4691b67385c655abca8a31ecad7cccfeef3c38d",
+  "upstream_evidence_checks": {
+    "riemannian": {
+      "retained_evidence_verified": true,
+      "graph_sha256": "6cac6ad8cccd4c30425fbdf62cc8ee7c04e61c5e2a29c155edfee593c7e10207"
+    },
+    "relative_power": {
+      "retained_evidence_verified": true,
+      "graph_sha256": "cca4fa851032d89ebabbca30f4069024d049d8492ca6de4598e37ded5655b8e7"
+    },
+    "combined_feature": {
+      "retained_evidence_verified": true,
+      "graph_sha256": "b9713d2fc7ac20caccd2a75e186f4dec78a519719e51ee000f03640b244fc124"
+    },
+    "feng_knn": {
+      "retained_evidence_verified": true,
+      "graph_sha256": "b2d6d14b1dd70ed1fdcb1d60cd964834fdb15e99699412a257e7c41ce060f8f6"
+    },
+    "feng_xgb": {
+      "retained_evidence_verified": true,
+      "graph_sha256": "52c93e5241475c00251a12e84c19dc08398a3bb5ecbac1ad9cdc46180a4cf82a"
+    },
+    "feng_expanded": {
+      "retained_evidence_verified": true,
+      "graph_sha256": "544856191ba0bc7d5fb625a037d9c91bdfa596a34aae5334137b94f60a4a5c53"
+    },
+    "andriy": {
+      "retained_evidence_verified": false,
+      "reason": "Historical compiled R qualification not satisfied",
+      "missing_or_changed_libraries": [
+        "data.table/libs/data_table.so",
+        "jsonlite/libs/jsonlite.so",
+        "LiblineaR/libs/LiblineaR.so",
+        "xgboost/libs/xgboost.so",
+        "glmnet/libs/glmnet.so",
+        "RcppEigen/libs/RcppEigen.so",
+        "Rcpp/libs/Rcpp.so"
+      ]
+    }
+  },
+  "retained_parent_evidence_sha256": {
+    "ensemble_test_review.json": "982a25e84fc7972525dfc904896e59a4fd6e080e6e748d910759e327d50944a4",
+    "ensemble_prerequisites.json": "8890cba483b7db94bff8da2232157dbb74aa2cc910e26b77e1f08f95e55fa19b",
+    "ensemble_semantic_review.md": "99118868ee445f0d5fc236bbf9fdb254073e2c50562b0334f56d7db0825ae970",
+    "ensemble_alignment_parity.json": "6e0fdd4ba365f1c981d0321fe86cb197fdca3cf7b9cb6f5e9d2bd005c542f80f",
+    "ensemble_execution_parity.json": "cb0042ad2d4dc83c57a5d7a3d0c98985a708ff66ded295c7c57882d62ddf992c"
+  },
+  "reusable_core": "Windowing, PSD feature transformations, statistical features, model fitting, paired score collection and identity-aligned rank blending remain separate callable operations. Source configuration and population membership remain explicit adapters.",
+  "limitations": [
+    "Read-only source and structural reconciliation; no fresh full-graph execution or corrected-original approval.",
+    "No empirical cross-domain predictive-quality claim. Caller establishes sampling, units, training membership and physical identity across families.",
+    "Coherence reference updates use the entire prediction batch; changing that batch can change predictions.",
+    "Original iterative-mean, overlapping-window and global metric-isometry claims require corrected descriptions."
+  ],
+  "remaining": [
+    "Restore or requalify the exact R runtime before full execution.",
+    "Qualify the legacy-only audio window provider in the canonical catalog; do not inherit the historical exception silently.",
+    "Check complete parent/provider interfaces, validity and current runtime contracts.",
+    "Stage a corrected original version preserving all eleven branches and original history.",
+    "Verify stored full execution, corruption rejection, publication rollback, idempotency and served selection."
+  ],
+  "auditor_sha256": "425fee17137129ebe46d4fa833729b158291f2aa4072eb192c5542277eee3b99"
+}

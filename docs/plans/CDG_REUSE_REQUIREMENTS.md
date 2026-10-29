@@ -2679,3 +2679,30 @@ See `ensemble_restored_r_models.json` and its three branch reports. This resolve
 standalone R model requalification; raw feature-to-ensemble execution and the
 canonical window-provider qualification remain outstanding. No catalog rows
 were changed in this checkpoint.
+
+### Window provider canonical qualification
+
+The ensemble's legacy-only window provider now has canonical Tier 3 approval
+under its existing artifact/version identities. Source code and legacy identity
+fields are preserved. Canonical and legacy port metadata now state the finite
+one-dimensional float64 contract, positive integer sample geometry, complete
+windows only, and read-only shared storage. Caller mutation remains visible
+through the returned view; read-only is not an immutability guarantee. No
+sampling-rate or application interpretation is inferred.
+
+Thirty-six synthetic cases cover two constructed application interpretations,
+overlap, nonoverlap, gaps, single windows, reversed/noncontiguous inputs, exact
+index-oracle values, witnesses and alias behavior. Nine invalid-domain cases
+are rejected. Twelve catalog corruption cases are rejected. Full rollback,
+failure after five writes and failure after activation leave the catalog
+unchanged. Publication created 16 metadata/evidence rows; repeat application
+created zero. Fresh canonical/legacy serving, document port contracts and the
+selected callable's execution pass. Provider code and existing ensemble graph
+hashes are unchanged. HTTP transport and ranking are outside qualification.
+
+The refreshed ensemble scope reports all 59 exact provider versions canonically
+approved, closing the prior window-provider gap. The restored R standalone model
+qualification is separate from its historical binary evidence. Corrected-original
+staging and full raw stored-graph execution, followed by publication gates,
+remain outstanding. See the audio_windows_canonical reports and
+`ensemble_post_window_dependency_scope.json`.

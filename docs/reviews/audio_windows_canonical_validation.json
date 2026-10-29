@@ -1,0 +1,71 @@
+{
+  "passed": true,
+  "approved": false,
+  "synthetic_only": true,
+  "catalog_mutations": 0,
+  "artifact_id": "be40e926-d0ed-4c8b-83d4-740ef0609355",
+  "version_id": "a00a4320-92d1-5c10-aa72-361d5494040f",
+  "content_hash": "1deccd1d0c1230068c6f84be92f20e5823ca438a309dd174f086d69527555fec",
+  "runtime_fqdn": "sciona.atoms.audio_speech.atoms.audio_windows",
+  "numerical_cases": 36,
+  "invalid_cases": 9,
+  "constructed_applications": [
+    "vibration sensor framing",
+    "energy measurement framing"
+  ],
+  "independent_index_oracle": true,
+  "noncontiguous_inputs": true,
+  "readonly_alias_verified": true,
+  "witness_verified": true,
+  "numpy_version": "2.4.2",
+  "icontract_version": "2.7.3",
+  "provider_sha256": "b7203d541172eee357c40f968bdef12abff0d3b5255775e1076577d67ceb9462",
+  "witness_sha256": "823d8050e598f2762ec86c67d341b8280a3576c8683df8f0937ce381c49fe96e",
+  "validator_sha256": "3678d91d8184f83812047c99139406e4363132e24dfd2288f4ad762df83253eb",
+  "description": "Frame a finite one-dimensional float64 signal into complete windows using positive integer window and hop sizes in samples. Return a read-only float64 view; trailing incomplete windows are dropped. Values and units are preserved, and the view aliases the caller-owned signal.",
+  "validity_bound": "Finite nonempty one-dimensional NumPy float64 array; positive integer window and hop sizes, with at least one complete window. Read-only output aliases the input: later input mutations remain visible. No padding, resampling, time inference or domain-specific interpretation.",
+  "ports": [
+    {
+      "direction": "input",
+      "name": "signal",
+      "ordinal": 0,
+      "type_desc": "numpy.ndarray",
+      "constraints": "Finite one-dimensional float64 array covering at least one window; caller owns sample units and ordering.",
+      "required": true,
+      "default_value_repr": ""
+    },
+    {
+      "direction": "input",
+      "name": "window_size",
+      "ordinal": 1,
+      "type_desc": "int",
+      "constraints": "Positive integer window length in samples, no larger than signal length.",
+      "required": true,
+      "default_value_repr": ""
+    },
+    {
+      "direction": "input",
+      "name": "hop_size",
+      "ordinal": 2,
+      "type_desc": "int",
+      "constraints": "Positive integer step in samples; overlap or gaps are explicit.",
+      "required": true,
+      "default_value_repr": ""
+    },
+    {
+      "direction": "output",
+      "name": "windows",
+      "ordinal": 0,
+      "type_desc": "numpy.ndarray",
+      "constraints": "Read-only float64 view with shape ((len(signal)-window_size)//hop_size+1,window_size), preserving input units and aliasing input storage.",
+      "required": true,
+      "default_value_repr": ""
+    }
+  ],
+  "limitations": [
+    "Constructed signal examples establish framing behavior, not empirical application performance.",
+    "Qualification is for float64 inputs, as required by the ensemble boundary. Other dtypes are not added to the contract.",
+    "Read-only does not mean immutable: caller mutation of the input changes the aliased output.",
+    "No source provider edits, catalog mutation or approval in this validator."
+  ]
+}
