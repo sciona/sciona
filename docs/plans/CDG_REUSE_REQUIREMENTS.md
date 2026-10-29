@@ -2252,3 +2252,37 @@ vacuum_wave_identity_served_verification.json.
 The read-only aggregate audit reports 126 approved/served physics.pdg CDGs and
 18 drafts, including originals and derivatives. Competition corrected-original
 coverage remains three of 142 intakes. The full promotion goal remains open.
+
+### Trigonometric-exponential original identities approved at Tier 3
+
+Both originals now select corrected executable Tier 3 versions using the
+unchanged approved provider. All ten grouped transitions, relation
+multiplicities, bindings and dependency edges agree. Fresh source review
+reproduces 22 bindings and eight stored equations, recovering the Euler premise
+and both final endpoints from the pinned public source. The imaginary unit and
+real dimensionless angle semantics are explicit. Original histories remain
+intact without claiming literal source parity.
+
+Reuse accepts a guarded finite real symbolic angle in radians and returns both
+cosine and sine exponential representations plus a specialized proof
+certificate. The Euler prerequisite uses the product rule and initial value on
+the connected real line; an independent linear-system solution checks both
+inverse representations. General symbolic inputs remain available for
+cross-disciplinary downstream composition. Callers establish units and
+assumptions. This qualification makes no global complex logarithm,
+complex-angle extension or later floating-point accuracy claim.
+
+Staging created 21 rows; repeat staging changed zero. Staging rollback and
+failure after 14 actual writes passed. Each stored and served version passed
+six symbolic runner cases, preserving the general angle, checked certificate
+and cached AST-string transport. All 38 corruption checks passed. Publication
+rollback, failure after nine writes and failure after paired activation passed.
+Publication created 12 rows and updated six; repeat publication changed zero.
+Fresh served SQL, latest selection, production candidate conversion,
+descriptions, bounds and stored execution passed. HTTP transport and semantic
+search ranking were not tested. See
+trig_exponential_identity_served_verification.json.
+
+The read-only aggregate audit reports 128 approved/served physics.pdg CDGs and
+16 drafts, including originals and derivatives. Competition corrected-original
+coverage remains three of 142 intakes. The full promotion goal remains open.
