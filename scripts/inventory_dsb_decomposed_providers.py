@@ -17,6 +17,7 @@ from sciona.atoms.supabase_seed import _parse_registered_atoms
 from scripts.import_flavours_provider_drafts import ROOT, connect
 
 GENERIC = {
+    'sciona.atoms.dl.spatial.centered_window.centered_window': 'dsb_generic_center_window_source_parity.json',
     'sciona.atoms.numerical.statistics.threshold_sampling.repeat_rows_by_threshold': 'dsb_generic_sampling_source_parity.json',
     'sciona.atoms.numerical.statistics.threshold_sampling.sequential_softmax_indices': 'dsb_generic_sampling_source_parity.json',
     'sciona.atoms.numerical.spatial.volume_tiles.split_volume_tiles': 'dsb_generic_tiles_source_parity.json',
@@ -35,7 +36,7 @@ def sha(path):
 def inventory(offline=False):
     graph = build_dsb_preparation_graph()
     digest, _, _ = encode_execution_graph(graph)
-    evidence_path = ROOT / 'docs/reviews/dsb_preparation_graph_source_parity.json'
+    evidence_path = ROOT / 'docs/reviews/dsb_center_graph_source_parity.json'
     evidence = json.loads(evidence_path.read_text())
     if not evidence['passed'] or evidence['execution_graph_sha256'] != digest:
         raise ValueError('Current graph lacks matching full source evidence')
@@ -94,7 +95,7 @@ def inventory(offline=False):
                 both_catalogs_exact_eligible=None if offline else sum(r['atom_exact_eligible'] and r['artifact_exact_eligible'] for r in records),
                 full_graph_evidence_sha256=sha(evidence_path), providers=records,
                 remaining_gates=[
-                    'Finish reusable coordinate, crop/augmentation/anchor and classifier center-feature boundaries.',
+                    'Finish reusable coordinate and crop/augmentation/anchor boundaries.',
                     'Expose validation/checkpoint contracts while preserving uninterrupted optimizer and RNG state.',
                     'Review complete transitive dependencies including local imports, model methods and callbacks.',
                     'Complete exact catalog interfaces, parameters, descriptions, references and Tier 3 audit evidence.',
