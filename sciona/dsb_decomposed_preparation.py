@@ -5,8 +5,9 @@ Training and inference retain their distinct mask policies and annotation frames
 """
 import numpy as np
 from sciona.dsb_components import segment_volume, mask_and_remove_bone
-from sciona.dsb_training_preprocessing import training_lung_mask, training_voxel_annotations
-from sciona.dsb_world_preprocessing import world_training_annotations
+from sciona.dsb_training_preprocessing import training_lung_mask
+from sciona.dsb_decomposed_annotations import training_voxel_annotations
+from sciona.dsb_decomposed_annotations import world_training_annotations
 from sciona.atoms.numerical.spatial.resampling import resample_regular_volume
 
 

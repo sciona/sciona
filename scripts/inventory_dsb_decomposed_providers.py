@@ -17,6 +17,7 @@ from sciona.atoms.supabase_seed import _parse_registered_atoms
 from scripts.import_flavours_provider_drafts import ROOT, connect
 
 GENERIC = {
+    'sciona.atoms.numerical.spatial.coordinate_scaling.scale_coordinate_rows': 'dsb_generic_coordinate_scaling_source_parity.json',
     'sciona.atoms.dl.spatial.centered_window.centered_window': 'dsb_generic_center_window_source_parity.json',
     'sciona.atoms.numerical.statistics.threshold_sampling.repeat_rows_by_threshold': 'dsb_generic_sampling_source_parity.json',
     'sciona.atoms.numerical.statistics.threshold_sampling.sequential_softmax_indices': 'dsb_generic_sampling_source_parity.json',
@@ -36,7 +37,7 @@ def sha(path):
 def inventory(offline=False):
     graph = build_dsb_preparation_graph()
     digest, _, _ = encode_execution_graph(graph)
-    evidence_path = ROOT / 'docs/reviews/dsb_center_graph_source_parity.json'
+    evidence_path = ROOT / 'docs/reviews/dsb_coordinate_graph_source_parity.json'
     evidence = json.loads(evidence_path.read_text())
     if not evidence['passed'] or evidence['execution_graph_sha256'] != digest:
         raise ValueError('Current graph lacks matching full source evidence')
@@ -95,7 +96,7 @@ def inventory(offline=False):
                 both_catalogs_exact_eligible=None if offline else sum(r['atom_exact_eligible'] and r['artifact_exact_eligible'] for r in records),
                 full_graph_evidence_sha256=sha(evidence_path), providers=records,
                 remaining_gates=[
-                    'Finish reusable coordinate and crop/augmentation/anchor boundaries.',
+                    'Finish reusable crop/augmentation/anchor boundaries; annotation coordinate policy is now explicit.',
                     'Expose validation/checkpoint contracts while preserving uninterrupted optimizer and RNG state.',
                     'Review complete transitive dependencies including local imports, model methods and callbacks.',
                     'Complete exact catalog interfaces, parameters, descriptions, references and Tier 3 audit evidence.',
