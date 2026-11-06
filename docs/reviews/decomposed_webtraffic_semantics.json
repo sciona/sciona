@@ -1,0 +1,1563 @@
+{
+  "format": "decomposed-webtraffic-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "proposed_tier": 3,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.unpack",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.unpack",
+      "version_id": "992a35a8-baaa-5b6d-8ea0-345072cdcd92",
+      "content_hash": "95d513a977715ffc3b14693308824eb505c94020c54a3974b78da827e8e047b6",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "payload",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "raw_frame",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "config",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "valid_threshold",
+          "ordinal": 2,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "add_days",
+          "ordinal": 3,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "corr_backoffset",
+          "ordinal": 4,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "lags",
+          "ordinal": 5,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "thresholds",
+          "ordinal": 6,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "output_rows",
+          "ordinal": 7,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "output_columns",
+          "ordinal": 8,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "identifiers",
+          "ordinal": 9,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Copy and validate the complete version2 forecasting request; expose all recipe controls.",
+      "parameters": {
+        "payload": "Finite JSON dictionary with exactly version=2,pages,start_day,counts,config,output. Pages are nonempty sorted unique strings; counts are rectangular nonnegative finite Python numbers/null, cast to float32; start_day is a canonical ISO day. Config is RuntimeConfig fields. Output has rows,columns,identifiers."
+      },
+      "validity_bounds": "Validate configuration and exact output row order; output columns must be a nonempty suffix of the63-day horizon after input end, and identifiers an aligned int64 matrix excluding bool. Deep-copy through finite JSON. No feature extraction or training. Return fixed recipe feature controls explicitly.",
+      "outputs": "Frame, RuntimeConfig, validity0, added_days63, backoffset0, lags[365,91], support[1.5,2], output rows/columns and int64 identifier matrix.",
+      "plain_limits": "Check inputs and expose the selected settings before starting work.",
+      "reuse": "Recipe boundary; numerical downstream inputs remain separately usable."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.prepare",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.prepare",
+      "version_id": "02b80d3c-19ad-5e8d-8cc0-1849da7a01e3",
+      "content_hash": "40ea9e453223348347c502abc37df2502c6212607af7d48c9a169efde222d858",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "frame",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "valid_threshold",
+          "ordinal": 1,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "add_days",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "corr_backoffset",
+          "ordinal": 3,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "logged",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "missing",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "starts",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "ends",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Validate daily frame and extract log-transformed series with missing mask and support bounds.",
+      "parameters": {
+        "frame": "Nonempty numeric DataFrame; unique sorted row labels and contiguous timezone-naive daily columns; nonnegative finite values or NaN.",
+        "valid_threshold": "Finite threshold in[0,1] for (last_positive-first_positive)/time_width.",
+        "add_days": "Nonnegative integer future feature extension excluding bool.",
+        "corr_backoffset": "Nonnegative integer correlation backoffset excluding bool."
+      },
+      "validity_bounds": "Total extended width<=32768 and backoffset<input width. Retain source validity selection, zero-fill missing values before log1p, and keep original missing mask. No surviving rows rejects. An all-zero row has support(-1,-1) and survives threshold0.",
+      "outputs": "Logged DataFrame, aligned boolean missing DataFrame, int32 first/last positive positions.",
+      "plain_limits": "Prepare each series and retain its missing values and support positions.",
+      "reuse": "Daily nonnegative series operation; labels are not parsed here."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.feature_axes",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.feature_axes",
+      "version_id": "41d98e03-acae-562b-9830-827cd49fa301",
+      "content_hash": "fecb4f5e6b6bf9e7846079ff122eb8cd09c3e4bdbf826362877b10b820ce9cb0",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "logged",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "numeric_values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "row_labels",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "begin",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "end",
+          "ordinal": 3,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Expose numeric values, ordered row labels and calendar endpoints.",
+      "parameters": {
+        "logged": "Nonempty DataFrame from prepare, with ordered daily columns."
+      },
+      "validity_bounds": "Copy numeric values; expose labels and first/last columns. Does not independently validate chronology or prepare provenance.",
+      "outputs": "Numeric matrix, row-label list, begin and end timestamps.",
+      "plain_limits": "Expose the axes and a copy of the values.",
+      "reuse": "Generic frame projection with caller-supplied chronology."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.correlations",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.correlations",
+      "version_id": "0aa46220-7d58-5171-a61b-2141e6d67aac",
+      "content_hash": "d4485813a58776b79485156b31138795c57aba88c3cb0c3c7daddcbd40496f46",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "starts",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "ends",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "lags",
+          "ordinal": 3,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "thresholds",
+          "ordinal": 4,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "backoffset",
+          "ordinal": 5,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "correlation_columns",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Weighted neighboring-lag correlations and population standardization.",
+      "parameters": {
+        "values": "Nonempty finite rank2 float32/float64 panel.",
+        "starts": "Aligned integer first support positions in[-1,width).",
+        "ends": "Aligned integer final support positions in[-1,width), not before starts; paired -1 marks no support.",
+        "lags": "Nonempty list of Python integers>=2.",
+        "thresholds": "Aligned nonnegative finite Python numeric support thresholds excluding bool.",
+        "backoffset": "Python integer in[0,width)."
+      },
+      "validity_bounds": "Preserve source exclusive end slicing even though support endpoint is the last positive position. Support length/lag must be strictly greater than threshold. Correlation is .5 at lag plus .25 at each neighboring lag. Undefined correlations become zero before population standardization. Constant populations can return NaN; no repair or finite-output guarantee.",
+      "outputs": "float64 entity-by-lag matrix in requested order.",
+      "plain_limits": "Summarize lagged similarity using explicit offsets and support thresholds.",
+      "reuse": "Domain-independent numeric panel operation; no page or date semantics."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.popularity",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.popularity",
+      "version_id": "08edf819-7e11-5430-9695-51b6ebb17ab6",
+      "content_hash": "20e7c6a1cefb1f310a4929d627aa655c8df70013dbe191a26c583a66cfaa8dad",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "logged",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "popularity_values",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Standardize row medians using sample standard deviation across rows.",
+      "parameters": {
+        "logged": "Nonempty finite numeric DataFrame."
+      },
+      "validity_bounds": "Pandas row median then (median-mean)/std with ddof1. Constant or singleton populations can yield NaN; source semantics preserved.",
+      "outputs": "Indexed Series of standardized row medians.",
+      "plain_limits": "Compare each row median with the population.",
+      "reuse": "Domain-independent numeric frame summary."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.page_metadata",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.page_metadata",
+      "version_id": "2988709a-8d8b-5a2a-931c-44ed97bdbfe4",
+      "content_hash": "0695e1c7efee3a38ab37ac36bac64a75d0446e3b64b6a3af286274031cabd63c",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "row_labels",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "page_map",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "encoded",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Apply source page grammar, agent grouping and normalized categorical encoding.",
+      "parameters": {
+        "row_labels": "Sorted source-compatible page strings from prepare."
+      },
+      "validity_bounds": "Retain exact source regex, four agent positions, missing-agent -1, and normalized one-hot agent/country/site columns. Invalid grammar rejects; constant categories can be nonfinite. This is not arbitrary categorical encoding.",
+      "outputs": "int32 page-group mapping and dictionary of three indexed encoded DataFrames.",
+      "plain_limits": "Extract the source-specific page categories.",
+      "reuse": "Explicit domain-specific parsing policy; replace only with qualified equivalent feature semantics."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.calendar",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.calendar",
+      "version_id": "7d127be4-897d-5e2a-8659-6e61b6cda140",
+      "content_hash": "1bcf29dbae48c5ff978944aed482646d143bc82809fae294fb03f29779a76fd0",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "begin",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "end",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "add_days",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "dow",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "lagged_ix",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "features_end",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Build weekly cyclic features and source calendar-month offsets.",
+      "parameters": {
+        "begin": "First timezone-naive daily timestamp.",
+        "end": "Last observed timestamp.",
+        "add_days": "Nonnegative integer future extension from validated root."
+      },
+      "validity_bounds": "Inclusive daily range through end+extension. Cosine/sine of weekday;3/6/9/12-month lag indexes with out-of-range -1 and int16 representation. Caller must enforce source index-width bounds.",
+      "outputs": "Weekly-cycle matrix, four-column lag-index matrix, final feature timestamp.",
+      "plain_limits": "Construct explicit calendar features over the required range.",
+      "reuse": "Calendar policy remains explicit; not inferred from arbitrary time units."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.assemble",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.assemble",
+      "version_id": "64728253-61b2-568d-a232-10ead6b42385",
+      "content_hash": "ac8e722862bc36db95425a704277acdc68154206213a069d667356c2f915d08c",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "logged",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "missing",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "correlation_columns",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "page_map",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "encoded",
+          "ordinal": 4,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "popularity_values",
+          "ordinal": 5,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "dow",
+          "ordinal": 6,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "lagged_ix",
+          "ordinal": 7,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "features_end",
+          "ordinal": 8,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "tensors",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "plain",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Combine separately computed feature blocks in the retained source layout.",
+      "parameters": {
+        "logged": "Prepared logged frame.",
+        "missing": "Exactly aligned missing mask.",
+        "correlation_columns": "Entity-by2 matrix in year/quarter recipe order.",
+        "page_map": "Source agent grouping matrix.",
+        "encoded": "Exactly agent,country,site indexed feature blocks.",
+        "popularity_values": "Exactly aligned indexed row summary.",
+        "dow": "Feature-days-by2 calendar matrix.",
+        "lagged_ix": "Feature-days-by4 lag-index matrix.",
+        "features_end": "Final calendar timestamp."
+      },
+      "validity_bounds": "Check key sets, aligned indexes and block shapes; restore NaN in a copied logged frame. Does not prove block values originated from the same invocation or independently revalidate every dtype/value.",
+      "outputs": "Source tensors dictionary and plain dimensions/date-boundary dictionary.",
+      "plain_limits": "Combine the qualified blocks without changing their values.",
+      "reuse": "Explicit recipe assembly; independent numeric blocks remain reusable."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.configure",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.configure",
+      "version_id": "9e3b4aad-9801-5b9f-9a88-716e37d91b36",
+      "content_hash": "d27c8cb8f907f3be36afaa6b842f953c9e0cc290694bc5ea8e9653a3644d44a4",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "tensors",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "plain",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "config",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Validate source training controls, availability and full update schedule.",
+      "parameters": {
+        "tensors": "Complete assembled source tensor dictionary.",
+        "plain": "Matching source dimensions and calendar boundaries.",
+        "config": "Validated RuntimeConfig with seed,batch_size,max_epoch,max_steps,save_from_step,prediction_batch_size,train_completeness and EMA phases."
+      },
+      "validity_bounds": "Require more than409 input days, at least one possible training window passing completeness, and a schedule with saved checkpoints. Positive batch/epoch counts, nonnegative step thresholds, seed<=2**32-4, completeness[0,1], explicit before/after EMA phases. RuntimeConfig is frozen but nested data must remain caller-stable.",
+      "outputs": "PreparedRuntime carrying tensors, dimensions, controls and complete schedule.",
+      "plain_limits": "Check that the configured training and forecasting run can complete.",
+      "reuse": "Fixed s32 window and horizon recipe; not arbitrary sequence training."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.initialize",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.initialize",
+      "version_id": "9dd43010-f2bd-5eec-9e3a-9e7810f2c81f",
+      "content_hash": "cd999b39b292c798c5d5fc30350fe8fa284c865a2c01980af34607e1d86b8cf3",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "initialized",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Initialize three models and invocation-local sampling/dropout streams.",
+      "parameters": {
+        "prepared": "Matching PreparedRuntime from configure."
+      },
+      "validity_bounds": "Per-model seed+index; NumPy permutation and sampled-window offsets, first batch, CPU torch uniform initialization in source order. s32 depth267. State bundles are mutable, invocation-local and not serialization artifacts.",
+      "outputs": "Single-use TrainingStreams with prepared identity, three streams/generators, first batches and initial parameter/Adam/EMA state.",
+      "plain_limits": "Initialize every model and preserve the random-stream order.",
+      "reuse": "Source lifecycle policy; no TensorFlow seeded replay claim."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.advance",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.advance",
+      "version_id": "9005516e-0c56-5f6c-8117-29be90cf77b0",
+      "content_hash": "e53c651391c5ae89cd14b4ee78ac337af532e3382d80ed6a7a26a5ca71ba4e90",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "state",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "batches",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "observations",
+          "ordinal": 2,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "state",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "metrics",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Advance all three models once with complete gradients, Adam and explicit EMA observations.",
+      "parameters": {
+        "state": "Shared integer step and exactly three model dictionaries containing named parameters, optimizer and EMA.",
+        "batches": "Exactly three source model batches with x,y,previous,mean,std,truth and optional dropout masks.",
+        "observations": "Exactly three dictionaries: parameter_phase before/after and observed global_step equal to current or next shared step."
+      },
+      "validity_bounds": "Preserve ten named parameter tensors, width267 GRU forward/loss, autograd, global-norm clipping10, float32 Adam rate.001/betas.9,.999/epsilon-hat1e-8 and EMA min(.99,(1+observed_step)/(10+observed_step)). Return new state; inputs unchanged. Invalid/nonfinite optimization state rejects.",
+      "outputs": "Updated shared-step/models dictionary and three metric dictionaries.",
+      "plain_limits": "Perform one complete training update for each model.",
+      "reuse": "Three-model s32 update policy with explicit observations; numeric lower-level helpers remain independently implemented."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.save_checkpoint",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.save_checkpoint",
+      "version_id": "132bb8de-b908-5954-8c90-43c2a235f650",
+      "content_hash": "15d15d31e3136cb080ac4607abfc89acddd289e2df5e4988d49fdf7dd7847517",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "checkpoints",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "state",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "checkpoints",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Retain the latest ten independent state snapshots.",
+      "parameters": {
+        "checkpoints": "List of earlier runtime states.",
+        "state": "Current runtime state to retain."
+      },
+      "validity_bounds": "Deep-copy the current state, append and retain last10. Older retained entries are shared with the input list; callers must not mutate retained snapshots. No filesystem checkpoint codec.",
+      "outputs": "New checkpoint list with at most ten entries.",
+      "plain_limits": "Keep an independent copy of the new state and retain the latest ten.",
+      "reuse": "Generic bounded snapshot retention with fixed explicit retention policy."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.train",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.train",
+      "version_id": "78a1cec4-8f12-5b13-a8cc-6b5c467d16d4",
+      "content_hash": "dc74a9c60fa4cf4939feacc533a0d0ec98f3ba918b3affbb35cc02b8c0129927",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "initialized",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "advance_function",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "checkpoint_function",
+          "ordinal": 3,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "trained",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Execute every configured update through explicit update and checkpoint callables.",
+      "parameters": {
+        "prepared": "PreparedRuntime matching initialized.prepared by object identity.",
+        "initialized": "Fresh, unconsumed TrainingStreams with shared_step0.",
+        "advance_function": "Qualified three-model update callable(state,batches,observations).",
+        "checkpoint_function": "Qualified checkpoint callable(checkpoints,state)."
+      },
+      "validity_bounds": "Mark streams consumed before execution, including failed execution. Preserve every scheduled batch and RNG draw, source dropout probabilities, declared EMA phases and checkpoint cadence. Strict source stop comparison can execute one update beyond max_steps. Callability alone does not authenticate injected semantics; qualified graph binds exact registered functions. Retry requires fresh initialization.",
+      "outputs": "Complete state and retained checkpoint dictionary.",
+      "plain_limits": "Run the full schedule and retain its checkpoints.",
+      "reuse": "Explicit source orchestration; no shortened or forward-only substitution."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.prediction_batches",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.prediction_batches",
+      "version_id": "0b196a6d-9a02-560f-83fb-81c7bd084edb",
+      "content_hash": "bab785332cfd157cefbedd76cafbfab1c847dc37ad444aa7a9025d60c026a1dc",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "records",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Construct all source forecast batches for the runtime population.",
+      "parameters": {
+        "prepared": "Complete matching PreparedRuntime."
+      },
+      "validity_bounds": "Use one sequential entity pass, no training offsets, explicit prediction batch size and source completeness. Preserve input-pipe feature order and source windows.",
+      "outputs": "List of source eleven-element prediction batch tuples.",
+      "plain_limits": "Build every forecast batch in population order.",
+      "reuse": "Source batch-layout policy."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.checkpoint_forecast",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.checkpoint_forecast",
+      "version_id": "81096f93-e711-52a6-bc25-4b8c58137781",
+      "content_hash": "952ef8a7b291724c9d416ccc0c7e5dc32509b8dd4ce70a767b4a4c51ed0341e2",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "trained",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "records",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "row_labels",
+          "ordinal": 2,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "frame",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Forecast every retained checkpoint for each model and combine in count space.",
+      "parameters": {
+        "trained": "Completed state/checkpoints dictionary from train.",
+        "records": "Complete compatible prediction batches.",
+        "row_labels": "Complete source row population for missing-row filling."
+      },
+      "validity_bounds": "For each of three models and every retained checkpoint, materialize EMA parameters and run full inference. Average after expm1 in source order, average three model outputs, fill missing rows with zero, threshold below.5 and round ties-to-even to int64. No empty checkpoint or accepted-window population.",
+      "outputs": "Sorted integer forecast DataFrame over the full source horizon.",
+      "plain_limits": "Combine all checkpoint and model predictions.",
+      "reuse": "Source ensemble policy; no fitted-weight authenticity or empirical accuracy claim."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.date_forecast",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.date_forecast",
+      "version_id": "e4edd852-0059-50e8-9234-5c79889f8c2d",
+      "content_hash": "b8106c017f9232fe05311d479577e4a888baefa8b9f92a83201d282512844026",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "frame",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "frame",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Attach the full forecast calendar axis.",
+      "parameters": {
+        "prepared": "Matching runtime calendar context.",
+        "frame": "Forecast frame with exactly63 columns."
+      },
+      "validity_bounds": "Copy frame and replace columns with63 daily coordinates after input end. Caller must preserve matching forecast provenance.",
+      "outputs": "Dated forecast frame with unchanged values.",
+      "plain_limits": "Attach the complete future date range.",
+      "reuse": "Explicit daily63-step recipe policy."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.forecast_axes",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.forecast_axes",
+      "version_id": "f257f1c8-e604-5477-a6e6-22844af72097",
+      "content_hash": "bc1abb3b4799c55f05ba6b26820db5e308e53b4e9d036bbf31dbc684aec6b33e",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "frame",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "row_labels",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "column_labels",
+          "ordinal": 2,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Expose finalized numeric forecast values and coordinate labels.",
+      "parameters": {
+        "frame": "Nonempty dated DataFrame with int64 values."
+      },
+      "validity_bounds": "Require DatetimeIndex and int64 values, copy matrix and encode dates as ISO day strings. No prediction or rounding occurs.",
+      "outputs": "Int64 matrix, ordered row labels and encoded column labels.",
+      "plain_limits": "Expose finalized values and their axes.",
+      "reuse": "Dated integer-panel projection."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.aligned_output",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.aligned_output",
+      "version_id": "ca1e9b39-a7e1-592c-8993-6d538b3ec967",
+      "content_hash": "d944d04840d738d8cd5e5bc03cd4c34638e44b77634ee50090b11b6ee68360b5",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "row_labels",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "column_labels",
+          "ordinal": 2,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "output_rows",
+          "ordinal": 3,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "output_columns",
+          "ordinal": 4,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "identifiers",
+          "ordinal": 5,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "identifiers",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "values",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Select an exact integer-panel suffix and flatten aligned identifiers and values.",
+      "parameters": {
+        "values": "Rank2 int64 values aligned to input axes.",
+        "row_labels": "Nonempty unique string row labels.",
+        "column_labels": "Nonempty unique string column labels.",
+        "output_rows": "Exact input row order.",
+        "output_columns": "Exact nonempty suffix of input column labels.",
+        "identifiers": "Aligned rank2 int64 identifier matrix."
+      },
+      "validity_bounds": "Reject any shape or axis mismatch; return C-order independent copies. Identifiers may repeat. No sorting, rounding, missing fills, date parsing or identity-uniqueness policy.",
+      "outputs": "Aligned flattened int64 identifiers and values.",
+      "plain_limits": "Return exactly the requested aligned records.",
+      "reuse": "Domain-independent integer-panel output operation."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.result",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.result",
+      "version_id": "788a3fc2-59cc-5f60-8a74-a61c27c0064a",
+      "content_hash": "1e719080e2da2aa6f5716ced29be8d95d498cf163e47694d095cc949ebb62859",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "identifiers",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Encode final record columns as finite JSON-compatible lists.",
+      "parameters": {
+        "identifiers": "Nonempty rank1 int64 identifiers.",
+        "values": "Int64 values with exactly matching shape."
+      },
+      "validity_bounds": "Return version2 plus identifiers/values; no file persistence or competition-specific field naming. Caller retains identity policy.",
+      "outputs": "Dictionary with version2 and two parallel integer lists.",
+      "plain_limits": "Return the final record columns.",
+      "reuse": "Generic integer-record encoding boundary."
+    }
+  ],
+  "existing_providers": [],
+  "tests": {
+    "tests": 52,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "execution": {
+    "format": "decomposed-webtraffic-graph.v1",
+    "passed": true,
+    "approved": false,
+    "catalog_mutations": 0,
+    "synthetic_only": true,
+    "graph_sha256": "eb30285ba797d1ff6cf386caebb787f4bcf6558aca030e3fb6ecb9206263026a",
+    "nodes": 19,
+    "edges": 48,
+    "distinct_providers": 19,
+    "cases": [
+      {
+        "seed": 2,
+        "ema_phase": "after",
+        "configured_max_steps": 1,
+        "actual_updates": 2,
+        "saved_checkpoints": 2,
+        "output_columns": 3,
+        "output_rows": 16,
+        "full_result_equal": true,
+        "all_nodes_uncached": true,
+        "exact_registered_callables": true
+      },
+      {
+        "seed": 7,
+        "ema_phase": "before",
+        "configured_max_steps": 2,
+        "actual_updates": 3,
+        "saved_checkpoints": 3,
+        "output_columns": 63,
+        "output_rows": 16,
+        "full_result_equal": true,
+        "all_nodes_uncached": true,
+        "exact_registered_callables": true
+      }
+    ],
+    "provider_sha256": {
+      "sciona.atoms.dl.decomposed_webtraffic_execution.unpack": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "sciona.atoms.dl.decomposed_webtraffic_execution.prepare": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "sciona.atoms.dl.decomposed_webtraffic_execution.feature_axes": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "sciona.atoms.dl.decomposed_webtraffic_execution.correlations": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "sciona.atoms.dl.decomposed_webtraffic_execution.popularity": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "sciona.atoms.dl.decomposed_webtraffic_execution.page_metadata": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "sciona.atoms.dl.decomposed_webtraffic_execution.calendar": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "sciona.atoms.dl.decomposed_webtraffic_execution.assemble": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "sciona.atoms.dl.decomposed_webtraffic_execution.configure": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "sciona.atoms.dl.decomposed_webtraffic_execution.initialize": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "sciona.atoms.dl.decomposed_webtraffic_execution.advance": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "sciona.atoms.dl.decomposed_webtraffic_execution.save_checkpoint": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "sciona.atoms.dl.decomposed_webtraffic_execution.train": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "sciona.atoms.dl.decomposed_webtraffic_execution.prediction_batches": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "sciona.atoms.dl.decomposed_webtraffic_execution.checkpoint_forecast": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "sciona.atoms.dl.decomposed_webtraffic_execution.date_forecast": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "sciona.atoms.dl.decomposed_webtraffic_execution.forecast_axes": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "sciona.atoms.dl.decomposed_webtraffic_execution.aligned_output": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "sciona.atoms.dl.decomposed_webtraffic_execution.result": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578"
+    },
+    "implementation_sha256": {
+      "sciona/decomposed_webtraffic_contract.py": "f4c62e6702fd886eeaae93f58adc5acf23e80f419fefa03c9f5075b61d0cd820",
+      "sciona/decomposed_webtraffic_features.py": "a0427a7d497fac3aa982967a7ed06a4b6ecfa386a9df354a28f0f0194613e119",
+      "sciona/decomposed_webtraffic_lifecycle.py": "176976ed4c6b2328969ea19dbf5688dcf121f40ebed9fe1e7ee097a2fc7855a9",
+      "sciona/decomposed_webtraffic_graph.py": "afe01c5d86664a40b0a14570dff836dec49d42bd356c8bb1b585c1896e60e129",
+      "sciona/panel_output.py": "dcc0b656924075a6ea3289e5970e1ce8de8d02264eb768bec49f2d10022dc839",
+      "scripts/validate_decomposed_webtraffic_graph.py": "84aa602c263020e7dd353d648d8143838938f58f3ef47c24ec2d3ccf76cd35a5",
+      "sciona/visualizer/runner.py": "22a49655e61c10d800aa2a6a9b5115cd873a9e699ea9903fa0f856aea8af67a4",
+      "sciona/services/execution_graph_codec.py": "1ad42332f8e28adf4ee3f8d53184a4af8351f66304efa1703c63ed32989082a6",
+      "sciona/webtraffic_adam.py": "3a8b018b2ca2d0491ebe6f8415107c48e80054370d5d71edd1919c4976fd64f9",
+      "sciona/webtraffic_assembly.py": "28fd1b0b87866e388bb5b3c863919f153b71210813226a0e54a1a81353a3976c",
+      "sciona/webtraffic_batches.py": "988dc4c26d52201795f72d7ef2901ae3c24ecd3c4b3c5ba1d17e1b7bab46ddf9",
+      "sciona/webtraffic_calendar.py": "e2ccf630fa3225e77373d4d8e40805d24ff152e35d877165e5f5d123c10dd205",
+      "sciona/webtraffic_decoder.py": "0a9aed75509a7991b4fb97458f8a5d7b03045519d1feef5fb6787289e90c3436",
+      "sciona/webtraffic_dropout.py": "e14169f15d2381f793b2d7e5fc5cf68bce8d2ad67ab4e6a44dd02f238c145259",
+      "sciona/webtraffic_ema.py": "aeb201795f711d58b7c3cfe86d8fb53b7f0eb70bdf22286d41d3b7a963bcc3f5",
+      "sciona/webtraffic_encoder.py": "4861fe7aad9af376f47287ede6342fe098aa10bd88b6a4541ae522fa7a61089b",
+      "sciona/webtraffic_ensemble.py": "bd0fc3b92458a8ded510e3c737607d106852cd535a312169fec768015c244f30",
+      "sciona/webtraffic_features.py": "78695bfc0331cb3e6b3e46fdfed5219a690e347390156dbac06aaaf8a8baf543",
+      "sciona/webtraffic_graph.py": "1203139c8dc5b62ead80027c63858b5fb49b54d8fdb8b25717a7e1c17712d4cf",
+      "sciona/webtraffic_initialization.py": "c4dbe90e5c958b14f2ab6f2ec8890a839adc60d015679a14b0ad69a482416a73",
+      "sciona/webtraffic_lifecycle.py": "947f8843fd38c93b6b34de5a38c19e66773b324a1475680afa3fc825da6378a5",
+      "sciona/webtraffic_losses.py": "3af5d59fd8c9f43a95e0de1db7d4c18bc315b2382446b9c9078eacb6028711a3",
+      "sciona/webtraffic_pages.py": "5b9e00643a86dc38568b7def1b8322051b89036c5d9a342994407ef7a6153442",
+      "sciona/webtraffic_payload.py": "550f0449ec92dcbe318e2115ec345458fdb54248dd60c9e0dbaaee9e581cd1c6",
+      "sciona/webtraffic_runtime.py": "0bab786fee50f5be127b117dbe191377df852a5fd4666a878d09ea575dda5152",
+      "sciona/webtraffic_schedule.py": "80b84dab37b24bd0387e81dd5cad054d69ac5c1172bf8b0266bf60640fcb4962",
+      "sciona/webtraffic_train_step.py": "b3c6baa092e1493a44c3db799b07b56b440738e8f580898af56854158d56532f",
+      "sciona/webtraffic_training_forward.py": "37315b609e76acd03c32442f55b88d039b196d6299ec9f53172ea02e1358fe6c",
+      "sciona/webtraffic_windows.py": "ed1b61b2de15d9aa3916bb11387f20c707868cd9e54f6e2f5704465e194d2db0"
+    },
+    "resource_policy": {
+      "serial_cases": true,
+      "native_threads": 1,
+      "torch_interop_threads": 1
+    },
+    "limits": [
+      "Registered local execution only; exact catalog intake, provider publication and original approval remain pending.",
+      "Short synthetic schedules preserve all configured updates; no historical duration, accuracy or TensorFlow seeded replay claim.",
+      "Page/calendar policy and three-model lifecycle remain explicit recipe-specific operations. Numeric correlation, normalization and output alignment are separately reusable."
+    ]
+  },
+  "candidate_review": {
+    "sciona-atoms-signal/src/sciona/atoms/riemannian_bci/covariance_features/atoms.py": "autocorrelation_covariance_matrix returns a channel-by-lag Hankel covariance matrix. It does not return weighted neighboring-lag correlations with row support masks and population normalization.",
+    "sciona-atoms-dl/src/sciona/atoms/dl/graph/atoms.py": "feature_clip_standardize adds 1e-5 to population standard deviation and clips outputs. Correlations preserve undefined constant populations; popularity standardizes row medians with sample standard deviation. Neither is interchangeable with the clipped feature transform.",
+    "sciona-atoms-ml/src/sciona/atoms/ml/sklearn/neural_network/mlp_optimizers/atoms.py": "mlp_adam_updates has related epsilon-hat Adam mathematics, but casts to float64, computes beta powers from an integer step, and returns deltas without global gradient clipping. The qualified float32 lifecycle maintains explicit beta-power tensors, clips global norm at 10, and observes three models and EMA phases. Substitution requires a separately qualified adapter and numerical-order review.",
+    "sciona-atoms-dl/src/sciona/atoms/dl/webtraffic_execution.py": "Existing whole prepare/train/forecast providers remain the unchanged parity reference. Their reuse as whole stages would conceal the separately selectable numeric and output operations."
+  },
+  "candidate_checks": {
+    "constant_population_semantics_differ": true
+  },
+  "software_sha256": {
+    "tests/test_panel_output.py": "e1eb14f037d24d0ee0844a6534e0e1c1dab7a5ee051ac034515494e603c66949",
+    "tests/test_decomposed_webtraffic_features.py": "ae308861375c8d7b2f8df6284478c433308ae56029b48d7ae1fa7520186043c2",
+    "tests/test_decomposed_webtraffic_lifecycle.py": "fc1f3d734e184354d0fb2e3ed3669f4696c4ba8d2900e091c3e5902b8bc4deb4",
+    "tests/test_decomposed_webtraffic_contract.py": "7580d7082ce859f5f6b738faa1e5e484855944fee174c2f5fbd48ad82ac5e19a",
+    "sciona/decomposed_webtraffic_contract.py": "f4c62e6702fd886eeaae93f58adc5acf23e80f419fefa03c9f5075b61d0cd820",
+    "sciona/decomposed_webtraffic_features.py": "a0427a7d497fac3aa982967a7ed06a4b6ecfa386a9df354a28f0f0194613e119",
+    "sciona/decomposed_webtraffic_lifecycle.py": "176976ed4c6b2328969ea19dbf5688dcf121f40ebed9fe1e7ee097a2fc7855a9",
+    "sciona/decomposed_webtraffic_graph.py": "afe01c5d86664a40b0a14570dff836dec49d42bd356c8bb1b585c1896e60e129",
+    "sciona/panel_output.py": "dcc0b656924075a6ea3289e5970e1ce8de8d02264eb768bec49f2d10022dc839",
+    "scripts/validate_decomposed_webtraffic_graph.py": "84aa602c263020e7dd353d648d8143838938f58f3ef47c24ec2d3ccf76cd35a5",
+    "sciona/visualizer/runner.py": "22a49655e61c10d800aa2a6a9b5115cd873a9e699ea9903fa0f856aea8af67a4",
+    "sciona/services/execution_graph_codec.py": "1ad42332f8e28adf4ee3f8d53184a4af8351f66304efa1703c63ed32989082a6",
+    "sciona/webtraffic_adam.py": "3a8b018b2ca2d0491ebe6f8415107c48e80054370d5d71edd1919c4976fd64f9",
+    "sciona/webtraffic_assembly.py": "28fd1b0b87866e388bb5b3c863919f153b71210813226a0e54a1a81353a3976c",
+    "sciona/webtraffic_batches.py": "988dc4c26d52201795f72d7ef2901ae3c24ecd3c4b3c5ba1d17e1b7bab46ddf9",
+    "sciona/webtraffic_calendar.py": "e2ccf630fa3225e77373d4d8e40805d24ff152e35d877165e5f5d123c10dd205",
+    "sciona/webtraffic_decoder.py": "0a9aed75509a7991b4fb97458f8a5d7b03045519d1feef5fb6787289e90c3436",
+    "sciona/webtraffic_dropout.py": "e14169f15d2381f793b2d7e5fc5cf68bce8d2ad67ab4e6a44dd02f238c145259",
+    "sciona/webtraffic_ema.py": "aeb201795f711d58b7c3cfe86d8fb53b7f0eb70bdf22286d41d3b7a963bcc3f5",
+    "sciona/webtraffic_encoder.py": "4861fe7aad9af376f47287ede6342fe098aa10bd88b6a4541ae522fa7a61089b",
+    "sciona/webtraffic_ensemble.py": "bd0fc3b92458a8ded510e3c737607d106852cd535a312169fec768015c244f30",
+    "sciona/webtraffic_features.py": "78695bfc0331cb3e6b3e46fdfed5219a690e347390156dbac06aaaf8a8baf543",
+    "sciona/webtraffic_graph.py": "1203139c8dc5b62ead80027c63858b5fb49b54d8fdb8b25717a7e1c17712d4cf",
+    "sciona/webtraffic_initialization.py": "c4dbe90e5c958b14f2ab6f2ec8890a839adc60d015679a14b0ad69a482416a73",
+    "sciona/webtraffic_lifecycle.py": "947f8843fd38c93b6b34de5a38c19e66773b324a1475680afa3fc825da6378a5",
+    "sciona/webtraffic_losses.py": "3af5d59fd8c9f43a95e0de1db7d4c18bc315b2382446b9c9078eacb6028711a3",
+    "sciona/webtraffic_pages.py": "5b9e00643a86dc38568b7def1b8322051b89036c5d9a342994407ef7a6153442",
+    "sciona/webtraffic_payload.py": "550f0449ec92dcbe318e2115ec345458fdb54248dd60c9e0dbaaee9e581cd1c6",
+    "sciona/webtraffic_runtime.py": "0bab786fee50f5be127b117dbe191377df852a5fd4666a878d09ea575dda5152",
+    "sciona/webtraffic_schedule.py": "80b84dab37b24bd0387e81dd5cad054d69ac5c1172bf8b0266bf60640fcb4962",
+    "sciona/webtraffic_train_step.py": "b3c6baa092e1493a44c3db799b07b56b440738e8f580898af56854158d56532f",
+    "sciona/webtraffic_training_forward.py": "37315b609e76acd03c32442f55b88d039b196d6299ec9f53172ea02e1358fe6c",
+    "sciona/webtraffic_windows.py": "ed1b61b2de15d9aa3916bb11387f20c707868cd9e54f6e2f5704465e194d2db0",
+    "scripts/review_decomposed_webtraffic_interfaces.py": "86bd34a95f950af73786049b84b56c221724e1d774fde1fa3d8c403a29480128",
+    "scripts/decomposed_webtraffic_provider_contracts.py": "f9607ebf0652de7969c31981d481174dc0f7974796c76c65e1f0cdae4bcb0773",
+    "scripts/review_decomposed_future_sales_interfaces.py": "370d5a69dc3acc4d67d041fac08d55a1c4a678ace7ef20edd73c2d03d553a607",
+    "scripts/promote_connectomics_execution.py": "e345459079d47c7dc6431c8f6400faba25c7c929abaabe85d64eae4e82774613",
+    "scripts/review_decomposed_webtraffic_semantics.py": "c33a6325c117652247cdd64893df7c369dff2255c5cbaf4a3b5628eb7db1ef12",
+    "sciona-atoms-signal/src/sciona/atoms/riemannian_bci/covariance_features/atoms.py": "d9cb93844cc17da85e822603a6fc8bdf817097bcdfc402907e0e5ccfaa0b4727",
+    "sciona-atoms-dl/src/sciona/atoms/dl/graph/atoms.py": "0f0eab52d35ad264a99607dd91ce6d01bc60d0630c92f6b59c42262ed4bf8654",
+    "sciona-atoms-ml/src/sciona/atoms/ml/sklearn/neural_network/mlp_optimizers/atoms.py": "2b2c675e8475dbd612f04a1b6542aa99308cc91f616aad23e02d3af33c4fb6a7",
+    "sciona-atoms-dl/src/sciona/atoms/dl/webtraffic_execution.py": "d7febb01f4df35b3a3f7ac5b65112bed73fd1bb28f17f41b85a57f24abcf9fc9",
+    "sciona-atoms-dl/src/sciona/atoms/dl/decomposed_webtraffic_execution.py": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578"
+  },
+  "installed_packages": {
+    "annotated-types": {
+      "version": "0.7.0",
+      "hashed_files_verified": 7,
+      "active_requirements": []
+    },
+    "asttokens": {
+      "version": "2.4.1",
+      "hashed_files_verified": 13,
+      "active_requirements": [
+        "six>=1.12.0"
+      ]
+    },
+    "filelock": {
+      "version": "3.25.2",
+      "hashed_files_verified": 16,
+      "active_requirements": []
+    },
+    "fsspec": {
+      "version": "2026.2.0",
+      "hashed_files_verified": 61,
+      "active_requirements": []
+    },
+    "icontract": {
+      "version": "2.7.3",
+      "hashed_files_verified": 16,
+      "active_requirements": [
+        "asttokens<3,>=2",
+        "typing_extensions"
+      ]
+    },
+    "jinja2": {
+      "version": "3.1.6",
+      "hashed_files_verified": 31,
+      "active_requirements": [
+        "MarkupSafe>=2.0"
+      ]
+    },
+    "markupsafe": {
+      "version": "3.0.3",
+      "hashed_files_verified": 11,
+      "active_requirements": []
+    },
+    "mpmath": {
+      "version": "1.3.0",
+      "hashed_files_verified": 92,
+      "active_requirements": []
+    },
+    "networkx": {
+      "version": "3.6.1",
+      "hashed_files_verified": 602,
+      "active_requirements": []
+    },
+    "numpy": {
+      "version": "2.2.6",
+      "hashed_files_verified": 876,
+      "active_requirements": []
+    },
+    "pandas": {
+      "version": "2.3.3",
+      "hashed_files_verified": 1513,
+      "active_requirements": [
+        "numpy>=1.26.0; python_version >= \"3.12\"",
+        "python-dateutil>=2.8.2",
+        "pytz>=2020.1",
+        "tzdata>=2022.7"
+      ]
+    },
+    "pydantic": {
+      "version": "2.12.5",
+      "hashed_files_verified": 111,
+      "active_requirements": [
+        "annotated-types>=0.6.0",
+        "pydantic-core==2.41.5",
+        "typing-extensions>=4.14.1",
+        "typing-inspection>=0.4.2"
+      ]
+    },
+    "pydantic-core": {
+      "version": "2.41.5",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.14.1"
+      ]
+    },
+    "python-dateutil": {
+      "version": "2.9.0.post0",
+      "hashed_files_verified": 25,
+      "active_requirements": [
+        "six>=1.5"
+      ]
+    },
+    "pytz": {
+      "version": "2026.1.post1",
+      "hashed_files_verified": 616,
+      "active_requirements": []
+    },
+    "setuptools": {
+      "version": "80.9.0",
+      "hashed_files_verified": 513,
+      "active_requirements": []
+    },
+    "six": {
+      "version": "1.17.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "sympy": {
+      "version": "1.14.0",
+      "hashed_files_verified": 1571,
+      "active_requirements": [
+        "mpmath<1.4,>=1.1.0"
+      ]
+    },
+    "threadpoolctl": {
+      "version": "3.6.0",
+      "hashed_files_verified": 5,
+      "active_requirements": []
+    },
+    "torch": {
+      "version": "2.11.0",
+      "hashed_files_verified": 12413,
+      "active_requirements": [
+        "filelock",
+        "fsspec>=0.8.5",
+        "jinja2",
+        "networkx>=2.5.1",
+        "setuptools<82",
+        "sympy>=1.13.3",
+        "typing-extensions>=4.10.0"
+      ]
+    },
+    "typing-extensions": {
+      "version": "4.16.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "typing-inspection": {
+      "version": "0.4.2",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.12.0"
+      ]
+    },
+    "tzdata": {
+      "version": "2025.3",
+      "hashed_files_verified": 633,
+      "active_requirements": []
+    }
+  },
+  "evidence_sha256": {
+    "docs/reviews/decomposed_webtraffic_interfaces.json": "5b5927c0f84d265e7dc967279d2dc6766ae7e4767a8a36088197fadcf6dc4d11",
+    "docs/reviews/decomposed_webtraffic_graph_execution.json": "2ba351b3228b0e8c88d04723e18f3235c37c04fad83de26d94bf8d6e1e89b630",
+    "docs/reviews/webtraffic_original_output_scope.json": "61e430612d46f502ac2c91d28a9d075b6c8f05e9e638489aa0bdcf97999bee90",
+    "docs/reviews/webtraffic_current_baseline.json": "bc1305c0c5c381ca966300a9df8bc32cadfd20a6ac734504e6ebce54f314dee5"
+  },
+  "resource_policy": {
+    "serial_tests": true,
+    "serial_workers": true,
+    "native_threads": 1
+  },
+  "limitations": [
+    "Automated Tier 3 semantic qualification only; provider publication and original CDG approval remain pending.",
+    "Candidate review covers the named nearby implementations, not an exhaustive catalog equivalence proof.",
+    "Numeric correlation, row-median normalization and integer suffix alignment accept domain-independent inputs. Page grammar, calendar lag policy, fixed s32 dimensions and three-model lifecycle retain explicit recipe assumptions.",
+    "Synthetic short schedules execute every configured update, checkpoint and ensemble member. They do not establish historical training duration, winning accuracy or generalization.",
+    "NumPy/PyTorch random streams and explicit EMA observation phases are declared adaptations; no identical-seed TensorFlow replay is claimed.",
+    "The output boundary accepts a prealigned identifier matrix and suffix coordinates. Original key-file parsing, historical cutoff constants and file serialization are not implemented by this graph.",
+    "State and feature validation does not authenticate same-invocation provenance. Training streams are mutable and single-use; failed consumption requires fresh initialization.",
+    "Installed files match their own RECORD hashes. Independent publisher authentication, clean deployment and other platforms are not certified."
+  ]
+}
