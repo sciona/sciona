@@ -46,7 +46,7 @@
         ]
       },
       "realization": "Retain character n-gram overlap, token Jaccard, TF-IDF cosine, normalized edit similarity, exact match and length ratio; append symmetric BM25 with training-only corpus statistics.",
-      "limits": "Two generic normalized text fields, without distinct title/description subfields. BM25 query terms have unit weight, corpus documents are unique training texts, and positive IDF is explicit. Field-role contract must be declared at the external boundary.",
+      "limits": "The external boundary declares shared_text: two comparable representations, without distinct title/description subfields or implicit concatenation. BM25 query terms have unit weight, corpus documents are unique training texts, and positive IDF is explicit. Separate-field source fidelity still requires review before original promotion.",
       "source_anchors": [
         {
           "file": "sciona/text_pair_features.py",
@@ -158,23 +158,41 @@
         ]
       },
       "realization": "Select the listed relevance-score scaling branch: fit increasing isotonic regression on held-out raw scores and binary labels, bound to [0,1], clip outside calibration score range, then select an empirical binary-F1 threshold.",
-      "limits": "Mapping and threshold share the calibration population; selection F1 is optimistic and not independent evaluation. Raw and scaled scores are distinguished. Strict serialized output and generic submission row format remain to be qualified; no competition-specific format is claimed.",
+      "limits": "Mapping and threshold share the calibration population; selection F1 is optimistic and not independent evaluation. Strict finite JSON distinguishes raw and scaled scores and emits ordered generic binary-relevance rows. No competition-specific format is claimed. Native stored-graph execution remains pending.",
       "source_anchors": [
         {
           "file": "sciona/text_pair_complete_recipe.py",
           "symbol": "execute",
           "line": 112,
           "file_sha256": "516daf18a95144134094d75d0ef68a7e3057cbfbfd12b40d4dcfad6dda6a5250"
+        },
+        {
+          "file": "sciona/text_pair_complete_contract.py",
+          "symbol": "prepare",
+          "line": 18,
+          "file_sha256": "1e0c9be2036a14fd32e6a5b521ed4b814dd4298033ed8f1de5ad0ff18d20bbd1"
+        },
+        {
+          "file": "sciona/text_pair_complete_contract.py",
+          "symbol": "execute",
+          "line": 60,
+          "file_sha256": "1e0c9be2036a14fd32e6a5b521ed4b814dd4298033ed8f1de5ad0ff18d20bbd1"
+        },
+        {
+          "file": "sciona/text_pair_complete_contract.py",
+          "symbol": "execute_json",
+          "line": 88,
+          "file_sha256": "1e0c9be2036a14fd32e6a5b521ed4b814dd4298033ed8f1de5ad0ff18d20bbd1"
         }
       ]
     }
   ],
   "additional_provider_catalog_candidates": [],
-  "reviewer_sha256": "761a61d27936351916c3ee64b5a008e9047bb78d4a1c8113e84f1600ce283b69",
+  "reviewer_sha256": "88ed9defdb191fe49faaf6de870801d265bd122fe95e40485f6db2798ce47046",
   "remaining_requirements": [
     "Qualify the existing isotonic provider branch and source dependencies; a local registered implementation is not proof of catalog approval.",
     "Complete reusable primitive inventory and exact callable bindings, including BM25 and normalization dependencies.",
-    "Provide strict finite serialization with explicit field roles, normalization policy, numerical controls and binary-relevance output rows.",
+    "Qualify the strict finite serialization boundary in the native graph and resolve separate title/description field fidelity against the original source.",
     "Execute the full serialized/stored original graph and verify exact catalog interfaces, rollback, native eligibility and served selection."
   ],
   "limits": [
