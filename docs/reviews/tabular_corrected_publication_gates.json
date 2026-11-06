@@ -1,0 +1,79 @@
+{
+  "passed": true,
+  "catalog_mutations": 0,
+  "rejected_faults": [
+    "candidate_hash",
+    "candidate_tier",
+    "candidate_lineage",
+    "original_latest",
+    "original_history",
+    "parent_history",
+    "parent_latest",
+    "parent_publication",
+    "binding_hash",
+    "binding_missing",
+    "dependency_optional",
+    "root_input_type",
+    "score_output_missing",
+    "failed_staging_audit",
+    "serialized_node",
+    "serialized_edge",
+    "provider_tier"
+  ],
+  "dry_run": {
+    "applied": false,
+    "already_approved": false,
+    "rows_created": 7,
+    "rows_updated": 3,
+    "trust_tier": 3,
+    "original_artifact_id": "11c51eb5-8c27-5df3-b820-dc67a4aff974",
+    "version_id": "1d812aaf-5196-5f4c-abbb-e0de78e29c7b",
+    "graph_sha256": "de3e378d268ca191f2ce6e025eed8e87e6c380daa41b09084e9b2e1e4b308fe4",
+    "served_cdgs": 1,
+    "reused_providers": 4,
+    "source_histories_preserved": true,
+    "plan_sha256": "28d995a26e68e06fa8f2cfaa7bb5894a2f178343ddbbedd002782c5bd346890d"
+  },
+  "execution_evidence_tests": {
+    "passed": true,
+    "count": 10,
+    "sha256": "6c2b46bccd7d71a6009a230f746d636fc228f715408b52f457e4e00e5d0d1be7"
+  },
+  "all_rollbacks_complete": true,
+  "injected_failure_points": [
+    "metadata",
+    "activation"
+  ],
+  "publisher_sha256": "e5663cf3e4caacccd46c9cb1d0c80394b4c62a16f878f5bd4a8e31a33f71c3ad",
+  "validator_sha256": "ef0054269960e4f554ac9b91b83cc17ba43e39b419de159bbff5d20d0345ee44",
+  "execution_sha256": "b05b9780bb04245821832357a1cb08cf27bff3bfde19f92dd31d15579153f33e",
+  "qualification": {
+    "review_source": "automated",
+    "proposed_tier": 3,
+    "verdict": "acceptable_with_limits",
+    "evidence_commit": "68e1b4d7abacd8e55b8b1dea28120cf4666a7454",
+    "execution_sha256": "b05b9780bb04245821832357a1cb08cf27bff3bfde19f92dd31d15579153f33e",
+    "source_review_sha256": "fb96f4bef5c45d0561f0e4bf83fb3903aab67db34f8b4d09b3e7a15cac0265f5",
+    "limitations": [
+      "Schema meaning and group discovery remain caller policy. No automatic chronology, duplicate-entity detection or general leakage guarantee. All-null numeric columns fill zero and are screened. Dense tables and wide-category resource use are not qualified.",
+      "Empty specification lists explicitly disable inapplicable families; qualification exercises every family together. Text fields use explicit whitespace/case policy. Group aggregate keys are feature choices distinct from validation groups. Entity vectors use a binary MLP objective, full fitting-fold labels and zero vectors for unseen categories. RFE is the selected alternative to permutation selection. Only target means exclude each training row group; supervised embeddings and RFE use all fitting-fold labels. Fold coordinate systems need not align because only prediction columns are stacked.",
+      "Other listed model families are alternatives and are not claimed. No SMOTE, class weighting, early stopping or hyperparameter search; caller chooses applicability and controls. Convergence warnings fail execution. ExtraTrees n_jobs and native pools are one.",
+      "No rank-average, pseudo-labeling or stability-based model selection is claimed. OOF coverage and group/fold separation are checked; OOF scores are training inputs to the stacker, not an independent evaluation of the final stacked model.",
+      "This specializes the source probability-calibration family to binary classes; it does not implement arbitrary multiclass calibration, QWK search, regression transforms or a named benchmark file format. Generic result arrays preserve query order and duplicates. A fitted calibration procedure is not a guarantee of empirical calibration or accuracy.",
+      "Only the explicitly selected source alternatives are implemented.",
+      "Automated synthetic Tier 3 evidence only; no historical accuracy, generalization or human Tier 1 claim."
+    ],
+    "resolved_source_corrections": {
+      "table_audit_cleaning": "Select explicit numeric/string column positions; validate finite values or nulls, fit numeric medians and clipping quantiles per outer training fold, screen constant/duplicate and modal-share quasi-constant columns, and validate caller-provided group-consistent folds. Schema meaning and group discovery remain caller policy. No automatic chronology, duplicate-entity detection or general leakage guarantee. All-null numeric columns fill zero and are screened. Dense tables and wide-category resource use are not qualified.",
+      "split_aware_feature_engineering": "Implement count/frequency and group-excluded target means, collision-free category-pair interactions, supervised categorical embedding vectors, training-only count-vocabulary LDA topics, explicit-key numeric aggregates, signed log1p copies, quantile clipping and RFE-selected dense features. Fit each feature family only within its outer training fold; preserve row order. Empty specification lists explicitly disable inapplicable families; qualification exercises every family together. Text fields use explicit whitespace/case policy. Group aggregate keys are feature choices distinct from validation groups. Entity vectors use a binary MLP objective, full fitting-fold labels and zero vectors for unseen categories. RFE is the selected alternative to permutation selection. Only target means exclude each training row group; supervised embeddings and RFE use all fitting-fold labels. Fold coordinate systems need not align because only prediction columns are stacked.",
+      "tabular_model_zoo": "Select standardized logistic regression and ExtraTrees as two source-listed model-family branches for binary classification. Fit each independently per outer fold and produce one held-out probability from each model for every training row. Other listed model families are alternatives and are not claimed. No SMOTE, class weighting, early stopping or hyperparameter search; caller chooses applicability and controls. Convergence warnings fail execution. ExtraTrees n_jobs and native pools are one.",
+      "ensemble_stacking_blending": "Select a second-level logistic stacker trained on the two OOF prediction columns. Refit base models and their feature maps on all training rows for later calibration and prediction. No rank-average, pseudo-labeling or stability-based model selection is claimed. OOF coverage and group/fold separation are checked; OOF scores are training inputs to the stacker, not an independent evaluation of the final stacked model.",
+      "metric_calibration": "Realize probability calibration for the explicit two-class specialization: fit a regularized sigmoid to clipped class-1 score logits on separated calibration rows, then return finite ordered query probabilities and inclusive 0.5 decisions. This specializes the source probability-calibration family to binary classes; it does not implement arbitrary multiclass calibration, QWK search, regression transforms or a named benchmark file format. Generic result arrays preserve query order and duplicates. A fitted calibration procedure is not a guarantee of empirical calibration or accuracy."
+    },
+    "output_scope_decision": "Execute explicit binary mixed-table classification with fold-local cleaning, all named feature families, logistic and ExtraTrees OOF stacking, separated sigmoid calibration and ordered predictions. Four recipe adapters depend on six independently reusable numerical providers. Schema, groups, folds and feature applicability remain caller policy. Synthetic qualification only; no historical accuracy or human Tier 1 claim.",
+    "plan_sha256": "28d995a26e68e06fa8f2cfaa7bb5894a2f178343ddbbedd002782c5bd346890d",
+    "parameter_contract": "One finite version-2 payload with aligned numeric/string rows, binary training and calibration labels, separated population groups and group-consistent outer folds. Explicit model controls and feature policies cover clipping, screening, logs, category interactions, target means, key aggregates, text topics, supervised category vectors and RFE. Four recipe adapters use six independently reusable numerical providers. Caller controls schema meaning and feature applicability.",
+    "output_contract": "Finite class-1 query probabilities and binary decisions using an inclusive 0.5 cutoff, preserving query order and duplicates, plus population, fold, model, tree and OOF row counts. Calibration fits a regularized sigmoid on clipped logits using separate labeled rows. No empirical calibration, independent accuracy, multiclass, regression or named competition-format guarantee.",
+    "evidence_checker_sha256": "43a6c9f21e9aa94e9e6a9cdaedd65427d50824605d21fe22ec92ca91ee8ceabc"
+  }
+}
