@@ -1,0 +1,282 @@
+{
+  "format": "champs-decomposed-review.v1",
+  "review_source": "automated",
+  "proposed_tier": 3,
+  "approved": false,
+  "catalog_mutations": 0,
+  "graph_digest": "1120063d922f0c354c9683a02e0c6ceba7bd88e6fdb8d148b33df034a233012e",
+  "graph_nodes": 5,
+  "graph_edges": 7,
+  "providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.champs_execution.champs_prepare",
+      "catalog_fqdn": "sciona.atoms.ml.champs_execution.champs_prepare",
+      "version_id": "52e63639-b81c-56d5-a62b-ec3faada9040",
+      "content_hash": "2bf06cf3121212158513ef91db55439846b3c1753c71e3b355bcce822444917a",
+      "provider_sha256": "50b9c31b0feaecb28520fbf58a971baeb339ae44e8394f7ca30f9fc504700f69",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "payload",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "signature": "(payload: dict) -> object",
+      "bound_nodes": [
+        "prepare"
+      ],
+      "classification": "source_recipe_adapter"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_champs_execution.ensemble_inputs",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_champs_execution.ensemble_inputs",
+      "version_id": "40a1b1f5-aca6-516c-98d7-3abaf5901d71",
+      "content_hash": "79195382cddbff46fddb8e9dd968dac8983c6d80b439454503fa320558a749ca",
+      "provider_sha256": "9b8611be6c13174cd281afd25ef9dcc5e764692b822ac722939f74746457b62b",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "training_result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "keys",
+          "ordinal": 0,
+          "type_desc": "tuple",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "values",
+          "ordinal": 1,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "retained",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "signature": "(training_result: dict) -> tuple[tuple, numpy.ndarray, int]",
+      "bound_nodes": [
+        "ensemble_inputs"
+      ],
+      "classification": "source_recipe_adapter"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_champs_execution.result",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_champs_execution.result",
+      "version_id": "cf4f19a7-2f22-539d-b9a6-5be07f21812c",
+      "content_hash": "3a977b36c3e6237ffcaa17f93364aecb2530081e2498de658d6a782d2221d566",
+      "provider_sha256": "9b8611be6c13174cd281afd25ef9dcc5e764692b822ac722939f74746457b62b",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "training_result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "keys",
+          "ordinal": 1,
+          "type_desc": "tuple",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 2,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "signature": "(training_result: dict, keys: tuple, values: numpy.ndarray) -> dict",
+      "bound_nodes": [
+        "result"
+      ],
+      "classification": "source_recipe_adapter"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_champs_execution.train_models",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_champs_execution.train_models",
+      "version_id": "8f74bd31-a5a0-54b0-a3ef-72ed85a2807c",
+      "content_hash": "ccdb616d4e34dc6263d445c01d902bdd8d757eda8c0084c3b58d2590e154b33b",
+      "provider_sha256": "9b8611be6c13174cd281afd25ef9dcc5e764692b822ac722939f74746457b62b",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "training_result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "signature": "(prepared: object) -> dict",
+      "bound_nodes": [
+        "train_models"
+      ],
+      "classification": "source_recipe_adapter"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.numerical.statistics.central_mean.central_rank_mean",
+      "catalog_fqdn": "sciona.atoms.numerical.statistics.central_mean.central_rank_mean",
+      "version_id": "ca87d3f4-357b-5d06-9ba9-093c85c404f5",
+      "content_hash": "48462ac41e82a91b25c8cb79009c384a29e567e50d9d1b3b23b1ac422fa91248",
+      "provider_sha256": "cc059d3373990cea89d85efda808c955bdc9cf2b83081e28ee25137bebaa6308",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "retained",
+          "ordinal": 1,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "signature": "(values: numpy.ndarray, retained: int) -> numpy.ndarray",
+      "bound_nodes": [
+        "central_mean"
+      ],
+      "classification": "generic_operation"
+    }
+  ],
+  "root_inputs": [
+    "payload"
+  ],
+  "root_outputs": [
+    "result"
+  ],
+  "complete_training_ast_equivalent": true,
+  "source_stage_mapping": [
+    {
+      "intake": "spatial_graphing",
+      "realization": "XYZ bond inference, chemistry tags/charges, atom/bond/triplet/quadruplet motifs and corrected fixed packing"
+    },
+    {
+      "intake": "target_scaling",
+      "realization": "Per-subtype mean/sample-standard-deviation scaling, not a distributional Gaussian guarantee"
+    },
+    {
+      "intake": "message_passing_neural_network_mpnn",
+      "realization": "Thirteen full configured graph transformers, not SchNet"
+    },
+    {
+      "intake": "attention_mechanism",
+      "realization": "Distance-biased multi-head attention across typed motifs with grouped subtype prediction heads"
+    },
+    {
+      "intake": "ensembling",
+      "realization": "Six-decimal unscaled predictions, fixed coupling-specific model masks and central-five mean, no LightGBM"
+    }
+  ],
+  "package_versions": {
+    "torch": "2.11.0",
+    "numpy": "2.2.6",
+    "pandas": "2.3.3",
+    "rdkit": "2026.3.6",
+    "openbabel-wheel": "3.1.1.23",
+    "networkx": "3.6.1",
+    "scipy": "1.17.1"
+  },
+  "execution_evidence_commit": "36ab2080",
+  "evidence_sha256": {
+    "docs/reviews/decomposed_champs_graph_execution.json": "cf94f5c02a0b849e4d2c2a196a4b214b9932b47f65d6014c2ba4601083af5731",
+    "docs/reviews/competition_champs_source_pins.json": "99fde10617f64e20fc0459e73723ded08e3692518afd6e74bb67b8f96de804ca",
+    "docs/reviews/competition_champs_semantic_review.json": "69293e56ef769a574d8cdc134139e6a8f13f31945eccb24fdf3cb23979b2e149"
+  },
+  "reviewer_sha256": "17c348b000a2d7630010bf93049c80c1332b4f650fb21cfaf792da6bd93d89c2",
+  "limitations": [
+    "Automated Tier 3 Community reconstruction. No Tier 1 human certification or Tier 2 usage qualification; original inaccurate intake remains draft.",
+    "Pinned Bosch graph-transformer solution corrects the intake SchNet/LightGBM claims. All thirteen full configurations are retained; no original pretrained checkpoint or historical accuracy parity is claimed.",
+    "Explicit corrected triplet packing/model indices and chunked evaluation; modern OpenBabel/pandas interfaces. Caller-seeded batching and complete structured checkpoints replace launcher global state and model pickles.",
+    "Original chemistry requires supported connected motifs and fixed 29/406/54/117 capacities. Degenerate or absent motifs, unsupported chemistry, out-of-vocabulary labels and nonfinite scaling can fail. This is not a general molecular chemistry predictor.",
+    "Original per-record bond corrections are excluded. Optional manual corrections in lower-level preprocessing are not exposed in this version of the pipeline payload; original-record parity is not claimed.",
+    "Fitted vocabulary/scaling precede the source population split. This preserves source behavior rather than claiming leakage-free validation. The eight supervised primary type slots are explicitly reserved for smaller populations.",
+    "Source inverse-square-root schedule is initialized but never advanced after warmup; this behavior is preserved. Original quadruplet cutout and chunked log-type-loss training combinations remain unsupported.",
+    "Graph evidence uses one explicitly configured synthetic SGD epoch for every full model. Sixteen stochastic optimizer/scheduler resume combinations and validation selection controls were checked separately with analytic synthetic inputs, not historical training runs.",
+    "Validation selection requires all eight finite type metrics. Full-population mode retains the last epoch; finite aggregate MAE alone is not represented as complete competition macro-metric coverage.",
+    "Per-model prediction rounding to six decimals precedes the coupling-specific central-five ensemble, matching original CSV precision. Opaque caller IDs are remapped to exactly representable internal float32 integers.",
+    "CPU execution requires locally provisioned hash-verified software and pinned dependencies in the matcher environment. No downloads, GPU/mixed-precision qualification, clean-environment installation or resource-cap guarantee is claimed.",
+    "Geometry, fitted state, checkpoints, training outputs and predictions are private runtime data. Publication evidence contains synthetic fixtures and aggregate checks only.",
+    "The new graph executes all thirteen full configured models for one explicitly requested synthetic SGD epoch each; historical training-duration and accuracy parity remain unproven.",
+    "Current execution uses NumPy 2.2.6, recorded in the new immutable report; it does not overwrite the earlier NumPy 2.4.2 qualification.",
+    "The complete training body is unchanged apart from moving final ensemble selection/reduction into explicit graph boundaries.",
+    "Central rank mean is domain independent. Molecular identity, model masks and retained count stay in recipe policy.",
+    "Dictionary shape and identity checks do not independently authenticate training provenance.",
+    "Provider eligibility and corrected-original publication require separate transactional qualification."
+  ]
+}
