@@ -1,0 +1,143 @@
+{
+  "format": "adversarial-decomposed-review.v1",
+  "review_source": "automated",
+  "proposed_tier": 3,
+  "approved": false,
+  "catalog_mutations": 0,
+  "graph_digest": "16de238d23319bd1aba8f54b2a50458b906ff724c21c0aabd6e490fc6f2c2689",
+  "graph_nodes": 3,
+  "graph_edges": 2,
+  "providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.dl.adversarial_execution.adversarial_prepare",
+      "catalog_fqdn": "sciona.atoms.dl.adversarial_execution.adversarial_prepare",
+      "version_id": "d161d0c4-1c88-570f-81ec-568535272378",
+      "content_hash": "029a16d101b77e7d9f67cdc2299e381b1ecbab6801bd89fb78192633aa302aa5",
+      "provider_sha256": "4f3c569667377520c79c8fd937f1e5f311c664caa010fb340002578219f5fc2e",
+      "signature": "(payload: dict) -> object",
+      "bound_nodes": [
+        "prepare"
+      ],
+      "classification": "source_recipe_adapter"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.adversarial_normalized_execution.execute_with_normalizer",
+      "catalog_fqdn": "sciona.atoms.dl.adversarial_normalized_execution.execute_with_normalizer",
+      "version_id": "0a917f45-0efb-5cd3-9e2f-58e2064dba92",
+      "content_hash": "489754d4865ef1867ceb4885c1f75c08d3b4952cf609ad7fc2177a6bf904fbc4",
+      "provider_sha256": "60b0a87bc932bf61ab299576ff4048ebdd68459e544f578f90ed22b3fb7d8662",
+      "signature": "(prepared: object, normalizer: object) -> dict",
+      "bound_nodes": [
+        "execute"
+      ],
+      "classification": "source_recipe_adapter"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.numerical.statistics.row_scale.normalize_rows_by_scale",
+      "catalog_fqdn": "sciona.atoms.numerical.statistics.row_scale.normalize_rows_by_scale",
+      "version_id": "60034fd4-9033-5422-b44f-b17d5f9dff55",
+      "content_hash": "3b9a131e78cdb001e9cdcc407c7bd1fc971a6b6268599844b60a71b9063d4b2a",
+      "provider_sha256": "4bc3d26b2f702f8bb59741b0a75d34d560156cc0e9bfb487ae3f62253b7ed1ea",
+      "signature": "(values: numpy.ndarray, statistic: str) -> numpy.ndarray",
+      "bound_nodes": [
+        "normalize_rows"
+      ],
+      "classification": "generic_operation"
+    }
+  ],
+  "root_inputs": [
+    "payload"
+  ],
+  "root_outputs": [
+    "result"
+  ],
+  "source_stage_mapping": [
+    {
+      "intake": "ensemble_prediction_label_inference",
+      "realization": "Unweighted eight-model probabilities on iteration0 then fixed labels",
+      "evidence": [
+        "losses",
+        "ensemble",
+        "lifecycle"
+      ]
+    },
+    {
+      "intake": "adaptive_epsilon_attack_strategy",
+      "realization": "Separate targeted epsilon>=8 five-model20steps versus epsilon<8 two-model40steps; non-targeted eight-model10step default",
+      "evidence": [
+        "updates",
+        "lifecycle",
+        "padded_attack",
+        "graph_execution"
+      ]
+    },
+    {
+      "intake": "ensemble_logit_fusion_with_asymmetric_weights",
+      "realization": "Source-ordered main and auxiliary weighted logits across actual full backbones",
+      "evidence": [
+        "losses",
+        "ensemble"
+      ]
+    },
+    {
+      "intake": "auxiliary_logit_loss_fusion",
+      "realization": "Inference auxiliary heads retained; main CE plus0.4 auxiliary CE",
+      "evidence": [
+        "inception_v3",
+        "inception_v4",
+        "inception_resnet",
+        "losses",
+        "graph_execution"
+      ]
+    },
+    {
+      "intake": "momentum_iterative_gradient_accumulation",
+      "realization": "Actual neural input gradients,mean-absolute non-targeted normalization and recurrent momentum",
+      "evidence": [
+        "updates",
+        "ensemble",
+        "lifecycle"
+      ]
+    },
+    {
+      "intake": "std_normalized_momentum_gradient",
+      "realization": "Targeted population-std input-gradient normalization and post-accumulation renormalization",
+      "evidence": [
+        "updates",
+        "lifecycle"
+      ]
+    },
+    {
+      "intake": "rounded_clipped_perturbation_step",
+      "realization": "Targeted half-even rounding,step clipping and fixedoriginalprojection;non-targeted sign ascent",
+      "evidence": [
+        "updates",
+        "lifecycle",
+        "image_boundary"
+      ]
+    }
+  ],
+  "evidence_sha256": {
+    "adversarial_generic_row_scale_source_parity.json": "fbca500dbd2d02420109984d2978d84d3681cbefec34169be9e4cc8cced134e1",
+    "decomposed_adversarial_lifecycle.json": "e4dd7cadfd9710ff4707448c0da2ba3aec674e186d95b05de1479c5775c2702c",
+    "decomposed_adversarial_padded.json": "39c594d5baa846efe0e4c1fc7662e6672e4d19d16be2682844acd977f578023c",
+    "decomposed_adversarial_graph.json": "5a4717f69e36661ddc71b6783ad1a0e4c8f7f594bb538f43a33505c113dbe92f",
+    "competition_adversarial_semantic_review.json": "561b1e034436c7a48cc985876229c81ee7ee634a0d5ed6493cabf3e4bd93bce2"
+  },
+  "auxiliary_sha256": {
+    "scripts/review_decomposed_adversarial.py": "045fac14518fb60df284d34da8d5a65073a5720bdeff72f04661a252319b704f",
+    "tests/test_injected_adversarial_update.py": "472344772de7d91c97d9efe4bf72a4857921876fcbe0317b237fc88b3593c2f3",
+    "tests/test_runner_callable_injection.py": "59659bc1233e1f02f2991f3a29ae1174776acdb9d0646cd89877b503415bcfe1",
+    "tests/test_decomposed_adversarial_review.py": "96e8047e1932b89ad5ff6785d1bee033f5276925aca29a0905712eff29535665"
+  },
+  "limitations": [
+    "Review only; provider eligibility, corrected original intake, promotion and served selection remain separate gates.",
+    "The generic row operation is domain independent. Model choices, image layout, normalization policy and recurrence are source recipe semantics.",
+    "Callable dependency is invoked ten, forty or eighty times in the qualified schedules; it is not a one-time preprocessing operation.",
+    "Caller-supplied normalization is a trusted graph dependency; numerical fidelity requires the reviewed provider binding.",
+    "Synthetic states and exact CPU-update agreement do not establish pretrained quality or historical TensorFlow binary equivalence.",
+    "Undefined normalization rejects without a stabilizer. Source PNG stretching does not preserve a pixel epsilon guarantee.",
+    "Validation intercepts intermediate persistence in memory. Only synthetic aggregate evidence is committed.",
+    "Tier 1 human review and Tier 2 usage qualification are not claimed."
+  ]
+}
