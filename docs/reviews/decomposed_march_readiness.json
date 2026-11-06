@@ -1,0 +1,156 @@
+{
+  "format": "decomposed-march-readiness.v1",
+  "read_only": true,
+  "catalog_mutations": 0,
+  "approved": false,
+  "original": {
+    "artifact_id": "ff29169b-d168-57eb-8c5c-a4c939e13373",
+    "fqdn": "cdg.competition.solution.kaggle.march_mania_benchmark",
+    "status": "draft",
+    "is_publishable": false,
+    "content_hash": "a32fed30707dd363c95f39462a6bd6db505102f4449f3dccf24fb62d71af34ee",
+    "is_latest": true
+  },
+  "reference": {
+    "artifact_id": "ef505a91-b2cf-5fd5-8a03-972135bf9c05",
+    "fqdn": "cdg.competition.solution.kaggle.march_mania_benchmark.execution",
+    "status": "approved",
+    "is_publishable": true,
+    "content_hash": "6e821a2dc2ca4abdd54bdb29046e2a0953cac7ebbfab837f284e90f81be19619",
+    "is_latest": true,
+    "trust_tier": 3
+  },
+  "source_stages": [
+    "season_aggregation",
+    "graph_centralities",
+    "elo_ratings",
+    "pairwise_concatenation",
+    "logistic_regression"
+  ],
+  "derivative_dependencies": [
+    {
+      "dependency_artifact_fqdn": "cdg.competition.solution.kaggle.march_mania_benchmark",
+      "dependency_content_hash": "a32fed30707dd363c95f39462a6bd6db505102f4449f3dccf24fb62d71af34ee",
+      "dependency_role": "cdg",
+      "optional": false
+    }
+  ],
+  "source_scope": "Generic benchmark topology with no identified historical winning implementation. Logistic regression is an explicit allowed branch; PageRank is a graph feature, not certified true strength of schedule.",
+  "prior_execution_changed_files": [],
+  "prior_provider_hash_matches": true,
+  "runtime_versions": {
+    "numpy": {
+      "recorded": "2.4.2",
+      "installed": "2.2.6"
+    },
+    "scipy": {
+      "recorded": "1.17.1",
+      "installed": "1.17.1"
+    },
+    "scikit-learn": {
+      "recorded": "1.8.0",
+      "installed": "1.8.0"
+    },
+    "joblib": {
+      "recorded": "1.5.3",
+      "installed": "1.5.3"
+    },
+    "threadpoolctl": {
+      "recorded": "3.6.0",
+      "installed": "3.6.0"
+    },
+    "networkx": {
+      "recorded": "3.6.1",
+      "installed": "3.6.1"
+    }
+  },
+  "reuse_candidates": [
+    {
+      "fqdn": "sciona.atoms.algorithmic.graph.utilities.pagerank",
+      "import_module": "sciona.atoms.algorithmic.graph.utilities.atoms",
+      "source_symbol": "pagerank",
+      "status": "approved",
+      "is_publishable": true,
+      "version_id": "c4f2a489-2300-5a99-abf6-2e891e94023a",
+      "content_hash": "9d4f86a5a836b53f4ba5db1fbf6043c1ee2f22851ad6706af39db266e692fc2f"
+    },
+    {
+      "fqdn": "sciona.atoms.ml.march_execution.march_execute",
+      "import_module": "sciona.atoms.ml.march_execution",
+      "source_symbol": "march_execute",
+      "status": "approved",
+      "is_publishable": true,
+      "version_id": "ff302da7-5c9a-53ba-b093-296da487597f",
+      "content_hash": "3272b4638379ee0715a6a0469345c211dc286e2b4f4846951b8bf4b74d7a7137"
+    },
+    {
+      "fqdn": "sciona.atoms.ml.march_execution.march_prepare",
+      "import_module": "sciona.atoms.ml.march_execution",
+      "source_symbol": "march_prepare",
+      "status": "approved",
+      "is_publishable": true,
+      "version_id": "5af8d2fe-d53b-5eed-a1ca-7c6bbcb3ce0f",
+      "content_hash": "d13d1a47056758b0bc3a4f2cf95f57fd3e0f6c843ce309671b78e6b305b19633"
+    },
+    {
+      "fqdn": "sciona.atoms.numerical.statistics.ordered_sum.ordered_weighted_sum",
+      "import_module": "sciona.atoms.numerical.statistics.ordered_sum",
+      "source_symbol": "ordered_weighted_sum",
+      "status": "approved",
+      "is_publishable": true,
+      "version_id": "5fb9c91f-ff5f-590c-b376-88e2a7360440",
+      "content_hash": "814d0ff20f33820537741e1f116c32dfa69262d56dc16d872f3a055f77bd6968"
+    },
+    {
+      "fqdn": "sciona.atoms.scoring.elo_rating_update",
+      "import_module": "sciona.atoms.scoring.atoms",
+      "source_symbol": "elo_rating_update",
+      "status": "approved",
+      "is_publishable": false,
+      "version_id": "98195eac-6032-519d-bcf4-3dd99eb20510",
+      "content_hash": "f664e89c97d561091be57f71d41297e5d65d2675ced73f4627f0e7568625c662"
+    }
+  ],
+  "reuse_probes": {
+    "synthetic_only": true,
+    "pagerank_exhaustion_contract_differs": true,
+    "pagerank_requires_adjacency_transpose": true,
+    "pagerank_tolerance_conventions_differ": true,
+    "transposed_pagerank_agrees_within_1e_12": true,
+    "elo_fixed_scale": 400,
+    "elo_extreme_difference_overflows": true,
+    "reference_extreme_difference_finite": true,
+    "reference_custom_scale_affects_ratings": true,
+    "ordered_sum_cases": 16,
+    "orientation_projection_byte_equal": true,
+    "inputs_unchanged": true,
+    "scope": "Reduction parity only. Existing PageRank and Elo are not drop-in replacements for the current feature recipe; no new implementation is approved."
+  },
+  "reference_code_sha256": {
+    "sciona/march_contract.py": "2a131fdec7724ec13ed6da2bb030afb94dc415aec71e1b33dd74824449e11b5c",
+    "sciona/march_features.py": "54a23fd4979ec75d8d3823d658f3b809b4bb51bc57240e6ae36094d09b633f55",
+    "sciona/march_graph.py": "4c183738598cdd3a0de456c6866ea2b805ec8fbc41dee421d57d937a100c6180",
+    "sciona/march_training.py": "3617008fefdff0d2748282b1407739bc956e1d9f61489216d720a9aa4fec86ee",
+    "scripts/march_synthetic.py": "c9579a596868e9ef25a63300b5513ca66b38460fdd3292408740461f950462aa",
+    "scripts/validate_march_graph_execution.py": "f1d882441186c2c2f1107e4ad862f9c27d610cb38b59bcad0060064dfa236362"
+  },
+  "prior_provider_sha256": "29da0e7e4100209f846fe5db614225335f3a929a0b9e1d11f44cb56eeb846693",
+  "inspected_provider_sha256": {
+    "pagerank": "c6b01207620c795f99a3d4073d193f3cc1f51cb4fd8cc0770b4a4bd577c614e9",
+    "elo_rating_update": "103de27c6c86e814749899ffc89fa7446d32e24a87dc7822eacb2c6c7c93329c",
+    "ordered_weighted_sum": "893e4fb0c884d1732d9bba0ae2e203b72170bba11fbc89443306e6fd1b6ea359"
+  },
+  "auditor_sha256": "e7fc63817dc84848d1d328a81d2ff279caa5b9fa776497bef6a9b9888d306992",
+  "next_steps": [
+    "Re-execute the unchanged full baseline on the current compatible runtime without overwriting historical evidence or changing the shared environment.",
+    "Preserve aggregation, directed rank, ordered ratings, paired features, training-only scaling, logistic fitting, frozen-base calibration and symmetric prediction.",
+    "Expose reusable operations with explicit contracts. Retain caller scale, stable Elo arithmetic and PageRank failure semantics; do not silently substitute existing incompatible atoms or add duplicate implementations.",
+    "Use the existing generic ordered sum for orientation projection if full extracted execution retains reference behavior.",
+    "Qualify new provider interfaces, source semantics, stored execution and Tier 3 publication before selecting the original."
+  ],
+  "limits": [
+    "No source, provider or original approval follows from readiness probes.",
+    "Runtime metadata and unchanged source hashes do not establish installed-file integrity or native execution.",
+    "Box-score feature construction remains domain-specific; matrix fitting and generic numeric reduction admit broader reuse within documented contracts."
+  ]
+}
