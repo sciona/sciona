@@ -1,0 +1,206 @@
+{
+  "format": "decomposed-plasticc-readiness.v1",
+  "read_only": true,
+  "catalog_mutations": 0,
+  "approved": false,
+  "original": {
+    "artifact_id": "66418269-ea10-53e3-9b7e-306139249971",
+    "fqdn": "cdg.competition.solution.kaggle.plasticc_1st",
+    "status": "draft",
+    "is_publishable": false,
+    "content_hash": "3290c60e5dc631a1a69f70a9fed6a9d232727c4f8c7dc1fd97dfc778c8be7a57",
+    "is_latest": true
+  },
+  "source_version_id": "57909e28-f500-51c8-91da-8e104377d2fd",
+  "source_stages": [
+    {
+      "stage_id": "flux_correction",
+      "description": "Correct astronomical flux measurements based on red-shift metadata to account for cosmological distance effects, normalizing flux to rest-frame values using pandas and numpy."
+    },
+    {
+      "stage_id": "time_series_feature_extraction",
+      "description": "Extract summary statistics, slopes, peaks, and other descriptive features for every passband using tsfresh and cesium libraries."
+    },
+    {
+      "stage_id": "gaussian_process_interpolation",
+      "description": "Fit Gaussian Processes to irregularly sampled light curves to produce smooth interpolated curves, extracting GP hyperparameters (length-scale, amplitude, noise) as additional features."
+    },
+    {
+      "stage_id": "feature_merging",
+      "description": "Concatenate raw time series statistics, GP-derived features, and object metadata into a single flat tabular feature matrix using pandas."
+    },
+    {
+      "stage_id": "model_training",
+      "description": "Train an ensemble of LightGBM gradient boosted trees and custom MLP neural networks with minority class augmentation to handle severe class imbalance."
+    },
+    {
+      "stage_id": "platt_calibration",
+      "description": "Adjust predicted probabilities using Platt Scaling (sigmoid calibration) on held-out predictions to optimize the competition log-loss metric."
+    }
+  ],
+  "derivative": {
+    "artifact_id": "a36e4640-8860-53a4-b8fe-fb6bff0327b2",
+    "fqdn": "cdg.competition.solution.kaggle.plasticc_1st.execution",
+    "status": "approved",
+    "is_publishable": true,
+    "content_hash": "32e1b91f5759b404f4b651a60d04daf741798b7355a84b0d3dc222c8f739a425",
+    "is_latest": true,
+    "trust_tier": 3
+  },
+  "derivative_version_id": "180dfa2f-60ec-5ccf-b716-ab9dc5b916d9",
+  "derivative_nodes": [
+    {
+      "node_id": "predict"
+    },
+    {
+      "node_id": "prepare"
+    },
+    {
+      "node_id": "train"
+    }
+  ],
+  "derivative_bindings": [
+    {
+      "node_id": "predict",
+      "bound_artifact_fqdn": "sciona.atoms.dl.plasticc_execution.plasticc_predict",
+      "bound_version_content_hash": "4a972e41df559f95d1be371d46c2e3cb60a298498e852b71d869aa00c926d699"
+    },
+    {
+      "node_id": "prepare",
+      "bound_artifact_fqdn": "sciona.atoms.dl.plasticc_execution.plasticc_prepare",
+      "bound_version_content_hash": "1b34cfc7afc46940a21053a92420b4aae297dd354be397c3f86c965c2903bcc5"
+    },
+    {
+      "node_id": "train",
+      "bound_artifact_fqdn": "sciona.atoms.dl.plasticc_execution.plasticc_train",
+      "bound_version_content_hash": "ad4ead218ddf242a3cd00c446929b2a6a56380ed86c8417375c2846eba8b4879"
+    }
+  ],
+  "draft_originals_with_approved_derivatives": 17,
+  "retained_evidence_sha256": {
+    "competition_plasticc_augmentation.json": "9b846ccf41246636b064f67db6446e9558c75afbd267d01042fb52abc77ed163",
+    "competition_plasticc_defaults.json": "dcdcc1edc985978c41a2fc104c94bbc990a17dc94a490a7e0537ec2f3c102064",
+    "competition_plasticc_features.json": "c1576e584ce85ef9c85707fbc7570c521f26e1a90de906192286e039e4416fcf",
+    "competition_plasticc_graph.json": "9f78a6e0eeeacf8204620491032e412e84e08425c9b5890541a00513b4cc9bda",
+    "competition_plasticc_observations.json": "90788df3ba1c044730d6b7c19bec31377dc20130b60cddf2558423373aa7f17c",
+    "competition_plasticc_population.json": "4fcac0f28bdee9866fc6073e35883c1d8494692c35d35f1eadcb5af58e706928",
+    "competition_plasticc_predictions.json": "3ed0745200ecfadfb978eef0896f400865bd3314b190308b8e0d1fdedf876956",
+    "competition_plasticc_publication.json": "38ef7623fd8db5c82fa75a8bb7ef39ecf4969014f1992e752567f01702363b6c",
+    "competition_plasticc_publication_verification.json": "012decc069699bbe079045b035f724af5cf67c6a66c6fb2fefe190036a830a8e",
+    "competition_plasticc_runtime.json": "384a934b2e0e0893a542015bf4a17056f0edecdb426ee77328649c355a902df7",
+    "competition_plasticc_semantic_review.json": "3433af1556ba27599f3bb703472bf51d9f1c9a882d9f5b7f679f248ebd7e8f90",
+    "competition_plasticc_source_inventory.json": "f0b934b7ddee4ef8e07266c46a1a05b18aa6866e96160cb2adb31da5716e4795",
+    "competition_plasticc_source_pins.json": "321a0fa44c9f16913110cce5236af7d91760c4aee0b42cf409d31a7484566235",
+    "competition_plasticc_source_review.json": "8439a22acac879f125df6cdbe1872e1f217872248407d05c7ba27cfb068dedd6",
+    "competition_plasticc_training.json": "a2b2f98246607d0ceaae05893232a22e767e1d426ab031c64e582c2f66ff79f5",
+    "competition_plasticc_weighting.json": "5972b492d7360c0295abb3397dbced2f6a0f660e011c9e488344459c0efd9d77"
+  },
+  "distinct_file_hash_checks": 22,
+  "implementation_drift": [],
+  "implementation_inventory": {
+    "plasticc_augmentation.py": {
+      "sha256": "66f5ad6d847368d845fa128f57af737519c602fedf2a0b800a5fbaf5d89d8fa4",
+      "functions": [
+        "Augmentor",
+        "PlasticcAugmentor"
+      ]
+    },
+    "plasticc_defaults.py": {
+      "sha256": "5143ee8d74dec155c01b1456037de03c1c12c8bd82257c76d72f9eee51c8be78",
+      "functions": []
+    },
+    "plasticc_features.py": {
+      "sha256": "e2b0841b8c65008cf8b11088192688c1d7d22f9742b4bb60ff0a0ecc64ad6c69",
+      "functions": [
+        "Featurizer",
+        "PlasticcFeaturizer",
+        "find_time_to_fractions"
+      ]
+    },
+    "plasticc_graph.py": {
+      "sha256": "2c557dfff3b74123ec4aa071d3f327b0e50f49bef383f5ff979cef2ea23cb2d0",
+      "functions": [
+        "build_plasticc_graph"
+      ]
+    },
+    "plasticc_observations.py": {
+      "sha256": "694196bf77c42833f07aa0367d67d0a0fbe5491a5d0aaf5d4acf174260310385",
+      "functions": [
+        "AvocadoException",
+        "get_band_central_wavelength",
+        "AstronomicalObject"
+      ]
+    },
+    "plasticc_population.py": {
+      "sha256": "64022bdcd6f38344e0e03e34d863f8ae4bad4a2aa90953b6d4d8ffa77600729f",
+      "functions": [
+        "Dataset",
+        "PopulationAugmentor"
+      ]
+    },
+    "plasticc_predictions.py": {
+      "sha256": "22fa11fb13ea480be21bb31b04094363434e458cbcb039b6e6edb6e6a74ed0a3",
+      "functions": [
+        "create_kaggle_predictions"
+      ]
+    },
+    "plasticc_runtime.py": {
+      "sha256": "d83c141ea3510bfa92fd8f2511470a7c7398e51b0049b627f747aafd1e0b4010",
+      "functions": [
+        "integer",
+        "finite",
+        "decode_objects",
+        "Prepared",
+        "Completed",
+        "prepare_runtime",
+        "train_runtime",
+        "predict_runtime"
+      ]
+    },
+    "plasticc_training.py": {
+      "sha256": "3d0937fbe12431f5de58dd1b7737da6651901115f4f78aca7b8a3bb5dfa8727c",
+      "functions": [
+        "Classifier",
+        "LightGBMClassifier",
+        "fit_lightgbm_classifier"
+      ]
+    },
+    "plasticc_weighting.py": {
+      "sha256": "cb2a5293d4d02399f1a627c6139555182178afa88e3ac9f4bdc9362ca2473013",
+      "functions": [
+        "evaluate_weights_flat",
+        "evaluate_weights_redshift",
+        "weighted_multi_logloss",
+        "label_folds"
+      ]
+    }
+  },
+  "current_runtime_versions": {
+    "numpy": "2.2.6",
+    "scipy": "1.17.1",
+    "pandas": "2.3.3",
+    "lightgbm": "4.7.0",
+    "scikit-learn": "1.8.0",
+    "astropy": "8.0.1",
+    "george": "0.4.4"
+  },
+  "source_corrections": [
+    "Pinned maintained MIT Avocado implementation establishes two-dimensional Matern32 time/wavelength GP and dedicated astronomical augmentation and features, not generic flux correction plus tsfresh/cesium.",
+    "Weighted grouped LightGBM folds replace unsupported MLP ensemble and Platt-calibration intake claims.",
+    "Known/unknown probability adjustment uses explicit galactic/extragalactic masks and task-tuned unknown-class formula, not general novelty detection.",
+    "Current LightGBM callbacks and instance RandomState are adaptations; no identical historical submission or predictive accuracy claim."
+  ],
+  "reuse_work": [
+    "Separate generic numeric GP, feature reduction, weighted multiclass learning and probability normalization from astronomical wavelength/redshift and class-mask policies.",
+    "Inspect registered numeric alternatives before adding providers and retain exact source behavior and licenses.",
+    "Expose augmentation, feature construction, fold allocation and weighted fitting as explicit stages; do not retain only opaque prepare/train/predict selection.",
+    "Validate full configured augmentation and fold lifecycle, both weighting modes and final known/unknown probabilities before stored original promotion.",
+    "Bound native pools and LightGBM n_jobs explicitly for every validation run; the retained runtime permits caller-defined worker counts."
+  ],
+  "limits": [
+    "Readiness only; historical hashes do not establish current numerical execution.",
+    "Pinned MIT implementation and license retained; no current website or historical submission-byte claim.",
+    "Public algorithm-template descriptions and software identifiers only; no runtime observation records or identifying dataset metadata retained."
+  ],
+  "auditor_sha256": "8bc8d80e5c77148f285ab79befeebb5f0bdfd668fc4530a38e69693d8a7b49d6"
+}
