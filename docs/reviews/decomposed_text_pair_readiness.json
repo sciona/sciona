@@ -1,0 +1,136 @@
+{
+  "format": "decomposed-text-pair-readiness.v1",
+  "read_only": true,
+  "catalog_mutations": 0,
+  "approved": false,
+  "original": {
+    "artifact_id": "e81e178e-524d-5e8b-8986-c183cea57949",
+    "fqdn": "cdg.competition.solution.kaggle.text_pair_similarity_feature_ensemble_topology",
+    "status": "draft",
+    "is_publishable": false,
+    "content_hash": "896ea8e61c63f03fcb22b6bc418126ac23acf0fb3ad55e5a11c3815ae00e1bd7"
+  },
+  "source_version_id": "1169253d-76d3-5b76-885f-07b58bed795c",
+  "source_stages": [
+    {
+      "stage_id": "pair_normalization",
+      "description": "Clean text pairs with lowercasing, spelling correction, synonym or query expansion, punctuation handling, and domain-specific token normalization.",
+      "guarantees": [
+        "Pair order and normalized tokens are explicit."
+      ]
+    },
+    {
+      "stage_id": "lexical_similarity_features",
+      "description": "Compute n-gram overlap, Jaccard on descriptions, cosine TF-IDF matching, Levenshtein/edit distance on titles, BM25, exact match, and length-ratio features for each pair.",
+      "guarantees": [
+        "Features are aligned one row per text pair."
+      ]
+    },
+    {
+      "stage_id": "embedding_similarity_features",
+      "description": "Compute similarity from GloVe, Word2Vec, LSA/SVD, LDA topic vectors, averaged token vectors, or sentence embeddings.",
+      "guarantees": [
+        "Semantic feature rows match the pair table."
+      ]
+    },
+    {
+      "stage_id": "pair_context_features",
+      "description": "Add pair graph degree, duplicate-neighborhood, transitive-closure, candidate frequency, category, or magic features computed with leakage-safe splits.",
+      "guarantees": [
+        "Context features respect validation boundaries."
+      ]
+    },
+    {
+      "stage_id": "feature_ensemble",
+      "description": "Train XGBoost, LightGBM, SVR, logistic regression, random forest, ranking heads, or blended models on the combined lexical, embedding, and context features.",
+      "guarantees": [
+        "Each input pair receives a raw score."
+      ]
+    },
+    {
+      "stage_id": "metric_thresholding",
+      "description": "Calibrate Jaccard, cosine, or Levenshtein thresholds; Kendall Tau or ranking objectives; target normalization to a 0-1 range; relevance-score scaling; or transitive closure against the competition metric.",
+      "guarantees": [
+        "Outputs are calibrated and formatted for submission."
+      ]
+    }
+  ],
+  "reference": {
+    "artifact_id": "dcfe4361-b150-54dd-84ef-fb4526490fe7",
+    "fqdn": "cdg.competition.solution.kaggle.text_pair_similarity_feature_ensemble_topology.execution",
+    "status": "approved",
+    "is_publishable": true,
+    "version_id": "310bbede-676c-5029-aad1-24273373b656",
+    "content_hash": "4a5e403fcdb5da06bf44812043e3a06bb66de2012a3af7dcf9d6eb091651787c",
+    "trust_tier": 3,
+    "served": true
+  },
+  "reuse_candidates": [
+    {
+      "fqdn": "sciona.atoms.ml.calibration.empirical_f1.apply_column_thresholds",
+      "status": "approved",
+      "is_publishable": true,
+      "version_id": "2c4add48-5699-5485-865c-da509201fc45",
+      "content_hash": "b1df674cf843553cef39c8fefb23c21a23cad31671503a6104e64aa954aebe8f",
+      "trust_tier": 3,
+      "native_eligible": true,
+      "served": true
+    },
+    {
+      "fqdn": "sciona.atoms.ml.calibration.empirical_f1.fit_empirical_f1_thresholds",
+      "status": "approved",
+      "is_publishable": true,
+      "version_id": "83608ee9-c047-53da-acb5-209901f7b245",
+      "content_hash": "a0c822126d1cfe7c14c4a451a0a8ae1070ffb50a0959a56776c2d3127c4e7c96",
+      "trust_tier": 3,
+      "native_eligible": true,
+      "served": true
+    },
+    {
+      "fqdn": "sciona.atoms.ml.model_selection.materialized_prediction.average",
+      "status": "approved",
+      "is_publishable": true,
+      "version_id": "fbea5906-9987-5e67-88c4-5ffe3d971e66",
+      "content_hash": "280b371b126f6d7f580dd169289280af76fc50d64350b784c3aefd346df18af5",
+      "trust_tier": 3,
+      "native_eligible": true,
+      "served": true
+    }
+  ],
+  "implementation_drift": [],
+  "runtime_drift": {
+    "numpy": {
+      "qualified": "2.4.2",
+      "current": "2.2.6"
+    }
+  },
+  "inspected_software_sha256": {
+    "sciona/text_pair_features.py": "1113c41b3d8018e603f6afdae71bd4a971fc63c9c95529f56c5c3a8967c890ce",
+    "sciona/text_pair_training.py": "d27bc10a06b3ea20626ae202a8a856142fbfd2ccf7abd1ccef2632927833fda4",
+    "sciona/text_pair_contract.py": "230c4aabea0cc2116dc1265fee93ceebd84edb03be37b16b7f5b6958f23e274d",
+    "sciona/text_pair_graph.py": "801fbdb3bc113a072d774145dacd45e24c64bb540dbe84d653fba18c4038da11",
+    "scripts/review_text_pair_execution.py": "9019c0f94518a1654a0df0bc8ccff2a5b8b9ded71604fda4a381e4f5100b1b77",
+    "docs/reviews/competition_text_pair_graph_execution.json": "13f22f176cc054dbecda6c28ebbcbe11e2d602a6c9079b1dd0c6b2068f699b28",
+    "docs/reviews/competition_text_pair_semantic_review.json": "cb583ef932e073c6fb00da491bfd593d9ab5c1198ed81abaabea549aaea44bdd"
+  },
+  "findings": [
+    "Original pair_normalization names spelling correction, synonym/query expansion and domain normalization. Existing NFKC/casefold/word-token processing omits these; derivative limitations do not authorize removing original requirements.",
+    "Original lexical_similarity_features names BM25 alongside overlap, TF-IDF, edit, exact-match and length features. Existing twelve-feature recipe has no BM25 computation. Resolve original scope through implementation or explicit source-supported alternative semantics before promotion.",
+    "LSA/SVD, candidate graph statistics and logistic/forest ensemble are explicitly listed alternatives. Training-only fits and current-edge exclusion must remain intact.",
+    "Original metric_thresholding promises calibrated submission outputs. Existing binary F1 threshold and JSON result need an explicit metric/output realization review; empirical F1 selection is not probability calibration.",
+    "Existing recipe embeds generic edit distance, set Jaccard, cosine/distance, arithmetic averaging and threshold fitting. Inspect exact existing providers before introducing independently selectable replacements.",
+    "The approved ordered mean and empirical-F1 providers are reuse candidates, not yet qualified substitutions: preserve exact floating arithmetic, tie rule, shape conversion and reported calibration F1.",
+    "Name-pattern catalog inventory is a starting point, not proof that equivalent generic providers do not exist. Broaden semantic/source inventory before adding new atoms.",
+    "Text normalization, vocabulary/model choices, feature assembly and population separation remain explicit recipe policy; generic numeric contracts must not hard-code text semantics."
+  ],
+  "next_actions": [
+    "Qualify current runtime with existing full synthetic feature, training and strict-boundary tests without rewriting historical approval evidence.",
+    "Resolve missing original normalization/BM25 and output requirements before claiming full source coverage.",
+    "Inventory and qualify reusable operations, then connect exact approved bindings in a complete original graph.",
+    "Execute the stored candidate and validate publication rollback, native eligibility and served selection."
+  ],
+  "limits": [
+    "Read-only scope and reuse audit; no new execution or promotion claim. Software and generic algorithm-template metadata only."
+  ],
+  "auditor_sha256": "22b72cb8da94f555dc63a5ba898fdddfa9d803c0b87b7f6e3755347ac1800835"
+}

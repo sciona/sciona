@@ -1,0 +1,46 @@
+{
+  "format": "text-pair-current-runtime-probe.v1",
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "observed_runs": [
+    {
+      "test_files": [
+        "tests/test_text_pair_features.py",
+        "tests/test_text_pair_training.py",
+        "tests/test_text_pair_contract.py"
+      ],
+      "passed": 28,
+      "failed": 0,
+      "warnings": 16
+    },
+    {
+      "test": "tests/test_text_pair_training.py::test_full_ensemble_calibration_prediction_and_reproducibility",
+      "warning_policy": "error::RuntimeWarning",
+      "passed": 0,
+      "failed": 1,
+      "failure": "RuntimeWarning: divide by zero encountered in matmul",
+      "location": "sklearn.utils.extmath._randomized_svd: U = Q @ Uhat"
+    }
+  ],
+  "dependency_versions": {
+    "numpy": "2.2.6",
+    "scipy": "1.17.1",
+    "scikit-learn": "1.8.0",
+    "threadpoolctl": "3.6.0"
+  },
+  "software_sha256": {
+    "sciona/text_pair_features.py": "1113c41b3d8018e603f6afdae71bd4a971fc63c9c95529f56c5c3a8967c890ce",
+    "sciona/text_pair_training.py": "d27bc10a06b3ea20626ae202a8a856142fbfd2ccf7abd1ccef2632927833fda4",
+    "sciona/text_pair_contract.py": "230c4aabea0cc2116dc1265fee93ceebd84edb03be37b16b7f5b6958f23e274d",
+    "tests/test_text_pair_features.py": "a92903c19cd2a1e343038d810d3e3d6eb86c3602adc7af8c380a5e9ebe457238",
+    "tests/test_text_pair_training.py": "b7b47669145efc2d3fdb3b2b419e94438c8d395960eab73f66349bc144e693ce",
+    "tests/test_text_pair_contract.py": "4cca5c7bb18315c5dc320c79508527c7ecbc8c97111a39c4f42d5d8e05b7ee87"
+  },
+  "resource_policy": {
+    "serial": true,
+    "native_threads": 1
+  },
+  "conclusion": "Current SVD runtime qualification remains unresolved. Passing default-warning tests does not resolve numerical warnings. Investigate finite inputs/outputs and floating-point status before changing the implementation or dependencies.",
+  "limits": "Observed local synthetic test runs; no promotion, historical accuracy, or clean-runtime qualification claim."
+}
