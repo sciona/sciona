@@ -1,0 +1,226 @@
+{
+  "approved": false,
+  "graph_digest": "4ccf9de579a71e90c3746650206dee7e1938bc329184fd2cc5832ae7a3f32cb3",
+  "review_sha256": "52ade976521baa14f0cee7b15dade086e50f2db96698580ceca7d19f0b142dc8",
+  "intake_script_sha256": "e912ece9ee7df25d76cd07b3aef1647c0c36d9bc6fa3cde7f06765db3d58ee02",
+  "providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.sklearn.neighbors.fitted_search.fit_euclidean_search",
+      "catalog_fqdn": "sciona.atoms.ml.sklearn.neighbors.fitted_search.fit_euclidean_search",
+      "atom_id": "3bd102e9-7676-5d48-95a1-bd4769549c29",
+      "version_id": "a3117369-1372-53fb-9fdb-5d6723ce516c",
+      "content_hash": "4ed294a2afbb147a1c30457d8e18972abbf4bec7920f8cb03f45dc9371c7bff9",
+      "provider_sha256": "f6686dea6da8d1355e3796bdc09e9fc1c34790823c6f8aac6f4462ce0b4eb75e",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.sklearn.neighbors.fitted_search.fit_euclidean_search",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.sklearn.neighbors.fitted_search",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.sklearn.neighbors.fitted_search",
+        "import_module": "sciona.atoms.ml.sklearn.neighbors.fitted_search",
+        "source_symbol": "fit_euclidean_search",
+        "description": "Fit a reusable index from nonempty finite float64 points (N,D). Copies caller storage. Default neighbor count affects auto backend selection even when a later query overrides k; it may exceed N at fit time. Queries require k <= N. State is an opaque runtime object, must not be modified, and is not a portable serialized artifact. Uses one worker and one native thread.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.4ed294a2afbb",
+      "fingerprint": "399d4bb801092beb569647d79a2256e890919610e725b98f6d00f87d27397697",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "points",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite float64 matrix (Q,D) for queries or (N,D) for fit. All features use a consistent caller-defined distance scale. Query feature count must match the fitted index. No domain identifiers or partition policy."
+        },
+        {
+          "direction": "input",
+          "name": "default_neighbors",
+          "ordinal": 1,
+          "type_desc": "int",
+          "required": false,
+          "default_value_repr": "5",
+          "constraints": "Positive integer, default 5. Influences auto backend selection at fit time even if later queries override k. May exceed N at fit time."
+        },
+        {
+          "direction": "input",
+          "name": "leaf_size",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": false,
+          "default_value_repr": "30",
+          "constraints": "Positive integer, default 30. Backend tree leaf size; changing it can change unsorted result order."
+        },
+        {
+          "direction": "output",
+          "name": "state",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Opaque fitted scikit-learn Euclidean index returned by fit_euclidean_search. Owns a copy of the fitted points. Must remain unmodified; not a portable serialized artifact. Auto backend, Minkowski p=2, one worker."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.sklearn.neighbors.fitted_search.query_euclidean_k",
+      "catalog_fqdn": "sciona.atoms.ml.sklearn.neighbors.fitted_search.query_euclidean_k",
+      "atom_id": "40a3d036-af88-5afc-8fe3-363998a1907d",
+      "version_id": "7eb10dd9-88f9-504b-af30-ad1a0312538c",
+      "content_hash": "f796cacd4bffccf0dc1dbf881462bddf0f5754ba7970b8bdd7aaf66296a1cf50",
+      "provider_sha256": "f6686dea6da8d1355e3796bdc09e9fc1c34790823c6f8aac6f4462ce0b4eb75e",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.sklearn.neighbors.fitted_search.query_euclidean_k",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.sklearn.neighbors.fitted_search",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.sklearn.neighbors.fitted_search",
+        "import_module": "sciona.atoms.ml.sklearn.neighbors.fitted_search",
+        "source_symbol": "query_euclidean_k",
+        "description": "Return distances and fitted-row indices, each (Q,k), for explicit queries. Queries use the same feature units as fitted points. Explicit self queries include self. Backend tie selection and ordering are preserved, with no cross-version ordering guarantee. Empty queries reject; caller may skip them.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.f796cacd4bff",
+      "fingerprint": "7260b3b9bb4d6b969ab98cb096cb0fe998b3d7d4e315d20717a9960e1140cd63",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "points",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite float64 matrix (Q,D) for queries or (N,D) for fit. All features use a consistent caller-defined distance scale. Query feature count must match the fitted index. No domain identifiers or partition policy."
+        },
+        {
+          "direction": "input",
+          "name": "state",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Opaque fitted scikit-learn Euclidean index returned by fit_euclidean_search. Owns a copy of the fitted points. Must remain unmodified; not a portable serialized artifact. Auto backend, Minkowski p=2, one worker."
+        },
+        {
+          "direction": "input",
+          "name": "k",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Positive integer no greater than fitted point count N. Booleans rejected. Explicit self queries include self."
+        },
+        {
+          "direction": "output",
+          "name": "distances",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 distance matrix (Q,k), in backend nearest-neighbor order. Ties and unsorted ordering are backend/version dependent; no extra stable sorting. Nonfinite returned distances reject."
+        },
+        {
+          "direction": "output",
+          "name": "indices",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Integer fitted-row index matrix (Q,k), aligned with distances. Ties and unsorted ordering are backend/version dependent; no extra stable sorting. Nonfinite returned distances reject."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.sklearn.neighbors.fitted_search.query_euclidean_radius",
+      "catalog_fqdn": "sciona.atoms.ml.sklearn.neighbors.fitted_search.query_euclidean_radius",
+      "atom_id": "28aea965-3bc1-5cc3-8ef7-5221bd69ce87",
+      "version_id": "3ea343f7-a3c2-554d-b4ef-6b40a7af9fdb",
+      "content_hash": "88d35600e360a178659d75886e31911e814b8037c642fa5acdcd1f3b7f7a0d03",
+      "provider_sha256": "f6686dea6da8d1355e3796bdc09e9fc1c34790823c6f8aac6f4462ce0b4eb75e",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.sklearn.neighbors.fitted_search.query_euclidean_radius",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.sklearn.neighbors.fitted_search",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.sklearn.neighbors.fitted_search",
+        "import_module": "sciona.atoms.ml.sklearn.neighbors.fitted_search",
+        "source_symbol": "query_euclidean_radius",
+        "description": "Return unsorted ragged distance/index rows within an inclusive radius. Radius shares the feature unit. Zero radius and rows with no matches are supported. Unsorted backend order is retained; no input-order sorting is added. Finite inputs yielding nonfinite distances reject.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.88d35600e360",
+      "fingerprint": "f1884e69d599a35ed940eef1f94165c732762a41865b14ba8eba31999f969d6c",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "points",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite float64 matrix (Q,D) for queries or (N,D) for fit. All features use a consistent caller-defined distance scale. Query feature count must match the fitted index. No domain identifiers or partition policy."
+        },
+        {
+          "direction": "input",
+          "name": "state",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Opaque fitted scikit-learn Euclidean index returned by fit_euclidean_search. Owns a copy of the fitted points. Must remain unmodified; not a portable serialized artifact. Auto backend, Minkowski p=2, one worker."
+        },
+        {
+          "direction": "input",
+          "name": "radius",
+          "ordinal": 2,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite nonnegative scalar in the feature distance unit. Inclusive boundary; zero radius allowed. Booleans rejected."
+        },
+        {
+          "direction": "output",
+          "name": "distances",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Object array (Q,) of float64 distance vectors, one per query; empty rows allowed, backend order unsorted. Ties and unsorted ordering are backend/version dependent; no extra stable sorting. Nonfinite returned distances reject."
+        },
+        {
+          "direction": "output",
+          "name": "indices",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Object array (Q,) of integer fitted-row index vectors, aligned with distance rows. Ties and unsorted ordering are backend/version dependent; no extra stable sorting. Nonfinite returned distances reject."
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Draft source/interface intake only; semantic publication and dependency gates remain.",
+    "Generic fitted Euclidean search with caller-defined feature units; partitioning, projections and identifier mapping stay in the recipe."
+  ],
+  "owners": {
+    "sciona-atoms-ml": {
+      "owner_id": "33ed07a2-1bea-5b17-8b71-d6d0e590fdd9",
+      "source_repo_id": "27b787a0-27ed-4760-92b7-ad8e8b4b815c"
+    }
+  },
+  "preserved_sha256": "f839940aa40edfe5734827698947ed1a426a79c16bb215d49820714ff632db50"
+}
