@@ -1,0 +1,213 @@
+{
+  "format": "trackml-grid-provider-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "providers": [
+    {
+      "artifact_id": "17939969-5346-573b-b04c-2f5e26cb1228",
+      "fqdn": "sciona.atoms.physics.regular_grid.evaluate_linear_grid",
+      "runtime_fqdn": "sciona.atoms.physics.regular_grid.evaluate_linear_grid",
+      "version_id": "24f0550b-c68d-537c-8497-decd99201e8f",
+      "content_hash": "a5f0f251fa77d88591109e20e54c67cde3ccdd591770bce6434eda1dad8b2720",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "points",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 matrix (Q,D) matching fitted axis order and units. Empty queries allowed; no coordinate conversion."
+        },
+        {
+          "direction": "input",
+          "name": "state",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Float64 interpolated values with shape (Q,) plus trailing value dimensions. Linear extrapolation outside the grid; nonfinite results reject. No physical validity or interpolation error bound."
+        }
+      ],
+      "operation": "Evaluate linear rectilinear interpolation state at caller-supplied query coordinates.",
+      "plain_description": "Estimate values at requested coordinates using a prepared grid.",
+      "validity_bounds": "Finite float64 matrix (Q,D) matching fitted axis order and units. Empty queries allowed; no coordinate conversion. Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact. Float64 interpolated values with shape (Q,) plus trailing value dimensions. Linear extrapolation outside the grid; nonfinite results reject. No physical validity or interpolation error bound.",
+      "reuse": "Generic rectilinear interpolation for scalar or component-valued fields; axes, units and values are supplied by the caller, with detector policy retained in the recipe.",
+      "registered_provider_dependencies": []
+    },
+    {
+      "artifact_id": "8a4cc294-6740-5ee7-8350-055c2c4895ad",
+      "fqdn": "sciona.atoms.physics.regular_grid.fit_linear_grid",
+      "runtime_fqdn": "sciona.atoms.physics.regular_grid.fit_linear_grid",
+      "version_id": "3c1ba3ed-e5ed-54f3-868f-5faadbd2a6a6",
+      "content_hash": "b2cf2424254bedefee23ec6ce1b7abc84cb6ec5691ee20e15ee69929d423e678",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "axes",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty tuple/list of finite float64 vectors, each strictly ascending or descending with at least two entries. Caller defines units; no sorting or singleton removal."
+        },
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 values whose leading dimensions match axis lengths; optional trailing component dimensions. Caller storage is copied."
+        },
+        {
+          "direction": "output",
+          "name": "state",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact."
+        }
+      ],
+      "operation": "Copy a rectilinear grid into linear interpolation runtime state with explicit extrapolation.",
+      "plain_description": "Prepare a grid of known values for estimating values between and beyond grid points.",
+      "validity_bounds": "Nonempty tuple/list of finite float64 vectors, each strictly ascending or descending with at least two entries. Caller defines units; no sorting or singleton removal. Finite float64 values whose leading dimensions match axis lengths; optional trailing component dimensions. Caller storage is copied. Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact.",
+      "reuse": "Generic rectilinear interpolation for scalar or component-valued fields; axes, units and values are supplied by the caller, with detector policy retained in the recipe.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "tests": {
+    "tests": 38,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "exact_backend_cases": 18,
+  "independent_multilinear_cases": 6,
+  "software_sha256": {
+    "tests/test_regular_grid_providers.py": "dfc567d2636755ab23d54bc8f47902185a751dff5cb90cb37e094714b529e902",
+    "scripts/review_trackml_grid_provider_semantics.py": "ed5b56e150e1ce68f1c50b7c5108c428323f5ece70bae1f6434a771484a35f74",
+    "scripts/stage_trackml_grid_providers.py": "42de50b4bfd0b3ff94281f8de55524b976a10f5c0c1869d27c6279acd47d9a1a",
+    "sciona/ghost/registry.py": "793723a75d07a88eed39f59d8d4dc327c54adbf75db7a03003516a6f74c81b51",
+    "sciona/decomposed_trackml_grid_lifecycle.py": "9bb590baa744deca72b43787b3c7c2b21190f8d5c0a8aac4eb99854b07a14e39",
+    "sciona/trackml_layer_functions.py": "b2f1b14b50a5061517c0c33fc0de90f624468ece764e0f5ac0b7c719a00dffa9",
+    "sciona-atoms-physics/src/sciona/atoms/physics/regular_grid.py": "9e697739290fac724de4c0749860c41ec24221d966ea94984c9ad2efce3dea6b"
+  },
+  "installed_packages": {
+    "annotated-types": {
+      "version": "0.7.0",
+      "hashed_files_verified": 7,
+      "active_requirements": []
+    },
+    "asttokens": {
+      "version": "2.4.1",
+      "hashed_files_verified": 13,
+      "active_requirements": [
+        "six>=1.12.0"
+      ]
+    },
+    "icontract": {
+      "version": "2.7.3",
+      "hashed_files_verified": 16,
+      "active_requirements": [
+        "asttokens<3,>=2",
+        "typing_extensions"
+      ]
+    },
+    "mpmath": {
+      "version": "1.3.0",
+      "hashed_files_verified": 92,
+      "active_requirements": []
+    },
+    "numpy": {
+      "version": "2.2.6",
+      "hashed_files_verified": 876,
+      "active_requirements": []
+    },
+    "pydantic": {
+      "version": "2.12.5",
+      "hashed_files_verified": 111,
+      "active_requirements": [
+        "annotated-types>=0.6.0",
+        "pydantic-core==2.41.5",
+        "typing-extensions>=4.14.1",
+        "typing-inspection>=0.4.2"
+      ]
+    },
+    "pydantic-core": {
+      "version": "2.41.5",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.14.1"
+      ]
+    },
+    "scipy": {
+      "version": "1.17.1",
+      "hashed_files_verified": 1423,
+      "active_requirements": [
+        "numpy<2.7,>=1.26.4"
+      ]
+    },
+    "six": {
+      "version": "1.17.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "sympy": {
+      "version": "1.14.0",
+      "hashed_files_verified": 1571,
+      "active_requirements": [
+        "mpmath<1.4,>=1.1.0"
+      ]
+    },
+    "threadpoolctl": {
+      "version": "3.6.0",
+      "hashed_files_verified": 5,
+      "active_requirements": []
+    },
+    "typing-extensions": {
+      "version": "4.16.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "typing-inspection": {
+      "version": "0.4.2",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.12.0"
+      ]
+    }
+  },
+  "intake_plan_sha256": "d3a51a50f5cf10f6aea6490f036e59580f68490e004e48785f8704f022252474",
+  "resource_policy": {
+    "serial_tests": true,
+    "native_threads": 1
+  },
+  "limitations": [
+    "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+    "Finite float64 rectilinear grids only, with strictly ascending or descending axes of at least two entries.",
+    "Values may have trailing component dimensions. Caller defines axis order and coordinate/component units.",
+    "Fit copies caller storage. Runtime state must remain unmodified and is not a portable serialized artifact.",
+    "Linear interpolation and extrapolation only; no physical validity or interpolation error bound is claimed.",
+    "Empty query batches are supported. Nonfinite results reject; finite rounding error is not exhaustively bounded.",
+    "Detector coordinate dispatch, singleton removal, missing-map and calibration policy remain in the recipe.",
+    "Concrete witness rejects abstract execution; no symbolic proof is claimed.",
+    "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+    "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+    "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate."
+  ]
+}

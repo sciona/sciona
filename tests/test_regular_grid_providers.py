@@ -74,3 +74,11 @@ def test_configuration_and_overflow_reject():
     state.method = 'nearest'
     with pytest.raises(ValueError):
         evaluate_linear_grid(np.array([[.5]]), state)
+
+
+def test_registered_abstract_witness_rejects():
+    from sciona.ghost.registry import get_witness
+    for function in (fit_linear_grid, evaluate_linear_grid):
+        witness = get_witness(function.__module__+'.'+function.__name__)
+        with pytest.raises(ValueError, match='Concrete grid'):
+            witness()
