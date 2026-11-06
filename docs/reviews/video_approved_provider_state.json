@@ -1,0 +1,1387 @@
+{
+  "passed": true,
+  "records": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.calibration.empirical_f1.apply_column_thresholds",
+      "catalog_fqdn": "sciona.atoms.ml.calibration.empirical_f1.apply_column_thresholds",
+      "artifact_id": "fe055a2d-5444-5c56-a52c-b4f1876aeba1",
+      "version_id": "2c4add48-5699-5485-865c-da509201fc45",
+      "content_hash": "b1df674cf843553cef39c8fefb23c21a23cad31671503a6104e64aa954aebe8f",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "scores",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input scores. Apply inclusive per-column thresholds to finite float64 scores (N,L).\n\nScores must be nonempty and in [0,1]. Thresholds are a finite float64 vector\n(L,), allowed outside [0,1] to express all/none decisions. Returns a new\nint64 binary matrix of identical shape. No fitting, clipping or mutation."
+        },
+        {
+          "direction": "input",
+          "name": "thresholds",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input thresholds. Apply inclusive per-column thresholds to finite float64 scores (N,L).\n\nScores must be nonempty and in [0,1]. Thresholds are a finite float64 vector\n(L,), allowed outside [0,1] to express all/none decisions. Returns a new\nint64 binary matrix of identical shape. No fitting, clipping or mutation."
+        },
+        {
+          "direction": "output",
+          "name": "predictions",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "output predictions. Apply inclusive per-column thresholds to finite float64 scores (N,L).\n\nScores must be nonempty and in [0,1]. Thresholds are a finite float64 vector\n(L,), allowed outside [0,1] to express all/none decisions. Returns a new\nint64 binary matrix of identical shape. No fitting, clipping or mutation."
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "scores",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input scores. Apply inclusive per-column thresholds to finite float64 scores (N,L).\n\nScores must be nonempty and in [0,1]. Thresholds are a finite float64 vector\n(L,), allowed outside [0,1] to express all/none decisions. Returns a new\nint64 binary matrix of identical shape. No fitting, clipping or mutation."
+        },
+        {
+          "direction": "input",
+          "name": "thresholds",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input thresholds. Apply inclusive per-column thresholds to finite float64 scores (N,L).\n\nScores must be nonempty and in [0,1]. Thresholds are a finite float64 vector\n(L,), allowed outside [0,1] to express all/none decisions. Returns a new\nint64 binary matrix of identical shape. No fitting, clipping or mutation."
+        },
+        {
+          "direction": "output",
+          "name": "predictions",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "output predictions. Apply inclusive per-column thresholds to finite float64 scores (N,L).\n\nScores must be nonempty and in [0,1]. Thresholds are a finite float64 vector\n(L,), allowed outside [0,1] to express all/none decisions. Returns a new\nint64 binary matrix of identical shape. No fitting, clipping or mutation."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.calibration.empirical_f1.fit_empirical_f1_thresholds",
+      "catalog_fqdn": "sciona.atoms.ml.calibration.empirical_f1.fit_empirical_f1_thresholds",
+      "artifact_id": "1d426405-3d0e-5545-b9c4-51b4eb2681af",
+      "version_id": "83608ee9-c047-53da-acb5-209901f7b245",
+      "content_hash": "a0c822126d1cfe7c14c4a451a0a8ae1070ffb50a0959a56776c2d3127c4e7c96",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "scores",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input scores. Maximize held-out empirical F1 independently for each score column.\n\nNonempty finite float64 scores (N,L) in [0,1] and aligned int64 binary\nlabels are required; every column must contain both classes. Predictions\nuse score >= threshold. Among equal computed float64 F1 values, choose\nthe highest observed-score threshold. Tied scores are processed together.\nReturns a new float64 vector (L,); inputs are unchanged. Sorting takes\nO(L*N*log(N)) time and O(N) temporary memory per column.\n\nCaller must enforce training/calibration/query separation. This fits a\ndecision threshold, not calibrated probabilities or unbiased accuracy.\nNo expected-F1 approximation, class weighting or domain policy is used."
+        },
+        {
+          "direction": "input",
+          "name": "labels",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input labels. Maximize held-out empirical F1 independently for each score column.\n\nNonempty finite float64 scores (N,L) in [0,1] and aligned int64 binary\nlabels are required; every column must contain both classes. Predictions\nuse score >= threshold. Among equal computed float64 F1 values, choose\nthe highest observed-score threshold. Tied scores are processed together.\nReturns a new float64 vector (L,); inputs are unchanged. Sorting takes\nO(L*N*log(N)) time and O(N) temporary memory per column.\n\nCaller must enforce training/calibration/query separation. This fits a\ndecision threshold, not calibrated probabilities or unbiased accuracy.\nNo expected-F1 approximation, class weighting or domain policy is used."
+        },
+        {
+          "direction": "output",
+          "name": "thresholds",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "output thresholds. Maximize held-out empirical F1 independently for each score column.\n\nNonempty finite float64 scores (N,L) in [0,1] and aligned int64 binary\nlabels are required; every column must contain both classes. Predictions\nuse score >= threshold. Among equal computed float64 F1 values, choose\nthe highest observed-score threshold. Tied scores are processed together.\nReturns a new float64 vector (L,); inputs are unchanged. Sorting takes\nO(L*N*log(N)) time and O(N) temporary memory per column.\n\nCaller must enforce training/calibration/query separation. This fits a\ndecision threshold, not calibrated probabilities or unbiased accuracy.\nNo expected-F1 approximation, class weighting or domain policy is used."
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "scores",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input scores. Maximize held-out empirical F1 independently for each score column.\n\nNonempty finite float64 scores (N,L) in [0,1] and aligned int64 binary\nlabels are required; every column must contain both classes. Predictions\nuse score >= threshold. Among equal computed float64 F1 values, choose\nthe highest observed-score threshold. Tied scores are processed together.\nReturns a new float64 vector (L,); inputs are unchanged. Sorting takes\nO(L*N*log(N)) time and O(N) temporary memory per column.\n\nCaller must enforce training/calibration/query separation. This fits a\ndecision threshold, not calibrated probabilities or unbiased accuracy.\nNo expected-F1 approximation, class weighting or domain policy is used."
+        },
+        {
+          "direction": "input",
+          "name": "labels",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input labels. Maximize held-out empirical F1 independently for each score column.\n\nNonempty finite float64 scores (N,L) in [0,1] and aligned int64 binary\nlabels are required; every column must contain both classes. Predictions\nuse score >= threshold. Among equal computed float64 F1 values, choose\nthe highest observed-score threshold. Tied scores are processed together.\nReturns a new float64 vector (L,); inputs are unchanged. Sorting takes\nO(L*N*log(N)) time and O(N) temporary memory per column.\n\nCaller must enforce training/calibration/query separation. This fits a\ndecision threshold, not calibrated probabilities or unbiased accuracy.\nNo expected-F1 approximation, class weighting or domain policy is used."
+        },
+        {
+          "direction": "output",
+          "name": "thresholds",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "output thresholds. Maximize held-out empirical F1 independently for each score column.\n\nNonempty finite float64 scores (N,L) in [0,1] and aligned int64 binary\nlabels are required; every column must contain both classes. Predictions\nuse score >= threshold. Among equal computed float64 F1 values, choose\nthe highest observed-score threshold. Tied scores are processed together.\nReturns a new float64 vector (L,); inputs are unchanged. Sorting takes\nO(L*N*log(N)) time and O(N) temporary memory per column.\n\nCaller must enforce training/calibration/query separation. This fits a\ndecision threshold, not calibrated probabilities or unbiased accuracy.\nNo expected-F1 approximation, class weighting or domain policy is used."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.masked_attention.masked_attention_pool",
+      "catalog_fqdn": "sciona.atoms.ml.masked_attention.masked_attention_pool",
+      "artifact_id": "518db7aa-4510-5597-ae1c-765f440c1276",
+      "version_id": "b0f2091c-22bd-5002-8743-42c41efcb00f",
+      "content_hash": "2a01012ac49ced9ec73f4b2c9b68a411de9dc1fa27708a31c2f581b8aaad43bc",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input values. Softmax-weighted reduction of values (B,T,F) over valid positions.\n\nLogits (B,T) share the floating dtype and device of values; mask is boolean\n(B,T) on the same device. Dimensions are nonempty, every row has a valid\nposition, and valid values/logits must be finite. Masked entries may be\nnonfinite: they are replaced before arithmetic and receive zero gradient.\nReturns pooled values (B,F) and weights (B,T), preserving autograd, dtype\nand device. Inputs are unchanged. No score model, position encoding,\ntraining, padding generation or application-specific policy is included."
+        },
+        {
+          "direction": "input",
+          "name": "logits",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input logits. Softmax-weighted reduction of values (B,T,F) over valid positions.\n\nLogits (B,T) share the floating dtype and device of values; mask is boolean\n(B,T) on the same device. Dimensions are nonempty, every row has a valid\nposition, and valid values/logits must be finite. Masked entries may be\nnonfinite: they are replaced before arithmetic and receive zero gradient.\nReturns pooled values (B,F) and weights (B,T), preserving autograd, dtype\nand device. Inputs are unchanged. No score model, position encoding,\ntraining, padding generation or application-specific policy is included."
+        },
+        {
+          "direction": "input",
+          "name": "mask",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input mask. Softmax-weighted reduction of values (B,T,F) over valid positions.\n\nLogits (B,T) share the floating dtype and device of values; mask is boolean\n(B,T) on the same device. Dimensions are nonempty, every row has a valid\nposition, and valid values/logits must be finite. Masked entries may be\nnonfinite: they are replaced before arithmetic and receive zero gradient.\nReturns pooled values (B,F) and weights (B,T), preserving autograd, dtype\nand device. Inputs are unchanged. No score model, position encoding,\ntraining, padding generation or application-specific policy is included."
+        },
+        {
+          "direction": "output",
+          "name": "pooled",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "output pooled. Softmax-weighted reduction of values (B,T,F) over valid positions.\n\nLogits (B,T) share the floating dtype and device of values; mask is boolean\n(B,T) on the same device. Dimensions are nonempty, every row has a valid\nposition, and valid values/logits must be finite. Masked entries may be\nnonfinite: they are replaced before arithmetic and receive zero gradient.\nReturns pooled values (B,F) and weights (B,T), preserving autograd, dtype\nand device. Inputs are unchanged. No score model, position encoding,\ntraining, padding generation or application-specific policy is included."
+        },
+        {
+          "direction": "output",
+          "name": "weights",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "output weights. Softmax-weighted reduction of values (B,T,F) over valid positions.\n\nLogits (B,T) share the floating dtype and device of values; mask is boolean\n(B,T) on the same device. Dimensions are nonempty, every row has a valid\nposition, and valid values/logits must be finite. Masked entries may be\nnonfinite: they are replaced before arithmetic and receive zero gradient.\nReturns pooled values (B,F) and weights (B,T), preserving autograd, dtype\nand device. Inputs are unchanged. No score model, position encoding,\ntraining, padding generation or application-specific policy is included."
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input values. Softmax-weighted reduction of values (B,T,F) over valid positions.\n\nLogits (B,T) share the floating dtype and device of values; mask is boolean\n(B,T) on the same device. Dimensions are nonempty, every row has a valid\nposition, and valid values/logits must be finite. Masked entries may be\nnonfinite: they are replaced before arithmetic and receive zero gradient.\nReturns pooled values (B,F) and weights (B,T), preserving autograd, dtype\nand device. Inputs are unchanged. No score model, position encoding,\ntraining, padding generation or application-specific policy is included."
+        },
+        {
+          "direction": "input",
+          "name": "logits",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input logits. Softmax-weighted reduction of values (B,T,F) over valid positions.\n\nLogits (B,T) share the floating dtype and device of values; mask is boolean\n(B,T) on the same device. Dimensions are nonempty, every row has a valid\nposition, and valid values/logits must be finite. Masked entries may be\nnonfinite: they are replaced before arithmetic and receive zero gradient.\nReturns pooled values (B,F) and weights (B,T), preserving autograd, dtype\nand device. Inputs are unchanged. No score model, position encoding,\ntraining, padding generation or application-specific policy is included."
+        },
+        {
+          "direction": "input",
+          "name": "mask",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input mask. Softmax-weighted reduction of values (B,T,F) over valid positions.\n\nLogits (B,T) share the floating dtype and device of values; mask is boolean\n(B,T) on the same device. Dimensions are nonempty, every row has a valid\nposition, and valid values/logits must be finite. Masked entries may be\nnonfinite: they are replaced before arithmetic and receive zero gradient.\nReturns pooled values (B,F) and weights (B,T), preserving autograd, dtype\nand device. Inputs are unchanged. No score model, position encoding,\ntraining, padding generation or application-specific policy is included."
+        },
+        {
+          "direction": "output",
+          "name": "pooled",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "output pooled. Softmax-weighted reduction of values (B,T,F) over valid positions.\n\nLogits (B,T) share the floating dtype and device of values; mask is boolean\n(B,T) on the same device. Dimensions are nonempty, every row has a valid\nposition, and valid values/logits must be finite. Masked entries may be\nnonfinite: they are replaced before arithmetic and receive zero gradient.\nReturns pooled values (B,F) and weights (B,T), preserving autograd, dtype\nand device. Inputs are unchanged. No score model, position encoding,\ntraining, padding generation or application-specific policy is included."
+        },
+        {
+          "direction": "output",
+          "name": "weights",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "output weights. Softmax-weighted reduction of values (B,T,F) over valid positions.\n\nLogits (B,T) share the floating dtype and device of values; mask is boolean\n(B,T) on the same device. Dimensions are nonempty, every row has a valid\nposition, and valid values/logits must be finite. Masked entries may be\nnonfinite: they are replaced before arithmetic and receive zero gradient.\nReturns pooled values (B,F) and weights (B,T), preserving autograd, dtype\nand device. Inputs are unchanged. No score model, position encoding,\ntraining, padding generation or application-specific policy is included."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.masked_attention.sigmoid_context_gate",
+      "catalog_fqdn": "sciona.atoms.ml.masked_attention.sigmoid_context_gate",
+      "artifact_id": "1224b27f-b754-5478-90a0-e217d703d93a",
+      "version_id": "857ed676-ab85-5dbf-8d13-0abc4f718357",
+      "content_hash": "8ec9ce4dfc887a3f12c04f143015f25356c7901e8b9ffaa80ed936b005de8cc4",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input values. Multiply a finite floating matrix by sigmoid of aligned finite logits.\n\nInputs are nonempty (B,F) tensors with identical dtype/device. Returns a\nnew tensor with autograd preserved and does not mutate inputs. The caller\nsupplies the gate logits; no affine parameters or fitted state are owned."
+        },
+        {
+          "direction": "input",
+          "name": "logits",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input logits. Multiply a finite floating matrix by sigmoid of aligned finite logits.\n\nInputs are nonempty (B,F) tensors with identical dtype/device. Returns a\nnew tensor with autograd preserved and does not mutate inputs. The caller\nsupplies the gate logits; no affine parameters or fitted state are owned."
+        },
+        {
+          "direction": "output",
+          "name": "gated",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "output gated. Multiply a finite floating matrix by sigmoid of aligned finite logits.\n\nInputs are nonempty (B,F) tensors with identical dtype/device. Returns a\nnew tensor with autograd preserved and does not mutate inputs. The caller\nsupplies the gate logits; no affine parameters or fitted state are owned."
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input values. Multiply a finite floating matrix by sigmoid of aligned finite logits.\n\nInputs are nonempty (B,F) tensors with identical dtype/device. Returns a\nnew tensor with autograd preserved and does not mutate inputs. The caller\nsupplies the gate logits; no affine parameters or fitted state are owned."
+        },
+        {
+          "direction": "input",
+          "name": "logits",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input logits. Multiply a finite floating matrix by sigmoid of aligned finite logits.\n\nInputs are nonempty (B,F) tensors with identical dtype/device. Returns a\nnew tensor with autograd preserved and does not mutate inputs. The caller\nsupplies the gate logits; no affine parameters or fitted state are owned."
+        },
+        {
+          "direction": "output",
+          "name": "gated",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "output gated. Multiply a finite floating matrix by sigmoid of aligned finite logits.\n\nInputs are nonempty (B,F) tensors with identical dtype/device. Returns a\nnew tensor with autograd preserved and does not mutate inputs. The caller\nsupplies the gate logits; no affine parameters or fitted state are owned."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.materialized_prediction.average",
+      "catalog_fqdn": "sciona.atoms.ml.model_selection.materialized_prediction.average",
+      "artifact_id": "3e054efb-38d6-56c1-a7c8-26da81e7a310",
+      "version_id": "fbea5906-9987-5e67-88c4-5ffe3d971e66",
+      "content_hash": "280b371b126f6d7f580dd169289280af76fc50d64350b784c3aefd346df18af5",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "vectors",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty ordered list of finite real vectors with identical shape and physical units."
+        },
+        {
+          "direction": "output",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "NDArray[np.float64]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Owned positional arithmetic mean using caller order; rejects nonfinite sum or incompatible shapes."
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "vectors",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty ordered list of finite real vectors with identical shape and physical units."
+        },
+        {
+          "direction": "output",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "NDArray[np.float64]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Owned positional arithmetic mean using caller order; rejects nonfinite sum or incompatible shapes."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.sklearn.feature_extraction.sparse_numeric.fit_numeric_vocabulary",
+      "catalog_fqdn": "sciona.atoms.ml.sklearn.feature_extraction.sparse_numeric.fit_numeric_vocabulary",
+      "artifact_id": "e3882f2f-68f1-5acc-a2f0-2c0dc0b46c6d",
+      "version_id": "fbf99b42-8b78-53ba-a5d3-3b4c2774f077",
+      "content_hash": "1aa767b87ac894561683d96baffaf1d607dfdbb15aea9c4bbc4e49e627159d42",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "records",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input records. Consume numeric mappings once and return fitted vocabulary and CSR rows.\n\nAccepts a nonempty iterable, including a one-shot generator, of mappings\nfrom nonempty string keys to finite real values (booleans excluded). Signed\nand zero values are accepted. Empty rows are allowed but the total feature\nvocabulary must be nonempty. Columns use sorted feature names. Returns a\nfitted sklearn DictVectorizer and float64 CSR matrix in input row order.\n\nSource mappings are validated and copied one at a time, never materialized\nas a full list. The output CSR and vocabulary remain resident. Caller owns\ntraining/query separation and must not mutate fitted state between calls.\nNo categorical encoding, labels, scaling or application policy is imposed."
+        },
+        {
+          "direction": "output",
+          "name": "state",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "output state. Consume numeric mappings once and return fitted vocabulary and CSR rows.\n\nAccepts a nonempty iterable, including a one-shot generator, of mappings\nfrom nonempty string keys to finite real values (booleans excluded). Signed\nand zero values are accepted. Empty rows are allowed but the total feature\nvocabulary must be nonempty. Columns use sorted feature names. Returns a\nfitted sklearn DictVectorizer and float64 CSR matrix in input row order.\n\nSource mappings are validated and copied one at a time, never materialized\nas a full list. The output CSR and vocabulary remain resident. Caller owns\ntraining/query separation and must not mutate fitted state between calls.\nNo categorical encoding, labels, scaling or application policy is imposed."
+        },
+        {
+          "direction": "output",
+          "name": "matrix",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "output matrix. Consume numeric mappings once and return fitted vocabulary and CSR rows.\n\nAccepts a nonempty iterable, including a one-shot generator, of mappings\nfrom nonempty string keys to finite real values (booleans excluded). Signed\nand zero values are accepted. Empty rows are allowed but the total feature\nvocabulary must be nonempty. Columns use sorted feature names. Returns a\nfitted sklearn DictVectorizer and float64 CSR matrix in input row order.\n\nSource mappings are validated and copied one at a time, never materialized\nas a full list. The output CSR and vocabulary remain resident. Caller owns\ntraining/query separation and must not mutate fitted state between calls.\nNo categorical encoding, labels, scaling or application policy is imposed."
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "records",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input records. Consume numeric mappings once and return fitted vocabulary and CSR rows.\n\nAccepts a nonempty iterable, including a one-shot generator, of mappings\nfrom nonempty string keys to finite real values (booleans excluded). Signed\nand zero values are accepted. Empty rows are allowed but the total feature\nvocabulary must be nonempty. Columns use sorted feature names. Returns a\nfitted sklearn DictVectorizer and float64 CSR matrix in input row order.\n\nSource mappings are validated and copied one at a time, never materialized\nas a full list. The output CSR and vocabulary remain resident. Caller owns\ntraining/query separation and must not mutate fitted state between calls.\nNo categorical encoding, labels, scaling or application policy is imposed."
+        },
+        {
+          "direction": "output",
+          "name": "state",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "output state. Consume numeric mappings once and return fitted vocabulary and CSR rows.\n\nAccepts a nonempty iterable, including a one-shot generator, of mappings\nfrom nonempty string keys to finite real values (booleans excluded). Signed\nand zero values are accepted. Empty rows are allowed but the total feature\nvocabulary must be nonempty. Columns use sorted feature names. Returns a\nfitted sklearn DictVectorizer and float64 CSR matrix in input row order.\n\nSource mappings are validated and copied one at a time, never materialized\nas a full list. The output CSR and vocabulary remain resident. Caller owns\ntraining/query separation and must not mutate fitted state between calls.\nNo categorical encoding, labels, scaling or application policy is imposed."
+        },
+        {
+          "direction": "output",
+          "name": "matrix",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "output matrix. Consume numeric mappings once and return fitted vocabulary and CSR rows.\n\nAccepts a nonempty iterable, including a one-shot generator, of mappings\nfrom nonempty string keys to finite real values (booleans excluded). Signed\nand zero values are accepted. Empty rows are allowed but the total feature\nvocabulary must be nonempty. Columns use sorted feature names. Returns a\nfitted sklearn DictVectorizer and float64 CSR matrix in input row order.\n\nSource mappings are validated and copied one at a time, never materialized\nas a full list. The output CSR and vocabulary remain resident. Caller owns\ntraining/query separation and must not mutate fitted state between calls.\nNo categorical encoding, labels, scaling or application policy is imposed."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.sklearn.feature_extraction.sparse_numeric.transform_numeric_vocabulary",
+      "catalog_fqdn": "sciona.atoms.ml.sklearn.feature_extraction.sparse_numeric.transform_numeric_vocabulary",
+      "artifact_id": "01be5370-5572-50ad-b049-4cfa696fff38",
+      "version_id": "7b9dd6a5-da00-54aa-bdba-727a7ce830aa",
+      "content_hash": "f3dbb15e6252262a50d333c18d0e2467ca57a72a1738ba0a1ca6547f54efa9f6",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "records",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input records. Transform a nonempty numeric-mapping iterable using frozen vocabulary.\n\nUses the fit operation's mapping contract and returns float64 CSR in input\nrow order with the original column order. Unknown keys are validated then\nignored; empty mappings yield all-zero rows. Does not refit or mutate state\nor input mappings. Source mappings are consumed once; output CSR is resident."
+        },
+        {
+          "direction": "input",
+          "name": "state",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input state. Transform a nonempty numeric-mapping iterable using frozen vocabulary.\n\nUses the fit operation's mapping contract and returns float64 CSR in input\nrow order with the original column order. Unknown keys are validated then\nignored; empty mappings yield all-zero rows. Does not refit or mutate state\nor input mappings. Source mappings are consumed once; output CSR is resident."
+        },
+        {
+          "direction": "output",
+          "name": "matrix",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "output matrix. Transform a nonempty numeric-mapping iterable using frozen vocabulary.\n\nUses the fit operation's mapping contract and returns float64 CSR in input\nrow order with the original column order. Unknown keys are validated then\nignored; empty mappings yield all-zero rows. Does not refit or mutate state\nor input mappings. Source mappings are consumed once; output CSR is resident."
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "records",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input records. Transform a nonempty numeric-mapping iterable using frozen vocabulary.\n\nUses the fit operation's mapping contract and returns float64 CSR in input\nrow order with the original column order. Unknown keys are validated then\nignored; empty mappings yield all-zero rows. Does not refit or mutate state\nor input mappings. Source mappings are consumed once; output CSR is resident."
+        },
+        {
+          "direction": "input",
+          "name": "state",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input state. Transform a nonempty numeric-mapping iterable using frozen vocabulary.\n\nUses the fit operation's mapping contract and returns float64 CSR in input\nrow order with the original column order. Unknown keys are validated then\nignored; empty mappings yield all-zero rows. Does not refit or mutate state\nor input mappings. Source mappings are consumed once; output CSR is resident."
+        },
+        {
+          "direction": "output",
+          "name": "matrix",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "output matrix. Transform a nonempty numeric-mapping iterable using frozen vocabulary.\n\nUses the fit operation's mapping contract and returns float64 CSR in input\nrow order with the original column order. Unknown keys are validated then\nignored; empty mappings yield all-zero rows. Does not refit or mutate state\nor input mappings. Source mappings are consumed once; output CSR is resident."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.sklearn.linear_model.sparse_binary.fit_sparse_binary_logistic",
+      "catalog_fqdn": "sciona.atoms.ml.sklearn.linear_model.sparse_binary.fit_sparse_binary_logistic",
+      "artifact_id": "789459ad-0c67-5178-82a1-d725a27dd2df",
+      "version_id": "5d4b9920-7a78-5e33-8e20-ee8142d8aaf9",
+      "content_hash": "0f170f6329938bf8d4d46c3e0bae91176b746812cac262cc313cf9ee5bae027d",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "features",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input features. Fit L2 binary logistic regression using LBFGS and an intercept.\n\nFeatures are a nonempty canonical float64 scipy CSR matrix; aligned int64\nlabels (N,) contain both 0 and 1. C (inverse regularization) and tolerance\nare finite positive Python numbers; maximum_iterations is a positive Python\nint and seed is a Python int in [0,2**32). Controls are caller supplied.\nNo feature scaling, weighting, class balancing or split policy is imposed.\n\nReturns a fitted sklearn LogisticRegression. Nonconvergence raises rather\nthan returning a partial fit. Native thread pools are limited to one during\nfitting; caller owns aggregate concurrency. A sparse copy protects input\nstorage. Fitted coefficients remain dense; source features are not densified."
+        },
+        {
+          "direction": "input",
+          "name": "labels",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input labels. Fit L2 binary logistic regression using LBFGS and an intercept.\n\nFeatures are a nonempty canonical float64 scipy CSR matrix; aligned int64\nlabels (N,) contain both 0 and 1. C (inverse regularization) and tolerance\nare finite positive Python numbers; maximum_iterations is a positive Python\nint and seed is a Python int in [0,2**32). Controls are caller supplied.\nNo feature scaling, weighting, class balancing or split policy is imposed.\n\nReturns a fitted sklearn LogisticRegression. Nonconvergence raises rather\nthan returning a partial fit. Native thread pools are limited to one during\nfitting; caller owns aggregate concurrency. A sparse copy protects input\nstorage. Fitted coefficients remain dense; source features are not densified."
+        },
+        {
+          "direction": "input",
+          "name": "inverse_regularization",
+          "ordinal": 2,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input inverse_regularization. Fit L2 binary logistic regression using LBFGS and an intercept.\n\nFeatures are a nonempty canonical float64 scipy CSR matrix; aligned int64\nlabels (N,) contain both 0 and 1. C (inverse regularization) and tolerance\nare finite positive Python numbers; maximum_iterations is a positive Python\nint and seed is a Python int in [0,2**32). Controls are caller supplied.\nNo feature scaling, weighting, class balancing or split policy is imposed.\n\nReturns a fitted sklearn LogisticRegression. Nonconvergence raises rather\nthan returning a partial fit. Native thread pools are limited to one during\nfitting; caller owns aggregate concurrency. A sparse copy protects input\nstorage. Fitted coefficients remain dense; source features are not densified."
+        },
+        {
+          "direction": "input",
+          "name": "tolerance",
+          "ordinal": 3,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input tolerance. Fit L2 binary logistic regression using LBFGS and an intercept.\n\nFeatures are a nonempty canonical float64 scipy CSR matrix; aligned int64\nlabels (N,) contain both 0 and 1. C (inverse regularization) and tolerance\nare finite positive Python numbers; maximum_iterations is a positive Python\nint and seed is a Python int in [0,2**32). Controls are caller supplied.\nNo feature scaling, weighting, class balancing or split policy is imposed.\n\nReturns a fitted sklearn LogisticRegression. Nonconvergence raises rather\nthan returning a partial fit. Native thread pools are limited to one during\nfitting; caller owns aggregate concurrency. A sparse copy protects input\nstorage. Fitted coefficients remain dense; source features are not densified."
+        },
+        {
+          "direction": "input",
+          "name": "maximum_iterations",
+          "ordinal": 4,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input maximum_iterations. Fit L2 binary logistic regression using LBFGS and an intercept.\n\nFeatures are a nonempty canonical float64 scipy CSR matrix; aligned int64\nlabels (N,) contain both 0 and 1. C (inverse regularization) and tolerance\nare finite positive Python numbers; maximum_iterations is a positive Python\nint and seed is a Python int in [0,2**32). Controls are caller supplied.\nNo feature scaling, weighting, class balancing or split policy is imposed.\n\nReturns a fitted sklearn LogisticRegression. Nonconvergence raises rather\nthan returning a partial fit. Native thread pools are limited to one during\nfitting; caller owns aggregate concurrency. A sparse copy protects input\nstorage. Fitted coefficients remain dense; source features are not densified."
+        },
+        {
+          "direction": "input",
+          "name": "seed",
+          "ordinal": 5,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input seed. Fit L2 binary logistic regression using LBFGS and an intercept.\n\nFeatures are a nonempty canonical float64 scipy CSR matrix; aligned int64\nlabels (N,) contain both 0 and 1. C (inverse regularization) and tolerance\nare finite positive Python numbers; maximum_iterations is a positive Python\nint and seed is a Python int in [0,2**32). Controls are caller supplied.\nNo feature scaling, weighting, class balancing or split policy is imposed.\n\nReturns a fitted sklearn LogisticRegression. Nonconvergence raises rather\nthan returning a partial fit. Native thread pools are limited to one during\nfitting; caller owns aggregate concurrency. A sparse copy protects input\nstorage. Fitted coefficients remain dense; source features are not densified."
+        },
+        {
+          "direction": "output",
+          "name": "model",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "output model. Fit L2 binary logistic regression using LBFGS and an intercept.\n\nFeatures are a nonempty canonical float64 scipy CSR matrix; aligned int64\nlabels (N,) contain both 0 and 1. C (inverse regularization) and tolerance\nare finite positive Python numbers; maximum_iterations is a positive Python\nint and seed is a Python int in [0,2**32). Controls are caller supplied.\nNo feature scaling, weighting, class balancing or split policy is imposed.\n\nReturns a fitted sklearn LogisticRegression. Nonconvergence raises rather\nthan returning a partial fit. Native thread pools are limited to one during\nfitting; caller owns aggregate concurrency. A sparse copy protects input\nstorage. Fitted coefficients remain dense; source features are not densified."
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "features",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input features. Fit L2 binary logistic regression using LBFGS and an intercept.\n\nFeatures are a nonempty canonical float64 scipy CSR matrix; aligned int64\nlabels (N,) contain both 0 and 1. C (inverse regularization) and tolerance\nare finite positive Python numbers; maximum_iterations is a positive Python\nint and seed is a Python int in [0,2**32). Controls are caller supplied.\nNo feature scaling, weighting, class balancing or split policy is imposed.\n\nReturns a fitted sklearn LogisticRegression. Nonconvergence raises rather\nthan returning a partial fit. Native thread pools are limited to one during\nfitting; caller owns aggregate concurrency. A sparse copy protects input\nstorage. Fitted coefficients remain dense; source features are not densified."
+        },
+        {
+          "direction": "input",
+          "name": "labels",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input labels. Fit L2 binary logistic regression using LBFGS and an intercept.\n\nFeatures are a nonempty canonical float64 scipy CSR matrix; aligned int64\nlabels (N,) contain both 0 and 1. C (inverse regularization) and tolerance\nare finite positive Python numbers; maximum_iterations is a positive Python\nint and seed is a Python int in [0,2**32). Controls are caller supplied.\nNo feature scaling, weighting, class balancing or split policy is imposed.\n\nReturns a fitted sklearn LogisticRegression. Nonconvergence raises rather\nthan returning a partial fit. Native thread pools are limited to one during\nfitting; caller owns aggregate concurrency. A sparse copy protects input\nstorage. Fitted coefficients remain dense; source features are not densified."
+        },
+        {
+          "direction": "input",
+          "name": "inverse_regularization",
+          "ordinal": 2,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input inverse_regularization. Fit L2 binary logistic regression using LBFGS and an intercept.\n\nFeatures are a nonempty canonical float64 scipy CSR matrix; aligned int64\nlabels (N,) contain both 0 and 1. C (inverse regularization) and tolerance\nare finite positive Python numbers; maximum_iterations is a positive Python\nint and seed is a Python int in [0,2**32). Controls are caller supplied.\nNo feature scaling, weighting, class balancing or split policy is imposed.\n\nReturns a fitted sklearn LogisticRegression. Nonconvergence raises rather\nthan returning a partial fit. Native thread pools are limited to one during\nfitting; caller owns aggregate concurrency. A sparse copy protects input\nstorage. Fitted coefficients remain dense; source features are not densified."
+        },
+        {
+          "direction": "input",
+          "name": "tolerance",
+          "ordinal": 3,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input tolerance. Fit L2 binary logistic regression using LBFGS and an intercept.\n\nFeatures are a nonempty canonical float64 scipy CSR matrix; aligned int64\nlabels (N,) contain both 0 and 1. C (inverse regularization) and tolerance\nare finite positive Python numbers; maximum_iterations is a positive Python\nint and seed is a Python int in [0,2**32). Controls are caller supplied.\nNo feature scaling, weighting, class balancing or split policy is imposed.\n\nReturns a fitted sklearn LogisticRegression. Nonconvergence raises rather\nthan returning a partial fit. Native thread pools are limited to one during\nfitting; caller owns aggregate concurrency. A sparse copy protects input\nstorage. Fitted coefficients remain dense; source features are not densified."
+        },
+        {
+          "direction": "input",
+          "name": "maximum_iterations",
+          "ordinal": 4,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input maximum_iterations. Fit L2 binary logistic regression using LBFGS and an intercept.\n\nFeatures are a nonempty canonical float64 scipy CSR matrix; aligned int64\nlabels (N,) contain both 0 and 1. C (inverse regularization) and tolerance\nare finite positive Python numbers; maximum_iterations is a positive Python\nint and seed is a Python int in [0,2**32). Controls are caller supplied.\nNo feature scaling, weighting, class balancing or split policy is imposed.\n\nReturns a fitted sklearn LogisticRegression. Nonconvergence raises rather\nthan returning a partial fit. Native thread pools are limited to one during\nfitting; caller owns aggregate concurrency. A sparse copy protects input\nstorage. Fitted coefficients remain dense; source features are not densified."
+        },
+        {
+          "direction": "input",
+          "name": "seed",
+          "ordinal": 5,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input seed. Fit L2 binary logistic regression using LBFGS and an intercept.\n\nFeatures are a nonempty canonical float64 scipy CSR matrix; aligned int64\nlabels (N,) contain both 0 and 1. C (inverse regularization) and tolerance\nare finite positive Python numbers; maximum_iterations is a positive Python\nint and seed is a Python int in [0,2**32). Controls are caller supplied.\nNo feature scaling, weighting, class balancing or split policy is imposed.\n\nReturns a fitted sklearn LogisticRegression. Nonconvergence raises rather\nthan returning a partial fit. Native thread pools are limited to one during\nfitting; caller owns aggregate concurrency. A sparse copy protects input\nstorage. Fitted coefficients remain dense; source features are not densified."
+        },
+        {
+          "direction": "output",
+          "name": "model",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "output model. Fit L2 binary logistic regression using LBFGS and an intercept.\n\nFeatures are a nonempty canonical float64 scipy CSR matrix; aligned int64\nlabels (N,) contain both 0 and 1. C (inverse regularization) and tolerance\nare finite positive Python numbers; maximum_iterations is a positive Python\nint and seed is a Python int in [0,2**32). Controls are caller supplied.\nNo feature scaling, weighting, class balancing or split policy is imposed.\n\nReturns a fitted sklearn LogisticRegression. Nonconvergence raises rather\nthan returning a partial fit. Native thread pools are limited to one during\nfitting; caller owns aggregate concurrency. A sparse copy protects input\nstorage. Fitted coefficients remain dense; source features are not densified."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.sklearn.linear_model.sparse_binary.predict_sparse_binary_probability",
+      "catalog_fqdn": "sciona.atoms.ml.sklearn.linear_model.sparse_binary.predict_sparse_binary_probability",
+      "artifact_id": "5c3eb952-70aa-50d0-bfc5-6f7f64399ab9",
+      "version_id": "ffe28bf3-e961-51bf-9b38-6a92a1fd986c",
+      "content_hash": "a15b56d0eec70837c7694aa767cbc9f4bb9036d96abe19cfc4308e58228c97d5",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "features",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input features. Score class 1 in row order using a fitted binary logistic model.\n\nRequires canonical finite float64 CSR features and a fitted sklearn\nLogisticRegression with classes [0,1], finite coefficients and matching\nfeature width. Returns finite float64 probabilities (N,) in [0,1]. No\nquery labels, refitting, calibration or threshold policy. Inputs are not\nmutated; a sparse copy is used and native pools are limited to one."
+        },
+        {
+          "direction": "input",
+          "name": "model",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input model. Score class 1 in row order using a fitted binary logistic model.\n\nRequires canonical finite float64 CSR features and a fitted sklearn\nLogisticRegression with classes [0,1], finite coefficients and matching\nfeature width. Returns finite float64 probabilities (N,) in [0,1]. No\nquery labels, refitting, calibration or threshold policy. Inputs are not\nmutated; a sparse copy is used and native pools are limited to one."
+        },
+        {
+          "direction": "output",
+          "name": "probabilities",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "output probabilities. Score class 1 in row order using a fitted binary logistic model.\n\nRequires canonical finite float64 CSR features and a fitted sklearn\nLogisticRegression with classes [0,1], finite coefficients and matching\nfeature width. Returns finite float64 probabilities (N,) in [0,1]. No\nquery labels, refitting, calibration or threshold policy. Inputs are not\nmutated; a sparse copy is used and native pools are limited to one."
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "features",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input features. Score class 1 in row order using a fitted binary logistic model.\n\nRequires canonical finite float64 CSR features and a fitted sklearn\nLogisticRegression with classes [0,1], finite coefficients and matching\nfeature width. Returns finite float64 probabilities (N,) in [0,1]. No\nquery labels, refitting, calibration or threshold policy. Inputs are not\nmutated; a sparse copy is used and native pools are limited to one."
+        },
+        {
+          "direction": "input",
+          "name": "model",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input model. Score class 1 in row order using a fitted binary logistic model.\n\nRequires canonical finite float64 CSR features and a fitted sklearn\nLogisticRegression with classes [0,1], finite coefficients and matching\nfeature width. Returns finite float64 probabilities (N,) in [0,1]. No\nquery labels, refitting, calibration or threshold policy. Inputs are not\nmutated; a sparse copy is used and native pools are limited to one."
+        },
+        {
+          "direction": "output",
+          "name": "probabilities",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "output probabilities. Score class 1 in row order using a fitted binary logistic model.\n\nRequires canonical finite float64 CSR features and a fitted sklearn\nLogisticRegression with classes [0,1], finite coefficients and matching\nfeature width. Returns finite float64 probabilities (N,) in [0,1]. No\nquery labels, refitting, calibration or threshold policy. Inputs are not\nmutated; a sparse copy is used and native pools are limited to one."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.video_multilabel_sharded_execution.execute",
+      "catalog_fqdn": "sciona.atoms.ml.video_multilabel_sharded_execution.execute",
+      "artifact_id": "f39a03c7-20c9-5a7b-a45f-84057d422ca9",
+      "version_id": "f7562ffa-13ff-521f-ae26-52f8adae81f4",
+      "content_hash": "c7563ccc7019da9af172f87d6028a4421ce5168498624dd4b267c3c146e4df8f",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "training",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Concrete labelled FeatureShards store, nonempty finite frame vectors, nonnegative numeric sparse features and binary labels. Every label has both classes. Caller constructs stores from private local runtime configuration; no paths or records may be embedded in catalog metadata."
+        },
+        {
+          "direction": "input",
+          "name": "calibration",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Concrete labelled FeatureShards store with matching feature and label widths and both classes per label. Groups are disjoint from training and query. Used only for empirical threshold fitting after all configured training epochs."
+        },
+        {
+          "direction": "input",
+          "name": "query",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Concrete unlabelled FeatureShards store with matching feature width and groups disjoint from training/calibration. Unknown sparse keys are ignored under the training-only vocabulary. Every supplied query row is scored."
+        },
+        {
+          "direction": "input",
+          "name": "controls",
+          "ordinal": 3,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact dict keys seed, hidden, epochs, batch_size, learning_rate. seed is a Python int in [0,2**32); hidden, epochs and batch_size are positive Python ints. learning_rate is a finite positive Python int or float. CPU float64 Adam/BCE neural fitting and per-label sparse L2 LBFGS with C=1, tolerance=1e-4 and max_iter=1000 are recipe policy."
+        },
+        {
+          "direction": "input",
+          "name": "pool_function",
+          "ordinal": 4,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact reviewed numeric callable supplied by its explicit graph edge; arbitrary replacements are not qualified. The recipe supplies model, label and population policy."
+        },
+        {
+          "direction": "input",
+          "name": "gate_function",
+          "ordinal": 5,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact reviewed numeric callable supplied by its explicit graph edge; arbitrary replacements are not qualified. The recipe supplies model, label and population policy."
+        },
+        {
+          "direction": "input",
+          "name": "mean_function",
+          "ordinal": 6,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact reviewed numeric callable supplied by its explicit graph edge; arbitrary replacements are not qualified. The recipe supplies model, label and population policy."
+        },
+        {
+          "direction": "input",
+          "name": "vocabulary_fit_function",
+          "ordinal": 7,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact reviewed numeric callable supplied by its explicit graph edge; arbitrary replacements are not qualified. The recipe supplies model, label and population policy."
+        },
+        {
+          "direction": "input",
+          "name": "vocabulary_transform_function",
+          "ordinal": 8,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact reviewed numeric callable supplied by its explicit graph edge; arbitrary replacements are not qualified. The recipe supplies model, label and population policy."
+        },
+        {
+          "direction": "input",
+          "name": "logistic_fit_function",
+          "ordinal": 9,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact reviewed numeric callable supplied by its explicit graph edge; arbitrary replacements are not qualified. The recipe supplies model, label and population policy."
+        },
+        {
+          "direction": "input",
+          "name": "logistic_predict_function",
+          "ordinal": 10,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact reviewed numeric callable supplied by its explicit graph edge; arbitrary replacements are not qualified. The recipe supplies model, label and population policy."
+        },
+        {
+          "direction": "input",
+          "name": "threshold_fit_function",
+          "ordinal": 11,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact reviewed numeric callable supplied by its explicit graph edge; arbitrary replacements are not qualified. The recipe supplies model, label and population policy."
+        },
+        {
+          "direction": "input",
+          "name": "threshold_apply_function",
+          "ordinal": 12,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact reviewed numeric callable supplied by its explicit graph edge; arbitrary replacements are not qualified. The recipe supplies model, label and population policy."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Dict with scores and binary labels (query_rows,label_count), per-label thresholds, training_rows, calibration_rows, query_rows, label_count, sparse_models, epochs, initial_training_loss and final_training_loss. Exact row/column ordering follows supplied stores. No historical accuracy guarantee."
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "training",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Concrete labelled FeatureShards store, nonempty finite frame vectors, nonnegative numeric sparse features and binary labels. Every label has both classes. Caller constructs stores from private local runtime configuration; no paths or records may be embedded in catalog metadata."
+        },
+        {
+          "direction": "input",
+          "name": "calibration",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Concrete labelled FeatureShards store with matching feature and label widths and both classes per label. Groups are disjoint from training and query. Used only for empirical threshold fitting after all configured training epochs."
+        },
+        {
+          "direction": "input",
+          "name": "query",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Concrete unlabelled FeatureShards store with matching feature width and groups disjoint from training/calibration. Unknown sparse keys are ignored under the training-only vocabulary. Every supplied query row is scored."
+        },
+        {
+          "direction": "input",
+          "name": "controls",
+          "ordinal": 3,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact dict keys seed, hidden, epochs, batch_size, learning_rate. seed is a Python int in [0,2**32); hidden, epochs and batch_size are positive Python ints. learning_rate is a finite positive Python int or float. CPU float64 Adam/BCE neural fitting and per-label sparse L2 LBFGS with C=1, tolerance=1e-4 and max_iter=1000 are recipe policy."
+        },
+        {
+          "direction": "input",
+          "name": "pool_function",
+          "ordinal": 4,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact reviewed numeric callable supplied by its explicit graph edge; arbitrary replacements are not qualified. The recipe supplies model, label and population policy."
+        },
+        {
+          "direction": "input",
+          "name": "gate_function",
+          "ordinal": 5,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact reviewed numeric callable supplied by its explicit graph edge; arbitrary replacements are not qualified. The recipe supplies model, label and population policy."
+        },
+        {
+          "direction": "input",
+          "name": "mean_function",
+          "ordinal": 6,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact reviewed numeric callable supplied by its explicit graph edge; arbitrary replacements are not qualified. The recipe supplies model, label and population policy."
+        },
+        {
+          "direction": "input",
+          "name": "vocabulary_fit_function",
+          "ordinal": 7,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact reviewed numeric callable supplied by its explicit graph edge; arbitrary replacements are not qualified. The recipe supplies model, label and population policy."
+        },
+        {
+          "direction": "input",
+          "name": "vocabulary_transform_function",
+          "ordinal": 8,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact reviewed numeric callable supplied by its explicit graph edge; arbitrary replacements are not qualified. The recipe supplies model, label and population policy."
+        },
+        {
+          "direction": "input",
+          "name": "logistic_fit_function",
+          "ordinal": 9,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact reviewed numeric callable supplied by its explicit graph edge; arbitrary replacements are not qualified. The recipe supplies model, label and population policy."
+        },
+        {
+          "direction": "input",
+          "name": "logistic_predict_function",
+          "ordinal": 10,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact reviewed numeric callable supplied by its explicit graph edge; arbitrary replacements are not qualified. The recipe supplies model, label and population policy."
+        },
+        {
+          "direction": "input",
+          "name": "threshold_fit_function",
+          "ordinal": 11,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact reviewed numeric callable supplied by its explicit graph edge; arbitrary replacements are not qualified. The recipe supplies model, label and population policy."
+        },
+        {
+          "direction": "input",
+          "name": "threshold_apply_function",
+          "ordinal": 12,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact reviewed numeric callable supplied by its explicit graph edge; arbitrary replacements are not qualified. The recipe supplies model, label and population policy."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Dict with scores and binary labels (query_rows,label_count), per-label thresholds, training_rows, calibration_rows, query_rows, label_count, sparse_models, epochs, initial_training_loss and final_training_loss. Exact row/column ordering follows supplied stores. No historical accuracy guarantee."
+        }
+      ]
+    }
+  ],
+  "checker_sha256": "b9ea3f49dc2fc14e8e34bbd489834695c8fc45af9c9a8ca6f9152b32afe6609e",
+  "adapter_plan_sha256": "e0d71cdac1a07a4345bd13645a3a8f58933480a81ffe4ee04effdfb65c5885bb",
+  "dependencies": [
+    {
+      "dependent_version_id": "f7562ffa-13ff-521f-ae26-52f8adae81f4",
+      "dependency_artifact_fqdn": "sciona.atoms.ml.calibration.empirical_f1.apply_column_thresholds",
+      "dependency_content_hash": "b1df674cf843553cef39c8fefb23c21a23cad31671503a6104e64aa954aebe8f",
+      "port_name": "threshold_apply_function",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "binding_metadata": {
+        "interfaces": [
+          {
+            "name": "scores",
+            "ordinal": 0,
+            "required": true,
+            "direction": "input",
+            "type_desc": "ndarray",
+            "constraints": "input scores. Apply inclusive per-column thresholds to finite float64 scores (N,L).\n\nScores must be nonempty and in [0,1]. Thresholds are a finite float64 vector\n(L,), allowed outside [0,1] to express all/none decisions. Returns a new\nint64 binary matrix of identical shape. No fitting, clipping or mutation.",
+            "default_value_repr": ""
+          },
+          {
+            "name": "thresholds",
+            "ordinal": 1,
+            "required": true,
+            "direction": "input",
+            "type_desc": "ndarray",
+            "constraints": "input thresholds. Apply inclusive per-column thresholds to finite float64 scores (N,L).\n\nScores must be nonempty and in [0,1]. Thresholds are a finite float64 vector\n(L,), allowed outside [0,1] to express all/none decisions. Returns a new\nint64 binary matrix of identical shape. No fitting, clipping or mutation.",
+            "default_value_repr": ""
+          },
+          {
+            "name": "predictions",
+            "ordinal": 0,
+            "required": true,
+            "direction": "output",
+            "type_desc": "ndarray",
+            "constraints": "output predictions. Apply inclusive per-column thresholds to finite float64 scores (N,L).\n\nScores must be nonempty and in [0,1]. Thresholds are a finite float64 vector\n(L,), allowed outside [0,1] to express all/none decisions. Returns a new\nint64 binary matrix of identical shape. No fitting, clipping or mutation.",
+            "default_value_repr": ""
+          }
+        ],
+        "version_id": "2c4add48-5699-5485-865c-da509201fc45",
+        "runtime_fqdn": "sciona.atoms.ml.calibration.empirical_f1.apply_column_thresholds",
+        "qualification_sha256": "625b56a2cd5ea671db72480b7df7584495f36686b24de2eae2e2f5a09706dd01"
+      }
+    },
+    {
+      "dependent_version_id": "f7562ffa-13ff-521f-ae26-52f8adae81f4",
+      "dependency_artifact_fqdn": "sciona.atoms.ml.calibration.empirical_f1.fit_empirical_f1_thresholds",
+      "dependency_content_hash": "a0c822126d1cfe7c14c4a451a0a8ae1070ffb50a0959a56776c2d3127c4e7c96",
+      "port_name": "threshold_fit_function",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "binding_metadata": {
+        "interfaces": [
+          {
+            "name": "scores",
+            "ordinal": 0,
+            "required": true,
+            "direction": "input",
+            "type_desc": "ndarray",
+            "constraints": "input scores. Maximize held-out empirical F1 independently for each score column.\n\nNonempty finite float64 scores (N,L) in [0,1] and aligned int64 binary\nlabels are required; every column must contain both classes. Predictions\nuse score >= threshold. Among equal computed float64 F1 values, choose\nthe highest observed-score threshold. Tied scores are processed together.\nReturns a new float64 vector (L,); inputs are unchanged. Sorting takes\nO(L*N*log(N)) time and O(N) temporary memory per column.\n\nCaller must enforce training/calibration/query separation. This fits a\ndecision threshold, not calibrated probabilities or unbiased accuracy.\nNo expected-F1 approximation, class weighting or domain policy is used.",
+            "default_value_repr": ""
+          },
+          {
+            "name": "labels",
+            "ordinal": 1,
+            "required": true,
+            "direction": "input",
+            "type_desc": "ndarray",
+            "constraints": "input labels. Maximize held-out empirical F1 independently for each score column.\n\nNonempty finite float64 scores (N,L) in [0,1] and aligned int64 binary\nlabels are required; every column must contain both classes. Predictions\nuse score >= threshold. Among equal computed float64 F1 values, choose\nthe highest observed-score threshold. Tied scores are processed together.\nReturns a new float64 vector (L,); inputs are unchanged. Sorting takes\nO(L*N*log(N)) time and O(N) temporary memory per column.\n\nCaller must enforce training/calibration/query separation. This fits a\ndecision threshold, not calibrated probabilities or unbiased accuracy.\nNo expected-F1 approximation, class weighting or domain policy is used.",
+            "default_value_repr": ""
+          },
+          {
+            "name": "thresholds",
+            "ordinal": 0,
+            "required": true,
+            "direction": "output",
+            "type_desc": "ndarray",
+            "constraints": "output thresholds. Maximize held-out empirical F1 independently for each score column.\n\nNonempty finite float64 scores (N,L) in [0,1] and aligned int64 binary\nlabels are required; every column must contain both classes. Predictions\nuse score >= threshold. Among equal computed float64 F1 values, choose\nthe highest observed-score threshold. Tied scores are processed together.\nReturns a new float64 vector (L,); inputs are unchanged. Sorting takes\nO(L*N*log(N)) time and O(N) temporary memory per column.\n\nCaller must enforce training/calibration/query separation. This fits a\ndecision threshold, not calibrated probabilities or unbiased accuracy.\nNo expected-F1 approximation, class weighting or domain policy is used.",
+            "default_value_repr": ""
+          }
+        ],
+        "version_id": "83608ee9-c047-53da-acb5-209901f7b245",
+        "runtime_fqdn": "sciona.atoms.ml.calibration.empirical_f1.fit_empirical_f1_thresholds",
+        "qualification_sha256": "625b56a2cd5ea671db72480b7df7584495f36686b24de2eae2e2f5a09706dd01"
+      }
+    },
+    {
+      "dependent_version_id": "f7562ffa-13ff-521f-ae26-52f8adae81f4",
+      "dependency_artifact_fqdn": "sciona.atoms.ml.masked_attention.masked_attention_pool",
+      "dependency_content_hash": "2a01012ac49ced9ec73f4b2c9b68a411de9dc1fa27708a31c2f581b8aaad43bc",
+      "port_name": "pool_function",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "binding_metadata": {
+        "interfaces": [
+          {
+            "name": "values",
+            "ordinal": 0,
+            "required": true,
+            "direction": "input",
+            "type_desc": "object",
+            "constraints": "input values. Softmax-weighted reduction of values (B,T,F) over valid positions.\n\nLogits (B,T) share the floating dtype and device of values; mask is boolean\n(B,T) on the same device. Dimensions are nonempty, every row has a valid\nposition, and valid values/logits must be finite. Masked entries may be\nnonfinite: they are replaced before arithmetic and receive zero gradient.\nReturns pooled values (B,F) and weights (B,T), preserving autograd, dtype\nand device. Inputs are unchanged. No score model, position encoding,\ntraining, padding generation or application-specific policy is included.",
+            "default_value_repr": ""
+          },
+          {
+            "name": "logits",
+            "ordinal": 1,
+            "required": true,
+            "direction": "input",
+            "type_desc": "object",
+            "constraints": "input logits. Softmax-weighted reduction of values (B,T,F) over valid positions.\n\nLogits (B,T) share the floating dtype and device of values; mask is boolean\n(B,T) on the same device. Dimensions are nonempty, every row has a valid\nposition, and valid values/logits must be finite. Masked entries may be\nnonfinite: they are replaced before arithmetic and receive zero gradient.\nReturns pooled values (B,F) and weights (B,T), preserving autograd, dtype\nand device. Inputs are unchanged. No score model, position encoding,\ntraining, padding generation or application-specific policy is included.",
+            "default_value_repr": ""
+          },
+          {
+            "name": "mask",
+            "ordinal": 2,
+            "required": true,
+            "direction": "input",
+            "type_desc": "object",
+            "constraints": "input mask. Softmax-weighted reduction of values (B,T,F) over valid positions.\n\nLogits (B,T) share the floating dtype and device of values; mask is boolean\n(B,T) on the same device. Dimensions are nonempty, every row has a valid\nposition, and valid values/logits must be finite. Masked entries may be\nnonfinite: they are replaced before arithmetic and receive zero gradient.\nReturns pooled values (B,F) and weights (B,T), preserving autograd, dtype\nand device. Inputs are unchanged. No score model, position encoding,\ntraining, padding generation or application-specific policy is included.",
+            "default_value_repr": ""
+          },
+          {
+            "name": "pooled",
+            "ordinal": 0,
+            "required": true,
+            "direction": "output",
+            "type_desc": "object",
+            "constraints": "output pooled. Softmax-weighted reduction of values (B,T,F) over valid positions.\n\nLogits (B,T) share the floating dtype and device of values; mask is boolean\n(B,T) on the same device. Dimensions are nonempty, every row has a valid\nposition, and valid values/logits must be finite. Masked entries may be\nnonfinite: they are replaced before arithmetic and receive zero gradient.\nReturns pooled values (B,F) and weights (B,T), preserving autograd, dtype\nand device. Inputs are unchanged. No score model, position encoding,\ntraining, padding generation or application-specific policy is included.",
+            "default_value_repr": ""
+          },
+          {
+            "name": "weights",
+            "ordinal": 1,
+            "required": true,
+            "direction": "output",
+            "type_desc": "object",
+            "constraints": "output weights. Softmax-weighted reduction of values (B,T,F) over valid positions.\n\nLogits (B,T) share the floating dtype and device of values; mask is boolean\n(B,T) on the same device. Dimensions are nonempty, every row has a valid\nposition, and valid values/logits must be finite. Masked entries may be\nnonfinite: they are replaced before arithmetic and receive zero gradient.\nReturns pooled values (B,F) and weights (B,T), preserving autograd, dtype\nand device. Inputs are unchanged. No score model, position encoding,\ntraining, padding generation or application-specific policy is included.",
+            "default_value_repr": ""
+          }
+        ],
+        "version_id": "b0f2091c-22bd-5002-8743-42c41efcb00f",
+        "runtime_fqdn": "sciona.atoms.ml.masked_attention.masked_attention_pool",
+        "qualification_sha256": "625b56a2cd5ea671db72480b7df7584495f36686b24de2eae2e2f5a09706dd01"
+      }
+    },
+    {
+      "dependent_version_id": "f7562ffa-13ff-521f-ae26-52f8adae81f4",
+      "dependency_artifact_fqdn": "sciona.atoms.ml.masked_attention.sigmoid_context_gate",
+      "dependency_content_hash": "8ec9ce4dfc887a3f12c04f143015f25356c7901e8b9ffaa80ed936b005de8cc4",
+      "port_name": "gate_function",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "binding_metadata": {
+        "interfaces": [
+          {
+            "name": "values",
+            "ordinal": 0,
+            "required": true,
+            "direction": "input",
+            "type_desc": "object",
+            "constraints": "input values. Multiply a finite floating matrix by sigmoid of aligned finite logits.\n\nInputs are nonempty (B,F) tensors with identical dtype/device. Returns a\nnew tensor with autograd preserved and does not mutate inputs. The caller\nsupplies the gate logits; no affine parameters or fitted state are owned.",
+            "default_value_repr": ""
+          },
+          {
+            "name": "logits",
+            "ordinal": 1,
+            "required": true,
+            "direction": "input",
+            "type_desc": "object",
+            "constraints": "input logits. Multiply a finite floating matrix by sigmoid of aligned finite logits.\n\nInputs are nonempty (B,F) tensors with identical dtype/device. Returns a\nnew tensor with autograd preserved and does not mutate inputs. The caller\nsupplies the gate logits; no affine parameters or fitted state are owned.",
+            "default_value_repr": ""
+          },
+          {
+            "name": "gated",
+            "ordinal": 0,
+            "required": true,
+            "direction": "output",
+            "type_desc": "object",
+            "constraints": "output gated. Multiply a finite floating matrix by sigmoid of aligned finite logits.\n\nInputs are nonempty (B,F) tensors with identical dtype/device. Returns a\nnew tensor with autograd preserved and does not mutate inputs. The caller\nsupplies the gate logits; no affine parameters or fitted state are owned.",
+            "default_value_repr": ""
+          }
+        ],
+        "version_id": "857ed676-ab85-5dbf-8d13-0abc4f718357",
+        "runtime_fqdn": "sciona.atoms.ml.masked_attention.sigmoid_context_gate",
+        "qualification_sha256": "625b56a2cd5ea671db72480b7df7584495f36686b24de2eae2e2f5a09706dd01"
+      }
+    },
+    {
+      "dependent_version_id": "f7562ffa-13ff-521f-ae26-52f8adae81f4",
+      "dependency_artifact_fqdn": "sciona.atoms.ml.model_selection.materialized_prediction.average",
+      "dependency_content_hash": "280b371b126f6d7f580dd169289280af76fc50d64350b784c3aefd346df18af5",
+      "port_name": "mean_function",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "binding_metadata": {
+        "interfaces": [
+          {
+            "name": "vectors",
+            "ordinal": 0,
+            "required": true,
+            "direction": "input",
+            "type_desc": "list",
+            "constraints": "Nonempty ordered list of finite real vectors with identical shape and physical units.",
+            "default_value_repr": ""
+          },
+          {
+            "name": "values",
+            "ordinal": 0,
+            "required": true,
+            "direction": "output",
+            "type_desc": "NDArray[np.float64]",
+            "constraints": "Owned positional arithmetic mean using caller order; rejects nonfinite sum or incompatible shapes.",
+            "default_value_repr": ""
+          }
+        ],
+        "version_id": "fbea5906-9987-5e67-88c4-5ffe3d971e66",
+        "runtime_fqdn": "sciona.atoms.ml.model_selection.materialized_prediction.average",
+        "qualification_sha256": "625b56a2cd5ea671db72480b7df7584495f36686b24de2eae2e2f5a09706dd01"
+      }
+    },
+    {
+      "dependent_version_id": "f7562ffa-13ff-521f-ae26-52f8adae81f4",
+      "dependency_artifact_fqdn": "sciona.atoms.ml.sklearn.feature_extraction.sparse_numeric.fit_numeric_vocabulary",
+      "dependency_content_hash": "1aa767b87ac894561683d96baffaf1d607dfdbb15aea9c4bbc4e49e627159d42",
+      "port_name": "vocabulary_fit_function",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "binding_metadata": {
+        "interfaces": [
+          {
+            "name": "records",
+            "ordinal": 0,
+            "required": true,
+            "direction": "input",
+            "type_desc": "object",
+            "constraints": "input records. Consume numeric mappings once and return fitted vocabulary and CSR rows.\n\nAccepts a nonempty iterable, including a one-shot generator, of mappings\nfrom nonempty string keys to finite real values (booleans excluded). Signed\nand zero values are accepted. Empty rows are allowed but the total feature\nvocabulary must be nonempty. Columns use sorted feature names. Returns a\nfitted sklearn DictVectorizer and float64 CSR matrix in input row order.\n\nSource mappings are validated and copied one at a time, never materialized\nas a full list. The output CSR and vocabulary remain resident. Caller owns\ntraining/query separation and must not mutate fitted state between calls.\nNo categorical encoding, labels, scaling or application policy is imposed.",
+            "default_value_repr": ""
+          },
+          {
+            "name": "state",
+            "ordinal": 0,
+            "required": true,
+            "direction": "output",
+            "type_desc": "object",
+            "constraints": "output state. Consume numeric mappings once and return fitted vocabulary and CSR rows.\n\nAccepts a nonempty iterable, including a one-shot generator, of mappings\nfrom nonempty string keys to finite real values (booleans excluded). Signed\nand zero values are accepted. Empty rows are allowed but the total feature\nvocabulary must be nonempty. Columns use sorted feature names. Returns a\nfitted sklearn DictVectorizer and float64 CSR matrix in input row order.\n\nSource mappings are validated and copied one at a time, never materialized\nas a full list. The output CSR and vocabulary remain resident. Caller owns\ntraining/query separation and must not mutate fitted state between calls.\nNo categorical encoding, labels, scaling or application policy is imposed.",
+            "default_value_repr": ""
+          },
+          {
+            "name": "matrix",
+            "ordinal": 1,
+            "required": true,
+            "direction": "output",
+            "type_desc": "object",
+            "constraints": "output matrix. Consume numeric mappings once and return fitted vocabulary and CSR rows.\n\nAccepts a nonempty iterable, including a one-shot generator, of mappings\nfrom nonempty string keys to finite real values (booleans excluded). Signed\nand zero values are accepted. Empty rows are allowed but the total feature\nvocabulary must be nonempty. Columns use sorted feature names. Returns a\nfitted sklearn DictVectorizer and float64 CSR matrix in input row order.\n\nSource mappings are validated and copied one at a time, never materialized\nas a full list. The output CSR and vocabulary remain resident. Caller owns\ntraining/query separation and must not mutate fitted state between calls.\nNo categorical encoding, labels, scaling or application policy is imposed.",
+            "default_value_repr": ""
+          }
+        ],
+        "version_id": "fbf99b42-8b78-53ba-a5d3-3b4c2774f077",
+        "runtime_fqdn": "sciona.atoms.ml.sklearn.feature_extraction.sparse_numeric.fit_numeric_vocabulary",
+        "qualification_sha256": "625b56a2cd5ea671db72480b7df7584495f36686b24de2eae2e2f5a09706dd01"
+      }
+    },
+    {
+      "dependent_version_id": "f7562ffa-13ff-521f-ae26-52f8adae81f4",
+      "dependency_artifact_fqdn": "sciona.atoms.ml.sklearn.feature_extraction.sparse_numeric.transform_numeric_vocabulary",
+      "dependency_content_hash": "f3dbb15e6252262a50d333c18d0e2467ca57a72a1738ba0a1ca6547f54efa9f6",
+      "port_name": "vocabulary_transform_function",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "binding_metadata": {
+        "interfaces": [
+          {
+            "name": "records",
+            "ordinal": 0,
+            "required": true,
+            "direction": "input",
+            "type_desc": "object",
+            "constraints": "input records. Transform a nonempty numeric-mapping iterable using frozen vocabulary.\n\nUses the fit operation's mapping contract and returns float64 CSR in input\nrow order with the original column order. Unknown keys are validated then\nignored; empty mappings yield all-zero rows. Does not refit or mutate state\nor input mappings. Source mappings are consumed once; output CSR is resident.",
+            "default_value_repr": ""
+          },
+          {
+            "name": "state",
+            "ordinal": 1,
+            "required": true,
+            "direction": "input",
+            "type_desc": "object",
+            "constraints": "input state. Transform a nonempty numeric-mapping iterable using frozen vocabulary.\n\nUses the fit operation's mapping contract and returns float64 CSR in input\nrow order with the original column order. Unknown keys are validated then\nignored; empty mappings yield all-zero rows. Does not refit or mutate state\nor input mappings. Source mappings are consumed once; output CSR is resident.",
+            "default_value_repr": ""
+          },
+          {
+            "name": "matrix",
+            "ordinal": 0,
+            "required": true,
+            "direction": "output",
+            "type_desc": "object",
+            "constraints": "output matrix. Transform a nonempty numeric-mapping iterable using frozen vocabulary.\n\nUses the fit operation's mapping contract and returns float64 CSR in input\nrow order with the original column order. Unknown keys are validated then\nignored; empty mappings yield all-zero rows. Does not refit or mutate state\nor input mappings. Source mappings are consumed once; output CSR is resident.",
+            "default_value_repr": ""
+          }
+        ],
+        "version_id": "7b9dd6a5-da00-54aa-bdba-727a7ce830aa",
+        "runtime_fqdn": "sciona.atoms.ml.sklearn.feature_extraction.sparse_numeric.transform_numeric_vocabulary",
+        "qualification_sha256": "625b56a2cd5ea671db72480b7df7584495f36686b24de2eae2e2f5a09706dd01"
+      }
+    },
+    {
+      "dependent_version_id": "f7562ffa-13ff-521f-ae26-52f8adae81f4",
+      "dependency_artifact_fqdn": "sciona.atoms.ml.sklearn.linear_model.sparse_binary.fit_sparse_binary_logistic",
+      "dependency_content_hash": "0f170f6329938bf8d4d46c3e0bae91176b746812cac262cc313cf9ee5bae027d",
+      "port_name": "logistic_fit_function",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "binding_metadata": {
+        "interfaces": [
+          {
+            "name": "features",
+            "ordinal": 0,
+            "required": true,
+            "direction": "input",
+            "type_desc": "object",
+            "constraints": "input features. Fit L2 binary logistic regression using LBFGS and an intercept.\n\nFeatures are a nonempty canonical float64 scipy CSR matrix; aligned int64\nlabels (N,) contain both 0 and 1. C (inverse regularization) and tolerance\nare finite positive Python numbers; maximum_iterations is a positive Python\nint and seed is a Python int in [0,2**32). Controls are caller supplied.\nNo feature scaling, weighting, class balancing or split policy is imposed.\n\nReturns a fitted sklearn LogisticRegression. Nonconvergence raises rather\nthan returning a partial fit. Native thread pools are limited to one during\nfitting; caller owns aggregate concurrency. A sparse copy protects input\nstorage. Fitted coefficients remain dense; source features are not densified.",
+            "default_value_repr": ""
+          },
+          {
+            "name": "labels",
+            "ordinal": 1,
+            "required": true,
+            "direction": "input",
+            "type_desc": "ndarray",
+            "constraints": "input labels. Fit L2 binary logistic regression using LBFGS and an intercept.\n\nFeatures are a nonempty canonical float64 scipy CSR matrix; aligned int64\nlabels (N,) contain both 0 and 1. C (inverse regularization) and tolerance\nare finite positive Python numbers; maximum_iterations is a positive Python\nint and seed is a Python int in [0,2**32). Controls are caller supplied.\nNo feature scaling, weighting, class balancing or split policy is imposed.\n\nReturns a fitted sklearn LogisticRegression. Nonconvergence raises rather\nthan returning a partial fit. Native thread pools are limited to one during\nfitting; caller owns aggregate concurrency. A sparse copy protects input\nstorage. Fitted coefficients remain dense; source features are not densified.",
+            "default_value_repr": ""
+          },
+          {
+            "name": "inverse_regularization",
+            "ordinal": 2,
+            "required": true,
+            "direction": "input",
+            "type_desc": "float",
+            "constraints": "input inverse_regularization. Fit L2 binary logistic regression using LBFGS and an intercept.\n\nFeatures are a nonempty canonical float64 scipy CSR matrix; aligned int64\nlabels (N,) contain both 0 and 1. C (inverse regularization) and tolerance\nare finite positive Python numbers; maximum_iterations is a positive Python\nint and seed is a Python int in [0,2**32). Controls are caller supplied.\nNo feature scaling, weighting, class balancing or split policy is imposed.\n\nReturns a fitted sklearn LogisticRegression. Nonconvergence raises rather\nthan returning a partial fit. Native thread pools are limited to one during\nfitting; caller owns aggregate concurrency. A sparse copy protects input\nstorage. Fitted coefficients remain dense; source features are not densified.",
+            "default_value_repr": ""
+          },
+          {
+            "name": "tolerance",
+            "ordinal": 3,
+            "required": true,
+            "direction": "input",
+            "type_desc": "float",
+            "constraints": "input tolerance. Fit L2 binary logistic regression using LBFGS and an intercept.\n\nFeatures are a nonempty canonical float64 scipy CSR matrix; aligned int64\nlabels (N,) contain both 0 and 1. C (inverse regularization) and tolerance\nare finite positive Python numbers; maximum_iterations is a positive Python\nint and seed is a Python int in [0,2**32). Controls are caller supplied.\nNo feature scaling, weighting, class balancing or split policy is imposed.\n\nReturns a fitted sklearn LogisticRegression. Nonconvergence raises rather\nthan returning a partial fit. Native thread pools are limited to one during\nfitting; caller owns aggregate concurrency. A sparse copy protects input\nstorage. Fitted coefficients remain dense; source features are not densified.",
+            "default_value_repr": ""
+          },
+          {
+            "name": "maximum_iterations",
+            "ordinal": 4,
+            "required": true,
+            "direction": "input",
+            "type_desc": "int",
+            "constraints": "input maximum_iterations. Fit L2 binary logistic regression using LBFGS and an intercept.\n\nFeatures are a nonempty canonical float64 scipy CSR matrix; aligned int64\nlabels (N,) contain both 0 and 1. C (inverse regularization) and tolerance\nare finite positive Python numbers; maximum_iterations is a positive Python\nint and seed is a Python int in [0,2**32). Controls are caller supplied.\nNo feature scaling, weighting, class balancing or split policy is imposed.\n\nReturns a fitted sklearn LogisticRegression. Nonconvergence raises rather\nthan returning a partial fit. Native thread pools are limited to one during\nfitting; caller owns aggregate concurrency. A sparse copy protects input\nstorage. Fitted coefficients remain dense; source features are not densified.",
+            "default_value_repr": ""
+          },
+          {
+            "name": "seed",
+            "ordinal": 5,
+            "required": true,
+            "direction": "input",
+            "type_desc": "int",
+            "constraints": "input seed. Fit L2 binary logistic regression using LBFGS and an intercept.\n\nFeatures are a nonempty canonical float64 scipy CSR matrix; aligned int64\nlabels (N,) contain both 0 and 1. C (inverse regularization) and tolerance\nare finite positive Python numbers; maximum_iterations is a positive Python\nint and seed is a Python int in [0,2**32). Controls are caller supplied.\nNo feature scaling, weighting, class balancing or split policy is imposed.\n\nReturns a fitted sklearn LogisticRegression. Nonconvergence raises rather\nthan returning a partial fit. Native thread pools are limited to one during\nfitting; caller owns aggregate concurrency. A sparse copy protects input\nstorage. Fitted coefficients remain dense; source features are not densified.",
+            "default_value_repr": ""
+          },
+          {
+            "name": "model",
+            "ordinal": 0,
+            "required": true,
+            "direction": "output",
+            "type_desc": "object",
+            "constraints": "output model. Fit L2 binary logistic regression using LBFGS and an intercept.\n\nFeatures are a nonempty canonical float64 scipy CSR matrix; aligned int64\nlabels (N,) contain both 0 and 1. C (inverse regularization) and tolerance\nare finite positive Python numbers; maximum_iterations is a positive Python\nint and seed is a Python int in [0,2**32). Controls are caller supplied.\nNo feature scaling, weighting, class balancing or split policy is imposed.\n\nReturns a fitted sklearn LogisticRegression. Nonconvergence raises rather\nthan returning a partial fit. Native thread pools are limited to one during\nfitting; caller owns aggregate concurrency. A sparse copy protects input\nstorage. Fitted coefficients remain dense; source features are not densified.",
+            "default_value_repr": ""
+          }
+        ],
+        "version_id": "5d4b9920-7a78-5e33-8e20-ee8142d8aaf9",
+        "runtime_fqdn": "sciona.atoms.ml.sklearn.linear_model.sparse_binary.fit_sparse_binary_logistic",
+        "qualification_sha256": "625b56a2cd5ea671db72480b7df7584495f36686b24de2eae2e2f5a09706dd01"
+      }
+    },
+    {
+      "dependent_version_id": "f7562ffa-13ff-521f-ae26-52f8adae81f4",
+      "dependency_artifact_fqdn": "sciona.atoms.ml.sklearn.linear_model.sparse_binary.predict_sparse_binary_probability",
+      "dependency_content_hash": "a15b56d0eec70837c7694aa767cbc9f4bb9036d96abe19cfc4308e58228c97d5",
+      "port_name": "logistic_predict_function",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "binding_metadata": {
+        "interfaces": [
+          {
+            "name": "features",
+            "ordinal": 0,
+            "required": true,
+            "direction": "input",
+            "type_desc": "object",
+            "constraints": "input features. Score class 1 in row order using a fitted binary logistic model.\n\nRequires canonical finite float64 CSR features and a fitted sklearn\nLogisticRegression with classes [0,1], finite coefficients and matching\nfeature width. Returns finite float64 probabilities (N,) in [0,1]. No\nquery labels, refitting, calibration or threshold policy. Inputs are not\nmutated; a sparse copy is used and native pools are limited to one.",
+            "default_value_repr": ""
+          },
+          {
+            "name": "model",
+            "ordinal": 1,
+            "required": true,
+            "direction": "input",
+            "type_desc": "object",
+            "constraints": "input model. Score class 1 in row order using a fitted binary logistic model.\n\nRequires canonical finite float64 CSR features and a fitted sklearn\nLogisticRegression with classes [0,1], finite coefficients and matching\nfeature width. Returns finite float64 probabilities (N,) in [0,1]. No\nquery labels, refitting, calibration or threshold policy. Inputs are not\nmutated; a sparse copy is used and native pools are limited to one.",
+            "default_value_repr": ""
+          },
+          {
+            "name": "probabilities",
+            "ordinal": 0,
+            "required": true,
+            "direction": "output",
+            "type_desc": "ndarray",
+            "constraints": "output probabilities. Score class 1 in row order using a fitted binary logistic model.\n\nRequires canonical finite float64 CSR features and a fitted sklearn\nLogisticRegression with classes [0,1], finite coefficients and matching\nfeature width. Returns finite float64 probabilities (N,) in [0,1]. No\nquery labels, refitting, calibration or threshold policy. Inputs are not\nmutated; a sparse copy is used and native pools are limited to one.",
+            "default_value_repr": ""
+          }
+        ],
+        "version_id": "ffe28bf3-e961-51bf-9b38-6a92a1fd986c",
+        "runtime_fqdn": "sciona.atoms.ml.sklearn.linear_model.sparse_binary.predict_sparse_binary_probability",
+        "qualification_sha256": "625b56a2cd5ea671db72480b7df7584495f36686b24de2eae2e2f5a09706dd01"
+      }
+    }
+  ],
+  "catalog_snapshot": {
+    "atoms": "235fac72755be1ae9905671c53bf4fdf2175bba231bfc8655b8047a1fe962f36",
+    "artifacts": "982e32cb425bf2bce71f97683afa57fa5546521488cae0713ee2f72760ed837b",
+    "atom_versions": "b7f86de53144ef34dc12fc9840c50c054a225860d816cdd60a6e4c7801aca4a1",
+    "artifact_versions": "98fcee41b80bf44f1e5ab68bf34a04ba52fe14aaeedac3d78a7d8e4fade0cbea",
+    "atom_io_specs": "1559ed962ecd0c3e2fd8ac705e6b942632b3d9dcc033b3b2f392a63c3422c6cd",
+    "artifact_io_specs": "98fe370e212fcc4d0d27def2f511a547a8c2b2b20f2f3b86baa3a31b1d7b346b",
+    "atom_parameters": "67166d72f391e4d488cb03abe0397ad50c651b3f27a70fb71b98a3eeb54edaa9",
+    "artifact_parameters": "26db2293577973b517ce59662b0d8753435722c2915384a1b38ac90e14bf3668",
+    "atom_descriptions": "2063e6978f7254175f56421b1559f61fabefa4e329c7025390b3596a21b71178",
+    "artifact_descriptions": "8fbb4da702f1fe308337db8f884ee257cc94602855eb6357fc55b8bfd0016002",
+    "atom_references": "8fce5b8ac9dfae96c516c487e92006ce1141b10c2fb0fb5a79d62bbe7433ac10",
+    "artifact_references": "0ae37259a8f87e1056f45b6b3f1c7f5bf2d1e34a0115d4fa7eee471b285e1ab8",
+    "atom_audit_rollups": "538d2aa18c6d5618136166c9a5996526ea9ab606e4cda0994671f12960641a52",
+    "artifact_audit_rollups": "d2d6e35e0b0bc4ce4b1887bce8a25c7b350eeb73efac5b4d716c9dfeae0bc113",
+    "artifact_audit_evidence": "b40f9bb4870c9a5d2c74116d04c904e5223de4627156a3d9ca0f1a5fe06bd4a3"
+  }
+}

@@ -1,0 +1,368 @@
+{
+  "passed": true,
+  "approved": false,
+  "artifact_id": "fe4236e8-593e-5d74-98a5-81c83b3ea359",
+  "fqdn": "cdg.competition.solution.kaggle.video_multilabel_temporal_pooling_topology",
+  "version_id": "3890838e-7202-559b-9962-bf5fe3640026",
+  "graph_sha256": "6bef5348c63363f559c0df16a2498ff565209821ce19699744d343fda60bb1bb",
+  "original_version_id": "13b48adf-8fb5-5ea2-a26c-44344bb8907e",
+  "original_content_hash": "30d0444ec640598942c6221136e608d7b15449732ceb848939e1424321c496ad",
+  "original_history": {
+    "artifact_versions": "74214a351c2b78b2f31ca5180c44258eb4ff4b5c25da095e05488ac33dfaa715",
+    "artifact_cdg_nodes": "e343f5c1488dab30e53ad87ef16f88959966800eb3fccecb2b4fd16bfa6ca40e",
+    "artifact_cdg_edges": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_cdg_bindings": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_io_specs": "8f7b4ea4cba50b15b76461e9e201cf0f78ee9bd0018cb4181a18b19cc90063f3",
+    "artifact_audit_evidence": "0df6b38e7bd3b4d2484a2f7b403d82b954c3b5e94af6f0ccb07ecafaad99546b",
+    "artifact_validity_bounds": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_dependencies": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "parent_history": {
+    "artifact_versions": "cd99787333ca009246a5b819d9206516bcb4277f2b1fd8e01634be3b14b66d75",
+    "artifact_cdg_nodes": "869a0c8239c3d692bcb244c093f08c5ed0663aeb218cf1c1ed46f0d6c7f5cb33",
+    "artifact_cdg_edges": "cdea8d3a2671bc134ac194879e338174c2053370984830e0e399fac159804aa1",
+    "artifact_cdg_bindings": "89819ddea6696693e1c687a4ea83761e5d494af72ceddea1152e733e44f3b052",
+    "artifact_io_specs": "5d586e7d95cb3384aef0ad6eecf29010955e524bc9d26fb81a9f0e48d2bee5a7",
+    "artifact_audit_evidence": "d3aa1ebca51ea28d0e11a436cbe4321db277768ab15f932f394fc724c2f1ecee",
+    "artifact_validity_bounds": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_dependencies": "41e0afadd4f86f394baaa11ca8ef4c07ae4061d945318d6adce34b9ac0ab1c4f"
+  },
+  "nodes": 10,
+  "edges": 9,
+  "inputs": [
+    {
+      "name": "training",
+      "type_desc": "object",
+      "constraints": "Concrete labelled FeatureShards store, nonempty finite frame vectors, nonnegative numeric sparse features and binary labels. Every label has both classes. Caller constructs stores from private local runtime configuration; no paths or records may be embedded in catalog metadata.",
+      "data_kind": "",
+      "time_basis": "",
+      "provenance": "",
+      "required": true,
+      "default_value_repr": "",
+      "dim_signature": ""
+    },
+    {
+      "name": "calibration",
+      "type_desc": "object",
+      "constraints": "Concrete labelled FeatureShards store with matching feature and label widths and both classes per label. Groups are disjoint from training and query. Used only for empirical threshold fitting after all configured training epochs.",
+      "data_kind": "",
+      "time_basis": "",
+      "provenance": "",
+      "required": true,
+      "default_value_repr": "",
+      "dim_signature": ""
+    },
+    {
+      "name": "query",
+      "type_desc": "object",
+      "constraints": "Concrete unlabelled FeatureShards store with matching feature width and groups disjoint from training/calibration. Unknown sparse keys are ignored under the training-only vocabulary. Every supplied query row is scored.",
+      "data_kind": "",
+      "time_basis": "",
+      "provenance": "",
+      "required": true,
+      "default_value_repr": "",
+      "dim_signature": ""
+    },
+    {
+      "name": "controls",
+      "type_desc": "dict",
+      "constraints": "Exact dict keys seed, hidden, epochs, batch_size, learning_rate. seed is a Python int in [0,2**32); hidden, epochs and batch_size are positive Python ints. learning_rate is a finite positive Python int or float. CPU float64 Adam/BCE neural fitting and per-label sparse L2 LBFGS with C=1, tolerance=1e-4 and max_iter=1000 are recipe policy.",
+      "data_kind": "",
+      "time_basis": "",
+      "provenance": "",
+      "required": true,
+      "default_value_repr": "",
+      "dim_signature": ""
+    }
+  ],
+  "outputs": [
+    {
+      "name": "result",
+      "type_desc": "dict",
+      "constraints": "Graph output execute/result.",
+      "data_kind": "",
+      "time_basis": "",
+      "provenance": "",
+      "required": true,
+      "default_value_repr": "",
+      "dim_signature": ""
+    }
+  ],
+  "bindings": [
+    {
+      "node_id": "pool",
+      "bound_artifact_fqdn": "sciona.atoms.ml.masked_attention.masked_attention_pool",
+      "bound_version_content_hash": "2a01012ac49ced9ec73f4b2c9b68a411de9dc1fa27708a31c2f581b8aaad43bc",
+      "status": "active",
+      "evidence_summary": {
+        "runtime_fqdn": "sciona.atoms.ml.masked_attention.masked_attention_pool",
+        "provider_version_id": "b0f2091c-22bd-5002-8743-42c41efcb00f",
+        "output_aliases_by_ordinal": [
+          "pooled",
+          "weights"
+        ]
+      }
+    },
+    {
+      "node_id": "gate",
+      "bound_artifact_fqdn": "sciona.atoms.ml.masked_attention.sigmoid_context_gate",
+      "bound_version_content_hash": "8ec9ce4dfc887a3f12c04f143015f25356c7901e8b9ffaa80ed936b005de8cc4",
+      "status": "active",
+      "evidence_summary": {
+        "runtime_fqdn": "sciona.atoms.ml.masked_attention.sigmoid_context_gate",
+        "provider_version_id": "857ed676-ab85-5dbf-8d13-0abc4f718357",
+        "output_aliases_by_ordinal": [
+          "gated"
+        ]
+      }
+    },
+    {
+      "node_id": "mean",
+      "bound_artifact_fqdn": "sciona.atoms.ml.model_selection.materialized_prediction.average",
+      "bound_version_content_hash": "280b371b126f6d7f580dd169289280af76fc50d64350b784c3aefd346df18af5",
+      "status": "active",
+      "evidence_summary": {
+        "runtime_fqdn": "sciona.atoms.ml.model_selection.materialized_prediction.average",
+        "provider_version_id": "fbea5906-9987-5e67-88c4-5ffe3d971e66",
+        "output_aliases_by_ordinal": [
+          "values"
+        ]
+      }
+    },
+    {
+      "node_id": "vocabulary_fit",
+      "bound_artifact_fqdn": "sciona.atoms.ml.sklearn.feature_extraction.sparse_numeric.fit_numeric_vocabulary",
+      "bound_version_content_hash": "1aa767b87ac894561683d96baffaf1d607dfdbb15aea9c4bbc4e49e627159d42",
+      "status": "active",
+      "evidence_summary": {
+        "runtime_fqdn": "sciona.atoms.ml.sklearn.feature_extraction.sparse_numeric.fit_numeric_vocabulary",
+        "provider_version_id": "fbf99b42-8b78-53ba-a5d3-3b4c2774f077",
+        "output_aliases_by_ordinal": [
+          "state",
+          "matrix"
+        ]
+      }
+    },
+    {
+      "node_id": "vocabulary_transform",
+      "bound_artifact_fqdn": "sciona.atoms.ml.sklearn.feature_extraction.sparse_numeric.transform_numeric_vocabulary",
+      "bound_version_content_hash": "f3dbb15e6252262a50d333c18d0e2467ca57a72a1738ba0a1ca6547f54efa9f6",
+      "status": "active",
+      "evidence_summary": {
+        "runtime_fqdn": "sciona.atoms.ml.sklearn.feature_extraction.sparse_numeric.transform_numeric_vocabulary",
+        "provider_version_id": "7b9dd6a5-da00-54aa-bdba-727a7ce830aa",
+        "output_aliases_by_ordinal": [
+          "matrix"
+        ]
+      }
+    },
+    {
+      "node_id": "logistic_fit",
+      "bound_artifact_fqdn": "sciona.atoms.ml.sklearn.linear_model.sparse_binary.fit_sparse_binary_logistic",
+      "bound_version_content_hash": "0f170f6329938bf8d4d46c3e0bae91176b746812cac262cc313cf9ee5bae027d",
+      "status": "active",
+      "evidence_summary": {
+        "runtime_fqdn": "sciona.atoms.ml.sklearn.linear_model.sparse_binary.fit_sparse_binary_logistic",
+        "provider_version_id": "5d4b9920-7a78-5e33-8e20-ee8142d8aaf9",
+        "output_aliases_by_ordinal": [
+          "model"
+        ]
+      }
+    },
+    {
+      "node_id": "logistic_predict",
+      "bound_artifact_fqdn": "sciona.atoms.ml.sklearn.linear_model.sparse_binary.predict_sparse_binary_probability",
+      "bound_version_content_hash": "a15b56d0eec70837c7694aa767cbc9f4bb9036d96abe19cfc4308e58228c97d5",
+      "status": "active",
+      "evidence_summary": {
+        "runtime_fqdn": "sciona.atoms.ml.sklearn.linear_model.sparse_binary.predict_sparse_binary_probability",
+        "provider_version_id": "ffe28bf3-e961-51bf-9b38-6a92a1fd986c",
+        "output_aliases_by_ordinal": [
+          "probabilities"
+        ]
+      }
+    },
+    {
+      "node_id": "threshold_fit",
+      "bound_artifact_fqdn": "sciona.atoms.ml.calibration.empirical_f1.fit_empirical_f1_thresholds",
+      "bound_version_content_hash": "a0c822126d1cfe7c14c4a451a0a8ae1070ffb50a0959a56776c2d3127c4e7c96",
+      "status": "active",
+      "evidence_summary": {
+        "runtime_fqdn": "sciona.atoms.ml.calibration.empirical_f1.fit_empirical_f1_thresholds",
+        "provider_version_id": "83608ee9-c047-53da-acb5-209901f7b245",
+        "output_aliases_by_ordinal": [
+          "thresholds"
+        ]
+      }
+    },
+    {
+      "node_id": "threshold_apply",
+      "bound_artifact_fqdn": "sciona.atoms.ml.calibration.empirical_f1.apply_column_thresholds",
+      "bound_version_content_hash": "b1df674cf843553cef39c8fefb23c21a23cad31671503a6104e64aa954aebe8f",
+      "status": "active",
+      "evidence_summary": {
+        "runtime_fqdn": "sciona.atoms.ml.calibration.empirical_f1.apply_column_thresholds",
+        "provider_version_id": "2c4add48-5699-5485-865c-da509201fc45",
+        "output_aliases_by_ordinal": [
+          "predictions"
+        ]
+      }
+    },
+    {
+      "node_id": "execute",
+      "bound_artifact_fqdn": "sciona.atoms.ml.video_multilabel_sharded_execution.execute",
+      "bound_version_content_hash": "c7563ccc7019da9af172f87d6028a4421ce5168498624dd4b267c3c146e4df8f",
+      "status": "active",
+      "evidence_summary": {
+        "runtime_fqdn": "sciona.atoms.ml.video_multilabel_sharded_execution.execute",
+        "provider_version_id": "f7562ffa-13ff-521f-ae26-52f8adae81f4",
+        "output_aliases_by_ordinal": [
+          "result"
+        ]
+      }
+    }
+  ],
+  "dependencies": [
+    {
+      "dependency_artifact_fqdn": "cdg.competition.solution.kaggle.video_multilabel_temporal_pooling_topology",
+      "dependency_content_hash": "30d0444ec640598942c6221136e608d7b15449732ceb848939e1424321c496ad",
+      "dependency_role": "cdg",
+      "optional": false,
+      "port_name": "",
+      "binding_metadata": {
+        "source_version_id": "13b48adf-8fb5-5ea2-a26c-44344bb8907e",
+        "scope": "Immutable original intake provenance."
+      }
+    },
+    {
+      "dependency_artifact_fqdn": "cdg.competition.solution.kaggle.video_multilabel_temporal_pooling_topology.execution",
+      "dependency_content_hash": "2becf3fdb330ae328071a82e2ffbaf8c5c6af1d110e036cd0ed48c67f0922e3f",
+      "dependency_role": "cdg",
+      "optional": false,
+      "port_name": "",
+      "binding_metadata": {
+        "source_version_id": "88181ca5-2045-5a42-9b25-377384466349",
+        "scope": "Preserved executable reference provenance; computation uses explicit atom bindings."
+      }
+    },
+    {
+      "dependency_artifact_fqdn": "sciona.atoms.ml.calibration.empirical_f1.apply_column_thresholds",
+      "dependency_content_hash": "b1df674cf843553cef39c8fefb23c21a23cad31671503a6104e64aa954aebe8f",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "port_name": "",
+      "binding_metadata": {
+        "runtime_fqdn": "sciona.atoms.ml.calibration.empirical_f1.apply_column_thresholds",
+        "provider_version_id": "2c4add48-5699-5485-865c-da509201fc45"
+      }
+    },
+    {
+      "dependency_artifact_fqdn": "sciona.atoms.ml.calibration.empirical_f1.fit_empirical_f1_thresholds",
+      "dependency_content_hash": "a0c822126d1cfe7c14c4a451a0a8ae1070ffb50a0959a56776c2d3127c4e7c96",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "port_name": "",
+      "binding_metadata": {
+        "runtime_fqdn": "sciona.atoms.ml.calibration.empirical_f1.fit_empirical_f1_thresholds",
+        "provider_version_id": "83608ee9-c047-53da-acb5-209901f7b245"
+      }
+    },
+    {
+      "dependency_artifact_fqdn": "sciona.atoms.ml.masked_attention.masked_attention_pool",
+      "dependency_content_hash": "2a01012ac49ced9ec73f4b2c9b68a411de9dc1fa27708a31c2f581b8aaad43bc",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "port_name": "",
+      "binding_metadata": {
+        "runtime_fqdn": "sciona.atoms.ml.masked_attention.masked_attention_pool",
+        "provider_version_id": "b0f2091c-22bd-5002-8743-42c41efcb00f"
+      }
+    },
+    {
+      "dependency_artifact_fqdn": "sciona.atoms.ml.masked_attention.sigmoid_context_gate",
+      "dependency_content_hash": "8ec9ce4dfc887a3f12c04f143015f25356c7901e8b9ffaa80ed936b005de8cc4",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "port_name": "",
+      "binding_metadata": {
+        "runtime_fqdn": "sciona.atoms.ml.masked_attention.sigmoid_context_gate",
+        "provider_version_id": "857ed676-ab85-5dbf-8d13-0abc4f718357"
+      }
+    },
+    {
+      "dependency_artifact_fqdn": "sciona.atoms.ml.model_selection.materialized_prediction.average",
+      "dependency_content_hash": "280b371b126f6d7f580dd169289280af76fc50d64350b784c3aefd346df18af5",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "port_name": "",
+      "binding_metadata": {
+        "runtime_fqdn": "sciona.atoms.ml.model_selection.materialized_prediction.average",
+        "provider_version_id": "fbea5906-9987-5e67-88c4-5ffe3d971e66"
+      }
+    },
+    {
+      "dependency_artifact_fqdn": "sciona.atoms.ml.sklearn.feature_extraction.sparse_numeric.fit_numeric_vocabulary",
+      "dependency_content_hash": "1aa767b87ac894561683d96baffaf1d607dfdbb15aea9c4bbc4e49e627159d42",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "port_name": "",
+      "binding_metadata": {
+        "runtime_fqdn": "sciona.atoms.ml.sklearn.feature_extraction.sparse_numeric.fit_numeric_vocabulary",
+        "provider_version_id": "fbf99b42-8b78-53ba-a5d3-3b4c2774f077"
+      }
+    },
+    {
+      "dependency_artifact_fqdn": "sciona.atoms.ml.sklearn.feature_extraction.sparse_numeric.transform_numeric_vocabulary",
+      "dependency_content_hash": "f3dbb15e6252262a50d333c18d0e2467ca57a72a1738ba0a1ca6547f54efa9f6",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "port_name": "",
+      "binding_metadata": {
+        "runtime_fqdn": "sciona.atoms.ml.sklearn.feature_extraction.sparse_numeric.transform_numeric_vocabulary",
+        "provider_version_id": "7b9dd6a5-da00-54aa-bdba-727a7ce830aa"
+      }
+    },
+    {
+      "dependency_artifact_fqdn": "sciona.atoms.ml.sklearn.linear_model.sparse_binary.fit_sparse_binary_logistic",
+      "dependency_content_hash": "0f170f6329938bf8d4d46c3e0bae91176b746812cac262cc313cf9ee5bae027d",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "port_name": "",
+      "binding_metadata": {
+        "runtime_fqdn": "sciona.atoms.ml.sklearn.linear_model.sparse_binary.fit_sparse_binary_logistic",
+        "provider_version_id": "5d4b9920-7a78-5e33-8e20-ee8142d8aaf9"
+      }
+    },
+    {
+      "dependency_artifact_fqdn": "sciona.atoms.ml.sklearn.linear_model.sparse_binary.predict_sparse_binary_probability",
+      "dependency_content_hash": "a15b56d0eec70837c7694aa767cbc9f4bb9036d96abe19cfc4308e58228c97d5",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "port_name": "",
+      "binding_metadata": {
+        "runtime_fqdn": "sciona.atoms.ml.sklearn.linear_model.sparse_binary.predict_sparse_binary_probability",
+        "provider_version_id": "ffe28bf3-e961-51bf-9b38-6a92a1fd986c"
+      }
+    },
+    {
+      "dependency_artifact_fqdn": "sciona.atoms.ml.video_multilabel_sharded_execution.execute",
+      "dependency_content_hash": "c7563ccc7019da9af172f87d6028a4421ce5168498624dd4b267c3c146e4df8f",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "port_name": "",
+      "binding_metadata": {
+        "runtime_fqdn": "sciona.atoms.ml.video_multilabel_sharded_execution.execute",
+        "provider_version_id": "f7562ffa-13ff-521f-ae26-52f8adae81f4"
+      }
+    }
+  ],
+  "provider_publication_plan_sha256": "c454ad979b15508b65fe70d6326181cd306c1375bfdeb24e5b9f57db96e7793c",
+  "provider_verification": {
+    "passed": true,
+    "exact_providers": 10,
+    "native_eligibility_checked": true,
+    "scope": "Exact approved and served provider versions"
+  },
+  "builder_sha256": "41c9a7546390091f4c34d95a2c4123119048ac4584a471962eaa3f6c62e1055c",
+  "qualified_base_execution_sha256": "85612415709a164ea4b66bc0c5e5cd55601faae2367a17c3ea3176edc7327c68"
+}

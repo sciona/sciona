@@ -1,0 +1,53 @@
+"""Qualify full synthetic lifecycles using the stored original candidate."""
+import json
+import os
+import subprocess
+import tempfile
+from pathlib import Path
+import xml.etree.ElementTree as ET
+from scripts import stage_video_corrected_intake as intake
+
+
+def validate():
+    plan, providers = intake.qualified_plan()
+    with intake.connect() as db:
+        db.execute('SET TRANSACTION READ ONLY')
+        graph = intake.check_candidate(db, plan, providers)
+    baseline = json.loads((intake.ROOT/'docs/reviews/catalog_video_multilabel_execution.json').read_text())
+    paths = list(baseline['software_sha256']) + [
+        'scripts/stage_video_corrected_intake.py', 'scripts/decomposed_video_approved_provider_state.py',
+        'scripts/validate_video_corrected_execution.py', 'tests/test_video_corrected_stored_execution.py',
+        'docs/reviews/video_corrected_intake_plan.json', 'docs/reviews/video_approved_provider_state.json']
+    before = {p:intake.sha(intake.ROOT/p) for p in paths}
+    if any(before[p] != digest for p,digest in baseline['software_sha256'].items()):
+        raise ValueError('Previously executed software changed')
+    env = dict(os.environ, OMP_NUM_THREADS='1', OPENBLAS_NUM_THREADS='1', MKL_NUM_THREADS='1',
+        VECLIB_MAXIMUM_THREADS='1', NUMEXPR_NUM_THREADS='1', MPLCONFIGDIR='/private/tmp/sciona-mpl-cache', PYTHONPATH=str(intake.ROOT))
+    with tempfile.TemporaryDirectory(prefix='synthetic-stored-video-') as temporary:
+        xml = Path(temporary)/'tests.xml'
+        run = subprocess.run([str(intake.ROOT/'.venv/bin/python'), '-m', 'pytest', '-q',
+            'tests/test_video_corrected_stored_execution.py', '--junitxml='+str(xml)],
+            cwd=intake.ROOT, env=env, capture_output=True, text=True)
+        if run.returncode:raise ValueError('Stored lifecycle validation failed: '+run.stdout[-5000:]+run.stderr[-1000:])
+        suites = list(ET.parse(xml).getroot().iter('testsuite'))
+        counts = {k:sum(int(s.get(k,'0')) for s in suites) for k in ('tests','failures','errors','skipped')}
+    if counts != dict(tests=3,failures=0,errors=0,skipped=0):raise ValueError('Three complete lifecycle cases required')
+    if before != {p:intake.sha(intake.ROOT/p) for p in paths}:raise ValueError('Executed software changed')
+    if intake.qualified_plan() != (plan, providers):raise ValueError('Qualification changed')
+    with intake.connect() as db:
+        db.execute('SET TRANSACTION READ ONLY')
+        if intake.check_candidate(db, plan, providers) != graph:raise ValueError('Stored graph changed')
+    return dict(format='video-corrected-stored-execution.v1', passed=True, approved=False,
+        catalog_mutations=0, synthetic_only=True, stored_catalog_graph_executed=True,
+        artifact_id=plan['artifact_id'], version_id=plan['version_id'], graph_sha256=plan['graph_sha256'],
+        tests=counts, software_sha256=before, graph_nodes=10, explicit_callable_edges=9,
+        exact_registered_bindings=True, all_nodes_uncached=True, full_configured_lifecycle_parity=True,
+        resource_policy=dict(serial_tests=True,native_threads=1),
+        limits=['Three full synthetic cases, including 80 epochs; no historical accuracy claim.',
+                'Original CDG publication and served selection remain pending.'])
+
+
+if __name__ == '__main__':
+    result = validate()
+    (intake.ROOT/'docs/reviews/video_corrected_intake_execution.json').write_text(json.dumps(result,indent=2)+'\n')
+    print(json.dumps(dict(passed=True,tests=result['tests'],stored_graph=True,approved=False)))
