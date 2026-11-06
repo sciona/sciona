@@ -42,7 +42,7 @@ def _record(raw, labelled):
     if any(type(row) is not list or len(row) != width or not all(finite(v) for v in row) for row in frames):
         raise ValueError('Aligned finite frame vectors required')
     sparse = record['sparse']
-    if type(sparse) is not dict or any(type(k) is not str or not finite(v) or v < 0 for k,v in sparse.items()):
+    if type(sparse) is not dict or any(type(k) is not str or not k or not finite(v) or v < 0 for k,v in sparse.items()):
         raise ValueError('Finite nonnegative sparse mapping required')
     if type(record['group']) is not str or not record['group']:
         raise ValueError('Nonempty group required')
