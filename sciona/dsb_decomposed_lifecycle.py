@@ -71,8 +71,8 @@ def run_epoch_lifecycle(detector,classifier,detector_optimizer,classifier_optimi
     classifier training-set evaluation. Caller owns private array loading and
     checkpoint storage; no filenames or data provenance enter returned metrics.
     """
-    from sciona.dsb_decomposed_validation import validate_detector,validate_classifier
-    from sciona.dsb_checkpoint import checkpoint_bytes
+    from sciona.atoms.dl.detection.dsb_lifecycle_steps import validate_detector,validate_classifier
+    from sciona.atoms.dl.detection.dsb_lifecycle_steps import export_model_checkpoint
     save_frequency=_integer(save_frequency,'save_frequency')
     validation=[]
     def after_pass(task,model):
@@ -83,7 +83,7 @@ def run_epoch_lifecycle(detector,classifier,detector_optimizer,classifier_optimi
                 validation.append(dict(task=key,metrics=validate_classifier(model,validation_factory(key))))
     training=run_training_epoch(detector,classifier,detector_optimizer,classifier_optimizer,
         training_factory,epoch=epoch,start_epoch=start_epoch,after_pass=after_pass,**kwargs)
-    checkpoint=checkpoint_bytes(classifier,epoch) if epoch%save_frequency==0 else None
+    checkpoint=export_model_checkpoint(classifier,epoch) if epoch%save_frequency==0 else None
     return dict(training=training,validation=validation,checkpoint=checkpoint)
 
 

@@ -7,10 +7,10 @@
   "graph_nodes": 19,
   "direct_providers": 18,
   "generic_providers": 10,
-  "inventoried_providers": 31,
+  "inventoried_providers": 34,
   "complete_transitive_closure": false,
   "both_catalogs_exact_eligible": null,
-  "full_graph_evidence_sha256": "08cb03da7dc1b965b405a1f71161649381062fcfa75848cc5a93112d33b7eeb0",
+  "full_graph_evidence_sha256": "57dad32eb24f29e9780e4442c313bae051944f7f98d7f05cc2e15bcfaafaec63",
   "providers": [
     {
       "runtime_fqdn": "sciona.atoms.dl.detection.dsb_decomposed_training.dsb_decomposed_training_batches",
@@ -166,6 +166,48 @@
       "directly_bound_nodes": [
         "suppress_proposals"
       ],
+      "classification": "dsb_recipe_adapter",
+      "atom_latest": null,
+      "atom_exact_eligible": null,
+      "artifact_latest": null,
+      "artifact_exact_eligible": null
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.detection.dsb_lifecycle_steps.export_model_checkpoint",
+      "catalog_fqdn": "sciona.atoms.dl.detection.dsb_lifecycle_steps.export_model_checkpoint",
+      "version_id": "e571fc18-e119-54ac-94d6-7ef3b0b08475",
+      "content_hash": "d4b54a5113d942dc378c8a1c98bd1137b645c487a396234e491773a8f38ff637",
+      "provider_sha256": "866e3592de700c43d036f6f5d7acc0a4e3b40ee826a1bd7f7628e93eef575a6e",
+      "signature": "(model: object, epoch: int) -> bytes",
+      "directly_bound_nodes": [],
+      "classification": "dsb_recipe_adapter",
+      "atom_latest": null,
+      "atom_exact_eligible": null,
+      "artifact_latest": null,
+      "artifact_exact_eligible": null
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.detection.dsb_lifecycle_steps.validate_classifier",
+      "catalog_fqdn": "sciona.atoms.dl.detection.dsb_lifecycle_steps.validate_classifier",
+      "version_id": "dd83b544-ce00-5ddd-9481-8cedc185f6e4",
+      "content_hash": "4baf350b6f9a41711d3d9acec8d2f25461d11ffdb82ea9e056c63415a31a9fd8",
+      "provider_sha256": "866e3592de700c43d036f6f5d7acc0a4e3b40ee826a1bd7f7628e93eef575a6e",
+      "signature": "(model: object, batches: object) -> dict",
+      "directly_bound_nodes": [],
+      "classification": "dsb_recipe_adapter",
+      "atom_latest": null,
+      "atom_exact_eligible": null,
+      "artifact_latest": null,
+      "artifact_exact_eligible": null
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.detection.dsb_lifecycle_steps.validate_detector",
+      "catalog_fqdn": "sciona.atoms.dl.detection.dsb_lifecycle_steps.validate_detector",
+      "version_id": "c1cafef8-fc2e-5335-b865-e3720ab4abff",
+      "content_hash": "c355d932d60e6d6c18dad5d0893f2ecea90a75597aeb430f702d971391a04274",
+      "provider_sha256": "866e3592de700c43d036f6f5d7acc0a4e3b40ee826a1bd7f7628e93eef575a6e",
+      "signature": "(model: object, batches: object) -> dict",
+      "directly_bound_nodes": [],
       "classification": "dsb_recipe_adapter",
       "atom_latest": null,
       "atom_exact_eligible": null,
@@ -526,7 +568,7 @@
   ],
   "remaining_gates": [
     "Review complete spatial recipe contracts across training, validation and inference; explicit consumers are connected.",
-    "Expose validation/checkpoint contracts while preserving uninterrupted optimizer and RNG state.",
+    "Validation and checkpoint operations are explicit; review lifecycle contracts and per-epoch invocation evidence.",
     "Review complete transitive dependencies including local imports, model methods and callbacks.",
     "Complete exact catalog interfaces, parameters, descriptions, references and Tier 3 audit evidence.",
     "Qualify corruption rejection, rollback and idempotent provider publication.",

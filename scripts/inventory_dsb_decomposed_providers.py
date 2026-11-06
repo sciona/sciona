@@ -35,6 +35,10 @@ SPATIAL_RECIPES = {'sciona.atoms.dl.detection.dsb_spatial_recipes.' + name for n
                     'crop_classifier_proposal', 'assign_anchor_labels')}
 
 
+LIFECYCLE_STEPS = {'sciona.atoms.dl.detection.dsb_lifecycle_steps.' + name for name in
+                   ('validate_detector', 'validate_classifier', 'export_model_checkpoint')}
+
+
 def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -42,7 +46,7 @@ def sha(path):
 def inventory(offline=False):
     graph = build_dsb_evaluation_graph()
     digest, _, _ = encode_execution_graph(graph)
-    evidence_path = ROOT / 'docs/reviews/dsb_evaluation_recipe_graph_source_parity.json'
+    evidence_path = ROOT / 'docs/reviews/dsb_lifecycle_contract_graph_source_parity.json'
     evidence = json.loads(evidence_path.read_text())
     if not evidence['passed'] or evidence['execution_graph_sha256'] != digest:
         raise ValueError('Current graph lacks matching full source evidence')
@@ -51,7 +55,7 @@ def inventory(offline=False):
             if sha(base / name) != expected:
                 raise ValueError('Execution evidence source drift: ' + name)
     direct = {node.matched_primitive for node in graph.nodes}
-    wanted = direct | GENERIC.keys() | SPATIAL_RECIPES
+    wanted = direct | GENERIC.keys() | SPATIAL_RECIPES | LIFECYCLE_STEPS
     specs = {}
     for repo_name in ('sciona-atoms', 'sciona-atoms-dl'):
         directory = ROOT.parent / repo_name
@@ -102,7 +106,7 @@ def inventory(offline=False):
                 full_graph_evidence_sha256=sha(evidence_path), providers=records,
                 remaining_gates=[
                     'Review complete spatial recipe contracts across training, validation and inference; explicit consumers are connected.',
-                    'Expose validation/checkpoint contracts while preserving uninterrupted optimizer and RNG state.',
+                    'Validation and checkpoint operations are explicit; review lifecycle contracts and per-epoch invocation evidence.',
                     'Review complete transitive dependencies including local imports, model methods and callbacks.',
                     'Complete exact catalog interfaces, parameters, descriptions, references and Tier 3 audit evidence.',
                     'Qualify corruption rejection, rollback and idempotent provider publication.',
