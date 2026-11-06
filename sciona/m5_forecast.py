@@ -4,7 +4,7 @@ from sciona.m5_family import frame,pools
 from sciona.m5_lags import rolling
 
 
-def predict(prepared, models, cutoff):
+def predict_families(prepared, models, cutoff):
     grid=prepared['grid'];days=np.asarray(grid['day']);series=np.asarray(grid['series'])
     if isinstance(cutoff,(bool,np.bool_)) or not isinstance(cutoff,(int,np.integer)):
         raise ValueError('Cutoff must be an integer')
@@ -68,5 +68,10 @@ def predict(prepared, models, cutoff):
         if not np.isfinite(matrix).all():raise ValueError('Incomplete family forecast')
         forecasts.append(matrix)
     stacked=np.stack(forecasts)
-    return dict(forecast=np.sum(stacked,axis=0)/6,families=stacked,models=len(models),horizon=28,
+    return dict(families=stacked,models=len(models),horizon=28,
                 scope='Independent CPU full-horizon family mean; no historical accuracy or GPU parity claim.')
+
+
+def predict(prepared, models, cutoff):
+    result = predict_families(prepared, models, cutoff)
+    return dict(forecast=np.sum(result['families'], axis=0)/6, **result)
