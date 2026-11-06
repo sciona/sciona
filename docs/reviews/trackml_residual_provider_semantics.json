@@ -1,0 +1,233 @@
+{
+  "format": "trackml-residual-provider-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "providers": [
+    {
+      "artifact_id": "9a215bc7-e5ba-58db-8674-6474aa4ca983",
+      "fqdn": "sciona.atoms.physics.tangent_residuals.combine_scaled_uncertainty",
+      "runtime_fqdn": "sciona.atoms.physics.tangent_residuals.combine_scaled_uncertainty",
+      "version_id": "01404e4e-8fdf-548d-970c-0f887e94e042",
+      "content_hash": "08d816883a4d84e15c9b4a4f1163a309106ea51c847c2021490b44d6970e679e",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "measured",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite nonnegative float64 vector (N,) in caller-defined uncertainty units. Empty vectors allowed."
+        },
+        {
+          "direction": "input",
+          "name": "driver",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite signed float64 vector (N,), exactly aligned with measured. Coefficients convert driver units to measured units."
+        },
+        {
+          "direction": "input",
+          "name": "driver_scale",
+          "ordinal": 2,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit finite nonnegative real scalar; booleans rejected. First multiplication is driver times driver_scale."
+        },
+        {
+          "direction": "input",
+          "name": "component_scale",
+          "ordinal": 3,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit finite nonnegative real scalar; booleans rejected. Applied after driver_scale; empirical values belong to the recipe."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Float64 vector sqrt(measured**2 + ((driver*driver_scale)*component_scale)**2). Independent components assumed by caller; nonfinite intermediate or output rejects."
+        }
+      ],
+      "operation": "Combine independent measured uncertainty and an explicitly scaled driver in quadrature, preserving multiplication order.",
+      "plain_description": "Combine two independent sources of uncertainty using caller-supplied scales.",
+      "validity_bounds": "Finite nonnegative float64 vector (N,) in caller-defined uncertainty units. Empty vectors allowed. Finite signed float64 vector (N,), exactly aligned with measured. Coefficients convert driver units to measured units. Explicit finite nonnegative real scalar; booleans rejected. First multiplication is driver times driver_scale. Explicit finite nonnegative real scalar; booleans rejected. Applied after driver_scale; empirical values belong to the recipe. Float64 vector sqrt(measured**2 + ((driver*driver_scale)*component_scale)**2). Independent components assumed by caller; nonfinite intermediate or output rejects.",
+      "reuse": "Generic residual geometry and independent uncertainty combination; coordinate conventions and coefficient choices are explicit, with detector policy retained in the recipe.",
+      "registered_provider_dependencies": []
+    },
+    {
+      "artifact_id": "cb7c65cf-3c97-5ffa-b8b4-3d372705567a",
+      "fqdn": "sciona.atoms.physics.tangent_residuals.hemisphere_tangent_displacement",
+      "runtime_fqdn": "sciona.atoms.physics.tangent_residuals.hemisphere_tangent_displacement",
+      "version_id": "6a1cc8df-d27b-5509-8e5d-ca270b24708e",
+      "content_hash": "86b36655ee78262992f8d8937009ad74206e5ffd2bfa648598e4e26550b46d8b",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "points",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 (N,3) positions sharing origin and length unit with reference. Nonzero finite radial normalization required; empty batches allowed."
+        },
+        {
+          "direction": "input",
+          "name": "reference",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 (N,3), exactly aligned with points. Displacement is points minus reference; no broadcasting."
+        },
+        {
+          "direction": "output",
+          "name": "polar",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Signed length projected onto sign(z) times the increasing-colatitude basis. Zero at z=0; not an angular displacement. Nonfinite arithmetic rejects."
+        },
+        {
+          "direction": "output",
+          "name": "azimuth",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Signed length along increasing azimuth about the z axis. Axis positions reject. Empty inputs return empty vectors."
+        }
+      ],
+      "operation": "Project Cartesian point-minus-reference residuals onto hemisphere-oriented polar and azimuthal directions.",
+      "plain_description": "Measure the difference between two positions along two local directions.",
+      "validity_bounds": "Finite float64 (N,3) positions sharing origin and length unit with reference. Nonzero finite radial normalization required; empty batches allowed. Finite float64 (N,3), exactly aligned with points. Displacement is points minus reference; no broadcasting. Signed length projected onto sign(z) times the increasing-colatitude basis. Zero at z=0; not an angular displacement. Nonfinite arithmetic rejects. Signed length along increasing azimuth about the z axis. Axis positions reject. Empty inputs return empty vectors.",
+      "reuse": "Generic residual geometry and independent uncertainty combination; coordinate conventions and coefficient choices are explicit, with detector policy retained in the recipe.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "tests": {
+    "tests": 54,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "exact_source_projection_cases": 24,
+  "exact_source_uncertainty_cases": 16,
+  "software_sha256": {
+    "tests/test_tangent_residual_providers.py": "2f6465bf119aa0ea89819c42a9089150bcdc6b7566109d4d48b5ff9ba32715bf",
+    "scripts/review_trackml_residual_provider_semantics.py": "bc131ec529050b346b1c8cc2073b7dfa2baa2a9a8a423b07bb932e6b93428604",
+    "scripts/stage_trackml_residual_providers.py": "64e6311479e98c5bbae8823e728fcb1009974d849aa32cc85cd246b755716149",
+    "sciona/ghost/registry.py": "793723a75d07a88eed39f59d8d4dc327c54adbf75db7a03003516a6f74c81b51",
+    "sciona/decomposed_trackml_residual_lifecycle.py": "88b8d8c4a8d43bff93c53e1426b1d7cd852990898b2a9e74102e40c6f0637c0d",
+    "sciona/trackml_bayesian.py": "5ba0fe8cec6f7cd8d431e8096a634ca0b1c478fca7d5121523133c95b7f0b041",
+    "sciona-atoms-physics/src/sciona/atoms/physics/tangent_residuals.py": "563d6d2b12053ba134de7a94a01a2018fce8dfcc483d80e7222e9e5e6ced11e5"
+  },
+  "installed_packages": {
+    "annotated-types": {
+      "version": "0.7.0",
+      "hashed_files_verified": 7,
+      "active_requirements": []
+    },
+    "asttokens": {
+      "version": "2.4.1",
+      "hashed_files_verified": 13,
+      "active_requirements": [
+        "six>=1.12.0"
+      ]
+    },
+    "icontract": {
+      "version": "2.7.3",
+      "hashed_files_verified": 16,
+      "active_requirements": [
+        "asttokens<3,>=2",
+        "typing_extensions"
+      ]
+    },
+    "mpmath": {
+      "version": "1.3.0",
+      "hashed_files_verified": 92,
+      "active_requirements": []
+    },
+    "numpy": {
+      "version": "2.2.6",
+      "hashed_files_verified": 876,
+      "active_requirements": []
+    },
+    "pydantic": {
+      "version": "2.12.5",
+      "hashed_files_verified": 111,
+      "active_requirements": [
+        "annotated-types>=0.6.0",
+        "pydantic-core==2.41.5",
+        "typing-extensions>=4.14.1",
+        "typing-inspection>=0.4.2"
+      ]
+    },
+    "pydantic-core": {
+      "version": "2.41.5",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.14.1"
+      ]
+    },
+    "six": {
+      "version": "1.17.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "sympy": {
+      "version": "1.14.0",
+      "hashed_files_verified": 1571,
+      "active_requirements": [
+        "mpmath<1.4,>=1.1.0"
+      ]
+    },
+    "threadpoolctl": {
+      "version": "3.6.0",
+      "hashed_files_verified": 5,
+      "active_requirements": []
+    },
+    "typing-extensions": {
+      "version": "4.16.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "typing-inspection": {
+      "version": "0.4.2",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.12.0"
+      ]
+    }
+  },
+  "intake_plan_sha256": "070b3a3f81131554576e933b99a54a1b2003273f3d9bd96eaf5b809bc6dff477",
+  "resource_policy": {
+    "serial_tests": true,
+    "native_threads": 1
+  },
+  "limitations": [
+    "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+    "Finite float64 arrays only; aligned shapes without broadcasting. Empty batches are supported.",
+    "Projection outputs signed lengths, not angles. Caller supplies a common coordinate origin and units.",
+    "Polar basis is sign(z) times increasing colatitude, and is zero at z=0. Axis positions and nonfinite radial normalization reject.",
+    "Uncertainty assumes independent components; measured uncertainty is nonnegative and driver may be signed. Coefficients are explicit finite nonnegative real scalars.",
+    "Source arithmetic order is preserved. Nonfinite intermediates reject; underflow and finite rounding error are not exhaustively bounded.",
+    "No detector geometry, empirical coefficients, calibration maps or identifier policy is embedded.",
+    "Concrete witness rejects abstract execution; no symbolic proof is claimed.",
+    "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+    "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+    "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate."
+  ]
+}

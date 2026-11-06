@@ -72,3 +72,32 @@ def test_uncertainty_rejects_coefficients(coefficient):
 def test_uncertainty_rejects_vectors(measured, driver):
     with pytest.raises(ValueError):
         combine_scaled_uncertainty(measured, driver, 1., 1.)
+
+
+@pytest.mark.parametrize('angle', [0., .3, -1.2, 2.4])
+def test_projection_rotation_and_unit_scaling(angle):
+    p = np.array([[2., -3., 4.], [-1., 2., -5.], [3., 2., 0.]])
+    q = np.array([[1., -2., 2.], [-2., 1., -4.], [2., 1., 3.]])
+    rotation = np.array([[np.cos(angle), -np.sin(angle), 0.],
+                         [np.sin(angle), np.cos(angle), 0.], [0., 0., 1.]])
+    expected = hemisphere_tangent_displacement(p, q)
+    actual = hemisphere_tangent_displacement((p@rotation.T)*8., (q@rotation.T)*8.)
+    np.testing.assert_allclose(actual, np.asarray(expected)*8., atol=3e-14)
+
+
+def test_uncertainty_does_not_mutate_and_rejects_hidden_overflow():
+    measured, driver = np.array([0., 3., 4.]), np.array([-2., 0., 2.])
+    before = measured.copy(), driver.copy()
+    result = combine_scaled_uncertainty(measured, driver, 2., .5)
+    np.testing.assert_allclose(result, [2., 3., np.sqrt(20.)])
+    np.testing.assert_array_equal(measured, before[0])
+    np.testing.assert_array_equal(driver, before[1])
+    assert not np.shares_memory(result, measured)
+    with pytest.raises(ValueError):
+        combine_scaled_uncertainty(np.ones(1), np.array([1e308]), 2., 0.)
+
+
+def test_abstract_witness_rejects():
+    from sciona.atoms.physics.tangent_residuals import concrete_only
+    with pytest.raises(ValueError):
+        concrete_only()
