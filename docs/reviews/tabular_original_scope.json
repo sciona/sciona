@@ -1,0 +1,220 @@
+{
+  "format": "tabular-original-scope.v1",
+  "read_only": true,
+  "catalog_mutations": 0,
+  "approved": false,
+  "original": {
+    "artifact_id": "11c51eb5-8c27-5df3-b820-dc67a4aff974",
+    "fqdn": "cdg.competition.solution.kaggle.classical_tabular_ensemble_topology",
+    "status": "draft",
+    "is_publishable": false,
+    "content_hash": "3cc5a5fdfab302b5c1a37abe86916ac996f577d11b733cba0bbf7b7d4438b2cd"
+  },
+  "source_version_id": "9f3c8c4f-ce85-5e9d-b169-8b055562ce65",
+  "source_content_hash": "3cc5a5fdfab302b5c1a37abe86916ac996f577d11b733cba0bbf7b7d4438b2cd",
+  "source_stage_review": [
+    {
+      "source_stage": {
+        "stage_id": "table_audit_cleaning",
+        "description": "Normalize schema and types, impute missing values, remove constant/quasi-constant or duplicate columns, clip outliers, and define leakage-safe train/validation folds.",
+        "guarantees": [
+          "Feature transforms can be fit without validation leakage."
+        ]
+      },
+      "realization": "Select explicit numeric/string column positions; validate finite values or nulls, fit numeric medians and clipping quantiles per outer training fold, screen constant/duplicate and modal-share quasi-constant columns, and validate caller-provided group-consistent folds.",
+      "limits": "Schema meaning and group discovery remain caller policy. No automatic chronology, duplicate-entity detection or general leakage guarantee. All-null numeric columns fill zero and are screened. Dense tables and wide-category resource use are not qualified.",
+      "source_anchors": [
+        {
+          "file": "sciona/tabular_ensemble_features.py",
+          "symbol": "validate_table",
+          "line": 7,
+          "file_sha256": "a21c9a05d159cea22cb6d46cd19ce7822ae260e33f081a8784a275a342864e95"
+        },
+        {
+          "file": "sciona/tabular_ensemble_features.py",
+          "symbol": "TabularFeatures.fit",
+          "line": 33,
+          "file_sha256": "a21c9a05d159cea22cb6d46cd19ce7822ae260e33f081a8784a275a342864e95"
+        },
+        {
+          "file": "sciona/tabular_complete_features.py",
+          "symbol": "fit_binary_tabular_features",
+          "line": 58,
+          "file_sha256": "e75adc8340ea421836dd23fae617b246a9eee8de9e478aec25c806b637472c22"
+        },
+        {
+          "file": "sciona/tabular_complete_contract.py",
+          "symbol": "prepare",
+          "line": 86,
+          "file_sha256": "2c03a48e8b73eb332db52f67b8c05dfdb80131c3b796d3eea2c558acbbc9bcd6"
+        },
+        {
+          "file": "sciona/tabular_complete_training.py",
+          "symbol": "_fit_complete_stacker",
+          "line": 53,
+          "file_sha256": "df11c12d6c6404cc2d11cb504302b9a89e18a154ff92d4107a1d4c1d2443dfe0"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "split_aware_feature_engineering",
+        "description": "Create target/count/frequency encodings, category interactions, entity embeddings, LDA topic features from text-like fields, group/session/user aggregations, log transforms, outlier or feature clipping, RFE or permutation-selected features, and sparse or dense feature matrices inside folds.",
+        "guarantees": [
+          "Feature rows align with labels and prediction rows."
+        ]
+      },
+      "realization": "Implement count/frequency and group-excluded target means, collision-free category-pair interactions, supervised categorical embedding vectors, training-only count-vocabulary LDA topics, explicit-key numeric aggregates, signed log1p copies, quantile clipping and RFE-selected dense features. Fit each feature family only within its outer training fold; preserve row order.",
+      "limits": "Empty specification lists explicitly disable inapplicable families; qualification exercises every family together. Text fields use explicit whitespace/case policy. Group aggregate keys are feature choices distinct from validation groups. Entity vectors use a binary MLP objective, full fitting-fold labels and zero vectors for unseen categories. RFE is the selected alternative to permutation selection. Only target means exclude each training row group; supervised embeddings and RFE use all fitting-fold labels. Fold coordinate systems need not align because only prediction columns are stacked.",
+      "source_anchors": [
+        {
+          "file": "sciona/tabular_category_features.py",
+          "symbol": "fit_category_features",
+          "line": 77,
+          "file_sha256": "33f04f6bb2b6eed9f8138db90e430ed2e1b2c3571dd7f16a8f357b2231bca538"
+        },
+        {
+          "file": "sciona/tabular_group_features.py",
+          "symbol": "fit_group_features",
+          "line": 38,
+          "file_sha256": "5609b192bc7fbd6fed62641f61ab87f31d3ebe17ae68662c1d0e9843f7c44a57"
+        },
+        {
+          "file": "sciona/tabular_text_topics.py",
+          "symbol": "fit_text_topics",
+          "line": 34,
+          "file_sha256": "8f5d7799f46ae63cea22fbd321b6a3ea00bbdfb8f43d69d7befdd29afb8774cf"
+        },
+        {
+          "file": "sciona/tabular_entity_embeddings.py",
+          "symbol": "fit_entity_embeddings",
+          "line": 38,
+          "file_sha256": "76e1666da47b0a79de32231ab6b74f0e33a9ee8634f66f916931073410dd6fa4"
+        },
+        {
+          "file": "sciona/tabular_feature_selection.py",
+          "symbol": "select_training_features",
+          "line": 27,
+          "file_sha256": "b5afa9a04830bef0abe38c0c0bf8f5432398d582e24a7d6ff39c29d0dcf72437"
+        },
+        {
+          "file": "sciona/tabular_complete_features.py",
+          "symbol": "fit_binary_tabular_features",
+          "line": 58,
+          "file_sha256": "e75adc8340ea421836dd23fae617b246a9eee8de9e478aec25c806b637472c22"
+        },
+        {
+          "file": "sciona/tabular_complete_training.py",
+          "symbol": "_fit_base",
+          "line": 39,
+          "file_sha256": "df11c12d6c6404cc2d11cb504302b9a89e18a154ff92d4107a1d4c1d2443dfe0"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "tabular_model_zoo",
+        "description": "Train XGBoost, LightGBM, CatBoost with categorical support, ExtraTrees, RandomForest, sparse linear models, MLP/entity-embedding networks, TabNet, or TabPFN-style models with early stopping, class weights or SMOTE where appropriate, and metric-aware objectives.",
+        "guarantees": [
+          "Every stacked model has out-of-fold predictions."
+        ]
+      },
+      "realization": "Select standardized logistic regression and ExtraTrees as two source-listed model-family branches for binary classification. Fit each independently per outer fold and produce one held-out probability from each model for every training row.",
+      "limits": "Other listed model families are alternatives and are not claimed. No SMOTE, class weighting, early stopping or hyperparameter search; caller chooses applicability and controls. Convergence warnings fail execution. ExtraTrees n_jobs and native pools are one.",
+      "source_anchors": [
+        {
+          "file": "sciona/tabular_complete_training.py",
+          "symbol": "_fit_base",
+          "line": 39,
+          "file_sha256": "df11c12d6c6404cc2d11cb504302b9a89e18a154ff92d4107a1d4c1d2443dfe0"
+        },
+        {
+          "file": "sciona/tabular_complete_training.py",
+          "symbol": "_fit_complete_stacker",
+          "line": 53,
+          "file_sha256": "df11c12d6c6404cc2d11cb504302b9a89e18a154ff92d4107a1d4c1d2443dfe0"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "ensemble_stacking_blending",
+        "description": "Blend, rank-average, or train a second-level stacker over out-of-fold predictions, optionally adding validation-safe pseudo-labeling or model selection by fold stability.",
+        "guarantees": [
+          "Blended predictions are fold-safe."
+        ]
+      },
+      "realization": "Select a second-level logistic stacker trained on the two OOF prediction columns. Refit base models and their feature maps on all training rows for later calibration and prediction.",
+      "limits": "No rank-average, pseudo-labeling or stability-based model selection is claimed. OOF coverage and group/fold separation are checked; OOF scores are training inputs to the stacker, not an independent evaluation of the final stacked model.",
+      "source_anchors": [
+        {
+          "file": "sciona/tabular_complete_training.py",
+          "symbol": "_fit_complete_stacker",
+          "line": 53,
+          "file_sha256": "df11c12d6c6404cc2d11cb504302b9a89e18a154ff92d4107a1d4c1d2443dfe0"
+        },
+        {
+          "file": "sciona/tabular_ensemble_training.py",
+          "symbol": "StackedModel.predict",
+          "line": 45,
+          "file_sha256": "5404123c59e394e7e35f62a5261f60d9a87ce8864017cc9a15723121cc3be272"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "metric_calibration",
+        "description": "Apply QWK threshold search, multi-class probability calibration, class-imbalance handling, rank normalization, regression clipping, inverse transforms, or benchmark-specific formatting.",
+        "guarantees": [
+          "Predictions are calibrated and formatted."
+        ]
+      },
+      "realization": "Realize probability calibration for the explicit two-class specialization: fit a regularized sigmoid to clipped class-1 score logits on separated calibration rows, then return finite ordered query probabilities and inclusive 0.5 decisions.",
+      "limits": "This specializes the source probability-calibration family to binary classes; it does not implement arbitrary multiclass calibration, QWK search, regression transforms or a named benchmark file format. Generic result arrays preserve query order and duplicates. A fitted calibration procedure is not a guarantee of empirical calibration or accuracy. Native stored-original execution and publication remain pending.",
+      "source_anchors": [
+        {
+          "file": "sciona/tabular_ensemble_calibration.py",
+          "symbol": "calibrate_stack",
+          "line": 26,
+          "file_sha256": "4a04c21466734845754b8f6c86f326b851944a1cc19aeaf02a6c3a1b2e3a7244"
+        },
+        {
+          "file": "sciona/tabular_ensemble_calibration.py",
+          "symbol": "predict_calibrated",
+          "line": 44,
+          "file_sha256": "4a04c21466734845754b8f6c86f326b851944a1cc19aeaf02a6c3a1b2e3a7244"
+        },
+        {
+          "file": "sciona/tabular_complete_contract.py",
+          "symbol": "execute",
+          "line": 104,
+          "file_sha256": "2c03a48e8b73eb332db52f67b8c05dfdb80131c3b796d3eea2c558acbbc9bcd6"
+        },
+        {
+          "file": "sciona/tabular_complete_stages.py",
+          "symbol": "calibrate",
+          "line": 31,
+          "file_sha256": "80cc1cb15a6e85b5a870f23e1230d60705ef8a6827a3fec1f271676762e540a6"
+        },
+        {
+          "file": "sciona/tabular_complete_stages.py",
+          "symbol": "predict",
+          "line": 38,
+          "file_sha256": "80cc1cb15a6e85b5a870f23e1230d60705ef8a6827a3fec1f271676762e540a6"
+        }
+      ]
+    }
+  ],
+  "reviewer_sha256": "122567ed9b38a7626f83f2ffc6c919b696be487961a94ba26f2eedaba7b9f16c",
+  "approved_provider_state_sha256": "23083700bd2e9b211f1ccd89664bc436aed7284bc9639b433bf9c3b22e742cc7",
+  "remaining_requirements": [
+    "Stage corrected original graph with exact approved bindings and immutable lineage.",
+    "Execute the stored original graph, verify source-scope fidelity, then run publication corruption and rollback checks.",
+    "Verify approved latest-version retrieval and served selection without changing the retained derivative."
+  ],
+  "limits": [
+    "Explicit binary realization of the generic source topology; not every listed model or metric alternative.",
+    "All named feature families implemented with explicit applicability policies; original source does not prescribe a universal schema.",
+    "Automated synthetic qualification only; no historical winning-solution reproduction or Tier 1 human review."
+  ]
+}
