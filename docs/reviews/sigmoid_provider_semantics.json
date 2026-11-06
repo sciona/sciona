@@ -1,0 +1,236 @@
+{
+  "format": "sigmoid-provider-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "providers": [
+    {
+      "artifact_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+      "fqdn": "sciona.atoms.ml.sklearn.calibration.sigmoid_calibration_fit",
+      "version_id": "41cba2bf-ce59-5b54-9cfd-b5c0a9e7ddf5",
+      "content_hash": "70e225fddbec4e9d7a39378f6dffdf55fdcfa63dafa7c5ad9e2c73a977421738",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "predictions",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities."
+        },
+        {
+          "direction": "input",
+          "name": "y",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned float64 binary targets encoded 0 and 1; both classes represented in an independent calibration population."
+        },
+        {
+          "direction": "input",
+          "name": "sample_weight",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": false,
+          "default_value_repr": "None",
+          "constraints": "None or aligned finite nonnegative float64 weights with positive total mass in each class."
+        },
+        {
+          "direction": "output",
+          "name": "state",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite sigmoid slope and intercept."
+        }
+      ],
+      "operation": "Fit Platt sigmoid slope and intercept using the installed sklearn binary calibration routine, with optional sample weights.",
+      "plain_description": "Learn two numbers that convert model scores into probabilities, using separate labeled examples and optional weights.",
+      "validity_bounds": "One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities. Aligned float64 binary targets encoded 0 and 1; both classes represented in an independent calibration population. None or aligned finite nonnegative float64 weights with positive total mass in each class.",
+      "reuse": "Domain-independent numeric calibration; no season, sport, team, task-specific feature layout or original competition data required.",
+      "registered_provider_dependencies": []
+    },
+    {
+      "artifact_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+      "fqdn": "sciona.atoms.ml.sklearn.calibration.sigmoid_calibration_predict",
+      "version_id": "e54f2ea7-9cc7-5f35-93b3-1956f480ed00",
+      "content_hash": "c4e3c6a65aec1ec5db26067637ca0972d77484ee32fcf03798f32cad600ceff8",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "predictions",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities."
+        },
+        {
+          "direction": "input",
+          "name": "state",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "SigmoidCalibrationState with finite a and b, fitted for the same score definition; predicts expit(-(a*score+b))."
+        },
+        {
+          "direction": "output",
+          "name": "probabilities",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned float64 probabilities in [0,1]; no empirical accuracy or calibration guarantee."
+        }
+      ],
+      "operation": "Apply a fitted sigmoid to raw scores using expit(-(a*score+b)).",
+      "plain_description": "Convert model scores into probabilities using two previously fitted numbers.",
+      "validity_bounds": "One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities. SigmoidCalibrationState with finite a and b, fitted for the same score definition; predicts expit(-(a*score+b)).",
+      "reuse": "Domain-independent numeric calibration; no season, sport, team, task-specific feature layout or original competition data required.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "tests": {
+    "tests": 88,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "software_sha256": {
+    "tests/test_sigmoid_provider_reuse.py": "63feffa2249f781cc1c5de36b8408422eec98ddb09df1cb694bba6f6e8fda729",
+    "tests/test_decomposed_march_runtime.py": "2c8bd1a036a6aaf933a5216f32889a555f888854bfea3f9ae61d7e13a4adb010",
+    "tests/test_march_features.py": "de45686fba8b5291ffe95215f76e8a85ee4fa015b54a6f3bd25d7b04cb1e23dc",
+    "tests/test_march_training.py": "164b99f26e384ce41660cb0db4472ed9c1cabc61f8fc5efe8c0fee420b3ff337",
+    "tests/test_march_contract.py": "59e049bd53c3b03e12764376ca4bf0dbf16250711765621017a8c28b2dde4069",
+    "scripts/review_sigmoid_provider_semantics.py": "af99a2d68ea1f17c82ccb0d169fea5c246644c6e0efad028ab6ea101a0265dfb",
+    "scripts/stage_sigmoid_canonical_records.py": "3d20ac96b1959faea77109ca8957a68f6e534c771f661cd938a51d77021ec206",
+    "scripts/audit_sigmoid_provider_intake.py": "b73bf342a3c471eb8c91dbc858ef744667aca5dffac052af6e231b952805b714",
+    "sciona/decomposed_march_runtime.py": "608491a50438779eaefaccb080d0922badef500487dd2dc6dc7cbfaa7fb5463d",
+    "sciona/march_contract.py": "2a131fdec7724ec13ed6da2bb030afb94dc415aec71e1b33dd74824449e11b5c",
+    "sciona/march_training.py": "3617008fefdff0d2748282b1407739bc956e1d9f61489216d720a9aa4fec86ee",
+    "sciona/march_features.py": "54a23fd4979ec75d8d3823d658f3b809b4bb51bc57240e6ae36094d09b633f55",
+    "scripts/march_synthetic.py": "c9579a596868e9ef25a63300b5513ca66b38460fdd3292408740461f950462aa",
+    "sciona.atoms.ml.sklearn.calibration.atoms": "c5b2102a62e286d2b1b4f7eee41d0630626042472b5bd52bec7476a6d4b20c10",
+    "sciona.atoms.ml.sklearn.calibration.state_models": "90dbcd8dfd1c4db692034b1039a9e209ada8689098cde0a1c5ced75c9a43ce01",
+    "sciona.atoms.ml.sklearn.calibration.witnesses": "c8ae72efba718583a6cec40901ee1560cfe9011b353fcda0b6e8b793489ca606",
+    "sciona.ghost.registry": "793723a75d07a88eed39f59d8d4dc327c54adbf75db7a03003516a6f74c81b51",
+    "sciona.ghost.abstract": "9574bed61c8292b2eaf6ff054bcf46504b07e679c521a19d2440396c3ea63670",
+    "sciona.ghost.dimensions": "61be1958aa50725f3c6598d5b5447a806d2549698d5ce3ec243d467816754b7e",
+    "sciona.atoms.numerical.statistics.ordered_sum": "893e4fb0c884d1732d9bba0ae2e203b72170bba11fbc89443306e6fd1b6ea359"
+  },
+  "installed_packages": {
+    "annotated-types": {
+      "version": "0.7.0",
+      "hashed_files_verified": 7,
+      "active_requirements": []
+    },
+    "asttokens": {
+      "version": "2.4.1",
+      "hashed_files_verified": 13,
+      "active_requirements": [
+        "six>=1.12.0"
+      ]
+    },
+    "icontract": {
+      "version": "2.7.3",
+      "hashed_files_verified": 16,
+      "active_requirements": [
+        "asttokens<3,>=2",
+        "typing_extensions"
+      ]
+    },
+    "joblib": {
+      "version": "1.5.3",
+      "hashed_files_verified": 143,
+      "active_requirements": []
+    },
+    "networkx": {
+      "version": "3.6.1",
+      "hashed_files_verified": 602,
+      "active_requirements": []
+    },
+    "numpy": {
+      "version": "2.2.6",
+      "hashed_files_verified": 876,
+      "active_requirements": []
+    },
+    "pydantic": {
+      "version": "2.12.5",
+      "hashed_files_verified": 111,
+      "active_requirements": [
+        "annotated-types>=0.6.0",
+        "pydantic-core==2.41.5",
+        "typing-extensions>=4.14.1",
+        "typing-inspection>=0.4.2"
+      ]
+    },
+    "pydantic-core": {
+      "version": "2.41.5",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.14.1"
+      ]
+    },
+    "scikit-learn": {
+      "version": "1.8.0",
+      "hashed_files_verified": 960,
+      "active_requirements": [
+        "joblib>=1.3.0",
+        "numpy>=1.24.1",
+        "scipy>=1.10.0",
+        "threadpoolctl>=3.2.0"
+      ]
+    },
+    "scipy": {
+      "version": "1.17.1",
+      "hashed_files_verified": 1423,
+      "active_requirements": [
+        "numpy<2.7,>=1.26.4"
+      ]
+    },
+    "six": {
+      "version": "1.17.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "threadpoolctl": {
+      "version": "3.6.0",
+      "hashed_files_verified": 5,
+      "active_requirements": []
+    },
+    "typing-extensions": {
+      "version": "4.16.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "typing-inspection": {
+      "version": "0.4.2",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.12.0"
+      ]
+    }
+  },
+  "intake_plan_sha256": "1390ba78d41e6dbef8cd8ef87c90ae874d89097faa6134ab26bbb5a3ceb7b006",
+  "resource_policy": {
+    "native_threads": 1,
+    "test_workers": 1
+  },
+  "limitations": [
+    "Automated Tier 3 qualification only; no human review or Tier 2 usage certification.",
+    "Synthetic mechanical reuse and reference parity do not establish empirical calibration, accuracy or generalization in any domain.",
+    "The supported catalog interface uses finite float64 binary scores and 0/1 labels; independence and score meaning are caller responsibilities, not authenticated by the provider.",
+    "Runtime decorators check shape and finite output state but do not enforce every documented dtype, finite-input, class-balance or weight restriction. Callers must satisfy the full supported input contract.",
+    "The installed private sklearn sigmoid fitter returns optimizer coefficients without checking solver success; finite coefficients do not certify convergence or optimality.",
+    "The registered witness is symbolic metadata, not evidence that concrete fitting succeeded.",
+    "Installed files match their own RECORD hashes; independent publisher authentication, optional extras, clean deployment and other platforms are not certified.",
+    "This review does not publish the providers or certify execution/publication of the corrected March CDG."
+  ]
+}
