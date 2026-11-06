@@ -1,0 +1,2168 @@
+{
+  "passed": true,
+  "approved": false,
+  "qualification": {
+    "format": "porto-decomposed-provider-semantics.v1",
+    "passed": true,
+    "approved": false,
+    "review_source": "automated",
+    "proposed_tier": 3,
+    "verdict": "acceptable_with_limits",
+    "providers": [
+      {
+        "runtime_fqdn": "sciona.atoms.ml.decomposed_porto_execution.blend_inputs",
+        "catalog_fqdn": "sciona.atoms.ml.decomposed_porto_execution.blend_inputs",
+        "version_id": "9c0f9a9e-8e67-5b3b-bbd6-41b170b9b9a9",
+        "content_hash": "754517b4ab08ac01ea00a99def35a2530522b03404c7490ed00e6151df9dbdc2",
+        "interfaces": [
+          {
+            "direction": "input",
+            "name": "fitted",
+            "ordinal": 0,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "output",
+            "name": "values",
+            "ordinal": 0,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "output",
+            "name": "coefficients",
+            "ordinal": 1,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          }
+        ],
+        "provider_sha256": "d8038fc98bb962596ed8c0224deb70af28dd353cb2cbe1e77e20f2be946b975d",
+        "classification": "source_recipe_adapter",
+        "atom_id": "05453bbb-4b30-5600-a605-9d93c85e9585",
+        "seed_fields": {
+          "fqdn": "sciona.atoms.ml.decomposed_porto_execution.blend_inputs",
+          "namespace_root": "sciona.atoms",
+          "namespace_path": "ml.decomposed_porto_execution",
+          "repo_name": "sciona-atoms-ml",
+          "source_module_path": "ml.decomposed_porto_execution",
+          "import_module": "sciona.atoms.ml.decomposed_porto_execution",
+          "source_symbol": "blend_inputs",
+          "description": "Validate all probabilities and expose the five ordered neural rows.",
+          "domain_tags": [
+            "ml"
+          ],
+          "source_kind": "hand_written",
+          "is_ffi": false
+        },
+        "semver": "0.0.0+local.754517b4ab08",
+        "fingerprint": "9a56f398001723a1cc992b96214f888696ea1c49a45daaecc1c79fb746660527",
+        "operation": "Expose five ordered neural probability rows and unit coefficients.",
+        "plain_limits": "Use five aligned neural vectors and one tree vector from this run. Each value must be a finite probability. Keep neural addition separate from recipe averaging.",
+        "validity_bounds": "Require a fitted dictionary with neural_probabilities of shape (5,N), N positive, and tree_probabilities of shape (N,). Require real integer or floating arrays with finite values in [0,1]. Return a fresh C-contiguous float64 copy of the five neural rows in supplied order and a five-element vector of ones. This step validates the tree vector but does not add it, sum neural rows, normalize, rank, or reorder scores. Shape alignment alone does not establish query identity.",
+        "parameters": {
+          "fitted": "Same-invocation complete fitted ensemble containing five aligned neural probability rows and the tree vector."
+        },
+        "outputs": "Tuple values, coefficients: fresh float64 neural matrix and unit vector. Caller arrays are unchanged.",
+        "dependencies": [
+          "sciona.decomposed_porto_runtime.blend_inputs",
+          "numpy",
+          "sciona.ghost.registry (registration only)"
+        ],
+        "reuse": "Independent binary classification recipe accepting caller-defined numeric populations and column roles across domains. Five neural branches and one tree are recipe policy. Joint feature preparation and unlabeled query participation are transductive; no out-of-sample transform or independent generalization estimate is provided. Intermediates must come from the same invocation; structural checks do not authenticate provenance. Historical winning-ensemble equivalence is unproven.",
+        "internal_registered_provider_dependencies": [],
+        "callable_dependency_contracts": {}
+      },
+      {
+        "runtime_fqdn": "sciona.atoms.ml.decomposed_porto_execution.features",
+        "catalog_fqdn": "sciona.atoms.ml.decomposed_porto_execution.features",
+        "version_id": "b069bbbc-e90e-510d-aae9-88588f57a1ff",
+        "content_hash": "b734f57e94da04a95ed173c388148408a5861466a122ff96e3e71c9043b0e254",
+        "interfaces": [
+          {
+            "direction": "input",
+            "name": "prepared",
+            "ordinal": 0,
+            "type_desc": "object",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "output",
+            "name": "transformed",
+            "ordinal": 0,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          }
+        ],
+        "provider_sha256": "d8038fc98bb962596ed8c0224deb70af28dd353cb2cbe1e77e20f2be946b975d",
+        "classification": "source_recipe_adapter",
+        "atom_id": "0a2802e0-327c-59d6-a795-d20eb5f79d90",
+        "seed_fields": {
+          "fqdn": "sciona.atoms.ml.decomposed_porto_execution.features",
+          "namespace_root": "sciona.atoms",
+          "namespace_path": "ml.decomposed_porto_execution",
+          "repo_name": "sciona-atoms-ml",
+          "source_module_path": "ml.decomposed_porto_execution",
+          "import_module": "sciona.atoms.ml.decomposed_porto_execution",
+          "source_symbol": "features",
+          "description": "Prepare the full joint feature populations without using labels.",
+          "domain_tags": [
+            "ml"
+          ],
+          "source_kind": "hand_written",
+          "is_ffi": false
+        },
+        "semver": "0.0.0+local.b734f57e94da",
+        "fingerprint": "d72faa59fc3f608d7ea4f8e919ed18bbd5d4630dd7639ce07eab9f32d4b5f842",
+        "operation": "Prepare joint feature populations for all neural branches and the tree.",
+        "plain_limits": "Use checked training and query rows with explicit column roles. Query features help define the transform. Labels do not enter it.",
+        "validity_bounds": "Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Stack training then query rows. Require nonempty finite real matrices of equal width, disjoint unique integer column roles, and at least one retained feature. Drop designated columns, retain other numeric columns in original order, and append one-hot columns using sorted joint categories in caller categorical-column order. Preserve declared binary values and one-hot columns. On each other column use average-tie midpoint ranks over the joint population, inverse error function and mean centering. Keep sentinel values literal. Split copied raw tree and normalized DAE views back into original row order. This is a population transform, not a fitted transform for future rows.",
+        "parameters": {
+          "prepared": "Canonical same-invocation Prepared returned by porto_prepare, containing private populations and explicit preparation, five neural branch and tree controls."
+        },
+        "outputs": "Dictionary with tree_training, tree_query, dae_training, dae_query, prepared_width and binary_output_columns. No labels or model objects are returned.",
+        "dependencies": [
+          "sciona.decomposed_porto_runtime.features",
+          "sciona.porto_execution",
+          "sciona.porto_preparation",
+          "sciona.porto_transforms",
+          "numpy",
+          "scipy",
+          "sciona.ghost.registry (registration only)"
+        ],
+        "reuse": "Independent binary classification recipe accepting caller-defined numeric populations and column roles across domains. Five neural branches and one tree are recipe policy. Joint feature preparation and unlabeled query participation are transductive; no out-of-sample transform or independent generalization estimate is provided. Intermediates must come from the same invocation; structural checks do not authenticate provenance. Historical winning-ensemble equivalence is unproven.",
+        "internal_registered_provider_dependencies": [],
+        "callable_dependency_contracts": {}
+      },
+      {
+        "runtime_fqdn": "sciona.atoms.ml.decomposed_porto_execution.fit",
+        "catalog_fqdn": "sciona.atoms.ml.decomposed_porto_execution.fit",
+        "version_id": "d9b9bfbd-f435-5423-a9c3-69942d35a96b",
+        "content_hash": "0a50fe54788b58dd46845350e12b04b1140a2ba0cada3863e6812fe9e596ee93",
+        "interfaces": [
+          {
+            "direction": "input",
+            "name": "prepared",
+            "ordinal": 0,
+            "type_desc": "object",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "input",
+            "name": "transformed",
+            "ordinal": 1,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "output",
+            "name": "fitted",
+            "ordinal": 0,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          }
+        ],
+        "provider_sha256": "d8038fc98bb962596ed8c0224deb70af28dd353cb2cbe1e77e20f2be946b975d",
+        "classification": "source_recipe_adapter",
+        "atom_id": "2b36600c-5184-5342-89d7-3d3b08f53966",
+        "seed_fields": {
+          "fqdn": "sciona.atoms.ml.decomposed_porto_execution.fit",
+          "namespace_root": "sciona.atoms",
+          "namespace_path": "ml.decomposed_porto_execution",
+          "repo_name": "sciona-atoms-ml",
+          "source_module_path": "ml.decomposed_porto_execution",
+          "import_module": "sciona.atoms.ml.decomposed_porto_execution",
+          "source_symbol": "fit",
+          "description": "Fit five full DAE/classifier branches and one prepared-feature tree.",
+          "domain_tags": [
+            "ml"
+          ],
+          "source_kind": "hand_written",
+          "is_ffi": false
+        },
+        "semver": "0.0.0+local.0a50fe54788b",
+        "fingerprint": "1dad4322deefd69a8ea81f0cd2ced3dc421ab109ade96774c563e274115c2cad",
+        "operation": "Fit every configured neural branch and the prepared-feature tree.",
+        "plain_limits": "Train five full neural branches, then one tree. Each neural branch learns from unlabeled joint rows before learning from training labels. Use every supplied training epoch.",
+        "validity_bounds": "Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Require transformed to be a dictionary with exactly tree_training, tree_query, dae_training, dae_query, prepared_width and binary_output_columns. Same-invocation feature provenance is a precondition. For each of five explicit configurations, fit a separate CPU denoising autoencoder on stacked normalized training/query rows without labels, using same-column swap noise with self-donors allowed, ReLU hidden layers, a linear decoder and clean-target mean squared error. Use explicit hidden widths, extraction layers, positive epochs/batch size, learning rate and decay in (0,1], noise/momentum in [0,1), bounded integer seed, SGD and per-epoch decay. Concatenate selected hidden activations only, then train the supervised ReLU classifier on labeled training features for every configured epoch using binary cross entropy, SGD, explicit L2/momentum, input/hidden dropout and inverted or unscaled training dropout. Validate finite float32 inputs, losses, gradients and predictions. Fit a single deterministic one-thread binary LightGBM on raw prepared training features with caller rounds, leaves, rates, sampling and regularization; the library may stop splitting before requested rounds. Require both binary classes and aligned populations. Retain full classifier loss histories, branch counts and DAE metrics; no historical settings are inferred.",
+        "parameters": {
+          "prepared": "Canonical same-invocation Prepared returned by porto_prepare, containing private populations and explicit preparation, five neural branch and tree controls.",
+          "transformed": "Complete same-invocation features result with aligned raw and normalized training/query views."
+        },
+        "outputs": "Dictionary with five-row neural_probabilities, tree_probabilities, neural_records, actual tree_iterations, models=6, dae_models=5 and prepared_width. Neural records retain training_loss, learned_width, DAE population/count/clean-error metrics and reference/query row counts. No fitted model objects are returned.",
+        "dependencies": [
+          "sciona.decomposed_porto_runtime.fit",
+          "sciona.porto_execution",
+          "sciona.porto_neural_branch",
+          "sciona.porto_autoencoder",
+          "sciona.porto_neural",
+          "sciona.porto_tree_blend",
+          "numpy",
+          "torch",
+          "lightgbm",
+          "sciona.ghost.registry (registration only)"
+        ],
+        "reuse": "Independent binary classification recipe accepting caller-defined numeric populations and column roles across domains. Five neural branches and one tree are recipe policy. Joint feature preparation and unlabeled query participation are transductive; no out-of-sample transform or independent generalization estimate is provided. Intermediates must come from the same invocation; structural checks do not authenticate provenance. Historical winning-ensemble equivalence is unproven.",
+        "internal_registered_provider_dependencies": [],
+        "callable_dependency_contracts": {}
+      },
+      {
+        "runtime_fqdn": "sciona.atoms.ml.decomposed_porto_execution.result",
+        "catalog_fqdn": "sciona.atoms.ml.decomposed_porto_execution.result",
+        "version_id": "3333402e-b6c3-5160-ab76-cd13862dc934",
+        "content_hash": "3de5b45c7f5e7bbe7ba28c42eaae09c5fdf587710f13a432b853cb377f754e97",
+        "interfaces": [
+          {
+            "direction": "input",
+            "name": "prepared",
+            "ordinal": 0,
+            "type_desc": "object",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "input",
+            "name": "fitted",
+            "ordinal": 1,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "input",
+            "name": "neural_sum",
+            "ordinal": 2,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "output",
+            "name": "result",
+            "ordinal": 0,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          }
+        ],
+        "provider_sha256": "d8038fc98bb962596ed8c0224deb70af28dd353cb2cbe1e77e20f2be946b975d",
+        "classification": "source_recipe_adapter",
+        "atom_id": "5557582d-db3e-5987-a67e-13c641ff7cf9",
+        "seed_fields": {
+          "fqdn": "sciona.atoms.ml.decomposed_porto_execution.result",
+          "namespace_root": "sciona.atoms",
+          "namespace_path": "ml.decomposed_porto_execution",
+          "repo_name": "sciona-atoms-ml",
+          "source_module_path": "ml.decomposed_porto_execution",
+          "import_module": "sciona.atoms.ml.decomposed_porto_execution",
+          "source_symbol": "result",
+          "description": "Add the tree after neural reduction and retain complete result metadata.",
+          "domain_tags": [
+            "ml"
+          ],
+          "source_kind": "hand_written",
+          "is_ffi": false
+        },
+        "semver": "0.0.0+local.3de5b45c7f5e",
+        "fingerprint": "96704518dc46842ce147fcb5451de6112e20b3c87a704160db0a6954dd564fea",
+        "operation": "Add the tree after neural reduction and divide by six.",
+        "plain_limits": "Use the neural sum and tree scores from this run. Add the tree only after the five neural rows have been added, then divide once. Retain all query probabilities.",
+        "validity_bounds": "Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Revalidate all five neural vectors and the tree through blend_inputs. Require neural_sum to be a finite real vector aligned to the complete query population and tree shape. Compute (neural_sum + tree_probabilities)/6 in that order, preserving the original floating-point evaluation. Require finite results in [0,1] and strict JSON serialization. Read models, dae_models, prepared_width and learned_width from fitted metadata without independently authenticating those counts or recomputing the supplied neural sum. Same-invocation provenance is required.",
+        "parameters": {
+          "prepared": "Canonical same-invocation Prepared returned by porto_prepare, containing private populations and explicit preparation, five neural branch and tree controls.",
+          "fitted": "Same-invocation fit output with complete probabilities and neural records.",
+          "neural_sum": "Same-invocation generic ordered sum of the five neural rows using unit coefficients."
+        },
+        "outputs": "Strict JSON dictionary containing probabilities, models, dae_models, prepared_width, learned_widths, score_kind=equal_probability_mean and the explicit independent-configuration/transductive scope.",
+        "dependencies": [
+          "sciona.decomposed_porto_runtime.result",
+          "sciona.porto_execution",
+          "numpy",
+          "json (Python standard library)",
+          "sciona.ghost.registry (registration only)"
+        ],
+        "reuse": "Independent binary classification recipe accepting caller-defined numeric populations and column roles across domains. Five neural branches and one tree are recipe policy. Joint feature preparation and unlabeled query participation are transductive; no out-of-sample transform or independent generalization estimate is provided. Intermediates must come from the same invocation; structural checks do not authenticate provenance. Historical winning-ensemble equivalence is unproven.",
+        "internal_registered_provider_dependencies": [],
+        "callable_dependency_contracts": {}
+      }
+    ],
+    "graph_digest": "3eb5e77b9bb18b8c608fb5ad9a4e072a0fba966c6bcb37dfa9adb906800be3e0",
+    "software_sha256": {
+      "sciona-atoms-ml/src/sciona/atoms/ml/decomposed_porto_execution.py": "d8038fc98bb962596ed8c0224deb70af28dd353cb2cbe1e77e20f2be946b975d",
+      "sciona/decomposed_porto_graph.py": "0732bd63626ded38b40e8bb64dd4561f8a29ef96dcb63dccd57bc0363425d776",
+      "sciona/decomposed_porto_runtime.py": "eb418c30da13ea60c4133dd2d5ffd042a1e6073cea2ccb9588a94918bc51eb97",
+      "sciona/porto_autoencoder.py": "37bdf15751d6b85ab00cadd467aa5762d09af4c39de32ef3f91a924c1bf67a3f",
+      "sciona/porto_ensemble.py": "e7123a1cde6cda15cb526d7dee8d67505fb126b2a1bc6d467720654a88aa17a4",
+      "sciona/porto_execution.py": "195e71c6429e65c3b6ba3ba727571883bced256be4081eb9c36a0ca2c841f735",
+      "sciona/porto_graph.py": "f64f4c7da9814b9826114f35c867f6b64f7a132850d2012caaa5d76fac5975ea",
+      "sciona/porto_neural.py": "3cbd9ff5505a4b007b1de65969921e05df58e1875c25d6d7b57c2eb1845e0d79",
+      "sciona/porto_neural_branch.py": "80fc09cbb950c338d37c44a5fbfe8f13dd95017bc00a3219591dbc724d7c6c4f",
+      "sciona/porto_preparation.py": "dba64ff56ac0746c95b7c239ce5f61077db5ba6647f0d7c550839c34dbd226eb",
+      "sciona/porto_transforms.py": "17c18948efca3d0872697496d8176942e4b0bf7de7fbbdd51611964dc11e0d0c",
+      "sciona/porto_tree_blend.py": "425616ae321a1e282ef12770c3103f61d29aa726059c63f9bcc17f84f49e5d2c",
+      "sciona/services/execution_graph_codec.py": "1ad42332f8e28adf4ee3f8d53184a4af8351f66304efa1703c63ed32989082a6",
+      "sciona/visualizer/runner.py": "22a49655e61c10d800aa2a6a9b5115cd873a9e699ea9903fa0f856aea8af67a4",
+      "scripts/audit_decomposed_porto_packages.py": "ddc3b8268871a72ea40368adcad73a424b7296437f77e81172061e9113eff5f3",
+      "scripts/decomposed_porto_provider_contracts.py": "29a5d21071d559f2e11cf54b49d5f0633baa1493efa5cc4958ee89a4edf80cba",
+      "scripts/review_decomposed_porto_implementation.py": "fe1375728bbc183bd02484e6560a59bb7de5a74576492972651b930d4481edc2",
+      "scripts/review_porto_decomposed_providers.py": "ee51951bf54b64f8f3b94dc9fae596c1764e73ccf8e6a460bd2fe765b1c70578",
+      "scripts/stage_porto_decomposed_providers.py": "3f7d700a10a9dfeda6340940c794919e4511549c696cad6110599f1e917c0e2f"
+    },
+    "imports": {
+      "sciona/porto_tree_blend.py": [
+        "from sciona.porto_transforms import _matrix",
+        "import lightgbm as lgb",
+        "import numpy as np"
+      ],
+      "sciona/porto_neural.py": [
+        "from sciona.porto_transforms import _matrix",
+        "import numpy as np",
+        "import torch"
+      ],
+      "sciona/porto_graph.py": [
+        "from sciona.architect.handoff import CDGExport",
+        "from sciona.architect.models import AlgorithmicNode, DependencyEdge, IOSpec, NodeStatus"
+      ],
+      "sciona/porto_transforms.py": [
+        "from scipy.special import erfinv",
+        "from scipy.stats import rankdata",
+        "import numpy as np"
+      ],
+      "sciona/porto_execution.py": [
+        "from dataclasses import dataclass, field",
+        "from sciona.porto_ensemble import fit",
+        "from sciona.porto_transforms import _matrix",
+        "import hashlib",
+        "import json",
+        "import numpy as np"
+      ],
+      "sciona/porto_preparation.py": [
+        "from sciona.porto_transforms import _matrix, rank_gauss_population",
+        "import numpy as np"
+      ],
+      "sciona/porto_neural_branch.py": [
+        "from sciona.porto_autoencoder import fit_population",
+        "from sciona.porto_neural import fit_predict",
+        "from sciona.porto_transforms import _matrix",
+        "import numpy as np"
+      ],
+      "sciona/porto_autoencoder.py": [
+        "from dataclasses import dataclass, field",
+        "from sciona.porto_transforms import _matrix, swap_noise",
+        "import numpy as np",
+        "import torch"
+      ],
+      "sciona/porto_ensemble.py": [
+        "from sciona.porto_neural_branch import fit_branch",
+        "from sciona.porto_preparation import prepare_populations",
+        "from sciona.porto_transforms import _matrix",
+        "from sciona.porto_tree_blend import fit_tree, blend",
+        "import json",
+        "import numpy as np"
+      ],
+      "sciona/decomposed_porto_runtime.py": [
+        "from sciona.porto_execution import Prepared, prepare",
+        "from sciona.porto_neural_branch import fit_branch",
+        "from sciona.porto_preparation import prepare_populations",
+        "from sciona.porto_tree_blend import fit_tree",
+        "import hashlib",
+        "import json",
+        "import numpy as np"
+      ],
+      "sciona/decomposed_porto_graph.py": [
+        "from sciona.architect.models import AlgorithmicNode, DependencyEdge, IOSpec, NodeStatus",
+        "from sciona.porto_graph import build_porto_graph"
+      ],
+      "sciona/visualizer/runner.py": [
+        "from __future__ import annotations",
+        "from pathlib import Path",
+        "from sciona.architect.models import AlgorithmicNode, DependencyEdge, EdgeKind, NodeStatus",
+        "from sciona.ghost.registry import REGISTRY",
+        "from sciona.synthesizer.ghost_sim import _ensure_atoms_imported",
+        "from sciona.telemetry import log_event",
+        "from sciona.visualizer.dataset_manager import DatasetManager",
+        "from typing import Any, Callable, Dict, List, Optional, Tuple",
+        "import dataclasses",
+        "import inspect",
+        "import json",
+        "import logging",
+        "import numpy as np",
+        "import pandas as pd",
+        "import time",
+        "import typing"
+      ],
+      "sciona/services/execution_graph_codec.py": [
+        "from sciona.architect.handoff import CDGExport",
+        "import hashlib",
+        "import json"
+      ],
+      "scripts/audit_decomposed_porto_packages.py": [
+        "from packaging.requirements import Requirement",
+        "from packaging.utils import canonicalize_name",
+        "from pathlib import Path",
+        "import base64",
+        "import hashlib",
+        "import importlib.metadata as metadata",
+        "import json"
+      ],
+      "scripts/review_decomposed_porto_implementation.py": [
+        "from pathlib import Path",
+        "from sciona import porto_ensemble",
+        "from sciona import porto_execution as original, decomposed_porto_runtime as candidate",
+        "from sciona.atoms.provider_inventory import ProviderRepo",
+        "from sciona.atoms.supabase_seed import _parse_registered_atoms",
+        "from sciona.decomposed_porto_graph import build_decomposed_porto_graph",
+        "from sciona.services.execution_graph_codec import encode_execution_graph",
+        "from scripts.audit_decomposed_porto_packages import audit",
+        "from scripts.promote_connectomics_execution import boundary_ports, provider_ports",
+        "from typing import get_args, get_origin, get_type_hints",
+        "import hashlib",
+        "import importlib",
+        "import importlib.metadata as metadata",
+        "import inspect",
+        "import json",
+        "import numpy as np",
+        "import subprocess"
+      ],
+      "scripts/stage_porto_decomposed_providers.py": [
+        "from collections import Counter",
+        "from psycopg.types.json import Jsonb",
+        "from sciona.atoms.provider_inventory import ProviderRepo",
+        "from sciona.atoms.supabase_seed import AtomSeedRow, _parse_registered_atoms",
+        "from sciona.decomposed_porto_graph import build_decomposed_porto_graph",
+        "from scripts.import_flavours_provider_drafts import connect",
+        "from scripts.import_residual_execution_drafts import comparable, ensure_row",
+        "from scripts.review_decomposed_porto_implementation import ROOT, review, require, sha, interfaces",
+        "from typing import get_type_hints, get_origin, get_args",
+        "from uuid import NAMESPACE_URL, UUID, uuid5",
+        "import argparse",
+        "import hashlib",
+        "import importlib",
+        "import inspect",
+        "import json",
+        "import numpy as np"
+      ],
+      "scripts/decomposed_porto_provider_contracts.py": [],
+      "scripts/review_porto_decomposed_providers.py": [
+        "from pathlib import Path",
+        "from scripts.audit_decomposed_porto_packages import audit as package_audit",
+        "from scripts.decomposed_porto_provider_contracts import CONTRACTS",
+        "from scripts.review_decomposed_porto_implementation import ROOT, require, sha, review as integration_review",
+        "from scripts.stage_porto_decomposed_providers import reviewed_plan",
+        "import argparse",
+        "import ast",
+        "import importlib.metadata",
+        "import json",
+        "import os",
+        "import platform",
+        "import subprocess",
+        "import tempfile",
+        "import xml.etree.ElementTree as ET"
+      ],
+      "sciona-atoms-ml/src/sciona/atoms/ml/decomposed_porto_execution.py": [
+        "from sciona.decomposed_porto_runtime import blend_inputs as implementation",
+        "from sciona.decomposed_porto_runtime import features as implementation",
+        "from sciona.decomposed_porto_runtime import fit as implementation",
+        "from sciona.decomposed_porto_runtime import result as implementation",
+        "from sciona.ghost.registry import register_atom",
+        "import numpy as np"
+      ]
+    },
+    "package_versions": {
+      "filelock": "3.25.2",
+      "fsspec": "2026.2.0",
+      "jinja2": "3.1.6",
+      "joblib": "1.5.3",
+      "lightgbm": "4.7.0",
+      "markupsafe": "3.0.3",
+      "mpmath": "1.3.0",
+      "narwhals": "2.26.0",
+      "networkx": "3.6.1",
+      "numpy": "2.2.6",
+      "pandas": "2.3.3",
+      "python-dateutil": "2.9.0.post0",
+      "pytz": "2026.1.post1",
+      "scikit-learn": "1.8.0",
+      "scipy": "1.17.1",
+      "setuptools": "80.9.0",
+      "six": "1.17.0",
+      "sympy": "1.14.0",
+      "threadpoolctl": "3.6.0",
+      "torch": "2.11.0",
+      "typing-extensions": "4.16.0",
+      "tzdata": "2025.3"
+    },
+    "python_version": "3.13.11",
+    "evidence_sha256": {
+      "porto_decomposed_provider_tests.json": "4294e1b900cf70b95f4e56b9ab81a4682c71e3fde82f300380862725c8e7382a",
+      "decomposed_porto_implementation_review.json": "5a6ac9e66034dd8d90af20d87e6e9dc7bb9460309cd5a2ae5441ebcbb7720081",
+      "decomposed_porto_graph_execution.json": "50a2a279ac4a9a3ecf2499d705dc21b0fc5eeef41013f47428c09034e2e9395b",
+      "porto_decomposed_provider_intake_gates.json": "b373ad4687e314e01fe9a3518a2a177efdedf0229e55756e1b06acd97a7429c8",
+      "decomposed_porto_package_files.json": "18aa7f13d43843bcacf8c118ca3c3f70b6a619eff3f02308d1ffa126844b09da",
+      "porto_decomposed_provider_intake_plan.json": "9bbc1083b2f075415903aa3b38320884f38cc3272bb4c5b3be0b2beb6714eeec"
+    },
+    "source_qualification_complete": false,
+    "original_cdg_publication_qualified": false,
+    "limitations": [
+      "Automated Tier 3 implementation semantics only; no Tier 1 human certification or Tier 2 usage qualification.",
+      "Four recipe adapters preserve all five configured DAE/classifier branches and the tree. The generic ordered weighted sum remains independently bound and domain independent.",
+      "Exact historical notebook details remain unverified. This review qualifies the stated implementation contracts, not historical winning-agent equivalence or original-CDG publication.",
+      "Fresh execution exactly matches the existing reconstruction on generated populations; historical population membership and competitive accuracy are unproven.",
+      "Installed package hashes were checked against their own RECORD files. Clean deployment and independently authenticated publisher signatures are not qualified.",
+      "Native pools, Torch intra/inter-op pools and LightGBM calls are bounded to one thread; models train serially. Deployment must configure its own resource limits.",
+      "Software imports are separate from registered-provider dependencies. Same-invocation intermediate provenance is required but not authenticated by structural checks.",
+      "Catalog eligibility, publication transaction gates and existing-provider metadata remain separate checks."
+    ]
+  },
+  "records": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_porto_execution.blend_inputs",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_porto_execution.blend_inputs",
+      "version_id": "9c0f9a9e-8e67-5b3b-bbd6-41b170b9b9a9",
+      "content_hash": "754517b4ab08ac01ea00a99def35a2530522b03404c7490ed00e6151df9dbdc2",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "fitted",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "coefficients",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "d8038fc98bb962596ed8c0224deb70af28dd353cb2cbe1e77e20f2be946b975d",
+      "classification": "source_recipe_adapter",
+      "atom_id": "05453bbb-4b30-5600-a605-9d93c85e9585",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_porto_execution.blend_inputs",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_porto_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_porto_execution",
+        "import_module": "sciona.atoms.ml.decomposed_porto_execution",
+        "source_symbol": "blend_inputs",
+        "description": "Validate all probabilities and expose the five ordered neural rows.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.754517b4ab08",
+      "fingerprint": "9a56f398001723a1cc992b96214f888696ea1c49a45daaecc1c79fb746660527",
+      "operation": "Expose five ordered neural probability rows and unit coefficients.",
+      "plain_limits": "Use five aligned neural vectors and one tree vector from this run. Each value must be a finite probability. Keep neural addition separate from recipe averaging.",
+      "validity_bounds": "Require a fitted dictionary with neural_probabilities of shape (5,N), N positive, and tree_probabilities of shape (N,). Require real integer or floating arrays with finite values in [0,1]. Return a fresh C-contiguous float64 copy of the five neural rows in supplied order and a five-element vector of ones. This step validates the tree vector but does not add it, sum neural rows, normalize, rank, or reorder scores. Shape alignment alone does not establish query identity.",
+      "parameters": {
+        "fitted": "Same-invocation complete fitted ensemble containing five aligned neural probability rows and the tree vector."
+      },
+      "outputs": "Tuple values, coefficients: fresh float64 neural matrix and unit vector. Caller arrays are unchanged.",
+      "dependencies": [
+        "sciona.decomposed_porto_runtime.blend_inputs",
+        "numpy",
+        "sciona.ghost.registry (registration only)"
+      ],
+      "reuse": "Independent binary classification recipe accepting caller-defined numeric populations and column roles across domains. Five neural branches and one tree are recipe policy. Joint feature preparation and unlabeled query participation are transductive; no out-of-sample transform or independent generalization estimate is provided. Intermediates must come from the same invocation; structural checks do not authenticate provenance. Historical winning-ensemble equivalence is unproven.",
+      "internal_registered_provider_dependencies": [],
+      "callable_dependency_contracts": {},
+      "artifact_id": "05453bbb-4b30-5600-a605-9d93c85e9585",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": {
+        "atom_io_specs": [
+          {
+            "direction": "input",
+            "name": "fitted",
+            "ordinal": 0,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "output",
+            "name": "values",
+            "ordinal": 0,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "output",
+            "name": "coefficients",
+            "ordinal": 1,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          }
+        ],
+        "artifact_io_specs": [
+          {
+            "direction": "input",
+            "name": "fitted",
+            "ordinal": 0,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "output",
+            "name": "values",
+            "ordinal": 0,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "output",
+            "name": "coefficients",
+            "ordinal": 1,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          }
+        ]
+      }
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_porto_execution.features",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_porto_execution.features",
+      "version_id": "b069bbbc-e90e-510d-aae9-88588f57a1ff",
+      "content_hash": "b734f57e94da04a95ed173c388148408a5861466a122ff96e3e71c9043b0e254",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "transformed",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "d8038fc98bb962596ed8c0224deb70af28dd353cb2cbe1e77e20f2be946b975d",
+      "classification": "source_recipe_adapter",
+      "atom_id": "0a2802e0-327c-59d6-a795-d20eb5f79d90",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_porto_execution.features",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_porto_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_porto_execution",
+        "import_module": "sciona.atoms.ml.decomposed_porto_execution",
+        "source_symbol": "features",
+        "description": "Prepare the full joint feature populations without using labels.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.b734f57e94da",
+      "fingerprint": "d72faa59fc3f608d7ea4f8e919ed18bbd5d4630dd7639ce07eab9f32d4b5f842",
+      "operation": "Prepare joint feature populations for all neural branches and the tree.",
+      "plain_limits": "Use checked training and query rows with explicit column roles. Query features help define the transform. Labels do not enter it.",
+      "validity_bounds": "Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Stack training then query rows. Require nonempty finite real matrices of equal width, disjoint unique integer column roles, and at least one retained feature. Drop designated columns, retain other numeric columns in original order, and append one-hot columns using sorted joint categories in caller categorical-column order. Preserve declared binary values and one-hot columns. On each other column use average-tie midpoint ranks over the joint population, inverse error function and mean centering. Keep sentinel values literal. Split copied raw tree and normalized DAE views back into original row order. This is a population transform, not a fitted transform for future rows.",
+      "parameters": {
+        "prepared": "Canonical same-invocation Prepared returned by porto_prepare, containing private populations and explicit preparation, five neural branch and tree controls."
+      },
+      "outputs": "Dictionary with tree_training, tree_query, dae_training, dae_query, prepared_width and binary_output_columns. No labels or model objects are returned.",
+      "dependencies": [
+        "sciona.decomposed_porto_runtime.features",
+        "sciona.porto_execution",
+        "sciona.porto_preparation",
+        "sciona.porto_transforms",
+        "numpy",
+        "scipy",
+        "sciona.ghost.registry (registration only)"
+      ],
+      "reuse": "Independent binary classification recipe accepting caller-defined numeric populations and column roles across domains. Five neural branches and one tree are recipe policy. Joint feature preparation and unlabeled query participation are transductive; no out-of-sample transform or independent generalization estimate is provided. Intermediates must come from the same invocation; structural checks do not authenticate provenance. Historical winning-ensemble equivalence is unproven.",
+      "internal_registered_provider_dependencies": [],
+      "callable_dependency_contracts": {},
+      "artifact_id": "0a2802e0-327c-59d6-a795-d20eb5f79d90",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": {
+        "atom_io_specs": [
+          {
+            "direction": "input",
+            "name": "prepared",
+            "ordinal": 0,
+            "type_desc": "object",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "output",
+            "name": "transformed",
+            "ordinal": 0,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          }
+        ],
+        "artifact_io_specs": [
+          {
+            "direction": "input",
+            "name": "prepared",
+            "ordinal": 0,
+            "type_desc": "object",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "output",
+            "name": "transformed",
+            "ordinal": 0,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          }
+        ]
+      }
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_porto_execution.fit",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_porto_execution.fit",
+      "version_id": "d9b9bfbd-f435-5423-a9c3-69942d35a96b",
+      "content_hash": "0a50fe54788b58dd46845350e12b04b1140a2ba0cada3863e6812fe9e596ee93",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "transformed",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "fitted",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "d8038fc98bb962596ed8c0224deb70af28dd353cb2cbe1e77e20f2be946b975d",
+      "classification": "source_recipe_adapter",
+      "atom_id": "2b36600c-5184-5342-89d7-3d3b08f53966",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_porto_execution.fit",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_porto_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_porto_execution",
+        "import_module": "sciona.atoms.ml.decomposed_porto_execution",
+        "source_symbol": "fit",
+        "description": "Fit five full DAE/classifier branches and one prepared-feature tree.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.0a50fe54788b",
+      "fingerprint": "1dad4322deefd69a8ea81f0cd2ced3dc421ab109ade96774c563e274115c2cad",
+      "operation": "Fit every configured neural branch and the prepared-feature tree.",
+      "plain_limits": "Train five full neural branches, then one tree. Each neural branch learns from unlabeled joint rows before learning from training labels. Use every supplied training epoch.",
+      "validity_bounds": "Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Require transformed to be a dictionary with exactly tree_training, tree_query, dae_training, dae_query, prepared_width and binary_output_columns. Same-invocation feature provenance is a precondition. For each of five explicit configurations, fit a separate CPU denoising autoencoder on stacked normalized training/query rows without labels, using same-column swap noise with self-donors allowed, ReLU hidden layers, a linear decoder and clean-target mean squared error. Use explicit hidden widths, extraction layers, positive epochs/batch size, learning rate and decay in (0,1], noise/momentum in [0,1), bounded integer seed, SGD and per-epoch decay. Concatenate selected hidden activations only, then train the supervised ReLU classifier on labeled training features for every configured epoch using binary cross entropy, SGD, explicit L2/momentum, input/hidden dropout and inverted or unscaled training dropout. Validate finite float32 inputs, losses, gradients and predictions. Fit a single deterministic one-thread binary LightGBM on raw prepared training features with caller rounds, leaves, rates, sampling and regularization; the library may stop splitting before requested rounds. Require both binary classes and aligned populations. Retain full classifier loss histories, branch counts and DAE metrics; no historical settings are inferred.",
+      "parameters": {
+        "prepared": "Canonical same-invocation Prepared returned by porto_prepare, containing private populations and explicit preparation, five neural branch and tree controls.",
+        "transformed": "Complete same-invocation features result with aligned raw and normalized training/query views."
+      },
+      "outputs": "Dictionary with five-row neural_probabilities, tree_probabilities, neural_records, actual tree_iterations, models=6, dae_models=5 and prepared_width. Neural records retain training_loss, learned_width, DAE population/count/clean-error metrics and reference/query row counts. No fitted model objects are returned.",
+      "dependencies": [
+        "sciona.decomposed_porto_runtime.fit",
+        "sciona.porto_execution",
+        "sciona.porto_neural_branch",
+        "sciona.porto_autoencoder",
+        "sciona.porto_neural",
+        "sciona.porto_tree_blend",
+        "numpy",
+        "torch",
+        "lightgbm",
+        "sciona.ghost.registry (registration only)"
+      ],
+      "reuse": "Independent binary classification recipe accepting caller-defined numeric populations and column roles across domains. Five neural branches and one tree are recipe policy. Joint feature preparation and unlabeled query participation are transductive; no out-of-sample transform or independent generalization estimate is provided. Intermediates must come from the same invocation; structural checks do not authenticate provenance. Historical winning-ensemble equivalence is unproven.",
+      "internal_registered_provider_dependencies": [],
+      "callable_dependency_contracts": {},
+      "artifact_id": "2b36600c-5184-5342-89d7-3d3b08f53966",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": {
+        "atom_io_specs": [
+          {
+            "direction": "input",
+            "name": "prepared",
+            "ordinal": 0,
+            "type_desc": "object",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "input",
+            "name": "transformed",
+            "ordinal": 1,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "output",
+            "name": "fitted",
+            "ordinal": 0,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          }
+        ],
+        "artifact_io_specs": [
+          {
+            "direction": "input",
+            "name": "prepared",
+            "ordinal": 0,
+            "type_desc": "object",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "input",
+            "name": "transformed",
+            "ordinal": 1,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "output",
+            "name": "fitted",
+            "ordinal": 0,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          }
+        ]
+      }
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_porto_execution.result",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_porto_execution.result",
+      "version_id": "3333402e-b6c3-5160-ab76-cd13862dc934",
+      "content_hash": "3de5b45c7f5e7bbe7ba28c42eaae09c5fdf587710f13a432b853cb377f754e97",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "fitted",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "neural_sum",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "d8038fc98bb962596ed8c0224deb70af28dd353cb2cbe1e77e20f2be946b975d",
+      "classification": "source_recipe_adapter",
+      "atom_id": "5557582d-db3e-5987-a67e-13c641ff7cf9",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_porto_execution.result",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_porto_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_porto_execution",
+        "import_module": "sciona.atoms.ml.decomposed_porto_execution",
+        "source_symbol": "result",
+        "description": "Add the tree after neural reduction and retain complete result metadata.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.3de5b45c7f5e",
+      "fingerprint": "96704518dc46842ce147fcb5451de6112e20b3c87a704160db0a6954dd564fea",
+      "operation": "Add the tree after neural reduction and divide by six.",
+      "plain_limits": "Use the neural sum and tree scores from this run. Add the tree only after the five neural rows have been added, then divide once. Retain all query probabilities.",
+      "validity_bounds": "Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Revalidate all five neural vectors and the tree through blend_inputs. Require neural_sum to be a finite real vector aligned to the complete query population and tree shape. Compute (neural_sum + tree_probabilities)/6 in that order, preserving the original floating-point evaluation. Require finite results in [0,1] and strict JSON serialization. Read models, dae_models, prepared_width and learned_width from fitted metadata without independently authenticating those counts or recomputing the supplied neural sum. Same-invocation provenance is required.",
+      "parameters": {
+        "prepared": "Canonical same-invocation Prepared returned by porto_prepare, containing private populations and explicit preparation, five neural branch and tree controls.",
+        "fitted": "Same-invocation fit output with complete probabilities and neural records.",
+        "neural_sum": "Same-invocation generic ordered sum of the five neural rows using unit coefficients."
+      },
+      "outputs": "Strict JSON dictionary containing probabilities, models, dae_models, prepared_width, learned_widths, score_kind=equal_probability_mean and the explicit independent-configuration/transductive scope.",
+      "dependencies": [
+        "sciona.decomposed_porto_runtime.result",
+        "sciona.porto_execution",
+        "numpy",
+        "json (Python standard library)",
+        "sciona.ghost.registry (registration only)"
+      ],
+      "reuse": "Independent binary classification recipe accepting caller-defined numeric populations and column roles across domains. Five neural branches and one tree are recipe policy. Joint feature preparation and unlabeled query participation are transductive; no out-of-sample transform or independent generalization estimate is provided. Intermediates must come from the same invocation; structural checks do not authenticate provenance. Historical winning-ensemble equivalence is unproven.",
+      "internal_registered_provider_dependencies": [],
+      "callable_dependency_contracts": {},
+      "artifact_id": "5557582d-db3e-5987-a67e-13c641ff7cf9",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": {
+        "atom_io_specs": [
+          {
+            "direction": "input",
+            "name": "prepared",
+            "ordinal": 0,
+            "type_desc": "object",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "input",
+            "name": "fitted",
+            "ordinal": 1,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "input",
+            "name": "neural_sum",
+            "ordinal": 2,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "output",
+            "name": "result",
+            "ordinal": 0,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          }
+        ],
+        "artifact_io_specs": [
+          {
+            "direction": "input",
+            "name": "prepared",
+            "ordinal": 0,
+            "type_desc": "object",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "input",
+            "name": "fitted",
+            "ordinal": 1,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "input",
+            "name": "neural_sum",
+            "ordinal": 2,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "output",
+            "name": "result",
+            "ordinal": 0,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          }
+        ]
+      }
+    }
+  ],
+  "inserts": [
+    {
+      "table": "references_registry",
+      "keys": {
+        "ref_id": "porto-decomposed-provider-review-v1"
+      },
+      "row": {
+        "ref_id": "porto-decomposed-provider-review-v1",
+        "ref_type": "web",
+        "title": "Exact provider semantics and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/e7721f9dfcf37b62847ffafe1d6a7e0cd5fe25d5/docs/reviews/porto_decomposed_provider_semantics.json"
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "05453bbb-4b30-5600-a605-9d93c85e9585",
+        "version_id": "9c0f9a9e-8e67-5b3b-bbd6-41b170b9b9a9",
+        "name": "fitted"
+      },
+      "row": {
+        "atom_id": "05453bbb-4b30-5600-a605-9d93c85e9585",
+        "version_id": "9c0f9a9e-8e67-5b3b-bbd6-41b170b9b9a9",
+        "name": "fitted",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "dict",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Same-invocation complete fitted ensemble containing five aligned neural probability rows and the tree vector.",
+        "dejargonized_description": "Caller supplies fitted.",
+        "constraints_json": {
+          "validity_bounds": "Require a fitted dictionary with neural_probabilities of shape (5,N), N positive, and tree_probabilities of shape (N,). Require real integer or floating arrays with finite values in [0,1]. Return a fresh C-contiguous float64 copy of the five neural rows in supplied order and a five-element vector of ones. This step validates the tree vector but does not add it, sum neural rows, normalize, rank, or reorder scores. Shape alignment alone does not establish query identity.",
+          "parameter_contract": "Same-invocation complete fitted ensemble containing five aligned neural probability rows and the tree vector."
+        }
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "05453bbb-4b30-5600-a605-9d93c85e9585",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "05453bbb-4b30-5600-a605-9d93c85e9585",
+        "kind": "technical",
+        "language": "en",
+        "content": "Expose five ordered neural probability rows and unit coefficients. Require a fitted dictionary with neural_probabilities of shape (5,N), N positive, and tree_probabilities of shape (N,). Require real integer or floating arrays with finite values in [0,1]. Return a fresh C-contiguous float64 copy of the five neural rows in supplied order and a five-element vector of ones. This step validates the tree vector but does not add it, sum neural rows, normalize, rank, or reorder scores. Shape alignment alone does not establish query identity. Tuple values, coefficients: fresh float64 neural matrix and unit vector. Caller arrays are unchanged.",
+        "generated_by": "porto-decomposed-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.020833
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "05453bbb-4b30-5600-a605-9d93c85e9585",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "05453bbb-4b30-5600-a605-9d93c85e9585",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Expose five ordered neural probability rows and unit coefficients. Use five aligned neural vectors and one tree vector from this run. Each value must be a finite probability. Keep neural addition separate from recipe averaging.",
+        "generated_by": "porto-decomposed-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "atom_references",
+      "keys": {
+        "atom_id": "05453bbb-4b30-5600-a605-9d93c85e9585",
+        "ref_key": "porto-decomposed-provider-review-v1"
+      },
+      "row": {
+        "atom_id": "05453bbb-4b30-5600-a605-9d93c85e9585",
+        "ref_key": "porto-decomposed-provider-review-v1",
+        "ref_id": "porto-decomposed-provider-review-v1",
+        "title": "Exact provider semantics and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/e7721f9dfcf37b62847ffafe1d6a7e0cd5fe25d5/docs/reviews/porto_decomposed_provider_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Expose five ordered neural probability rows and unit coefficients. Require a fitted dictionary with neural_probabilities of shape (5,N), N positive, and tree_probabilities of shape (N,). Require real integer or floating arrays with finite values in [0,1]. Return a fresh C-contiguous float64 copy of the five neural rows in supplied order and a five-element vector of ones. This step validates the tree vector but does not add it, sum neural rows, normalize, rank, or reorder scores. Shape alignment alone does not establish query identity."
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "05453bbb-4b30-5600-a605-9d93c85e9585",
+        "version_id": "9c0f9a9e-8e67-5b3b-bbd6-41b170b9b9a9",
+        "name": "fitted"
+      },
+      "row": {
+        "artifact_id": "05453bbb-4b30-5600-a605-9d93c85e9585",
+        "version_id": "9c0f9a9e-8e67-5b3b-bbd6-41b170b9b9a9",
+        "name": "fitted",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "dict",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Same-invocation complete fitted ensemble containing five aligned neural probability rows and the tree vector.",
+        "dejargonized_description": "Caller supplies fitted.",
+        "constraints_json": {
+          "validity_bounds": "Require a fitted dictionary with neural_probabilities of shape (5,N), N positive, and tree_probabilities of shape (N,). Require real integer or floating arrays with finite values in [0,1]. Return a fresh C-contiguous float64 copy of the five neural rows in supplied order and a five-element vector of ones. This step validates the tree vector but does not add it, sum neural rows, normalize, rank, or reorder scores. Shape alignment alone does not establish query identity.",
+          "parameter_contract": "Same-invocation complete fitted ensemble containing five aligned neural probability rows and the tree vector."
+        }
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "05453bbb-4b30-5600-a605-9d93c85e9585",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "05453bbb-4b30-5600-a605-9d93c85e9585",
+        "kind": "technical",
+        "language": "en",
+        "content": "Expose five ordered neural probability rows and unit coefficients. Require a fitted dictionary with neural_probabilities of shape (5,N), N positive, and tree_probabilities of shape (N,). Require real integer or floating arrays with finite values in [0,1]. Return a fresh C-contiguous float64 copy of the five neural rows in supplied order and a five-element vector of ones. This step validates the tree vector but does not add it, sum neural rows, normalize, rank, or reorder scores. Shape alignment alone does not establish query identity. Tuple values, coefficients: fresh float64 neural matrix and unit vector. Caller arrays are unchanged.",
+        "generated_by": "porto-decomposed-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.020833
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "05453bbb-4b30-5600-a605-9d93c85e9585",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "05453bbb-4b30-5600-a605-9d93c85e9585",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Expose five ordered neural probability rows and unit coefficients. Use five aligned neural vectors and one tree vector from this run. Each value must be a finite probability. Keep neural addition separate from recipe averaging.",
+        "generated_by": "porto-decomposed-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "artifact_references",
+      "keys": {
+        "artifact_id": "05453bbb-4b30-5600-a605-9d93c85e9585",
+        "ref_key": "porto-decomposed-provider-review-v1"
+      },
+      "row": {
+        "artifact_id": "05453bbb-4b30-5600-a605-9d93c85e9585",
+        "ref_key": "porto-decomposed-provider-review-v1",
+        "ref_id": "porto-decomposed-provider-review-v1",
+        "title": "Exact provider semantics and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/e7721f9dfcf37b62847ffafe1d6a7e0cd5fe25d5/docs/reviews/porto_decomposed_provider_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Expose five ordered neural probability rows and unit coefficients. Require a fitted dictionary with neural_probabilities of shape (5,N), N positive, and tree_probabilities of shape (N,). Require real integer or floating arrays with finite values in [0,1]. Return a fresh C-contiguous float64 copy of the five neural rows in supplied order and a five-element vector of ones. This step validates the tree vector but does not add it, sum neural rows, normalize, rank, or reorder scores. Shape alignment alone does not establish query identity."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "0a2802e0-327c-59d6-a795-d20eb5f79d90",
+        "version_id": "b069bbbc-e90e-510d-aae9-88588f57a1ff",
+        "name": "prepared"
+      },
+      "row": {
+        "atom_id": "0a2802e0-327c-59d6-a795-d20eb5f79d90",
+        "version_id": "b069bbbc-e90e-510d-aae9-88588f57a1ff",
+        "name": "prepared",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "object",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Canonical same-invocation Prepared returned by porto_prepare, containing private populations and explicit preparation, five neural branch and tree controls.",
+        "dejargonized_description": "Caller supplies prepared.",
+        "constraints_json": {
+          "validity_bounds": "Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Stack training then query rows. Require nonempty finite real matrices of equal width, disjoint unique integer column roles, and at least one retained feature. Drop designated columns, retain other numeric columns in original order, and append one-hot columns using sorted joint categories in caller categorical-column order. Preserve declared binary values and one-hot columns. On each other column use average-tie midpoint ranks over the joint population, inverse error function and mean centering. Keep sentinel values literal. Split copied raw tree and normalized DAE views back into original row order. This is a population transform, not a fitted transform for future rows.",
+          "parameter_contract": "Canonical same-invocation Prepared returned by porto_prepare, containing private populations and explicit preparation, five neural branch and tree controls."
+        }
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "0a2802e0-327c-59d6-a795-d20eb5f79d90",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "0a2802e0-327c-59d6-a795-d20eb5f79d90",
+        "kind": "technical",
+        "language": "en",
+        "content": "Prepare joint feature populations for all neural branches and the tree. Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Stack training then query rows. Require nonempty finite real matrices of equal width, disjoint unique integer column roles, and at least one retained feature. Drop designated columns, retain other numeric columns in original order, and append one-hot columns using sorted joint categories in caller categorical-column order. Preserve declared binary values and one-hot columns. On each other column use average-tie midpoint ranks over the joint population, inverse error function and mean centering. Keep sentinel values literal. Split copied raw tree and normalized DAE views back into original row order. This is a population transform, not a fitted transform for future rows. Dictionary with tree_training, tree_query, dae_training, dae_query, prepared_width and binary_output_columns. No labels or model objects are returned.",
+        "generated_by": "porto-decomposed-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.05
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "0a2802e0-327c-59d6-a795-d20eb5f79d90",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "0a2802e0-327c-59d6-a795-d20eb5f79d90",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Prepare joint feature populations for all neural branches and the tree. Use checked training and query rows with explicit column roles. Query features help define the transform. Labels do not enter it.",
+        "generated_by": "porto-decomposed-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "atom_references",
+      "keys": {
+        "atom_id": "0a2802e0-327c-59d6-a795-d20eb5f79d90",
+        "ref_key": "porto-decomposed-provider-review-v1"
+      },
+      "row": {
+        "atom_id": "0a2802e0-327c-59d6-a795-d20eb5f79d90",
+        "ref_key": "porto-decomposed-provider-review-v1",
+        "ref_id": "porto-decomposed-provider-review-v1",
+        "title": "Exact provider semantics and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/e7721f9dfcf37b62847ffafe1d6a7e0cd5fe25d5/docs/reviews/porto_decomposed_provider_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Prepare joint feature populations for all neural branches and the tree. Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Stack training then query rows. Require nonempty finite real matrices of equal width, disjoint unique integer column roles, and at least one retained feature. Drop designated columns, retain other numeric columns in original order, and append one-hot columns using sorted joint categories in caller categorical-column order. Preserve declared binary values and one-hot columns. On each other column use average-tie midpoint ranks over the joint population, inverse error function and mean centering. Keep sentinel values literal. Split copied raw tree and normalized DAE views back into original row order. This is a population transform, not a fitted transform for future rows."
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "0a2802e0-327c-59d6-a795-d20eb5f79d90",
+        "version_id": "b069bbbc-e90e-510d-aae9-88588f57a1ff",
+        "name": "prepared"
+      },
+      "row": {
+        "artifact_id": "0a2802e0-327c-59d6-a795-d20eb5f79d90",
+        "version_id": "b069bbbc-e90e-510d-aae9-88588f57a1ff",
+        "name": "prepared",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "object",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Canonical same-invocation Prepared returned by porto_prepare, containing private populations and explicit preparation, five neural branch and tree controls.",
+        "dejargonized_description": "Caller supplies prepared.",
+        "constraints_json": {
+          "validity_bounds": "Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Stack training then query rows. Require nonempty finite real matrices of equal width, disjoint unique integer column roles, and at least one retained feature. Drop designated columns, retain other numeric columns in original order, and append one-hot columns using sorted joint categories in caller categorical-column order. Preserve declared binary values and one-hot columns. On each other column use average-tie midpoint ranks over the joint population, inverse error function and mean centering. Keep sentinel values literal. Split copied raw tree and normalized DAE views back into original row order. This is a population transform, not a fitted transform for future rows.",
+          "parameter_contract": "Canonical same-invocation Prepared returned by porto_prepare, containing private populations and explicit preparation, five neural branch and tree controls."
+        }
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "0a2802e0-327c-59d6-a795-d20eb5f79d90",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "0a2802e0-327c-59d6-a795-d20eb5f79d90",
+        "kind": "technical",
+        "language": "en",
+        "content": "Prepare joint feature populations for all neural branches and the tree. Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Stack training then query rows. Require nonempty finite real matrices of equal width, disjoint unique integer column roles, and at least one retained feature. Drop designated columns, retain other numeric columns in original order, and append one-hot columns using sorted joint categories in caller categorical-column order. Preserve declared binary values and one-hot columns. On each other column use average-tie midpoint ranks over the joint population, inverse error function and mean centering. Keep sentinel values literal. Split copied raw tree and normalized DAE views back into original row order. This is a population transform, not a fitted transform for future rows. Dictionary with tree_training, tree_query, dae_training, dae_query, prepared_width and binary_output_columns. No labels or model objects are returned.",
+        "generated_by": "porto-decomposed-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.05
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "0a2802e0-327c-59d6-a795-d20eb5f79d90",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "0a2802e0-327c-59d6-a795-d20eb5f79d90",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Prepare joint feature populations for all neural branches and the tree. Use checked training and query rows with explicit column roles. Query features help define the transform. Labels do not enter it.",
+        "generated_by": "porto-decomposed-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "artifact_references",
+      "keys": {
+        "artifact_id": "0a2802e0-327c-59d6-a795-d20eb5f79d90",
+        "ref_key": "porto-decomposed-provider-review-v1"
+      },
+      "row": {
+        "artifact_id": "0a2802e0-327c-59d6-a795-d20eb5f79d90",
+        "ref_key": "porto-decomposed-provider-review-v1",
+        "ref_id": "porto-decomposed-provider-review-v1",
+        "title": "Exact provider semantics and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/e7721f9dfcf37b62847ffafe1d6a7e0cd5fe25d5/docs/reviews/porto_decomposed_provider_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Prepare joint feature populations for all neural branches and the tree. Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Stack training then query rows. Require nonempty finite real matrices of equal width, disjoint unique integer column roles, and at least one retained feature. Drop designated columns, retain other numeric columns in original order, and append one-hot columns using sorted joint categories in caller categorical-column order. Preserve declared binary values and one-hot columns. On each other column use average-tie midpoint ranks over the joint population, inverse error function and mean centering. Keep sentinel values literal. Split copied raw tree and normalized DAE views back into original row order. This is a population transform, not a fitted transform for future rows."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "2b36600c-5184-5342-89d7-3d3b08f53966",
+        "version_id": "d9b9bfbd-f435-5423-a9c3-69942d35a96b",
+        "name": "prepared"
+      },
+      "row": {
+        "atom_id": "2b36600c-5184-5342-89d7-3d3b08f53966",
+        "version_id": "d9b9bfbd-f435-5423-a9c3-69942d35a96b",
+        "name": "prepared",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "object",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Canonical same-invocation Prepared returned by porto_prepare, containing private populations and explicit preparation, five neural branch and tree controls.",
+        "dejargonized_description": "Caller supplies prepared.",
+        "constraints_json": {
+          "validity_bounds": "Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Require transformed to be a dictionary with exactly tree_training, tree_query, dae_training, dae_query, prepared_width and binary_output_columns. Same-invocation feature provenance is a precondition. For each of five explicit configurations, fit a separate CPU denoising autoencoder on stacked normalized training/query rows without labels, using same-column swap noise with self-donors allowed, ReLU hidden layers, a linear decoder and clean-target mean squared error. Use explicit hidden widths, extraction layers, positive epochs/batch size, learning rate and decay in (0,1], noise/momentum in [0,1), bounded integer seed, SGD and per-epoch decay. Concatenate selected hidden activations only, then train the supervised ReLU classifier on labeled training features for every configured epoch using binary cross entropy, SGD, explicit L2/momentum, input/hidden dropout and inverted or unscaled training dropout. Validate finite float32 inputs, losses, gradients and predictions. Fit a single deterministic one-thread binary LightGBM on raw prepared training features with caller rounds, leaves, rates, sampling and regularization; the library may stop splitting before requested rounds. Require both binary classes and aligned populations. Retain full classifier loss histories, branch counts and DAE metrics; no historical settings are inferred.",
+          "parameter_contract": "Canonical same-invocation Prepared returned by porto_prepare, containing private populations and explicit preparation, five neural branch and tree controls."
+        }
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "2b36600c-5184-5342-89d7-3d3b08f53966",
+        "version_id": "d9b9bfbd-f435-5423-a9c3-69942d35a96b",
+        "name": "transformed"
+      },
+      "row": {
+        "atom_id": "2b36600c-5184-5342-89d7-3d3b08f53966",
+        "version_id": "d9b9bfbd-f435-5423-a9c3-69942d35a96b",
+        "name": "transformed",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "dict",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Complete same-invocation features result with aligned raw and normalized training/query views.",
+        "dejargonized_description": "Caller supplies transformed.",
+        "constraints_json": {
+          "validity_bounds": "Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Require transformed to be a dictionary with exactly tree_training, tree_query, dae_training, dae_query, prepared_width and binary_output_columns. Same-invocation feature provenance is a precondition. For each of five explicit configurations, fit a separate CPU denoising autoencoder on stacked normalized training/query rows without labels, using same-column swap noise with self-donors allowed, ReLU hidden layers, a linear decoder and clean-target mean squared error. Use explicit hidden widths, extraction layers, positive epochs/batch size, learning rate and decay in (0,1], noise/momentum in [0,1), bounded integer seed, SGD and per-epoch decay. Concatenate selected hidden activations only, then train the supervised ReLU classifier on labeled training features for every configured epoch using binary cross entropy, SGD, explicit L2/momentum, input/hidden dropout and inverted or unscaled training dropout. Validate finite float32 inputs, losses, gradients and predictions. Fit a single deterministic one-thread binary LightGBM on raw prepared training features with caller rounds, leaves, rates, sampling and regularization; the library may stop splitting before requested rounds. Require both binary classes and aligned populations. Retain full classifier loss histories, branch counts and DAE metrics; no historical settings are inferred.",
+          "parameter_contract": "Complete same-invocation features result with aligned raw and normalized training/query views."
+        }
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "2b36600c-5184-5342-89d7-3d3b08f53966",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "2b36600c-5184-5342-89d7-3d3b08f53966",
+        "kind": "technical",
+        "language": "en",
+        "content": "Fit every configured neural branch and the prepared-feature tree. Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Require transformed to be a dictionary with exactly tree_training, tree_query, dae_training, dae_query, prepared_width and binary_output_columns. Same-invocation feature provenance is a precondition. For each of five explicit configurations, fit a separate CPU denoising autoencoder on stacked normalized training/query rows without labels, using same-column swap noise with self-donors allowed, ReLU hidden layers, a linear decoder and clean-target mean squared error. Use explicit hidden widths, extraction layers, positive epochs/batch size, learning rate and decay in (0,1], noise/momentum in [0,1), bounded integer seed, SGD and per-epoch decay. Concatenate selected hidden activations only, then train the supervised ReLU classifier on labeled training features for every configured epoch using binary cross entropy, SGD, explicit L2/momentum, input/hidden dropout and inverted or unscaled training dropout. Validate finite float32 inputs, losses, gradients and predictions. Fit a single deterministic one-thread binary LightGBM on raw prepared training features with caller rounds, leaves, rates, sampling and regularization; the library may stop splitting before requested rounds. Require both binary classes and aligned populations. Retain full classifier loss histories, branch counts and DAE metrics; no historical settings are inferred. Dictionary with five-row neural_probabilities, tree_probabilities, neural_records, actual tree_iterations, models=6, dae_models=5 and prepared_width. Neural records retain training_loss, learned_width, DAE population/count/clean-error metrics and reference/query row counts. No fitted model objects are returned.",
+        "generated_by": "porto-decomposed-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.06867
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "2b36600c-5184-5342-89d7-3d3b08f53966",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "2b36600c-5184-5342-89d7-3d3b08f53966",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Fit every configured neural branch and the prepared-feature tree. Train five full neural branches, then one tree. Each neural branch learns from unlabeled joint rows before learning from training labels. Use every supplied training epoch.",
+        "generated_by": "porto-decomposed-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.028571
+      }
+    },
+    {
+      "table": "atom_references",
+      "keys": {
+        "atom_id": "2b36600c-5184-5342-89d7-3d3b08f53966",
+        "ref_key": "porto-decomposed-provider-review-v1"
+      },
+      "row": {
+        "atom_id": "2b36600c-5184-5342-89d7-3d3b08f53966",
+        "ref_key": "porto-decomposed-provider-review-v1",
+        "ref_id": "porto-decomposed-provider-review-v1",
+        "title": "Exact provider semantics and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/e7721f9dfcf37b62847ffafe1d6a7e0cd5fe25d5/docs/reviews/porto_decomposed_provider_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Fit every configured neural branch and the prepared-feature tree. Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Require transformed to be a dictionary with exactly tree_training, tree_query, dae_training, dae_query, prepared_width and binary_output_columns. Same-invocation feature provenance is a precondition. For each of five explicit configurations, fit a separate CPU denoising autoencoder on stacked normalized training/query rows without labels, using same-column swap noise with self-donors allowed, ReLU hidden layers, a linear decoder and clean-target mean squared error. Use explicit hidden widths, extraction layers, positive epochs/batch size, learning rate and decay in (0,1], noise/momentum in [0,1), bounded integer seed, SGD and per-epoch decay. Concatenate selected hidden activations only, then train the supervised ReLU classifier on labeled training features for every configured epoch using binary cross entropy, SGD, explicit L2/momentum, input/hidden dropout and inverted or unscaled training dropout. Validate finite float32 inputs, losses, gradients and predictions. Fit a single deterministic one-thread binary LightGBM on raw prepared training features with caller rounds, leaves, rates, sampling and regularization; the library may stop splitting before requested rounds. Require both binary classes and aligned populations. Retain full classifier loss histories, branch counts and DAE metrics; no historical settings are inferred."
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "2b36600c-5184-5342-89d7-3d3b08f53966",
+        "version_id": "d9b9bfbd-f435-5423-a9c3-69942d35a96b",
+        "name": "prepared"
+      },
+      "row": {
+        "artifact_id": "2b36600c-5184-5342-89d7-3d3b08f53966",
+        "version_id": "d9b9bfbd-f435-5423-a9c3-69942d35a96b",
+        "name": "prepared",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "object",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Canonical same-invocation Prepared returned by porto_prepare, containing private populations and explicit preparation, five neural branch and tree controls.",
+        "dejargonized_description": "Caller supplies prepared.",
+        "constraints_json": {
+          "validity_bounds": "Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Require transformed to be a dictionary with exactly tree_training, tree_query, dae_training, dae_query, prepared_width and binary_output_columns. Same-invocation feature provenance is a precondition. For each of five explicit configurations, fit a separate CPU denoising autoencoder on stacked normalized training/query rows without labels, using same-column swap noise with self-donors allowed, ReLU hidden layers, a linear decoder and clean-target mean squared error. Use explicit hidden widths, extraction layers, positive epochs/batch size, learning rate and decay in (0,1], noise/momentum in [0,1), bounded integer seed, SGD and per-epoch decay. Concatenate selected hidden activations only, then train the supervised ReLU classifier on labeled training features for every configured epoch using binary cross entropy, SGD, explicit L2/momentum, input/hidden dropout and inverted or unscaled training dropout. Validate finite float32 inputs, losses, gradients and predictions. Fit a single deterministic one-thread binary LightGBM on raw prepared training features with caller rounds, leaves, rates, sampling and regularization; the library may stop splitting before requested rounds. Require both binary classes and aligned populations. Retain full classifier loss histories, branch counts and DAE metrics; no historical settings are inferred.",
+          "parameter_contract": "Canonical same-invocation Prepared returned by porto_prepare, containing private populations and explicit preparation, five neural branch and tree controls."
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "2b36600c-5184-5342-89d7-3d3b08f53966",
+        "version_id": "d9b9bfbd-f435-5423-a9c3-69942d35a96b",
+        "name": "transformed"
+      },
+      "row": {
+        "artifact_id": "2b36600c-5184-5342-89d7-3d3b08f53966",
+        "version_id": "d9b9bfbd-f435-5423-a9c3-69942d35a96b",
+        "name": "transformed",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "dict",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Complete same-invocation features result with aligned raw and normalized training/query views.",
+        "dejargonized_description": "Caller supplies transformed.",
+        "constraints_json": {
+          "validity_bounds": "Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Require transformed to be a dictionary with exactly tree_training, tree_query, dae_training, dae_query, prepared_width and binary_output_columns. Same-invocation feature provenance is a precondition. For each of five explicit configurations, fit a separate CPU denoising autoencoder on stacked normalized training/query rows without labels, using same-column swap noise with self-donors allowed, ReLU hidden layers, a linear decoder and clean-target mean squared error. Use explicit hidden widths, extraction layers, positive epochs/batch size, learning rate and decay in (0,1], noise/momentum in [0,1), bounded integer seed, SGD and per-epoch decay. Concatenate selected hidden activations only, then train the supervised ReLU classifier on labeled training features for every configured epoch using binary cross entropy, SGD, explicit L2/momentum, input/hidden dropout and inverted or unscaled training dropout. Validate finite float32 inputs, losses, gradients and predictions. Fit a single deterministic one-thread binary LightGBM on raw prepared training features with caller rounds, leaves, rates, sampling and regularization; the library may stop splitting before requested rounds. Require both binary classes and aligned populations. Retain full classifier loss histories, branch counts and DAE metrics; no historical settings are inferred.",
+          "parameter_contract": "Complete same-invocation features result with aligned raw and normalized training/query views."
+        }
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "2b36600c-5184-5342-89d7-3d3b08f53966",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "2b36600c-5184-5342-89d7-3d3b08f53966",
+        "kind": "technical",
+        "language": "en",
+        "content": "Fit every configured neural branch and the prepared-feature tree. Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Require transformed to be a dictionary with exactly tree_training, tree_query, dae_training, dae_query, prepared_width and binary_output_columns. Same-invocation feature provenance is a precondition. For each of five explicit configurations, fit a separate CPU denoising autoencoder on stacked normalized training/query rows without labels, using same-column swap noise with self-donors allowed, ReLU hidden layers, a linear decoder and clean-target mean squared error. Use explicit hidden widths, extraction layers, positive epochs/batch size, learning rate and decay in (0,1], noise/momentum in [0,1), bounded integer seed, SGD and per-epoch decay. Concatenate selected hidden activations only, then train the supervised ReLU classifier on labeled training features for every configured epoch using binary cross entropy, SGD, explicit L2/momentum, input/hidden dropout and inverted or unscaled training dropout. Validate finite float32 inputs, losses, gradients and predictions. Fit a single deterministic one-thread binary LightGBM on raw prepared training features with caller rounds, leaves, rates, sampling and regularization; the library may stop splitting before requested rounds. Require both binary classes and aligned populations. Retain full classifier loss histories, branch counts and DAE metrics; no historical settings are inferred. Dictionary with five-row neural_probabilities, tree_probabilities, neural_records, actual tree_iterations, models=6, dae_models=5 and prepared_width. Neural records retain training_loss, learned_width, DAE population/count/clean-error metrics and reference/query row counts. No fitted model objects are returned.",
+        "generated_by": "porto-decomposed-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.06867
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "2b36600c-5184-5342-89d7-3d3b08f53966",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "2b36600c-5184-5342-89d7-3d3b08f53966",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Fit every configured neural branch and the prepared-feature tree. Train five full neural branches, then one tree. Each neural branch learns from unlabeled joint rows before learning from training labels. Use every supplied training epoch.",
+        "generated_by": "porto-decomposed-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.028571
+      }
+    },
+    {
+      "table": "artifact_references",
+      "keys": {
+        "artifact_id": "2b36600c-5184-5342-89d7-3d3b08f53966",
+        "ref_key": "porto-decomposed-provider-review-v1"
+      },
+      "row": {
+        "artifact_id": "2b36600c-5184-5342-89d7-3d3b08f53966",
+        "ref_key": "porto-decomposed-provider-review-v1",
+        "ref_id": "porto-decomposed-provider-review-v1",
+        "title": "Exact provider semantics and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/e7721f9dfcf37b62847ffafe1d6a7e0cd5fe25d5/docs/reviews/porto_decomposed_provider_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Fit every configured neural branch and the prepared-feature tree. Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Require transformed to be a dictionary with exactly tree_training, tree_query, dae_training, dae_query, prepared_width and binary_output_columns. Same-invocation feature provenance is a precondition. For each of five explicit configurations, fit a separate CPU denoising autoencoder on stacked normalized training/query rows without labels, using same-column swap noise with self-donors allowed, ReLU hidden layers, a linear decoder and clean-target mean squared error. Use explicit hidden widths, extraction layers, positive epochs/batch size, learning rate and decay in (0,1], noise/momentum in [0,1), bounded integer seed, SGD and per-epoch decay. Concatenate selected hidden activations only, then train the supervised ReLU classifier on labeled training features for every configured epoch using binary cross entropy, SGD, explicit L2/momentum, input/hidden dropout and inverted or unscaled training dropout. Validate finite float32 inputs, losses, gradients and predictions. Fit a single deterministic one-thread binary LightGBM on raw prepared training features with caller rounds, leaves, rates, sampling and regularization; the library may stop splitting before requested rounds. Require both binary classes and aligned populations. Retain full classifier loss histories, branch counts and DAE metrics; no historical settings are inferred."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "5557582d-db3e-5987-a67e-13c641ff7cf9",
+        "version_id": "3333402e-b6c3-5160-ab76-cd13862dc934",
+        "name": "prepared"
+      },
+      "row": {
+        "atom_id": "5557582d-db3e-5987-a67e-13c641ff7cf9",
+        "version_id": "3333402e-b6c3-5160-ab76-cd13862dc934",
+        "name": "prepared",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "object",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Canonical same-invocation Prepared returned by porto_prepare, containing private populations and explicit preparation, five neural branch and tree controls.",
+        "dejargonized_description": "Caller supplies prepared.",
+        "constraints_json": {
+          "validity_bounds": "Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Revalidate all five neural vectors and the tree through blend_inputs. Require neural_sum to be a finite real vector aligned to the complete query population and tree shape. Compute (neural_sum + tree_probabilities)/6 in that order, preserving the original floating-point evaluation. Require finite results in [0,1] and strict JSON serialization. Read models, dae_models, prepared_width and learned_width from fitted metadata without independently authenticating those counts or recomputing the supplied neural sum. Same-invocation provenance is required.",
+          "parameter_contract": "Canonical same-invocation Prepared returned by porto_prepare, containing private populations and explicit preparation, five neural branch and tree controls."
+        }
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "5557582d-db3e-5987-a67e-13c641ff7cf9",
+        "version_id": "3333402e-b6c3-5160-ab76-cd13862dc934",
+        "name": "fitted"
+      },
+      "row": {
+        "atom_id": "5557582d-db3e-5987-a67e-13c641ff7cf9",
+        "version_id": "3333402e-b6c3-5160-ab76-cd13862dc934",
+        "name": "fitted",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "dict",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Same-invocation fit output with complete probabilities and neural records.",
+        "dejargonized_description": "Caller supplies fitted.",
+        "constraints_json": {
+          "validity_bounds": "Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Revalidate all five neural vectors and the tree through blend_inputs. Require neural_sum to be a finite real vector aligned to the complete query population and tree shape. Compute (neural_sum + tree_probabilities)/6 in that order, preserving the original floating-point evaluation. Require finite results in [0,1] and strict JSON serialization. Read models, dae_models, prepared_width and learned_width from fitted metadata without independently authenticating those counts or recomputing the supplied neural sum. Same-invocation provenance is required.",
+          "parameter_contract": "Same-invocation fit output with complete probabilities and neural records."
+        }
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "5557582d-db3e-5987-a67e-13c641ff7cf9",
+        "version_id": "3333402e-b6c3-5160-ab76-cd13862dc934",
+        "name": "neural_sum"
+      },
+      "row": {
+        "atom_id": "5557582d-db3e-5987-a67e-13c641ff7cf9",
+        "version_id": "3333402e-b6c3-5160-ab76-cd13862dc934",
+        "name": "neural_sum",
+        "position": 2,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Same-invocation generic ordered sum of the five neural rows using unit coefficients.",
+        "dejargonized_description": "Caller supplies neural sum.",
+        "constraints_json": {
+          "validity_bounds": "Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Revalidate all five neural vectors and the tree through blend_inputs. Require neural_sum to be a finite real vector aligned to the complete query population and tree shape. Compute (neural_sum + tree_probabilities)/6 in that order, preserving the original floating-point evaluation. Require finite results in [0,1] and strict JSON serialization. Read models, dae_models, prepared_width and learned_width from fitted metadata without independently authenticating those counts or recomputing the supplied neural sum. Same-invocation provenance is required.",
+          "parameter_contract": "Same-invocation generic ordered sum of the five neural rows using unit coefficients."
+        }
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "5557582d-db3e-5987-a67e-13c641ff7cf9",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "5557582d-db3e-5987-a67e-13c641ff7cf9",
+        "kind": "technical",
+        "language": "en",
+        "content": "Add the tree after neural reduction and divide by six. Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Revalidate all five neural vectors and the tree through blend_inputs. Require neural_sum to be a finite real vector aligned to the complete query population and tree shape. Compute (neural_sum + tree_probabilities)/6 in that order, preserving the original floating-point evaluation. Require finite results in [0,1] and strict JSON serialization. Read models, dae_models, prepared_width and learned_width from fitted metadata without independently authenticating those counts or recomputing the supplied neural sum. Same-invocation provenance is required. Strict JSON dictionary containing probabilities, models, dae_models, prepared_width, learned_widths, score_kind=equal_probability_mean and the explicit independent-configuration/transductive scope.",
+        "generated_by": "porto-decomposed-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.127273
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "5557582d-db3e-5987-a67e-13c641ff7cf9",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "5557582d-db3e-5987-a67e-13c641ff7cf9",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Add the tree after neural reduction and divide by six. Use the neural sum and tree scores from this run. Add the tree only after the five neural rows have been added, then divide once. Retain all query probabilities.",
+        "generated_by": "porto-decomposed-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "atom_references",
+      "keys": {
+        "atom_id": "5557582d-db3e-5987-a67e-13c641ff7cf9",
+        "ref_key": "porto-decomposed-provider-review-v1"
+      },
+      "row": {
+        "atom_id": "5557582d-db3e-5987-a67e-13c641ff7cf9",
+        "ref_key": "porto-decomposed-provider-review-v1",
+        "ref_id": "porto-decomposed-provider-review-v1",
+        "title": "Exact provider semantics and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/e7721f9dfcf37b62847ffafe1d6a7e0cd5fe25d5/docs/reviews/porto_decomposed_provider_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Add the tree after neural reduction and divide by six. Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Revalidate all five neural vectors and the tree through blend_inputs. Require neural_sum to be a finite real vector aligned to the complete query population and tree shape. Compute (neural_sum + tree_probabilities)/6 in that order, preserving the original floating-point evaluation. Require finite results in [0,1] and strict JSON serialization. Read models, dae_models, prepared_width and learned_width from fitted metadata without independently authenticating those counts or recomputing the supplied neural sum. Same-invocation provenance is required."
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "5557582d-db3e-5987-a67e-13c641ff7cf9",
+        "version_id": "3333402e-b6c3-5160-ab76-cd13862dc934",
+        "name": "prepared"
+      },
+      "row": {
+        "artifact_id": "5557582d-db3e-5987-a67e-13c641ff7cf9",
+        "version_id": "3333402e-b6c3-5160-ab76-cd13862dc934",
+        "name": "prepared",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "object",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Canonical same-invocation Prepared returned by porto_prepare, containing private populations and explicit preparation, five neural branch and tree controls.",
+        "dejargonized_description": "Caller supplies prepared.",
+        "constraints_json": {
+          "validity_bounds": "Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Revalidate all five neural vectors and the tree through blend_inputs. Require neural_sum to be a finite real vector aligned to the complete query population and tree shape. Compute (neural_sum + tree_probabilities)/6 in that order, preserving the original floating-point evaluation. Require finite results in [0,1] and strict JSON serialization. Read models, dae_models, prepared_width and learned_width from fitted metadata without independently authenticating those counts or recomputing the supplied neural sum. Same-invocation provenance is required.",
+          "parameter_contract": "Canonical same-invocation Prepared returned by porto_prepare, containing private populations and explicit preparation, five neural branch and tree controls."
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "5557582d-db3e-5987-a67e-13c641ff7cf9",
+        "version_id": "3333402e-b6c3-5160-ab76-cd13862dc934",
+        "name": "fitted"
+      },
+      "row": {
+        "artifact_id": "5557582d-db3e-5987-a67e-13c641ff7cf9",
+        "version_id": "3333402e-b6c3-5160-ab76-cd13862dc934",
+        "name": "fitted",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "dict",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Same-invocation fit output with complete probabilities and neural records.",
+        "dejargonized_description": "Caller supplies fitted.",
+        "constraints_json": {
+          "validity_bounds": "Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Revalidate all five neural vectors and the tree through blend_inputs. Require neural_sum to be a finite real vector aligned to the complete query population and tree shape. Compute (neural_sum + tree_probabilities)/6 in that order, preserving the original floating-point evaluation. Require finite results in [0,1] and strict JSON serialization. Read models, dae_models, prepared_width and learned_width from fitted metadata without independently authenticating those counts or recomputing the supplied neural sum. Same-invocation provenance is required.",
+          "parameter_contract": "Same-invocation fit output with complete probabilities and neural records."
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "5557582d-db3e-5987-a67e-13c641ff7cf9",
+        "version_id": "3333402e-b6c3-5160-ab76-cd13862dc934",
+        "name": "neural_sum"
+      },
+      "row": {
+        "artifact_id": "5557582d-db3e-5987-a67e-13c641ff7cf9",
+        "version_id": "3333402e-b6c3-5160-ab76-cd13862dc934",
+        "name": "neural_sum",
+        "position": 2,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Same-invocation generic ordered sum of the five neural rows using unit coefficients.",
+        "dejargonized_description": "Caller supplies neural sum.",
+        "constraints_json": {
+          "validity_bounds": "Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Revalidate all five neural vectors and the tree through blend_inputs. Require neural_sum to be a finite real vector aligned to the complete query population and tree shape. Compute (neural_sum + tree_probabilities)/6 in that order, preserving the original floating-point evaluation. Require finite results in [0,1] and strict JSON serialization. Read models, dae_models, prepared_width and learned_width from fitted metadata without independently authenticating those counts or recomputing the supplied neural sum. Same-invocation provenance is required.",
+          "parameter_contract": "Same-invocation generic ordered sum of the five neural rows using unit coefficients."
+        }
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "5557582d-db3e-5987-a67e-13c641ff7cf9",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "5557582d-db3e-5987-a67e-13c641ff7cf9",
+        "kind": "technical",
+        "language": "en",
+        "content": "Add the tree after neural reduction and divide by six. Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Revalidate all five neural vectors and the tree through blend_inputs. Require neural_sum to be a finite real vector aligned to the complete query population and tree shape. Compute (neural_sum + tree_probabilities)/6 in that order, preserving the original floating-point evaluation. Require finite results in [0,1] and strict JSON serialization. Read models, dae_models, prepared_width and learned_width from fitted metadata without independently authenticating those counts or recomputing the supplied neural sum. Same-invocation provenance is required. Strict JSON dictionary containing probabilities, models, dae_models, prepared_width, learned_widths, score_kind=equal_probability_mean and the explicit independent-configuration/transductive scope.",
+        "generated_by": "porto-decomposed-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.127273
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "5557582d-db3e-5987-a67e-13c641ff7cf9",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "5557582d-db3e-5987-a67e-13c641ff7cf9",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Add the tree after neural reduction and divide by six. Use the neural sum and tree scores from this run. Add the tree only after the five neural rows have been added, then divide once. Retain all query probabilities.",
+        "generated_by": "porto-decomposed-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "artifact_references",
+      "keys": {
+        "artifact_id": "5557582d-db3e-5987-a67e-13c641ff7cf9",
+        "ref_key": "porto-decomposed-provider-review-v1"
+      },
+      "row": {
+        "artifact_id": "5557582d-db3e-5987-a67e-13c641ff7cf9",
+        "ref_key": "porto-decomposed-provider-review-v1",
+        "ref_id": "porto-decomposed-provider-review-v1",
+        "title": "Exact provider semantics and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/e7721f9dfcf37b62847ffafe1d6a7e0cd5fe25d5/docs/reviews/porto_decomposed_provider_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Add the tree after neural reduction and divide by six. Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Revalidate all five neural vectors and the tree through blend_inputs. Require neural_sum to be a finite real vector aligned to the complete query population and tree shape. Compute (neural_sum + tree_probabilities)/6 in that order, preserving the original floating-point evaluation. Require finite results in [0,1] and strict JSON serialization. Read models, dae_models, prepared_width and learned_width from fitted metadata without independently authenticating those counts or recomputing the supplied neural sum. Same-invocation provenance is required."
+      }
+    }
+  ],
+  "rollups": [
+    {
+      "table": "atom_audit_rollups",
+      "key": "atom_id",
+      "identity": "05453bbb-4b30-5600-a605-9d93c85e9585",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 implementation semantics only; no Tier 1 human certification or Tier 2 usage qualification.",
+          "Four recipe adapters preserve all five configured DAE/classifier branches and the tree. The generic ordered weighted sum remains independently bound and domain independent.",
+          "Exact historical notebook details remain unverified. This review qualifies the stated implementation contracts, not historical winning-agent equivalence or original-CDG publication.",
+          "Fresh execution exactly matches the existing reconstruction on generated populations; historical population membership and competitive accuracy are unproven.",
+          "Installed package hashes were checked against their own RECORD files. Clean deployment and independently authenticated publisher signatures are not qualified.",
+          "Native pools, Torch intra/inter-op pools and LightGBM calls are bounded to one thread; models train serially. Deployment must configure its own resource limits.",
+          "Software imports are separate from registered-provider dependencies. Same-invocation intermediate provenance is required but not authenticated by structural checks.",
+          "Catalog eligibility, publication transaction gates and existing-provider metadata remain separate checks.",
+          "Require a fitted dictionary with neural_probabilities of shape (5,N), N positive, and tree_probabilities of shape (N,). Require real integer or floating arrays with finite values in [0,1]. Return a fresh C-contiguous float64 copy of the five neural rows in supplied order and a five-element vector of ones. This step validates the tree vector but does not add it, sum neural rows, normalize, rank, or reorder scores. Shape alignment alone does not establish query identity."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "artifact_audit_rollups",
+      "key": "artifact_id",
+      "identity": "05453bbb-4b30-5600-a605-9d93c85e9585",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 implementation semantics only; no Tier 1 human certification or Tier 2 usage qualification.",
+          "Four recipe adapters preserve all five configured DAE/classifier branches and the tree. The generic ordered weighted sum remains independently bound and domain independent.",
+          "Exact historical notebook details remain unverified. This review qualifies the stated implementation contracts, not historical winning-agent equivalence or original-CDG publication.",
+          "Fresh execution exactly matches the existing reconstruction on generated populations; historical population membership and competitive accuracy are unproven.",
+          "Installed package hashes were checked against their own RECORD files. Clean deployment and independently authenticated publisher signatures are not qualified.",
+          "Native pools, Torch intra/inter-op pools and LightGBM calls are bounded to one thread; models train serially. Deployment must configure its own resource limits.",
+          "Software imports are separate from registered-provider dependencies. Same-invocation intermediate provenance is required but not authenticated by structural checks.",
+          "Catalog eligibility, publication transaction gates and existing-provider metadata remain separate checks.",
+          "Require a fitted dictionary with neural_probabilities of shape (5,N), N positive, and tree_probabilities of shape (N,). Require real integer or floating arrays with finite values in [0,1]. Return a fresh C-contiguous float64 copy of the five neural rows in supplied order and a five-element vector of ones. This step validates the tree vector but does not add it, sum neural rows, normalize, rank, or reorder scores. Shape alignment alone does not establish query identity."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "atom_audit_rollups",
+      "key": "atom_id",
+      "identity": "0a2802e0-327c-59d6-a795-d20eb5f79d90",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 implementation semantics only; no Tier 1 human certification or Tier 2 usage qualification.",
+          "Four recipe adapters preserve all five configured DAE/classifier branches and the tree. The generic ordered weighted sum remains independently bound and domain independent.",
+          "Exact historical notebook details remain unverified. This review qualifies the stated implementation contracts, not historical winning-agent equivalence or original-CDG publication.",
+          "Fresh execution exactly matches the existing reconstruction on generated populations; historical population membership and competitive accuracy are unproven.",
+          "Installed package hashes were checked against their own RECORD files. Clean deployment and independently authenticated publisher signatures are not qualified.",
+          "Native pools, Torch intra/inter-op pools and LightGBM calls are bounded to one thread; models train serially. Deployment must configure its own resource limits.",
+          "Software imports are separate from registered-provider dependencies. Same-invocation intermediate provenance is required but not authenticated by structural checks.",
+          "Catalog eligibility, publication transaction gates and existing-provider metadata remain separate checks.",
+          "Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Stack training then query rows. Require nonempty finite real matrices of equal width, disjoint unique integer column roles, and at least one retained feature. Drop designated columns, retain other numeric columns in original order, and append one-hot columns using sorted joint categories in caller categorical-column order. Preserve declared binary values and one-hot columns. On each other column use average-tie midpoint ranks over the joint population, inverse error function and mean centering. Keep sentinel values literal. Split copied raw tree and normalized DAE views back into original row order. This is a population transform, not a fitted transform for future rows."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "artifact_audit_rollups",
+      "key": "artifact_id",
+      "identity": "0a2802e0-327c-59d6-a795-d20eb5f79d90",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 implementation semantics only; no Tier 1 human certification or Tier 2 usage qualification.",
+          "Four recipe adapters preserve all five configured DAE/classifier branches and the tree. The generic ordered weighted sum remains independently bound and domain independent.",
+          "Exact historical notebook details remain unverified. This review qualifies the stated implementation contracts, not historical winning-agent equivalence or original-CDG publication.",
+          "Fresh execution exactly matches the existing reconstruction on generated populations; historical population membership and competitive accuracy are unproven.",
+          "Installed package hashes were checked against their own RECORD files. Clean deployment and independently authenticated publisher signatures are not qualified.",
+          "Native pools, Torch intra/inter-op pools and LightGBM calls are bounded to one thread; models train serially. Deployment must configure its own resource limits.",
+          "Software imports are separate from registered-provider dependencies. Same-invocation intermediate provenance is required but not authenticated by structural checks.",
+          "Catalog eligibility, publication transaction gates and existing-provider metadata remain separate checks.",
+          "Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Stack training then query rows. Require nonempty finite real matrices of equal width, disjoint unique integer column roles, and at least one retained feature. Drop designated columns, retain other numeric columns in original order, and append one-hot columns using sorted joint categories in caller categorical-column order. Preserve declared binary values and one-hot columns. On each other column use average-tie midpoint ranks over the joint population, inverse error function and mean centering. Keep sentinel values literal. Split copied raw tree and normalized DAE views back into original row order. This is a population transform, not a fitted transform for future rows."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "atom_audit_rollups",
+      "key": "atom_id",
+      "identity": "2b36600c-5184-5342-89d7-3d3b08f53966",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 implementation semantics only; no Tier 1 human certification or Tier 2 usage qualification.",
+          "Four recipe adapters preserve all five configured DAE/classifier branches and the tree. The generic ordered weighted sum remains independently bound and domain independent.",
+          "Exact historical notebook details remain unverified. This review qualifies the stated implementation contracts, not historical winning-agent equivalence or original-CDG publication.",
+          "Fresh execution exactly matches the existing reconstruction on generated populations; historical population membership and competitive accuracy are unproven.",
+          "Installed package hashes were checked against their own RECORD files. Clean deployment and independently authenticated publisher signatures are not qualified.",
+          "Native pools, Torch intra/inter-op pools and LightGBM calls are bounded to one thread; models train serially. Deployment must configure its own resource limits.",
+          "Software imports are separate from registered-provider dependencies. Same-invocation intermediate provenance is required but not authenticated by structural checks.",
+          "Catalog eligibility, publication transaction gates and existing-provider metadata remain separate checks.",
+          "Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Require transformed to be a dictionary with exactly tree_training, tree_query, dae_training, dae_query, prepared_width and binary_output_columns. Same-invocation feature provenance is a precondition. For each of five explicit configurations, fit a separate CPU denoising autoencoder on stacked normalized training/query rows without labels, using same-column swap noise with self-donors allowed, ReLU hidden layers, a linear decoder and clean-target mean squared error. Use explicit hidden widths, extraction layers, positive epochs/batch size, learning rate and decay in (0,1], noise/momentum in [0,1), bounded integer seed, SGD and per-epoch decay. Concatenate selected hidden activations only, then train the supervised ReLU classifier on labeled training features for every configured epoch using binary cross entropy, SGD, explicit L2/momentum, input/hidden dropout and inverted or unscaled training dropout. Validate finite float32 inputs, losses, gradients and predictions. Fit a single deterministic one-thread binary LightGBM on raw prepared training features with caller rounds, leaves, rates, sampling and regularization; the library may stop splitting before requested rounds. Require both binary classes and aligned populations. Retain full classifier loss histories, branch counts and DAE metrics; no historical settings are inferred."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "artifact_audit_rollups",
+      "key": "artifact_id",
+      "identity": "2b36600c-5184-5342-89d7-3d3b08f53966",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 implementation semantics only; no Tier 1 human certification or Tier 2 usage qualification.",
+          "Four recipe adapters preserve all five configured DAE/classifier branches and the tree. The generic ordered weighted sum remains independently bound and domain independent.",
+          "Exact historical notebook details remain unverified. This review qualifies the stated implementation contracts, not historical winning-agent equivalence or original-CDG publication.",
+          "Fresh execution exactly matches the existing reconstruction on generated populations; historical population membership and competitive accuracy are unproven.",
+          "Installed package hashes were checked against their own RECORD files. Clean deployment and independently authenticated publisher signatures are not qualified.",
+          "Native pools, Torch intra/inter-op pools and LightGBM calls are bounded to one thread; models train serially. Deployment must configure its own resource limits.",
+          "Software imports are separate from registered-provider dependencies. Same-invocation intermediate provenance is required but not authenticated by structural checks.",
+          "Catalog eligibility, publication transaction gates and existing-provider metadata remain separate checks.",
+          "Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Require transformed to be a dictionary with exactly tree_training, tree_query, dae_training, dae_query, prepared_width and binary_output_columns. Same-invocation feature provenance is a precondition. For each of five explicit configurations, fit a separate CPU denoising autoencoder on stacked normalized training/query rows without labels, using same-column swap noise with self-donors allowed, ReLU hidden layers, a linear decoder and clean-target mean squared error. Use explicit hidden widths, extraction layers, positive epochs/batch size, learning rate and decay in (0,1], noise/momentum in [0,1), bounded integer seed, SGD and per-epoch decay. Concatenate selected hidden activations only, then train the supervised ReLU classifier on labeled training features for every configured epoch using binary cross entropy, SGD, explicit L2/momentum, input/hidden dropout and inverted or unscaled training dropout. Validate finite float32 inputs, losses, gradients and predictions. Fit a single deterministic one-thread binary LightGBM on raw prepared training features with caller rounds, leaves, rates, sampling and regularization; the library may stop splitting before requested rounds. Require both binary classes and aligned populations. Retain full classifier loss histories, branch counts and DAE metrics; no historical settings are inferred."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "atom_audit_rollups",
+      "key": "atom_id",
+      "identity": "5557582d-db3e-5987-a67e-13c641ff7cf9",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 implementation semantics only; no Tier 1 human certification or Tier 2 usage qualification.",
+          "Four recipe adapters preserve all five configured DAE/classifier branches and the tree. The generic ordered weighted sum remains independently bound and domain independent.",
+          "Exact historical notebook details remain unverified. This review qualifies the stated implementation contracts, not historical winning-agent equivalence or original-CDG publication.",
+          "Fresh execution exactly matches the existing reconstruction on generated populations; historical population membership and competitive accuracy are unproven.",
+          "Installed package hashes were checked against their own RECORD files. Clean deployment and independently authenticated publisher signatures are not qualified.",
+          "Native pools, Torch intra/inter-op pools and LightGBM calls are bounded to one thread; models train serially. Deployment must configure its own resource limits.",
+          "Software imports are separate from registered-provider dependencies. Same-invocation intermediate provenance is required but not authenticated by structural checks.",
+          "Catalog eligibility, publication transaction gates and existing-provider metadata remain separate checks.",
+          "Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Revalidate all five neural vectors and the tree through blend_inputs. Require neural_sum to be a finite real vector aligned to the complete query population and tree shape. Compute (neural_sum + tree_probabilities)/6 in that order, preserving the original floating-point evaluation. Require finite results in [0,1] and strict JSON serialization. Read models, dae_models, prepared_width and learned_width from fitted metadata without independently authenticating those counts or recomputing the supplied neural sum. Same-invocation provenance is required."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "artifact_audit_rollups",
+      "key": "artifact_id",
+      "identity": "5557582d-db3e-5987-a67e-13c641ff7cf9",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 implementation semantics only; no Tier 1 human certification or Tier 2 usage qualification.",
+          "Four recipe adapters preserve all five configured DAE/classifier branches and the tree. The generic ordered weighted sum remains independently bound and domain independent.",
+          "Exact historical notebook details remain unverified. This review qualifies the stated implementation contracts, not historical winning-agent equivalence or original-CDG publication.",
+          "Fresh execution exactly matches the existing reconstruction on generated populations; historical population membership and competitive accuracy are unproven.",
+          "Installed package hashes were checked against their own RECORD files. Clean deployment and independently authenticated publisher signatures are not qualified.",
+          "Native pools, Torch intra/inter-op pools and LightGBM calls are bounded to one thread; models train serially. Deployment must configure its own resource limits.",
+          "Software imports are separate from registered-provider dependencies. Same-invocation intermediate provenance is required but not authenticated by structural checks.",
+          "Catalog eligibility, publication transaction gates and existing-provider metadata remain separate checks.",
+          "Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation. Revalidate all five neural vectors and the tree through blend_inputs. Require neural_sum to be a finite real vector aligned to the complete query population and tree shape. Compute (neural_sum + tree_probabilities)/6 in that order, preserving the original floating-point evaluation. Require finite results in [0,1] and strict JSON serialization. Read models, dae_models, prepared_width and learned_width from fitted metadata without independently authenticating those counts or recomputing the supplied neural sum. Same-invocation provenance is required."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    }
+  ],
+  "parameter_updates": [],
+  "metadata_expectations": [],
+  "dependencies": [],
+  "before": {
+    "atoms": "4ea801188ae648197025e9aea865b0ab024f11f99a6f4a90113eb972847c8b6b",
+    "artifacts": "593eafdbb518cf85477eac6fca54eb85289c55f68e1c9bfe8d5166b91729a7bb",
+    "atom_versions": "708bfad052cafd3d312bf1db3ba69d25fed505cb8631d8bbb7463976d05814fe",
+    "artifact_versions": "405804092123a600b499e411dcaa666eae77d1a49abae0553241991c14d72f71",
+    "atom_io_specs": "8a4af462a1ce107384c5c8207bd9b6a56d45ce4ba8efbd058c6bcb1d3cad69f9",
+    "artifact_io_specs": "e9b53200ac28147c1e68bf157c367d22d3d53e5cec677b3c92cc0e0c13a00bdb",
+    "atom_parameters": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_parameters": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_descriptions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_descriptions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_references": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_references": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_audit_rollups": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_audit_rollups": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_audit_evidence": "2d80772a4839f757c3f729e3578b3f7a9ca2d61b1c5320bd728f36eff771caec"
+  },
+  "preserved_approved": {
+    "atom_versions": "708bfad052cafd3d312bf1db3ba69d25fed505cb8631d8bbb7463976d05814fe",
+    "artifact_versions": "405804092123a600b499e411dcaa666eae77d1a49abae0553241991c14d72f71",
+    "atom_io_specs": "8a4af462a1ce107384c5c8207bd9b6a56d45ce4ba8efbd058c6bcb1d3cad69f9",
+    "artifact_io_specs": "e9b53200ac28147c1e68bf157c367d22d3d53e5cec677b3c92cc0e0c13a00bdb",
+    "artifact_audit_evidence": "2d80772a4839f757c3f729e3578b3f7a9ca2d61b1c5320bd728f36eff771caec"
+  },
+  "outside_preserved": "ec1c95821c7f251dda42f711977238aaff959e4b879e3fd6e0b44db6d091cbd3",
+  "review_sha256": "5c2ee97407d194977490c4ffab3dd26f6877576736b2fab0032ae3c7d97d7ea3"
+}
