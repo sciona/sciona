@@ -1,0 +1,596 @@
+{
+  "format": "march-decomposed-provider-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_march_execution.features",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_march_execution.features",
+      "version_id": "fc628767-65ba-566b-abf6-9f42a70640ab",
+      "content_hash": "4ec23c162d429b52fbd62577eca75c968e61c45c2ef80320859b84267456ca08",
+      "provider_sha256": "9eb88dafd5dbcb47bc8b6746bd8246b36b704768dcd97a65bf60c8f975397db9",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "featured",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Compute complete season box-score efficiencies, loser-to-winner PageRank and chronological scaled Elo.",
+      "parameters": {
+        "prepared": "Prepared from march_prepare; its deep-copied strict finite JSON payload is revalidated before feature work."
+      },
+      "validity_bounds": "Require explicit finite feature and optimizer controls. Preserve the original possessions formula and ratios of summed totals, per-season rating resets, stable custom-scale Elo expectation, directed weighted PageRank with explicit tolerance and iteration budget, sorted game order, unique game chronology and rejection of tied completed games. PageRank exhaustion propagates as an error. Team vectors are float64 with five components: offensive efficiency, defensive efficiency, turnover rate, PageRank and Elo. No training or calibration occurs.",
+      "outputs": "Dictionary containing seasons, training, calibration, prediction and regularization/max_iterations/tolerance/seed. Raw games are removed.",
+      "plain_limits": "Build five team features from completed games using explicit settings. These features retain the season and box-score recipe.",
+      "reuse": "Season feature policy is domain-specific. Numeric model fitting and calibration are separate and do not require these raw inputs.",
+      "atom_id": "4ebeb687-887e-5b4b-958d-4362324e43f8",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_march_execution.features",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_march_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_march_execution",
+        "import_module": "sciona.atoms.ml.decomposed_march_execution",
+        "source_symbol": "features",
+        "description": "Aggregate box scores, directed PageRank and chronological scaled Elo.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.4ec23c162d42",
+      "fingerprint": "c993df8017bdb1ea2e2e77884c91204be74807d46299db3aef1f7a42d1174d7b",
+      "internal_registered_provider_dependencies": []
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_march_execution.fit_scores",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_march_execution.fit_scores",
+      "version_id": "97c233bd-e3b3-577b-95d5-982e67d7bbc5",
+      "content_hash": "4f0e11320894e9feb8e18ebe74970d3a1a2479dab7ea5ed7e306033f1f014a45",
+      "provider_sha256": "9eb88dafd5dbcb47bc8b6746bd8246b36b704768dcd97a65bf60c8f975397db9",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "arrays",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "calibration_scores",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "labels",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "sample_weight",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "forward_scores",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "reverse_scores",
+          "ordinal": 4,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "counts",
+          "ordinal": 5,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Fit StandardScaler and binary LogisticRegression on training rows only and expose scores for external calibration and prediction.",
+      "parameters": {
+        "arrays": "Exact matrix packet: train_x/train_y/calibration_x/calibration_y/forward_x/reverse_x and regularization/max_iterations/tolerance/seed."
+      },
+      "validity_bounds": "Prevalidate every input before fitting. Matrices are nonempty finite float64 rank-two arrays with a shared arbitrary positive feature width; forward and reverse shapes match. Labels are aligned int64 rank-one arrays with both 0 and 1 represented and at least two rows per labeled population. Copy arrays before use. Seed is a Python integer in [0,2**32); iteration budget is a positive Python integer; C and tolerance are finite positive Python int/float excluding bool. Fit StandardScaler then LogisticRegression using lbfgs and explicit controls. Promote ConvergenceWarning to an error. Require classes [0,1]. Evaluate three separate decision_function calls for calibration, forward and reverse; require finite rank-one float64 scores. No base refit during external calibration. Caller establishes independent populations and shared feature meaning; this stage does not prove either.",
+      "outputs": "Tuple: calibration scores, float64 binary calibration targets, None sample weights, forward scores, reverse scores, and counts(training_rows,calibration_rows,predicted_matchups). Model objects are not returned.",
+      "plain_limits": "Fit a binary model on numeric training rows and produce scores for separate calibration and prediction rows. All rows must use the same feature meaning.",
+      "reuse": "Domain-independent dense matrix fitting with arbitrary positive feature widths, tested at 1, 3, 8 and 23 columns. No season, team or box-score inputs are required. Logistic solver and scaling policy remain explicit.",
+      "atom_id": "022b1cf7-4ab7-55d5-9d8a-43474e1e98db",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_march_execution.fit_scores",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_march_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_march_execution",
+        "import_module": "sciona.atoms.ml.decomposed_march_execution",
+        "source_symbol": "fit_scores",
+        "description": "Fit standardized binary logistic scores from arbitrary-width matrices.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.4f0e11320894",
+      "fingerprint": "9c4523cda4ea4bc7c8944b451c12acf27aa1126f349a8b25d4f25fb69bc036ca",
+      "internal_registered_provider_dependencies": []
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_march_execution.pairings",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_march_execution.pairings",
+      "version_id": "bee431e3-290b-5d15-b0ef-219e456776e4",
+      "content_hash": "cdfe252124f16291aafcecd02a4f60186fa3dfaa82bc6ba25bc9d147505e4ca0",
+      "provider_sha256": "9eb88dafd5dbcb47bc8b6746bd8246b36b704768dcd97a65bf60c8f975397db9",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "featured",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "arrays",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Validate chronological populations and form mirrored fitting/calibration matrices plus both prediction orientations.",
+      "parameters": {
+        "featured": "Complete feature packet with nonempty season/team states, finite float64 five-component vectors, explicit last game order and all three target populations."
+      },
+      "validity_bounds": "Deep-copy and validate exact packet fields. Require nonnegative Python integer season/team/order identifiers, distinct teams known to their season, exact target row fields and binary fitting/calibration outcomes. Every target follows its season feature cutoff. Labeled (season,order) identities are unique. All training seasons precede all calibration seasons, which precede all prediction seasons. Require at least two original fitting and two calibration matchups. Concatenate A, B and A-B for each orientation; append reversed rows and complemented labels in source order. Reject invalid optimizer controls. Supplied features and chronology must be trustworthy; structural checks do not authenticate provenance.",
+      "outputs": "Exact dictionary train_x/train_y/calibration_x/calibration_y/forward_x/reverse_x plus four optimizer controls. Feature matrices have 15 columns under this recipe; fitting/calibration labels are mirrored int64.",
+      "plain_limits": "Build ordered pairs and their reversals, keeping fitting, calibration and prediction seasons separate.",
+      "reuse": "Pair construction retains the five-feature season recipe. The following numeric fitting stage accepts other feature widths independently.",
+      "atom_id": "66547149-3404-5877-8503-1187eefe0f66",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_march_execution.pairings",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_march_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_march_execution",
+        "import_module": "sciona.atoms.ml.decomposed_march_execution",
+        "source_symbol": "pairings",
+        "description": "Validate season chronology and build mirrored numeric populations.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.cdfe252124f1",
+      "fingerprint": "9a6ef27d46306a3759c4a461f7946e25998df38d085ea50bd6315be1be971eb7",
+      "internal_registered_provider_dependencies": []
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_march_execution.projection_inputs",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_march_execution.projection_inputs",
+      "version_id": "3f1faca8-06ee-5ff2-92c8-de013d67cd58",
+      "content_hash": "3f968dc5b06884f5f50884682f5b6f23805c575bc9e667fcc14fa3ee6c277654",
+      "provider_sha256": "9eb88dafd5dbcb47bc8b6746bd8246b36b704768dcd97a65bf60c8f975397db9",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "forward",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "reverse",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "coefficients",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Prepare the orientation policy as numeric rows and coefficients for an external ordered sum.",
+      "parameters": {
+        "forward": "Nonempty finite float64 rank-one forward probabilities in [0,1].",
+        "reverse": "Matching-shape finite float64 reverse probabilities in [0,1], calibrated with the same state."
+      },
+      "validity_bounds": "Require identical vector shapes and strict dtype/range checks. Return rows [forward,ones,reverse] and coefficients [1,1,-1] as fresh arrays. Do not sum or rescale here. The graph must preserve both prediction orientations and shared calibration state.",
+      "outputs": "Tuple of float64 matrix (3,N) and float64 coefficients (3,), consumed by generic ordered_weighted_sum.",
+      "plain_limits": "Prepare forward plus one minus reverse, in that arithmetic order. Pair orientation is the caller recipe.",
+      "reuse": "Works for compatible paired binary predictions across domains; assumes reversing a pair complements the target probability.",
+      "atom_id": "f67735c4-00ca-5fb5-8e94-0d2771c7ccdf",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_march_execution.projection_inputs",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_march_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_march_execution",
+        "import_module": "sciona.atoms.ml.decomposed_march_execution",
+        "source_symbol": "projection_inputs",
+        "description": "Expose orientation probabilities and coefficients for an ordered sum.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.3f968dc5b068",
+      "fingerprint": "443f16f62972dd3e56ec95ed2af833976cfed7d6b51244ec22da0640f4001d62",
+      "internal_registered_provider_dependencies": []
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_march_execution.result",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_march_execution.result",
+      "version_id": "1dbf4b4d-f584-5322-a34c-25add3cd68f2",
+      "content_hash": "0fc3619be40ca84f8e343aff766036d8bef7a6816e5a5e7be3ae5ff1c6461490",
+      "provider_sha256": "9eb88dafd5dbcb47bc8b6746bd8246b36b704768dcd97a65bf60c8f975397db9",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "total",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "counts",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Divide the external ordered orientation total by two and restore the complete JSON result.",
+      "parameters": {
+        "total": "Nonempty finite float64 rank-one total in [0,2] from the same-invocation ordered sum.",
+        "counts": "Exact training_rows/calibration_rows/predicted_matchups dictionary from fit_scores."
+      },
+      "validity_bounds": "Require Python integer counts excluding bool, at least two training/calibration rows, and predicted_matchups equal to total length. Multiply total by .5 and convert probabilities to a list; require strict JSON serialization. Bounds and counts do not authenticate execution or same-invocation provenance.",
+      "outputs": "Strict JSON probabilities plus training_rows, calibration_rows and predicted_matchups.",
+      "plain_limits": "Return paired prediction probabilities and row counts. The input total must belong to this invocation.",
+      "reuse": "Compatible paired binary prediction aggregation across domains; preserves the original result naming and half-sum policy.",
+      "atom_id": "69a68863-cb2a-5867-a5ec-516fbdd1eda9",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_march_execution.result",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_march_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_march_execution",
+        "import_module": "sciona.atoms.ml.decomposed_march_execution",
+        "source_symbol": "result",
+        "description": "Scale the external sum and return probabilities with lifecycle counts.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.0fc3619be40c",
+      "fingerprint": "c0fefcfbcbdabe1a02a39287181c82e494603f82a596e5d9afc2f99d2f038b97",
+      "internal_registered_provider_dependencies": []
+    }
+  ],
+  "graph_digest": "f4d1eeb9501b65841be637623e369660b1f34fe23a60d3810b837688aac03a67",
+  "tests": {
+    "tests": 88,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "graph_cases": [
+    {
+      "seed": 0,
+      "elo_scale": 200.0,
+      "nodes_executed": 10,
+      "all_uncached": true,
+      "probability_bytes_equal": true,
+      "full_result_equal": true,
+      "nontrivial_orientation_predictions": true
+    },
+    {
+      "seed": 3,
+      "elo_scale": 400.0,
+      "nodes_executed": 10,
+      "all_uncached": true,
+      "probability_bytes_equal": true,
+      "full_result_equal": true,
+      "nontrivial_orientation_predictions": true
+    },
+    {
+      "seed": 11,
+      "elo_scale": 800.0,
+      "nodes_executed": 10,
+      "all_uncached": true,
+      "probability_bytes_equal": true,
+      "full_result_equal": true,
+      "nontrivial_orientation_predictions": true
+    }
+  ],
+  "installed_packages": {
+    "annotated-types": {
+      "version": "0.7.0",
+      "hashed_files_verified": 7,
+      "active_requirements": []
+    },
+    "asttokens": {
+      "version": "2.4.1",
+      "hashed_files_verified": 13,
+      "active_requirements": [
+        "six>=1.12.0"
+      ]
+    },
+    "icontract": {
+      "version": "2.7.3",
+      "hashed_files_verified": 16,
+      "active_requirements": [
+        "asttokens<3,>=2",
+        "typing_extensions"
+      ]
+    },
+    "joblib": {
+      "version": "1.5.3",
+      "hashed_files_verified": 143,
+      "active_requirements": []
+    },
+    "networkx": {
+      "version": "3.6.1",
+      "hashed_files_verified": 602,
+      "active_requirements": []
+    },
+    "numpy": {
+      "version": "2.2.6",
+      "hashed_files_verified": 876,
+      "active_requirements": []
+    },
+    "pydantic": {
+      "version": "2.12.5",
+      "hashed_files_verified": 111,
+      "active_requirements": [
+        "annotated-types>=0.6.0",
+        "pydantic-core==2.41.5",
+        "typing-extensions>=4.14.1",
+        "typing-inspection>=0.4.2"
+      ]
+    },
+    "pydantic-core": {
+      "version": "2.41.5",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.14.1"
+      ]
+    },
+    "scikit-learn": {
+      "version": "1.8.0",
+      "hashed_files_verified": 960,
+      "active_requirements": [
+        "joblib>=1.3.0",
+        "numpy>=1.24.1",
+        "scipy>=1.10.0",
+        "threadpoolctl>=3.2.0"
+      ]
+    },
+    "scipy": {
+      "version": "1.17.1",
+      "hashed_files_verified": 1423,
+      "active_requirements": [
+        "numpy<2.7,>=1.26.4"
+      ]
+    },
+    "six": {
+      "version": "1.17.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "threadpoolctl": {
+      "version": "3.6.0",
+      "hashed_files_verified": 5,
+      "active_requirements": []
+    },
+    "typing-extensions": {
+      "version": "4.16.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "typing-inspection": {
+      "version": "0.4.2",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.12.0"
+      ]
+    }
+  },
+  "software_sha256": {
+    "scripts/review_march_decomposed_providers.py": "7adcbe03ef5ea6da752931e14bb5f9eb47ade6c1c113f0bf003c5c804c6c4afc",
+    "scripts/stage_march_decomposed_providers.py": "860758a9990cc9c324bc1ab1ab554f28e49b36e224f3671054e61f2a279b635e",
+    "scripts/decomposed_march_provider_contracts.py": "6d36bc6f2022cca1243cccb3e06343b11dec2615c2e71cbcdec4d70ba9232c02",
+    "sciona/decomposed_march_runtime.py": "608491a50438779eaefaccb080d0922badef500487dd2dc6dc7cbfaa7fb5463d",
+    "sciona/decomposed_march_graph.py": "536b3534df89813446cbf796512010d2a75d260e47cf0f63bd4d9c1d80e5cd38",
+    "sciona/march_contract.py": "2a131fdec7724ec13ed6da2bb030afb94dc415aec71e1b33dd74824449e11b5c",
+    "sciona/march_features.py": "54a23fd4979ec75d8d3823d658f3b809b4bb51bc57240e6ae36094d09b633f55",
+    "sciona/march_training.py": "3617008fefdff0d2748282b1407739bc956e1d9f61489216d720a9aa4fec86ee",
+    "sciona-atoms-ml/src/sciona/atoms/ml/decomposed_march_execution.py": "9eb88dafd5dbcb47bc8b6746bd8246b36b704768dcd97a65bf60c8f975397db9"
+  },
+  "imports": {
+    "scripts/review_march_decomposed_providers.py": [
+      "from pathlib import Path",
+      "from sciona.atoms.ml import decomposed_march_execution as provider",
+      "from scripts.review_sigmoid_provider_semantics import review as sigmoid_review",
+      "from scripts.stage_march_decomposed_providers import reviewed_plan, ROOT, sha, require",
+      "from scripts.validate_decomposed_march_graph_execution import validate as execute_graph",
+      "import ast",
+      "import inspect",
+      "import json"
+    ],
+    "scripts/stage_march_decomposed_providers.py": [
+      "from collections import Counter",
+      "from psycopg.types.json import Jsonb",
+      "from sciona.atoms.provider_inventory import ProviderRepo",
+      "from sciona.atoms.supabase_seed import AtomSeedRow, _parse_registered_atoms",
+      "from sciona.decomposed_march_graph import build_decomposed_march_graph",
+      "from sciona.services.execution_graph_codec import encode_execution_graph",
+      "from scripts.import_flavours_provider_drafts import ROOT",
+      "from scripts.import_flavours_provider_drafts import connect",
+      "from scripts.import_residual_execution_drafts import comparable, ensure_row",
+      "from scripts.review_decomposed_m5u_implementation import interfaces",
+      "from scripts.validate_decomposed_march_baseline import sha",
+      "from uuid import NAMESPACE_URL, UUID, uuid5",
+      "import argparse",
+      "import hashlib",
+      "import importlib",
+      "import inspect",
+      "import json",
+      "import subprocess"
+    ],
+    "scripts/decomposed_march_provider_contracts.py": [],
+    "sciona/decomposed_march_runtime.py": [
+      "from sciona.march_contract import Prepared, prepare",
+      "from sciona.march_features import season_features, matchup_features",
+      "from sklearn.exceptions import ConvergenceWarning",
+      "from sklearn.linear_model import LogisticRegression",
+      "from sklearn.pipeline import make_pipeline",
+      "from sklearn.preprocessing import StandardScaler",
+      "import copy",
+      "import json",
+      "import numpy as np",
+      "import warnings"
+    ],
+    "sciona/decomposed_march_graph.py": [
+      "from sciona.architect.models import AlgorithmicNode, DependencyEdge, IOSpec, NodeStatus",
+      "from sciona.march_graph import build_march_graph"
+    ],
+    "sciona/march_contract.py": [
+      "from dataclasses import dataclass",
+      "from sciona.march_training import fit_predict",
+      "import copy",
+      "import json"
+    ],
+    "sciona/march_features.py": [
+      "import math",
+      "import networkx as nx",
+      "import numpy as np"
+    ],
+    "sciona/march_training.py": [
+      "from sciona.march_features import season_features, matchup_features",
+      "from sklearn.calibration import CalibratedClassifierCV",
+      "from sklearn.exceptions import ConvergenceWarning",
+      "from sklearn.frozen import FrozenEstimator",
+      "from sklearn.linear_model import LogisticRegression",
+      "from sklearn.pipeline import make_pipeline",
+      "from sklearn.preprocessing import StandardScaler",
+      "import numpy as np",
+      "import warnings"
+    ],
+    "sciona-atoms-ml/src/sciona/atoms/ml/decomposed_march_execution.py": [
+      "from sciona.decomposed_march_runtime import features as implementation",
+      "from sciona.decomposed_march_runtime import fit_scores as implementation",
+      "from sciona.decomposed_march_runtime import pairings as implementation",
+      "from sciona.decomposed_march_runtime import projection_inputs as implementation",
+      "from sciona.decomposed_march_runtime import result as implementation",
+      "from sciona.ghost.registry import register_atom",
+      "import numpy as np"
+    ]
+  },
+  "evidence_sha256": {
+    "decomposed_march_graph_execution.json": "5fe393e45edfb9e73cc65faa3291bbbc0cd14b4f2876b4f1beead87790c5badb",
+    "decomposed_march_interfaces.json": "1b7c92fb1efdee783a867c857cd021e4207a0145594bb4f75732ce9b515a04c8",
+    "march_decomposed_provider_intake_plan.json": "6b5a406081061c453efcd34a1a91478a2ac8fa8f9af05f753024ebdad2c235a0",
+    "march_decomposed_provider_intake_gates.json": "4f68fff3fc60753a3e2af9b76df1697013545f0bb04ecb31330ce7edadd075a4"
+  },
+  "resource_policy": {
+    "native_threads": 1,
+    "serial_graph_cases": true,
+    "test_workers": 1
+  },
+  "limitations": [
+    "Automated Tier 3 implementation qualification only; no human Tier 1 review or Tier 2 usage certification.",
+    "The source describes a generic benchmark topology, not an identified historical winning solution. No competitive accuracy or true strength-of-schedule claim is made.",
+    "Complete synthetic graph results match the unchanged reference. Matrix-only tests demonstrate mechanical reuse, not empirical cross-domain accuracy.",
+    "Season feature aggregation and mirrored chronological pairing retain the source recipe. Dense standardized binary fitting supports arbitrary positive feature widths; sigmoid fit/predict and ordered sum remain independently bound generic providers.",
+    "Intermediate provenance and population independence are caller responsibilities; shape and chronology checks do not authenticate them.",
+    "Existing sigmoid fitting does not check optimizer success. Finite calibration coefficients do not establish convergence; base logistic fitting does treat ConvergenceWarning as an error.",
+    "Installed package files match their own RECORD hashes; publisher authenticity, clean deployment, optional extras and other platforms remain unqualified.",
+    "Provider publication transaction gates and stored corrected-original CDG execution/publication remain separate requirements."
+  ]
+}
