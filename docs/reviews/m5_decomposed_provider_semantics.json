@@ -1,0 +1,634 @@
+{
+  "format": "m5-decomposed-provider-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "review_source": "automated",
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_m5_execution.blend_inputs",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_m5_execution.blend_inputs",
+      "version_id": "76ab8451-2edf-5362-a9e3-7f40a5329c95",
+      "content_hash": "66eceb8cd54ab5c3b5910b250c3b972a4328183f04e866f0a631da10d8d77f42",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "forecasted",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "coefficients",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "b493f0d92af5cf0ff8f3ff4d2ec81d59457ebc8027c0f9dc0cfac889fa131ef9",
+      "classification": "source_recipe_adapter",
+      "atom_id": "1367a94a-5de2-57b3-a93a-bf7ace9478a6",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_m5_execution.blend_inputs",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_m5_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_m5_execution",
+        "import_module": "sciona.atoms.ml.decomposed_m5_execution",
+        "source_symbol": "blend_inputs",
+        "description": "Flatten the six family matrices and expose unit coefficients.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.66eceb8cd54a",
+      "fingerprint": "7bf9a9fd924b1ca28def7abd701b1e5088183e5e739b705e19c6875419ac2828",
+      "operation": "Flatten six aligned forecast matrices and expose unit coefficients.",
+      "plain_limits": "Check all six forecast arrays. Keep their order, copy them, and assign one weight to each. Leave addition and division to the following steps.",
+      "validity_bounds": "Require an exact dictionary with families convertible to an array of shape (6,N,28), N positive, exact float64 dtype and finite nonnegative values. Return a fresh C-contiguous float64 matrix shaped (6,N*28) in series-major, horizon-minor order and a six-element float64 vector of ones. Do not normalize, sum, reorder families or mutate caller arrays. Other forecast metadata is not validated here; shape checks do not establish series identity.",
+      "parameters": {
+        "forecasted": "Same-invocation complete forecast output containing all six aligned family matrices."
+      },
+      "outputs": "Tuple values, coefficients: fresh flattened matrix and unit vector for the independently bound ordered weighted sum.",
+      "dependencies": [
+        "sciona.decomposed_m5_runtime.blend_inputs",
+        "numpy",
+        "sciona.ghost.registry (registration only)"
+      ],
+      "reuse": "Independent grouped nonnegative time-series forecasting recipe accepting caller-defined series, hierarchy roles, calendar categories and known price-like covariates across domains. The five hierarchy roles, seven calendar category roles, eleven target groupings, six model families, 28-step horizon and equal mean are recipe policy. Applicability requires these roles and nonnegative Tweedie targets; arbitrary signed signals are unsupported. The separately bound ordered weighted sum is domain independent and does not impose these policies. Intermediates must come from one invocation; structural checks do not authenticate provenance. Historical accuracy and original winning-model equivalence are unproven.",
+      "internal_registered_provider_dependencies": [],
+      "callable_dependency_contracts": {}
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_m5_execution.features",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_m5_execution.features",
+      "version_id": "c2557f03-247a-500e-8da9-88b56e9f5539",
+      "content_hash": "8392a22f5fa2df67c3439043d160b31f627d63ca2b6f7b5cc1d6423361554bc0",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "transformed",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "b493f0d92af5cf0ff8f3ff4d2ec81d59457ebc8027c0f9dc0cfac889fa131ef9",
+      "classification": "source_recipe_adapter",
+      "atom_id": "835dde54-a556-52be-a600-e04e4f105a56",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_m5_execution.features",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_m5_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_m5_execution",
+        "import_module": "sciona.atoms.ml.decomposed_m5_execution",
+        "source_symbol": "features",
+        "description": "Construct the full prepared feature grid from explicit caller roles.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.8392a22f5fa2",
+      "fingerprint": "ae6963f770df613fd84e5978717351257bba04d65b5f6f26a8e9b2324fc481ba",
+      "operation": "Construct the complete aligned feature grid for all six forecast families.",
+      "plain_limits": "Use checked series history, group roles, dates and known covariates. Build all past and future rows. Future target values stay missing. Some features use known future covariates; target averages use eligible past labels.",
+      "validity_bounds": "Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation through prepare, including full preprocessing validation. Unpack history and price values as float64. Build day-major history plus 28 missing-target future days, filter rows before each pair first price week, and require every input series to retain all 28 future rows. Retain five hierarchy categorical vocabularies and seven calendar category roles. Require the eleven groupings in reviewed order. Join prices by unique pair/week; preserve source first-calendar-week semantics and range-based precision reduction. Known future prices can affect group features. Create date features, lags 28 through 42, shift-28 rolling mean/sample-standard-deviation windows 7,14,30,60,180, and temporary mean shifts 1,7,14 with windows 7,14,30,60. Incomplete windows remain missing; stored lag features use float16 and reject infinity after conversion. Fit 22 mean/sample-deviation columns using targets at or before the final history day minus 28, including each eligible row own target. Unseen groups and singleton deviations remain missing. Encoding uses float16 with overflow rejection. This is not out-of-fold encoding or an independent validation split.",
+      "parameters": {
+        "prepared": "Canonical same-invocation Prepared returned by m5_prepare, containing private series history, explicit role and calendar/price configuration, and both training-start controls."
+      },
+      "outputs": "Dictionary with aligned grid, categorical, prices, calendar, lags, encoding, encoding_cutoff and encoding_groupings. Contains private target history and role codes; retain only in runtime memory.",
+      "dependencies": [
+        "sciona.decomposed_m5_runtime.features",
+        "sciona.m5_execution",
+        "sciona.m5_preprocessing",
+        "sciona.m5_grid",
+        "sciona.m5_join",
+        "sciona.m5_calendar",
+        "sciona.m5_price_block",
+        "sciona.m5_prices",
+        "sciona.m5_precision",
+        "sciona.m5_lags",
+        "sciona.m5_encoding",
+        "numpy",
+        "pandas",
+        "sciona.ghost.registry (registration only)"
+      ],
+      "reuse": "Independent grouped nonnegative time-series forecasting recipe accepting caller-defined series, hierarchy roles, calendar categories and known price-like covariates across domains. The five hierarchy roles, seven calendar category roles, eleven target groupings, six model families, 28-step horizon and equal mean are recipe policy. Applicability requires these roles and nonnegative Tweedie targets; arbitrary signed signals are unsupported. The separately bound ordered weighted sum is domain independent and does not impose these policies. Intermediates must come from one invocation; structural checks do not authenticate provenance. Historical accuracy and original winning-model equivalence are unproven.",
+      "internal_registered_provider_dependencies": [],
+      "callable_dependency_contracts": {}
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_m5_execution.fit",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_m5_execution.fit",
+      "version_id": "c5a3efb5-4842-544c-9950-ad6f10665561",
+      "content_hash": "a193a98bee33c0b451fd39f6d74a7bff46cbf36ad418ee023631b18e9f6b7c35",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "transformed",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "fitted",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "b493f0d92af5cf0ff8f3ff4d2ec81d59457ebc8027c0f9dc0cfac889fa131ef9",
+      "classification": "source_recipe_adapter",
+      "atom_id": "002c58c7-0e49-53fc-91e9-000770de6208",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_m5_execution.fit",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_m5_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_m5_execution",
+        "import_module": "sciona.atoms.ml.decomposed_m5_execution",
+        "source_symbol": "fit",
+        "description": "Train all pools in all six families with the full learner schedules.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.a193a98bee33",
+      "fingerprint": "92bcb46449c1ae850e8ecfde5e8ef3052d08940993c2b4962e008bf6c2580479",
+      "operation": "Train every pool in all six families for the complete configured schedule.",
+      "plain_limits": "Train all groups with and without prediction feedback, using three group levels. Run every training round. Reported diagnostics are not independent accuracy estimates.",
+      "validity_bounds": "Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation through prepare, including full preprocessing validation. Derive cutoff as first_day plus history width minus one; use explicit recursive_first_day and nonrecursive_first_day. Require same-invocation transformed blocks. Preflight all recursive and nonrecursive families at outlet, outlet/category and outlet/department pool levels. Require every eligible grid row to be covered exactly once per family, nonempty training and diagnostic rows for each pool, finite training targets and at least one positive training target per pool. Preserve family-specific feature order and precision. Train serially using deterministic one-thread column-wise LightGBM GBDT Tweedie objective with variance power 1.1, 3000 rounds without early stopping, learning rate .015, subsample .5 each round, feature fraction .5, max_bin 100 and boost_from_average=False. Recursive outlet uses 2047 leaves and minimum leaf rows 4095; other families use 255 leaves and minimum rows 255. Seeds are 42 recursive and 1995 nonrecursive. Recursive diagnostic rows overlap the last 28 training days; nonrecursive future diagnostic missing labels are replaced with zero. Diagnostics do not select training duration. Leaf constraints may yield fewer retained iterations despite 3000 evaluated rounds. This is a complete retraining operation, not inference from historical weights.",
+      "parameters": {
+        "prepared": "Canonical same-invocation Prepared returned by m5_prepare, containing private series history, explicit role and calendar/price configuration, and both training-start controls.",
+        "transformed": "Complete same-invocation features output with aligned private targets, roles and feature blocks."
+      },
+      "outputs": "Dictionary with models (all PoolModel instances) and cutoff. Each model retains recursive flag, pooling level, pool tuple, row mapping, feature order, fitted model and aggregate training report. Private mappings must not be published.",
+      "dependencies": [
+        "sciona.decomposed_m5_runtime.fit",
+        "sciona.m5_execution",
+        "sciona.m5_pooled_training",
+        "sciona.m5_family",
+        "sciona.m5_training",
+        "numpy",
+        "pandas",
+        "lightgbm",
+        "sciona.ghost.registry (registration only)"
+      ],
+      "reuse": "Independent grouped nonnegative time-series forecasting recipe accepting caller-defined series, hierarchy roles, calendar categories and known price-like covariates across domains. The five hierarchy roles, seven calendar category roles, eleven target groupings, six model families, 28-step horizon and equal mean are recipe policy. Applicability requires these roles and nonnegative Tweedie targets; arbitrary signed signals are unsupported. The separately bound ordered weighted sum is domain independent and does not impose these policies. Intermediates must come from one invocation; structural checks do not authenticate provenance. Historical accuracy and original winning-model equivalence are unproven.",
+      "internal_registered_provider_dependencies": [],
+      "callable_dependency_contracts": {}
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_m5_execution.forecast",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_m5_execution.forecast",
+      "version_id": "dae4178b-dae6-52c5-9d45-67990d183521",
+      "content_hash": "02d7a651a45ac4e4879dd79c05635cb38dc8765c4acbea6143ee7cae9727cee0",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "transformed",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "fitted",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "forecasted",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "b493f0d92af5cf0ff8f3ff4d2ec81d59457ebc8027c0f9dc0cfac889fa131ef9",
+      "classification": "source_recipe_adapter",
+      "atom_id": "cc894295-ef7b-549a-a550-db021f58cd22",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_m5_execution.forecast",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_m5_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_m5_execution",
+        "import_module": "sciona.atoms.ml.decomposed_m5_execution",
+        "source_symbol": "forecast",
+        "description": "Forecast all families for 28 days with separate recursive feedback.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.02d7a651a45a",
+      "fingerprint": "3b821899c7c40a2448aa4c00470edd01d80e202401c2a090929872b3225451e0",
+      "operation": "Forecast all 28 future steps separately for every complete model family.",
+      "plain_limits": "Use all trained groups from this run. Keep prediction feedback separate for each family. Return all six forecast arrays before averaging.",
+      "validity_bounds": "Require complete same-invocation transformed blocks and fitted models/cutoff. Require integer cutoff, every series to have exactly 28 unique aligned future rows and all future targets missing. Require exactly the six recursive/nonrecursive pooling-family keys and each unique expected pool inventory. Copy quantized history into independent float64 state for each family. For recursive families, retain the last 100 history days plus the horizon and recompute temporary rolling means for shifts 1,7,14 and windows 7,14,30,60 separately each day, using only that family predictions as feedback. Fixed features remain as prepared. Nonrecursive families predict the complete horizon once. Require model feature order to match training, nonempty pool predictions, finite nonnegative outputs and exactly one assignment per wanted row. Return matrices in sorted series-index order, horizon order and recursive-then-nonrecursive family order, each using outlet, outlet/category, outlet/department order. No averaging, multiplier or reconciliation is performed here.",
+      "parameters": {
+        "transformed": "Complete same-invocation features output.",
+        "fitted": "Complete same-invocation fit output with all pool models and cutoff."
+      },
+      "outputs": "Dictionary with families float64 array shaped (6,series_count,28), models count, horizon=28 and explicit independent CPU scope. Forecast arrays remain runtime values.",
+      "dependencies": [
+        "sciona.decomposed_m5_runtime.forecast",
+        "sciona.m5_forecast",
+        "sciona.m5_family",
+        "sciona.m5_lags",
+        "numpy",
+        "sciona.ghost.registry (registration only)"
+      ],
+      "reuse": "Independent grouped nonnegative time-series forecasting recipe accepting caller-defined series, hierarchy roles, calendar categories and known price-like covariates across domains. The five hierarchy roles, seven calendar category roles, eleven target groupings, six model families, 28-step horizon and equal mean are recipe policy. Applicability requires these roles and nonnegative Tweedie targets; arbitrary signed signals are unsupported. The separately bound ordered weighted sum is domain independent and does not impose these policies. Intermediates must come from one invocation; structural checks do not authenticate provenance. Historical accuracy and original winning-model equivalence are unproven.",
+      "internal_registered_provider_dependencies": [],
+      "callable_dependency_contracts": {}
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_m5_execution.result",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_m5_execution.result",
+      "version_id": "aaf05271-3e74-5d51-ad30-1ae83192bebf",
+      "content_hash": "4785bee6e7fe0e019d38e225978a05c33b5c578c14d14244d2e003a6dec71d22",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "forecasted",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "total",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "b493f0d92af5cf0ff8f3ff4d2ec81d59457ebc8027c0f9dc0cfac889fa131ef9",
+      "classification": "source_recipe_adapter",
+      "atom_id": "2de11ddb-9166-5ac1-9e88-d55542507f64",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_m5_execution.result",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_m5_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_m5_execution",
+        "import_module": "sciona.atoms.ml.decomposed_m5_execution",
+        "source_symbol": "result",
+        "description": "Divide the ordered sum by six and package the complete forecast.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.4785bee6e7fe",
+      "fingerprint": "3f9fb306af0b95c854c4c1401586d3f85316636cc9346e1ab8312b7630635fa8",
+      "operation": "Reshape the ordered family sum and divide once by six.",
+      "plain_limits": "Use the complete sum from this run. Restore series and horizon shape, then divide by six. Return every forecast with the stated model count and scope.",
+      "validity_bounds": "Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical payload revalidation through prepare, including full preprocessing validation. Revalidate the six family arrays through blend_inputs. Require total to be exact float64, finite, nonnegative, one-dimensional and length equal to input series count times 28. Require forecasted family series count to match the prepared history count. Reshape total to (series_count,28), divide once by six, preserve row order, convert to lists and require strict JSON serialization. The model count and scope are read from forecasted; this adapter does not authenticate those metadata fields or recompute the supplied sum. Same-invocation provenance is required. No constant multiplier or hierarchical reconciliation is added.",
+      "parameters": {
+        "prepared": "Canonical same-invocation Prepared returned by m5_prepare, containing private series history, explicit role and calendar/price configuration, and both training-start controls.",
+        "forecasted": "Same-invocation complete forecast output with family arrays, models and scope.",
+        "total": "Same-invocation generic ordered sum over the six flattened family arrays with unit coefficients."
+      },
+      "outputs": "Strict JSON dictionary with forecast, models, horizon=28, model_families=6 and scope. Includes all series and all 28 steps; identities and private input configuration are excluded.",
+      "dependencies": [
+        "sciona.decomposed_m5_runtime.result",
+        "sciona.m5_execution",
+        "numpy",
+        "json (Python standard library)",
+        "sciona.ghost.registry (registration only)"
+      ],
+      "reuse": "Independent grouped nonnegative time-series forecasting recipe accepting caller-defined series, hierarchy roles, calendar categories and known price-like covariates across domains. The five hierarchy roles, seven calendar category roles, eleven target groupings, six model families, 28-step horizon and equal mean are recipe policy. Applicability requires these roles and nonnegative Tweedie targets; arbitrary signed signals are unsupported. The separately bound ordered weighted sum is domain independent and does not impose these policies. Intermediates must come from one invocation; structural checks do not authenticate provenance. Historical accuracy and original winning-model equivalence are unproven.",
+      "internal_registered_provider_dependencies": [],
+      "callable_dependency_contracts": {}
+    }
+  ],
+  "graph_digest": "d9cbb6f5c411e93e99d81a893e828d512ea69be6491d3b9dde95755af1d5d76f",
+  "software_sha256": {
+    "sciona-atoms-ml/src/sciona/atoms/ml/decomposed_m5_execution.py": "b493f0d92af5cf0ff8f3ff4d2ec81d59457ebc8027c0f9dc0cfac889fa131ef9",
+    "sciona/decomposed_m5_graph.py": "0752fc1253ee05da23a7ba739162eb0b9d594b99aa69035329a0533a609efeff",
+    "sciona/decomposed_m5_runtime.py": "e534f6ce5bf059f50eb452ee3577aec544b416376b376bb6366d5eb1fd71b868",
+    "sciona/m5_calendar.py": "32f729ea52f80f109ff3ec8f46d595051a14e97f3b13a640f238e23e1ce4470d",
+    "sciona/m5_encoding.py": "83cdef7393eb4d87f1df0ca2717462aa8c94196d0cc644bbe493bbee62eac18a",
+    "sciona/m5_execution.py": "af183997bcbf809b444d4c96342eb6f681fab31e6b686fead191a920c4bc25b8",
+    "sciona/m5_family.py": "51283e76eb1b00eff625ea570e2a194c9774997925f4829e27acb6277f1ffe05",
+    "sciona/m5_forecast.py": "807482ddb6c7dd88c76697c16cb5a3746b463d887a20bdb562bb8f7181d15d70",
+    "sciona/m5_graph.py": "226fafcb7f1e1722a1f5cace8dff6c817825af229e006df42581532fc9eb6d9c",
+    "sciona/m5_grid.py": "9f3831c77638395b07be10268c30503adbde39a7345217611ad53c7b89ea0787",
+    "sciona/m5_join.py": "4d574d15807afe29c92da95e17cf9f0dd764cf639935b1603682d8e23e074d49",
+    "sciona/m5_lags.py": "c74e2b42dfdd3dacf09bc3c2e1be6f956b9c8252e2c89562693e40b4b206b7c4",
+    "sciona/m5_pooled_training.py": "9c674a5d7a8c9f6c5083a530aaed3fa13836f01885736949cc41f764c5d75ff7",
+    "sciona/m5_precision.py": "7606b0ce072e14bdca3b711562af56386143ea1652ffa779df9f64a733ff64d4",
+    "sciona/m5_preprocessing.py": "76823cb49cedc165ab4a8201f296cf485c9c119eb221f874c240849c30ad9dcd",
+    "sciona/m5_price_block.py": "f1d2623a4956a3f79c12adcef52a8dc53a702fdae9cacbdc2c979925dc27b016",
+    "sciona/m5_prices.py": "12d228b78d17e357fca0dce1a881cb1a3090204065f1a8a8d7782d20f660c512",
+    "sciona/m5_training.py": "77ce1bfb9da5f31f0b68e6142a24686c241e7a45bb72d370f1f897431951bf83",
+    "sciona/services/execution_graph_codec.py": "1ad42332f8e28adf4ee3f8d53184a4af8351f66304efa1703c63ed32989082a6",
+    "sciona/visualizer/runner.py": "22a49655e61c10d800aa2a6a9b5115cd873a9e699ea9903fa0f856aea8af67a4",
+    "scripts/audit_decomposed_m5_packages.py": "864e8c7e1bde54ecb0a55f60fb2923dbfd6a8a3b910495e6e7beeaf220f9dfd5",
+    "scripts/decomposed_m5_provider_contracts.py": "5ed3c88935354db4a75c70106f165ef8b3cb992e0bf21c0f0d0a0656dedf4b80",
+    "scripts/review_decomposed_m5_implementation.py": "56baafd13291a2b259488a9bb0e7f1d2633e99d9c2132d75b3250028427be78d",
+    "scripts/review_m5_decomposed_providers.py": "7cd3579e497f7a90c6e086d0023f91772ee607ff7a7283c82dc3684e2bd80fdf",
+    "scripts/stage_m5_decomposed_providers.py": "bfc8701a6cd565217d00a6dc7391172a4d80b3d1fb7f5e15d5bce60864212bd3"
+  },
+  "imports": {
+    "sciona/m5_training.py": [
+      "import lightgbm as lgb",
+      "import numpy as np",
+      "import pandas as pd"
+    ],
+    "sciona/m5_graph.py": [
+      "from sciona.architect.handoff import CDGExport",
+      "from sciona.architect.models import AlgorithmicNode, DependencyEdge, IOSpec, NodeStatus"
+    ],
+    "sciona/m5_grid.py": [
+      "import numpy as np"
+    ],
+    "sciona/m5_join.py": [
+      "import numpy as np"
+    ],
+    "sciona/m5_preprocessing.py": [
+      "from datetime import date",
+      "from sciona.m5_calendar import features as date_features",
+      "from sciona.m5_encoding import encode",
+      "from sciona.m5_grid import build as build_grid",
+      "from sciona.m5_join import left_indices",
+      "from sciona.m5_lags import features as lag_features",
+      "from sciona.m5_precision import downcast",
+      "from sciona.m5_price_block import build as price_features",
+      "import numpy as np",
+      "import pandas as pd"
+    ],
+    "sciona/m5_precision.py": [
+      "import numpy as np"
+    ],
+    "sciona/m5_calendar.py": [
+      "from datetime import date",
+      "import numpy as np"
+    ],
+    "sciona/m5_lags.py": [
+      "import numpy as np"
+    ],
+    "sciona/m5_pooled_training.py": [
+      "from dataclasses import dataclass",
+      "from sciona.m5_family import frame, pools",
+      "from sciona.m5_training import fit",
+      "import numpy as np"
+    ],
+    "sciona/m5_family.py": [
+      "from sciona.m5_precision import downcast",
+      "from sciona.m5_preprocessing import GROUPINGS",
+      "from sciona.m5_training import parameters",
+      "import numpy as np",
+      "import pandas as pd"
+    ],
+    "sciona/m5_price_block.py": [
+      "from sciona.m5_join import first_per_key, left_indices, take_numeric",
+      "from sciona.m5_precision import downcast",
+      "from sciona.m5_prices import features",
+      "import numpy as np"
+    ],
+    "sciona/m5_encoding.py": [
+      "import numpy as np"
+    ],
+    "sciona/m5_forecast.py": [
+      "from sciona.m5_family import frame, pools",
+      "from sciona.m5_lags import rolling",
+      "import numpy as np"
+    ],
+    "sciona/m5_execution.py": [
+      "from dataclasses import dataclass",
+      "from sciona.m5_forecast import predict",
+      "from sciona.m5_pooled_training import train",
+      "from sciona.m5_preprocessing import prepare as preprocess",
+      "import hashlib",
+      "import json",
+      "import numpy as np"
+    ],
+    "sciona/m5_prices.py": [
+      "import numpy as np"
+    ],
+    "sciona/decomposed_m5_runtime.py": [
+      "from sciona.m5_execution import Prepared, prepare, unpack, preprocess",
+      "from sciona.m5_forecast import predict_families",
+      "from sciona.m5_pooled_training import train",
+      "import hashlib",
+      "import json",
+      "import numpy as np"
+    ],
+    "sciona/decomposed_m5_graph.py": [
+      "from sciona.architect.models import AlgorithmicNode, DependencyEdge, IOSpec, NodeStatus",
+      "from sciona.m5_graph import build_m5_graph"
+    ],
+    "sciona/visualizer/runner.py": [
+      "from __future__ import annotations",
+      "from pathlib import Path",
+      "from sciona.architect.models import AlgorithmicNode, DependencyEdge, EdgeKind, NodeStatus",
+      "from sciona.ghost.registry import REGISTRY",
+      "from sciona.synthesizer.ghost_sim import _ensure_atoms_imported",
+      "from sciona.telemetry import log_event",
+      "from sciona.visualizer.dataset_manager import DatasetManager",
+      "from typing import Any, Callable, Dict, List, Optional, Tuple",
+      "import dataclasses",
+      "import inspect",
+      "import json",
+      "import logging",
+      "import numpy as np",
+      "import pandas as pd",
+      "import time",
+      "import typing"
+    ],
+    "sciona/services/execution_graph_codec.py": [
+      "from sciona.architect.handoff import CDGExport",
+      "import hashlib",
+      "import json"
+    ],
+    "scripts/audit_decomposed_m5_packages.py": [
+      "from packaging.requirements import Requirement",
+      "from packaging.utils import canonicalize_name",
+      "from pathlib import Path",
+      "import base64",
+      "import hashlib",
+      "import importlib.metadata as metadata",
+      "import json"
+    ],
+    "scripts/review_decomposed_m5_implementation.py": [
+      "from pathlib import Path",
+      "from sciona import m5_execution as original, decomposed_m5_runtime as candidate",
+      "from sciona import m5_pooled_training, m5_forecast",
+      "from sciona.atoms.provider_inventory import ProviderRepo",
+      "from sciona.atoms.supabase_seed import _parse_registered_atoms",
+      "from sciona.decomposed_m5_graph import build_decomposed_m5_graph",
+      "from sciona.services.execution_graph_codec import encode_execution_graph",
+      "from scripts.audit_decomposed_m5_packages import audit",
+      "from scripts.promote_connectomics_execution import boundary_ports, provider_ports",
+      "from typing import get_args, get_origin, get_type_hints",
+      "import hashlib",
+      "import importlib",
+      "import importlib.metadata as metadata",
+      "import inspect",
+      "import json",
+      "import numpy as np",
+      "import subprocess"
+    ],
+    "scripts/stage_m5_decomposed_providers.py": [
+      "from collections import Counter",
+      "from psycopg.types.json import Jsonb",
+      "from sciona.atoms.provider_inventory import ProviderRepo",
+      "from sciona.atoms.supabase_seed import AtomSeedRow, _parse_registered_atoms",
+      "from sciona.decomposed_m5_graph import build_decomposed_m5_graph",
+      "from scripts.import_flavours_provider_drafts import connect",
+      "from scripts.import_residual_execution_drafts import comparable, ensure_row",
+      "from scripts.review_decomposed_m5_implementation import ROOT, review, require, sha, interfaces",
+      "from typing import get_type_hints, get_origin, get_args",
+      "from uuid import NAMESPACE_URL, UUID, uuid5",
+      "import argparse",
+      "import hashlib",
+      "import importlib",
+      "import inspect",
+      "import json",
+      "import numpy as np"
+    ],
+    "scripts/decomposed_m5_provider_contracts.py": [],
+    "scripts/review_m5_decomposed_providers.py": [
+      "from pathlib import Path",
+      "from scripts.audit_decomposed_m5_packages import audit as package_audit",
+      "from scripts.decomposed_m5_provider_contracts import CONTRACTS",
+      "from scripts.review_decomposed_m5_implementation import ROOT, require, sha, review as integration_review",
+      "from scripts.stage_m5_decomposed_providers import reviewed_plan",
+      "import argparse",
+      "import ast",
+      "import importlib.metadata",
+      "import json",
+      "import os",
+      "import platform",
+      "import subprocess",
+      "import tempfile",
+      "import xml.etree.ElementTree as ET"
+    ],
+    "sciona-atoms-ml/src/sciona/atoms/ml/decomposed_m5_execution.py": [
+      "from sciona.decomposed_m5_runtime import blend_inputs as implementation",
+      "from sciona.decomposed_m5_runtime import features as implementation",
+      "from sciona.decomposed_m5_runtime import fit as implementation",
+      "from sciona.decomposed_m5_runtime import forecast as implementation",
+      "from sciona.decomposed_m5_runtime import result as implementation",
+      "from sciona.ghost.registry import register_atom",
+      "import numpy as np"
+    ]
+  },
+  "package_versions": {
+    "joblib": "1.5.3",
+    "lightgbm": "4.7.0",
+    "narwhals": "2.26.0",
+    "numpy": "2.2.6",
+    "pandas": "2.3.3",
+    "python-dateutil": "2.9.0.post0",
+    "pytz": "2026.1.post1",
+    "scikit-learn": "1.8.0",
+    "scipy": "1.17.1",
+    "six": "1.17.0",
+    "threadpoolctl": "3.6.0",
+    "tzdata": "2025.3"
+  },
+  "python_version": "3.13.11",
+  "evidence_sha256": {
+    "m5_decomposed_provider_tests.json": "7dbafc95938459ac72608c1f966fee5c55b07c8b9c2c82ac3ef998ac9c8d68e0",
+    "decomposed_m5_implementation_review.json": "136b1f2f028622b54b50d4821539a4ffb82af8fb24df7d50ed61f57a26957102",
+    "decomposed_m5_graph_execution.json": "3dba22b040f30d7c98aae2cd7ae9a4da4e746da4ab2323ffeac22146d514c649",
+    "m5_decomposed_provider_intake_gates.json": "f66768f07222f6ae011f4d755343a8a6ebf2db09c401cbb961fc015393ac0462",
+    "decomposed_m5_package_files.json": "fb9b94b592c31bc3c12ece6c05ddcc3faa9efe06f614fae3515a5a8fd4e9c81e",
+    "m5_decomposed_provider_intake_plan.json": "71ea9a612ce9d890fbe3857fc9ebebe2873d7d547ad4ccb1b59cd021eaba407d"
+  },
+  "source_qualification_complete": false,
+  "original_cdg_publication_qualified": false,
+  "limitations": [
+    "Automated Tier 3 implementation semantics only; no Tier 1 human certification or Tier 2 usage qualification.",
+    "Five recipe adapters preserve all six pooled forecast families, full 3000-round training and the complete 28-step horizon. The generic ordered weighted sum remains independently bound and domain independent.",
+    "Exact historical notebook details remain unverified. This review qualifies the stated implementation contracts, not historical winning-agent equivalence or original-CDG publication.",
+    "Fresh execution exactly matches the existing reconstruction on generated populations; historical population membership and competitive accuracy are unproven.",
+    "Installed package hashes were checked against their own RECORD files. Clean deployment and independently authenticated publisher signatures are not qualified.",
+    "Native pools and LightGBM calls are bounded to one thread; models train serially. Deployment must configure its own resource limits.",
+    "Software imports are separate from registered-provider dependencies. Same-invocation intermediate provenance is required but not authenticated by structural checks.",
+    "Catalog eligibility, publication transaction gates and existing-provider metadata remain separate checks."
+  ]
+}
