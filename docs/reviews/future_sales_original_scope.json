@@ -1,0 +1,41 @@
+{
+  "format": "future-sales-original-scope.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "source_version_id": "e6803752-90ef-5cab-8b30-5ebeec716c15",
+  "source_content_hash": "ffde31b5d874a8d6fafa0103988b0b9a8e0f13a0169f39ff6dce4e30369423e2",
+  "template_commit": "356193bc371a7f9adc7b210abde04b9b370f55b6",
+  "prior_template_commit": "eb2aabea654e25815e99cac996ce244a66dde164",
+  "template_sha256": "b7ade0befe43880197ca49268eb8db982856012b44603d0091946cc9d2e24a65",
+  "exact_committed_template_equals_intake": true,
+  "original_stages": [
+    "time_aggregation",
+    "target_clipping",
+    "lag_feature_generation",
+    "mean_encoding",
+    "gbdt_modeling"
+  ],
+  "decision": "The full intake explicitly makes mean-encoding representations swappable. Select expanding entity/store/item/category/global means and cyclical period features; learned embeddings, holiday and promotion features are alternative branches, not mandatory additional computations.",
+  "evidence": {
+    "explicit_alternatives": "Can use store, shop, item, category, day-of-week, month, holiday, promotion, target encoding, or learned entity embeddings.",
+    "summary_uses_embeddings_or_encodings": true,
+    "earlier_mean_encoding": "calculate the expanding mean of sales per shop and per item over time to generate robust continuous features",
+    "scope_expansion_commit": "356193bc371a7f9adc7b210abde04b9b370f55b6"
+  },
+  "selected_computations": {
+    "time_aggregation": "Caller-defined periods and fixed store/item/category universe; compensated net transaction summation, absence means zero.",
+    "target_clipping": "Clip net observed period/entity quantities to [0,20] only after summation. Preserve unknown forecast targets.",
+    "lag_feature_generation": "All caller-configured lags and complete-width shifted rolling means, without current or future target access.",
+    "mean_encoding": "Prior-only expanding means for entity/store/item/category/global populations and explicit cyclic period features, using the source-authorized encoding branch.",
+    "gbdt_modeling": "LightGBM squared error with clipped-prediction RMSE validation, every configured TPE trial including model-based sampling, early stopping and final selected-round refit."
+  },
+  "limits": [
+    "The template is a generic benchmark topology with a competition landing-page citation, not a historical winning implementation.",
+    "Stage descriptions must be interpreted together with the explicit applicability/swappable_stages contract; isolated descriptions overstated the mandatory feature set in the previous readiness audit.",
+    "Do not claim implementation of omitted holiday, promotion or embedding branches. Cross-domain reuse requires the selected feature and observation-availability assumptions.",
+    "Clipping does not by itself replicate a competition evaluation metric. The realization declares its squared-error objective and clipped-prediction RMSE; no historical metric or accuracy equivalence is certified.",
+    "All configured trials and feature operations remain mandatory. This resolution does not approve providers, stored execution or the original CDG."
+  ],
+  "reviewer_sha256": "f80b6eb076a47d2e5a3570579066d1472f12496c5d72748d490702fb69f63311"
+}
