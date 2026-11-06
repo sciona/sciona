@@ -1,0 +1,118 @@
+{
+  "approved": false,
+  "graph_digest": "9f4b96c707fa1361647681167121906f958a746c3c8fa84c36a1fd883e56ec93",
+  "review_sha256": "91cb40b39524fe40849d60fc96f7d0dfb2f93644a3d67953674bc08163662f10",
+  "intake_script_sha256": "6e5cde768330cbb2b73294f21b5a8d5bbd24038ec0b80252465dc477828977a4",
+  "providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.sklearn.cluster.lloyd_fit.fit_lloyd_clusters",
+      "catalog_fqdn": "sciona.atoms.ml.sklearn.cluster.lloyd_fit.fit_lloyd_clusters",
+      "atom_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+      "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+      "content_hash": "6bc731a7bb4bc45de7e185901c3222b20636cd4529d23e07aa61c506c72b521b",
+      "provider_sha256": "f1035bd95ab67f2265ae4b106dd5d7b6aaae9d6a864d57738b127283e4e38e3f",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.sklearn.cluster.lloyd_fit.fit_lloyd_clusters",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.sklearn.cluster.lloyd_fit",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.sklearn.cluster.lloyd_fit",
+        "import_module": "sciona.atoms.ml.sklearn.cluster.lloyd_fit",
+        "source_symbol": "fit_lloyd_clusters",
+        "description": "Return centers (K,D) and labels (N,) for dense Euclidean clustering. Requires a nonempty finite float32/float64 matrix. Preserves input precision, copies storage, uses k-means++ initialization and Lloyd updates, and bounds native threads to one. Seed is an unsigned 32-bit integer; counts are positive and K <= N. Tolerance is finite and nonnegative. Features must be scaled by the caller to define a meaningful Euclidean metric. Labels retain backend order; duplicate points can yield fewer distinct clusters. Neither global optimality nor cross-version numeric reproducibility is promised.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.6bc731a7bb4b",
+      "fingerprint": "79285af27705ba01625266a5db6b2e5e9317209eb2654a1f1ce6654f7f4672e0",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "points",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite float32 or float64 matrix (N,D). Input precision is preserved and storage copied. Caller controls feature scaling and the Euclidean metric; no domain identifiers or partitioning policy."
+        },
+        {
+          "direction": "input",
+          "name": "n_clusters",
+          "ordinal": 1,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Positive integer K <= N; booleans rejected. Duplicate points can yield fewer distinct clusters."
+        },
+        {
+          "direction": "input",
+          "name": "random_state",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": false,
+          "default_value_repr": "0",
+          "constraints": "Integer seed in [0, 2**32-1]; booleans rejected. No cross-version reproducibility guarantee."
+        },
+        {
+          "direction": "input",
+          "name": "n_init",
+          "ordinal": 3,
+          "type_desc": "int",
+          "required": false,
+          "default_value_repr": "1",
+          "constraints": "Positive integer restart count. Each run uses k-means++ initialization; best inertia is selected by the installed backend."
+        },
+        {
+          "direction": "input",
+          "name": "max_iter",
+          "ordinal": 4,
+          "type_desc": "int",
+          "required": false,
+          "default_value_repr": "300",
+          "constraints": "Positive integer Lloyd iteration limit per restart. A limit does not guarantee convergence or global optimality."
+        },
+        {
+          "direction": "input",
+          "name": "tolerance",
+          "ordinal": 5,
+          "type_desc": "float",
+          "required": false,
+          "default_value_repr": "0.0001",
+          "constraints": "Finite nonnegative convergence tolerance interpreted by the installed scikit-learn backend; booleans rejected."
+        },
+        {
+          "direction": "output",
+          "name": "centers",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite copied center matrix (K,D), preserving input float precision and backend cluster order. Single native thread; no global optimum guarantee."
+        },
+        {
+          "direction": "output",
+          "name": "labels",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Copied integer vector (N,) indexing returned centers, in caller row order. Cluster numbering is backend-dependent."
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Draft source/interface intake only; semantic publication and dependency gates remain.",
+    "Generic dense Euclidean clustering with caller-defined feature scaling; ring counts, gap detection and layer mapping stay in the recipe."
+  ],
+  "owners": {
+    "sciona-atoms-ml": {
+      "owner_id": "33ed07a2-1bea-5b17-8b71-d6d0e590fdd9",
+      "source_repo_id": "27b787a0-27ed-4760-92b7-ad8e8b4b815c"
+    }
+  },
+  "preserved_sha256": "f839940aa40edfe5734827698947ed1a426a79c16bb215d49820714ff632db50"
+}
