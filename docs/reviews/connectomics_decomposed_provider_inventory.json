@@ -1,0 +1,167 @@
+{
+  "format": "connectomics-decomposed-review.v1",
+  "review_source": "automated",
+  "proposed_tier": 3,
+  "approved": false,
+  "catalog_mutations": 0,
+  "graph_digest": "95e215627881bb6be74d333ad18cd4941663bf8e896c4603ac741e01f234ede2",
+  "graph_nodes": 7,
+  "graph_edges": 22,
+  "providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.connectomics_execution.connectomics_prepare",
+      "catalog_fqdn": "sciona.atoms.ml.connectomics_execution.connectomics_prepare",
+      "version_id": "257e007f-7954-5416-9cfd-f09ea78f34a8",
+      "content_hash": "290da0a04defdb2aada9d9d9d41948b8e7c88879a3073fb04a9b8691b6eb790f",
+      "provider_sha256": "e29240147d80d32ed8f99f83001b82443363d906f62e3c3e1127369b8ec5e5eb",
+      "signature": "(payload: dict) -> object",
+      "bound_nodes": [
+        "prepare"
+      ],
+      "classification": "source_recipe_adapter",
+      "atom_latest": [
+        {
+          "identity": "8e88bf04-bd23-5a25-9e9c-f00ee6f3665a",
+          "status": "approved",
+          "is_publishable": true,
+          "version_id": "257e007f-7954-5416-9cfd-f09ea78f34a8",
+          "content_hash": "290da0a04defdb2aada9d9d9d41948b8e7c88879a3073fb04a9b8691b6eb790f",
+          "trust_tier": 3,
+          "native_eligible": true
+        }
+      ],
+      "atom_exact_eligible": true,
+      "artifact_latest": [
+        {
+          "identity": "8e88bf04-bd23-5a25-9e9c-f00ee6f3665a",
+          "status": "approved",
+          "is_publishable": true,
+          "version_id": "257e007f-7954-5416-9cfd-f09ea78f34a8",
+          "content_hash": "290da0a04defdb2aada9d9d9d41948b8e7c88879a3073fb04a9b8691b6eb790f",
+          "trust_tier": 3,
+          "native_eligible": true
+        }
+      ],
+      "artifact_exact_eligible": true
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.connectomics_filter_execution.execute_prefiltered",
+      "catalog_fqdn": "sciona.atoms.ml.connectomics_filter_execution.execute_prefiltered",
+      "version_id": "82aa95b5-75c7-5576-9d34-ed960ac5bbed",
+      "content_hash": "1a2146edb9a46e90a3721fc74ff7a8268f4c87f9883c81c10b2af9046d1cbdbc",
+      "provider_sha256": "d909e196c6cf5587ae95967d8b3d3725c1f7535c56591a615ae764bf0c3eed4e",
+      "signature": "(prepared: object, f1: numpy.ndarray, f2: numpy.ndarray, f3: numpy.ndarray, f4: numpy.ndarray) -> dict",
+      "bound_nodes": [
+        "execute"
+      ],
+      "classification": "source_recipe_adapter",
+      "atom_latest": [],
+      "atom_exact_eligible": false,
+      "artifact_latest": [],
+      "artifact_exact_eligible": false
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.connectomics_filter_execution.filter_configuration",
+      "catalog_fqdn": "sciona.atoms.ml.connectomics_filter_execution.filter_configuration",
+      "version_id": "f83378ee-33fb-5d14-977c-2bc6550645cc",
+      "content_hash": "82802248c4464e10b50a0178f7ca9248c315d32287365f0cd2a3d558a9b545f1",
+      "provider_sha256": "d909e196c6cf5587ae95967d8b3d3725c1f7535c56591a615ae764bf0c3eed4e",
+      "signature": "(prepared: object) -> tuple",
+      "bound_nodes": [
+        "configuration"
+      ],
+      "classification": "source_recipe_adapter",
+      "atom_latest": [],
+      "atom_exact_eligible": false,
+      "artifact_latest": [],
+      "artifact_exact_eligible": false
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.numerical.spatial.circular_filter.ordered_circular_filter",
+      "catalog_fqdn": "sciona.atoms.numerical.spatial.circular_filter.ordered_circular_filter",
+      "version_id": "78b98228-a317-5bb1-98bd-25c7ee98782d",
+      "content_hash": "216ae2a7f3eb4b988edf05d1d7543060395295b1cdb79fea49c1fd9793026def",
+      "provider_sha256": "708b4d40772c6b9eb9609a6d9a04832255ed1f98f12d1a6c3e405fda846a2431",
+      "signature": "(values: numpy.ndarray, shifts: object, weights: object, axis: int) -> numpy.ndarray",
+      "bound_nodes": [
+        "f1",
+        "f2",
+        "f3",
+        "f4"
+      ],
+      "classification": "generic_operation",
+      "atom_latest": [],
+      "atom_exact_eligible": false,
+      "artifact_latest": [],
+      "artifact_exact_eligible": false
+    }
+  ],
+  "source_stage_mapping": [
+    {
+      "intake": "calcium_lowpass_filter",
+      "realization": "Source circular f1/f2 or f1/f2/f3/f4"
+    },
+    {
+      "intake": "first_difference",
+      "realization": "Adjacent temporal differences"
+    },
+    {
+      "intake": "fluorescence_hard_threshold",
+      "realization": "Corrected scalar threshold at each grid entry"
+    },
+    {
+      "intake": "global_activity_sample_reweighting",
+      "realization": "Simple row activity or tuned lagged activity and filter-specific powers"
+    },
+    {
+      "intake": "pca_precision_matrix",
+      "realization": "Pinned historical PCA, 80 percent components and negative precision"
+    },
+    {
+      "intake": "score_matrix_normalization",
+      "realization": "Diagonal minimum and min/max after weighted precision aggregation"
+    },
+    {
+      "intake": "threshold_sweep_ensemble",
+      "realization": "Complete 120-entry weighted grid, not Bayesian inference"
+    },
+    {
+      "intake": "temporal_precedence_directivity",
+      "realization": "Optional strict 0.2/0.5 precedence bounds with source endpoint behavior"
+    },
+    {
+      "intake": "weighted_score_combination",
+      "realization": "Optional 0.997 precision and 0.003 precedence"
+    }
+  ],
+  "evidence_sha256": {
+    "connectomics_decomposed_graph_execution.json": "0429e741dad7161e1df4dc1906b4a79ae007774e7bd083a3152f2cb58f3da31d",
+    "connectomics_generic_circular_filter_source_parity.json": "d3ac2dcf8024138767fcdc8a00a12f679ec2d0d1d5b8b8546622795536ff21d5",
+    "competition_connectomics_semantic_review.json": "1412cdaf7323ec9fa635a9089af83329bd5f7f119c0103b30262fe230474d9a2"
+  },
+  "auxiliary_sha256": {
+    "scripts/review_decomposed_connectomics.py": "c28f43751f0b7c5d9793a02a2bae930e06c5c2e2ee426411712ee392391d06ff",
+    "tests/test_decomposed_connectomics.py": "64d134c694b01e113642eb33830f8b880ee446ea4002b9ce3a13f295080991ee",
+    "tests/test_ordered_circular_filter.py": "325aec5daa63fab331a94e7a9dfee2b049b4454d2df38ef9b54d6b0ea32b83d4",
+    "tests/test_decomposed_connectomics_review.py": "e7719e97b20ce712c60de705e6b159308a6a0553a643de662d2d24a462838e4d"
+  },
+  "limitations": [
+    "This integration review does not approve or stage catalog records.",
+    "The generic filter is domain independent; tap choice, time-axis policy and the remaining sweep are source recipe semantics.",
+    "All four filters run in both modes; only f1/f2 are consumed by the simple sweep.",
+    "Prefiltered recipe inputs are trusted graph bindings. Shape and finiteness validation alone does not prove correct tap computation.",
+    "Historical PCA, source namespace callbacks and matcher runtime adapters still require explicit dependency review.",
+    "Synthetic exact-source agreement does not establish historical accuracy or domain validity."
+  ],
+  "original_state": [
+    {
+      "fqdn": "cdg.competition.solution.kaggle.connectomics_1st",
+      "status": "draft",
+      "is_publishable": false,
+      "version_id": "e9f83a4e-4cb1-5297-8c04-8fd65c6e7d33",
+      "content_hash": "c37cf5cd41c4c7f7f19af3f2f48ab3a69d94bd451822a830088abe2c632774ed",
+      "trust_tier": 3
+    }
+  ],
+  "both_catalogs_exact_eligible": 1
+}
