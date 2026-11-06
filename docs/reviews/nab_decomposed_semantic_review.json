@@ -1,0 +1,376 @@
+{
+  "format": "nab-decomposed-review.v1",
+  "review_source": "automated",
+  "proposed_tier": 3,
+  "approved": false,
+  "catalog_mutations": 0,
+  "graph_digest": "d59e0b958c1fa3172ce7c5392ee495916f4db6c7ae754313a3e83555504311ad",
+  "graph_nodes": 6,
+  "graph_edges": 13,
+  "providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_nab_execution.detection",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_nab_execution.detection",
+      "version_id": "47a5f838-05a9-5f01-82f1-fe2235a0287b",
+      "content_hash": "cff7993db4bbd029256a9e853a43494106509b2a4829ba11416b2bb2f45b63f4",
+      "provider_sha256": "20decc5dbc657b11191ae56986373aea8be27bc6f21a841d0a78107716e2a9b3",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "forest",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "thresholds",
+          "ordinal": 2,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "detected",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "signature": "(prepared: object, forest: dict, thresholds: list) -> dict",
+      "bound_nodes": [
+        "detection"
+      ],
+      "classification": "source_recipe_adapter"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_nab_execution.forest_scores",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_nab_execution.forest_scores",
+      "version_id": "73b18d94-528e-5915-b2e9-66fdcc266ff6",
+      "content_hash": "399461b489137f0098c00cac0b9b5e7cfe860a6ecd1086c5b1e74f184a2befd8",
+      "provider_sha256": "20decc5dbc657b11191ae56986373aea8be27bc6f21a841d0a78107716e2a9b3",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "forest",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "signature": "(prepared: object) -> dict",
+      "bound_nodes": [
+        "forest_scores"
+      ],
+      "classification": "source_recipe_adapter"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_nab_execution.result",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_nab_execution.result",
+      "version_id": "80f82bcc-cf84-5f61-ac69-3bc4024bdea2",
+      "content_hash": "82567f6c4c71cd8fa4ee5b2c0a343776e13003d89008c7fc7cb360ef91e67396",
+      "provider_sha256": "20decc5dbc657b11191ae56986373aea8be27bc6f21a841d0a78107716e2a9b3",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "detected",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "signature": "(prepared: object, detected: dict) -> dict",
+      "bound_nodes": [
+        "result"
+      ],
+      "classification": "source_recipe_adapter"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_nab_execution.threshold_inputs",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_nab_execution.threshold_inputs",
+      "version_id": "54b11666-5c79-5758-a5e7-6321361d8ccc",
+      "content_hash": "c5e51c449ab72a50fcebf13ecb9c3ab60a9e3667c0c930763ecc5469f6c58dd6",
+      "provider_sha256": "20decc5dbc657b11191ae56986373aea8be27bc6f21a841d0a78107716e2a9b3",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "forest",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "history",
+          "ordinal": 1,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "minimum",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "ddof",
+          "ordinal": 3,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "multiplier",
+          "ordinal": 4,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "signature": "(prepared: object, forest: dict) -> tuple[list, int, int, int, float]",
+      "bound_nodes": [
+        "threshold_inputs"
+      ],
+      "classification": "source_recipe_adapter"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.nab_execution.nab_prepare",
+      "catalog_fqdn": "sciona.atoms.ml.nab_execution.nab_prepare",
+      "version_id": "1874db03-2fdb-58f2-8d29-19413034f13f",
+      "content_hash": "587fcd0c2e98a7f92ca4a3914b4aa434844f4e50dad079934a8cc9da821d69d7",
+      "provider_sha256": "3b735f47a44fb3689ee435baa5594a2aff09291edd1408605451397cd23871e3",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "payload",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "signature": "(payload: dict) -> object",
+      "bound_nodes": [
+        "prepare"
+      ],
+      "classification": "source_recipe_adapter"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.numerical.statistics.prior_threshold.prior_location_scale_threshold",
+      "catalog_fqdn": "sciona.atoms.numerical.statistics.prior_threshold.prior_location_scale_threshold",
+      "version_id": "a0b57032-cd64-55ab-ad11-5d41eedf84cb",
+      "content_hash": "d0ec29822f75c43e4a3beb635de6eafb84bd6f179e63abeba32fc52d53ca35f9",
+      "provider_sha256": "ab358c8413da9ca61e0ef1ed763bfbb20a46cd572cf710516c71b64907613d26",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "history",
+          "ordinal": 1,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "minimum",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "ddof",
+          "ordinal": 3,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "multiplier",
+          "ordinal": 4,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "thresholds",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "signature": "(values: list, history: int, minimum: int, ddof: int, multiplier: float) -> list",
+      "bound_nodes": [
+        "thresholds"
+      ],
+      "classification": "generic_operation"
+    }
+  ],
+  "root_inputs": [
+    "payload"
+  ],
+  "root_outputs": [
+    "result"
+  ],
+  "complete_forest_loop_ast_equivalent": true,
+  "source_stage_mapping": [
+    {
+      "intake": "streaming_ingestion",
+      "realization": "Ordered private numeric population processed without lookahead"
+    },
+    {
+      "intake": "representation_generation",
+      "realization": "Isolation forest fitted on prior trailing windows"
+    },
+    {
+      "intake": "predictive_scoring",
+      "realization": "Negative sklearn isolation-forest score_samples"
+    },
+    {
+      "intake": "dynamic_thresholding",
+      "realization": "Prior-score rolling mean plus three standard deviations"
+    },
+    {
+      "intake": "windowed_evaluation",
+      "realization": "Corrected NAB scoring and source null/perfect normalization"
+    }
+  ],
+  "package_versions": {
+    "numpy": "2.2.6",
+    "scipy": "1.17.1",
+    "scikit-learn": "1.8.0",
+    "joblib": "1.5.3",
+    "threadpoolctl": "3.6.0"
+  },
+  "execution_evidence_commit": "f5eace31",
+  "evidence_sha256": {
+    "docs/reviews/decomposed_nab_graph_execution.json": "9770fa406a53a0216becd428cd8517ab77951740b7f409ec415078545074d21b",
+    "docs/reviews/competition_nab_source_pins.json": "5803833269861e463b3a76c85f5fb37448cfab2e0162ae74e5b44175637aa3ac",
+    "docs/reviews/decomposed_nab_scoring.json": "966adaa2b2c29170cb40e9586a35b503b1e13066ad42bff3e201492cd60fb72a",
+    "docs/reviews/decomposed_nab_package_files.json": "39e0ed7d83b0ee97c96754bce48ccf18c1530a637a6960a1549796e890ed53e1",
+    "docs/reviews/competition_nab_semantic_review.json": "b0613376722acbfeda731423b32aaf49b930ddf82b65946c54be450e3623f17d"
+  },
+  "reviewer_sha256": "cc2f5789f4d0136808692fd0821a35059fb27c8eda9f3e82c62b2a95e51a0366",
+  "limitations": [
+    "Automated Tier 3 Community generic reconstruction; no Tier 1 human certification or Tier 2 usage qualification. Original generic intake remains draft and is retained as mandatory provenance.",
+    "The intake offers isolation forest OR autoencoder without naming a historical winning implementation. This realizes the isolation-forest branch with explicit new choices. It is not Numenta HTM, an autoencoder, or a historical high-tier/scoreboard-equivalent detector.",
+    "One univariate ordered population is processed causally. Each full forest fits only prior trailing observation windows, then scores the current window by negative sklearn score_samples. No separate learned feature compressor or reconstruction-error model is claimed.",
+    "Window length, bounded fitting history, minimum fit count, tree count, maximum samples, seed, threshold history and variance convention are explicit. Forests use all features, no bootstrap, one job, automatic contamination offset and per-step seed plus index. The offset does not affect score_samples.",
+    "Three-sigma threshold statistics exclude the current anomaly score. Detection uses strict greater-than, even if the threshold exceeds one. Warmup scores/thresholds are null and flags false. Evaluation probation is separately caller-controlled; warmup anomalies can be missed and penalized.",
+    "Fitting and scoring do not consume labels. Caller supplies sorted disjoint inclusive index windows for evaluation only. There is no timestamp parsing, elapsed-time weighting, resampling, missing-value imputation or independent real-world accuracy qualification.",
+    "Independent NAB score reduction matches the pinned source for ordinary windows and preserves per-point confusion counts, best detection reward per window, preceding-window false-positive penalties and source probation cap semantics.",
+    "Two explicit source corrections apply: thresholds below all eligible scores select the final sweep state; singleton windows use one row as the post-window penalty scale instead of dividing by zero. Exact historical parity is not claimed for undefined source behavior.",
+    "Normalization uses all supplied labeled windows for the perfect score and scorable windows for the null baseline, including the source distinction when windows lie inside probation. A zero normalization denominator returns null. Scores are not clipped to zero or one hundred.",
+    "All numerical evidence is generated synthetic input: prefix/future-mutation invariance, exclusion of the current observation from fitting, label-independent detection, 432 scoring comparisons and actual pipeline-runner execution. This is implementation evidence, not generalization performance.",
+    "Qualified on the provisioned Python 3.13 macOS arm64 worker with pinned NumPy, SciPy and sklearn dependencies. Clean installation, other platforms, serialization of trained forests, restart/resume, resource caps and streaming transport are not qualified.",
+    "NAB MIT notice retained. Only selected benchmark software was fetched; no benchmark records, anomaly label inventories, historical result files or private templates are embedded. Runtime values and results require private caller storage.",
+    "Current synthetic graph uses NumPy 2.2.6 and matches the full existing generic reconstruction exactly; historical reports remain unchanged.",
+    "Forest fitting loop is AST-identical after removing only threshold reduction and its history append into explicit graph stages.",
+    "Rolling prior mean-plus-scale threshold accepts arbitrary finite multipliers; NAB three-sigma and strict comparison remain recipe policy.",
+    "Shape checks do not authenticate the provenance of externally supplied intermediate values.",
+    "Exact provider eligibility and corrected-original publication remain pending separate transaction gates."
+  ]
+}
