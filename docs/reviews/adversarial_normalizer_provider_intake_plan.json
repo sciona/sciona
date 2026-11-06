@@ -1,0 +1,141 @@
+{
+  "approved": false,
+  "graph_digest": "16de238d23319bd1aba8f54b2a50458b906ff724c21c0aabd6e490fc6f2c2689",
+  "review_sha256": "e65343b3b2bfdb770df3d6cd13aba811ca30c5dbfabe7a77df76875f7cc2ff5a",
+  "intake_script_sha256": "c98322a1133cf3badae14a588e87ea2c64203b190d41270dff35095edc5342ac",
+  "providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.dl.adversarial_normalized_execution.execute_with_normalizer",
+      "catalog_fqdn": "sciona.atoms.dl.adversarial_normalized_execution.execute_with_normalizer",
+      "version_id": "0a917f45-0efb-5cd3-9e2f-58e2064dba92",
+      "content_hash": "489754d4865ef1867ceb4885c1f75c08d3b4952cf609ad7fc2177a6bf904fbc4",
+      "provider_sha256": "60b0a87bc932bf61ab299576ff4048ebdd68459e544f578f90ed22b3fb7d8662",
+      "signature": "(prepared: object, normalizer: object) -> dict",
+      "bound_nodes": [
+        "execute"
+      ],
+      "classification": "source_recipe_adapter",
+      "atom_id": "2378266d-dafd-5a19-a820-eb07f27f7dc0",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.dl.adversarial_normalized_execution.execute_with_normalizer",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "dl.adversarial_normalized_execution",
+        "repo_name": "sciona-atoms-dl",
+        "source_module_path": "dl.adversarial_normalized_execution",
+        "import_module": "sciona.atoms.dl.adversarial_normalized_execution",
+        "source_symbol": "execute_with_normalizer",
+        "description": "Run the complete padded attack with an explicitly supplied row normalizer. The source recipe chooses mean-absolute or population-standard-deviation scaling at each recurrent update. The graph supplies the numerical function. Preserve all source model branches, label rules, momentum updates, projection, and real-entry PNG encoding. No implicit pretrained state is downloaded.",
+        "domain_tags": [
+          "dl"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.489754d4865e",
+      "fingerprint": "103fc713cba9adc32f20739ab5c1f27c92f934811a7b4afff33b047699b1796d",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "normalizer",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.numerical.statistics.row_scale.normalize_rows_by_scale",
+      "catalog_fqdn": "sciona.atoms.numerical.statistics.row_scale.normalize_rows_by_scale",
+      "version_id": "60034fd4-9033-5422-b44f-b17d5f9dff55",
+      "content_hash": "3b9a131e78cdb001e9cdcc407c7bd1fc971a6b6268599844b60a71b9063d4b2a",
+      "provider_sha256": "4bc3d26b2f702f8bb59741b0a75d34d560156cc0e9bfb487ae3f62253b7ed1ea",
+      "signature": "(values: numpy.ndarray, statistic: str) -> numpy.ndarray",
+      "bound_nodes": [
+        "normalize_rows"
+      ],
+      "classification": "generic_operation",
+      "atom_id": "1eded449-1724-568b-a1c3-6335d1140689",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.numerical.statistics.row_scale.normalize_rows_by_scale",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "numerical.statistics.row_scale",
+        "repo_name": "sciona-atoms",
+        "source_module_path": "numerical.statistics.row_scale",
+        "import_module": "sciona.atoms.numerical.statistics.row_scale",
+        "source_symbol": "normalize_rows_by_scale",
+        "description": "Divide each row by its mean absolute value or population standard deviation. Accept nonempty finite 2D float32/float64 arrays. Statistic must be exactly 'mean_absolute' or 'population_std'. Keep NumPy input-dtype reductions and output dtype. Population standard deviation uses ddof=0; the numerator is NOT centered. Reject zero or nonfinite scales and nonfinite results, without an epsilon stabilizer. Return a fresh array; input is unchanged. Meaning of each row and column, units and downstream use are entirely caller policy.",
+        "domain_tags": [
+          "numerical"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.3b9a131e78cd",
+      "fingerprint": "ee1dd75d29e94c235420bb3160587d84323eaa60aaa9a53229f073fc63e18f20",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "statistic",
+          "ordinal": 1,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "normalized",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Draft source/interface intake only; semantic publication and dependency gates remain.",
+    "One generic numerical operation and one source recipe adapter; no domain-specific normalization policy in the generic provider."
+  ],
+  "owners": {
+    "sciona-atoms": {
+      "owner_id": "33ed07a2-1bea-5b17-8b71-d6d0e590fdd9",
+      "source_repo_id": "3bff5d3b-7b24-45c0-b688-1edb61107107"
+    },
+    "sciona-atoms-dl": {
+      "owner_id": "33ed07a2-1bea-5b17-8b71-d6d0e590fdd9",
+      "source_repo_id": "f3f0e87e-68ff-4422-aa59-28f92be032db"
+    }
+  },
+  "preserved_sha256": "6a60b073822616f45cb42a7cb2d85497644d57a6119f40d7e1348798aa6e743b"
+}
