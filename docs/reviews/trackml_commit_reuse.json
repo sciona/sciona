@@ -1,0 +1,28 @@
+{
+  "format": "trackml-commit-reuse.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "exact_source_batches": 144,
+  "repeated_position_case": true,
+  "reservation_counterexample": true,
+  "empty_row_difference": true,
+  "implementation_sha256": {
+    "source": "d74daba0b006d2c5f2a515820c0e096b2bf3206527ad69ef856a6610fa0d6a23",
+    "retained": "985fedbd7ad1905b0b3ed0e9118674b1257293ee03a5d34d5e46ea23bfa3faa8",
+    "reviewer": "fc9a6de6ac243249bf9a85820cba7f88413d1efa338914ec82489e303c5fe0a4",
+    "provider": "dda1f5a1d363efbd45d0357edea25ce1000a6e9df9de29e73d653ee116a2edd4"
+  },
+  "decision": "Reuse existing pure ordered resource-selection arithmetic for reserve_skipped=False, with explicit defaults and caller-managed mutation. Preserve reservation behavior separately if required by the calling recipe.",
+  "limitations": [
+    "Nonnegative integer resource IDs index the supplied one-dimensional boolean used mask. Zero is a sentinel. IDs must be in bounds; source-qualified rows contain at least one nonzero entry.",
+    "Selection is ordered and greedy, not globally optimal. Position counts include duplicate IDs within a row; this is not unique-resource counting.",
+    "Provider defaults max_nloss=100 and max_nrows=100000 differ from source None, which means matrix width and row count. Translate None explicitly.",
+    "Source mutates both arrays and returns None; provider copies both inputs and returns the updated pair. Integration must preserve caller-visible behavior.",
+    "Source reserve_skipped=True consumes resources even for rejected rows; the existing atom has no equivalent option. The retained tracking lifecycle explicitly uses False.",
+    "Source asserts on all-zero rows while provider skips them. Do not claim unconditional source equivalence.",
+    "Candidate storage, ordering, identifier assignment, submission formatting and fill policy remain caller operations. Numeric resource IDs require no particle-specific interpretation.",
+    "Synthetic parity is not historical competition accuracy or qualification of the original CDG. Lifecycle integration and catalog qualification remain pending."
+  ]
+}
