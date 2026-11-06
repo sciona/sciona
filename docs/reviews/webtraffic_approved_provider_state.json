@@ -1,0 +1,3562 @@
+{
+  "passed": true,
+  "records": [
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.advance",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.advance",
+      "version_id": "9005516e-0c56-5f6c-8117-29be90cf77b0",
+      "content_hash": "e53c651391c5ae89cd14b4ee78ac337af532e3382d80ed6a7a26a5ca71ba4e90",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "state",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "batches",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "observations",
+          "ordinal": 2,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "state",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "metrics",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Advance all three models once with complete gradients, Adam and explicit EMA observations.",
+      "parameters": {
+        "state": "Shared integer step and exactly three model dictionaries containing named parameters, optimizer and EMA.",
+        "batches": "Exactly three source model batches with x,y,previous,mean,std,truth and optional dropout masks.",
+        "observations": "Exactly three dictionaries: parameter_phase before/after and observed global_step equal to current or next shared step."
+      },
+      "validity_bounds": "Preserve ten named parameter tensors, width267 GRU forward/loss, autograd, global-norm clipping10, float32 Adam rate.001/betas.9,.999/epsilon-hat1e-8 and EMA min(.99,(1+observed_step)/(10+observed_step)). Return new state; inputs unchanged. Invalid/nonfinite optimization state rejects.",
+      "outputs": "Updated shared-step/models dictionary and three metric dictionaries.",
+      "plain_limits": "Perform one complete training update for each model.",
+      "reuse": "Three-model s32 update policy with explicit observations; numeric lower-level helpers remain independently implemented.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.advance",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "dl.decomposed_webtraffic_execution",
+        "repo_name": "sciona-atoms-dl",
+        "source_module_path": "dl.decomposed_webtraffic_execution",
+        "import_module": "sciona.atoms.dl.decomposed_webtraffic_execution",
+        "source_symbol": "advance",
+        "description": "Explicit advance operation for qualified runtime composition.",
+        "domain_tags": [
+          "dl"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "94d2df5e-5f75-514a-8062-67d8ba09b343",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "state",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "batches",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "observations",
+          "ordinal": 2,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "state",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "metrics",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "state",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "batches",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "observations",
+          "ordinal": 2,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "state",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "metrics",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.aligned_output",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.aligned_output",
+      "version_id": "ca1e9b39-a7e1-592c-8993-6d538b3ec967",
+      "content_hash": "d944d04840d738d8cd5e5bc03cd4c34638e44b77634ee50090b11b6ee68360b5",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "row_labels",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "column_labels",
+          "ordinal": 2,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "output_rows",
+          "ordinal": 3,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "output_columns",
+          "ordinal": 4,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "identifiers",
+          "ordinal": 5,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "identifiers",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "values",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Select an exact integer-panel suffix and flatten aligned identifiers and values.",
+      "parameters": {
+        "values": "Rank2 int64 values aligned to input axes.",
+        "row_labels": "Nonempty unique string row labels.",
+        "column_labels": "Nonempty unique string column labels.",
+        "output_rows": "Exact input row order.",
+        "output_columns": "Exact nonempty suffix of input column labels.",
+        "identifiers": "Aligned rank2 int64 identifier matrix."
+      },
+      "validity_bounds": "Reject any shape or axis mismatch; return C-order independent copies. Identifiers may repeat. No sorting, rounding, missing fills, date parsing or identity-uniqueness policy.",
+      "outputs": "Aligned flattened int64 identifiers and values.",
+      "plain_limits": "Return exactly the requested aligned records.",
+      "reuse": "Domain-independent integer-panel output operation.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.aligned_output",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "dl.decomposed_webtraffic_execution",
+        "repo_name": "sciona-atoms-dl",
+        "source_module_path": "dl.decomposed_webtraffic_execution",
+        "import_module": "sciona.atoms.dl.decomposed_webtraffic_execution",
+        "source_symbol": "aligned_output",
+        "description": "Explicit aligned output operation for qualified runtime composition.",
+        "domain_tags": [
+          "dl"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "0856ca21-c9dc-5fd9-89c3-1aa63bc5e4a7",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "row_labels",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "column_labels",
+          "ordinal": 2,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "output_rows",
+          "ordinal": 3,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "output_columns",
+          "ordinal": 4,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "identifiers",
+          "ordinal": 5,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "identifiers",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "values",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "row_labels",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "column_labels",
+          "ordinal": 2,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "output_rows",
+          "ordinal": 3,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "output_columns",
+          "ordinal": 4,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "identifiers",
+          "ordinal": 5,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "identifiers",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "values",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.assemble",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.assemble",
+      "version_id": "64728253-61b2-568d-a232-10ead6b42385",
+      "content_hash": "ac8e722862bc36db95425a704277acdc68154206213a069d667356c2f915d08c",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "logged",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "missing",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "correlation_columns",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "page_map",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "encoded",
+          "ordinal": 4,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "popularity_values",
+          "ordinal": 5,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "dow",
+          "ordinal": 6,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "lagged_ix",
+          "ordinal": 7,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "features_end",
+          "ordinal": 8,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "tensors",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "plain",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Combine separately computed feature blocks in the retained source layout.",
+      "parameters": {
+        "logged": "Prepared logged frame.",
+        "missing": "Exactly aligned missing mask.",
+        "correlation_columns": "Entity-by2 matrix in year/quarter recipe order.",
+        "page_map": "Source agent grouping matrix.",
+        "encoded": "Exactly agent,country,site indexed feature blocks.",
+        "popularity_values": "Exactly aligned indexed row summary.",
+        "dow": "Feature-days-by2 calendar matrix.",
+        "lagged_ix": "Feature-days-by4 lag-index matrix.",
+        "features_end": "Final calendar timestamp."
+      },
+      "validity_bounds": "Check key sets, aligned indexes and block shapes; restore NaN in a copied logged frame. Does not prove block values originated from the same invocation or independently revalidate every dtype/value.",
+      "outputs": "Source tensors dictionary and plain dimensions/date-boundary dictionary.",
+      "plain_limits": "Combine the qualified blocks without changing their values.",
+      "reuse": "Explicit recipe assembly; independent numeric blocks remain reusable.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.assemble",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "dl.decomposed_webtraffic_execution",
+        "repo_name": "sciona-atoms-dl",
+        "source_module_path": "dl.decomposed_webtraffic_execution",
+        "import_module": "sciona.atoms.dl.decomposed_webtraffic_execution",
+        "source_symbol": "assemble",
+        "description": "Explicit assemble operation for qualified runtime composition.",
+        "domain_tags": [
+          "dl"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "a6617383-0326-5647-83d2-446515b734d4",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "logged",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "missing",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "correlation_columns",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "page_map",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "encoded",
+          "ordinal": 4,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "popularity_values",
+          "ordinal": 5,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "dow",
+          "ordinal": 6,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "lagged_ix",
+          "ordinal": 7,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "features_end",
+          "ordinal": 8,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "tensors",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "plain",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "logged",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "missing",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "correlation_columns",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "page_map",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "encoded",
+          "ordinal": 4,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "popularity_values",
+          "ordinal": 5,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "dow",
+          "ordinal": 6,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "lagged_ix",
+          "ordinal": 7,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "features_end",
+          "ordinal": 8,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "tensors",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "plain",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.calendar",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.calendar",
+      "version_id": "7d127be4-897d-5e2a-8659-6e61b6cda140",
+      "content_hash": "1bcf29dbae48c5ff978944aed482646d143bc82809fae294fb03f29779a76fd0",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "begin",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "end",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "add_days",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "dow",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "lagged_ix",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "features_end",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Build weekly cyclic features and source calendar-month offsets.",
+      "parameters": {
+        "begin": "First timezone-naive daily timestamp.",
+        "end": "Last observed timestamp.",
+        "add_days": "Nonnegative integer future extension from validated root."
+      },
+      "validity_bounds": "Inclusive daily range through end+extension. Cosine/sine of weekday;3/6/9/12-month lag indexes with out-of-range -1 and int16 representation. Caller must enforce source index-width bounds.",
+      "outputs": "Weekly-cycle matrix, four-column lag-index matrix, final feature timestamp.",
+      "plain_limits": "Construct explicit calendar features over the required range.",
+      "reuse": "Calendar policy remains explicit; not inferred from arbitrary time units.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.calendar",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "dl.decomposed_webtraffic_execution",
+        "repo_name": "sciona-atoms-dl",
+        "source_module_path": "dl.decomposed_webtraffic_execution",
+        "import_module": "sciona.atoms.dl.decomposed_webtraffic_execution",
+        "source_symbol": "calendar",
+        "description": "Explicit calendar operation for qualified runtime composition.",
+        "domain_tags": [
+          "dl"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "d3e9da7b-8027-54e3-94bb-adc83e676df3",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "begin",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "end",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "add_days",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "dow",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "lagged_ix",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "features_end",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "begin",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "end",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "add_days",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "dow",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "lagged_ix",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "features_end",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.checkpoint_forecast",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.checkpoint_forecast",
+      "version_id": "81096f93-e711-52a6-bc25-4b8c58137781",
+      "content_hash": "952ef8a7b291724c9d416ccc0c7e5dc32509b8dd4ce70a767b4a4c51ed0341e2",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "trained",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "records",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "row_labels",
+          "ordinal": 2,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "frame",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Forecast every retained checkpoint for each model and combine in count space.",
+      "parameters": {
+        "trained": "Completed state/checkpoints dictionary from train.",
+        "records": "Complete compatible prediction batches.",
+        "row_labels": "Complete source row population for missing-row filling."
+      },
+      "validity_bounds": "For each of three models and every retained checkpoint, materialize EMA parameters and run full inference. Average after expm1 in source order, average three model outputs, fill missing rows with zero, threshold below.5 and round ties-to-even to int64. No empty checkpoint or accepted-window population.",
+      "outputs": "Sorted integer forecast DataFrame over the full source horizon.",
+      "plain_limits": "Combine all checkpoint and model predictions.",
+      "reuse": "Source ensemble policy; no fitted-weight authenticity or empirical accuracy claim.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.checkpoint_forecast",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "dl.decomposed_webtraffic_execution",
+        "repo_name": "sciona-atoms-dl",
+        "source_module_path": "dl.decomposed_webtraffic_execution",
+        "import_module": "sciona.atoms.dl.decomposed_webtraffic_execution",
+        "source_symbol": "checkpoint_forecast",
+        "description": "Explicit checkpoint forecast operation for qualified runtime composition.",
+        "domain_tags": [
+          "dl"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "a6765197-5fe1-5269-9b78-d30383c2943a",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "trained",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "records",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "row_labels",
+          "ordinal": 2,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "frame",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "trained",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "records",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "row_labels",
+          "ordinal": 2,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "frame",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.configure",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.configure",
+      "version_id": "9e3b4aad-9801-5b9f-9a88-716e37d91b36",
+      "content_hash": "d27c8cb8f907f3be36afaa6b842f953c9e0cc290694bc5ea8e9653a3644d44a4",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "tensors",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "plain",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "config",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Validate source training controls, availability and full update schedule.",
+      "parameters": {
+        "tensors": "Complete assembled source tensor dictionary.",
+        "plain": "Matching source dimensions and calendar boundaries.",
+        "config": "Validated RuntimeConfig with seed,batch_size,max_epoch,max_steps,save_from_step,prediction_batch_size,train_completeness and EMA phases."
+      },
+      "validity_bounds": "Require more than409 input days, at least one possible training window passing completeness, and a schedule with saved checkpoints. Positive batch/epoch counts, nonnegative step thresholds, seed<=2**32-4, completeness[0,1], explicit before/after EMA phases. RuntimeConfig is frozen but nested data must remain caller-stable.",
+      "outputs": "PreparedRuntime carrying tensors, dimensions, controls and complete schedule.",
+      "plain_limits": "Check that the configured training and forecasting run can complete.",
+      "reuse": "Fixed s32 window and horizon recipe; not arbitrary sequence training.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.configure",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "dl.decomposed_webtraffic_execution",
+        "repo_name": "sciona-atoms-dl",
+        "source_module_path": "dl.decomposed_webtraffic_execution",
+        "import_module": "sciona.atoms.dl.decomposed_webtraffic_execution",
+        "source_symbol": "configure",
+        "description": "Explicit configure operation for qualified runtime composition.",
+        "domain_tags": [
+          "dl"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "0b1dd536-4a9d-5cc7-a4cc-cd9b1174c18b",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "tensors",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "plain",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "config",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "tensors",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "plain",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "config",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.correlations",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.correlations",
+      "version_id": "0aa46220-7d58-5171-a61b-2141e6d67aac",
+      "content_hash": "d4485813a58776b79485156b31138795c57aba88c3cb0c3c7daddcbd40496f46",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "starts",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "ends",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "lags",
+          "ordinal": 3,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "thresholds",
+          "ordinal": 4,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "backoffset",
+          "ordinal": 5,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "correlation_columns",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Weighted neighboring-lag correlations and population standardization.",
+      "parameters": {
+        "values": "Nonempty finite rank2 float32/float64 panel.",
+        "starts": "Aligned integer first support positions in[-1,width).",
+        "ends": "Aligned integer final support positions in[-1,width), not before starts; paired -1 marks no support.",
+        "lags": "Nonempty list of Python integers>=2.",
+        "thresholds": "Aligned nonnegative finite Python numeric support thresholds excluding bool.",
+        "backoffset": "Python integer in[0,width)."
+      },
+      "validity_bounds": "Preserve source exclusive end slicing even though support endpoint is the last positive position. Support length/lag must be strictly greater than threshold. Correlation is .5 at lag plus .25 at each neighboring lag. Undefined correlations become zero before population standardization. Constant populations can return NaN; no repair or finite-output guarantee.",
+      "outputs": "float64 entity-by-lag matrix in requested order.",
+      "plain_limits": "Summarize lagged similarity using explicit offsets and support thresholds.",
+      "reuse": "Domain-independent numeric panel operation; no page or date semantics.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.correlations",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "dl.decomposed_webtraffic_execution",
+        "repo_name": "sciona-atoms-dl",
+        "source_module_path": "dl.decomposed_webtraffic_execution",
+        "import_module": "sciona.atoms.dl.decomposed_webtraffic_execution",
+        "source_symbol": "correlations",
+        "description": "Explicit correlations operation for qualified runtime composition.",
+        "domain_tags": [
+          "dl"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "bc210b00-7c6d-5920-98a2-fff4389f19f6",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "starts",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "ends",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "lags",
+          "ordinal": 3,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "thresholds",
+          "ordinal": 4,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "backoffset",
+          "ordinal": 5,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "correlation_columns",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "starts",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "ends",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "lags",
+          "ordinal": 3,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "thresholds",
+          "ordinal": 4,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "backoffset",
+          "ordinal": 5,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "correlation_columns",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.date_forecast",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.date_forecast",
+      "version_id": "e4edd852-0059-50e8-9234-5c79889f8c2d",
+      "content_hash": "b8106c017f9232fe05311d479577e4a888baefa8b9f92a83201d282512844026",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "frame",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "frame",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Attach the full forecast calendar axis.",
+      "parameters": {
+        "prepared": "Matching runtime calendar context.",
+        "frame": "Forecast frame with exactly63 columns."
+      },
+      "validity_bounds": "Copy frame and replace columns with63 daily coordinates after input end. Caller must preserve matching forecast provenance.",
+      "outputs": "Dated forecast frame with unchanged values.",
+      "plain_limits": "Attach the complete future date range.",
+      "reuse": "Explicit daily63-step recipe policy.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.date_forecast",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "dl.decomposed_webtraffic_execution",
+        "repo_name": "sciona-atoms-dl",
+        "source_module_path": "dl.decomposed_webtraffic_execution",
+        "import_module": "sciona.atoms.dl.decomposed_webtraffic_execution",
+        "source_symbol": "date_forecast",
+        "description": "Explicit date forecast operation for qualified runtime composition.",
+        "domain_tags": [
+          "dl"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "291f54bb-b4bf-585c-b358-6696e86fcdc6",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "frame",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "frame",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "frame",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "frame",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.feature_axes",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.feature_axes",
+      "version_id": "41d98e03-acae-562b-9830-827cd49fa301",
+      "content_hash": "fecb4f5e6b6bf9e7846079ff122eb8cd09c3e4bdbf826362877b10b820ce9cb0",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "logged",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "numeric_values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "row_labels",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "begin",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "end",
+          "ordinal": 3,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Expose numeric values, ordered row labels and calendar endpoints.",
+      "parameters": {
+        "logged": "Nonempty DataFrame from prepare, with ordered daily columns."
+      },
+      "validity_bounds": "Copy numeric values; expose labels and first/last columns. Does not independently validate chronology or prepare provenance.",
+      "outputs": "Numeric matrix, row-label list, begin and end timestamps.",
+      "plain_limits": "Expose the axes and a copy of the values.",
+      "reuse": "Generic frame projection with caller-supplied chronology.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.feature_axes",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "dl.decomposed_webtraffic_execution",
+        "repo_name": "sciona-atoms-dl",
+        "source_module_path": "dl.decomposed_webtraffic_execution",
+        "import_module": "sciona.atoms.dl.decomposed_webtraffic_execution",
+        "source_symbol": "feature_axes",
+        "description": "Explicit feature axes operation for qualified runtime composition.",
+        "domain_tags": [
+          "dl"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "b8926a82-5c5d-5a2f-9fb3-13c80b7afede",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "logged",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "numeric_values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "row_labels",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "begin",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "end",
+          "ordinal": 3,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "logged",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "numeric_values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "row_labels",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "begin",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "end",
+          "ordinal": 3,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.forecast_axes",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.forecast_axes",
+      "version_id": "f257f1c8-e604-5477-a6e6-22844af72097",
+      "content_hash": "bc1abb3b4799c55f05ba6b26820db5e308e53b4e9d036bbf31dbc684aec6b33e",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "frame",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "row_labels",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "column_labels",
+          "ordinal": 2,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Expose finalized numeric forecast values and coordinate labels.",
+      "parameters": {
+        "frame": "Nonempty dated DataFrame with int64 values."
+      },
+      "validity_bounds": "Require DatetimeIndex and int64 values, copy matrix and encode dates as ISO day strings. No prediction or rounding occurs.",
+      "outputs": "Int64 matrix, ordered row labels and encoded column labels.",
+      "plain_limits": "Expose finalized values and their axes.",
+      "reuse": "Dated integer-panel projection.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.forecast_axes",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "dl.decomposed_webtraffic_execution",
+        "repo_name": "sciona-atoms-dl",
+        "source_module_path": "dl.decomposed_webtraffic_execution",
+        "import_module": "sciona.atoms.dl.decomposed_webtraffic_execution",
+        "source_symbol": "forecast_axes",
+        "description": "Explicit forecast axes operation for qualified runtime composition.",
+        "domain_tags": [
+          "dl"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "cbc573e1-8d0e-5a5d-b31c-5aeee9951527",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "frame",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "row_labels",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "column_labels",
+          "ordinal": 2,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "frame",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "row_labels",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "column_labels",
+          "ordinal": 2,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.initialize",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.initialize",
+      "version_id": "9dd43010-f2bd-5eec-9e3a-9e7810f2c81f",
+      "content_hash": "cd999b39b292c798c5d5fc30350fe8fa284c865a2c01980af34607e1d86b8cf3",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "initialized",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Initialize three models and invocation-local sampling/dropout streams.",
+      "parameters": {
+        "prepared": "Matching PreparedRuntime from configure."
+      },
+      "validity_bounds": "Per-model seed+index; NumPy permutation and sampled-window offsets, first batch, CPU torch uniform initialization in source order. s32 depth267. State bundles are mutable, invocation-local and not serialization artifacts.",
+      "outputs": "Single-use TrainingStreams with prepared identity, three streams/generators, first batches and initial parameter/Adam/EMA state.",
+      "plain_limits": "Initialize every model and preserve the random-stream order.",
+      "reuse": "Source lifecycle policy; no TensorFlow seeded replay claim.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.initialize",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "dl.decomposed_webtraffic_execution",
+        "repo_name": "sciona-atoms-dl",
+        "source_module_path": "dl.decomposed_webtraffic_execution",
+        "import_module": "sciona.atoms.dl.decomposed_webtraffic_execution",
+        "source_symbol": "initialize",
+        "description": "Explicit initialize operation for qualified runtime composition.",
+        "domain_tags": [
+          "dl"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "64b3d654-d380-5c1f-8172-72c57f1d1563",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "initialized",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "initialized",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.page_metadata",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.page_metadata",
+      "version_id": "2988709a-8d8b-5a2a-931c-44ed97bdbfe4",
+      "content_hash": "0695e1c7efee3a38ab37ac36bac64a75d0446e3b64b6a3af286274031cabd63c",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "row_labels",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "page_map",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "encoded",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Apply source page grammar, agent grouping and normalized categorical encoding.",
+      "parameters": {
+        "row_labels": "Sorted source-compatible page strings from prepare."
+      },
+      "validity_bounds": "Retain exact source regex, four agent positions, missing-agent -1, and normalized one-hot agent/country/site columns. Invalid grammar rejects; constant categories can be nonfinite. This is not arbitrary categorical encoding.",
+      "outputs": "int32 page-group mapping and dictionary of three indexed encoded DataFrames.",
+      "plain_limits": "Extract the source-specific page categories.",
+      "reuse": "Explicit domain-specific parsing policy; replace only with qualified equivalent feature semantics.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.page_metadata",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "dl.decomposed_webtraffic_execution",
+        "repo_name": "sciona-atoms-dl",
+        "source_module_path": "dl.decomposed_webtraffic_execution",
+        "import_module": "sciona.atoms.dl.decomposed_webtraffic_execution",
+        "source_symbol": "page_metadata",
+        "description": "Explicit page metadata operation for qualified runtime composition.",
+        "domain_tags": [
+          "dl"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "eb958eb6-40e4-5f5e-af28-5522ff8c4ad9",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "row_labels",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "page_map",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "encoded",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "row_labels",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "page_map",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "encoded",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.popularity",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.popularity",
+      "version_id": "08edf819-7e11-5430-9695-51b6ebb17ab6",
+      "content_hash": "20e7c6a1cefb1f310a4929d627aa655c8df70013dbe191a26c583a66cfaa8dad",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "logged",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "popularity_values",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Standardize row medians using sample standard deviation across rows.",
+      "parameters": {
+        "logged": "Nonempty finite numeric DataFrame."
+      },
+      "validity_bounds": "Pandas row median then (median-mean)/std with ddof1. Constant or singleton populations can yield NaN; source semantics preserved.",
+      "outputs": "Indexed Series of standardized row medians.",
+      "plain_limits": "Compare each row median with the population.",
+      "reuse": "Domain-independent numeric frame summary.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.popularity",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "dl.decomposed_webtraffic_execution",
+        "repo_name": "sciona-atoms-dl",
+        "source_module_path": "dl.decomposed_webtraffic_execution",
+        "import_module": "sciona.atoms.dl.decomposed_webtraffic_execution",
+        "source_symbol": "popularity",
+        "description": "Explicit popularity operation for qualified runtime composition.",
+        "domain_tags": [
+          "dl"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "2b9fac80-b5ce-52af-b73f-cb33ed9c1874",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "logged",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "popularity_values",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "logged",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "popularity_values",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.prediction_batches",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.prediction_batches",
+      "version_id": "0b196a6d-9a02-560f-83fb-81c7bd084edb",
+      "content_hash": "bab785332cfd157cefbedd76cafbfab1c847dc37ad444aa7a9025d60c026a1dc",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "records",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Construct all source forecast batches for the runtime population.",
+      "parameters": {
+        "prepared": "Complete matching PreparedRuntime."
+      },
+      "validity_bounds": "Use one sequential entity pass, no training offsets, explicit prediction batch size and source completeness. Preserve input-pipe feature order and source windows.",
+      "outputs": "List of source eleven-element prediction batch tuples.",
+      "plain_limits": "Build every forecast batch in population order.",
+      "reuse": "Source batch-layout policy.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.prediction_batches",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "dl.decomposed_webtraffic_execution",
+        "repo_name": "sciona-atoms-dl",
+        "source_module_path": "dl.decomposed_webtraffic_execution",
+        "import_module": "sciona.atoms.dl.decomposed_webtraffic_execution",
+        "source_symbol": "prediction_batches",
+        "description": "Explicit prediction batches operation for qualified runtime composition.",
+        "domain_tags": [
+          "dl"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "ad902c3a-0cf4-5c10-b735-78756102d667",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "records",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "records",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.prepare",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.prepare",
+      "version_id": "02b80d3c-19ad-5e8d-8cc0-1849da7a01e3",
+      "content_hash": "40ea9e453223348347c502abc37df2502c6212607af7d48c9a169efde222d858",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "frame",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "valid_threshold",
+          "ordinal": 1,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "add_days",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "corr_backoffset",
+          "ordinal": 3,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "logged",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "missing",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "starts",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "ends",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Validate daily frame and extract log-transformed series with missing mask and support bounds.",
+      "parameters": {
+        "frame": "Nonempty numeric DataFrame; unique sorted row labels and contiguous timezone-naive daily columns; nonnegative finite values or NaN.",
+        "valid_threshold": "Finite threshold in[0,1] for (last_positive-first_positive)/time_width.",
+        "add_days": "Nonnegative integer future feature extension excluding bool.",
+        "corr_backoffset": "Nonnegative integer correlation backoffset excluding bool."
+      },
+      "validity_bounds": "Total extended width<=32768 and backoffset<input width. Retain source validity selection, zero-fill missing values before log1p, and keep original missing mask. No surviving rows rejects. An all-zero row has support(-1,-1) and survives threshold0.",
+      "outputs": "Logged DataFrame, aligned boolean missing DataFrame, int32 first/last positive positions.",
+      "plain_limits": "Prepare each series and retain its missing values and support positions.",
+      "reuse": "Daily nonnegative series operation; labels are not parsed here.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.prepare",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "dl.decomposed_webtraffic_execution",
+        "repo_name": "sciona-atoms-dl",
+        "source_module_path": "dl.decomposed_webtraffic_execution",
+        "import_module": "sciona.atoms.dl.decomposed_webtraffic_execution",
+        "source_symbol": "prepare",
+        "description": "Explicit prepare operation for qualified runtime composition.",
+        "domain_tags": [
+          "dl"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "05524cbf-e7cc-5e79-a6e1-2186536a05ae",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "frame",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "valid_threshold",
+          "ordinal": 1,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "add_days",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "corr_backoffset",
+          "ordinal": 3,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "logged",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "missing",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "starts",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "ends",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "frame",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "valid_threshold",
+          "ordinal": 1,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "add_days",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "corr_backoffset",
+          "ordinal": 3,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "logged",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "missing",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "starts",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "ends",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.result",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.result",
+      "version_id": "788a3fc2-59cc-5f60-8a74-a61c27c0064a",
+      "content_hash": "1e719080e2da2aa6f5716ced29be8d95d498cf163e47694d095cc949ebb62859",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "identifiers",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Encode final record columns as finite JSON-compatible lists.",
+      "parameters": {
+        "identifiers": "Nonempty rank1 int64 identifiers.",
+        "values": "Int64 values with exactly matching shape."
+      },
+      "validity_bounds": "Return version2 plus identifiers/values; no file persistence or competition-specific field naming. Caller retains identity policy.",
+      "outputs": "Dictionary with version2 and two parallel integer lists.",
+      "plain_limits": "Return the final record columns.",
+      "reuse": "Generic integer-record encoding boundary.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.result",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "dl.decomposed_webtraffic_execution",
+        "repo_name": "sciona-atoms-dl",
+        "source_module_path": "dl.decomposed_webtraffic_execution",
+        "import_module": "sciona.atoms.dl.decomposed_webtraffic_execution",
+        "source_symbol": "result",
+        "description": "Explicit result operation for qualified runtime composition.",
+        "domain_tags": [
+          "dl"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "338684fb-486e-54a6-95b3-760de1986c63",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "identifiers",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "identifiers",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.save_checkpoint",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.save_checkpoint",
+      "version_id": "132bb8de-b908-5954-8c90-43c2a235f650",
+      "content_hash": "15d15d31e3136cb080ac4607abfc89acddd289e2df5e4988d49fdf7dd7847517",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "checkpoints",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "state",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "checkpoints",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Retain the latest ten independent state snapshots.",
+      "parameters": {
+        "checkpoints": "List of earlier runtime states.",
+        "state": "Current runtime state to retain."
+      },
+      "validity_bounds": "Deep-copy the current state, append and retain last10. Older retained entries are shared with the input list; callers must not mutate retained snapshots. No filesystem checkpoint codec.",
+      "outputs": "New checkpoint list with at most ten entries.",
+      "plain_limits": "Keep an independent copy of the new state and retain the latest ten.",
+      "reuse": "Generic bounded snapshot retention with fixed explicit retention policy.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.save_checkpoint",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "dl.decomposed_webtraffic_execution",
+        "repo_name": "sciona-atoms-dl",
+        "source_module_path": "dl.decomposed_webtraffic_execution",
+        "import_module": "sciona.atoms.dl.decomposed_webtraffic_execution",
+        "source_symbol": "save_checkpoint",
+        "description": "Explicit save checkpoint operation for qualified runtime composition.",
+        "domain_tags": [
+          "dl"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "2a98ad78-da31-52d5-932c-9736eb7dc744",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "checkpoints",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "state",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "checkpoints",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "checkpoints",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "state",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "checkpoints",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.train",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.train",
+      "version_id": "78a1cec4-8f12-5b13-a8cc-6b5c467d16d4",
+      "content_hash": "dc74a9c60fa4cf4939feacc533a0d0ec98f3ba918b3affbb35cc02b8c0129927",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "initialized",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "advance_function",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "checkpoint_function",
+          "ordinal": 3,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "trained",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Execute every configured update through explicit update and checkpoint callables.",
+      "parameters": {
+        "prepared": "PreparedRuntime matching initialized.prepared by object identity.",
+        "initialized": "Fresh, unconsumed TrainingStreams with shared_step0.",
+        "advance_function": "Qualified three-model update callable(state,batches,observations).",
+        "checkpoint_function": "Qualified checkpoint callable(checkpoints,state)."
+      },
+      "validity_bounds": "Mark streams consumed before execution, including failed execution. Preserve every scheduled batch and RNG draw, source dropout probabilities, declared EMA phases and checkpoint cadence. Strict source stop comparison can execute one update beyond max_steps. Callability alone does not authenticate injected semantics; qualified graph binds exact registered functions. Retry requires fresh initialization.",
+      "outputs": "Complete state and retained checkpoint dictionary.",
+      "plain_limits": "Run the full schedule and retain its checkpoints.",
+      "reuse": "Explicit source orchestration; no shortened or forward-only substitution.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.train",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "dl.decomposed_webtraffic_execution",
+        "repo_name": "sciona-atoms-dl",
+        "source_module_path": "dl.decomposed_webtraffic_execution",
+        "import_module": "sciona.atoms.dl.decomposed_webtraffic_execution",
+        "source_symbol": "train",
+        "description": "Explicit train operation for qualified runtime composition.",
+        "domain_tags": [
+          "dl"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "eb28f02d-f2b2-57b8-906f-6a37e212bb02",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "initialized",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "advance_function",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "checkpoint_function",
+          "ordinal": 3,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "trained",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "initialized",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "advance_function",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "checkpoint_function",
+          "ordinal": 3,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "trained",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.unpack",
+      "catalog_fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.unpack",
+      "version_id": "992a35a8-baaa-5b6d-8ea0-345072cdcd92",
+      "content_hash": "95d513a977715ffc3b14693308824eb505c94020c54a3974b78da827e8e047b6",
+      "provider_sha256": "7d536d077ee2a4b3c5f7a575768c77b2b3c2043343cee9d741f052d0096f6578",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "payload",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "raw_frame",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "config",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "valid_threshold",
+          "ordinal": 2,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "add_days",
+          "ordinal": 3,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "corr_backoffset",
+          "ordinal": 4,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "lags",
+          "ordinal": 5,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "thresholds",
+          "ordinal": 6,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "output_rows",
+          "ordinal": 7,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "output_columns",
+          "ordinal": 8,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "identifiers",
+          "ordinal": 9,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Copy and validate the complete version2 forecasting request; expose all recipe controls.",
+      "parameters": {
+        "payload": "Finite JSON dictionary with exactly version=2,pages,start_day,counts,config,output. Pages are nonempty sorted unique strings; counts are rectangular nonnegative finite Python numbers/null, cast to float32; start_day is a canonical ISO day. Config is RuntimeConfig fields. Output has rows,columns,identifiers."
+      },
+      "validity_bounds": "Validate configuration and exact output row order; output columns must be a nonempty suffix of the63-day horizon after input end, and identifiers an aligned int64 matrix excluding bool. Deep-copy through finite JSON. No feature extraction or training. Return fixed recipe feature controls explicitly.",
+      "outputs": "Frame, RuntimeConfig, validity0, added_days63, backoffset0, lags[365,91], support[1.5,2], output rows/columns and int64 identifier matrix.",
+      "plain_limits": "Check inputs and expose the selected settings before starting work.",
+      "reuse": "Recipe boundary; numerical downstream inputs remain separately usable.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.dl.decomposed_webtraffic_execution.unpack",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "dl.decomposed_webtraffic_execution",
+        "repo_name": "sciona-atoms-dl",
+        "source_module_path": "dl.decomposed_webtraffic_execution",
+        "import_module": "sciona.atoms.dl.decomposed_webtraffic_execution",
+        "source_symbol": "unpack",
+        "description": "Explicit unpack operation for qualified runtime composition.",
+        "domain_tags": [
+          "dl"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "02ab1385-92fd-5d91-8e73-2ee3272d9588",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "payload",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "raw_frame",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "config",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "valid_threshold",
+          "ordinal": 2,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "add_days",
+          "ordinal": 3,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "corr_backoffset",
+          "ordinal": 4,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "lags",
+          "ordinal": 5,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "thresholds",
+          "ordinal": 6,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "output_rows",
+          "ordinal": 7,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "output_columns",
+          "ordinal": 8,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "identifiers",
+          "ordinal": 9,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "payload",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "raw_frame",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "config",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "valid_threshold",
+          "ordinal": 2,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "add_days",
+          "ordinal": 3,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "corr_backoffset",
+          "ordinal": 4,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "lags",
+          "ordinal": 5,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "thresholds",
+          "ordinal": 6,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "output_rows",
+          "ordinal": 7,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "output_columns",
+          "ordinal": 8,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "identifiers",
+          "ordinal": 9,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    }
+  ],
+  "checker_sha256": "90a759eaf5ae5aafc4d6052bbae104ce1f899f99f7c4570df4fe39e39457cf03",
+  "catalog_snapshot": {
+    "atoms": "ea4e0d0a34d311bdb4142ae6526ad03caffd3e0712e42d9657d95c5045895129",
+    "artifacts": "44360aa0ebb96661d66fb58debbf60133675620ba4e6aa200632801f415dd876",
+    "atom_versions": "1a2f6e7b4c60f874c4f32cae7c3390738178ed86e62dc9509a7fa403e6d55708",
+    "artifact_versions": "c24576c3a01efeea0de9e85915b9059750badc12ece5b69ed3a9bdc929be2eb4",
+    "atom_io_specs": "38fa737c89de0f7a0b3e0b46bbc59c8235770f5c83f67fedbe820f62fdd283ce",
+    "artifact_io_specs": "b5e702df9231cf83b7aa15986869815758ee73b8126e96a7580ab03aea215043",
+    "atom_parameters": "60f89f6da27cf7d95eac46488125b3ae8751291634e46f19382f8e6ec56acd8d",
+    "artifact_parameters": "83626e89ec19fb3759e2508cf4ff0713c1aba4252c628c5bf9b31a7d3b17bdec",
+    "atom_descriptions": "c5b8276e98ae4884fdf04b262f8640a22f116ae16a5942848e358b14208bae92",
+    "artifact_descriptions": "dbbaf5174f1063e8f19c9248fe275b8bf8e8db61a28a5c6176c79d0f368653a9",
+    "atom_references": "72f14e123030967511ea73359ff77c09e21a6f17f55f12186e7c04063a6a5c7f",
+    "artifact_references": "540b8ccaf29a76d0a7dc4690ac3605754023d2b5b72548e79fec8b50e4ecfac2",
+    "atom_audit_rollups": "b61baa0e66b00a36e20020ba75006d0e631dbfbe2e7553888d529cd869e9d486",
+    "artifact_audit_rollups": "b6a28a083b98210d2bbb4fce530974590331bbb62f9ffa97afbef6f2e79bbdab",
+    "artifact_audit_evidence": "6fb68d62905a90b2aa505c7a1eade1530874a176015045998f6beb3b95a85549"
+  }
+}
