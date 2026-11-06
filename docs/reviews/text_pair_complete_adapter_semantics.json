@@ -1,0 +1,478 @@
+{
+  "format": "text-pair-complete-adapter-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "providers": [
+    {
+      "artifact_id": "b7e55f41-64cb-5693-91b0-865269e667d8",
+      "fqdn": "sciona.atoms.ml.text_pair_complete_execution.fit_features",
+      "runtime_fqdn": "sciona.atoms.ml.text_pair_complete_execution.fit_features",
+      "version_id": "c2351877-8637-568a-8b8c-d4c7281ee989",
+      "content_hash": "bdf070554e16965ec07867a11e8e1f2406cf92625e9fda8551915be4502c375b",
+      "legacy_existing": false,
+      "intake_interfaces": [
+        {
+          "direction": "input",
+          "name": "normalized",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Fit description vocabulary, projection, BM25 and context on training only."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Fit description vocabulary, projection, BM25 and context on training only."
+        }
+      ],
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "normalized",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Normalized state from the qualified normalization stage, with valid nonempty training rows and feasible projection controls. Fits unique training descriptions using word unigram/bigram TF-IDF and uncentered randomized sparse projection, and training-only BM25 corpus statistics. Builds candidate co-occurrence context from full title/description entities. Does not read labels, calibration or query text to fit. Returns execution-local mutable feature state; memory/runtime depend on caller population and vocabulary size."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Normalized state from the qualified normalization stage, with valid nonempty training rows and feasible projection controls. Fits unique training descriptions using word unigram/bigram TF-IDF and uncentered randomized sparse projection, and training-only BM25 corpus statistics. Builds candidate co-occurrence context from full title/description entities. Does not read labels, calibration or query text to fit. Returns execution-local mutable feature state; memory/runtime depend on caller population and vocabulary size."
+        }
+      ],
+      "operation": "Fit training-only description representations and full-record pair context.",
+      "plain_description": "Learn text features from training rows while keeping later rows out of the fitted vocabulary and statistics.",
+      "validity_bounds": "Unmodified Normalized state from the qualified normalization stage, with valid nonempty training rows and feasible projection controls. Fits unique training descriptions using word unigram/bigram TF-IDF and uncentered randomized sparse projection, and training-only BM25 corpus statistics. Builds candidate co-occurrence context from full title/description entities. Does not read labels, calibration or query text to fit. Returns execution-local mutable feature state; memory/runtime depend on caller population and vocabulary size.",
+      "reuse": "Reusable separate-field binary relevance recipe stage across applications with compatible contracts; explicit text, population and model policies are not universal numerical semantics.",
+      "registered_provider_dependencies": [
+        {
+          "runtime_fqdn": "sciona.atoms.ml.sklearn.decomposition.sparse_projection.fit_sparse_projection",
+          "artifact_id": "ddb952af-3379-56a0-a38f-e92c99b3794e",
+          "fqdn": "sciona.atoms.ml.sklearn.decomposition.sparse_projection.fit_sparse_projection",
+          "version_id": "277291e7-b3df-506c-9f3c-954eb6b7b6ba",
+          "content_hash": "2f5b9ae3a9a441834cf443dc2dd7d2a78f03d34cdad4d006398802a888ca7555",
+          "trust_tier": 3
+        }
+      ]
+    },
+    {
+      "artifact_id": "15006584-e426-5d80-a9a0-3f3397b21537",
+      "fqdn": "sciona.atoms.ml.text_pair_complete_execution.fit_models",
+      "runtime_fqdn": "sciona.atoms.ml.text_pair_complete_execution.fit_models",
+      "version_id": "6c914275-f7c9-505a-9679-b30a0f74dafb",
+      "content_hash": "7435012aa09a7ade48f47322e36fe1b4b11aa0c460363b6df478aa6f341bbefa",
+      "legacy_existing": false,
+      "intake_interfaces": [
+        {
+          "direction": "input",
+          "name": "features",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Fit the explicit logistic/random-forest recipe using training labels only."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Fit the explicit logistic/random-forest recipe using training labels only."
+        }
+      ],
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "features",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Features state from the qualified feature-fit stage. Thirteen features retain separate title edit and description similarities; current training pair occurrence is excluded from graph context. Fit standardized logistic regression with max_iter=1000 and a random forest with explicit trees/depth/leaf/seed controls and n_jobs=1. Native thread pools are bounded to one. Convergence warnings fail execution. Caller owns the choice of model families and feature policy; calibration labels and query rows do not fit these models."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Features state from the qualified feature-fit stage. Thirteen features retain separate title edit and description similarities; current training pair occurrence is excluded from graph context. Fit standardized logistic regression with max_iter=1000 and a random forest with explicit trees/depth/leaf/seed controls and n_jobs=1. Native thread pools are bounded to one. Convergence warnings fail execution. Caller owns the choice of model families and feature policy; calibration labels and query rows do not fit these models."
+        }
+      ],
+      "operation": "Fit the declared two-model binary relevance ensemble on thirteen training features.",
+      "plain_description": "Train two models using only training labels and training features.",
+      "validity_bounds": "Unmodified Features state from the qualified feature-fit stage. Thirteen features retain separate title edit and description similarities; current training pair occurrence is excluded from graph context. Fit standardized logistic regression with max_iter=1000 and a random forest with explicit trees/depth/leaf/seed controls and n_jobs=1. Native thread pools are bounded to one. Convergence warnings fail execution. Caller owns the choice of model families and feature policy; calibration labels and query rows do not fit these models.",
+      "reuse": "Reusable separate-field binary relevance recipe stage across applications with compatible contracts; explicit text, population and model policies are not universal numerical semantics.",
+      "registered_provider_dependencies": [
+        {
+          "runtime_fqdn": "sciona.atoms.ml.text_nlp.atoms.levenshtein",
+          "artifact_id": "270959cd-a379-4305-b3b6-d55c5a3235ed",
+          "fqdn": "sciona.atoms.ml.text_nlp.levenshtein",
+          "version_id": "211724b6-3494-5629-a6d4-2d0522090be8",
+          "content_hash": "354b2116ef43e38bd5f68638b041ccd99d5e1ceb03ab811d5722c31e8f9e4c67",
+          "trust_tier": 3
+        },
+        {
+          "runtime_fqdn": "sciona.atoms.ml.text_nlp.bm25.score_bm25",
+          "artifact_id": "8f0da8ba-9199-547a-9ae4-1b7e684a827c",
+          "fqdn": "sciona.atoms.ml.text_nlp.bm25.score_bm25",
+          "version_id": "04038b26-2f54-5968-9d73-5ca86fe1f5aa",
+          "content_hash": "694aa344d694ea817a51bd770cf529d005f04ea536def53b5154891b692b5710",
+          "trust_tier": 3
+        },
+        {
+          "runtime_fqdn": "sciona.atoms.ml.sklearn.decomposition.sparse_projection.transform_sparse_projection",
+          "artifact_id": "d84f65b4-0e20-561b-bd43-dc3cf9f14e71",
+          "fqdn": "sciona.atoms.ml.sklearn.decomposition.sparse_projection.transform_sparse_projection",
+          "version_id": "078cb171-1a34-5469-bec9-66d9039d3f82",
+          "content_hash": "20414518df42b5262acc43c7bc1c52b3014984047389d05c619131a07931da52",
+          "trust_tier": 3
+        }
+      ]
+    },
+    {
+      "artifact_id": "1a4ab961-b85d-5605-b5cb-1028f6fa6863",
+      "fqdn": "sciona.atoms.ml.text_pair_complete_execution.format_rows",
+      "runtime_fqdn": "sciona.atoms.ml.text_pair_complete_execution.format_rows",
+      "version_id": "d1d1a6d4-c069-5445-9df9-d3b1dc109fe6",
+      "content_hash": "365121a4b9f49f30740c510bd30050dff48df073bc2f303dd1f34d3922b36c06",
+      "legacy_existing": false,
+      "intake_interfaces": [
+        {
+          "direction": "input",
+          "name": "predictions",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Emit finite ordered relevance rows and calibration selection metrics."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Emit finite ordered relevance rows and calibration selection metrics."
+        }
+      ],
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "predictions",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Predictions state from the qualified prediction stage. Checks equal score/decision lengths, query count, finite JSON values, score ranges and inclusive-threshold decisions. Returns version-2 binary_relevance/title_description output with ordinal row indices, raw and scaled scores, binary decisions, cutoff and selection F1. This is a generic result table; competition-specific file formats and external identifiers remain caller-owned. Arbitrary fabricated intermediate records are not qualified."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Predictions state from the qualified prediction stage. Checks equal score/decision lengths, query count, finite JSON values, score ranges and inclusive-threshold decisions. Returns version-2 binary_relevance/title_description output with ordinal row indices, raw and scaled scores, binary decisions, cutoff and selection F1. This is a generic result table; competition-specific file formats and external identifiers remain caller-owned. Arbitrary fabricated intermediate records are not qualified."
+        }
+      ],
+      "operation": "Validate and emit finite ordered generic relevance rows and selection metrics.",
+      "plain_description": "Return one result per query row, preserving order and repeated rows.",
+      "validity_bounds": "Unmodified Predictions state from the qualified prediction stage. Checks equal score/decision lengths, query count, finite JSON values, score ranges and inclusive-threshold decisions. Returns version-2 binary_relevance/title_description output with ordinal row indices, raw and scaled scores, binary decisions, cutoff and selection F1. This is a generic result table; competition-specific file formats and external identifiers remain caller-owned. Arbitrary fabricated intermediate records are not qualified.",
+      "reuse": "Reusable separate-field binary relevance recipe stage across applications with compatible contracts; explicit text, population and model policies are not universal numerical semantics.",
+      "registered_provider_dependencies": []
+    },
+    {
+      "artifact_id": "6fd2d992-5f28-5b44-8efc-98e850680633",
+      "fqdn": "sciona.atoms.ml.text_pair_complete_execution.normalize_fields",
+      "runtime_fqdn": "sciona.atoms.ml.text_pair_complete_execution.normalize_fields",
+      "version_id": "d1410a50-c8a1-505c-874d-f319db026851",
+      "content_hash": "07411656c15d2bf7bd759ff7476ff18c8ef943cccee3a12055df7aefcc17f4ac",
+      "legacy_existing": false,
+      "intake_interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Normalize separate fields with caller policy and check population overlap."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Normalize separate fields with caller policy and check population overlap."
+        }
+      ],
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified PreparedCompletePairs from the qualified prepare stage. Revalidates and copies the request. NFKC/casefold, spelling, tokenization, one-pass domain substitution and synonym expansion are explicit policy; titles and descriptions are never concatenated. Train/calibration unordered full-record pairs must be unique and all three populations disjoint; repeated query rows are allowed. Output holds copied payload and normalized rows in original order. Vocabulary and mapping adequacy remain caller responsibilities."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified PreparedCompletePairs from the qualified prepare stage. Revalidates and copies the request. NFKC/casefold, spelling, tokenization, one-pass domain substitution and synonym expansion are explicit policy; titles and descriptions are never concatenated. Train/calibration unordered full-record pairs must be unique and all three populations disjoint; repeated query rows are allowed. Output holds copied payload and normalized rows in original order. Vocabulary and mapping adequacy remain caller responsibilities."
+        }
+      ],
+      "operation": "Normalize disjoint title/description populations using the declared frozen policy.",
+      "plain_description": "Apply the chosen text rules to each field and reject repeated or overlapping training and calibration pairs.",
+      "validity_bounds": "Unmodified PreparedCompletePairs from the qualified prepare stage. Revalidates and copies the request. NFKC/casefold, spelling, tokenization, one-pass domain substitution and synonym expansion are explicit policy; titles and descriptions are never concatenated. Train/calibration unordered full-record pairs must be unique and all three populations disjoint; repeated query rows are allowed. Output holds copied payload and normalized rows in original order. Vocabulary and mapping adequacy remain caller responsibilities.",
+      "reuse": "Reusable separate-field binary relevance recipe stage across applications with compatible contracts; explicit text, population and model policies are not universal numerical semantics.",
+      "registered_provider_dependencies": [
+        {
+          "runtime_fqdn": "sciona.atoms.ml.text_nlp.atoms.clean_text",
+          "artifact_id": "e81f7609-265b-44cd-9954-5384822299c9",
+          "fqdn": "sciona.atoms.ml.text_nlp.clean_text",
+          "version_id": "6336deb9-4112-5541-aa0c-18c15fb53b44",
+          "content_hash": "fac71b12a314d709fe3925df4fe59adb680d325141617bc5ea53a13247450ff3",
+          "trust_tier": 3
+        }
+      ]
+    },
+    {
+      "artifact_id": "a21c58da-8f1d-54ce-8655-96c78d0b60d0",
+      "fqdn": "sciona.atoms.ml.text_pair_complete_execution.predict",
+      "runtime_fqdn": "sciona.atoms.ml.text_pair_complete_execution.predict",
+      "version_id": "0d701f42-d6ae-560d-b90f-8e6cb7a8bb58",
+      "content_hash": "60a00eb55815dece46fb3a1139da298b718103fb4509d206a6929f1f772af233",
+      "legacy_existing": false,
+      "intake_interfaces": [
+        {
+          "direction": "input",
+          "name": "models",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Fit isotonic mapping and F1 cutoff on calibration rows, then predict query rows."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Fit isotonic mapping and F1 cutoff on calibration rows, then predict query rows."
+        }
+      ],
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "models",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Models state from the qualified model-fit stage. Average two class-1 score vectors equally. Fit increasing isotonic mapping bounded to [0,1], clipping outside calibration score range; then select the highest observed-score cutoff among equal empirical binary F1 values. Apply score >= cutoff to query rows without refitting text features or base models. Mapping and cutoff use the same calibration rows, so reported selection F1 is not independent accuracy. Returns raw and scaled scores, decisions and selection metrics; no probability-calibration guarantee."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Models state from the qualified model-fit stage. Average two class-1 score vectors equally. Fit increasing isotonic mapping bounded to [0,1], clipping outside calibration score range; then select the highest observed-score cutoff among equal empirical binary F1 values. Apply score >= cutoff to query rows without refitting text features or base models. Mapping and cutoff use the same calibration rows, so reported selection F1 is not independent accuracy. Returns raw and scaled scores, decisions and selection metrics; no probability-calibration guarantee."
+        }
+      ],
+      "operation": "Fit calibration score mapping and empirical F1 cutoff, then predict ordered query rows.",
+      "plain_description": "Use held-out labels to choose a rising score curve and decision cutoff, then apply both to new rows.",
+      "validity_bounds": "Unmodified Models state from the qualified model-fit stage. Average two class-1 score vectors equally. Fit increasing isotonic mapping bounded to [0,1], clipping outside calibration score range; then select the highest observed-score cutoff among equal empirical binary F1 values. Apply score >= cutoff to query rows without refitting text features or base models. Mapping and cutoff use the same calibration rows, so reported selection F1 is not independent accuracy. Returns raw and scaled scores, decisions and selection metrics; no probability-calibration guarantee.",
+      "reuse": "Reusable separate-field binary relevance recipe stage across applications with compatible contracts; explicit text, population and model policies are not universal numerical semantics.",
+      "registered_provider_dependencies": [
+        {
+          "runtime_fqdn": "sciona.atoms.ml.text_nlp.atoms.levenshtein",
+          "artifact_id": "270959cd-a379-4305-b3b6-d55c5a3235ed",
+          "fqdn": "sciona.atoms.ml.text_nlp.levenshtein",
+          "version_id": "211724b6-3494-5629-a6d4-2d0522090be8",
+          "content_hash": "354b2116ef43e38bd5f68638b041ccd99d5e1ceb03ab811d5722c31e8f9e4c67",
+          "trust_tier": 3
+        },
+        {
+          "runtime_fqdn": "sciona.atoms.ml.text_nlp.bm25.score_bm25",
+          "artifact_id": "8f0da8ba-9199-547a-9ae4-1b7e684a827c",
+          "fqdn": "sciona.atoms.ml.text_nlp.bm25.score_bm25",
+          "version_id": "04038b26-2f54-5968-9d73-5ca86fe1f5aa",
+          "content_hash": "694aa344d694ea817a51bd770cf529d005f04ea536def53b5154891b692b5710",
+          "trust_tier": 3
+        },
+        {
+          "runtime_fqdn": "sciona.atoms.ml.sklearn.decomposition.sparse_projection.transform_sparse_projection",
+          "artifact_id": "d84f65b4-0e20-561b-bd43-dc3cf9f14e71",
+          "fqdn": "sciona.atoms.ml.sklearn.decomposition.sparse_projection.transform_sparse_projection",
+          "version_id": "078cb171-1a34-5469-bec9-66d9039d3f82",
+          "content_hash": "20414518df42b5262acc43c7bc1c52b3014984047389d05c619131a07931da52",
+          "trust_tier": 3
+        },
+        {
+          "runtime_fqdn": "sciona.atoms.ml.model_selection.materialized_prediction.average",
+          "artifact_id": "3e054efb-38d6-56c1-a7c8-26da81e7a310",
+          "fqdn": "sciona.atoms.ml.model_selection.materialized_prediction.average",
+          "version_id": "fbea5906-9987-5e67-88c4-5ffe3d971e66",
+          "content_hash": "280b371b126f6d7f580dd169289280af76fc50d64350b784c3aefd346df18af5",
+          "trust_tier": 3
+        },
+        {
+          "runtime_fqdn": "sciona.atoms.ml.sklearn.isotonic.atoms.isotonic_regression_fit",
+          "artifact_id": "777018bd-19bf-466c-93e1-3b7ee5cd2554",
+          "fqdn": "sciona.atoms.ml.sklearn.isotonic.isotonic_regression_fit",
+          "version_id": "f91ca3b0-656e-5afc-8cdc-7aadeb961655",
+          "content_hash": "076afd2e339934fd8b103328693fb851e2fa0ba38ea835b868c03688082ac219",
+          "trust_tier": 3
+        },
+        {
+          "runtime_fqdn": "sciona.atoms.ml.sklearn.isotonic.atoms.isotonic_regression",
+          "artifact_id": "46e31de0-ba8d-4807-afeb-91f83f9872a5",
+          "fqdn": "sciona.atoms.ml.sklearn.isotonic.isotonic_regression",
+          "version_id": "5e0791b2-d932-5556-a678-ec447331cfe3",
+          "content_hash": "33921162f0f39f88695cd0523cd5ebe3f1e11f7c38f16284ffb318f5424a84c4",
+          "trust_tier": 3
+        },
+        {
+          "runtime_fqdn": "sciona.atoms.ml.sklearn.isotonic.atoms.isotonic_regression_transform",
+          "artifact_id": "45d3cfd3-5b31-4526-83a4-dfadf75a3366",
+          "fqdn": "sciona.atoms.ml.sklearn.isotonic.isotonic_regression_transform",
+          "version_id": "bd2155a5-a167-5b22-88a8-a0227e28ecc8",
+          "content_hash": "a784245c6ea9017fe7e77f7bd8e891fc5c7e9c8a0bf03eaa171c19601208cb7e",
+          "trust_tier": 3
+        },
+        {
+          "runtime_fqdn": "sciona.atoms.ml.calibration.empirical_f1.fit_empirical_f1_thresholds",
+          "artifact_id": "1d426405-3d0e-5545-b9c4-51b4eb2681af",
+          "fqdn": "sciona.atoms.ml.calibration.empirical_f1.fit_empirical_f1_thresholds",
+          "version_id": "83608ee9-c047-53da-acb5-209901f7b245",
+          "content_hash": "a0c822126d1cfe7c14c4a451a0a8ae1070ffb50a0959a56776c2d3127c4e7c96",
+          "trust_tier": 3
+        },
+        {
+          "runtime_fqdn": "sciona.atoms.ml.calibration.empirical_f1.apply_column_thresholds",
+          "artifact_id": "fe055a2d-5444-5c56-a52c-b4f1876aeba1",
+          "fqdn": "sciona.atoms.ml.calibration.empirical_f1.apply_column_thresholds",
+          "version_id": "2c4add48-5699-5485-865c-da509201fc45",
+          "content_hash": "b1df674cf843553cef39c8fefb23c21a23cad31671503a6104e64aa954aebe8f",
+          "trust_tier": 3
+        }
+      ]
+    },
+    {
+      "artifact_id": "f5d62d51-9656-50cd-9c9b-7ecd2e6e2a0a",
+      "fqdn": "sciona.atoms.ml.text_pair_complete_execution.prepare_fields",
+      "runtime_fqdn": "sciona.atoms.ml.text_pair_complete_execution.prepare_fields",
+      "version_id": "9262dcf1-8ff7-5fb5-bf89-e23ef790d3b1",
+      "content_hash": "3a5c077cd7a8767dff8b7c1cf0ace0e6473491bc217395e871611a305487df71",
+      "legacy_existing": false,
+      "intake_interfaces": [
+        {
+          "direction": "input",
+          "name": "payload",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Validate and copy explicit policies and disjoint title/description rows."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Validate and copy explicit policies and disjoint title/description rows."
+        }
+      ],
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "payload",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact finite JSON-compatible version-2 request with binary_relevance task and title_description role. Nonempty training, calibration and query record pairs; each record has exactly string title and description fields. Training and calibration labels are integer 0/1 with both classes. Explicit vocabulary, domain substitutions and synonyms; explicit projection, BM25 and forest controls. Text limits and normalized full-record population collision rules apply. No entity-disjointness guarantee. Deep-copies the request; caller must not mutate the resulting payload before the next stage."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact finite JSON-compatible version-2 request with binary_relevance task and title_description role. Nonempty training, calibration and query record pairs; each record has exactly string title and description fields. Training and calibration labels are integer 0/1 with both classes. Explicit vocabulary, domain substitutions and synonyms; explicit projection, BM25 and forest controls. Text limits and normalized full-record population collision rules apply. No entity-disjointness guarantee. Deep-copies the request; caller must not mutate the resulting payload before the next stage."
+        }
+      ],
+      "operation": "Validate and copy a separate-field binary relevance request.",
+      "plain_description": "Check the input rows and settings before fitting anything, keeping titles and descriptions separate.",
+      "validity_bounds": "Exact finite JSON-compatible version-2 request with binary_relevance task and title_description role. Nonempty training, calibration and query record pairs; each record has exactly string title and description fields. Training and calibration labels are integer 0/1 with both classes. Explicit vocabulary, domain substitutions and synonyms; explicit projection, BM25 and forest controls. Text limits and normalized full-record population collision rules apply. No entity-disjointness guarantee. Deep-copies the request; caller must not mutate the resulting payload before the next stage.",
+      "reuse": "Reusable separate-field binary relevance recipe stage across applications with compatible contracts; explicit text, population and model policies are not universal numerical semantics.",
+      "registered_provider_dependencies": [
+        {
+          "runtime_fqdn": "sciona.atoms.ml.text_nlp.atoms.clean_text",
+          "artifact_id": "e81f7609-265b-44cd-9954-5384822299c9",
+          "fqdn": "sciona.atoms.ml.text_nlp.clean_text",
+          "version_id": "6336deb9-4112-5541-aa0c-18c15fb53b44",
+          "content_hash": "fac71b12a314d709fe3925df4fe59adb680d325141617bc5ea53a13247450ff3",
+          "trust_tier": 3
+        }
+      ]
+    }
+  ],
+  "tests": {
+    "tests": 3,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "semantic_source_sha256": {
+    "tests/test_text_pair_complete_semantics.py": "a1c5aaa77c8c83c09e0559dd158ead5853d3fb4a531b4a7528746084a94f72c1",
+    "scripts/review_text_pair_complete_adapter_semantics.py": "7c92f4f964b1acab956b2e01355aac41f3606b070b0200f61c4ad7ce9d74f763"
+  },
+  "intake_plan_sha256": "f82682d448d338086ecff1b8ba984c9bd5725fe683f22f0e8fb6abd6e3a3fb4c",
+  "graph_evidence_sha256": "1c65a7ee8d1e67f54fc3c43bab678af6269c03ee98e4d416290d804b6d0c34bc",
+  "reviewer_sha256": "7c92f4f964b1acab956b2e01355aac41f3606b070b0200f61c4ad7ce9d74f763",
+  "limitations": [
+    "Automated Tier 3 only; no human Tier 1 review or Tier 2 designation.",
+    "Recipe adapters carry explicit policy; independently reusable numerical/text primitives retain separate catalog identities.",
+    "Concrete execution-local state only; arbitrary fabricated or concurrently mutated intermediate states are unqualified.",
+    "Bounds are caller contracts, not a promise to reject every invalid object or finite arithmetic overflow.",
+    "Full-record pair-disjoint populations are required; stronger entity/domain separation remains caller-owned.",
+    "No named competition accuracy, probability calibration, submission-file compatibility or abstract-witness equivalence claim.",
+    "Three semantic cases supplement the source-bound 115-test recipe qualification and three native graph executions.",
+    "Exact registered dependency versions and reviewed metadata must be installed before activation.",
+    "No adapter or original-CDG approval is performed by this review."
+  ]
+}
