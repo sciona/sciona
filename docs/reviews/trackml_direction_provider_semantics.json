@@ -1,0 +1,232 @@
+{
+  "format": "trackml_direction-provider-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "providers": [
+    {
+      "artifact_id": "6558393e-8463-4a7e-a27b-1900d286b02b",
+      "fqdn": "sciona.atoms.particle_tracking.helix_geometry.helix_direction_from_two_points",
+      "version_id": "938482e2-c3a9-56d0-901e-f34a3d30e7ae",
+      "content_hash": "80763811d458983f68483fb0fbaad952aac9da9090a71d158ca0d7915c03ee23",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "hel_xm",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vector. Coordinates, centers and pitch share a caller-defined length unit. No broadcasting. Qualified domain excludes nonfinite intermediate arithmetic; point pairs and center define the caller-selected transverse rotation sense."
+        },
+        {
+          "direction": "input",
+          "name": "hel_ym",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vector. Coordinates, centers and pitch share a caller-defined length unit. No broadcasting. Qualified domain excludes nonfinite intermediate arithmetic; point pairs and center define the caller-selected transverse rotation sense."
+        },
+        {
+          "direction": "input",
+          "name": "hel_pitch",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vector. Coordinates, centers and pitch share a caller-defined length unit. No broadcasting. Qualified domain excludes nonfinite intermediate arithmetic; point pairs and center define the caller-selected transverse rotation sense."
+        },
+        {
+          "direction": "input",
+          "name": "x1",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vector. Coordinates, centers and pitch share a caller-defined length unit. No broadcasting. Qualified domain excludes nonfinite intermediate arithmetic; point pairs and center define the caller-selected transverse rotation sense."
+        },
+        {
+          "direction": "input",
+          "name": "y1",
+          "ordinal": 4,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vector. Coordinates, centers and pitch share a caller-defined length unit. No broadcasting. Qualified domain excludes nonfinite intermediate arithmetic; point pairs and center define the caller-selected transverse rotation sense."
+        },
+        {
+          "direction": "input",
+          "name": "z1",
+          "ordinal": 5,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vector. Coordinates, centers and pitch share a caller-defined length unit. No broadcasting. Qualified domain excludes nonfinite intermediate arithmetic; point pairs and center define the caller-selected transverse rotation sense."
+        },
+        {
+          "direction": "input",
+          "name": "x2",
+          "ordinal": 6,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vector. Coordinates, centers and pitch share a caller-defined length unit. No broadcasting. Qualified domain excludes nonfinite intermediate arithmetic; point pairs and center define the caller-selected transverse rotation sense."
+        },
+        {
+          "direction": "input",
+          "name": "y2",
+          "ordinal": 7,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vector. Coordinates, centers and pitch share a caller-defined length unit. No broadcasting. Qualified domain excludes nonfinite intermediate arithmetic; point pairs and center define the caller-selected transverse rotation sense."
+        },
+        {
+          "direction": "input",
+          "name": "z2",
+          "ordinal": 8,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vector. Coordinates, centers and pitch share a caller-defined length unit. No broadcasting. Qualified domain excludes nonfinite intermediate arithmetic; point pairs and center define the caller-selected transverse rotation sense."
+        },
+        {
+          "direction": "output",
+          "name": "hel_dz",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned float64 direction indicator in caller length units: axial difference, or for equal-height points pitch times transverse rotation sign. Zero is possible, including coincident points. This is not a unit vector or probability. The symbolic expression covers only the axial-difference branch; no symbolic fallback proof is claimed."
+        }
+      ],
+      "operation": "Determine axial motion sense from two positions, a transverse center and signed pitch, including the equal-height rotation fallback.",
+      "plain_description": "Determine the direction of travel along a spiral from two points.",
+      "validity_bounds": "Nonempty aligned finite float64 vector. Coordinates, centers and pitch share a caller-defined length unit. No broadcasting. Qualified domain excludes nonfinite intermediate arithmetic; point pairs and center define the caller-selected transverse rotation sense. Aligned float64 direction indicator in caller length units: axial difference, or for equal-height points pitch times transverse rotation sign. Zero is possible, including coincident points. This is not a unit vector or probability. The symbolic expression covers only the axial-difference branch; no symbolic fallback proof is claimed.",
+      "reuse": "Numeric geometry with caller-defined coordinates and units; detector topology, field strength and tracking policy remain outside the provider.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "tests": {
+    "tests": 37,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "exact_source_cases": 36,
+  "symbolic_scope": "Axial-difference branch only; equal-height fallback checked concretely.",
+  "software_sha256": {
+    "scripts/review_trackml_direction_provider_semantics.py": "bf64e057077d7bd9036dc37c88168de1c36df14ffec0e7361b215e3d104ea92c",
+    "scripts/review_trackml_geometry_provider_semantics.py": "c1d650e245a181370160d0d859871cdc6fb4d0b3b10a1e82c8f309423bb575b8",
+    "scripts/review_trackml_direction_reuse.py": "79b7b6c636c050e3d4c2dd776b55ad8a820d2a88ce7bc700a350b0fcdad95a7d",
+    "scripts/stage_trackml_direction_canonical_records.py": "9c5ae9777b98f766738b630c06da6b93cf86b3b47eaa28d8239a7526763224f0",
+    "scripts/audit_trackml_direction_intake.py": "16ccbd211662004cbee8586bfe8a62b4dcd7a72bbd011db5e2e2ce78f42f2bbf",
+    "tests/test_helix_direction_reuse.py": "41e5c311716035a17a66b59193069af41cf3a96f0935f78946f775b7b6caa9fa",
+    "sciona/trackml_nearest.py": "28ffa9afe1cc1d65b68423c6423d6ff6ebdc4c4630f92787ef91752657f73773",
+    "sciona/ghost/decorators.py": "9c29d4fd89992fd15e3cd48fc39b4e36e5815201f6cd714ea567c12c5a2deed8",
+    "sciona/ghost/registry.py": "793723a75d07a88eed39f59d8d4dc327c54adbf75db7a03003516a6f74c81b51",
+    "sciona/ghost/dimensions.py": "61be1958aa50725f3c6598d5b5447a806d2549698d5ce3ec243d467816754b7e",
+    "sciona-atoms-physics/src/sciona/atoms/particle_tracking/helix_geometry/atoms.py": "26677db3581b8be023b489ddf956d71328aea5e66631afa4c00b3601914dfd42",
+    "sciona-atoms-physics/src/sciona/atoms/particle_tracking/helix_geometry/expressions.py": "6a929f5e464e2353e4d5b392e247d390e4b82eb5b03e1e95878c5d779133b544",
+    "sciona-atoms-physics/src/sciona/atoms/particle_tracking/helix_geometry/witnesses.py": "3071db17f2046e612dbe5e3c0f58ca8947064380e9941e6c5300a970b6fa0b12",
+    "sciona-atoms-physics/src/sciona/atoms/particle_tracking/helix_geometry/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "installed_packages": {
+    "annotated-types": {
+      "version": "0.7.0",
+      "hashed_files_verified": 7,
+      "active_requirements": []
+    },
+    "asttokens": {
+      "version": "2.4.1",
+      "hashed_files_verified": 13,
+      "active_requirements": [
+        "six>=1.12.0"
+      ]
+    },
+    "icontract": {
+      "version": "2.7.3",
+      "hashed_files_verified": 16,
+      "active_requirements": [
+        "asttokens<3,>=2",
+        "typing_extensions"
+      ]
+    },
+    "mpmath": {
+      "version": "1.3.0",
+      "hashed_files_verified": 92,
+      "active_requirements": []
+    },
+    "numpy": {
+      "version": "2.2.6",
+      "hashed_files_verified": 876,
+      "active_requirements": []
+    },
+    "pydantic": {
+      "version": "2.12.5",
+      "hashed_files_verified": 111,
+      "active_requirements": [
+        "annotated-types>=0.6.0",
+        "pydantic-core==2.41.5",
+        "typing-extensions>=4.14.1",
+        "typing-inspection>=0.4.2"
+      ]
+    },
+    "pydantic-core": {
+      "version": "2.41.5",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.14.1"
+      ]
+    },
+    "six": {
+      "version": "1.17.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "sympy": {
+      "version": "1.14.0",
+      "hashed_files_verified": 1571,
+      "active_requirements": [
+        "mpmath<1.4,>=1.1.0"
+      ]
+    },
+    "threadpoolctl": {
+      "version": "3.6.0",
+      "hashed_files_verified": 5,
+      "active_requirements": []
+    },
+    "typing-extensions": {
+      "version": "4.16.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "typing-inspection": {
+      "version": "0.4.2",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.12.0"
+      ]
+    }
+  },
+  "intake_plan_sha256": "ee4e5ca2ec6454021b74b9b29e8143c4b15385d91956c2935d93dfd52602c65b",
+  "resource_policy": {
+    "serial_tests": true,
+    "native_threads": 1
+  },
+  "limitations": [
+    "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+    "Nonempty aligned finite float64 vectors in consistent caller-defined length units. No general broadcasting contract.",
+    "Output is axial difference except at equal heights, where it is pitch times transverse rotation sign. Zero is possible and callers must handle it.",
+    "The existing provider does not independently enforce every shape, dtype or finite-intermediate precondition. Qualified callers must enforce these conditions.",
+    "Finite input can overflow the fallback cross product while yielding a finite sign. Such arithmetic is outside qualification; no floating-point error bound is supplied.",
+    "The registered symbolic equation describes only the ordinary axial-difference branch. The abstract witness supplies shape only; neither proves the equal-height fallback.",
+    "Geometry is reusable across applications with consistent coordinates and units. No detector layout, field strength, candidate ranking or calibration map is embedded.",
+    "Installed RECORD integrity validates current dependency files, not wheel publisher authentication or deployment on other platforms.",
+    "Legacy approval and history remain preserved. Canonical approval, recipe integration and original-CDG publication are separate gates."
+  ]
+}
