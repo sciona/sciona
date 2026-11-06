@@ -1,0 +1,492 @@
+{
+  "format": "connectomics-filter-provider-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "review_source": "automated",
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.connectomics_filter_execution.execute_prefiltered",
+      "catalog_fqdn": "sciona.atoms.ml.connectomics_filter_execution.execute_prefiltered",
+      "version_id": "82aa95b5-75c7-5576-9d34-ed960ac5bbed",
+      "content_hash": "1a2146edb9a46e90a3721fc74ff7a8268f4c87f9883c81c10b2af9046d1cbdbc",
+      "provider_sha256": "d909e196c6cf5587ae95967d8b3d3725c1f7535c56591a615ae764bf0c3eed4e",
+      "signature": "(prepared: object, f1: numpy.ndarray, f2: numpy.ndarray, f3: numpy.ndarray, f4: numpy.ndarray) -> dict",
+      "bound_nodes": [
+        "execute"
+      ],
+      "classification": "source_recipe_adapter",
+      "atom_id": "a3dd4f77-f3aa-53d0-9249-1c4cb8f6c4bd",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.connectomics_filter_execution.execute_prefiltered",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.connectomics_filter_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.connectomics_filter_execution",
+        "import_module": "sciona.atoms.ml.connectomics_filter_execution",
+        "source_symbol": "execute_prefiltered",
+        "description": "Run the full corrected source sweep using explicitly supplied filters.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.1a2146edb9a4",
+      "fingerprint": "bf85d42ddce6322ad3ea0ab806d0c3bd8573f22d642afaea466507fdee6484bb",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "f1",
+          "ordinal": 1,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "f2",
+          "ordinal": 2,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "f3",
+          "ordinal": 3,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "f4",
+          "ordinal": 4,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Run the full source recipe with the four supplied filter results and the caller\u2019s chosen method.",
+      "plain_limits": "Use the checked graph to supply all four filter results for the same input. This step checks their shape and number format, but does not prove that their weights were correct. It runs every source threshold and optionally adds the time order score. Invalid or degenerate results are rejected. These scores are not calibrated probabilities.",
+      "validity_bounds": "Revalidated Prepared plus four finite float32 ndarrays exactly matching signals.shape, including f3/f4 in simple mode. Filter snapshots are copied and bound to equal source signal values; each source callback gets a fresh copy. Filter correctness is a graph-binding obligation, not inferred from shape. Executes complete 120-entry corrected sweeps: simple 240 historical PCA fits, tuned 480. Includes repeated thresholds, source weights, historical sample-count variance, 80% components, and normalization after aggregation. Optional directivity uses n_jobs=1 and 0.997/0.003 blend. Nonfinite filtered signals, nonpositive residual covariance and degenerate score normalization fail closed. Hash-verified locally provisioned source required.",
+      "parameters": {
+        "prepared": "Prepared object revalidated through the same version-1 input contract; explicit simple/tuned mode and boolean directivity.",
+        "f1": "Finite float32 ndarray matching prepared.signals.shape; must be the corresponding source filter output for those exact signals. A copy is retained. The qualified graph supplies this binding.",
+        "f2": "Finite float32 ndarray matching prepared.signals.shape; must be the corresponding source filter output for those exact signals. A copy is retained. The qualified graph supplies this binding.",
+        "f3": "Finite float32 ndarray matching prepared.signals.shape; must be the corresponding source filter output for those exact signals. A copy is retained. The qualified graph supplies this binding.",
+        "f4": "Finite float32 ndarray matching prepared.signals.shape; must be the corresponding source filter output for those exact signals. A copy is retained. The qualified graph supplies this binding."
+      },
+      "outputs": "Version-1 result dictionary with mode, directivity, pca_fits and finite square score lists. Synthetic source parity does not establish scientific validity or calibrated probabilities.",
+      "dependencies": [
+        "sciona.decomposed_connectomics_runtime.execute_prefiltered",
+        "sciona.decomposed_connectomics_runtime.checked_filter",
+        "sciona.connectomics_runtime.Prepared",
+        "sciona.connectomics_runtime.prepare",
+        "sciona.connectomics_source.source_namespace",
+        "hash-pinned source function namespace and historical PCA class",
+        "numpy",
+        "scipy",
+        "scikit-learn base/validation interfaces",
+        "joblib",
+        "sciona.ghost.registry (registration only)"
+      ],
+      "reuse": "Source recipe adapter; it consumes numerical arrays through explicit ports. Generic filters are upstream graph providers, not hidden calls from this adapter.",
+      "internal_registered_provider_dependencies": []
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.connectomics_filter_execution.filter_configuration",
+      "catalog_fqdn": "sciona.atoms.ml.connectomics_filter_execution.filter_configuration",
+      "version_id": "f83378ee-33fb-5d14-977c-2bc6550645cc",
+      "content_hash": "82802248c4464e10b50a0178f7ca9248c315d32287365f0cd2a3d558a9b545f1",
+      "provider_sha256": "d909e196c6cf5587ae95967d8b3d3725c1f7535c56591a615ae764bf0c3eed4e",
+      "signature": "(prepared: object) -> tuple",
+      "bound_nodes": [
+        "configuration"
+      ],
+      "classification": "source_recipe_adapter",
+      "atom_id": "8a752a90-f154-582b-9e1e-46b1200417a5",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.connectomics_filter_execution.filter_configuration",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.connectomics_filter_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.connectomics_filter_execution",
+        "import_module": "sciona.atoms.ml.connectomics_filter_execution",
+        "source_symbol": "filter_configuration",
+        "description": "Expose source-specific taps and time axis for four generic filter calls.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.82802248c446",
+      "fingerprint": "a5b0f0afa7a6fbef365d6564781823a4d7fdf9af562d5be8d88404ac55999fba",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "axis",
+          "ordinal": 1,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "f1_shifts",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "f1_weights",
+          "ordinal": 3,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "f2_shifts",
+          "ordinal": 4,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "f2_weights",
+          "ordinal": 5,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "f3_shifts",
+          "ordinal": 6,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "f3_weights",
+          "ordinal": 7,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "f4_shifts",
+          "ordinal": 8,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "f4_weights",
+          "ordinal": 9,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Check the prepared input and return the four filter settings used by this source recipe.",
+      "plain_limits": "This step uses the source recipe\u2019s fixed weights and time axis. It copies and checks the input again. It returns the values, axis and four pairs of shifts and weights in a fixed order. It does not apply the filters.",
+      "validity_bounds": "Requires Connectomics Prepared; revalidates the complete version-1 payload contract through prepare. Returns a fresh read-only Fortran float32 signals array, axis=0, and f1/f2/f3/f4 shift/weight lists. Output order is values, axis, f1_shifts, f1_weights, f2_shifts, f2_weights, f3_shifts, f3_weights, f4_shifts, f4_weights. Tap policies are source-specific and do not define the generic numerical atom.",
+      "parameters": {
+        "prepared": "Prepared object with finite nonnegative float32-compatible time-by-node signals, >=3 nodes and samples>=max(5,nodes+1), nonconstant channels, simple/tuned mode and boolean directivity. Revalidated and copied."
+      },
+      "outputs": "Ten ordered outputs; complete tap values and ordering qualified by source parity and actual graph execution.",
+      "dependencies": [
+        "sciona.decomposed_connectomics_runtime.filter_configuration",
+        "sciona.connectomics_runtime.Prepared",
+        "sciona.connectomics_runtime.prepare",
+        "numpy",
+        "sciona.ghost.registry (registration only)"
+      ],
+      "reuse": "Source recipe adapter. The circular numerical operation remains a separately bound generic provider.",
+      "internal_registered_provider_dependencies": []
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.numerical.spatial.circular_filter.ordered_circular_filter",
+      "catalog_fqdn": "sciona.atoms.numerical.spatial.circular_filter.ordered_circular_filter",
+      "version_id": "78b98228-a317-5bb1-98bd-25c7ee98782d",
+      "content_hash": "216ae2a7f3eb4b988edf05d1d7543060395295b1cdb79fea49c1fd9793026def",
+      "provider_sha256": "708b4d40772c6b9eb9609a6d9a04832255ed1f98f12d1a6c3e405fda846a2431",
+      "signature": "(values: numpy.ndarray, shifts: object, weights: object, axis: int) -> numpy.ndarray",
+      "bound_nodes": [
+        "f1",
+        "f2",
+        "f3",
+        "f4"
+      ],
+      "classification": "generic_operation",
+      "atom_id": "6f9c72b3-403f-5e1f-9bb6-e82c8219cd1a",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.numerical.spatial.circular_filter.ordered_circular_filter",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "numerical.spatial.circular_filter",
+        "repo_name": "sciona-atoms",
+        "source_module_path": "numerical.spatial.circular_filter",
+        "import_module": "sciona.atoms.numerical.spatial.circular_filter",
+        "source_symbol": "ordered_circular_filter",
+        "description": "Sum weighted circular shifts in the supplied order, preserving float dtype. Nonempty finite float32/float64 arrays only. Axis is explicit and nonnegative; positive shifts move values toward increasing indices with wraparound. Shifts are integers and weights are finite real scalars representable in the input dtype. The first weighted shift initializes the result; later terms are added left to right without normalization or regrouping. Negative weights and repeated shifts are allowed. Reject nonfinite intermediate arithmetic. Returns a new array without changing caller inputs. Axis meanings, sampling intervals and filter interpretation belong to the caller; no domain policy.",
+        "domain_tags": [
+          "numerical"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.216ae2a7f3eb",
+      "fingerprint": "826d58383914ed956da4742e5fe63a9a2633c65a7df528166b4e6cf285b5017c",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "shifts",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "weights",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "axis",
+          "ordinal": 3,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "filtered",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Add weighted, wrapped shifts of an array in the order supplied by the caller.",
+      "plain_limits": "Use nonempty arrays of finite numbers stored in 32 or 64 bit form. Choose the axis, whole-number shifts and weights explicitly. Weights may be negative and shifts may repeat. The result has the same shape and number format. The input is unchanged. Overflow is rejected.",
+      "validity_bounds": "Nonempty finite float32/float64 array, ndim >= 1. Nonnegative integer axis within ndim; bool rejected. Equal nonempty 1D integer shifts and finite real weights; bool controls rejected. Each weight must be representable in input dtype. Python-float coefficients preserve weak-scalar float32 arithmetic. Ordered weighted rolls are accumulated left to right, without normalization or regrouping. Nonfinite terms or partial sums are rejected. No units, axis meaning, sampling rate or domain policy is inferred.",
+      "parameters": {
+        "values": "Finite nonempty float32 or float64 array. Any dimensionality of at least one; copied output retains shape and dtype.",
+        "shifts": "Nonempty one-dimensional integer shifts; positive shifts move values toward increasing indices, wrapping at the boundary. Repeats are allowed.",
+        "weights": "One-dimensional finite real weights, same length as shifts and representable in input dtype. Signed weights allowed; order affects rounding.",
+        "axis": "Explicit nonnegative integer axis less than values.ndim; booleans rejected."
+      },
+      "outputs": "Fresh array of the same shape and dtype; no caller array mutation.",
+      "dependencies": [
+        "numpy",
+        "numbers (Python standard library)",
+        "sciona.ghost.registry (registration only)"
+      ],
+      "reuse": "Domain independent. Callers supply axis and all filter taps; no Connectomics names or policies occur in the implementation.",
+      "internal_registered_provider_dependencies": []
+    }
+  ],
+  "graph_digest": "95e215627881bb6be74d333ad18cd4941663bf8e896c4603ac741e01f234ede2",
+  "software_sha256": {
+    "sciona/connectomics_runtime.py": "1e061d3a0384188e503b7e0935a984a2d351b9c500f9a4434d1b605e429d0211",
+    "sciona/connectomics_source.py": "5c8b13850cdb0a58f3587543decc303dc8c5a8eaf93dcb9f57f427c7c10336d1",
+    "sciona/decomposed_connectomics_runtime.py": "a25f16008faeaf0a60ca6dca80429c54194e70896cfa0f03cfb5afa7464720d7",
+    "sciona-atoms/src/sciona/atoms/numerical/spatial/circular_filter.py": "708b4d40772c6b9eb9609a6d9a04832255ed1f98f12d1a6c3e405fda846a2431",
+    "sciona-atoms-ml/src/sciona/atoms/ml/connectomics_filter_execution.py": "d909e196c6cf5587ae95967d8b3d3725c1f7535c56591a615ae764bf0c3eed4e"
+  },
+  "imports": {
+    "sciona/connectomics_runtime.py": [
+      "from dataclasses import dataclass",
+      "from pathlib import Path",
+      "from sciona.connectomics_source import source_namespace",
+      "import numpy as np",
+      "import os"
+    ],
+    "sciona/connectomics_source.py": [
+      "from math import sqrt",
+      "from pathlib import Path",
+      "from scipy import linalg",
+      "from sklearn.base import BaseEstimator, TransformerMixin",
+      "from sklearn.utils import as_float_array",
+      "import ast",
+      "import hashlib",
+      "import itertools",
+      "import joblib",
+      "import json",
+      "import numpy as np"
+    ],
+    "sciona/decomposed_connectomics_runtime.py": [
+      "from pathlib import Path",
+      "from sciona.connectomics_runtime import Prepared, prepare",
+      "from sciona.connectomics_source import source_namespace",
+      "import numpy as np",
+      "import os"
+    ],
+    "sciona-atoms/src/sciona/atoms/numerical/spatial/circular_filter.py": [
+      "from sciona.ghost.registry import register_atom",
+      "import numbers",
+      "import numpy as np"
+    ],
+    "sciona-atoms-ml/src/sciona/atoms/ml/connectomics_filter_execution.py": [
+      "from sciona.decomposed_connectomics_runtime import execute_prefiltered as execute",
+      "from sciona.decomposed_connectomics_runtime import filter_configuration as configure",
+      "from sciona.ghost.registry import register_atom",
+      "import numpy as np"
+    ]
+  },
+  "package_versions": {
+    "numpy": "2.4.2",
+    "scipy": "1.17.1",
+    "scikit-learn": "1.8.0",
+    "joblib": "1.5.3"
+  },
+  "python_version": "3.13.11",
+  "source_namespace": {
+    "source_pins_sha256": "5f6cbd3868c61956af0b63e86dfb6a0c14fcdf56bb6c37f11330478641403057",
+    "execution": "Only pinned historical PCA class and pinned function definitions are compiled. Source module imports, main routine, data loaders and rank helper are not executed.",
+    "callbacks": "f1/f2/f3/f4 are replaced with checked prefiltered snapshots; PCA and scale are replaced with finite/degeneracy guards; print is suppressed.",
+    "namespace_libraries": [
+      "numpy",
+      "scipy.linalg",
+      "math.sqrt",
+      "sklearn.base.BaseEstimator",
+      "sklearn.base.TransformerMixin",
+      "sklearn.utils.as_float_array",
+      "itertools.chain",
+      "joblib.Parallel",
+      "joblib.delayed",
+      "joblib.cpu_count"
+    ],
+    "parallelism": "Graph nodes execute serially. Optional source directivity explicitly receives n_jobs=1. Validation caps native pools at one; deployment must configure its own native thread limits."
+  },
+  "evidence_sha256": {
+    "connectomics_filter_provider_tests.json": "49a1b927441b1a5c65d380064f050d79ab6c6616139d76a6115cbd6e39d96123",
+    "connectomics_decomposed_semantic_review.json": "77418c79a77e1327dcad4a3dfd6aec050b6d81d32fad1b020db1a02542fb0eec",
+    "connectomics_decomposed_graph_execution.json": "0429e741dad7161e1df4dc1906b4a79ae007774e7bd083a3152f2cb58f3da31d",
+    "connectomics_generic_circular_filter_source_parity.json": "d3ac2dcf8024138767fcdc8a00a12f679ec2d0d1d5b8b8546622795536ff21d5",
+    "connectomics_filter_provider_intake_plan.json": "677b90334515851c7f3d1d1c721ac940202e6586526c6a7c28a2cdb5610e889a"
+  },
+  "intake_stage_mapping": [
+    {
+      "intake": "calcium_lowpass_filter",
+      "realization": "Source circular f1/f2 or f1/f2/f3/f4"
+    },
+    {
+      "intake": "first_difference",
+      "realization": "Adjacent temporal differences"
+    },
+    {
+      "intake": "fluorescence_hard_threshold",
+      "realization": "Corrected scalar threshold at each grid entry"
+    },
+    {
+      "intake": "global_activity_sample_reweighting",
+      "realization": "Simple row activity or tuned lagged activity and filter-specific powers"
+    },
+    {
+      "intake": "pca_precision_matrix",
+      "realization": "Pinned historical PCA, 80 percent components and negative precision"
+    },
+    {
+      "intake": "score_matrix_normalization",
+      "realization": "Diagonal minimum and min/max after weighted precision aggregation"
+    },
+    {
+      "intake": "threshold_sweep_ensemble",
+      "realization": "Complete 120-entry weighted grid, not Bayesian inference"
+    },
+    {
+      "intake": "temporal_precedence_directivity",
+      "realization": "Optional strict 0.2/0.5 precedence bounds with source endpoint behavior"
+    },
+    {
+      "intake": "weighted_score_combination",
+      "realization": "Optional 0.997 precision and 0.003 precedence"
+    }
+  ],
+  "limitations": [
+    "Automated Tier 3 review only; no Tier 1 human review or Tier 2 usage evidence.",
+    "Synthetic numerical and full-sweep source agreement; no historical accuracy or biological validity claim.",
+    "Recipe adapters require the hash-verified source cache and matching Python packages.",
+    "Direct consumers of execute_prefiltered are responsible for filter provenance; approved graph bindings establish that relationship.",
+    "The generic operation permits other domains, axes and signed taps; users determine their scientific interpretation.",
+    "This review does not change catalog approval; publication needs matching metadata and transaction gates."
+  ]
+}
