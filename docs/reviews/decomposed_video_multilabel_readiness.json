@@ -1,0 +1,89 @@
+{
+  "format": "decomposed-video-multilabel-readiness.v1",
+  "read_only": true,
+  "catalog_mutations": 0,
+  "approved": false,
+  "original": {
+    "artifact_id": "fe4236e8-593e-5d74-98a5-81c83b3ea359",
+    "fqdn": "cdg.competition.solution.kaggle.video_multilabel_temporal_pooling_topology",
+    "status": "draft",
+    "is_publishable": false,
+    "content_hash": "30d0444ec640598942c6221136e608d7b15449732ceb848939e1424321c496ad"
+  },
+  "source_version_id": "13b48adf-8fb5-5ea2-a26c-44344bb8907e",
+  "source_stages": [
+    {
+      "stage_id": "feature_stream_loading",
+      "description": "Load precomputed frame-level, segment-level, audio, visual, metadata, or sparse features for each video with sharded and memory-aware access."
+    },
+    {
+      "stage_id": "temporal_pooling",
+      "description": "Aggregate frame or segment features with NetVLAD, NetFV, attention pooling, bidirectional LSTM/GRU, transformer pooling, mean/max pooling, or mixture-of-experts pooling."
+    },
+    {
+      "stage_id": "context_gated_multilabel_head",
+      "description": "Train multilabel sigmoid, hierarchy-aware multitask, context gating, label-embedding, or mixture-of-experts heads for video label prediction."
+    },
+    {
+      "stage_id": "sparse_baseline_fusion",
+      "description": "Blend neural scores with bag-of-words, sparse linear, metadata, audio-only, or visual-only baselines to improve rare-label coverage."
+    },
+    {
+      "stage_id": "rank_ensemble_calibration",
+      "description": "Apply rank averaging, fold/model ensembling, label-specific threshold optimization, class-prior correction, or metric-specific top-k formatting."
+    }
+  ],
+  "reference": {
+    "artifact_id": "52a0bf31-8f5a-5669-b966-d967f6fc9edd",
+    "fqdn": "cdg.competition.solution.kaggle.video_multilabel_temporal_pooling_topology.execution",
+    "status": "approved",
+    "is_publishable": true,
+    "version_id": "88181ca5-2045-5a42-9b25-377384466349",
+    "content_hash": "2becf3fdb330ae328071a82e2ffbaf8c5c6af1d110e036cd0ed48c67f0922e3f",
+    "trust_tier": 3
+  },
+  "reference_served": true,
+  "implementation_drift": [],
+  "runtime_drift": {
+    "numpy": {
+      "qualified": "2.4.2",
+      "current": "2.2.6"
+    },
+    "setuptools": {
+      "qualified": "81.0.0",
+      "current": "80.9.0"
+    },
+    "typing-extensions": {
+      "qualified": "4.15.0",
+      "current": "4.16.0"
+    }
+  },
+  "semantic_report_sha256": "adcfd65f180df09799e3e4a8e6bdd71ba9c48c5cd403f717768b781472317305",
+  "execution_report_sha256": "61d6850a46408ecb340974a7a2b78be48da71629d00025bea869d9eff7570f63",
+  "inspected_implementation_sha256": {
+    "sciona/video_multilabel_contract.py": "b3511e7df73c0f5f5f4b7a22dcd76aed5badd9a131f37c7acd13f3ce9ab037ea",
+    "sciona/video_multilabel_network.py": "2787419d79ad600dd53be0cdbaf8c7b3ccf73b5cda73a8ee76884f984e1eb451",
+    "sciona/video_multilabel_training.py": "fa65c6ab869a3e89ed7c2e4dde3838853602574c719c3dde8384b40757f164e7",
+    "sciona/video_multilabel_thresholds.py": "78b071bdef9faa2949fe0b61ceabe4286ba6eb88d7c1f58f771f916e40dcbf1e",
+    "../sciona-atoms/src/sciona/atoms/scoring/atoms.py": "103de27c6c86e814749899ffc89fa7446d32e24a87dc7822eacb2c6c7c93329c"
+  },
+  "reuse_candidates": [],
+  "findings": [
+    "The approved two-node derivative runs attention/context/sparse-fusion/threshold operations inside a recipe; these are not independently selectable graph providers.",
+    "Original feature_stream_loading explicitly requires sharded and memory-aware access. Existing prepare deep-copies a complete JSON population; only padded frame batches are bounded. Disk streaming is explicitly excluded by the derivative. Original promotion requires implementing and qualifying sharded access, not deleting that requirement.",
+    "Masked learned attention and context gating are independent of video semantics and should have reusable tensor contracts preserving differentiation, masking and frame-order invariance.",
+    "Sparse vocabulary fitting and per-label logistic training must stay training-only; group isolation and calibration population policy remain recipe responsibilities.",
+    "Existing expected_f1_threshold maximizes an expected-score objective from probabilities and a positive-count estimate. The recipe maximizes empirical F1 against held-out binary labels with highest-threshold ties. They are not interchangeable.",
+    "The original permits alternative pooling, head and calibration families; the attention/context-gate/sparse-linear/F1 branch is a declared realization, not a claim to implement every alternative."
+  ],
+  "next_actions": [
+    "Reexecute the existing derivative under the current bounded runtime and investigate dependency drift before reusing historical execution evidence.",
+    "Implement sharded feature access with training-only vocabulary and group checks, preserving every configured epoch and complete supplied population.",
+    "Inventory and qualify reusable masked pooling, context gating, sparse fit/predict, score fusion and empirical threshold operations; connect them explicitly in the original graph.",
+    "Revalidate full stored execution and native catalog eligibility before original Tier 3 publication."
+  ],
+  "limits": [
+    "Scope/reuse audit only; no new runtime correctness or promotion claim. Public software and generic algorithm-template metadata only."
+  ],
+  "auditor_sha256": "1aa0dc23e54805d0af09640780a5e2c0f8e2af557153a194874cf208ee53a6d8"
+}
