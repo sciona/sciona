@@ -1,0 +1,4606 @@
+{
+  "passed": true,
+  "records": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.aggregate",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.aggregate",
+      "version_id": "0d1c1439-cc05-53d0-b16f-938bc514e2a3",
+      "content_hash": "2365f5cb9cebfc636eac80ab3677ef9ec7e365ce978c4cdb4c0db6e4757a95a7",
+      "provider_sha256": "48d7261d4e8ffb373760cdabeb0ca5a39f5ce6ee69de9e133f7c42101497c25a",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "groups",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "heights",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "descriptors",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "quadrants",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "measurement_count",
+          "ordinal": 4,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "features",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Aggregate nine numeric features per explicitly supplied group.",
+      "parameters": {
+        "groups": "Rank1 integer group indexes in[0,measurement_count).",
+        "heights": "Aligned finite strictly positive real heights.",
+        "descriptors": "Peak-by4 real matrix; NaN allowed only in first2 columns.",
+        "quadrants": "Aligned integer values in{-1,0,1,2,3}.",
+        "measurement_count": "Positive Python integer."
+      },
+      "validity_bounds": "Exclude next-neighbor ratio>.33333 with height>50. Count quadrants0/2, all, and1/3. For0/2 compute height mean/sample std and means of previous ratio,next ratio,absolute opposite offset,sawtooth MSE. Missing groups and undefined summaries retain NaN; reject infinity.",
+      "outputs": "Measurement-by9 float matrix in the declared feature order.",
+      "plain_limits": "Summarize grouped peak records with fixed numeric rules.",
+      "reuse": "Group identities are arbitrary numeric indexes; thresholds and feature definitions are explicit recipe policy.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_vsb_execution.aggregate",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_vsb_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_vsb_execution",
+        "import_module": "sciona.atoms.ml.decomposed_vsb_execution",
+        "source_symbol": "aggregate",
+        "description": "Explicit aggregate operation for qualified runtime composition.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "10cb6a2f-0848-5b20-8a51-4a2104662c58",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "groups",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "heights",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "descriptors",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "quadrants",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "measurement_count",
+          "ordinal": 4,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "features",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "groups",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "heights",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "descriptors",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "quadrants",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "measurement_count",
+          "ordinal": 4,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "features",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.amplitude_gradient",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.amplitude_gradient",
+      "version_id": "5523331a-b61c-5e00-92d5-4ab2172ba392",
+      "content_hash": "3d92c2f2e5dcdc8eaa0498094a64b36d4268af35507f46296c3aea1c6a984110",
+      "provider_sha256": "48d7261d4e8ffb373760cdabeb0ca5a39f5ce6ee69de9e133f7c42101497c25a",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "heights",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "width",
+          "ordinal": 1,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "trim",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "gradient",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Convolve adjacent amplitude differences with a uniform kernel and trim both ends.",
+      "parameters": {
+        "heights": "At least2 finite nonnegative descending real amplitudes.",
+        "width": "Positive Python integer.",
+        "trim": "Nonnegative Python integer."
+      },
+      "validity_bounds": "Full convolution with ones(width)/width, then [trim:-trim]; trim0 retains everything. Empty trimmed output is valid; reject nonfinite arithmetic.",
+      "outputs": "Finite gradient vector, possibly empty.",
+      "plain_limits": "Smooth changes in ranked magnitudes.",
+      "reuse": "Domain-independent numeric sequence operation; smoothing controls are explicit.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_vsb_execution.amplitude_gradient",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_vsb_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_vsb_execution",
+        "import_module": "sciona.atoms.ml.decomposed_vsb_execution",
+        "source_symbol": "amplitude_gradient",
+        "description": "Explicit amplitude gradient operation for qualified runtime composition.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "a1f9a39b-bf3a-522a-bb8f-0f8330e11d01",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "heights",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "width",
+          "ordinal": 1,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "trim",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "gradient",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "heights",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "width",
+          "ordinal": 1,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "trim",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "gradient",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.baseline_arguments",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.baseline_arguments",
+      "version_id": "f9867cd5-353a-5484-8702-167da82d7269",
+      "content_hash": "f84e9a63b46da12ebf992a36b3b6323caf013031d84789e10de042b3e1f1004f",
+      "provider_sha256": "48d7261d4e8ffb373760cdabeb0ca5a39f5ce6ee69de9e133f7c42101497c25a",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "retention",
+          "ordinal": 1,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "b",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "a",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "x",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "axis",
+          "ordinal": 3,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "zi",
+          "ordinal": 4,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Construct first-order baseline subtraction filter arguments.",
+      "parameters": {
+        "values": "Nonempty finite real vector.",
+        "retention": "Finite numeric scalar in[0,1], excluding bool."
+      },
+      "validity_bounds": "Return b=[a,-a], denominator=[1,-a], independent float64 input, axis=-1 and initial delay[-a*x0]. No filtering occurs here.",
+      "outputs": "Five ordered arguments for the qualified linear filter.",
+      "plain_limits": "Prepare a recursive baseline filter with explicit retention.",
+      "reuse": "Domain-independent signal operation with an explicit initial-state convention.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_vsb_execution.baseline_arguments",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_vsb_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_vsb_execution",
+        "import_module": "sciona.atoms.ml.decomposed_vsb_execution",
+        "source_symbol": "baseline_arguments",
+        "description": "Explicit baseline arguments operation for qualified runtime composition.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "890c93c1-d7e8-596d-b9de-f4fad49d8964",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "retention",
+          "ordinal": 1,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "b",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "a",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "x",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "axis",
+          "ordinal": 3,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "zi",
+          "ordinal": 4,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "retention",
+          "ordinal": 1,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "b",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "a",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "x",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "axis",
+          "ordinal": 3,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "zi",
+          "ordinal": 4,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.baseline_residual",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.baseline_residual",
+      "version_id": "2f94662c-273e-5b62-8fcc-6b3292d00c55",
+      "content_hash": "9dd7ff87e85ce67f80c67e688c4c10aaef2285c66604f49a13b0c702fa2cd1ba",
+      "provider_sha256": "48d7261d4e8ffb373760cdabeb0ca5a39f5ce6ee69de9e133f7c42101497c25a",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "filtered",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "residual",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Copy a filtered vector and set its first value to zero.",
+      "parameters": {
+        "filtered": "Nonempty finite real filtered vector."
+      },
+      "validity_bounds": "Copy to float64, then overwrite index0. Does not authenticate filter coefficients, input provenance or the initial state.",
+      "outputs": "Independent residual vector.",
+      "plain_limits": "Apply the initial zero-residual convention.",
+      "reuse": "Generic numeric boundary; pair with matching filter arguments when reconstructing baseline subtraction.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_vsb_execution.baseline_residual",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_vsb_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_vsb_execution",
+        "import_module": "sciona.atoms.ml.decomposed_vsb_execution",
+        "source_symbol": "baseline_residual",
+        "description": "Explicit baseline residual operation for qualified runtime composition.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "d1ad7169-4ce1-5c68-963f-66143d464111",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "filtered",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "residual",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "filtered",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "residual",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.collect",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.collect",
+      "version_id": "91a5f98c-0768-50cf-8aca-254b1a325e56",
+      "content_hash": "9fa01dcf30ede18ac580f2cc5b5a54b6afc4928d61564baa52dc5c4a40259869",
+      "provider_sha256": "48d7261d4e8ffb373760cdabeb0ca5a39f5ce6ee69de9e133f7c42101497c25a",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "coefficients",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "controls",
+          "ordinal": 2,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "arguments_function",
+          "ordinal": 3,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "filter_function",
+          "ordinal": 4,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "residual_function",
+          "ordinal": 5,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "maxima_function",
+          "ordinal": 6,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "rank_function",
+          "ordinal": 7,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "gradient_function",
+          "ordinal": 8,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "selection_function",
+          "ordinal": 9,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "descriptor_function",
+          "ordinal": 10,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "phase_function",
+          "ordinal": 11,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "groups",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "heights",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "descriptors",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "quadrants",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "measurement_count",
+          "ordinal": 4,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Collect peak records through nine explicitly supplied numeric callables.",
+      "parameters": {
+        "values": "Finite real sample-by-signal matrix with samples>=3 and complete consecutive triples.",
+        "coefficients": "Aligned finite coefficient vector from the same signal matrix.",
+        "controls": "Exactly retention,window,width,trim,threshold,count,offset,small_radius,large_radius.",
+        "arguments_function": "Qualified callable(values,retention) returning five filter arguments.",
+        "filter_function": "Qualified callable(b,a,x,axis,zi) returning filtered samples.",
+        "residual_function": "Qualified callable(filtered) returning residuals.",
+        "maxima_function": "Qualified callable(values,window) returning candidates.",
+        "rank_function": "Qualified callable(residual,positions) returning ranked positions and heights.",
+        "gradient_function": "Qualified callable(heights,width,trim) returning gradient.",
+        "selection_function": "Qualified callable(positions,heights,gradient,threshold,count,offset) returning selected positions,heights,knee.",
+        "descriptor_function": "Qualified callable(positions,residual,small_radius,large_radius) returning four descriptors.",
+        "phase_function": "Qualified callable(positions,coefficient,length) returning quadrants."
+      },
+      "validity_bounds": "Visit every column serially; group index=column//3. Check descriptor and phase alignment. Shape checks and callability do not authenticate semantics or matching provenance. Control value validation is delegated to qualified operations.",
+      "outputs": "Aligned group indexes, heights, peak-by4 descriptors, quadrants and measurement count.",
+      "plain_limits": "Apply explicit numeric operations to every signal and collect ordered triples.",
+      "reuse": "Recipe grouping policy; injected numeric operations remain independently selectable.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_vsb_execution.collect",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_vsb_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_vsb_execution",
+        "import_module": "sciona.atoms.ml.decomposed_vsb_execution",
+        "source_symbol": "collect",
+        "description": "Explicit collect operation for qualified runtime composition.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "6e9494d5-3972-5473-bf65-f34087539628",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "coefficients",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "controls",
+          "ordinal": 2,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "arguments_function",
+          "ordinal": 3,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "filter_function",
+          "ordinal": 4,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "residual_function",
+          "ordinal": 5,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "maxima_function",
+          "ordinal": 6,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "rank_function",
+          "ordinal": 7,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "gradient_function",
+          "ordinal": 8,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "selection_function",
+          "ordinal": 9,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "descriptor_function",
+          "ordinal": 10,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "phase_function",
+          "ordinal": 11,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "groups",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "heights",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "descriptors",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "quadrants",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "measurement_count",
+          "ordinal": 4,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "coefficients",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "controls",
+          "ordinal": 2,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "arguments_function",
+          "ordinal": 3,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "filter_function",
+          "ordinal": 4,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "residual_function",
+          "ordinal": 5,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "maxima_function",
+          "ordinal": 6,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "rank_function",
+          "ordinal": 7,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "gradient_function",
+          "ordinal": 8,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "selection_function",
+          "ordinal": 9,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "descriptor_function",
+          "ordinal": 10,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "phase_function",
+          "ordinal": 11,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "groups",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "heights",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "descriptors",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "quadrants",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "measurement_count",
+          "ordinal": 4,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.encode_result",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.encode_result",
+      "version_id": "c20e20d2-c2cf-5c78-a259-df34b4d9347d",
+      "content_hash": "508896de1ee1af7e448ef53fca74ce637d0865c1d4a9dfeb1731510335645957",
+      "provider_sha256": "48d7261d4e8ffb373760cdabeb0ca5a39f5ce6ee69de9e133f7c42101497c25a",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "trained",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Encode the qualified final output as finite JSON-compatible values.",
+      "parameters": {
+        "trained": "Matching result dictionary with probability and signal-decision arrays,threshold,models,scope."
+      },
+      "validity_bounds": "Convert arrays to lists and retain exactly five fields. Require finite JSON; do not independently validate shapes, probability ranges, integer labels or provenance.",
+      "outputs": "Dictionary of probabilities,signal_decisions,threshold,models,scope in original query order.",
+      "plain_limits": "Return the final numeric output and declared limitations.",
+      "reuse": "Serialization boundary; caller must supply qualified result provenance.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_vsb_execution.encode_result",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_vsb_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_vsb_execution",
+        "import_module": "sciona.atoms.ml.decomposed_vsb_execution",
+        "source_symbol": "encode_result",
+        "description": "Explicit encode result operation for qualified runtime composition.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "45b8bd37-25dc-522a-a836-1cbd90673804",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "trained",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "trained",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.ensemble",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.ensemble",
+      "version_id": "f35122ae-1a7f-55fd-af11-f2a829ad33fd",
+      "content_hash": "c0229a19022aecba37a8ec4040b52c0e7f1d314e0a39b9597050021e0eff4607",
+      "provider_sha256": "48d7261d4e8ffb373760cdabeb0ca5a39f5ce6ee69de9e133f7c42101497c25a",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "training",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "labels",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "query",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "plans",
+          "ordinal": 3,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "repetitions",
+          "ordinal": 4,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "tree_seed",
+          "ordinal": 5,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "rounds",
+          "ordinal": 6,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "patience",
+          "ordinal": 7,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "fold_function",
+          "ordinal": 8,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "trained",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Execute every supplied fold and accumulate count-normalized scores.",
+      "parameters": {
+        "training": "Nonempty real rank2 features; NaN allowed.",
+        "labels": "Aligned integer binary vector.",
+        "query": "Nonempty real rank2 features of matching width; NaN allowed.",
+        "plans": "List of5*repetitions complete disjoint three-way partitions.",
+        "repetitions": "Positive Python integer.",
+        "tree_seed": "Python integer in[0,2**31).",
+        "rounds": "Positive Python integer.",
+        "patience": "Positive Python integer.",
+        "fold_function": "Qualified callable with fit_fold signature and output order."
+      },
+      "validity_bounds": "Validate all partitions before fitting; each row must occur3*repetitions in training and repetitions in each heldout. Validate finite[0,1] returned vectors and iteration1..rounds. Execute serially in plan order, averaging query scores per fold and row scores by coverage. Callable authenticity is a graph concern.",
+      "outputs": "Dictionary of query/training/validation/test probabilities, best iterations and model count.",
+      "plain_limits": "Fit every planned model and preserve the averaging order.",
+      "reuse": "Explicit repeated-five-way ensemble policy over generic numeric features.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_vsb_execution.ensemble",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_vsb_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_vsb_execution",
+        "import_module": "sciona.atoms.ml.decomposed_vsb_execution",
+        "source_symbol": "ensemble",
+        "description": "Explicit ensemble operation for qualified runtime composition.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "be09a2fc-13c8-597f-92dd-d54df9e0cdfd",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "training",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "labels",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "query",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "plans",
+          "ordinal": 3,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "repetitions",
+          "ordinal": 4,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "tree_seed",
+          "ordinal": 5,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "rounds",
+          "ordinal": 6,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "patience",
+          "ordinal": 7,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "fold_function",
+          "ordinal": 8,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "trained",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "training",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "labels",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "query",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "plans",
+          "ordinal": 3,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "repetitions",
+          "ordinal": 4,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "tree_seed",
+          "ordinal": 5,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "rounds",
+          "ordinal": 6,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "patience",
+          "ordinal": 7,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "fold_function",
+          "ordinal": 8,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "trained",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.fit_fold",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.fit_fold",
+      "version_id": "296af152-4617-5b3c-b1c7-59e45b2dcb21",
+      "content_hash": "4dbd19f400d62bf66e298e92a84532f31519aca5752a6cd6d856790f1ec420bf",
+      "provider_sha256": "48d7261d4e8ffb373760cdabeb0ca5a39f5ce6ee69de9e133f7c42101497c25a",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "training",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "labels",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "query",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "train",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "validation",
+          "ordinal": 4,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "test",
+          "ordinal": 5,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "tree_seed",
+          "ordinal": 6,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "rounds",
+          "ordinal": 7,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "patience",
+          "ordinal": 8,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "training_scores",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "validation_scores",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "test_scores",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "query_scores",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "iteration",
+          "ordinal": 4,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Fit a generic-width binary LightGBM model with two early-stopping populations.",
+      "parameters": {
+        "training": "Nonempty real rank2 features; NaN allowed, infinity rejected.",
+        "labels": "Aligned integer binary vector.",
+        "query": "Nonempty real rank2 features of matching width; NaN allowed.",
+        "train": "Nonempty integer training indexes with both classes.",
+        "validation": "Nonempty integer validation indexes.",
+        "test": "Nonempty integer nominal-test indexes.",
+        "tree_seed": "Python integer in[0,2**31).",
+        "rounds": "Positive Python integer iteration ceiling.",
+        "patience": "Positive Python integer early-stopping patience."
+      },
+      "validity_bounds": "Three index vectors must be disjoint and cover every training row exactly once. Binary GBDT, rate.01,80leaves, feature/bagging fractions.8, bagging frequency1, deterministic column-wise CPU with one thread. Both heldouts influence binary-logloss early stopping; neither is untouched test evidence.",
+      "outputs": "Train,validation,test,query probability vectors in supplied row order and selected iteration.",
+      "plain_limits": "Fit one full fold with explicit stopping populations.",
+      "reuse": "Domain-independent numeric binary learning with fixed documented hyperparameters; feature width is generic.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_vsb_execution.fit_fold",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_vsb_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_vsb_execution",
+        "import_module": "sciona.atoms.ml.decomposed_vsb_execution",
+        "source_symbol": "fit_fold",
+        "description": "Explicit fit fold operation for qualified runtime composition.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "ade13d92-3745-5429-adb9-fc31d55bbe8e",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "training",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "labels",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "query",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "train",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "validation",
+          "ordinal": 4,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "test",
+          "ordinal": 5,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "tree_seed",
+          "ordinal": 6,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "rounds",
+          "ordinal": 7,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "patience",
+          "ordinal": 8,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "training_scores",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "validation_scores",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "test_scores",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "query_scores",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "iteration",
+          "ordinal": 4,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "training",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "labels",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "query",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "train",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "validation",
+          "ordinal": 4,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "test",
+          "ordinal": 5,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "tree_seed",
+          "ordinal": 6,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "rounds",
+          "ordinal": 7,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "patience",
+          "ordinal": 8,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "training_scores",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "validation_scores",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "test_scores",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "query_scores",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "iteration",
+          "ordinal": 4,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.fundamental",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.fundamental",
+      "version_id": "67c0fda6-0813-5a23-936d-cb121a6ead97",
+      "content_hash": "df39e1eda0b0d3e4b0e43500e390df46e2f0cbf45d5d509f4099af570c34235a",
+      "provider_sha256": "48d7261d4e8ffb373760cdabeb0ca5a39f5ce6ee69de9e133f7c42101497c25a",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "coefficients",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Extract the first positive-frequency real FFT coefficient per column.",
+      "parameters": {
+        "values": "Finite real rank2 sample-by-signal matrix with at least3 samples and one column."
+      },
+      "validity_bounds": "Cast to float64 and compute rfft along axis0, index1; reject nonfinite coefficients. Frequency means one cycle per supplied length, without physical time units or a three-column restriction.",
+      "outputs": "Complex coefficient vector aligned to columns.",
+      "plain_limits": "Measure the one-cycle component of each numeric signal.",
+      "reuse": "Domain-independent Fourier projection; caller supplies physical interpretation.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_vsb_execution.fundamental",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_vsb_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_vsb_execution",
+        "import_module": "sciona.atoms.ml.decomposed_vsb_execution",
+        "source_symbol": "fundamental",
+        "description": "Explicit fundamental operation for qualified runtime composition.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "b1a8d9c6-9231-5a96-af2d-8e630a372fa9",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "coefficients",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "coefficients",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.peak_descriptors",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.peak_descriptors",
+      "version_id": "c9a0599f-9044-5579-be03-55cf8b418595",
+      "content_hash": "8f213fe4456ea3455d821bfb3ca3874c2e55376fe553718e5b73338aa6304e89",
+      "provider_sha256": "48d7261d4e8ffb373760cdabeb0ca5a39f5ce6ee69de9e133f7c42101497c25a",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "positions",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "residual",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "small_radius",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "large_radius",
+          "ordinal": 3,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "descriptors",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Compute normalized neighbor, opposite-extremum and sawtooth descriptors.",
+      "parameters": {
+        "positions": "Rank1 in-range integer peak positions; empty accepted.",
+        "residual": "Nonempty finite real vector with nonzero amplitude at every selected peak.",
+        "small_radius": "Positive Python integer.",
+        "large_radius": "Positive Python integer."
+      },
+      "validity_bounds": "Actual-length clipped windows. Columns are absolute next/peak, previous/peak, signed opposite-extremum offset subtracting small_radius even at boundaries, and normalized sawtooth MSE. Missing neighbors retain NaN. Require normalized waveform maximum aligned with template maximum; reject infinity.",
+      "outputs": "Float64 peak-by4 descriptor matrix.",
+      "plain_limits": "Describe each peak using local normalized waveform shape.",
+      "reuse": "Numeric waveform operation with explicit template and edge conventions; no grouping or labels.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_vsb_execution.peak_descriptors",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_vsb_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_vsb_execution",
+        "import_module": "sciona.atoms.ml.decomposed_vsb_execution",
+        "source_symbol": "peak_descriptors",
+        "description": "Explicit peak descriptors operation for qualified runtime composition.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "965fe42a-458c-5f79-b678-4d6f4af8d2bf",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "positions",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "residual",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "small_radius",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "large_radius",
+          "ordinal": 3,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "descriptors",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "positions",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "residual",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "small_radius",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "large_radius",
+          "ordinal": 3,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "descriptors",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.phase_quadrants",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.phase_quadrants",
+      "version_id": "1491fee4-e00c-5504-87c4-058c190861ca",
+      "content_hash": "8866318bcfce28c1ac103b5032d03c1c89ea896f01825bff69284270491bb0d6",
+      "provider_sha256": "48d7261d4e8ffb373760cdabeb0ca5a39f5ce6ee69de9e133f7c42101497c25a",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "positions",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "coefficient",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "length",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "quadrants",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Assign right-closed phase quadrants relative to a supplied Fourier coefficient.",
+      "parameters": {
+        "positions": "Rank1 in-range integer positions; empty accepted.",
+        "coefficient": "Finite numeric scalar Fourier coefficient for the same signal.",
+        "length": "Python integer>=3 matching the full signal length."
+      },
+      "validity_bounds": "Compute (degrees(2*pi*positions/length+angle(coefficient))+90)%360. Right-closed bins yield0..3; exactly zero yields-1. Matching coefficient provenance is caller responsibility.",
+      "outputs": "Aligned integer quadrant vector.",
+      "plain_limits": "Locate selected positions within the one-cycle phase.",
+      "reuse": "Domain-independent numeric phase policy with an explicit90-degree offset.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_vsb_execution.phase_quadrants",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_vsb_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_vsb_execution",
+        "import_module": "sciona.atoms.ml.decomposed_vsb_execution",
+        "source_symbol": "phase_quadrants",
+        "description": "Explicit phase quadrants operation for qualified runtime composition.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "8b5ebc2e-4225-5916-ad82-671fcb52f876",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "positions",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "coefficient",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "length",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "quadrants",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "positions",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "coefficient",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "length",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "quadrants",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.rank_peaks",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.rank_peaks",
+      "version_id": "02be7d14-6d5e-556c-80ff-51956a5e2dee",
+      "content_hash": "bd16f90e34aebdf806ac2dfabd649b890e5e6fe94a0b30433e9d1ef6fb34ce11",
+      "provider_sha256": "48d7261d4e8ffb373760cdabeb0ca5a39f5ce6ee69de9e133f7c42101497c25a",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "residual",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "positions",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "positions",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "heights",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Rank supplied candidates by descending absolute residual amplitude.",
+      "parameters": {
+        "residual": "Nonempty finite real vector.",
+        "positions": "At least2 unique in-range integer positions."
+      },
+      "validity_bounds": "Use reversed NumPy argsort of absolute amplitudes; ties follow that implementation, not a stable chronological tie rule.",
+      "outputs": "Aligned ranked position and amplitude vectors.",
+      "plain_limits": "Rank candidate peaks by magnitude.",
+      "reuse": "Generic numeric ranking, independent of signal grouping or labels.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_vsb_execution.rank_peaks",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_vsb_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_vsb_execution",
+        "import_module": "sciona.atoms.ml.decomposed_vsb_execution",
+        "source_symbol": "rank_peaks",
+        "description": "Explicit rank peaks operation for qualified runtime composition.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "4ed793c7-b95a-5cfd-a12f-b433af76b087",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "residual",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "positions",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "positions",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "heights",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "residual",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "positions",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "positions",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "heights",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.recipe_inputs",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.recipe_inputs",
+      "version_id": "34c882fb-34ab-5ac9-9d37-85ffb3a4d187",
+      "content_hash": "cdaacd992926e77a6fde1eaa9c0d5b86a301fd00131b7903baa6c7e7b2f3cbaa",
+      "provider_sha256": "48d7261d4e8ffb373760cdabeb0ca5a39f5ce6ee69de9e133f7c42101497c25a",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "training",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "signal_labels",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "query",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "training",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "labels",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "query",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "signal_labels",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Reorder nine features and derive measurement labels from triples.",
+      "parameters": {
+        "training": "Nonempty real training-by9 matrix; NaN allowed, infinity rejected.",
+        "signal_labels": "Aligned training-by3 integer binary labels.",
+        "query": "Nonempty real query-by9 matrix; NaN allowed, infinity rejected."
+      },
+      "validity_bounds": "Copy feature columns in order[2,7,3,4,8,0,6,5,1]; label a measurement positive when any signal is positive. Copy signal labels.",
+      "outputs": "Training features, measurement labels, query features and signal labels.",
+      "plain_limits": "Apply the explicit feature order and triple-label rule.",
+      "reuse": "Recipe adapter; generic-width fitting remains separate.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_vsb_execution.recipe_inputs",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_vsb_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_vsb_execution",
+        "import_module": "sciona.atoms.ml.decomposed_vsb_execution",
+        "source_symbol": "recipe_inputs",
+        "description": "Explicit recipe inputs operation for qualified runtime composition.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "ddcee3c3-f3ba-5ae1-a7be-b7973ab90465",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "training",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "signal_labels",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "query",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "training",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "labels",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "query",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "signal_labels",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "training",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "signal_labels",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "query",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "training",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "labels",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "query",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "signal_labels",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.repeated_folds",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.repeated_folds",
+      "version_id": "49ab999b-f404-5666-8626-214a2132b2f0",
+      "content_hash": "2a3077a8c734afaa5449d83d425413b9e979cd36ad443158bc0f2332c38896ad",
+      "provider_sha256": "48d7261d4e8ffb373760cdabeb0ca5a39f5ce6ee69de9e133f7c42101497c25a",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "labels",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "seed",
+          "ordinal": 1,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "repetitions",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "plans",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Construct class-specific random five-way partitions with rotating heldouts.",
+      "parameters": {
+        "labels": "Nonempty integer binary vector containing both classes.",
+        "seed": "Nonnegative Python integer.",
+        "repetitions": "Positive Python integer with seed+repetitions-1<2**32."
+      },
+      "validity_bounds": "RandomState(seed+iteration), assign class1 then class0 independently to integers0..4. Each of5 rotations uses one validation fold, next test fold and remaining3 training folds. Reject empty heldouts or training without both classes.",
+      "outputs": "List of5*repetitions tuples(train,validation,test) of integer index vectors.",
+      "plain_limits": "Construct the full repeated random fold schedule.",
+      "reuse": "Domain-independent binary-label partition policy; not balanced stratified KFold.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_vsb_execution.repeated_folds",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_vsb_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_vsb_execution",
+        "import_module": "sciona.atoms.ml.decomposed_vsb_execution",
+        "source_symbol": "repeated_folds",
+        "description": "Explicit repeated folds operation for qualified runtime composition.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "175d93c9-fc77-5932-8643-32558da8fe8c",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "labels",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "seed",
+          "ordinal": 1,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "repetitions",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "plans",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "labels",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "seed",
+          "ordinal": 1,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "repetitions",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "plans",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.result",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.result",
+      "version_id": "92110f0b-357c-5bb4-9df5-7588f30b91e6",
+      "content_hash": "d53476765e91c1c6a1e29f447728b3ae0eef37ecfda34a67f6a7aa76ade8581c",
+      "provider_sha256": "48d7261d4e8ffb373760cdabeb0ca5a39f5ce6ee69de9e133f7c42101497c25a",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "ensemble_result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "selected",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Apply strict query threshold and repeat the decision across each triple.",
+      "parameters": {
+        "ensemble_result": "Matching ensemble dictionary with nonempty finite query probabilities in[0,1].",
+        "selected": "Exactly threshold and mcc; finite threshold in[0,1] and finite mcc."
+      },
+      "validity_bounds": "Decision uses strict > although optimizer uses >=. Return a shallow dictionary extension; existing arrays remain shared. Does not independently validate other ensemble fields or prove selected threshold provenance.",
+      "outputs": "Extended dictionary with measurement-by3 decisions, threshold, threshold_fit_mcc and explicit scope.",
+      "plain_limits": "Encode the source decision rule and its evaluation limits.",
+      "reuse": "Recipe decision policy; no independent per-signal probability model.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_vsb_execution.result",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_vsb_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_vsb_execution",
+        "import_module": "sciona.atoms.ml.decomposed_vsb_execution",
+        "source_symbol": "result",
+        "description": "Explicit result operation for qualified runtime composition.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "4458b83e-98af-5786-aef8-c71ceab64702",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "ensemble_result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "selected",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "ensemble_result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "selected",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.select_ranked_peaks",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.select_ranked_peaks",
+      "version_id": "0403c2b6-8eb6-5d8f-ad43-c54012fb8a8d",
+      "content_hash": "7f484f37a8f06f308a64f22e861b2c1647ab2122698051e41f20e1772cc35118",
+      "provider_sha256": "48d7261d4e8ffb373760cdabeb0ca5a39f5ce6ee69de9e133f7c42101497c25a",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "positions",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "heights",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "gradient",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "threshold",
+          "ordinal": 3,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "count",
+          "ordinal": 4,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "offset",
+          "ordinal": 5,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "positions",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "heights",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "knee",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Use a cumulative threshold-hit knee and restore chronological order.",
+      "parameters": {
+        "positions": "At least2 unique nonnegative integer positions.",
+        "heights": "Aligned finite nonnegative descending amplitudes.",
+        "gradient": "Finite real rank1 vector, possibly empty.",
+        "threshold": "Finite numeric scalar excluding bool.",
+        "count": "Positive Python integer.",
+        "offset": "Nonnegative Python integer."
+      },
+      "validity_bounds": "Count nonconsecutive gradient>threshold hits. Knee is position of count-th hit minus count minus offset, or -offset when too few hits. Apply Python [:knee] unchanged, including negative slicing. No upper position bound or gradient provenance is independently established.",
+      "outputs": "Chronological selected positions, aligned amplitudes and integer knee.",
+      "plain_limits": "Select a prefix using the declared knee rule.",
+      "reuse": "Generic ranked-selection policy with explicit source slicing semantics.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_vsb_execution.select_ranked_peaks",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_vsb_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_vsb_execution",
+        "import_module": "sciona.atoms.ml.decomposed_vsb_execution",
+        "source_symbol": "select_ranked_peaks",
+        "description": "Explicit select ranked peaks operation for qualified runtime composition.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "c31a7d57-320c-52ad-9f3e-676f1ff82270",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "positions",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "heights",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "gradient",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "threshold",
+          "ordinal": 3,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "count",
+          "ordinal": 4,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "offset",
+          "ordinal": 5,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "positions",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "heights",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "knee",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "positions",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "heights",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "gradient",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "threshold",
+          "ordinal": 3,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "count",
+          "ordinal": 4,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "offset",
+          "ordinal": 5,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "positions",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "heights",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "knee",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.threshold",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.threshold",
+      "version_id": "35effc60-0c50-5ea2-b026-c9b8222aaeac",
+      "content_hash": "08e60dd7523dbc4c5e57a619211eacb0dfb910eea49cd7641cb5888df28dbcba",
+      "provider_sha256": "48d7261d4e8ffb373760cdabeb0ca5a39f5ce6ee69de9e133f7c42101497c25a",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "labels",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "probabilities",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "selected",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Maximize grouped MCC over observed probability thresholds.",
+      "parameters": {
+        "labels": "Nonempty integer binary vector.",
+        "probabilities": "Aligned finite real vector in[0,1]."
+      },
+      "validity_bounds": "Group tied probabilities, evaluate decision probability>=threshold at observed values only. Zero denominator gives MCC0; select largest threshold among equal best scores. Does not add an all-negative candidate above the maximum.",
+      "outputs": "Dictionary with threshold and fitted mcc.",
+      "plain_limits": "Select a threshold using the declared MCC and tie rules.",
+      "reuse": "Domain-independent binary threshold optimization; fit scores are not generalization evidence.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_vsb_execution.threshold",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_vsb_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_vsb_execution",
+        "import_module": "sciona.atoms.ml.decomposed_vsb_execution",
+        "source_symbol": "threshold",
+        "description": "Explicit threshold operation for qualified runtime composition.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "a709ae7d-c400-5c6e-ac36-76ed28e01f77",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "labels",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "probabilities",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "selected",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "labels",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "probabilities",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "selected",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.threshold_inputs",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.threshold_inputs",
+      "version_id": "3f296feb-13e8-56dc-a68a-15fa45d4c68a",
+      "content_hash": "8b40ef2f13fd278ecce413079386a887a691007016c7f48d5508a102b0c5edc0",
+      "provider_sha256": "48d7261d4e8ffb373760cdabeb0ca5a39f5ce6ee69de9e133f7c42101497c25a",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "signal_labels",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "training_probabilities",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "labels",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "probabilities",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Align triple signal labels with repeated measurement probabilities.",
+      "parameters": {
+        "signal_labels": "Nonempty measurement-by3 integer binary labels.",
+        "training_probabilities": "Aligned finite real measurement probabilities in[0,1]."
+      },
+      "validity_bounds": "Flatten labels in row order and repeat each measurement score3times. No claim that in-training probabilities are unbiased validation.",
+      "outputs": "Aligned binary labels and probability vectors.",
+      "plain_limits": "Prepare signal-level threshold inputs.",
+      "reuse": "Explicit three-signal policy; threshold optimization remains domain-independent.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_vsb_execution.threshold_inputs",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_vsb_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_vsb_execution",
+        "import_module": "sciona.atoms.ml.decomposed_vsb_execution",
+        "source_symbol": "threshold_inputs",
+        "description": "Explicit threshold inputs operation for qualified runtime composition.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "e496b526-f149-5c0a-8309-c3222bb63e48",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "signal_labels",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "training_probabilities",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "labels",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "probabilities",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "signal_labels",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "training_probabilities",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "labels",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "probabilities",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.training_controls",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.training_controls",
+      "version_id": "c1e7f626-473f-56b2-af83-e2017b0536f0",
+      "content_hash": "d66de6e471ca25c0d40e2648cbe5a4b17d0b52cbc3126daf6e36f5dce3a36a48",
+      "provider_sha256": "48d7261d4e8ffb373760cdabeb0ca5a39f5ce6ee69de9e133f7c42101497c25a",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "controls",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "repetitions",
+          "ordinal": 0,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "split_seed",
+          "ordinal": 1,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "tree_seed",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "rounds",
+          "ordinal": 3,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "patience",
+          "ordinal": 4,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Project the five declared training controls in fixed order.",
+      "parameters": {
+        "controls": "Dictionary from the validated invocation with repetitions,split_seed,tree_seed,rounds,patience."
+      },
+      "validity_bounds": "No independent value validation; extra keys are ignored and missing keys reject. Downstream fold and fit operations validate numeric bounds.",
+      "outputs": "Five values in declared order.",
+      "plain_limits": "Expose the requested training schedule.",
+      "reuse": "Dictionary projection with explicit key meanings; caller retains validated provenance.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_vsb_execution.training_controls",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_vsb_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_vsb_execution",
+        "import_module": "sciona.atoms.ml.decomposed_vsb_execution",
+        "source_symbol": "training_controls",
+        "description": "Explicit training controls operation for qualified runtime composition.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "4694538c-59f2-54e3-9d8a-7e2198da8789",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "controls",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "repetitions",
+          "ordinal": 0,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "split_seed",
+          "ordinal": 1,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "tree_seed",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "rounds",
+          "ordinal": 3,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "patience",
+          "ordinal": 4,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "controls",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "repetitions",
+          "ordinal": 0,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "split_seed",
+          "ordinal": 1,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "tree_seed",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "rounds",
+          "ordinal": 3,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "patience",
+          "ordinal": 4,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.training_scores",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.training_scores",
+      "version_id": "28de4664-8431-579f-bab7-e3b346464c59",
+      "content_hash": "a71871bed7adb19365843762046bb39f5f1ac9d7b78aa1001110177d4af75fe5",
+      "provider_sha256": "48d7261d4e8ffb373760cdabeb0ca5a39f5ce6ee69de9e133f7c42101497c25a",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "trained",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "scores",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Expose the training-probability member of an ensemble result.",
+      "parameters": {
+        "trained": "Matching qualified ensemble dictionary containing training_probabilities."
+      },
+      "validity_bounds": "Returns the existing object without copy or independent validation. Caller must not mutate it or substitute mismatched provenance.",
+      "outputs": "Aliased training probability vector.",
+      "plain_limits": "Expose in-training probabilities for threshold fitting.",
+      "reuse": "Generic dictionary projection with explicit mutability and provenance requirements.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_vsb_execution.training_scores",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_vsb_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_vsb_execution",
+        "import_module": "sciona.atoms.ml.decomposed_vsb_execution",
+        "source_symbol": "training_scores",
+        "description": "Explicit training scores operation for qualified runtime composition.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "1b1366cb-f151-5e1c-8f63-f80e38511290",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "trained",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "scores",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "trained",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "scores",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.unpack",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.unpack",
+      "version_id": "4d3d6dc0-3a02-5772-bc56-351d45a7264d",
+      "content_hash": "fb6aab2e0e1b7808489a5156b28bf372115bac169dcfcc25004a1f5ccee2e589",
+      "provider_sha256": "48d7261d4e8ffb373760cdabeb0ca5a39f5ce6ee69de9e133f7c42101497c25a",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "payload",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "training_signals",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "signal_labels",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "query_signals",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "feature_controls",
+          "ordinal": 3,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "fit_controls",
+          "ordinal": 4,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Validate and copy a complete version1 invocation without extracting features or fitting models.",
+      "parameters": {
+        "payload": "Finite JSON dictionary with exactly version=1, training and query. Training has signals, labels, identities; query has signals, identities."
+      },
+      "validity_bounds": "At most64MiB canonical JSON. Finite real sample-by-signal matrices with equal sample counts>=3 and nonempty consecutive triples. Training integer binary labels align as measurements-by3. Nonempty unique opaque identity strings align per measurement and are disjoint between populations. Validate all125 random folds before returning.",
+      "outputs": "Independent training signals, signal labels, query signals, feature controls and training controls; identities do not enter downstream numerics.",
+      "plain_limits": "Validate the full request and expose fixed recipe settings.",
+      "reuse": "Recipe boundary with ordered triples; downstream numeric operations accept independent inputs.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_vsb_execution.unpack",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_vsb_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_vsb_execution",
+        "import_module": "sciona.atoms.ml.decomposed_vsb_execution",
+        "source_symbol": "unpack",
+        "description": "Explicit unpack operation for qualified runtime composition.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "e91e5c08-f33e-5494-8e00-05057539fd62",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "payload",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "training_signals",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "signal_labels",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "query_signals",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "feature_controls",
+          "ordinal": 3,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "fit_controls",
+          "ordinal": 4,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "payload",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "training_signals",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "signal_labels",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "query_signals",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "feature_controls",
+          "ordinal": 3,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "fit_controls",
+          "ordinal": 4,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.window_maxima",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_vsb_execution.window_maxima",
+      "version_id": "c0decd74-3f6b-5a45-8389-b9dc5f8261c7",
+      "content_hash": "2dbbf43a5f4e8941dd9423d0516cefe5affc712ca6c2a0f6f1bc033e83c6a23e",
+      "provider_sha256": "48d7261d4e8ffb373760cdabeb0ca5a39f5ce6ee69de9e133f7c42101497c25a",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "window",
+          "ordinal": 1,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "positions",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Intersect forward and reverse directional plateau-midpoint maxima.",
+      "parameters": {
+        "values": "Nonempty finite real vector.",
+        "window": "Positive Python integer excluding bool."
+      },
+      "validity_bounds": "Preserve asymmetric directional advancement and plateau midpoints; intersect reflected reverse indexes. Empty output is valid. This is not a symmetric sliding maximum filter.",
+      "outputs": "Sorted unique integer peak positions.",
+      "plain_limits": "Find peaks accepted from both scan directions.",
+      "reuse": "Domain-independent directional peak algorithm with explicit scan policy.",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_vsb_execution.window_maxima",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_vsb_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_vsb_execution",
+        "import_module": "sciona.atoms.ml.decomposed_vsb_execution",
+        "source_symbol": "window_maxima",
+        "description": "Explicit window maxima operation for qualified runtime composition.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "artifact_id": "06c1a216-270f-5005-aae5-79c0ff138acc",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "window",
+          "ordinal": 1,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "positions",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "window",
+          "ordinal": 1,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "positions",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "artifact_id": "773f66ef-aa3a-40c2-a83e-680651517011",
+      "fqdn": "sciona.atoms.scipy.signal.lfilter",
+      "version_id": "b2d4c1c2-9e7b-5ce4-ac66-c8b14fa864e6",
+      "content_hash": "c4b6387d6fee049494a725d9530a14ff4bac82b8f57c16c0b69516554c10bdd2",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "b",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite rank-one float64 numerator coefficients."
+        },
+        {
+          "direction": "input",
+          "name": "a",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite rank-one float64 denominator coefficients with nonzero first coefficient. SciPy normalizes coefficients by a[0]."
+        },
+        {
+          "direction": "input",
+          "name": "x",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite rank-one float64 numeric signal; this is the qualified subset of the wider ArrayLike interface."
+        },
+        {
+          "direction": "input",
+          "name": "axis",
+          "ordinal": 3,
+          "type_desc": "int",
+          "required": false,
+          "default_value_repr": "-1",
+          "constraints": "For the qualified rank-one signal use Python integer -1 or 0."
+        },
+        {
+          "direction": "input",
+          "name": "zi",
+          "ordinal": 4,
+          "type_desc": "object",
+          "required": false,
+          "default_value_repr": "None",
+          "constraints": "None for zero initial delay, or finite float64 vector of length max(len(a),len(b))-1 containing initial filter delay state."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Float64 vector with the same shape as x. Direct-form filtering uses supplied delay or zero delay. Final delay state is discarded even when zi is supplied. Arithmetic overflow is not rejected by this provider; callers must check output finiteness when required."
+        }
+      ],
+      "operation": "Apply a real linear digital filter with explicit numerator, denominator, axis and optional initial delay state.",
+      "plain_description": "Filter a numeric sequence using supplied coefficients and, optionally, a starting delay state. Return the filtered sequence.",
+      "validity_bounds": "Nonempty finite rank-one float64 numerator coefficients. Nonempty finite rank-one float64 denominator coefficients with nonzero first coefficient. SciPy normalizes coefficients by a[0]. Nonempty finite rank-one float64 numeric signal; this is the qualified subset of the wider ArrayLike interface. For the qualified rank-one signal use Python integer -1 or 0. None for zero initial delay, or finite float64 vector of length max(len(a),len(b))-1 containing initial filter delay state. Float64 vector with the same shape as x. Direct-form filtering uses supplied delay or zero delay. Final delay state is discarded even when zi is supplied. Arithmetic overflow is not rejected by this provider; callers must check output finiteness when required.",
+      "reuse": "Domain-independent linear sequence filtering; no power-line, measurement-group, peak or classification semantics.",
+      "registered_provider_dependencies": [],
+      "runtime_fqdn": "sciona.atoms.scipy.signal.lfilter",
+      "catalog_fqdn": "sciona.atoms.scipy.signal.lfilter",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "b",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite rank-one float64 numerator coefficients."
+        },
+        {
+          "direction": "input",
+          "name": "a",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite rank-one float64 denominator coefficients with nonzero first coefficient. SciPy normalizes coefficients by a[0]."
+        },
+        {
+          "direction": "input",
+          "name": "x",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite rank-one float64 numeric signal; this is the qualified subset of the wider ArrayLike interface."
+        },
+        {
+          "direction": "input",
+          "name": "axis",
+          "ordinal": 3,
+          "type_desc": "int",
+          "required": false,
+          "default_value_repr": "-1",
+          "constraints": "For the qualified rank-one signal use Python integer -1 or 0."
+        },
+        {
+          "direction": "input",
+          "name": "zi",
+          "ordinal": 4,
+          "type_desc": "object",
+          "required": false,
+          "default_value_repr": "None",
+          "constraints": "None for zero initial delay, or finite float64 vector of length max(len(a),len(b))-1 containing initial filter delay state."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Float64 vector with the same shape as x. Direct-form filtering uses supplied delay or zero delay. Final delay state is discarded even when zi is supplied. Arithmetic overflow is not rejected by this provider; callers must check output finiteness when required."
+        }
+      ],
+      "legacy_ports": []
+    }
+  ],
+  "checker_sha256": "ac084f407f65d40fcd21983017b3c645e6d9b385c8c9e05ba77e321cfec69846",
+  "catalog_snapshot": {
+    "atoms": "360c1407f8fd9f40b8fd433c5b545e7cb097887cf2b0016978c38e7eaaca12f6",
+    "artifacts": "a7919decdc89a430bbda578dc71bcf200f4f50d52ddd5301bb8b8f13ad4c9467",
+    "atom_versions": "df2c93332e2964441d742141b9636a20c2eabd5383c2ea609eb676c86212941b",
+    "artifact_versions": "21802866808a249909adbe68c5de2e49322c75b61e16c963781dead4ba523efd",
+    "atom_io_specs": "6b8b41aced38859c2be92ffca21860f7c58e5d49f46a3092df821f41768d8a3d",
+    "artifact_io_specs": "bda47924709d6b176a73eb6b8066f12932d457b09bdda7bade51e5645ed53999",
+    "atom_parameters": "f43f3266ddb781a76f686df8fec0c45a08baa140329f60bf96233f6d3817cf59",
+    "artifact_parameters": "6d063ec61354b50d7aee382f279d35df1201dac7ea5c6dae794cee43fd3cbe2d",
+    "atom_descriptions": "44a616372d48de16b2a6b2338325a3fd018712683505609b69fbd32e24f16e4e",
+    "artifact_descriptions": "9919ddbec9604d38cfcb53dd20c9da6917d96af0dc6c4942faa49ceffd93d675",
+    "atom_references": "1a11149acacfe3a7aef025fd1b5018f2c9a847b3465bec80d5587f095c02f8a4",
+    "artifact_references": "cd884994b88d8988e4d8a6239ac290e57457a8e825ca0c84f8c0cb89553410f2",
+    "atom_audit_rollups": "15d1bc10e6d18c9874220bcd03ff95c012d3c56f4ef8796e4702e081fa17c7bd",
+    "artifact_audit_rollups": "ac775fba2bab3792ee2499019f936c30efbd6e89dbc4058de985dd3bc557f57d",
+    "artifact_audit_evidence": "f7f0b8b112c9f51ef42e92630e5f1d09fb313da25a67b7c07b8bb6d2692039f6"
+  }
+}
