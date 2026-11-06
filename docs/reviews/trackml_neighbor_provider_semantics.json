@@ -1,0 +1,313 @@
+{
+  "format": "trackml-neighbor-provider-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "providers": [
+    {
+      "artifact_id": "3bd102e9-7676-5d48-95a1-bd4769549c29",
+      "fqdn": "sciona.atoms.ml.sklearn.neighbors.fitted_search.fit_euclidean_search",
+      "runtime_fqdn": "sciona.atoms.ml.sklearn.neighbors.fitted_search.fit_euclidean_search",
+      "version_id": "a3117369-1372-53fb-9fdb-5d6723ce516c",
+      "content_hash": "4ed294a2afbb147a1c30457d8e18972abbf4bec7920f8cb03f45dc9371c7bff9",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "points",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite float64 matrix (Q,D) for queries or (N,D) for fit. All features use a consistent caller-defined distance scale. Query feature count must match the fitted index. No domain identifiers or partition policy."
+        },
+        {
+          "direction": "input",
+          "name": "default_neighbors",
+          "ordinal": 1,
+          "type_desc": "int",
+          "required": false,
+          "default_value_repr": "5",
+          "constraints": "Positive integer, default 5. Influences auto backend selection at fit time even if later queries override k. May exceed N at fit time."
+        },
+        {
+          "direction": "input",
+          "name": "leaf_size",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": false,
+          "default_value_repr": "30",
+          "constraints": "Positive integer, default 30. Backend tree leaf size; changing it can change unsorted result order."
+        },
+        {
+          "direction": "output",
+          "name": "state",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Opaque fitted scikit-learn Euclidean index returned by fit_euclidean_search. Owns a copy of the fitted points. Must remain unmodified; not a portable serialized artifact. Auto backend, Minkowski p=2, one worker."
+        }
+      ],
+      "operation": "Fit an auto-selected Euclidean neighbor index with explicit default neighbor count and leaf size.",
+      "plain_description": "Build a reusable index for finding nearby points.",
+      "validity_bounds": "Nonempty finite float64 matrix (Q,D) for queries or (N,D) for fit. All features use a consistent caller-defined distance scale. Query feature count must match the fitted index. No domain identifiers or partition policy. Positive integer, default 5. Influences auto backend selection at fit time even if later queries override k. May exceed N at fit time. Positive integer, default 30. Backend tree leaf size; changing it can change unsorted result order. Opaque fitted scikit-learn Euclidean index returned by fit_euclidean_search. Owns a copy of the fitted points. Must remain unmodified; not a portable serialized artifact. Auto backend, Minkowski p=2, one worker.",
+      "reuse": "Generic Euclidean search over caller-supplied numeric features; domain grouping, coordinate transforms and labels remain outside these operations.",
+      "registered_provider_dependencies": []
+    },
+    {
+      "artifact_id": "40a3d036-af88-5afc-8fe3-363998a1907d",
+      "fqdn": "sciona.atoms.ml.sklearn.neighbors.fitted_search.query_euclidean_k",
+      "runtime_fqdn": "sciona.atoms.ml.sklearn.neighbors.fitted_search.query_euclidean_k",
+      "version_id": "7eb10dd9-88f9-504b-af30-ad1a0312538c",
+      "content_hash": "f796cacd4bffccf0dc1dbf881462bddf0f5754ba7970b8bdd7aaf66296a1cf50",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "points",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite float64 matrix (Q,D) for queries or (N,D) for fit. All features use a consistent caller-defined distance scale. Query feature count must match the fitted index. No domain identifiers or partition policy."
+        },
+        {
+          "direction": "input",
+          "name": "state",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Opaque fitted scikit-learn Euclidean index returned by fit_euclidean_search. Owns a copy of the fitted points. Must remain unmodified; not a portable serialized artifact. Auto backend, Minkowski p=2, one worker."
+        },
+        {
+          "direction": "input",
+          "name": "k",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Positive integer no greater than fitted point count N. Booleans rejected. Explicit self queries include self."
+        },
+        {
+          "direction": "output",
+          "name": "distances",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 distance matrix (Q,k), in backend nearest-neighbor order. Ties and unsorted ordering are backend/version dependent; no extra stable sorting. Nonfinite returned distances reject."
+        },
+        {
+          "direction": "output",
+          "name": "indices",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Integer fitted-row index matrix (Q,k), aligned with distances. Ties and unsorted ordering are backend/version dependent; no extra stable sorting. Nonfinite returned distances reject."
+        }
+      ],
+      "operation": "Query k nearest fitted rows, preserving backend tie selection and distance order.",
+      "plain_description": "Find a chosen number of nearby points and their distances.",
+      "validity_bounds": "Nonempty finite float64 matrix (Q,D) for queries or (N,D) for fit. All features use a consistent caller-defined distance scale. Query feature count must match the fitted index. No domain identifiers or partition policy. Opaque fitted scikit-learn Euclidean index returned by fit_euclidean_search. Owns a copy of the fitted points. Must remain unmodified; not a portable serialized artifact. Auto backend, Minkowski p=2, one worker. Positive integer no greater than fitted point count N. Booleans rejected. Explicit self queries include self. Finite float64 distance matrix (Q,k), in backend nearest-neighbor order. Ties and unsorted ordering are backend/version dependent; no extra stable sorting. Nonfinite returned distances reject. Integer fitted-row index matrix (Q,k), aligned with distances. Ties and unsorted ordering are backend/version dependent; no extra stable sorting. Nonfinite returned distances reject.",
+      "reuse": "Generic Euclidean search over caller-supplied numeric features; domain grouping, coordinate transforms and labels remain outside these operations.",
+      "registered_provider_dependencies": []
+    },
+    {
+      "artifact_id": "28aea965-3bc1-5cc3-8ef7-5221bd69ce87",
+      "fqdn": "sciona.atoms.ml.sklearn.neighbors.fitted_search.query_euclidean_radius",
+      "runtime_fqdn": "sciona.atoms.ml.sklearn.neighbors.fitted_search.query_euclidean_radius",
+      "version_id": "3ea343f7-a3c2-554d-b4ef-6b40a7af9fdb",
+      "content_hash": "88d35600e360a178659d75886e31911e814b8037c642fa5acdcd1f3b7f7a0d03",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "points",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite float64 matrix (Q,D) for queries or (N,D) for fit. All features use a consistent caller-defined distance scale. Query feature count must match the fitted index. No domain identifiers or partition policy."
+        },
+        {
+          "direction": "input",
+          "name": "state",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Opaque fitted scikit-learn Euclidean index returned by fit_euclidean_search. Owns a copy of the fitted points. Must remain unmodified; not a portable serialized artifact. Auto backend, Minkowski p=2, one worker."
+        },
+        {
+          "direction": "input",
+          "name": "radius",
+          "ordinal": 2,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite nonnegative scalar in the feature distance unit. Inclusive boundary; zero radius allowed. Booleans rejected."
+        },
+        {
+          "direction": "output",
+          "name": "distances",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Object array (Q,) of float64 distance vectors, one per query; empty rows allowed, backend order unsorted. Ties and unsorted ordering are backend/version dependent; no extra stable sorting. Nonfinite returned distances reject."
+        },
+        {
+          "direction": "output",
+          "name": "indices",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Object array (Q,) of integer fitted-row index vectors, aligned with distance rows. Ties and unsorted ordering are backend/version dependent; no extra stable sorting. Nonfinite returned distances reject."
+        }
+      ],
+      "operation": "Query all fitted rows within an inclusive distance radius, preserving unsorted backend order.",
+      "plain_description": "Find points within a chosen distance, including when none match.",
+      "validity_bounds": "Nonempty finite float64 matrix (Q,D) for queries or (N,D) for fit. All features use a consistent caller-defined distance scale. Query feature count must match the fitted index. No domain identifiers or partition policy. Opaque fitted scikit-learn Euclidean index returned by fit_euclidean_search. Owns a copy of the fitted points. Must remain unmodified; not a portable serialized artifact. Auto backend, Minkowski p=2, one worker. Finite nonnegative scalar in the feature distance unit. Inclusive boundary; zero radius allowed. Booleans rejected. Object array (Q,) of float64 distance vectors, one per query; empty rows allowed, backend order unsorted. Ties and unsorted ordering are backend/version dependent; no extra stable sorting. Nonfinite returned distances reject. Object array (Q,) of integer fitted-row index vectors, aligned with distance rows. Ties and unsorted ordering are backend/version dependent; no extra stable sorting. Nonfinite returned distances reject.",
+      "reuse": "Generic Euclidean search over caller-supplied numeric features; domain grouping, coordinate transforms and labels remain outside these operations.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "tests": {
+    "tests": 66,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "exact_backend_cases": 48,
+  "software_sha256": {
+    "tests/test_fitted_neighbor_search.py": "0afe34f904d12a6b3078bc11d3f9678ffc04b57132e3763de16afeffe762fb21",
+    "scripts/review_trackml_neighbor_provider_semantics.py": "e68cb3490cd5063520072f6e3262199709346733c4f942036a428e7deaac816b",
+    "scripts/stage_trackml_neighbor_providers.py": "e912ece9ee7df25d76cd07b3aef1647c0c36d9bc6fa3cde7f06765db3d58ee02",
+    "sciona/ghost/registry.py": "793723a75d07a88eed39f59d8d4dc327c54adbf75db7a03003516a6f74c81b51",
+    "sciona/decomposed_trackml_neighbor_lifecycle.py": "94f09939d2b8c569444163f0fcd5cc7b702bf7ffd323faac15c59ca65a54ea68",
+    "sciona-atoms-ml/src/sciona/atoms/ml/sklearn/neighbors/fitted_search.py": "f6686dea6da8d1355e3796bdc09e9fc1c34790823c6f8aac6f4462ce0b4eb75e"
+  },
+  "installed_packages": {
+    "annotated-types": {
+      "version": "0.7.0",
+      "hashed_files_verified": 7,
+      "active_requirements": []
+    },
+    "asttokens": {
+      "version": "2.4.1",
+      "hashed_files_verified": 13,
+      "active_requirements": [
+        "six>=1.12.0"
+      ]
+    },
+    "icontract": {
+      "version": "2.7.3",
+      "hashed_files_verified": 16,
+      "active_requirements": [
+        "asttokens<3,>=2",
+        "typing_extensions"
+      ]
+    },
+    "joblib": {
+      "version": "1.5.3",
+      "hashed_files_verified": 143,
+      "active_requirements": []
+    },
+    "mpmath": {
+      "version": "1.3.0",
+      "hashed_files_verified": 92,
+      "active_requirements": []
+    },
+    "numpy": {
+      "version": "2.2.6",
+      "hashed_files_verified": 876,
+      "active_requirements": []
+    },
+    "pydantic": {
+      "version": "2.12.5",
+      "hashed_files_verified": 111,
+      "active_requirements": [
+        "annotated-types>=0.6.0",
+        "pydantic-core==2.41.5",
+        "typing-extensions>=4.14.1",
+        "typing-inspection>=0.4.2"
+      ]
+    },
+    "pydantic-core": {
+      "version": "2.41.5",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.14.1"
+      ]
+    },
+    "scikit-learn": {
+      "version": "1.8.0",
+      "hashed_files_verified": 960,
+      "active_requirements": [
+        "joblib>=1.3.0",
+        "numpy>=1.24.1",
+        "scipy>=1.10.0",
+        "threadpoolctl>=3.2.0"
+      ]
+    },
+    "scipy": {
+      "version": "1.17.1",
+      "hashed_files_verified": 1423,
+      "active_requirements": [
+        "numpy<2.7,>=1.26.4"
+      ]
+    },
+    "six": {
+      "version": "1.17.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "sympy": {
+      "version": "1.14.0",
+      "hashed_files_verified": 1571,
+      "active_requirements": [
+        "mpmath<1.4,>=1.1.0"
+      ]
+    },
+    "threadpoolctl": {
+      "version": "3.6.0",
+      "hashed_files_verified": 5,
+      "active_requirements": []
+    },
+    "typing-extensions": {
+      "version": "4.16.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "typing-inspection": {
+      "version": "0.4.2",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.12.0"
+      ]
+    }
+  },
+  "intake_plan_sha256": "3c85f06ac4d0af57f67aafacda6bd50f03c10452bbb2391fe4fa99f3fb360fb6",
+  "resource_policy": {
+    "serial_tests": true,
+    "native_threads": 1
+  },
+  "limitations": [
+    "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+    "Nonempty finite float64 matrices with caller-defined consistent feature scaling. Query dimension must match fitted dimension. No detector layout, labels, layer partitioning, projections or identifier mapping is embedded.",
+    "Fit copies the input points and returns an opaque runtime scikit-learn state. Callers must not modify the state; validation of its public configuration is not a complete integrity check of estimator internals. No portable state serialization is qualified.",
+    "Fit default neighbor count influences auto backend selection even if queries supply a different k. Leaf size can affect backend order. Defaults are 5 and 30; both controls require positive integers.",
+    "Explicit self queries include self. k must not exceed fitted row count. Radius is finite, nonnegative and inclusive, with zero and empty match rows supported. Empty query batches reject.",
+    "Tied k-neighbor selection and unsorted radius ordering follow the installed backend. No cross-version or cross-platform ordering guarantee. Existing stable dense search is intentionally not substituted.",
+    "Finite inputs can overflow intermediate distance arithmetic. Nonfinite returned distances reject; exhaustive accuracy over all floating-point magnitudes is not claimed.",
+    "Abstract witnesses reject: concrete fitted state is required. No symbolic proof is claimed.",
+    "Each operation uses one worker and one native thread. Caller owns aggregate concurrency and state lifetime.",
+    "Synthetic exact-backend comparisons and lifecycle agreement establish the tested behavior, not historical competition accuracy or accuracy for arbitrary new applications.",
+    "Installed RECORD validation checks current dependency files and active requirements, not publisher authentication or clean deployment on another platform.",
+    "Provider publication and original TrackML CDG qualification remain separate actions."
+  ]
+}
