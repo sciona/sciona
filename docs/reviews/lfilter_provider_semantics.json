@@ -1,0 +1,405 @@
+{
+  "format": "lfilter-provider-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "providers": [
+    {
+      "artifact_id": "773f66ef-aa3a-40c2-a83e-680651517011",
+      "fqdn": "sciona.atoms.scipy.signal.lfilter",
+      "version_id": "b2d4c1c2-9e7b-5ce4-ac66-c8b14fa864e6",
+      "content_hash": "c4b6387d6fee049494a725d9530a14ff4bac82b8f57c16c0b69516554c10bdd2",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "b",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite rank-one float64 numerator coefficients."
+        },
+        {
+          "direction": "input",
+          "name": "a",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite rank-one float64 denominator coefficients with nonzero first coefficient. SciPy normalizes coefficients by a[0]."
+        },
+        {
+          "direction": "input",
+          "name": "x",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite rank-one float64 numeric signal; this is the qualified subset of the wider ArrayLike interface."
+        },
+        {
+          "direction": "input",
+          "name": "axis",
+          "ordinal": 3,
+          "type_desc": "int",
+          "required": false,
+          "default_value_repr": "-1",
+          "constraints": "For the qualified rank-one signal use Python integer -1 or 0."
+        },
+        {
+          "direction": "input",
+          "name": "zi",
+          "ordinal": 4,
+          "type_desc": "object",
+          "required": false,
+          "default_value_repr": "None",
+          "constraints": "None for zero initial delay, or finite float64 vector of length max(len(a),len(b))-1 containing initial filter delay state."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Float64 vector with the same shape as x. Direct-form filtering uses supplied delay or zero delay. Final delay state is discarded even when zi is supplied. Arithmetic overflow is not rejected by this provider; callers must check output finiteness when required."
+        }
+      ],
+      "operation": "Apply a real linear digital filter with explicit numerator, denominator, axis and optional initial delay state.",
+      "plain_description": "Filter a numeric sequence using supplied coefficients and, optionally, a starting delay state. Return the filtered sequence.",
+      "validity_bounds": "Nonempty finite rank-one float64 numerator coefficients. Nonempty finite rank-one float64 denominator coefficients with nonzero first coefficient. SciPy normalizes coefficients by a[0]. Nonempty finite rank-one float64 numeric signal; this is the qualified subset of the wider ArrayLike interface. For the qualified rank-one signal use Python integer -1 or 0. None for zero initial delay, or finite float64 vector of length max(len(a),len(b))-1 containing initial filter delay state. Float64 vector with the same shape as x. Direct-form filtering uses supplied delay or zero delay. Final delay state is discarded even when zi is supplied. Arithmetic overflow is not rejected by this provider; callers must check output finiteness when required.",
+      "reuse": "Domain-independent linear sequence filtering; no power-line, measurement-group, peak or classification semantics.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "tests": {
+    "tests": 40,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "baseline_reuse_cases": [
+    {
+      "dtype": "float32",
+      "length": 1,
+      "retention": 0.0,
+      "exact_equal": true,
+      "input_unchanged": true
+    },
+    {
+      "dtype": "float32",
+      "length": 1,
+      "retention": 0.5,
+      "exact_equal": true,
+      "input_unchanged": true
+    },
+    {
+      "dtype": "float32",
+      "length": 1,
+      "retention": 0.99,
+      "exact_equal": true,
+      "input_unchanged": true
+    },
+    {
+      "dtype": "float32",
+      "length": 1,
+      "retention": 1.0,
+      "exact_equal": true,
+      "input_unchanged": true
+    },
+    {
+      "dtype": "float32",
+      "length": 7,
+      "retention": 0.0,
+      "exact_equal": true,
+      "input_unchanged": true
+    },
+    {
+      "dtype": "float32",
+      "length": 7,
+      "retention": 0.5,
+      "exact_equal": true,
+      "input_unchanged": true
+    },
+    {
+      "dtype": "float32",
+      "length": 7,
+      "retention": 0.99,
+      "exact_equal": true,
+      "input_unchanged": true
+    },
+    {
+      "dtype": "float32",
+      "length": 7,
+      "retention": 1.0,
+      "exact_equal": true,
+      "input_unchanged": true
+    },
+    {
+      "dtype": "float32",
+      "length": 129,
+      "retention": 0.0,
+      "exact_equal": true,
+      "input_unchanged": true
+    },
+    {
+      "dtype": "float32",
+      "length": 129,
+      "retention": 0.5,
+      "exact_equal": true,
+      "input_unchanged": true
+    },
+    {
+      "dtype": "float32",
+      "length": 129,
+      "retention": 0.99,
+      "exact_equal": true,
+      "input_unchanged": true
+    },
+    {
+      "dtype": "float32",
+      "length": 129,
+      "retention": 1.0,
+      "exact_equal": true,
+      "input_unchanged": true
+    },
+    {
+      "dtype": "float64",
+      "length": 1,
+      "retention": 0.0,
+      "exact_equal": true,
+      "input_unchanged": true
+    },
+    {
+      "dtype": "float64",
+      "length": 1,
+      "retention": 0.5,
+      "exact_equal": true,
+      "input_unchanged": true
+    },
+    {
+      "dtype": "float64",
+      "length": 1,
+      "retention": 0.99,
+      "exact_equal": true,
+      "input_unchanged": true
+    },
+    {
+      "dtype": "float64",
+      "length": 1,
+      "retention": 1.0,
+      "exact_equal": true,
+      "input_unchanged": true
+    },
+    {
+      "dtype": "float64",
+      "length": 7,
+      "retention": 0.0,
+      "exact_equal": true,
+      "input_unchanged": true
+    },
+    {
+      "dtype": "float64",
+      "length": 7,
+      "retention": 0.5,
+      "exact_equal": true,
+      "input_unchanged": true
+    },
+    {
+      "dtype": "float64",
+      "length": 7,
+      "retention": 0.99,
+      "exact_equal": true,
+      "input_unchanged": true
+    },
+    {
+      "dtype": "float64",
+      "length": 7,
+      "retention": 1.0,
+      "exact_equal": true,
+      "input_unchanged": true
+    },
+    {
+      "dtype": "float64",
+      "length": 129,
+      "retention": 0.0,
+      "exact_equal": true,
+      "input_unchanged": true
+    },
+    {
+      "dtype": "float64",
+      "length": 129,
+      "retention": 0.5,
+      "exact_equal": true,
+      "input_unchanged": true
+    },
+    {
+      "dtype": "float64",
+      "length": 129,
+      "retention": 0.99,
+      "exact_equal": true,
+      "input_unchanged": true
+    },
+    {
+      "dtype": "float64",
+      "length": 129,
+      "retention": 1.0,
+      "exact_equal": true,
+      "input_unchanged": true
+    },
+    {
+      "dtype": "int64",
+      "length": 1,
+      "retention": 0.0,
+      "exact_equal": true,
+      "input_unchanged": true
+    },
+    {
+      "dtype": "int64",
+      "length": 1,
+      "retention": 0.5,
+      "exact_equal": true,
+      "input_unchanged": true
+    },
+    {
+      "dtype": "int64",
+      "length": 1,
+      "retention": 0.99,
+      "exact_equal": true,
+      "input_unchanged": true
+    },
+    {
+      "dtype": "int64",
+      "length": 1,
+      "retention": 1.0,
+      "exact_equal": true,
+      "input_unchanged": true
+    },
+    {
+      "dtype": "int64",
+      "length": 7,
+      "retention": 0.0,
+      "exact_equal": true,
+      "input_unchanged": true
+    },
+    {
+      "dtype": "int64",
+      "length": 7,
+      "retention": 0.5,
+      "exact_equal": true,
+      "input_unchanged": true
+    },
+    {
+      "dtype": "int64",
+      "length": 7,
+      "retention": 0.99,
+      "exact_equal": true,
+      "input_unchanged": true
+    },
+    {
+      "dtype": "int64",
+      "length": 7,
+      "retention": 1.0,
+      "exact_equal": true,
+      "input_unchanged": true
+    },
+    {
+      "dtype": "int64",
+      "length": 129,
+      "retention": 0.0,
+      "exact_equal": true,
+      "input_unchanged": true
+    },
+    {
+      "dtype": "int64",
+      "length": 129,
+      "retention": 0.5,
+      "exact_equal": true,
+      "input_unchanged": true
+    },
+    {
+      "dtype": "int64",
+      "length": 129,
+      "retention": 0.99,
+      "exact_equal": true,
+      "input_unchanged": true
+    },
+    {
+      "dtype": "int64",
+      "length": 129,
+      "retention": 1.0,
+      "exact_equal": true,
+      "input_unchanged": true
+    }
+  ],
+  "software_sha256": {
+    "tests/test_lfilter_provider_reuse.py": "4a6df1e15558149da710c3daaa40d238e2dcdf493cbeb6ec3cf9ea027cfbb4e6",
+    "scripts/review_lfilter_provider_semantics.py": "1c732003c1c2306d8e34fe55a46ed219df7882c595606e7f9bf3f32831db2235",
+    "scripts/review_vsb_lfilter_reuse.py": "fe5d217478d88f7cb378d3f88151987be5580cac2152a1c25590661e81477dfa",
+    "scripts/stage_lfilter_canonical_records.py": "321594f5caab9c606e7915c8246888f58ab256c0abf43bee03d10831c76a01c9",
+    "scripts/audit_lfilter_provider_intake.py": "55c84dd5d41d974862f89fcc5324644967b3d73f803886adfed1f0f3e5b893a0",
+    "sciona/vsb_baseline.py": "3c38d41b990c15ee5addc94bab28c87f451a146b3b89ebb36c7864cfda5f5f97",
+    "sciona-atoms/src/sciona/atoms/scipy/signal.py": "9e3789823c052fbc7de5b70334d19817b1a45a6981b66680a92872a4fbeaf6ee"
+  },
+  "installed_packages": {
+    "asttokens": {
+      "version": "2.4.1",
+      "hashed_files_verified": 13,
+      "active_requirements": [
+        "six>=1.12.0"
+      ]
+    },
+    "icontract": {
+      "version": "2.7.3",
+      "hashed_files_verified": 16,
+      "active_requirements": [
+        "asttokens<3,>=2",
+        "typing_extensions"
+      ]
+    },
+    "numpy": {
+      "version": "2.2.6",
+      "hashed_files_verified": 876,
+      "active_requirements": []
+    },
+    "scipy": {
+      "version": "1.17.1",
+      "hashed_files_verified": 1423,
+      "active_requirements": [
+        "numpy<2.7,>=1.26.4"
+      ]
+    },
+    "six": {
+      "version": "1.17.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "threadpoolctl": {
+      "version": "3.6.0",
+      "hashed_files_verified": 5,
+      "active_requirements": []
+    },
+    "typing-extensions": {
+      "version": "4.16.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    }
+  },
+  "intake_plan_sha256": "79694870466a00101f53d2691605e88bb67902fe2bac56f9ee59f936267968b7",
+  "resource_policy": {
+    "serial_tests": true,
+    "native_threads": 1
+  },
+  "limitations": [
+    "Automated Tier 3 qualification of the explicit real rank-one subset only; no human Tier 1 or usage-qualified Tier 2 designation.",
+    "Finite nonempty float64 coefficients and signal, nonzero leading denominator, axis -1 or 0, and compatible finite optional delay state are caller responsibilities where the existing provider does not enforce them.",
+    "The wrapper returns only filtered samples, discarding final delay state even when initial delay is supplied. It is not a state-returning streaming interface.",
+    "Unstable filters and numerical overflow may produce nonfinite results without rejection. This qualification does not promise stability or bounded outputs; composition adapters must check required finiteness.",
+    "Synthetic recurrence and baseline parity do not establish performance on real signals, historical precision, or application-specific validity.",
+    "Installed files match their own RECORD hashes; independent publisher authentication, clean deployment and other platforms are not certified.",
+    "Legacy provider metadata and approval remain preserved. Canonical publication and VSB original graph qualification remain separate actions."
+  ]
+}
