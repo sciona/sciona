@@ -1,0 +1,32 @@
+{
+  "format": "sparse-randomized-projection-qualification.v1",
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "tests": {
+    "passed": 16,
+    "failed": 0
+  },
+  "resource_policy": {
+    "serial": true,
+    "native_threads": 1
+  },
+  "software_sha256": {
+    "sciona/sparse_randomized_projection.py": "d1b3c5a71aba984646d415f26155de6ebc6d242d2e207a3d7f5c6d4ab4525d1b",
+    "tests/test_sparse_randomized_projection.py": "22273a50cddc209406c1f83308b0cdac64573301f6bc282e2ec7d5b783ac820d"
+  },
+  "checks": [
+    "Eight sparse shape/seed comparisons against sklearn TruncatedSVD components, singular values and projections.",
+    "Candidate arithmetic runs with RuntimeWarning treated as error; historical reference warnings are captured separately.",
+    "Full retained training/calibration/query lifecycle, deterministic output and 64-tree configuration.",
+    "Downstream score/threshold agreement within rtol=1e-10, atol=1e-12; exact prediction and calibration-F1 agreement.",
+    "Invalid controls, nonfinite inputs, mismatched transforms and preservation of unsorted/duplicate sparse storage."
+  ],
+  "implementation_decision": "Preserve sparse entry order and duplicates. Canonicalizing the TF-IDF CSR changed downstream scores and was removed. Only the dense basis lift uses unoptimized einsum in place of layout-sensitive matmul.",
+  "limits": [
+    "Current synthetic cases only; no universal numerical equivalence or historical accuracy claim.",
+    "One existing event-loop DeprecationWarning remains in the test fixture; candidate runtime arithmetic warnings are errors.",
+    "Numerical module is not yet registered, catalog-qualified or integrated into an approved original CDG.",
+    "Original text-pair normalization, BM25 and output-scope gaps remain unresolved."
+  ]
+}
