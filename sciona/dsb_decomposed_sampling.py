@@ -9,8 +9,9 @@ import numpy as np
 from sciona.atoms.numerical.statistics.threshold_sampling import (
     repeat_rows_by_threshold, sequential_softmax_indices,
 )
-from sciona.dsb_components import _integer, crop_classifier_proposal
-from sciona.dsb_augmentation import augment_classifier
+from sciona.dsb_components import _integer
+from sciona.atoms.dl.detection.dsb_spatial_recipes import crop_classifier_proposal
+from sciona.atoms.dl.detection.dsb_spatial_recipes import augment_classifier
 
 
 def detector_sampling_table(boxes_by_image, resolution=1.):

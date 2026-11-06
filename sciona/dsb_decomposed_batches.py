@@ -9,7 +9,7 @@ import numpy as np
 from sciona.dsb_components import _integer
 from sciona.dsb_sampling import detector_epoch_length
 from sciona.dsb_decomposed_sampling import detector_sampling_table,classifier_training_sample
-from sciona.dsb_training import detector_indexed_training_sample
+from sciona.dsb_decomposed_detector_samples import detector_indexed_training_sample
 
 
 def _order(values,limit,name):

@@ -30,6 +30,11 @@ GENERIC = {
 }
 
 
+SPATIAL_RECIPES = {'sciona.atoms.dl.detection.dsb_spatial_recipes.' + name for name in
+                   ('crop_detection', 'augment_detection', 'augment_classifier',
+                    'crop_classifier_proposal', 'assign_anchor_labels')}
+
+
 def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -37,7 +42,7 @@ def sha(path):
 def inventory(offline=False):
     graph = build_dsb_preparation_graph()
     digest, _, _ = encode_execution_graph(graph)
-    evidence_path = ROOT / 'docs/reviews/dsb_coordinate_graph_source_parity.json'
+    evidence_path = ROOT / 'docs/reviews/dsb_spatial_recipe_graph_source_parity.json'
     evidence = json.loads(evidence_path.read_text())
     if not evidence['passed'] or evidence['execution_graph_sha256'] != digest:
         raise ValueError('Current graph lacks matching full source evidence')
@@ -46,7 +51,7 @@ def inventory(offline=False):
             if sha(base / name) != expected:
                 raise ValueError('Execution evidence source drift: ' + name)
     direct = {node.matched_primitive for node in graph.nodes}
-    wanted = direct | GENERIC.keys()
+    wanted = direct | GENERIC.keys() | SPATIAL_RECIPES
     specs = {}
     for repo_name in ('sciona-atoms', 'sciona-atoms-dl'):
         directory = ROOT.parent / repo_name
@@ -96,7 +101,7 @@ def inventory(offline=False):
                 both_catalogs_exact_eligible=None if offline else sum(r['atom_exact_eligible'] and r['artifact_exact_eligible'] for r in records),
                 full_graph_evidence_sha256=sha(evidence_path), providers=records,
                 remaining_gates=[
-                    'Finish reusable crop/augmentation/anchor boundaries; annotation coordinate policy is now explicit.',
+                    'Training crop/augmentation/anchor recipes are explicit; connect validation and inference consumers and review their contracts.',
                     'Expose validation/checkpoint contracts while preserving uninterrupted optimizer and RNG state.',
                     'Review complete transitive dependencies including local imports, model methods and callbacks.',
                     'Complete exact catalog interfaces, parameters, descriptions, references and Tier 3 audit evidence.',
