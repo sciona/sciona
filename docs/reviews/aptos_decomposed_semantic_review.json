@@ -1,0 +1,131 @@
+{
+  "format": "aptos-decomposed-review.v1",
+  "review_source": "automated",
+  "proposed_tier": 3,
+  "approved": false,
+  "catalog_mutations": 0,
+  "graph_digest": "4489ff7791c460e069515323ccb5b6fed60471c2a4d7efe6e1ae2b22fa2e87ba",
+  "graph_nodes": 5,
+  "graph_edges": 7,
+  "providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.aptos_execution.aptos_population",
+      "catalog_fqdn": "sciona.atoms.ml.aptos_execution.aptos_population",
+      "version_id": "cac04171-edbd-5b40-a7bf-a2cb5707c39a",
+      "content_hash": "1d3e9e2aaf6b04a253d66036a4c26bb58147a7f2fd0387fb12325e3582d38cf6",
+      "provider_sha256": "97953529d448b804912e47eee127293094de60fc63f12ecf05dfacab15c966ab",
+      "signature": "(base: list, average: list, grouped: list, pseudo_keys: list) -> object",
+      "bound_nodes": [
+        "population"
+      ],
+      "classification": "source_recipe_adapter"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_aptos_execution.cut_inputs",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_aptos_execution.cut_inputs",
+      "version_id": "48cbce4d-5be3-54ae-b2de-ba262f867250",
+      "content_hash": "46e60d7b25e4e36bd1e0480bd34f4df5fba9098f3b6a7bf1b7fe095ac28c57c9",
+      "provider_sha256": "9573238b946c33b011fa0b5ff0d11d444daf0e570fb5f5073fe380104b5e03bc",
+      "signature": "(training_result: dict) -> tuple[numpy.ndarray, numpy.ndarray, str]",
+      "bound_nodes": [
+        "cut_inputs"
+      ],
+      "classification": "source_recipe_adapter"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_aptos_execution.result",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_aptos_execution.result",
+      "version_id": "7ccad786-aa2a-5c84-82a1-ca107ac2d343",
+      "content_hash": "0fdf5cc65e55fc92b896404b82d5ba3d39f036ea1b65dce932ab4b955164037f",
+      "provider_sha256": "9573238b946c33b011fa0b5ff0d11d444daf0e570fb5f5073fe380104b5e03bc",
+      "signature": "(training_result: dict, ordinals: numpy.ndarray) -> dict",
+      "bound_nodes": [
+        "result"
+      ],
+      "classification": "source_recipe_adapter"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_aptos_execution.train_scores",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_aptos_execution.train_scores",
+      "version_id": "84929392-f85b-5b3d-aef5-9a3b4aa3cf27",
+      "content_hash": "892cb2ed536ff1e4312f593d032500c0e895fd56885d605e5d81a66486fe6348",
+      "provider_sha256": "9573238b946c33b011fa0b5ff0d11d444daf0e570fb5f5073fe380104b5e03bc",
+      "signature": "(plan: object, query_keys: list, images: dict, references: dict, first_stage_epochs: dict, seeds: dict, batch_size: int, learning_rate: float, lower_deviation: float, upper_deviation: float, tie_policy: str, work_root: str) -> dict",
+      "bound_nodes": [
+        "train_scores"
+      ],
+      "classification": "source_recipe_adapter"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.numerical.statistics.cut_indices.ordered_cut_indices",
+      "catalog_fqdn": "sciona.atoms.numerical.statistics.cut_indices.ordered_cut_indices",
+      "version_id": "98583dc5-b783-5ae3-b222-8607850227f3",
+      "content_hash": "10de8a9c21dac659bc6dcb81a35c31e2fbb00b994bab4ba7ef047aac9b8ab00b",
+      "provider_sha256": "09b03d64f259fe622c2e33790bb87d2034859bd801fb1a0c678978fff11d8987",
+      "signature": "(values: numpy.ndarray, cut_points: numpy.ndarray, tie_policy: str) -> numpy.ndarray",
+      "bound_nodes": [
+        "classify"
+      ],
+      "classification": "generic_operation"
+    }
+  ],
+  "root_inputs": [
+    "base",
+    "average",
+    "grouped",
+    "pseudo_keys",
+    "query_keys",
+    "images",
+    "references",
+    "first_stage_epochs",
+    "seeds",
+    "batch_size",
+    "learning_rate",
+    "lower_deviation",
+    "upper_deviation",
+    "tie_policy",
+    "work_root"
+  ],
+  "root_outputs": [
+    "result"
+  ],
+  "complete_training_ast_equivalent": true,
+  "source_stage_mapping": {
+    "image_standardization": "Plain full-image resizing replaces unsupported retinal cropping/local-color subtraction. Reference augmentation and publisher normalization are explicit choices.",
+    "cnn_backbone": "Eight models: two each of Inception-ResNet-v2, Inception-v4, SE-ResNeXt-50 and SE-ResNeXt-101, with trainable GeM and scalar regression head. EfficientNet substitution excluded.",
+    "quadratic_weighted_kappa_qwk_loss": "Smooth-L1 regression replaces unsupported differentiable-QWK training loss. QWK motivates final fixed ordinal thresholds, not the training objective.",
+    "pre_training_fine_tuning": "All pretrained backbone parameters train in stage one; an ensemble teacher builds three added target roles, and each own model continues ten epochs. Four-level grouping differs from five-level averaging labels.",
+    "threshold_calibration": "Fixed manually selected cuts 0.7,1.5,2.5,3.5 replace unsupported Nelder-Mead optimization. Equality convention is explicit."
+  },
+  "evidence_sha256": {
+    "decomposed_aptos_graph.json": "99fcefa7075427a5979808f40f35f4e9e52aac8394117e775ed5b5e7dc055d2a",
+    "decomposed_aptos_baseline_review.json": "b929a4408a12b12678942267e95c3b79ee9ea8f478932a398968a647e068a183"
+  },
+  "auxiliary_sha256": {
+    "scripts/review_decomposed_aptos.py": "86fda9440633b5fb406dfb152cc2180184e8d9f114ea769b6107965fe0799c76",
+    "tests/test_decomposed_aptos_cut_indices.py": "e7f32392536b09e7b8c0bf240b6c065d964832019f43109ed59ea775646d96d3",
+    "tests/test_decomposed_aptos_graph.py": "aa60b1dcf14ba38bfbf1a42748396974253fca85e531da400ccf979c9c5c0b06",
+    "tests/test_decomposed_aptos_provider_intake.py": "0ef3bd7a61a7c684d3293e279e9a26bc3bf01dc329a0a67c892a1b5cef5cdd8f",
+    "tests/test_decomposed_aptos_review.py": "b1d19f96ad2e0a29753cede8b8039d51d5d71386d9e3861b4f80f5e25e3abe96"
+  },
+  "limitations": [
+    "Automated Community Tier 3 reference; no human-reviewed Tier 1 or usage-qualified Tier 2 designation.",
+    "Corrected eight-model CPU reconstruction; original winner runtime, artifact identity and leaderboard equivalence remain unproven.",
+    "First-stage budgets in five-epoch increments, Adam settings, ensemble teacher and fresh second-stage optimizer are explicit reference choices.",
+    "Augmentation units/distributions/order, bilinear resize, publisher normalization, scalar head and single-view inference are explicit choices.",
+    "Symmetric group bounds and threshold equality convention are explicit; the source establishes only the demonstrated lower-bound example.",
+    "Caller establishes population-role provenance and physical-image identity; supplied-label queries reject, while pseudo-label queries are deliberately transductive.",
+    "Synthetic full-resolution execution uses five first-stage and ten second-stage epochs per model; original population-scale performance is unproven.",
+    "Local external model artifacts require caller use rights. Each call retrains; temporary checkpoints are verified and removed.",
+    "Retain pooling, upstream, dependency and supplemental notices with the reconstruction.",
+    "Caller supplies model artifacts they are entitled to use; integrity and source correspondence checks do not establish usage rights.",
+    "Smp-hub cards declare license other; no independent model-weight grant or redistribution permission is inferred.",
+    "Review future distribution of external model artifacts or dependency wheels separately.",
+    "Pinned maintainer mirror identity is established; exact winner artifact/runtime identity and competitive accuracy remain unproven.",
+    "The training body is AST-equivalent to the qualified reference apart from returning the equality policy and moving final cut indexing into the graph.",
+    "Full graph validation checks complete fits, optimizer updates, checkpoint replay, target roles and the ensemble/cut oracle; it does not compare all trained tensors across independent runs.",
+    "Cut indexing is domain independent; fixed source cuts, image models, target roles and learner settings remain recipe policy.",
+    "Intermediate result dictionaries must come from the same invocation; the result encoder alone cannot establish training provenance.",
+    "Provider publication, corrected original intake and served selection remain separate requirements."
+  ]
+}

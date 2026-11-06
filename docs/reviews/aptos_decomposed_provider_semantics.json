@@ -1,0 +1,720 @@
+{
+  "format": "aptos-decomposed-provider-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "review_source": "automated",
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_aptos_execution.cut_inputs",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_aptos_execution.cut_inputs",
+      "version_id": "48cbce4d-5be3-54ae-b2de-ba262f867250",
+      "content_hash": "46e60d7b25e4e36bd1e0480bd34f4df5fba9098f3b6a7bf1b7fe095ac28c57c9",
+      "provider_sha256": "9573238b946c33b011fa0b5ff0d11d444daf0e570fb5f5073fe380104b5e03bc",
+      "signature": "(training_result: dict) -> tuple[numpy.ndarray, numpy.ndarray, str]",
+      "bound_nodes": [
+        "cut_inputs"
+      ],
+      "classification": "source_recipe_adapter",
+      "atom_id": "9fc05072-288e-5bfb-854e-4ac6b988f80d",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_aptos_execution.cut_inputs",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_aptos_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_aptos_execution",
+        "import_module": "sciona.atoms.ml.decomposed_aptos_execution",
+        "source_symbol": "cut_inputs",
+        "description": "Expose scores and source cut policy without applying numeric indexing.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.46e60d7b25e4",
+      "fingerprint": "e5e30305c14a8c2f43a488ce907d28a755f868388d34b4adeebff77d52f5fad0",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "training_result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "cut_points",
+          "ordinal": 1,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "tie_policy",
+          "ordinal": 2,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Expose ensemble scores and the recipe cut points as graph inputs.",
+      "plain_limits": "Use finite scores from the training result and an explicit equality rule. Return copies with the four fixed cut points.",
+      "validity_bounds": "Input dictionary must contain a nonempty finite one-dimensional float64 scores array and tie_policy equal to upper or lower. Return scores.copy(), float64 cuts [.7,1.5,2.5,3.5] and the policy. This boundary does not establish training provenance or calibrate thresholds.",
+      "parameters": {
+        "training_result": "Coherent output from train_scores for the same invocation."
+      },
+      "outputs": "Tuple of fresh scores, fresh four-element cut vector and equality-policy string, in that order.",
+      "dependencies": [
+        "sciona.decomposed_aptos_pipeline.cut_inputs",
+        "sciona.aptos_ensemble.CUT_POINTS",
+        "numpy",
+        "sciona.ghost.registry (registration only)"
+      ],
+      "reuse": "Source recipe adapter. Image families, target roles, training settings and fixed cuts are recipe policy. Intermediate dictionaries must come from the same invocation; standalone adapters do not authenticate their origin.",
+      "internal_registered_provider_dependencies": [],
+      "callable_dependency_contracts": {}
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_aptos_execution.result",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_aptos_execution.result",
+      "version_id": "7ccad786-aa2a-5c84-82a1-ca107ac2d343",
+      "content_hash": "0fdf5cc65e55fc92b896404b82d5ba3d39f036ea1b65dce932ab4b955164037f",
+      "provider_sha256": "9573238b946c33b011fa0b5ff0d11d444daf0e570fb5f5073fe380104b5e03bc",
+      "signature": "(training_result: dict, ordinals: numpy.ndarray) -> dict",
+      "bound_nodes": [
+        "result"
+      ],
+      "classification": "source_recipe_adapter",
+      "atom_id": "7358697c-72b7-5a1a-a1f1-008ffc54241e",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_aptos_execution.result",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_aptos_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_aptos_execution",
+        "import_module": "sciona.atoms.ml.decomposed_aptos_execution",
+        "source_symbol": "result",
+        "description": "Attach generic class indices to the complete same-invocation training result.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.0fdf5cc65e55",
+      "fingerprint": "8b564cea6f2db705dd85b7a456fd33a5f607cb8a8d30355129bb5f28f23a53e5",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "training_result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "ordinals",
+          "ordinal": 1,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Attach class indices to the complete training result.",
+      "plain_limits": "Use matching scores and integer indices from the same graph run. Keep all training details and copy the indices.",
+      "validity_bounds": "Exact training-result field set is required. Scores and policy satisfy cut_inputs. Ordinals must be an integer ndarray of matching shape with values 0..4. Remove tie_policy and attach a copy of ordinals; other values remain shared. This checks representation, not whether indices equal the recipe cuts, whether flags are true or whether models were trained; complete graph qualification supplies those guarantees.",
+      "parameters": {
+        "training_result": "Complete same-invocation train_scores result.",
+        "ordinals": "Aligned integer vector from the graph-bound cut operation using the recipe scores, cuts and equality policy."
+      },
+      "outputs": "Complete result dictionary with scores, copied ordinal indices, fit histories, predictions, targets and replay/cleanup flags.",
+      "dependencies": [
+        "sciona.decomposed_aptos_pipeline.result",
+        "numpy",
+        "sciona.ghost.registry (registration only)"
+      ],
+      "reuse": "Source recipe adapter. Image families, target roles, training settings and fixed cuts are recipe policy. Intermediate dictionaries must come from the same invocation; standalone adapters do not authenticate their origin.",
+      "internal_registered_provider_dependencies": [],
+      "callable_dependency_contracts": {}
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_aptos_execution.train_scores",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_aptos_execution.train_scores",
+      "version_id": "84929392-f85b-5b3d-aef5-9a3b4aa3cf27",
+      "content_hash": "892cb2ed536ff1e4312f593d032500c0e895fd56885d605e5d81a66486fe6348",
+      "provider_sha256": "9573238b946c33b011fa0b5ff0d11d444daf0e570fb5f5073fe380104b5e03bc",
+      "signature": "(plan: object, query_keys: list, images: dict, references: dict, first_stage_epochs: dict, seeds: dict, batch_size: int, learning_rate: float, lower_deviation: float, upper_deviation: float, tie_policy: str, work_root: str) -> dict",
+      "bound_nodes": [
+        "train_scores"
+      ],
+      "classification": "source_recipe_adapter",
+      "atom_id": "6f3a203c-48fd-543b-adff-30084d80c878",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_aptos_execution.train_scores",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_aptos_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_aptos_execution",
+        "import_module": "sciona.atoms.ml.decomposed_aptos_execution",
+        "source_symbol": "train_scores",
+        "description": "Fit all eight models and both stages; leave final class indexing to the graph. References map four families to [local safetensors path, reviewed SHA256]. Budgets and seeds map (family, replica) pairs to integers. All first-stage fits precede the ensemble teacher; second-stage model weights continue with fresh Adam. Reference augmentation, normalization and single-view inference are explicit reconstruction choices. Results include private predictions, soft targets and aggregate fit histories. Temporary trained checkpoints are verified by replay and removed, never published here.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.892cb2ed536f",
+      "fingerprint": "d9a63127dd32a1ab9480e650ae35a734127894b7e85988706dd51af432b7db5b",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "plan",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Validated Aptos Population with source-separated roles; revalidated at execution"
+        },
+        {
+          "direction": "input",
+          "name": "query_keys",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty unique private keys; disjoint from supplied-label roles; may overlap pseudo keys"
+        },
+        {
+          "direction": "input",
+          "name": "images",
+          "ordinal": 2,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exactly population and query coverage; values are nonempty RGB uint8 HWC arrays; caller establishes physical identity and provenance"
+        },
+        {
+          "direction": "input",
+          "name": "references",
+          "ordinal": 3,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exactly four model families mapped to local safetensors paths and reviewed full SHA256; no downloads"
+        },
+        {
+          "direction": "input",
+          "name": "first_stage_epochs",
+          "ordinal": 4,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exactly eight (family, integer replica) keys; positive integer multiples of five; historical winning budgets unproven"
+        },
+        {
+          "direction": "input",
+          "name": "seeds",
+          "ordinal": 5,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exactly eight (family, integer replica) keys with distinct nonnegative 32-bit integer seeds"
+        },
+        {
+          "direction": "input",
+          "name": "batch_size",
+          "ordinal": 6,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit positive integer; retains final partial batch"
+        },
+        {
+          "direction": "input",
+          "name": "learning_rate",
+          "ordinal": 7,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit finite positive Adam learning rate; constant schedule and fresh stage-two optimizer are reference choices"
+        },
+        {
+          "direction": "input",
+          "name": "lower_deviation",
+          "ordinal": 8,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite nonnegative lower bound distance from group mean; source demonstrates 0.5"
+        },
+        {
+          "direction": "input",
+          "name": "upper_deviation",
+          "ordinal": 9,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite nonnegative upper bound distance; symmetric 0.5 is a reference choice"
+        },
+        {
+          "direction": "input",
+          "name": "tie_policy",
+          "ordinal": 10,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit upper or lower handling of equality at fixed cut points 0.7,1.5,2.5,3.5"
+        },
+        {
+          "direction": "input",
+          "name": "work_root",
+          "ordinal": 11,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Existing caller-managed private directory; temporary trained checkpoints removed after execution"
+        },
+        {
+          "direction": "output",
+          "name": "training_result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Complete training result before ordinal indexing; includes source tie policy and all fit/replay evidence"
+        }
+      ],
+      "operation": "Train all eight image models in both stages and return ensemble scores.",
+      "plain_limits": "Supply all required image groups, model files and settings. Train every model, check saved predictions and remove temporary checkpoints.",
+      "validity_bounds": "Population contains nonempty disjoint base, average, grouped and pseudo roles. Base and average labels are 0..4; grouped labels are 0..3. Queries may overlap pseudo inputs but never supplied-label roles. Exact image coverage, nonempty uint8 RGB arrays. Four reviewed pretrained families with two replicas each; native family resolutions, trainable GeM and scalar head. First-stage budgets are positive five-epoch multiples; all eight fits precede the teacher mean. Stage two continues each own checkpoint for ten epochs with fresh constant-rate Adam and SmoothL1. Preserve source target refinement, augmentation and partial batches. Exact checkpoint prediction replay and cleanup on success or failure. RNG state changes. No historical training or accuracy parity claim.",
+      "parameters": {
+        "plan": "Population produced by the existing checked population provider; all roles are required and must remain coherent.",
+        "query_keys": "Nonempty unique opaque query keys; may overlap pseudo keys but not supplied-label groups.",
+        "images": "Private runtime mapping covering exactly all population and query keys with nonempty uint8 RGB HWC arrays.",
+        "references": "All four family names mapped to local safetensors paths and reviewed SHA256 digests; external artifact permissions apply.",
+        "first_stage_epochs": "Exactly eight family/replica tuple keys with integer budgets at least five and divisible by five.",
+        "seeds": "Exactly eight family/replica tuple keys with distinct nonnegative 32-bit integer seeds.",
+        "batch_size": "Positive integer; final partial training batches are retained.",
+        "learning_rate": "Finite positive real number, excluding bool; constant Adam rate in each stage.",
+        "lower_deviation": "Explicit finite nonnegative lower refinement deviation, checked by second_stage_targets.",
+        "upper_deviation": "Explicit finite nonnegative upper refinement deviation, checked by second_stage_targets.",
+        "tie_policy": "Explicit upper or lower equality policy, validated before training and forwarded for final indexing.",
+        "work_root": "Existing private parent directory; the implementation removes its temporary checkpoint subdirectory."
+      },
+      "outputs": "Dictionary containing float64 scores, tie policy, all sixteen fit histories, both prediction maps, second-stage targets and replay/cleanup flags. Runtime results may contain private information and must not be published.",
+      "dependencies": [
+        "sciona.decomposed_aptos_pipeline.train_scores",
+        "sciona.aptos_population",
+        "sciona.aptos_pipeline",
+        "sciona.aptos_initialization",
+        "sciona.aptos_models",
+        "sciona.aptos_training",
+        "sciona.aptos_ensemble",
+        "numpy",
+        "torch",
+        "torchvision",
+        "Pillow",
+        "pretrainedmodels",
+        "safetensors",
+        "sciona.ghost.registry (registration only)"
+      ],
+      "reuse": "Source recipe adapter. Image families, target roles, training settings and fixed cuts are recipe policy. Intermediate dictionaries must come from the same invocation; standalone adapters do not authenticate their origin.",
+      "internal_registered_provider_dependencies": [],
+      "callable_dependency_contracts": {}
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.numerical.statistics.cut_indices.ordered_cut_indices",
+      "catalog_fqdn": "sciona.atoms.numerical.statistics.cut_indices.ordered_cut_indices",
+      "version_id": "98583dc5-b783-5ae3-b222-8607850227f3",
+      "content_hash": "10de8a9c21dac659bc6dcb81a35c31e2fbb00b994bab4ba7ef047aac9b8ab00b",
+      "provider_sha256": "09b03d64f259fe622c2e33790bb87d2034859bd801fb1a0c678978fff11d8987",
+      "signature": "(values: numpy.ndarray, cut_points: numpy.ndarray, tie_policy: str) -> numpy.ndarray",
+      "bound_nodes": [
+        "classify"
+      ],
+      "classification": "generic_operation",
+      "atom_id": "7018facd-ca43-5f99-933b-a2e1f650b168",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.numerical.statistics.cut_indices.ordered_cut_indices",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "numerical.statistics.cut_indices",
+        "repo_name": "sciona-atoms",
+        "source_module_path": "numerical.statistics.cut_indices",
+        "import_module": "sciona.atoms.numerical.statistics.cut_indices",
+        "source_symbol": "ordered_cut_indices",
+        "description": "Return the index of each value among strictly increasing cut points. Inputs are finite one-dimensional float32 or float64 arrays. Values must be nonempty; an empty cut vector assigns index zero to every value. 'upper' places equality above a cut; 'lower' places equality below it. Use NumPy searchsorted without rounding, clipping or casting either input. Return a fresh integer vector with indices from zero through the number of cuts. Inputs remain unchanged. Boundaries, units, class names and interpretation are caller policy; no calibration or learning occurs.",
+        "domain_tags": [
+          "numerical"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.10de8a9c21da",
+      "fingerprint": "09de831acca6bbc8e2422681b718cd2161a98c551f6a2636475d4cfa155aa818",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "cut_points",
+          "ordinal": 1,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "tie_policy",
+          "ordinal": 2,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "ordinals",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Assign each numeric value an index among ordered cut points.",
+      "plain_limits": "Use finite vectors and strictly increasing cuts. Choose which side receives equality. Empty cuts are allowed. Inputs stay unchanged.",
+      "validity_bounds": "One-dimensional native float32 or float64 NumPy arrays, both finite; values nonempty, cuts optionally empty and strictly increasing. Use numpy.searchsorted without rounding, clipping or casting. Upper means side=right; lower means side=left. Return a fresh integer vector from zero through the number of cuts. Mixed float32/float64 inputs follow NumPy comparison semantics. No labels, probability bounds, fixed thresholds or calibration are imposed.",
+      "parameters": {
+        "values": "Nonempty finite one-dimensional float32 or float64 ndarray.",
+        "cut_points": "Finite one-dimensional float32 or float64 ndarray of strictly increasing cut points; may be empty.",
+        "tie_policy": "Explicit upper or lower string controlling exact equality at a cut."
+      },
+      "outputs": "Fresh integer ndarray aligned with values, with indices in [0, number of cuts].",
+      "dependencies": [
+        "numpy",
+        "sciona.ghost.registry (registration only)"
+      ],
+      "reuse": "Domain independent ordered interval indexing for any compatible numeric quantities. Units, thresholds, category names and downstream interpretation belong to the caller.",
+      "internal_registered_provider_dependencies": [],
+      "callable_dependency_contracts": {}
+    }
+  ],
+  "graph_digest": "4489ff7791c460e069515323ccb5b6fed60471c2a4d7efe6e1ae2b22fa2e87ba",
+  "software_sha256": {
+    "requirements/aptos-reference-macos-arm64.lock": "e96378e380e9c7ac9f464338678a5a76d86f7081cb86094e41a52f41f0f9b9aa",
+    "requirements/aptos-reference.txt": "2e28988a0be314934eb3d1eb1c7fe58c41b0b75b0ec3e1d817cc911120d675d4",
+    "sciona-atoms-ml/src/sciona/atoms/ml/decomposed_aptos_execution.py": "9573238b946c33b011fa0b5ff0d11d444daf0e570fb5f5073fe380104b5e03bc",
+    "sciona-atoms/src/sciona/atoms/numerical/statistics/cut_indices.py": "09b03d64f259fe622c2e33790bb87d2034859bd801fb1a0c678978fff11d8987",
+    "sciona/aptos_augmentation.py": "1df7db83aab5c8866602a1ebfdf78391e81827b5313ab9894b754993c65eb1d0",
+    "sciona/aptos_ensemble.py": "0ab67a978e17226c1f076dce8dc5368a51fe1af74d2dd061ddb5a17531072f22",
+    "sciona/aptos_group_refinement.py": "e6417e93ebeeb4d44556f73cca5309381aa5acf0ffe4b7e05a115068db309f2d",
+    "sciona/aptos_initialization.py": "049020432c1ff43f11210ecb484d9f231a2846508ed8059533d667214f5411b9",
+    "sciona/aptos_models.py": "71859184e8a87f25115db150acfd3bcd8ffdb3856743d5bb914202db306d8b16",
+    "sciona/aptos_pipeline.py": "9fe296001aec5ab14268efb88e74317af1573b7ecb036768814a7f17128e144e",
+    "sciona/aptos_pooling.py": "6c7ffa9346a524370f1e700eb607ca3bbce7829b91e3ef23327c3d4c6466a33f",
+    "sciona/aptos_population.py": "3ab744fefc2be23c3fffafa7566b0f696e2d11054e3d756dcbf5750a94d4112c",
+    "sciona/aptos_preprocessing.py": "a9e97fc62963d698966bc97805e6c4bbd104cf74dde5bd167f56853d0dbc7010",
+    "sciona/aptos_refinement.py": "2599304219bdb8e91bdda98633c96db30f0abe6abfcb115b06b3f7f0d3cdbae5",
+    "sciona/aptos_training.py": "aefb7e06fd3140a0dc9e861c101d814bfe7b6d1d6687783090c7d522756849af",
+    "sciona/decomposed_aptos_graph.py": "806d720f75ce0dd69f9f7cdfcba0fa6c5643740ccec23ebbd17ca368427418a9",
+    "sciona/decomposed_aptos_pipeline.py": "530d3fbf3be47db8dba3b28d4f7e845ef52f65b213ce057a06a0a54839e57dc2",
+    "sciona/services/execution_graph_codec.py": "1ad42332f8e28adf4ee3f8d53184a4af8351f66304efa1703c63ed32989082a6",
+    "sciona/visualizer/runner.py": "22a49655e61c10d800aa2a6a9b5115cd873a9e699ea9903fa0f856aea8af67a4",
+    "scripts/decomposed_aptos_provider_contracts.py": "567d4bf004d66781e2eb19de9d8278a31c051201f89718fe51bbd8746859d3f1",
+    "scripts/review_aptos_decomposed_providers.py": "959bab209c0cf49ede57f8c2e9fb7f7f2229e00d1bdc61649ecfa2f10cfd5a9b"
+  },
+  "imports": {
+    "sciona/aptos_population.py": [
+      "from dataclasses import dataclass",
+      "from sciona.aptos_ensemble import _keys",
+      "from sciona.aptos_group_refinement import bound_group_targets",
+      "from sciona.aptos_refinement import _align, average_ordinal_targets",
+      "import numpy as np"
+    ],
+    "sciona/aptos_refinement.py": [
+      "from sciona.aptos_ensemble import _keys",
+      "import numpy as np"
+    ],
+    "sciona/aptos_preprocessing.py": [
+      "from PIL import Image",
+      "from sciona.aptos_models import FAMILIES",
+      "import numpy as np",
+      "import torch"
+    ],
+    "sciona/aptos_group_refinement.py": [
+      "from sciona.aptos_ensemble import _keys",
+      "from sciona.aptos_refinement import _align",
+      "import numbers",
+      "import numpy as np"
+    ],
+    "sciona/aptos_ensemble.py": [
+      "import numpy as np"
+    ],
+    "sciona/aptos_pooling.py": [
+      "from torch import nn",
+      "from torch.nn import functional as F",
+      "import torch"
+    ],
+    "sciona/aptos_pipeline.py": [
+      "from pathlib import Path",
+      "from sciona.aptos_augmentation import apply_parameters, draw_parameters",
+      "from sciona.aptos_ensemble import MODEL_KEYS, _keys, blend, classify",
+      "from sciona.aptos_initialization import build_from_checkpoint",
+      "from sciona.aptos_models import FAMILIES, build_uninitialized",
+      "from sciona.aptos_population import prepare_population, first_stage_targets, second_stage_targets",
+      "from sciona.aptos_preprocessing import prepare_rgb",
+      "from sciona.aptos_training import train_epochs",
+      "from tempfile import TemporaryDirectory",
+      "import gc",
+      "import hashlib",
+      "import numpy as np",
+      "import torch"
+    ],
+    "sciona/aptos_augmentation.py": [
+      "from PIL import Image, ImageEnhance, ImageFilter",
+      "from dataclasses import dataclass",
+      "from torchvision.transforms import InterpolationMode",
+      "from torchvision.transforms import functional as TF",
+      "import math",
+      "import numpy as np"
+    ],
+    "sciona/aptos_training.py": [
+      "import torch"
+    ],
+    "sciona/aptos_models.py": [
+      "from sciona.aptos_pooling import GeM",
+      "from torch import nn",
+      "import pretrainedmodels"
+    ],
+    "sciona/aptos_initialization.py": [
+      "from safetensors.torch import load",
+      "from sciona.aptos_models import FAMILIES",
+      "from sciona.aptos_pooling import GeM",
+      "from torch import nn",
+      "import hashlib",
+      "import pretrainedmodels",
+      "import re",
+      "import torch"
+    ],
+    "sciona/decomposed_aptos_pipeline.py": [
+      "from pathlib import Path",
+      "from sciona.aptos_ensemble import MODEL_KEYS, CUT_POINTS, _keys, blend, classify",
+      "from sciona.aptos_initialization import build_from_checkpoint",
+      "from sciona.aptos_models import FAMILIES",
+      "from sciona.aptos_pipeline import _predict, _batches, _digest, _restore",
+      "from sciona.aptos_population import prepare_population, first_stage_targets, second_stage_targets",
+      "from sciona.aptos_training import train_epochs",
+      "from tempfile import TemporaryDirectory",
+      "import gc",
+      "import numpy as np",
+      "import torch"
+    ],
+    "sciona/decomposed_aptos_graph.py": [
+      "from sciona.architect.models import AlgorithmicNode, DependencyEdge, IOSpec, NodeStatus",
+      "from scripts.build_aptos_execution_graph import build_graph"
+    ],
+    "sciona/visualizer/runner.py": [
+      "from __future__ import annotations",
+      "from pathlib import Path",
+      "from sciona.architect.models import AlgorithmicNode, DependencyEdge, EdgeKind, NodeStatus",
+      "from sciona.ghost.registry import REGISTRY",
+      "from sciona.synthesizer.ghost_sim import _ensure_atoms_imported",
+      "from sciona.telemetry import log_event",
+      "from sciona.visualizer.dataset_manager import DatasetManager",
+      "from typing import Any, Callable, Dict, List, Optional, Tuple",
+      "import dataclasses",
+      "import inspect",
+      "import json",
+      "import logging",
+      "import numpy as np",
+      "import pandas as pd",
+      "import time",
+      "import typing"
+    ],
+    "sciona/services/execution_graph_codec.py": [
+      "from sciona.architect.handoff import CDGExport",
+      "import hashlib",
+      "import json"
+    ],
+    "scripts/decomposed_aptos_provider_contracts.py": [],
+    "scripts/review_aptos_decomposed_providers.py": [
+      "from pathlib import Path",
+      "from scripts.decomposed_aptos_provider_contracts import CONTRACTS",
+      "from scripts.review_decomposed_aptos import ROOT, require, sha, review as integration_review",
+      "from scripts.stage_aptos_decomposed_providers import reviewed_plan",
+      "import argparse",
+      "import ast",
+      "import importlib.metadata",
+      "import json",
+      "import os",
+      "import platform",
+      "import subprocess",
+      "import tempfile",
+      "import xml.etree.ElementTree as ET"
+    ],
+    "sciona-atoms/src/sciona/atoms/numerical/statistics/cut_indices.py": [
+      "from sciona.ghost.registry import register_atom",
+      "import numpy as np"
+    ],
+    "sciona-atoms-ml/src/sciona/atoms/ml/decomposed_aptos_execution.py": [
+      "from sciona.aptos_population import Population",
+      "from sciona.decomposed_aptos_pipeline import cut_inputs as implementation",
+      "from sciona.decomposed_aptos_pipeline import result as implementation",
+      "from sciona.decomposed_aptos_pipeline import train_scores as run_reference",
+      "from sciona.ghost.registry import register_atom",
+      "import numpy as np"
+    ]
+  },
+  "package_versions": {
+    "annotated-doc": "0.0.4",
+    "annotated-types": "0.7.0",
+    "anyio": "4.12.1",
+    "attrs": "26.1.0",
+    "certifi": "2026.2.25",
+    "charset-normalizer": "3.4.5",
+    "click": "8.3.1",
+    "fastapi": "0.129.0",
+    "filelock": "3.25.2",
+    "fsspec": "2026.2.0",
+    "h11": "0.16.0",
+    "httpcore": "1.0.9",
+    "httpx": "0.28.1",
+    "idna": "3.11",
+    "jinja2": "3.1.6",
+    "jsonpatch": "1.33",
+    "jsonpointer": "3.0.0",
+    "langchain-core": "1.2.19",
+    "langgraph": "1.1.2",
+    "langgraph-checkpoint": "4.0.1",
+    "langgraph-prebuilt": "1.0.8",
+    "langgraph-sdk": "0.3.11",
+    "langsmith": "0.7.17",
+    "markdown-it-py": "4.0.0",
+    "markupsafe": "3.0.3",
+    "mdurl": "0.1.2",
+    "mpmath": "1.3.0",
+    "msgpack": "1.1.2",
+    "munch": "4.0.0",
+    "networkx": "3.6.1",
+    "numexpr": "2.14.2",
+    "numpy": "2.4.2",
+    "opt-einsum": "3.4.0",
+    "orjson": "3.11.7",
+    "ormsgpack": "1.12.2",
+    "packaging": "26.0",
+    "pandas": "2.3.3",
+    "pillow": "11.3.0",
+    "pretrainedmodels": "0.7.4",
+    "psutil": "7.0.0",
+    "pyarrow": "23.0.1",
+    "pydantic": "2.12.5",
+    "pydantic-core": "2.41.5",
+    "pygments": "2.19.2",
+    "python-dateutil": "2.9.0.post0",
+    "python-multipart": "0.0.32",
+    "pytz": "2026.1.post1",
+    "pyyaml": "6.0.3",
+    "requests": "2.32.5",
+    "requests-toolbelt": "1.0.0",
+    "rich": "14.3.3",
+    "safetensors": "0.6.2",
+    "setuptools": "81.0.0",
+    "six": "1.17.0",
+    "sniffio": "1.3.1",
+    "sse-starlette": "3.2.0",
+    "starlette": "0.52.1",
+    "sympy": "1.14.0",
+    "tenacity": "9.1.4",
+    "torch": "2.11.0",
+    "torchvision": "0.26.0",
+    "tqdm": "4.67.3",
+    "typing-extensions": "4.15.0",
+    "typing-inspection": "0.4.2",
+    "tzdata": "2025.3",
+    "urllib3": "2.6.3",
+    "uuid-utils": "0.14.1",
+    "uvicorn": "0.41.0",
+    "xxhash": "3.6.0",
+    "zstandard": "0.25.0"
+  },
+  "python_version": "3.13.11",
+  "evidence_sha256": {
+    "aptos_decomposed_provider_tests.json": "a9562625bb506fe3fdf50425ef0903b570134e0126ca7865872a02d61e6229d4",
+    "aptos_decomposed_semantic_review.json": "c521de1afd695c330c6545ddcce195a448eaac856813714dcfa1c81554bd6c44",
+    "decomposed_aptos_graph.json": "99fcefa7075427a5979808f40f35f4e9e52aac8394117e775ed5b5e7dc055d2a",
+    "decomposed_aptos_baseline_review.json": "b929a4408a12b12678942267e95c3b79ee9ea8f478932a398968a647e068a183",
+    "decomposed_aptos_package_files.json": "64fd0f7ca23003ae87dd83353a4c6751d2fbd06d5510882f0febffb727511c26",
+    "aptos_decomposed_provider_intake_plan.json": "1ddd4f85172c9a0b12ef5d09d95f1c346686e03c6487155a58065208609132cb"
+  },
+  "intake_stage_mapping": {
+    "image_standardization": "Plain full-image resizing replaces unsupported retinal cropping/local-color subtraction. Reference augmentation and publisher normalization are explicit choices.",
+    "cnn_backbone": "Eight models: two each of Inception-ResNet-v2, Inception-v4, SE-ResNeXt-50 and SE-ResNeXt-101, with trainable GeM and scalar regression head. EfficientNet substitution excluded.",
+    "quadratic_weighted_kappa_qwk_loss": "Smooth-L1 regression replaces unsupported differentiable-QWK training loss. QWK motivates final fixed ordinal thresholds, not the training objective.",
+    "pre_training_fine_tuning": "All pretrained backbone parameters train in stage one; an ensemble teacher builds three added target roles, and each own model continues ten epochs. Four-level grouping differs from five-level averaging labels.",
+    "threshold_calibration": "Fixed manually selected cuts 0.7,1.5,2.5,3.5 replace unsupported Nelder-Mead optimization. Equality convention is explicit."
+  },
+  "limitations": [
+    "Automated Community Tier 3 reference; no human-reviewed Tier 1 or usage-qualified Tier 2 designation.",
+    "Corrected eight-model CPU reconstruction; original winner runtime, artifact identity and leaderboard equivalence remain unproven.",
+    "First-stage budgets in five-epoch increments, Adam settings, ensemble teacher and fresh second-stage optimizer are explicit reference choices.",
+    "Augmentation units/distributions/order, bilinear resize, publisher normalization, scalar head and single-view inference are explicit choices.",
+    "Symmetric group bounds and threshold equality convention are explicit; the source establishes only the demonstrated lower-bound example.",
+    "Caller establishes population-role provenance and physical-image identity; supplied-label queries reject, while pseudo-label queries are deliberately transductive.",
+    "Synthetic full-resolution execution uses five first-stage and ten second-stage epochs per model; original population-scale performance is unproven.",
+    "Local external model artifacts require caller use rights. Each call retrains; temporary checkpoints are verified and removed.",
+    "Retain pooling, upstream, dependency and supplemental notices with the reconstruction.",
+    "Caller supplies model artifacts they are entitled to use; integrity and source correspondence checks do not establish usage rights.",
+    "Smp-hub cards declare license other; no independent model-weight grant or redistribution permission is inferred.",
+    "Review future distribution of external model artifacts or dependency wheels separately.",
+    "Pinned maintainer mirror identity is established; exact winner artifact/runtime identity and competitive accuracy remain unproven.",
+    "The training body is AST-equivalent to the qualified reference apart from returning the equality policy and moving final cut indexing into the graph.",
+    "Full graph validation checks complete fits, optimizer updates, checkpoint replay, target roles and the ensemble/cut oracle; it does not compare all trained tensors across independent runs.",
+    "Cut indexing is domain independent; fixed source cuts, image models, target roles and learner settings remain recipe policy.",
+    "Intermediate result dictionaries must come from the same invocation; the result encoder alone cannot establish training provenance.",
+    "Provider publication, corrected original intake and served selection remain separate requirements.",
+    "Automated Tier 3 only; no Tier 1 human certification or Tier 2 usage qualification.",
+    "Generic cut indexing is domain independent. The recipe supplies its fixed cuts and caller equality policy through explicit graph edges.",
+    "Synthetic training qualification does not establish competition accuracy, historical trained-weight parity or independent-run tensor identity.",
+    "Installed package hashes were checked against their own RECORD files, not independently authenticated publisher signatures. Clean deployment qualification is not claimed.",
+    "Validation bounds native and Torch thread pools to one; deployment must configure its own resource limits.",
+    "External pretrained artifacts are runtime dependencies; their access does not establish redistribution rights.",
+    "Software dependencies are separate from registered atom dependencies. This review alone does not approve catalog records."
+  ]
+}
