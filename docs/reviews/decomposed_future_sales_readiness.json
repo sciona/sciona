@@ -1,0 +1,160 @@
+{
+  "format": "decomposed-future-sales-readiness.v1",
+  "read_only": true,
+  "catalog_mutations": 0,
+  "approved": false,
+  "original": {
+    "artifact_id": "ea94f03d-2aaf-53b1-b3e3-2af190c9441f",
+    "fqdn": "cdg.competition.solution.kaggle.predict_future_sales_benchmark",
+    "status": "draft",
+    "is_publishable": false,
+    "content_hash": "ffde31b5d874a8d6fafa0103988b0b9a8e0f13a0169f39ff6dce4e30369423e2",
+    "is_latest": true
+  },
+  "source_version_id": "e6803752-90ef-5cab-8b30-5ebeec716c15",
+  "source_stages": [
+    "time_aggregation",
+    "target_clipping",
+    "lag_feature_generation",
+    "mean_encoding",
+    "gbdt_modeling"
+  ],
+  "reference": {
+    "artifact_id": "066fee0b-2af4-506c-a307-8fbeafd0027c",
+    "fqdn": "cdg.competition.solution.kaggle.predict_future_sales_benchmark.execution",
+    "version_id": "bccef63c-4379-5456-a2e1-a2e92d495ad1",
+    "content_hash": "d21008b254ab763cfa27396cc1ded4270af4fbfb48383b3b7e1e48c8710bd862",
+    "trust_tier": 3
+  },
+  "source_scope": "Generic benchmark topology; no identified historical winning implementation.",
+  "unresolved_source_scope": [
+    "Original mean_encoding description explicitly lists entity embeddings, holiday effects and promotion effects. Existing derivative implements prior expanding means and cyclic period features only.",
+    "Earlier derivative review calls these alternatives/examples, but the original mean_encoding wording does not explicitly say optional. Establish the intended complete contract and implement required computations before original promotion; existing derivative approval does not settle this discrepancy.",
+    "Original target_clipping claims exact evaluation-metric replication; clipping alone does not establish that claim. Preserve numeric [0,20] policy and separately qualify the chosen loss and validation metric."
+  ],
+  "unchanged_reference_code_sha256": {
+    "sciona/future_sales_contract.py": "5af0f45358949919eb2310938a2a64b22eb35fb42dfb1a58330900fe31dd4b34",
+    "sciona/future_sales_features.py": "ed275594ec8e2a81dceef57fa4b981dded2ca887d200e7a11a65ced32c2b58e1",
+    "sciona/future_sales_graph.py": "ee55cc3d232f945cbfdea9cd40c9605b32f1e1c23dfb03677b0e5edaf7d67fd1",
+    "sciona/future_sales_training.py": "39a81d674481df6ea3e33d0a7027a27a35c8c17ab1e05aa93b0f740f35ebe1a2",
+    "sciona/future_sales_worker.py": "a77232bdb88568ed0af39f6312d86a67bed1682a4d8889e907d08868ec8a6894",
+    "scripts/future_sales_synthetic.py": "3532c8d4a8dcb6d713c6a60623d2cfa0ff7c56cd97e331947e073a56551487b1",
+    "scripts/validate_future_sales_graph_execution.py": "71b7e815beabe3f6fa4a7fc383eb4989067242861c37cd59773813d53220d378"
+  },
+  "provider_sha256": "c74e40ec5f128ae590a7fc96be75c987c44b3bad66a2924d6f6a7bfe32c89347",
+  "runtime_versions": {
+    "alembic": {
+      "recorded": "1.18.4",
+      "installed": "1.18.4"
+    },
+    "colorlog": {
+      "recorded": "6.10.1",
+      "installed": "6.10.1"
+    },
+    "lightgbm": {
+      "recorded": "4.7.0",
+      "installed": "4.7.0"
+    },
+    "mako": {
+      "recorded": "1.3.10",
+      "installed": "1.3.10"
+    },
+    "markupsafe": {
+      "recorded": "3.0.3",
+      "installed": "3.0.3"
+    },
+    "narwhals": {
+      "recorded": "2.26.0",
+      "installed": "2.26.0"
+    },
+    "numpy": {
+      "recorded": "2.4.2",
+      "installed": "2.2.6"
+    },
+    "optuna": {
+      "recorded": "4.8.0",
+      "installed": "4.8.0"
+    },
+    "packaging": {
+      "recorded": "26.0",
+      "installed": "26.3"
+    },
+    "pyyaml": {
+      "recorded": "6.0.3",
+      "installed": "6.0.3"
+    },
+    "scipy": {
+      "recorded": "1.17.1",
+      "installed": "1.17.1"
+    },
+    "sqlalchemy": {
+      "recorded": "2.0.48",
+      "installed": "2.0.48"
+    },
+    "tqdm": {
+      "recorded": "4.67.3",
+      "installed": "4.67.3"
+    },
+    "typing-extensions": {
+      "recorded": "4.15.0",
+      "installed": "4.16.0"
+    }
+  },
+  "reuse_candidates": [
+    {
+      "fqdn": "sciona.atoms.ml.future_sales_execution.future_sales_execute",
+      "status": "approved",
+      "is_publishable": true,
+      "version_id": "a38faed5-cff9-59f6-938f-213d7334c906",
+      "content_hash": "7e7b93c37342f7b9ec70cf0fc64a33c38c8ad183b65041d34cdb3d781f911028"
+    },
+    {
+      "fqdn": "sciona.atoms.ml.future_sales_execution.future_sales_prepare",
+      "status": "approved",
+      "is_publishable": true,
+      "version_id": "d5c3990d-1921-573f-900e-0cc37cc4f0e7",
+      "content_hash": "f45d9640723dead8d183a88782e58586839e9b9264b9bb9db75a0022fca55c2d"
+    },
+    {
+      "fqdn": "sciona.atoms.ml.tabular.gradient_boosting.group_aggregate",
+      "status": "approved",
+      "is_publishable": true,
+      "version_id": "2578a896-62a1-5e66-af2b-7f4e7f2d57df",
+      "content_hash": "21ab0d27f13e2869f23c9417986195178a1f9aa2df485d9d50d7543df5df691f"
+    },
+    {
+      "fqdn": "sciona.atoms.ml.tabular.gradient_boosting.rolling_statistics",
+      "status": "approved",
+      "is_publishable": true,
+      "version_id": "8ff9681f-f14e-57dd-9237-c34193cdc3a0",
+      "content_hash": "60db40fb38e90f530117dbbb8447664c6ef77ac6d38514f345f3bc77837abeff"
+    }
+  ],
+  "reuse_probes": {
+    "synthetic_only": true,
+    "compensated_sum_required": true,
+    "generic_group_sum_not_byte_equivalent": true,
+    "rolling_requires_prior_shift_and_full_window_mask": true,
+    "adapted_rolling_probe_equal": true,
+    "limits": "Small contract probes only; complete extraction parity and broader duplicate search remain required."
+  },
+  "inspected_provider_sha256": {
+    "group_aggregate": "fbe13604dc943db6b77b9c2f7da1284cb39da90cc0924566cc36e12a2eb8eb72",
+    "rolling_statistics": "fbe13604dc943db6b77b9c2f7da1284cb39da90cc0924566cc36e12a2eb8eb72"
+  },
+  "auditor_sha256": "04e99b3267af9b8e2ac9d1e221b9160706c61034b5f5a8cdaeaefc7403c2c6df",
+  "next_steps": [
+    "Resolve the original mean-encoding scope against the retained source description before choosing extraction boundaries; do not silently inherit omitted computations from the derivative.",
+    "Preserve compensated net aggregation before clipping, fixed active population, strict prior-only features, rolling one-step validation and the full configured TPE/early-stopping/refit lifecycle.",
+    "Expose reusable numeric stages with explicit contracts; retain recipe-specific clipping bounds, categorical layout and observation-availability assumptions as declared policy.",
+    "Preserve dedicated worker execution for native training; do not move LightGBM into the combined graph process without resolving the recorded crash.",
+    "Qualify current environment and complete native graph execution without overwriting historical NumPy 2.4.2 evidence.",
+    "Finish duplicate search, extraction parity, provider qualification, stored original execution and publication gates before approval."
+  ],
+  "limits": [
+    "Readiness and contract probes are not publication approval or full execution qualification.",
+    "A fixed entity universe assumes all entities are active for every observed period; absent transactions mean zero.",
+    "Validation uses earlier validation-period observations and is not fixed-origin multi-period forecasting.",
+    "Native worker isolation remains required; original crash cause has not been established."
+  ]
+}
