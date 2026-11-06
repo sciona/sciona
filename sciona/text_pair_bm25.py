@@ -5,7 +5,7 @@ from types import MappingProxyType
 import re
 import unicodedata
 
-from sciona.bm25_scoring import bm25_score
+from sciona.atoms.ml.text_nlp.bm25 import score_bm25 as bm25_score
 
 
 def _pairs(pairs):
