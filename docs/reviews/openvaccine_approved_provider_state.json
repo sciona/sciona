@@ -1,0 +1,456 @@
+{
+  "passed": true,
+  "records": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.openvaccine_execution.openvaccine_prepare",
+      "catalog_fqdn": "sciona.atoms.ml.openvaccine_execution.openvaccine_prepare",
+      "version_id": "14792e48-704a-51a8-b1b8-f0fe93a3e993",
+      "content_hash": "0660a3429840284aa26f2bd01fef70031fc3a3dd99d9965b967b915d85eaee83",
+      "provider_sha256": "64a4a0bcd4ab68f7b2320ce92986b6af71e582eec6eccb1f94a5e9d699087a50",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "payload",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "semantics": null,
+      "classification": "source_recipe_adapter",
+      "artifact_id": "12c53ef6-e2c3-52fe-a8e1-421c39039636",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "payload",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_openvaccine_execution.features",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_openvaccine_execution.features",
+      "version_id": "a1099774-42e9-55c4-b436-cd042bd17d6f",
+      "content_hash": "f5ff382a8ccb9b28b134fc985b4da75f108a8db91dae24087bea02adc2f1b5dc",
+      "provider_sha256": "93c313334818e1caff61442acec814df02d90a682522565fbcaa3675ff5680ee",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "featured",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "semantics": {
+        "operation": "Fold all three validated RNA populations and expose dense features and explicit training controls.",
+        "plain_limits": "Validate the complete input before folding. Fold labeled, pseudo-label and prediction populations in that order. Return features and controls without fitting a model.",
+        "validity_bounds": "Require exact Prepared type. Deep-copy and revalidate its strict finite JSON payload through the existing _arguments boundary; null targets denote masked values. Require explicit Python initialization seed in [0,2**31), positive integer step counts, all twenty train/validation member splits, nonempty refinement plans and valid rollback/ddof controls. Each raw population is nonempty, contains only ACGU strings of length at least two, and has a common length within that population; lengths may differ between populations. Require configured reviewed model source, folding binary and coefficient paths. The existing folding dispatcher verifies software identities, validates posterior probabilities and structure, and constructs per-record 55-channel nodes and eight-channel adjacency with boundary positions. Preserve all target masks, cluster/proximity weights, split identities and round inputs. Validate dense outputs before returning. No seed reset, model fitting, external checkpoint loading or numeric ensemble sum occurs here.",
+        "parameters": {
+          "prepared": "Same-invocation Prepared from openvaccine_prepare, containing private raw populations and complete explicit training controls."
+        },
+        "outputs": "Dictionary with nodes/adjacency, pseudo_nodes/pseudo_adjacency, prediction_nodes/prediction_adjacency, targets, cluster_ids, proximity_factors, splits, pseudo_rounds, pretraining_steps, initial_supervised_steps, rollback_policy, absolute_tolerance, std_ddof and seed. Raw sequence fields are removed. Feature tensors remain private runtime values.",
+        "dependencies": [
+          "sciona.decomposed_openvaccine_runtime.features",
+          "sciona.openvaccine_contract",
+          "sciona.openvaccine_folding",
+          "sciona.openvaccine_features",
+          "sciona.openvaccine_structure",
+          "numpy",
+          "pandas",
+          "pinned CONTRAfold-SE binary and EternaFold coefficients",
+          "sciona.ghost.registry (registration only)"
+        ],
+        "reuse": "Dense graph-feature training is callable independently of RNA folding. Compatible cross-domain inputs must retain the pinned architecture contract: 55 node features, eight adjacency channels, boundary positions and five output channels. Applicability and feature semantics require caller justification. The ordered numeric sum is domain independent; RNA folding, four-family five-state inventory, reversal, clipping and training policy remain recipe-specific. Intermediate state must come from the same invocation; shape checks do not authenticate provenance. No historical accuracy, independent CV, winning clustered blend or stochastic checkpoint replay is claimed."
+      },
+      "classification": "source_recipe_adapter",
+      "artifact_id": "bd152c46-b0f1-57de-b35a-4ef8e5349797",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "featured",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_openvaccine_execution.fit_forecast",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_openvaccine_execution.fit_forecast",
+      "version_id": "54ec32b9-3162-5d51-bcca-c6bb04e77da2",
+      "content_hash": "eb816143e09b6cdb990be74dfcf67abf8b65b5860629c5ddbdf8c9e56645fada",
+      "provider_sha256": "93c313334818e1caff61442acec814df02d90a682522565fbcaa3675ff5680ee",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "featured",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "forecasted",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "semantics": {
+        "operation": "Execute the complete configured model lifecycle from dense graph features.",
+        "plain_limits": "Pretrain a shared autoencoder, fit all twenty split models, run every supervised/pseudo-label refinement round, and collect checkpoint-backed member predictions and teacher moments.",
+        "validity_bounds": "Require exact dense-feature dictionary fields; deep-copy inputs. All three feature populations must be finite float32 node arrays (B,L+2,55) and aligned adjacency (B,L+2,L+2,8), with B positive and L at least two. Labeled targets must be float32 (B,L,5), allow NaN masks but no infinity, and satisfy every split observation/positive-weight constraint. Derive existing cluster/proximity weights; validate all twenty disjoint nonempty train/validation partitions and every round before TensorFlow/model work. Require positive Python integer pretraining and initial supervised step counts, Python seed in [0,2**31), supported rollback policy, finite nonnegative tolerance and Python integer ddof 0 or 1. Every round requires all twenty explicit member recipes with boolean reversal/eligibility arrays, finite float32 perturbations and nonnegative positive-sum float32 pseudo weights, at least one eligible positive-weight target and finite nonnegative uncertainty threshold. Use the hash-verified source architectures and legacy Keras. Reset the global TensorFlow/Python/NumPy initialization seed, so use a dedicated process rather than concurrent seeded executions. Preserve full model widths, caller step counts, all twenty members in sorted initial order and every refinement round. Shared pretraining uses the full labeled feature population, including validation features; teachers share member information, so validation is transductive. Each refinement round uses unchanged checkpoint teacher statistics, supervised training, pseudo-label training and configured validation rollback. Keep checkpoint weights and optimizer state in a private temporary directory; cleanup follows final inference. Load every final member with its manifest/family checks; predict forward and reversed inputs, average in native float32, compute unclipped float64 Welford moments, clip each member to [-.5,6] and retain the twenty-member stack. Model execution is serial; deployment must bound native/TensorFlow thread pools within the shared CPU budget. No raw RNA input or folding call is required by this operation.",
+        "parameters": {
+          "featured": "Validated same-invocation dense features and controls from features, or independently supplied compatible dense features satisfying the exact contract."
+        },
+        "outputs": "Dictionary containing float64 clipped_members (20,Bq,Lq,5), float32 teacher_mean/teacher_std (Bq,Lq,5), members=20, per-round member/supervised/pseudo/rollback counters, pretraining_steps and aggregate initial_supervised_steps. Materializing twenty predictions uses more memory than the original streaming reduction. No final mean prediction is returned yet.",
+        "dependencies": [
+          "sciona.decomposed_openvaccine_runtime.fit_forecast",
+          "sciona.decomposed_openvaccine_ensemble",
+          "sciona.openvaccine_models",
+          "sciona.openvaccine_checkpoints",
+          "sciona.openvaccine_population",
+          "sciona.openvaccine_round",
+          "sciona.openvaccine_round_contract",
+          "sciona.openvaccine_sections",
+          "sciona.openvaccine_splits",
+          "sciona.openvaccine_targets",
+          "sciona.openvaccine_teacher",
+          "sciona.openvaccine_ensemble",
+          "numpy",
+          "tensorflow",
+          "tf-keras",
+          "pinned source model definitions",
+          "sciona.ghost.registry (registration only)"
+        ],
+        "reuse": "Dense graph-feature training is callable independently of RNA folding. Compatible cross-domain inputs must retain the pinned architecture contract: 55 node features, eight adjacency channels, boundary positions and five output channels. Applicability and feature semantics require caller justification. The ordered numeric sum is domain independent; RNA folding, four-family five-state inventory, reversal, clipping and training policy remain recipe-specific. Intermediate state must come from the same invocation; shape checks do not authenticate provenance. No historical accuracy, independent CV, winning clustered blend or stochastic checkpoint replay is claimed."
+      },
+      "classification": "source_recipe_adapter",
+      "artifact_id": "c42d49cc-5e70-53fa-a3e1-fc4bd0653a05",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "featured",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "forecasted",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_openvaccine_execution.blend_inputs",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_openvaccine_execution.blend_inputs",
+      "version_id": "7250bb37-db4d-5eb7-9500-a68473b724fd",
+      "content_hash": "44614dc55e6b0f0cb9b51ca77f6ccfaf6ff191269e8a832cbe169c4c23e06700",
+      "provider_sha256": "93c313334818e1caff61442acec814df02d90a682522565fbcaa3675ff5680ee",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "forecasted",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "coefficients",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "semantics": {
+        "operation": "Expose the ordered clipped predictions and coefficients for a generic sum.",
+        "plain_limits": "Flatten each member prediction into one row, preserving order, and supply twenty unit coefficients. Keep clipping and mean division as recipe policy.",
+        "validity_bounds": "Require exact dictionary containing clipped_members and both teacher moments; lifecycle metadata may also be present. Require finite float64 clipped_members shaped (20,B,L,5), B positive, L at least two, and every value in [-.5,6]. Both teacher arrays must be aligned finite float32 (B,L,5), with nonnegative standard deviation. Copy and reshape clipped members to (20,B*L*5), preserving C-order. Add positive zero to the first row to preserve the original accumulator signed-zero semantics when the generic reducer starts from its first product. Return fresh float64 ones (20,) as coefficients. Do not sum, normalize, train, reclip or alter caller arrays. Member identity is established upstream; shape checks cannot recover it.",
+        "parameters": {
+          "forecasted": "Complete same-invocation fit_forecast output with ordered clipped member predictions and unclipped teacher moments."
+        },
+        "outputs": "Tuple (values, coefficients): fresh float64 matrix (20,B*L*5) and float64 vector (20,) of ones. The generic ordered_weighted_sum must consume these unchanged.",
+        "dependencies": [
+          "sciona.decomposed_openvaccine_ensemble.blend_inputs",
+          "numpy",
+          "sciona.ghost.registry (registration only)"
+        ],
+        "reuse": "Dense graph-feature training is callable independently of RNA folding. Compatible cross-domain inputs must retain the pinned architecture contract: 55 node features, eight adjacency channels, boundary positions and five output channels. Applicability and feature semantics require caller justification. The ordered numeric sum is domain independent; RNA folding, four-family five-state inventory, reversal, clipping and training policy remain recipe-specific. Intermediate state must come from the same invocation; shape checks do not authenticate provenance. No historical accuracy, independent CV, winning clustered blend or stochastic checkpoint replay is claimed."
+      },
+      "classification": "source_recipe_adapter",
+      "artifact_id": "c22910b0-0ba5-59f5-9fd2-fa987dbfed90",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "forecasted",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "coefficients",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.numerical.statistics.ordered_sum.ordered_weighted_sum",
+      "catalog_fqdn": "sciona.atoms.numerical.statistics.ordered_sum.ordered_weighted_sum",
+      "version_id": "5fb9c91f-ff5f-590c-b376-88e2a7360440",
+      "content_hash": "814d0ff20f33820537741e1f116c32dfa69262d56dc16d872f3a055f77bd6968",
+      "provider_sha256": "893e4fb0c884d1732d9bba0ae2e203b72170bba11fbc89443306e6fd1b6ea359",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "coefficients",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "total",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "semantics": null,
+      "classification": "generic_operation",
+      "artifact_id": "4f486f1c-82db-50db-b5d2-188aeaa8cc4a",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "coefficients",
+          "ordinal": 1,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "scores",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_openvaccine_execution.result",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_openvaccine_execution.result",
+      "version_id": "2fcbf1c7-79e4-5946-a239-e7ca2a2421be",
+      "content_hash": "7da101b38588c58baa68ac69db71f4908dc2bded3fef88646d3f61b0bd718b31",
+      "provider_sha256": "93c313334818e1caff61442acec814df02d90a682522565fbcaa3675ff5680ee",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "forecasted",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "total",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "semantics": {
+        "operation": "Restore the ensemble mean and package the complete lifecycle result.",
+        "plain_limits": "Divide the external ordered sum by twenty, restore prediction shape, and return predictions, unclipped teacher moments and all lifecycle counters as strict JSON.",
+        "validity_bounds": "Revalidate the clipped members and teacher moments using the same finite/dtype/shape/bounds checks as blend_inputs. Require supplied total convertible to finite float64 vector (B*L*5,) with entries in [-10,120]. Reshape, divide by twenty in float64 and cast to float32. Require exact forecast dictionary fields; Python integer members=20; positive Python integer pretraining and aggregate initial supervised counters, with the latter divisible by twenty; and a nonempty list of exact per-round counter dictionaries. Each round has Python integer members=20, supervised_steps=20, pseudo_label_steps=20 and rollbacks in [0,20]. Convert prediction and teacher arrays to lists, deep-copy round counters and require strict JSON serialization. No model execution, sum or teacher statistics are recomputed. The graph must enforce that the supplied total belongs to this forecast; bounds and counters do not authenticate execution history.",
+        "parameters": {
+          "forecasted": "Complete same-invocation fit_forecast output.",
+          "total": "Same-invocation generic ordered weighted sum of blend_inputs rows with its unit coefficients."
+        },
+        "outputs": "Strict JSON dictionary with predictions, teacher_mean, teacher_std, members, rounds, pretraining_steps and initial_supervised_steps. Private prediction values must not be included in public real-data evidence.",
+        "dependencies": [
+          "sciona.decomposed_openvaccine_runtime.result",
+          "sciona.decomposed_openvaccine_ensemble.finish_prediction",
+          "numpy",
+          "json (Python standard library)",
+          "sciona.ghost.registry (registration only)"
+        ],
+        "reuse": "Dense graph-feature training is callable independently of RNA folding. Compatible cross-domain inputs must retain the pinned architecture contract: 55 node features, eight adjacency channels, boundary positions and five output channels. Applicability and feature semantics require caller justification. The ordered numeric sum is domain independent; RNA folding, four-family five-state inventory, reversal, clipping and training policy remain recipe-specific. Intermediate state must come from the same invocation; shape checks do not authenticate provenance. No historical accuracy, independent CV, winning clustered blend or stochastic checkpoint replay is claimed."
+      },
+      "classification": "source_recipe_adapter",
+      "artifact_id": "5a291e1e-aef0-5599-aa35-70271626fb99",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "forecasted",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "total",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    }
+  ],
+  "checker_sha256": "f0316bea615db02cf4e9f2e28ea50c39e07a6432637a524f30368d58dac37355",
+  "catalog_snapshot": {
+    "atoms": "255db945cbdda251b7bfc2c236bd4fb96e84e815d45c659cde72d8c7ad7fa044",
+    "artifacts": "27091088921deed80ce075add64d412505099038f30dab9f0bd53a9531e862bc",
+    "atom_versions": "e6ffa12c514f6d286431005c9996921151f1a0a6074ab703b2938df30224c7a9",
+    "artifact_versions": "52a5add2dc4b63ff06d74a3829faff724ea172e4d685c5b56662d1a4fd872e65",
+    "atom_io_specs": "15c7d0520fbf442c9b89446479a55d16bf012cb00f81ce1239ae83e6121e911e",
+    "artifact_io_specs": "80dcb7e52f97bb4fa6052a42eb9ec48a8558b44dd5c818392c5b6ec283c63f38",
+    "atom_parameters": "1e5e54142e797e48f5c6e2896ebd12bfec4f16c8e83bbeed03639f9f2a9c35a7",
+    "artifact_parameters": "62fbe459f0d16f3a3e849dbabb2bef86300684c5c082a202c838546c22f2d6ec",
+    "atom_descriptions": "01ec688d40a0b8df6b60c98e2db1945ad914bd7d8d01ab7d2efc16ad79b23704",
+    "artifact_descriptions": "5e2d09acbcd7af96fbbc078320d4933b1c4100ed2113e2ea54079f532cbf6c34",
+    "atom_references": "3c18c6b6b712608a36a6b64c93f885aeb640092936eee356255b686cd6905be2",
+    "artifact_references": "98a3fcf5dc7dbaeafbca4f046908da74451d7d5c9e16710a03c1ef4e6c8232aa",
+    "atom_audit_rollups": "727c5ab83fc7d8c5fd394af0f0cb90bd7fa9fdab266c9ed3af77162057198212",
+    "artifact_audit_rollups": "2fd73984879178613b4a5bd2dc8d32ff30e66aba4f4c7412063a7185a801ccc2",
+    "artifact_audit_evidence": "89a76762acc79a9ebaff54b9da5525fbd528353bd31ddeb9d6f342825383d9b8"
+  }
+}
