@@ -1,0 +1,984 @@
+{
+  "records": [
+    {
+      "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+      "fqdn": "sciona.atoms.ml.sklearn.cluster.mean_shift",
+      "runtime_fqdn": "sciona.atoms.ml.sklearn.cluster.atoms.mean_shift",
+      "version_id": "359c5a5b-ecb0-5994-b5d1-4e90542a55d1",
+      "content_hash": "df6e86753cb9e12a090191d650f4e3ecf74e0fe361baf653bd9c307e0291af7a",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "X",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite dense numeric matrix (N,D), converted to float64. Caller owns feature scaling for Euclidean neighborhoods; no detector policy."
+        },
+        {
+          "direction": "input",
+          "name": "bandwidth",
+          "ordinal": 1,
+          "type_desc": "float",
+          "required": false,
+          "default_value_repr": "None",
+          "constraints": "Positive finite neighborhood radius in feature units, or None for backend bandwidth estimation. Explicit positive bandwidth is the currently exercised detector path."
+        },
+        {
+          "direction": "input",
+          "name": "seeds",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": false,
+          "default_value_repr": "None",
+          "constraints": "None uses input rows or bin seeds; supplied seeds must be a nonempty finite matrix with D columns."
+        },
+        {
+          "direction": "input",
+          "name": "bin_seeding",
+          "ordinal": 3,
+          "type_desc": "bool",
+          "required": false,
+          "default_value_repr": "False",
+          "constraints": "Boolean; when true and seeds are None, use grid bins as initial seeds."
+        },
+        {
+          "direction": "input",
+          "name": "min_bin_freq",
+          "ordinal": 4,
+          "type_desc": "int",
+          "required": false,
+          "default_value_repr": "1",
+          "constraints": "Positive integer minimum populated-bin count; relevant to bin seeding."
+        },
+        {
+          "direction": "input",
+          "name": "cluster_all",
+          "ordinal": 5,
+          "type_desc": "bool",
+          "required": false,
+          "default_value_repr": "True",
+          "constraints": "Boolean; false permits label -1 for points beyond bandwidth from every retained center."
+        },
+        {
+          "direction": "input",
+          "name": "max_iter",
+          "ordinal": 6,
+          "type_desc": "int",
+          "required": false,
+          "default_value_repr": "300",
+          "constraints": "Nonnegative integer iteration bound. Does not guarantee convergence or global optimality."
+        },
+        {
+          "direction": "input",
+          "name": "n_jobs",
+          "ordinal": 7,
+          "type_desc": "int",
+          "required": false,
+          "default_value_repr": "None",
+          "constraints": "Qualified execution uses n_jobs=1 and externally bounded native threads. Caller owns total concurrency; None follows joblib context."
+        },
+        {
+          "direction": "output",
+          "name": "centers",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 center matrix (K,D) in backend mode ordering; feature units match input."
+        },
+        {
+          "direction": "output",
+          "name": "labels",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Integer vector (N,) of retained-center indices; -1 denotes an unassigned point when cluster_all is false. Numbering is backend-dependent."
+        }
+      ],
+      "operation": "Find Euclidean density modes by repeated neighborhood means, suppress nearby modes, and assign points to retained centers.",
+      "plain_description": "Find groups of nearby points and report their centers and assignments.",
+      "validity_bounds": "Nonempty finite dense numeric matrix (N,D), converted to float64. Caller owns feature scaling for Euclidean neighborhoods; no detector policy. Positive finite neighborhood radius in feature units, or None for backend bandwidth estimation. Explicit positive bandwidth is the currently exercised detector path. None uses input rows or bin seeds; supplied seeds must be a nonempty finite matrix with D columns. Boolean; when true and seeds are None, use grid bins as initial seeds. Positive integer minimum populated-bin count; relevant to bin seeding. Boolean; false permits label -1 for points beyond bandwidth from every retained center. Nonnegative integer iteration bound. Does not guarantee convergence or global optimality. Qualified execution uses n_jobs=1 and externally bounded native threads. Caller owns total concurrency; None follows joblib context. Finite float64 center matrix (K,D) in backend mode ordering; feature units match input. Integer vector (N,) of retained-center indices; -1 denotes an unassigned point when cluster_all is false. Numbering is backend-dependent.",
+      "reuse": "Generic Euclidean mode clustering over caller-supplied features; detector topology and grouping stay outside the operation.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "qualification": {
+    "format": "trackml-meanshift-provider-semantics.v1",
+    "passed": true,
+    "approved": false,
+    "proposed_tier": 3,
+    "verdict": "acceptable_with_limits",
+    "catalog_mutations": 0,
+    "synthetic_only": true,
+    "providers": [
+      {
+        "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+        "fqdn": "sciona.atoms.ml.sklearn.cluster.mean_shift",
+        "runtime_fqdn": "sciona.atoms.ml.sklearn.cluster.atoms.mean_shift",
+        "version_id": "359c5a5b-ecb0-5994-b5d1-4e90542a55d1",
+        "content_hash": "df6e86753cb9e12a090191d650f4e3ecf74e0fe361baf653bd9c307e0291af7a",
+        "interfaces": [
+          {
+            "direction": "input",
+            "name": "X",
+            "ordinal": 0,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Nonempty finite dense numeric matrix (N,D), converted to float64. Caller owns feature scaling for Euclidean neighborhoods; no detector policy."
+          },
+          {
+            "direction": "input",
+            "name": "bandwidth",
+            "ordinal": 1,
+            "type_desc": "float",
+            "required": false,
+            "default_value_repr": "None",
+            "constraints": "Positive finite neighborhood radius in feature units, or None for backend bandwidth estimation. Explicit positive bandwidth is the currently exercised detector path."
+          },
+          {
+            "direction": "input",
+            "name": "seeds",
+            "ordinal": 2,
+            "type_desc": "ndarray",
+            "required": false,
+            "default_value_repr": "None",
+            "constraints": "None uses input rows or bin seeds; supplied seeds must be a nonempty finite matrix with D columns."
+          },
+          {
+            "direction": "input",
+            "name": "bin_seeding",
+            "ordinal": 3,
+            "type_desc": "bool",
+            "required": false,
+            "default_value_repr": "False",
+            "constraints": "Boolean; when true and seeds are None, use grid bins as initial seeds."
+          },
+          {
+            "direction": "input",
+            "name": "min_bin_freq",
+            "ordinal": 4,
+            "type_desc": "int",
+            "required": false,
+            "default_value_repr": "1",
+            "constraints": "Positive integer minimum populated-bin count; relevant to bin seeding."
+          },
+          {
+            "direction": "input",
+            "name": "cluster_all",
+            "ordinal": 5,
+            "type_desc": "bool",
+            "required": false,
+            "default_value_repr": "True",
+            "constraints": "Boolean; false permits label -1 for points beyond bandwidth from every retained center."
+          },
+          {
+            "direction": "input",
+            "name": "max_iter",
+            "ordinal": 6,
+            "type_desc": "int",
+            "required": false,
+            "default_value_repr": "300",
+            "constraints": "Nonnegative integer iteration bound. Does not guarantee convergence or global optimality."
+          },
+          {
+            "direction": "input",
+            "name": "n_jobs",
+            "ordinal": 7,
+            "type_desc": "int",
+            "required": false,
+            "default_value_repr": "None",
+            "constraints": "Qualified execution uses n_jobs=1 and externally bounded native threads. Caller owns total concurrency; None follows joblib context."
+          },
+          {
+            "direction": "output",
+            "name": "centers",
+            "ordinal": 0,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Finite float64 center matrix (K,D) in backend mode ordering; feature units match input."
+          },
+          {
+            "direction": "output",
+            "name": "labels",
+            "ordinal": 1,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Integer vector (N,) of retained-center indices; -1 denotes an unassigned point when cluster_all is false. Numbering is backend-dependent."
+          }
+        ],
+        "operation": "Find Euclidean density modes by repeated neighborhood means, suppress nearby modes, and assign points to retained centers.",
+        "plain_description": "Find groups of nearby points and report their centers and assignments.",
+        "validity_bounds": "Nonempty finite dense numeric matrix (N,D), converted to float64. Caller owns feature scaling for Euclidean neighborhoods; no detector policy. Positive finite neighborhood radius in feature units, or None for backend bandwidth estimation. Explicit positive bandwidth is the currently exercised detector path. None uses input rows or bin seeds; supplied seeds must be a nonempty finite matrix with D columns. Boolean; when true and seeds are None, use grid bins as initial seeds. Positive integer minimum populated-bin count; relevant to bin seeding. Boolean; false permits label -1 for points beyond bandwidth from every retained center. Nonnegative integer iteration bound. Does not guarantee convergence or global optimality. Qualified execution uses n_jobs=1 and externally bounded native threads. Caller owns total concurrency; None follows joblib context. Finite float64 center matrix (K,D) in backend mode ordering; feature units match input. Integer vector (N,) of retained-center indices; -1 denotes an unassigned point when cluster_all is false. Numbering is backend-dependent.",
+        "reuse": "Generic Euclidean mode clustering over caller-supplied features; detector topology and grouping stay outside the operation.",
+        "registered_provider_dependencies": []
+      }
+    ],
+    "tests": {
+      "tests": 28,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exact_backend_cases": 26,
+    "software_sha256": {
+      "tests/test_meanshift_provider_semantics.py": "9f95aac653ee70a8260e947ac13557ceab047e1075b91644298b3896e2415631",
+      "scripts/review_trackml_meanshift_provider_semantics.py": "3e74efdb8162824de91cf38bb09a3d190702f3f1a5acbb7a5af9e4c6c9f518df",
+      "scripts/stage_trackml_meanshift_providers.py": "e64547401262becf154b726589dd7c626f33c43b02e3899898bc8cc189cc19e0",
+      "sciona/ghost/registry.py": "793723a75d07a88eed39f59d8d4dc327c54adbf75db7a03003516a6f74c81b51",
+      "sciona/decomposed_trackml_detector_lifecycle.py": "40203dd5117c965aa77e40c64e7259164dd0523aa6288740c3a3ce457f45bca0",
+      "sciona-atoms-ml/src/sciona/atoms/ml/sklearn/cluster/atoms.py": "c8a78a13625c22a4427de39fb21faad478776cfaaab5b6d7dec65b1804265c8d",
+      "scripts/review_trackml_kmeans_provider_semantics.py": "d1430da95ba7cb4f4b29d52490463ae13ceca4d65387733e9eb83498afd38e47",
+      "sciona-atoms-ml/src/sciona/atoms/ml/sklearn/cluster/state_models.py": "51b644973b5634da82d3cfcb89a9742f6a208cfaf75e46f72628243bfaafaf16",
+      "sciona-atoms-ml/src/sciona/atoms/ml/sklearn/cluster/witnesses.py": "9edcc058d2c667cd146600369a082b5ec76eb0d3e35e64a87a13bcb97c91eb87"
+    },
+    "installed_packages": {
+      "annotated-types": {
+        "version": "0.7.0",
+        "hashed_files_verified": 7,
+        "active_requirements": []
+      },
+      "asttokens": {
+        "version": "2.4.1",
+        "hashed_files_verified": 13,
+        "active_requirements": [
+          "six>=1.12.0"
+        ]
+      },
+      "icontract": {
+        "version": "2.7.3",
+        "hashed_files_verified": 16,
+        "active_requirements": [
+          "asttokens<3,>=2",
+          "typing_extensions"
+        ]
+      },
+      "joblib": {
+        "version": "1.5.3",
+        "hashed_files_verified": 143,
+        "active_requirements": []
+      },
+      "mpmath": {
+        "version": "1.3.0",
+        "hashed_files_verified": 92,
+        "active_requirements": []
+      },
+      "numpy": {
+        "version": "2.2.6",
+        "hashed_files_verified": 876,
+        "active_requirements": []
+      },
+      "pydantic": {
+        "version": "2.12.5",
+        "hashed_files_verified": 111,
+        "active_requirements": [
+          "annotated-types>=0.6.0",
+          "pydantic-core==2.41.5",
+          "typing-extensions>=4.14.1",
+          "typing-inspection>=0.4.2"
+        ]
+      },
+      "pydantic-core": {
+        "version": "2.41.5",
+        "hashed_files_verified": 9,
+        "active_requirements": [
+          "typing-extensions>=4.14.1"
+        ]
+      },
+      "scikit-learn": {
+        "version": "1.8.0",
+        "hashed_files_verified": 960,
+        "active_requirements": [
+          "joblib>=1.3.0",
+          "numpy>=1.24.1",
+          "scipy>=1.10.0",
+          "threadpoolctl>=3.2.0"
+        ]
+      },
+      "scipy": {
+        "version": "1.17.1",
+        "hashed_files_verified": 1423,
+        "active_requirements": [
+          "numpy<2.7,>=1.26.4"
+        ]
+      },
+      "six": {
+        "version": "1.17.0",
+        "hashed_files_verified": 6,
+        "active_requirements": []
+      },
+      "sympy": {
+        "version": "1.14.0",
+        "hashed_files_verified": 1571,
+        "active_requirements": [
+          "mpmath<1.4,>=1.1.0"
+        ]
+      },
+      "threadpoolctl": {
+        "version": "3.6.0",
+        "hashed_files_verified": 5,
+        "active_requirements": []
+      },
+      "typing-extensions": {
+        "version": "4.16.0",
+        "hashed_files_verified": 6,
+        "active_requirements": []
+      },
+      "typing-inspection": {
+        "version": "0.4.2",
+        "hashed_files_verified": 9,
+        "active_requirements": [
+          "typing-extensions>=4.12.0"
+        ]
+      }
+    },
+    "intake_plan_sha256": "7b48cb27fb2ee00b48899e93b73c03269077e4fd46ecfc2c0685badaeefaa748",
+    "resource_policy": {
+      "serial_tests": true,
+      "native_threads": 1
+    },
+    "limitations": [
+      "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+      "Nonempty finite dense numeric points and optional seeds are converted to float64; float32 backend execution is not preserved. Caller owns Euclidean feature scaling.",
+      "Positive finite explicit bandwidth or None for bandwidth estimation. Estimates can be zero on degenerate input; universal nondegenerate estimation is not promised.",
+      "Seeds may be caller supplied, input rows, or populated grid bins. Empty seeds or no populated bins are not qualified; seeds with no neighbors reject.",
+      "min_bin_freq is a positive integer. max_iter is nonnegative; zero still performs the source first mean update and does not mean no computation.",
+      "cluster_all=false permits -1 labels. Centers and label numbering retain installed backend ordering, not a stable cross-version identity.",
+      "Finite inputs may overflow intermediate arithmetic. No exhaustive floating-point accuracy, global optimum or historical competition accuracy claim.",
+      "Qualification uses n_jobs=1 with native threads externally bounded to one; callers must bound total concurrency.",
+      "Existing witness and symbolic metadata are not a proof of iterative clustering semantics.",
+      "Ring counts, detector topology, gap detection and grouping remain separate recipe policy.",
+      "Installed RECORD checks validate current dependency files, not publisher authentication or deployment on other platforms.",
+      "Legacy approval and serving remain preserved; canonical publication and original CDG qualification are separate actions."
+    ]
+  },
+  "inserts": [
+    {
+      "table": "references_registry",
+      "keys": {
+        "ref_id": "trackml_meanshift-provider-review-v1"
+      },
+      "row": {
+        "ref_id": "trackml_meanshift-provider-review-v1",
+        "ref_type": "web",
+        "title": "Reusable MeanShift clustering synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/9c7ba183/docs/reviews/trackml_meanshift_provider_semantics.json"
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+        "version_id": "359c5a5b-ecb0-5994-b5d1-4e90542a55d1",
+        "name": "X"
+      },
+      "row": {
+        "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+        "version_id": "359c5a5b-ecb0-5994-b5d1-4e90542a55d1",
+        "name": "X",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonempty finite dense numeric matrix (N,D), converted to float64. Caller owns feature scaling for Euclidean neighborhoods; no detector policy.",
+        "dejargonized_description": "Caller supplies X.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty finite dense numeric matrix (N,D), converted to float64. Caller owns feature scaling for Euclidean neighborhoods; no detector policy.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Nonempty finite dense numeric points and optional seeds are converted to float64; float32 backend execution is not preserved. Caller owns Euclidean feature scaling.",
+            "Positive finite explicit bandwidth or None for bandwidth estimation. Estimates can be zero on degenerate input; universal nondegenerate estimation is not promised.",
+            "Seeds may be caller supplied, input rows, or populated grid bins. Empty seeds or no populated bins are not qualified; seeds with no neighbors reject.",
+            "min_bin_freq is a positive integer. max_iter is nonnegative; zero still performs the source first mean update and does not mean no computation.",
+            "cluster_all=false permits -1 labels. Centers and label numbering retain installed backend ordering, not a stable cross-version identity.",
+            "Finite inputs may overflow intermediate arithmetic. No exhaustive floating-point accuracy, global optimum or historical competition accuracy claim.",
+            "Qualification uses n_jobs=1 with native threads externally bounded to one; callers must bound total concurrency.",
+            "Existing witness and symbolic metadata are not a proof of iterative clustering semantics.",
+            "Ring counts, detector topology, gap detection and grouping remain separate recipe policy.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or deployment on other platforms.",
+            "Legacy approval and serving remain preserved; canonical publication and original CDG qualification are separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+        "version_id": "359c5a5b-ecb0-5994-b5d1-4e90542a55d1",
+        "name": "bandwidth"
+      },
+      "row": {
+        "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+        "version_id": "359c5a5b-ecb0-5994-b5d1-4e90542a55d1",
+        "name": "bandwidth",
+        "position": 1,
+        "kind": "keyword_only",
+        "type_desc": "float",
+        "required": false,
+        "default_value_repr": "None",
+        "technical_description": "Positive finite neighborhood radius in feature units, or None for backend bandwidth estimation. Explicit positive bandwidth is the currently exercised detector path.",
+        "dejargonized_description": "Caller supplies bandwidth.",
+        "constraints_json": {
+          "parameter_contract": "Positive finite neighborhood radius in feature units, or None for backend bandwidth estimation. Explicit positive bandwidth is the currently exercised detector path.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Nonempty finite dense numeric points and optional seeds are converted to float64; float32 backend execution is not preserved. Caller owns Euclidean feature scaling.",
+            "Positive finite explicit bandwidth or None for bandwidth estimation. Estimates can be zero on degenerate input; universal nondegenerate estimation is not promised.",
+            "Seeds may be caller supplied, input rows, or populated grid bins. Empty seeds or no populated bins are not qualified; seeds with no neighbors reject.",
+            "min_bin_freq is a positive integer. max_iter is nonnegative; zero still performs the source first mean update and does not mean no computation.",
+            "cluster_all=false permits -1 labels. Centers and label numbering retain installed backend ordering, not a stable cross-version identity.",
+            "Finite inputs may overflow intermediate arithmetic. No exhaustive floating-point accuracy, global optimum or historical competition accuracy claim.",
+            "Qualification uses n_jobs=1 with native threads externally bounded to one; callers must bound total concurrency.",
+            "Existing witness and symbolic metadata are not a proof of iterative clustering semantics.",
+            "Ring counts, detector topology, gap detection and grouping remain separate recipe policy.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or deployment on other platforms.",
+            "Legacy approval and serving remain preserved; canonical publication and original CDG qualification are separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+        "version_id": "359c5a5b-ecb0-5994-b5d1-4e90542a55d1",
+        "name": "seeds"
+      },
+      "row": {
+        "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+        "version_id": "359c5a5b-ecb0-5994-b5d1-4e90542a55d1",
+        "name": "seeds",
+        "position": 2,
+        "kind": "keyword_only",
+        "type_desc": "ndarray",
+        "required": false,
+        "default_value_repr": "None",
+        "technical_description": "None uses input rows or bin seeds; supplied seeds must be a nonempty finite matrix with D columns.",
+        "dejargonized_description": "Caller supplies seeds.",
+        "constraints_json": {
+          "parameter_contract": "None uses input rows or bin seeds; supplied seeds must be a nonempty finite matrix with D columns.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Nonempty finite dense numeric points and optional seeds are converted to float64; float32 backend execution is not preserved. Caller owns Euclidean feature scaling.",
+            "Positive finite explicit bandwidth or None for bandwidth estimation. Estimates can be zero on degenerate input; universal nondegenerate estimation is not promised.",
+            "Seeds may be caller supplied, input rows, or populated grid bins. Empty seeds or no populated bins are not qualified; seeds with no neighbors reject.",
+            "min_bin_freq is a positive integer. max_iter is nonnegative; zero still performs the source first mean update and does not mean no computation.",
+            "cluster_all=false permits -1 labels. Centers and label numbering retain installed backend ordering, not a stable cross-version identity.",
+            "Finite inputs may overflow intermediate arithmetic. No exhaustive floating-point accuracy, global optimum or historical competition accuracy claim.",
+            "Qualification uses n_jobs=1 with native threads externally bounded to one; callers must bound total concurrency.",
+            "Existing witness and symbolic metadata are not a proof of iterative clustering semantics.",
+            "Ring counts, detector topology, gap detection and grouping remain separate recipe policy.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or deployment on other platforms.",
+            "Legacy approval and serving remain preserved; canonical publication and original CDG qualification are separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+        "version_id": "359c5a5b-ecb0-5994-b5d1-4e90542a55d1",
+        "name": "bin_seeding"
+      },
+      "row": {
+        "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+        "version_id": "359c5a5b-ecb0-5994-b5d1-4e90542a55d1",
+        "name": "bin_seeding",
+        "position": 3,
+        "kind": "keyword_only",
+        "type_desc": "bool",
+        "required": false,
+        "default_value_repr": "False",
+        "technical_description": "Boolean; when true and seeds are None, use grid bins as initial seeds.",
+        "dejargonized_description": "Caller supplies bin seeding.",
+        "constraints_json": {
+          "parameter_contract": "Boolean; when true and seeds are None, use grid bins as initial seeds.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Nonempty finite dense numeric points and optional seeds are converted to float64; float32 backend execution is not preserved. Caller owns Euclidean feature scaling.",
+            "Positive finite explicit bandwidth or None for bandwidth estimation. Estimates can be zero on degenerate input; universal nondegenerate estimation is not promised.",
+            "Seeds may be caller supplied, input rows, or populated grid bins. Empty seeds or no populated bins are not qualified; seeds with no neighbors reject.",
+            "min_bin_freq is a positive integer. max_iter is nonnegative; zero still performs the source first mean update and does not mean no computation.",
+            "cluster_all=false permits -1 labels. Centers and label numbering retain installed backend ordering, not a stable cross-version identity.",
+            "Finite inputs may overflow intermediate arithmetic. No exhaustive floating-point accuracy, global optimum or historical competition accuracy claim.",
+            "Qualification uses n_jobs=1 with native threads externally bounded to one; callers must bound total concurrency.",
+            "Existing witness and symbolic metadata are not a proof of iterative clustering semantics.",
+            "Ring counts, detector topology, gap detection and grouping remain separate recipe policy.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or deployment on other platforms.",
+            "Legacy approval and serving remain preserved; canonical publication and original CDG qualification are separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+        "version_id": "359c5a5b-ecb0-5994-b5d1-4e90542a55d1",
+        "name": "min_bin_freq"
+      },
+      "row": {
+        "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+        "version_id": "359c5a5b-ecb0-5994-b5d1-4e90542a55d1",
+        "name": "min_bin_freq",
+        "position": 4,
+        "kind": "keyword_only",
+        "type_desc": "int",
+        "required": false,
+        "default_value_repr": "1",
+        "technical_description": "Positive integer minimum populated-bin count; relevant to bin seeding.",
+        "dejargonized_description": "Caller supplies min bin freq.",
+        "constraints_json": {
+          "parameter_contract": "Positive integer minimum populated-bin count; relevant to bin seeding.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Nonempty finite dense numeric points and optional seeds are converted to float64; float32 backend execution is not preserved. Caller owns Euclidean feature scaling.",
+            "Positive finite explicit bandwidth or None for bandwidth estimation. Estimates can be zero on degenerate input; universal nondegenerate estimation is not promised.",
+            "Seeds may be caller supplied, input rows, or populated grid bins. Empty seeds or no populated bins are not qualified; seeds with no neighbors reject.",
+            "min_bin_freq is a positive integer. max_iter is nonnegative; zero still performs the source first mean update and does not mean no computation.",
+            "cluster_all=false permits -1 labels. Centers and label numbering retain installed backend ordering, not a stable cross-version identity.",
+            "Finite inputs may overflow intermediate arithmetic. No exhaustive floating-point accuracy, global optimum or historical competition accuracy claim.",
+            "Qualification uses n_jobs=1 with native threads externally bounded to one; callers must bound total concurrency.",
+            "Existing witness and symbolic metadata are not a proof of iterative clustering semantics.",
+            "Ring counts, detector topology, gap detection and grouping remain separate recipe policy.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or deployment on other platforms.",
+            "Legacy approval and serving remain preserved; canonical publication and original CDG qualification are separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+        "version_id": "359c5a5b-ecb0-5994-b5d1-4e90542a55d1",
+        "name": "cluster_all"
+      },
+      "row": {
+        "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+        "version_id": "359c5a5b-ecb0-5994-b5d1-4e90542a55d1",
+        "name": "cluster_all",
+        "position": 5,
+        "kind": "keyword_only",
+        "type_desc": "bool",
+        "required": false,
+        "default_value_repr": "True",
+        "technical_description": "Boolean; false permits label -1 for points beyond bandwidth from every retained center.",
+        "dejargonized_description": "Caller supplies cluster all.",
+        "constraints_json": {
+          "parameter_contract": "Boolean; false permits label -1 for points beyond bandwidth from every retained center.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Nonempty finite dense numeric points and optional seeds are converted to float64; float32 backend execution is not preserved. Caller owns Euclidean feature scaling.",
+            "Positive finite explicit bandwidth or None for bandwidth estimation. Estimates can be zero on degenerate input; universal nondegenerate estimation is not promised.",
+            "Seeds may be caller supplied, input rows, or populated grid bins. Empty seeds or no populated bins are not qualified; seeds with no neighbors reject.",
+            "min_bin_freq is a positive integer. max_iter is nonnegative; zero still performs the source first mean update and does not mean no computation.",
+            "cluster_all=false permits -1 labels. Centers and label numbering retain installed backend ordering, not a stable cross-version identity.",
+            "Finite inputs may overflow intermediate arithmetic. No exhaustive floating-point accuracy, global optimum or historical competition accuracy claim.",
+            "Qualification uses n_jobs=1 with native threads externally bounded to one; callers must bound total concurrency.",
+            "Existing witness and symbolic metadata are not a proof of iterative clustering semantics.",
+            "Ring counts, detector topology, gap detection and grouping remain separate recipe policy.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or deployment on other platforms.",
+            "Legacy approval and serving remain preserved; canonical publication and original CDG qualification are separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+        "version_id": "359c5a5b-ecb0-5994-b5d1-4e90542a55d1",
+        "name": "max_iter"
+      },
+      "row": {
+        "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+        "version_id": "359c5a5b-ecb0-5994-b5d1-4e90542a55d1",
+        "name": "max_iter",
+        "position": 6,
+        "kind": "keyword_only",
+        "type_desc": "int",
+        "required": false,
+        "default_value_repr": "300",
+        "technical_description": "Nonnegative integer iteration bound. Does not guarantee convergence or global optimality.",
+        "dejargonized_description": "Caller supplies max iter.",
+        "constraints_json": {
+          "parameter_contract": "Nonnegative integer iteration bound. Does not guarantee convergence or global optimality.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Nonempty finite dense numeric points and optional seeds are converted to float64; float32 backend execution is not preserved. Caller owns Euclidean feature scaling.",
+            "Positive finite explicit bandwidth or None for bandwidth estimation. Estimates can be zero on degenerate input; universal nondegenerate estimation is not promised.",
+            "Seeds may be caller supplied, input rows, or populated grid bins. Empty seeds or no populated bins are not qualified; seeds with no neighbors reject.",
+            "min_bin_freq is a positive integer. max_iter is nonnegative; zero still performs the source first mean update and does not mean no computation.",
+            "cluster_all=false permits -1 labels. Centers and label numbering retain installed backend ordering, not a stable cross-version identity.",
+            "Finite inputs may overflow intermediate arithmetic. No exhaustive floating-point accuracy, global optimum or historical competition accuracy claim.",
+            "Qualification uses n_jobs=1 with native threads externally bounded to one; callers must bound total concurrency.",
+            "Existing witness and symbolic metadata are not a proof of iterative clustering semantics.",
+            "Ring counts, detector topology, gap detection and grouping remain separate recipe policy.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or deployment on other platforms.",
+            "Legacy approval and serving remain preserved; canonical publication and original CDG qualification are separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+        "version_id": "359c5a5b-ecb0-5994-b5d1-4e90542a55d1",
+        "name": "n_jobs"
+      },
+      "row": {
+        "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+        "version_id": "359c5a5b-ecb0-5994-b5d1-4e90542a55d1",
+        "name": "n_jobs",
+        "position": 7,
+        "kind": "keyword_only",
+        "type_desc": "int",
+        "required": false,
+        "default_value_repr": "None",
+        "technical_description": "Qualified execution uses n_jobs=1 and externally bounded native threads. Caller owns total concurrency; None follows joblib context.",
+        "dejargonized_description": "Caller supplies n jobs.",
+        "constraints_json": {
+          "parameter_contract": "Qualified execution uses n_jobs=1 and externally bounded native threads. Caller owns total concurrency; None follows joblib context.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Nonempty finite dense numeric points and optional seeds are converted to float64; float32 backend execution is not preserved. Caller owns Euclidean feature scaling.",
+            "Positive finite explicit bandwidth or None for bandwidth estimation. Estimates can be zero on degenerate input; universal nondegenerate estimation is not promised.",
+            "Seeds may be caller supplied, input rows, or populated grid bins. Empty seeds or no populated bins are not qualified; seeds with no neighbors reject.",
+            "min_bin_freq is a positive integer. max_iter is nonnegative; zero still performs the source first mean update and does not mean no computation.",
+            "cluster_all=false permits -1 labels. Centers and label numbering retain installed backend ordering, not a stable cross-version identity.",
+            "Finite inputs may overflow intermediate arithmetic. No exhaustive floating-point accuracy, global optimum or historical competition accuracy claim.",
+            "Qualification uses n_jobs=1 with native threads externally bounded to one; callers must bound total concurrency.",
+            "Existing witness and symbolic metadata are not a proof of iterative clustering semantics.",
+            "Ring counts, detector topology, gap detection and grouping remain separate recipe policy.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or deployment on other platforms.",
+            "Legacy approval and serving remain preserved; canonical publication and original CDG qualification are separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+        "kind": "technical",
+        "language": "en",
+        "content": "Find Euclidean density modes by repeated neighborhood means, suppress nearby modes, and assign points to retained centers. Nonempty finite dense numeric matrix (N,D), converted to float64. Caller owns feature scaling for Euclidean neighborhoods; no detector policy. Positive finite neighborhood radius in feature units, or None for backend bandwidth estimation. Explicit positive bandwidth is the currently exercised detector path. None uses input rows or bin seeds; supplied seeds must be a nonempty finite matrix with D columns. Boolean; when true and seeds are None, use grid bins as initial seeds. Positive integer minimum populated-bin count; relevant to bin seeding. Boolean; false permits label -1 for points beyond bandwidth from every retained center. Nonnegative integer iteration bound. Does not guarantee convergence or global optimality. Qualified execution uses n_jobs=1 and externally bounded native threads. Caller owns total concurrency; None follows joblib context. Finite float64 center matrix (K,D) in backend mode ordering; feature units match input. Integer vector (N,) of retained-center indices; -1 denotes an unassigned point when cluster_all is false. Numbering is backend-dependent. Generic Euclidean mode clustering over caller-supplied features; detector topology and grouping stay outside the operation.",
+        "generated_by": "trackml_meanshift-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.027027
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Find groups of nearby points and report their centers and assignments. Accuracy on new problems must be checked separately.",
+        "generated_by": "trackml_meanshift-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "artifact_references",
+      "keys": {
+        "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+        "ref_key": "trackml_meanshift-provider-review-v1"
+      },
+      "row": {
+        "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+        "ref_key": "trackml_meanshift-provider-review-v1",
+        "ref_id": "trackml_meanshift-provider-review-v1",
+        "title": "Reusable MeanShift clustering synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/9c7ba183/docs/reviews/trackml_meanshift_provider_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Find Euclidean density modes by repeated neighborhood means, suppress nearby modes, and assign points to retained centers. Nonempty finite dense numeric matrix (N,D), converted to float64. Caller owns feature scaling for Euclidean neighborhoods; no detector policy. Positive finite neighborhood radius in feature units, or None for backend bandwidth estimation. Explicit positive bandwidth is the currently exercised detector path. None uses input rows or bin seeds; supplied seeds must be a nonempty finite matrix with D columns. Boolean; when true and seeds are None, use grid bins as initial seeds. Positive integer minimum populated-bin count; relevant to bin seeding. Boolean; false permits label -1 for points beyond bandwidth from every retained center. Nonnegative integer iteration bound. Does not guarantee convergence or global optimality. Qualified execution uses n_jobs=1 and externally bounded native threads. Caller owns total concurrency; None follows joblib context. Finite float64 center matrix (K,D) in backend mode ordering; feature units match input. Integer vector (N,) of retained-center indices; -1 denotes an unassigned point when cluster_all is false. Numbering is backend-dependent."
+      }
+    }
+  ],
+  "rollups": [
+    {
+      "table": "artifact_audit_rollups",
+      "key": "artifact_id",
+      "identity": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+          "Nonempty finite dense numeric points and optional seeds are converted to float64; float32 backend execution is not preserved. Caller owns Euclidean feature scaling.",
+          "Positive finite explicit bandwidth or None for bandwidth estimation. Estimates can be zero on degenerate input; universal nondegenerate estimation is not promised.",
+          "Seeds may be caller supplied, input rows, or populated grid bins. Empty seeds or no populated bins are not qualified; seeds with no neighbors reject.",
+          "min_bin_freq is a positive integer. max_iter is nonnegative; zero still performs the source first mean update and does not mean no computation.",
+          "cluster_all=false permits -1 labels. Centers and label numbering retain installed backend ordering, not a stable cross-version identity.",
+          "Finite inputs may overflow intermediate arithmetic. No exhaustive floating-point accuracy, global optimum or historical competition accuracy claim.",
+          "Qualification uses n_jobs=1 with native threads externally bounded to one; callers must bound total concurrency.",
+          "Existing witness and symbolic metadata are not a proof of iterative clustering semantics.",
+          "Ring counts, detector topology, gap detection and grouping remain separate recipe policy.",
+          "Installed RECORD checks validate current dependency files, not publisher authentication or deployment on other platforms.",
+          "Legacy approval and serving remain preserved; canonical publication and original CDG qualification are separate actions.",
+          "Nonempty finite dense numeric matrix (N,D), converted to float64. Caller owns feature scaling for Euclidean neighborhoods; no detector policy. Positive finite neighborhood radius in feature units, or None for backend bandwidth estimation. Explicit positive bandwidth is the currently exercised detector path. None uses input rows or bin seeds; supplied seeds must be a nonempty finite matrix with D columns. Boolean; when true and seeds are None, use grid bins as initial seeds. Positive integer minimum populated-bin count; relevant to bin seeding. Boolean; false permits label -1 for points beyond bandwidth from every retained center. Nonnegative integer iteration bound. Does not guarantee convergence or global optimality. Qualified execution uses n_jobs=1 and externally bounded native threads. Caller owns total concurrency; None follows joblib context. Finite float64 center matrix (K,D) in backend mode ordering; feature units match input. Integer vector (N,) of retained-center indices; -1 denotes an unassigned point when cluster_all is false. Numbering is backend-dependent."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    }
+  ],
+  "states": {
+    "e2bcd47a-b48c-4d6b-a749-4db2f6b62919": {
+      "artifact": {
+        "status": "draft",
+        "is_publishable": false
+      }
+    }
+  },
+  "before": {
+    "atoms": "29f64e57dc2c6ef7902a95954c12dd6b43a10c96f9ebf6e6dee9be4023441a26",
+    "artifacts": "1b0a1bffe4f8d4e44c9ca0d883fc4679c94786a488edc14efa5c24d8f6276f50",
+    "atom_versions": "31aea9be1249a91bac6f2e4a659bbff239dcc892ff31288ae52bdcc134725c30",
+    "artifact_versions": "6b9ac4a292091ea3c998090872d181a2bd71cc8eab6a404fe64258cfcaca3475",
+    "atom_io_specs": "ca96a7db93df87d338ca2ecf12df0cbc4acd1838e9a30854a412ed069ba59dbb",
+    "artifact_io_specs": "276ab588e47f1a576ae90d49dfc102c89adda5ee72d4af48fb396f3d9231fda5",
+    "atom_parameters": "ae77f4bf826cd812ee3d4c7956c568a1144d6ed659af8012eec2115bf421aaf4",
+    "artifact_parameters": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_descriptions": "b093f8d127c5b3932210bfcb6db846b9dfb48fde5c0e764a4ea102f595a812e6",
+    "artifact_descriptions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_references": "498882e3c6e22d07c9c9671fcb23b48334c9b44f46feace1d61d9eb41911f076",
+    "artifact_references": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_audit_rollups": "8be74e4182b74f70217c10a10b6eafa2671b28a05204ef00c14ed1bfaa989291",
+    "artifact_audit_rollups": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_audit_evidence": "0124bce47f4cc8f52e1c3816f70155f01b9c70ec24491f7ee8891214812ec279"
+  },
+  "preserved": {
+    "artifact_versions": [
+      {
+        "row": {
+          "s3_key": "local-seed/atoms/df6e86753cb9e12a090191d650f4e3ecf74e0fe361baf653bd9c307e0291af7a.tar.gz",
+          "semver": "0.0.0+local.df6e86753cb9",
+          "is_latest": true,
+          "created_at": "2026-11-06T14:21:59.27983+00:00",
+          "trust_tier": 3,
+          "version_id": "359c5a5b-ecb0-5994-b5d1-4e90542a55d1",
+          "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+          "fingerprint": "3e5bd33299207488299f78eda114e0795c10a2935738cb405ab550a69dd9a227",
+          "content_hash": "df6e86753cb9e12a090191d650f4e3ecf74e0fe361baf653bd9c307e0291af7a",
+          "derives_from": null
+        }
+      }
+    ],
+    "artifact_parameters": [],
+    "artifact_references": [],
+    "artifact_io_specs": [
+      {
+        "row": {
+          "name": "bandwidth",
+          "ordinal": 1,
+          "required": false,
+          "direction": "input",
+          "type_desc": "float",
+          "io_spec_id": "8778e410-0b6f-410a-ba15-57fe7e1061be",
+          "version_id": "359c5a5b-ecb0-5994-b5d1-4e90542a55d1",
+          "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+          "constraints": "Positive finite neighborhood radius in feature units, or None for backend bandwidth estimation. Explicit positive bandwidth is the currently exercised detector path.",
+          "dim_signature": "",
+          "default_value_repr": "None"
+        }
+      },
+      {
+        "row": {
+          "name": "bin_seeding",
+          "ordinal": 3,
+          "required": false,
+          "direction": "input",
+          "type_desc": "bool",
+          "io_spec_id": "70366d97-1401-4e25-80dc-49385f0643e8",
+          "version_id": "359c5a5b-ecb0-5994-b5d1-4e90542a55d1",
+          "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+          "constraints": "Boolean; when true and seeds are None, use grid bins as initial seeds.",
+          "dim_signature": "",
+          "default_value_repr": "False"
+        }
+      },
+      {
+        "row": {
+          "name": "centers",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "ndarray",
+          "io_spec_id": "7cfdee2a-2989-47c1-8d12-a729aece72f3",
+          "version_id": "359c5a5b-ecb0-5994-b5d1-4e90542a55d1",
+          "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+          "constraints": "Finite float64 center matrix (K,D) in backend mode ordering; feature units match input.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "cluster_all",
+          "ordinal": 5,
+          "required": false,
+          "direction": "input",
+          "type_desc": "bool",
+          "io_spec_id": "546504cf-ad4b-419e-b06d-852b5b7cc28b",
+          "version_id": "359c5a5b-ecb0-5994-b5d1-4e90542a55d1",
+          "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+          "constraints": "Boolean; false permits label -1 for points beyond bandwidth from every retained center.",
+          "dim_signature": "",
+          "default_value_repr": "True"
+        }
+      },
+      {
+        "row": {
+          "name": "labels",
+          "ordinal": 1,
+          "required": true,
+          "direction": "output",
+          "type_desc": "ndarray",
+          "io_spec_id": "5ae27a1f-b63e-46d8-9575-2d0faacccdf5",
+          "version_id": "359c5a5b-ecb0-5994-b5d1-4e90542a55d1",
+          "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+          "constraints": "Integer vector (N,) of retained-center indices; -1 denotes an unassigned point when cluster_all is false. Numbering is backend-dependent.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "max_iter",
+          "ordinal": 6,
+          "required": false,
+          "direction": "input",
+          "type_desc": "int",
+          "io_spec_id": "d439288d-8eba-45cb-a54e-e66c8ba1bbc0",
+          "version_id": "359c5a5b-ecb0-5994-b5d1-4e90542a55d1",
+          "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+          "constraints": "Nonnegative integer iteration bound. Does not guarantee convergence or global optimality.",
+          "dim_signature": "",
+          "default_value_repr": "300"
+        }
+      },
+      {
+        "row": {
+          "name": "min_bin_freq",
+          "ordinal": 4,
+          "required": false,
+          "direction": "input",
+          "type_desc": "int",
+          "io_spec_id": "4803c331-c1cb-4437-aae2-a99e8ea18815",
+          "version_id": "359c5a5b-ecb0-5994-b5d1-4e90542a55d1",
+          "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+          "constraints": "Positive integer minimum populated-bin count; relevant to bin seeding.",
+          "dim_signature": "",
+          "default_value_repr": "1"
+        }
+      },
+      {
+        "row": {
+          "name": "n_jobs",
+          "ordinal": 7,
+          "required": false,
+          "direction": "input",
+          "type_desc": "int",
+          "io_spec_id": "a8707d1c-9d19-4855-9405-9c40382e3674",
+          "version_id": "359c5a5b-ecb0-5994-b5d1-4e90542a55d1",
+          "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+          "constraints": "Qualified execution uses n_jobs=1 and externally bounded native threads. Caller owns total concurrency; None follows joblib context.",
+          "dim_signature": "",
+          "default_value_repr": "None"
+        }
+      },
+      {
+        "row": {
+          "name": "seeds",
+          "ordinal": 2,
+          "required": false,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "85bfa2aa-f4de-4d8e-9c8d-767024c85273",
+          "version_id": "359c5a5b-ecb0-5994-b5d1-4e90542a55d1",
+          "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+          "constraints": "None uses input rows or bin seeds; supplied seeds must be a nonempty finite matrix with D columns.",
+          "dim_signature": "",
+          "default_value_repr": "None"
+        }
+      },
+      {
+        "row": {
+          "name": "X",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "128642da-7ea5-4b41-aa2f-5f91a75fd63f",
+          "version_id": "359c5a5b-ecb0-5994-b5d1-4e90542a55d1",
+          "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+          "constraints": "Nonempty finite dense numeric matrix (N,D), converted to float64. Caller owns feature scaling for Euclidean neighborhoods; no detector policy.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      }
+    ],
+    "artifact_audit_evidence": [
+      {
+        "row": {
+          "passed": true,
+          "status": "completed",
+          "details": {
+            "scope": "Exact source and interface draft intake; no publication approval.",
+            "plan_sha256": "7b48cb27fb2ee00b48899e93b73c03269077e4fd46ecfc2c0685badaeefaa748",
+            "source_sha256": "c8a78a13625c22a4427de39fb21faad478776cfaaab5b6d7dec65b1804265c8d"
+          },
+          "audit_type": "asset_integrity_check",
+          "created_at": "2026-11-06T14:21:59.27983+00:00",
+          "version_id": "359c5a5b-ecb0-5994-b5d1-4e90542a55d1",
+          "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+          "evidence_id": "4d36c387-1055-5fe8-b3d3-75e5173bf39f",
+          "source_kind": "automated",
+          "runner_version": "trackml-meanshift-provider-intake.v1",
+          "review_basis_at": null,
+          "run_duration_ms": null,
+          "source_revision": "",
+          "upstream_version": ""
+        }
+      }
+    ]
+  },
+  "legacy_sha256": "ab8b20b1bf18e80647086e8cdbd5767d736ec2e2c00ae9e6cfa4dc6c5a1d106e",
+  "originals_sha256": "f839940aa40edfe5734827698947ed1a426a79c16bb215d49820714ff632db50",
+  "publisher_sha256": "612e0f1192e336c914ff90901070754f9af340fc48cb165f770783eda7414688",
+  "review_sha256": "08ff6b7807d9dd305d8e13c350416e34ca37b5f12796cffc46308685a8970613"
+}
