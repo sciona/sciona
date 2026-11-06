@@ -1,0 +1,1732 @@
+{
+  "records": [
+    {
+      "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+      "fqdn": "sciona.atoms.particle_tracking.track_matching.bayesian_neighbor_evaluation",
+      "runtime_fqdn": "sciona.atoms.particle_tracking.track_matching.atoms.bayesian_neighbor_evaluation",
+      "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+      "content_hash": "d83be2337ac9f063709bc1697a6a0ca9f73c612796f00c3703078da60c57864a",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "d_theta",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults."
+        },
+        {
+          "direction": "input",
+          "name": "d_phi",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults."
+        },
+        {
+          "direction": "input",
+          "name": "bg_theta",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults."
+        },
+        {
+          "direction": "input",
+          "name": "bg_phi",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults."
+        },
+        {
+          "direction": "input",
+          "name": "e_theta",
+          "ordinal": 4,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults."
+        },
+        {
+          "direction": "input",
+          "name": "e_phi",
+          "ordinal": 5,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults."
+        },
+        {
+          "direction": "input",
+          "name": "cut_factor",
+          "ordinal": 6,
+          "type_desc": "float",
+          "required": false,
+          "default_value_repr": "3.0",
+          "constraints": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults."
+        },
+        {
+          "direction": "input",
+          "name": "dist_trust",
+          "ordinal": 7,
+          "type_desc": "float",
+          "required": false,
+          "default_value_repr": "0.5",
+          "constraints": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults."
+        },
+        {
+          "direction": "output",
+          "name": "good_neighbor",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned boolean vector. Good is normalized distance strictly below cut; dubious is normalized distance strictly above trust times cut. Flags are independent and may both be true. Equality does not pass the respective strict comparison. No calibrated probability or symbolic decision proof is claimed."
+        },
+        {
+          "direction": "output",
+          "name": "dubious",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned boolean vector. Good is normalized distance strictly below cut; dubious is normalized distance strictly above trust times cut. Flags are independent and may both be true. Equality does not pass the respective strict comparison. No calibrated probability or symbolic decision proof is claimed."
+        }
+      ],
+      "operation": "Compare a two-component error-normalized residual norm against a logarithmic background-derived cut and a separate trust-scaled cut using strict inequalities.",
+      "plain_description": "Decide whether paired numeric residuals pass a supplied background-relative threshold and independently flag residuals above a trust threshold.",
+      "validity_bounds": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults. Aligned boolean vector. Good is normalized distance strictly below cut; dubious is normalized distance strictly above trust times cut. Flags are independent and may both be true. Equality does not pass the respective strict comparison. No calibrated probability or symbolic decision proof is claimed.",
+      "reuse": "Pure paired residual decisions with explicit numeric scales and dimensionless controls; components may use different units if each residual/background/error triple is consistent. No detector, event, lookup or calibration policy.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "qualification": {
+    "format": "trackml-bayesian-provider-semantics.v1",
+    "passed": true,
+    "approved": false,
+    "proposed_tier": 3,
+    "verdict": "acceptable_with_limits",
+    "catalog_mutations": 0,
+    "synthetic_only": true,
+    "providers": [
+      {
+        "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "fqdn": "sciona.atoms.particle_tracking.track_matching.bayesian_neighbor_evaluation",
+        "runtime_fqdn": "sciona.atoms.particle_tracking.track_matching.atoms.bayesian_neighbor_evaluation",
+        "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+        "content_hash": "d83be2337ac9f063709bc1697a6a0ca9f73c612796f00c3703078da60c57864a",
+        "interfaces": [
+          {
+            "direction": "input",
+            "name": "d_theta",
+            "ordinal": 0,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults."
+          },
+          {
+            "direction": "input",
+            "name": "d_phi",
+            "ordinal": 1,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults."
+          },
+          {
+            "direction": "input",
+            "name": "bg_theta",
+            "ordinal": 2,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults."
+          },
+          {
+            "direction": "input",
+            "name": "bg_phi",
+            "ordinal": 3,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults."
+          },
+          {
+            "direction": "input",
+            "name": "e_theta",
+            "ordinal": 4,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults."
+          },
+          {
+            "direction": "input",
+            "name": "e_phi",
+            "ordinal": 5,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults."
+          },
+          {
+            "direction": "input",
+            "name": "cut_factor",
+            "ordinal": 6,
+            "type_desc": "float",
+            "required": false,
+            "default_value_repr": "3.0",
+            "constraints": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults."
+          },
+          {
+            "direction": "input",
+            "name": "dist_trust",
+            "ordinal": 7,
+            "type_desc": "float",
+            "required": false,
+            "default_value_repr": "0.5",
+            "constraints": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults."
+          },
+          {
+            "direction": "output",
+            "name": "good_neighbor",
+            "ordinal": 0,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Aligned boolean vector. Good is normalized distance strictly below cut; dubious is normalized distance strictly above trust times cut. Flags are independent and may both be true. Equality does not pass the respective strict comparison. No calibrated probability or symbolic decision proof is claimed."
+          },
+          {
+            "direction": "output",
+            "name": "dubious",
+            "ordinal": 1,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Aligned boolean vector. Good is normalized distance strictly below cut; dubious is normalized distance strictly above trust times cut. Flags are independent and may both be true. Equality does not pass the respective strict comparison. No calibrated probability or symbolic decision proof is claimed."
+          }
+        ],
+        "operation": "Compare a two-component error-normalized residual norm against a logarithmic background-derived cut and a separate trust-scaled cut using strict inequalities.",
+        "plain_description": "Decide whether paired numeric residuals pass a supplied background-relative threshold and independently flag residuals above a trust threshold.",
+        "validity_bounds": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults. Aligned boolean vector. Good is normalized distance strictly below cut; dubious is normalized distance strictly above trust times cut. Flags are independent and may both be true. Equality does not pass the respective strict comparison. No calibrated probability or symbolic decision proof is claimed.",
+        "reuse": "Pure paired residual decisions with explicit numeric scales and dimensionless controls; components may use different units if each residual/background/error triple is consistent. No detector, event, lookup or calibration policy.",
+        "registered_provider_dependencies": []
+      }
+    ],
+    "tests": {
+      "tests": 42,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exact_source_cases": {
+      "batches": 72,
+      "batch_size": 32
+    },
+    "source_comparison_sha256": {
+      "source": "227b2250abda4601ed4ef113aebae9ad5292d2a2f67345d2b0f23694a90a469a",
+      "retained": "5ba0fe8cec6f7cd8d431e8096a634ca0b1c478fca7d5121523133c95b7f0b041",
+      "reviewer": "1db1c09ff27886b81bb3a3a1426038181064c0ca6fd410e2538b0a2e56717e84",
+      "provider": "dda1f5a1d363efbd45d0357edea25ce1000a6e9df9de29e73d653ee116a2edd4"
+    },
+    "strict_boundary_cases": 4,
+    "software_sha256": {
+      "tests/test_bayesian_provider_semantics.py": "f893eb2ad33b82aff8db5ad7c313b626ed385388de33eca8d447726718be65c8",
+      "tests/test_decomposed_trackml_bayesian.py": "eab9175486553a8da28c2f5cd523363ab456aab4316f10e92fe8b486c6ca43a9",
+      "scripts/review_trackml_bayesian_provider_semantics.py": "45b98b3639015832d0b83ac53fb717ff3f1f9b245f5a73063f70ff02a80fa508",
+      "scripts/review_trackml_bayesian_reuse.py": "1db1c09ff27886b81bb3a3a1426038181064c0ca6fd410e2538b0a2e56717e84",
+      "scripts/review_trackml_geometry_provider_semantics.py": "c1d650e245a181370160d0d859871cdc6fb4d0b3b10a1e82c8f309423bb575b8",
+      "scripts/stage_trackml_bayesian_providers.py": "b0a753bb7ce555757454a328931ae1c8f92e3151a834753c313602a06ec373c9",
+      "sciona/trackml_bayesian.py": "5ba0fe8cec6f7cd8d431e8096a634ca0b1c478fca7d5121523133c95b7f0b041",
+      "sciona/decomposed_trackml_bayesian_lifecycle.py": "a9fcf2d5ead5be277165d17e4f7f342797e5bb6b6b418a312e7e7504dacebd76",
+      "sciona/ghost/registry.py": "793723a75d07a88eed39f59d8d4dc327c54adbf75db7a03003516a6f74c81b51",
+      "sciona-atoms-physics/src/sciona/atoms/particle_tracking/track_matching/atoms.py": "dda1f5a1d363efbd45d0357edea25ce1000a6e9df9de29e73d653ee116a2edd4",
+      "sciona-atoms-physics/src/sciona/atoms/particle_tracking/track_matching/expressions.py": "9692e1ddc0911dfb96ac48d7ab6529b0265376bf4bdc190ee0c3bc9bd3f88a89",
+      "sciona-atoms-physics/src/sciona/atoms/particle_tracking/track_matching/witnesses.py": "a8976f7975ca099bddcbc1fd4e2a81e878a315eb980ff6d0181e47e44a93a962",
+      "sciona-atoms-physics/src/sciona/atoms/particle_tracking/source_tracking/solution_LICENSE.source": "00404581925abc4b8435bb7813eee07ac1df8b834326a33ee969d8315e9471fe"
+    },
+    "installed_packages": {
+      "annotated-types": {
+        "version": "0.7.0",
+        "hashed_files_verified": 7,
+        "active_requirements": []
+      },
+      "asttokens": {
+        "version": "2.4.1",
+        "hashed_files_verified": 13,
+        "active_requirements": [
+          "six>=1.12.0"
+        ]
+      },
+      "icontract": {
+        "version": "2.7.3",
+        "hashed_files_verified": 16,
+        "active_requirements": [
+          "asttokens<3,>=2",
+          "typing_extensions"
+        ]
+      },
+      "mpmath": {
+        "version": "1.3.0",
+        "hashed_files_verified": 92,
+        "active_requirements": []
+      },
+      "numpy": {
+        "version": "2.2.6",
+        "hashed_files_verified": 876,
+        "active_requirements": []
+      },
+      "pydantic": {
+        "version": "2.12.5",
+        "hashed_files_verified": 111,
+        "active_requirements": [
+          "annotated-types>=0.6.0",
+          "pydantic-core==2.41.5",
+          "typing-extensions>=4.14.1",
+          "typing-inspection>=0.4.2"
+        ]
+      },
+      "pydantic-core": {
+        "version": "2.41.5",
+        "hashed_files_verified": 9,
+        "active_requirements": [
+          "typing-extensions>=4.14.1"
+        ]
+      },
+      "six": {
+        "version": "1.17.0",
+        "hashed_files_verified": 6,
+        "active_requirements": []
+      },
+      "sympy": {
+        "version": "1.14.0",
+        "hashed_files_verified": 1571,
+        "active_requirements": [
+          "mpmath<1.4,>=1.1.0"
+        ]
+      },
+      "threadpoolctl": {
+        "version": "3.6.0",
+        "hashed_files_verified": 5,
+        "active_requirements": []
+      },
+      "typing-extensions": {
+        "version": "4.16.0",
+        "hashed_files_verified": 6,
+        "active_requirements": []
+      },
+      "typing-inspection": {
+        "version": "0.4.2",
+        "hashed_files_verified": 9,
+        "active_requirements": [
+          "typing-extensions>=4.12.0"
+        ]
+      }
+    },
+    "intake_plan_sha256": "6c4b42d17555a3acbb8f3771f0aac040f0367bcc1a6e7723edc60fb152ef41ff",
+    "resource_policy": {
+      "serial_tests": true,
+      "native_threads": 1
+    },
+    "limitations": [
+      "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+      "Caller supplies nonempty aligned finite float64 vectors. Each residual, background and positive error triple must share units; the two components can have different units. Normalized ratios and thresholds are dimensionless.",
+      "Both thresholds must be finite positive scalars. Background zero is allowed. Qualified arithmetic requires finite normalized distances, cut and trust-scaled cut; overflow and singular underflow are excluded.",
+      "Existing preconditions do not enforce every shape, dtype, finiteness or domain restriction. Caller boundaries must enforce the qualified domain.",
+      "Good and dubious flags use independent strict comparisons and may both be true. Equality does not pass the respective comparison. These are threshold decisions, not calibrated probabilities.",
+      "Provider defaults are cut_factor=3.0 and dist_trust=0.5. The source recipe uses 1.0 and 0.8. Pass the intended recipe controls explicitly.",
+      "Existing symbolic metadata assigns angular dimensions and only describes normalized distance. Concrete matching-unit use is qualified; no full symbolic decision proof or generalized dimensional metadata is claimed.",
+      "The witness reports boolean shapes only, without validating numeric inputs or proving decisions. Symbolic lower bounds of zero do not establish validity at zero error or thresholds.",
+      "Coordinate projection, empirical error prediction, coefficient lookup and diagnostic reporting are separate recipe operations. This atom accepts numeric vectors without detector or event state.",
+      "Synthetic source parity and unit-scaling checks do not establish arbitrary-input accuracy, calibrated error models or historical competition performance.",
+      "Installed RECORD validation checks current package files, not publisher authentication or clean deployment on another platform.",
+      "Provider publication and original TrackML CDG qualification remain separate actions."
+    ]
+  },
+  "inserts": [
+    {
+      "table": "references_registry",
+      "keys": {
+        "ref_id": "trackml_bayesian-provider-review-v1"
+      },
+      "row": {
+        "ref_id": "trackml_bayesian-provider-review-v1",
+        "ref_type": "web",
+        "title": "Reusable normalized residual decision synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/be4e9482/docs/reviews/trackml_bayesian_provider_semantics.json"
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+        "name": "d_theta"
+      },
+      "row": {
+        "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+        "name": "d_theta",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+        "dejargonized_description": "Caller supplies d theta.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Caller supplies nonempty aligned finite float64 vectors. Each residual, background and positive error triple must share units; the two components can have different units. Normalized ratios and thresholds are dimensionless.",
+            "Both thresholds must be finite positive scalars. Background zero is allowed. Qualified arithmetic requires finite normalized distances, cut and trust-scaled cut; overflow and singular underflow are excluded.",
+            "Existing preconditions do not enforce every shape, dtype, finiteness or domain restriction. Caller boundaries must enforce the qualified domain.",
+            "Good and dubious flags use independent strict comparisons and may both be true. Equality does not pass the respective comparison. These are threshold decisions, not calibrated probabilities.",
+            "Provider defaults are cut_factor=3.0 and dist_trust=0.5. The source recipe uses 1.0 and 0.8. Pass the intended recipe controls explicitly.",
+            "Existing symbolic metadata assigns angular dimensions and only describes normalized distance. Concrete matching-unit use is qualified; no full symbolic decision proof or generalized dimensional metadata is claimed.",
+            "The witness reports boolean shapes only, without validating numeric inputs or proving decisions. Symbolic lower bounds of zero do not establish validity at zero error or thresholds.",
+            "Coordinate projection, empirical error prediction, coefficient lookup and diagnostic reporting are separate recipe operations. This atom accepts numeric vectors without detector or event state.",
+            "Synthetic source parity and unit-scaling checks do not establish arbitrary-input accuracy, calibrated error models or historical competition performance.",
+            "Installed RECORD validation checks current package files, not publisher authentication or clean deployment on another platform.",
+            "Provider publication and original TrackML CDG qualification remain separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+        "name": "d_phi"
+      },
+      "row": {
+        "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+        "name": "d_phi",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+        "dejargonized_description": "Caller supplies d phi.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Caller supplies nonempty aligned finite float64 vectors. Each residual, background and positive error triple must share units; the two components can have different units. Normalized ratios and thresholds are dimensionless.",
+            "Both thresholds must be finite positive scalars. Background zero is allowed. Qualified arithmetic requires finite normalized distances, cut and trust-scaled cut; overflow and singular underflow are excluded.",
+            "Existing preconditions do not enforce every shape, dtype, finiteness or domain restriction. Caller boundaries must enforce the qualified domain.",
+            "Good and dubious flags use independent strict comparisons and may both be true. Equality does not pass the respective comparison. These are threshold decisions, not calibrated probabilities.",
+            "Provider defaults are cut_factor=3.0 and dist_trust=0.5. The source recipe uses 1.0 and 0.8. Pass the intended recipe controls explicitly.",
+            "Existing symbolic metadata assigns angular dimensions and only describes normalized distance. Concrete matching-unit use is qualified; no full symbolic decision proof or generalized dimensional metadata is claimed.",
+            "The witness reports boolean shapes only, without validating numeric inputs or proving decisions. Symbolic lower bounds of zero do not establish validity at zero error or thresholds.",
+            "Coordinate projection, empirical error prediction, coefficient lookup and diagnostic reporting are separate recipe operations. This atom accepts numeric vectors without detector or event state.",
+            "Synthetic source parity and unit-scaling checks do not establish arbitrary-input accuracy, calibrated error models or historical competition performance.",
+            "Installed RECORD validation checks current package files, not publisher authentication or clean deployment on another platform.",
+            "Provider publication and original TrackML CDG qualification remain separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+        "name": "bg_theta"
+      },
+      "row": {
+        "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+        "name": "bg_theta",
+        "position": 2,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+        "dejargonized_description": "Caller supplies bg theta.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Caller supplies nonempty aligned finite float64 vectors. Each residual, background and positive error triple must share units; the two components can have different units. Normalized ratios and thresholds are dimensionless.",
+            "Both thresholds must be finite positive scalars. Background zero is allowed. Qualified arithmetic requires finite normalized distances, cut and trust-scaled cut; overflow and singular underflow are excluded.",
+            "Existing preconditions do not enforce every shape, dtype, finiteness or domain restriction. Caller boundaries must enforce the qualified domain.",
+            "Good and dubious flags use independent strict comparisons and may both be true. Equality does not pass the respective comparison. These are threshold decisions, not calibrated probabilities.",
+            "Provider defaults are cut_factor=3.0 and dist_trust=0.5. The source recipe uses 1.0 and 0.8. Pass the intended recipe controls explicitly.",
+            "Existing symbolic metadata assigns angular dimensions and only describes normalized distance. Concrete matching-unit use is qualified; no full symbolic decision proof or generalized dimensional metadata is claimed.",
+            "The witness reports boolean shapes only, without validating numeric inputs or proving decisions. Symbolic lower bounds of zero do not establish validity at zero error or thresholds.",
+            "Coordinate projection, empirical error prediction, coefficient lookup and diagnostic reporting are separate recipe operations. This atom accepts numeric vectors without detector or event state.",
+            "Synthetic source parity and unit-scaling checks do not establish arbitrary-input accuracy, calibrated error models or historical competition performance.",
+            "Installed RECORD validation checks current package files, not publisher authentication or clean deployment on another platform.",
+            "Provider publication and original TrackML CDG qualification remain separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+        "name": "bg_phi"
+      },
+      "row": {
+        "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+        "name": "bg_phi",
+        "position": 3,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+        "dejargonized_description": "Caller supplies bg phi.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Caller supplies nonempty aligned finite float64 vectors. Each residual, background and positive error triple must share units; the two components can have different units. Normalized ratios and thresholds are dimensionless.",
+            "Both thresholds must be finite positive scalars. Background zero is allowed. Qualified arithmetic requires finite normalized distances, cut and trust-scaled cut; overflow and singular underflow are excluded.",
+            "Existing preconditions do not enforce every shape, dtype, finiteness or domain restriction. Caller boundaries must enforce the qualified domain.",
+            "Good and dubious flags use independent strict comparisons and may both be true. Equality does not pass the respective comparison. These are threshold decisions, not calibrated probabilities.",
+            "Provider defaults are cut_factor=3.0 and dist_trust=0.5. The source recipe uses 1.0 and 0.8. Pass the intended recipe controls explicitly.",
+            "Existing symbolic metadata assigns angular dimensions and only describes normalized distance. Concrete matching-unit use is qualified; no full symbolic decision proof or generalized dimensional metadata is claimed.",
+            "The witness reports boolean shapes only, without validating numeric inputs or proving decisions. Symbolic lower bounds of zero do not establish validity at zero error or thresholds.",
+            "Coordinate projection, empirical error prediction, coefficient lookup and diagnostic reporting are separate recipe operations. This atom accepts numeric vectors without detector or event state.",
+            "Synthetic source parity and unit-scaling checks do not establish arbitrary-input accuracy, calibrated error models or historical competition performance.",
+            "Installed RECORD validation checks current package files, not publisher authentication or clean deployment on another platform.",
+            "Provider publication and original TrackML CDG qualification remain separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+        "name": "e_theta"
+      },
+      "row": {
+        "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+        "name": "e_theta",
+        "position": 4,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+        "dejargonized_description": "Caller supplies e theta.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Caller supplies nonempty aligned finite float64 vectors. Each residual, background and positive error triple must share units; the two components can have different units. Normalized ratios and thresholds are dimensionless.",
+            "Both thresholds must be finite positive scalars. Background zero is allowed. Qualified arithmetic requires finite normalized distances, cut and trust-scaled cut; overflow and singular underflow are excluded.",
+            "Existing preconditions do not enforce every shape, dtype, finiteness or domain restriction. Caller boundaries must enforce the qualified domain.",
+            "Good and dubious flags use independent strict comparisons and may both be true. Equality does not pass the respective comparison. These are threshold decisions, not calibrated probabilities.",
+            "Provider defaults are cut_factor=3.0 and dist_trust=0.5. The source recipe uses 1.0 and 0.8. Pass the intended recipe controls explicitly.",
+            "Existing symbolic metadata assigns angular dimensions and only describes normalized distance. Concrete matching-unit use is qualified; no full symbolic decision proof or generalized dimensional metadata is claimed.",
+            "The witness reports boolean shapes only, without validating numeric inputs or proving decisions. Symbolic lower bounds of zero do not establish validity at zero error or thresholds.",
+            "Coordinate projection, empirical error prediction, coefficient lookup and diagnostic reporting are separate recipe operations. This atom accepts numeric vectors without detector or event state.",
+            "Synthetic source parity and unit-scaling checks do not establish arbitrary-input accuracy, calibrated error models or historical competition performance.",
+            "Installed RECORD validation checks current package files, not publisher authentication or clean deployment on another platform.",
+            "Provider publication and original TrackML CDG qualification remain separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+        "name": "e_phi"
+      },
+      "row": {
+        "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+        "name": "e_phi",
+        "position": 5,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+        "dejargonized_description": "Caller supplies e phi.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Caller supplies nonempty aligned finite float64 vectors. Each residual, background and positive error triple must share units; the two components can have different units. Normalized ratios and thresholds are dimensionless.",
+            "Both thresholds must be finite positive scalars. Background zero is allowed. Qualified arithmetic requires finite normalized distances, cut and trust-scaled cut; overflow and singular underflow are excluded.",
+            "Existing preconditions do not enforce every shape, dtype, finiteness or domain restriction. Caller boundaries must enforce the qualified domain.",
+            "Good and dubious flags use independent strict comparisons and may both be true. Equality does not pass the respective comparison. These are threshold decisions, not calibrated probabilities.",
+            "Provider defaults are cut_factor=3.0 and dist_trust=0.5. The source recipe uses 1.0 and 0.8. Pass the intended recipe controls explicitly.",
+            "Existing symbolic metadata assigns angular dimensions and only describes normalized distance. Concrete matching-unit use is qualified; no full symbolic decision proof or generalized dimensional metadata is claimed.",
+            "The witness reports boolean shapes only, without validating numeric inputs or proving decisions. Symbolic lower bounds of zero do not establish validity at zero error or thresholds.",
+            "Coordinate projection, empirical error prediction, coefficient lookup and diagnostic reporting are separate recipe operations. This atom accepts numeric vectors without detector or event state.",
+            "Synthetic source parity and unit-scaling checks do not establish arbitrary-input accuracy, calibrated error models or historical competition performance.",
+            "Installed RECORD validation checks current package files, not publisher authentication or clean deployment on another platform.",
+            "Provider publication and original TrackML CDG qualification remain separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+        "name": "cut_factor"
+      },
+      "row": {
+        "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+        "name": "cut_factor",
+        "position": 6,
+        "kind": "positional_or_keyword",
+        "type_desc": "float",
+        "required": false,
+        "default_value_repr": "3.0",
+        "technical_description": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+        "dejargonized_description": "Caller supplies cut factor.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Caller supplies nonempty aligned finite float64 vectors. Each residual, background and positive error triple must share units; the two components can have different units. Normalized ratios and thresholds are dimensionless.",
+            "Both thresholds must be finite positive scalars. Background zero is allowed. Qualified arithmetic requires finite normalized distances, cut and trust-scaled cut; overflow and singular underflow are excluded.",
+            "Existing preconditions do not enforce every shape, dtype, finiteness or domain restriction. Caller boundaries must enforce the qualified domain.",
+            "Good and dubious flags use independent strict comparisons and may both be true. Equality does not pass the respective comparison. These are threshold decisions, not calibrated probabilities.",
+            "Provider defaults are cut_factor=3.0 and dist_trust=0.5. The source recipe uses 1.0 and 0.8. Pass the intended recipe controls explicitly.",
+            "Existing symbolic metadata assigns angular dimensions and only describes normalized distance. Concrete matching-unit use is qualified; no full symbolic decision proof or generalized dimensional metadata is claimed.",
+            "The witness reports boolean shapes only, without validating numeric inputs or proving decisions. Symbolic lower bounds of zero do not establish validity at zero error or thresholds.",
+            "Coordinate projection, empirical error prediction, coefficient lookup and diagnostic reporting are separate recipe operations. This atom accepts numeric vectors without detector or event state.",
+            "Synthetic source parity and unit-scaling checks do not establish arbitrary-input accuracy, calibrated error models or historical competition performance.",
+            "Installed RECORD validation checks current package files, not publisher authentication or clean deployment on another platform.",
+            "Provider publication and original TrackML CDG qualification remain separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+        "name": "dist_trust"
+      },
+      "row": {
+        "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+        "name": "dist_trust",
+        "position": 7,
+        "kind": "positional_or_keyword",
+        "type_desc": "float",
+        "required": false,
+        "default_value_repr": "0.5",
+        "technical_description": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+        "dejargonized_description": "Caller supplies dist trust.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Caller supplies nonempty aligned finite float64 vectors. Each residual, background and positive error triple must share units; the two components can have different units. Normalized ratios and thresholds are dimensionless.",
+            "Both thresholds must be finite positive scalars. Background zero is allowed. Qualified arithmetic requires finite normalized distances, cut and trust-scaled cut; overflow and singular underflow are excluded.",
+            "Existing preconditions do not enforce every shape, dtype, finiteness or domain restriction. Caller boundaries must enforce the qualified domain.",
+            "Good and dubious flags use independent strict comparisons and may both be true. Equality does not pass the respective comparison. These are threshold decisions, not calibrated probabilities.",
+            "Provider defaults are cut_factor=3.0 and dist_trust=0.5. The source recipe uses 1.0 and 0.8. Pass the intended recipe controls explicitly.",
+            "Existing symbolic metadata assigns angular dimensions and only describes normalized distance. Concrete matching-unit use is qualified; no full symbolic decision proof or generalized dimensional metadata is claimed.",
+            "The witness reports boolean shapes only, without validating numeric inputs or proving decisions. Symbolic lower bounds of zero do not establish validity at zero error or thresholds.",
+            "Coordinate projection, empirical error prediction, coefficient lookup and diagnostic reporting are separate recipe operations. This atom accepts numeric vectors without detector or event state.",
+            "Synthetic source parity and unit-scaling checks do not establish arbitrary-input accuracy, calibrated error models or historical competition performance.",
+            "Installed RECORD validation checks current package files, not publisher authentication or clean deployment on another platform.",
+            "Provider publication and original TrackML CDG qualification remain separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_references",
+      "keys": {
+        "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "ref_key": "trackml_bayesian-provider-review-v1"
+      },
+      "row": {
+        "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "ref_key": "trackml_bayesian-provider-review-v1",
+        "ref_id": "trackml_bayesian-provider-review-v1",
+        "title": "Reusable normalized residual decision synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/be4e9482/docs/reviews/trackml_bayesian_provider_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Compare a two-component error-normalized residual norm against a logarithmic background-derived cut and a separate trust-scaled cut using strict inequalities. Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults. Aligned boolean vector. Good is normalized distance strictly below cut; dubious is normalized distance strictly above trust times cut. Flags are independent and may both be true. Equality does not pass the respective strict comparison. No calibrated probability or symbolic decision proof is claimed."
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+        "name": "d_theta"
+      },
+      "row": {
+        "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+        "name": "d_theta",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+        "dejargonized_description": "Caller supplies d theta.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Caller supplies nonempty aligned finite float64 vectors. Each residual, background and positive error triple must share units; the two components can have different units. Normalized ratios and thresholds are dimensionless.",
+            "Both thresholds must be finite positive scalars. Background zero is allowed. Qualified arithmetic requires finite normalized distances, cut and trust-scaled cut; overflow and singular underflow are excluded.",
+            "Existing preconditions do not enforce every shape, dtype, finiteness or domain restriction. Caller boundaries must enforce the qualified domain.",
+            "Good and dubious flags use independent strict comparisons and may both be true. Equality does not pass the respective comparison. These are threshold decisions, not calibrated probabilities.",
+            "Provider defaults are cut_factor=3.0 and dist_trust=0.5. The source recipe uses 1.0 and 0.8. Pass the intended recipe controls explicitly.",
+            "Existing symbolic metadata assigns angular dimensions and only describes normalized distance. Concrete matching-unit use is qualified; no full symbolic decision proof or generalized dimensional metadata is claimed.",
+            "The witness reports boolean shapes only, without validating numeric inputs or proving decisions. Symbolic lower bounds of zero do not establish validity at zero error or thresholds.",
+            "Coordinate projection, empirical error prediction, coefficient lookup and diagnostic reporting are separate recipe operations. This atom accepts numeric vectors without detector or event state.",
+            "Synthetic source parity and unit-scaling checks do not establish arbitrary-input accuracy, calibrated error models or historical competition performance.",
+            "Installed RECORD validation checks current package files, not publisher authentication or clean deployment on another platform.",
+            "Provider publication and original TrackML CDG qualification remain separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+        "name": "d_phi"
+      },
+      "row": {
+        "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+        "name": "d_phi",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+        "dejargonized_description": "Caller supplies d phi.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Caller supplies nonempty aligned finite float64 vectors. Each residual, background and positive error triple must share units; the two components can have different units. Normalized ratios and thresholds are dimensionless.",
+            "Both thresholds must be finite positive scalars. Background zero is allowed. Qualified arithmetic requires finite normalized distances, cut and trust-scaled cut; overflow and singular underflow are excluded.",
+            "Existing preconditions do not enforce every shape, dtype, finiteness or domain restriction. Caller boundaries must enforce the qualified domain.",
+            "Good and dubious flags use independent strict comparisons and may both be true. Equality does not pass the respective comparison. These are threshold decisions, not calibrated probabilities.",
+            "Provider defaults are cut_factor=3.0 and dist_trust=0.5. The source recipe uses 1.0 and 0.8. Pass the intended recipe controls explicitly.",
+            "Existing symbolic metadata assigns angular dimensions and only describes normalized distance. Concrete matching-unit use is qualified; no full symbolic decision proof or generalized dimensional metadata is claimed.",
+            "The witness reports boolean shapes only, without validating numeric inputs or proving decisions. Symbolic lower bounds of zero do not establish validity at zero error or thresholds.",
+            "Coordinate projection, empirical error prediction, coefficient lookup and diagnostic reporting are separate recipe operations. This atom accepts numeric vectors without detector or event state.",
+            "Synthetic source parity and unit-scaling checks do not establish arbitrary-input accuracy, calibrated error models or historical competition performance.",
+            "Installed RECORD validation checks current package files, not publisher authentication or clean deployment on another platform.",
+            "Provider publication and original TrackML CDG qualification remain separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+        "name": "bg_theta"
+      },
+      "row": {
+        "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+        "name": "bg_theta",
+        "position": 2,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+        "dejargonized_description": "Caller supplies bg theta.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Caller supplies nonempty aligned finite float64 vectors. Each residual, background and positive error triple must share units; the two components can have different units. Normalized ratios and thresholds are dimensionless.",
+            "Both thresholds must be finite positive scalars. Background zero is allowed. Qualified arithmetic requires finite normalized distances, cut and trust-scaled cut; overflow and singular underflow are excluded.",
+            "Existing preconditions do not enforce every shape, dtype, finiteness or domain restriction. Caller boundaries must enforce the qualified domain.",
+            "Good and dubious flags use independent strict comparisons and may both be true. Equality does not pass the respective comparison. These are threshold decisions, not calibrated probabilities.",
+            "Provider defaults are cut_factor=3.0 and dist_trust=0.5. The source recipe uses 1.0 and 0.8. Pass the intended recipe controls explicitly.",
+            "Existing symbolic metadata assigns angular dimensions and only describes normalized distance. Concrete matching-unit use is qualified; no full symbolic decision proof or generalized dimensional metadata is claimed.",
+            "The witness reports boolean shapes only, without validating numeric inputs or proving decisions. Symbolic lower bounds of zero do not establish validity at zero error or thresholds.",
+            "Coordinate projection, empirical error prediction, coefficient lookup and diagnostic reporting are separate recipe operations. This atom accepts numeric vectors without detector or event state.",
+            "Synthetic source parity and unit-scaling checks do not establish arbitrary-input accuracy, calibrated error models or historical competition performance.",
+            "Installed RECORD validation checks current package files, not publisher authentication or clean deployment on another platform.",
+            "Provider publication and original TrackML CDG qualification remain separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+        "name": "bg_phi"
+      },
+      "row": {
+        "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+        "name": "bg_phi",
+        "position": 3,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+        "dejargonized_description": "Caller supplies bg phi.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Caller supplies nonempty aligned finite float64 vectors. Each residual, background and positive error triple must share units; the two components can have different units. Normalized ratios and thresholds are dimensionless.",
+            "Both thresholds must be finite positive scalars. Background zero is allowed. Qualified arithmetic requires finite normalized distances, cut and trust-scaled cut; overflow and singular underflow are excluded.",
+            "Existing preconditions do not enforce every shape, dtype, finiteness or domain restriction. Caller boundaries must enforce the qualified domain.",
+            "Good and dubious flags use independent strict comparisons and may both be true. Equality does not pass the respective comparison. These are threshold decisions, not calibrated probabilities.",
+            "Provider defaults are cut_factor=3.0 and dist_trust=0.5. The source recipe uses 1.0 and 0.8. Pass the intended recipe controls explicitly.",
+            "Existing symbolic metadata assigns angular dimensions and only describes normalized distance. Concrete matching-unit use is qualified; no full symbolic decision proof or generalized dimensional metadata is claimed.",
+            "The witness reports boolean shapes only, without validating numeric inputs or proving decisions. Symbolic lower bounds of zero do not establish validity at zero error or thresholds.",
+            "Coordinate projection, empirical error prediction, coefficient lookup and diagnostic reporting are separate recipe operations. This atom accepts numeric vectors without detector or event state.",
+            "Synthetic source parity and unit-scaling checks do not establish arbitrary-input accuracy, calibrated error models or historical competition performance.",
+            "Installed RECORD validation checks current package files, not publisher authentication or clean deployment on another platform.",
+            "Provider publication and original TrackML CDG qualification remain separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+        "name": "e_theta"
+      },
+      "row": {
+        "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+        "name": "e_theta",
+        "position": 4,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+        "dejargonized_description": "Caller supplies e theta.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Caller supplies nonempty aligned finite float64 vectors. Each residual, background and positive error triple must share units; the two components can have different units. Normalized ratios and thresholds are dimensionless.",
+            "Both thresholds must be finite positive scalars. Background zero is allowed. Qualified arithmetic requires finite normalized distances, cut and trust-scaled cut; overflow and singular underflow are excluded.",
+            "Existing preconditions do not enforce every shape, dtype, finiteness or domain restriction. Caller boundaries must enforce the qualified domain.",
+            "Good and dubious flags use independent strict comparisons and may both be true. Equality does not pass the respective comparison. These are threshold decisions, not calibrated probabilities.",
+            "Provider defaults are cut_factor=3.0 and dist_trust=0.5. The source recipe uses 1.0 and 0.8. Pass the intended recipe controls explicitly.",
+            "Existing symbolic metadata assigns angular dimensions and only describes normalized distance. Concrete matching-unit use is qualified; no full symbolic decision proof or generalized dimensional metadata is claimed.",
+            "The witness reports boolean shapes only, without validating numeric inputs or proving decisions. Symbolic lower bounds of zero do not establish validity at zero error or thresholds.",
+            "Coordinate projection, empirical error prediction, coefficient lookup and diagnostic reporting are separate recipe operations. This atom accepts numeric vectors without detector or event state.",
+            "Synthetic source parity and unit-scaling checks do not establish arbitrary-input accuracy, calibrated error models or historical competition performance.",
+            "Installed RECORD validation checks current package files, not publisher authentication or clean deployment on another platform.",
+            "Provider publication and original TrackML CDG qualification remain separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+        "name": "e_phi"
+      },
+      "row": {
+        "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+        "name": "e_phi",
+        "position": 5,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+        "dejargonized_description": "Caller supplies e phi.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Caller supplies nonempty aligned finite float64 vectors. Each residual, background and positive error triple must share units; the two components can have different units. Normalized ratios and thresholds are dimensionless.",
+            "Both thresholds must be finite positive scalars. Background zero is allowed. Qualified arithmetic requires finite normalized distances, cut and trust-scaled cut; overflow and singular underflow are excluded.",
+            "Existing preconditions do not enforce every shape, dtype, finiteness or domain restriction. Caller boundaries must enforce the qualified domain.",
+            "Good and dubious flags use independent strict comparisons and may both be true. Equality does not pass the respective comparison. These are threshold decisions, not calibrated probabilities.",
+            "Provider defaults are cut_factor=3.0 and dist_trust=0.5. The source recipe uses 1.0 and 0.8. Pass the intended recipe controls explicitly.",
+            "Existing symbolic metadata assigns angular dimensions and only describes normalized distance. Concrete matching-unit use is qualified; no full symbolic decision proof or generalized dimensional metadata is claimed.",
+            "The witness reports boolean shapes only, without validating numeric inputs or proving decisions. Symbolic lower bounds of zero do not establish validity at zero error or thresholds.",
+            "Coordinate projection, empirical error prediction, coefficient lookup and diagnostic reporting are separate recipe operations. This atom accepts numeric vectors without detector or event state.",
+            "Synthetic source parity and unit-scaling checks do not establish arbitrary-input accuracy, calibrated error models or historical competition performance.",
+            "Installed RECORD validation checks current package files, not publisher authentication or clean deployment on another platform.",
+            "Provider publication and original TrackML CDG qualification remain separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+        "name": "cut_factor"
+      },
+      "row": {
+        "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+        "name": "cut_factor",
+        "position": 6,
+        "kind": "positional_or_keyword",
+        "type_desc": "float",
+        "required": false,
+        "default_value_repr": "3.0",
+        "technical_description": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+        "dejargonized_description": "Caller supplies cut factor.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Caller supplies nonempty aligned finite float64 vectors. Each residual, background and positive error triple must share units; the two components can have different units. Normalized ratios and thresholds are dimensionless.",
+            "Both thresholds must be finite positive scalars. Background zero is allowed. Qualified arithmetic requires finite normalized distances, cut and trust-scaled cut; overflow and singular underflow are excluded.",
+            "Existing preconditions do not enforce every shape, dtype, finiteness or domain restriction. Caller boundaries must enforce the qualified domain.",
+            "Good and dubious flags use independent strict comparisons and may both be true. Equality does not pass the respective comparison. These are threshold decisions, not calibrated probabilities.",
+            "Provider defaults are cut_factor=3.0 and dist_trust=0.5. The source recipe uses 1.0 and 0.8. Pass the intended recipe controls explicitly.",
+            "Existing symbolic metadata assigns angular dimensions and only describes normalized distance. Concrete matching-unit use is qualified; no full symbolic decision proof or generalized dimensional metadata is claimed.",
+            "The witness reports boolean shapes only, without validating numeric inputs or proving decisions. Symbolic lower bounds of zero do not establish validity at zero error or thresholds.",
+            "Coordinate projection, empirical error prediction, coefficient lookup and diagnostic reporting are separate recipe operations. This atom accepts numeric vectors without detector or event state.",
+            "Synthetic source parity and unit-scaling checks do not establish arbitrary-input accuracy, calibrated error models or historical competition performance.",
+            "Installed RECORD validation checks current package files, not publisher authentication or clean deployment on another platform.",
+            "Provider publication and original TrackML CDG qualification remain separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+        "name": "dist_trust"
+      },
+      "row": {
+        "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+        "name": "dist_trust",
+        "position": 7,
+        "kind": "positional_or_keyword",
+        "type_desc": "float",
+        "required": false,
+        "default_value_repr": "0.5",
+        "technical_description": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+        "dejargonized_description": "Caller supplies dist trust.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Caller supplies nonempty aligned finite float64 vectors. Each residual, background and positive error triple must share units; the two components can have different units. Normalized ratios and thresholds are dimensionless.",
+            "Both thresholds must be finite positive scalars. Background zero is allowed. Qualified arithmetic requires finite normalized distances, cut and trust-scaled cut; overflow and singular underflow are excluded.",
+            "Existing preconditions do not enforce every shape, dtype, finiteness or domain restriction. Caller boundaries must enforce the qualified domain.",
+            "Good and dubious flags use independent strict comparisons and may both be true. Equality does not pass the respective comparison. These are threshold decisions, not calibrated probabilities.",
+            "Provider defaults are cut_factor=3.0 and dist_trust=0.5. The source recipe uses 1.0 and 0.8. Pass the intended recipe controls explicitly.",
+            "Existing symbolic metadata assigns angular dimensions and only describes normalized distance. Concrete matching-unit use is qualified; no full symbolic decision proof or generalized dimensional metadata is claimed.",
+            "The witness reports boolean shapes only, without validating numeric inputs or proving decisions. Symbolic lower bounds of zero do not establish validity at zero error or thresholds.",
+            "Coordinate projection, empirical error prediction, coefficient lookup and diagnostic reporting are separate recipe operations. This atom accepts numeric vectors without detector or event state.",
+            "Synthetic source parity and unit-scaling checks do not establish arbitrary-input accuracy, calibrated error models or historical competition performance.",
+            "Installed RECORD validation checks current package files, not publisher authentication or clean deployment on another platform.",
+            "Provider publication and original TrackML CDG qualification remain separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "kind": "technical",
+        "language": "en",
+        "content": "Compare a two-component error-normalized residual norm against a logarithmic background-derived cut and a separate trust-scaled cut using strict inequalities. Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults. Aligned boolean vector. Good is normalized distance strictly below cut; dubious is normalized distance strictly above trust times cut. Flags are independent and may both be true. Equality does not pass the respective strict comparison. No calibrated probability or symbolic decision proof is claimed. Pure paired residual decisions with explicit numeric scales and dimensionless controls; components may use different units if each residual/background/error triple is consistent. No detector, event, lookup or calibration policy.",
+        "generated_by": "trackml_bayesian-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.013158
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Decide whether paired numeric residuals pass a supplied background-relative threshold and independently flag residuals above a trust threshold. Accuracy on new problems must be checked separately.",
+        "generated_by": "trackml_bayesian-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.038462
+      }
+    },
+    {
+      "table": "artifact_references",
+      "keys": {
+        "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "ref_key": "trackml_bayesian-provider-review-v1"
+      },
+      "row": {
+        "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "ref_key": "trackml_bayesian-provider-review-v1",
+        "ref_id": "trackml_bayesian-provider-review-v1",
+        "title": "Reusable normalized residual decision synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/be4e9482/docs/reviews/trackml_bayesian_provider_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Compare a two-component error-normalized residual norm against a logarithmic background-derived cut and a separate trust-scaled cut using strict inequalities. Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults. Aligned boolean vector. Good is normalized distance strictly below cut; dubious is normalized distance strictly above trust times cut. Flags are independent and may both be true. Equality does not pass the respective strict comparison. No calibrated probability or symbolic decision proof is claimed."
+      }
+    }
+  ],
+  "updates": [
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "kind": "technical",
+        "language": "en",
+        "content": "Compare a two-component error-normalized residual norm against a logarithmic background-derived cut and a separate trust-scaled cut using strict inequalities. Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults. Aligned boolean vector. Good is normalized distance strictly below cut; dubious is normalized distance strictly above trust times cut. Flags are independent and may both be true. Equality does not pass the respective strict comparison. No calibrated probability or symbolic decision proof is claimed. Pure paired residual decisions with explicit numeric scales and dimensionless controls; components may use different units if each residual/background/error triple is consistent. No detector, event, lookup or calibration policy.",
+        "generated_by": "trackml_bayesian-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.013158
+      },
+      "before": {
+        "kind": "technical",
+        "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "content": "Evaluate neighbor hits using a Bayesian signal-vs-background cut.",
+        "language": "en",
+        "reviewed": false,
+        "created_at": "2026-08-11T23:12:58.218118+00:00",
+        "updated_at": "2026-08-11T23:12:58.218118+00:00",
+        "generated_by": "backfill-v1",
+        "jargon_score": 1,
+        "description_id": "d7a96feb-c763-4061-8fdf-fe7853587705"
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Decide whether paired numeric residuals pass a supplied background-relative threshold and independently flag residuals above a trust threshold. Accuracy on new problems must be checked separately.",
+        "generated_by": "trackml_bayesian-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.038462
+      },
+      "before": {
+        "kind": "dejargonized",
+        "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "content": "Evaluate neighbor hits using a Bayesian signal-vs-background cut.",
+        "language": "en",
+        "reviewed": false,
+        "created_at": "2026-08-11T23:12:58.218118+00:00",
+        "updated_at": "2026-08-11T23:12:58.218118+00:00",
+        "generated_by": "backfill-v1",
+        "jargon_score": 0.2,
+        "description_id": "92c8c018-d71f-4079-b196-b11e9ea670df"
+      }
+    }
+  ],
+  "rollups": [
+    {
+      "table": "atom_audit_rollups",
+      "key": "atom_id",
+      "identity": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+      "before": {
+        "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+        "risk_tier": "low",
+        "risk_score": 0,
+        "updated_at": "2026-08-11T23:13:20.983553+00:00",
+        "risk_reasons": [],
+        "review_status": "missing",
+        "runtime_status": "unknown",
+        "trust_blockers": [],
+        "overall_verdict": "acceptable_with_limits",
+        "risk_dimensions": {},
+        "semantic_status": "unknown",
+        "trust_readiness": "not_reviewed",
+        "parity_case_count": 0,
+        "structural_status": "unknown",
+        "acceptability_band": "acceptable_with_limits_candidate",
+        "parity_test_status": "unknown",
+        "review_limitations": [],
+        "acceptability_score": 70,
+        "parity_fixture_count": 0,
+        "parity_coverage_level": "unknown",
+        "review_required_actions": [],
+        "review_semantic_verdict": "unknown",
+        "developer_semantics_status": "unknown",
+        "review_developer_semantics_verdict": "unknown"
+      },
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+          "Caller supplies nonempty aligned finite float64 vectors. Each residual, background and positive error triple must share units; the two components can have different units. Normalized ratios and thresholds are dimensionless.",
+          "Both thresholds must be finite positive scalars. Background zero is allowed. Qualified arithmetic requires finite normalized distances, cut and trust-scaled cut; overflow and singular underflow are excluded.",
+          "Existing preconditions do not enforce every shape, dtype, finiteness or domain restriction. Caller boundaries must enforce the qualified domain.",
+          "Good and dubious flags use independent strict comparisons and may both be true. Equality does not pass the respective comparison. These are threshold decisions, not calibrated probabilities.",
+          "Provider defaults are cut_factor=3.0 and dist_trust=0.5. The source recipe uses 1.0 and 0.8. Pass the intended recipe controls explicitly.",
+          "Existing symbolic metadata assigns angular dimensions and only describes normalized distance. Concrete matching-unit use is qualified; no full symbolic decision proof or generalized dimensional metadata is claimed.",
+          "The witness reports boolean shapes only, without validating numeric inputs or proving decisions. Symbolic lower bounds of zero do not establish validity at zero error or thresholds.",
+          "Coordinate projection, empirical error prediction, coefficient lookup and diagnostic reporting are separate recipe operations. This atom accepts numeric vectors without detector or event state.",
+          "Synthetic source parity and unit-scaling checks do not establish arbitrary-input accuracy, calibrated error models or historical competition performance.",
+          "Installed RECORD validation checks current package files, not publisher authentication or clean deployment on another platform.",
+          "Provider publication and original TrackML CDG qualification remain separate actions.",
+          "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults. Aligned boolean vector. Good is normalized distance strictly below cut; dubious is normalized distance strictly above trust times cut. Flags are independent and may both be true. Equality does not pass the respective strict comparison. No calibrated probability or symbolic decision proof is claimed."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "artifact_audit_rollups",
+      "key": "artifact_id",
+      "identity": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+          "Caller supplies nonempty aligned finite float64 vectors. Each residual, background and positive error triple must share units; the two components can have different units. Normalized ratios and thresholds are dimensionless.",
+          "Both thresholds must be finite positive scalars. Background zero is allowed. Qualified arithmetic requires finite normalized distances, cut and trust-scaled cut; overflow and singular underflow are excluded.",
+          "Existing preconditions do not enforce every shape, dtype, finiteness or domain restriction. Caller boundaries must enforce the qualified domain.",
+          "Good and dubious flags use independent strict comparisons and may both be true. Equality does not pass the respective comparison. These are threshold decisions, not calibrated probabilities.",
+          "Provider defaults are cut_factor=3.0 and dist_trust=0.5. The source recipe uses 1.0 and 0.8. Pass the intended recipe controls explicitly.",
+          "Existing symbolic metadata assigns angular dimensions and only describes normalized distance. Concrete matching-unit use is qualified; no full symbolic decision proof or generalized dimensional metadata is claimed.",
+          "The witness reports boolean shapes only, without validating numeric inputs or proving decisions. Symbolic lower bounds of zero do not establish validity at zero error or thresholds.",
+          "Coordinate projection, empirical error prediction, coefficient lookup and diagnostic reporting are separate recipe operations. This atom accepts numeric vectors without detector or event state.",
+          "Synthetic source parity and unit-scaling checks do not establish arbitrary-input accuracy, calibrated error models or historical competition performance.",
+          "Installed RECORD validation checks current package files, not publisher authentication or clean deployment on another platform.",
+          "Provider publication and original TrackML CDG qualification remain separate actions.",
+          "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults. Aligned boolean vector. Good is normalized distance strictly below cut; dubious is normalized distance strictly above trust times cut. Flags are independent and may both be true. Equality does not pass the respective strict comparison. No calibrated probability or symbolic decision proof is claimed."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    }
+  ],
+  "states": {
+    "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2": {
+      "atom": {
+        "status": "approved",
+        "is_publishable": false
+      },
+      "artifact": {
+        "status": "draft",
+        "is_publishable": false
+      }
+    }
+  },
+  "before": {
+    "atoms": "ff1cdd51bd0fc59e35e1d14c3382534554053694cca4979c9cd9029a0b09954e",
+    "artifacts": "a8f5122eef404b8ff4b364019d418ddb73689c03ed1ffb876a1e43246b69aa49",
+    "atom_versions": "9e75620c07db2298841847d3634f640e7679caa06e85aa06db08d3cdc9d62c52",
+    "artifact_versions": "d4df4773ff0f7aa1917d5dc2aff52d91d4ede2020e8ffd70564347fd36dcb1e5",
+    "atom_io_specs": "8281b2a68e31e11257dc19e65241ad0f12e75e7251ec0161185e570b5229c826",
+    "artifact_io_specs": "a6cde40a0b8b2c6dd69ad1b81383abd17740704b6198d9877688b06fcb059173",
+    "atom_parameters": "ecfc559f641ed3eab8c286b2c1bbe0c0036cc827e8f85f00240e8af6ae4cb45e",
+    "artifact_parameters": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_descriptions": "392dea0ff87ee0d1f7fbb1f5813700ebc01c9e85df68d8cb5467d5d10bc7c0bf",
+    "artifact_descriptions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_references": "96706e7d9e7ec6c1d889636115e8d807a5adfa5f3fe12c6425cf2a7fdb533171",
+    "artifact_references": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_audit_rollups": "bbde65e663adf4592251429ff73c37a3cb13d4d26897c6ac903771d1277a52c5",
+    "artifact_audit_rollups": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_audit_evidence": "b615cbd5445bdd64a3cba79456ad370c593f8994773f1d01fee39a9993a745ef"
+  },
+  "preserved": {
+    "atom_versions": [
+      {
+        "row": {
+          "s3_key": "local-seed/atoms/d83be2337ac9f063709bc1697a6a0ca9f73c612796f00c3703078da60c57864a.tar.gz",
+          "semver": "0.0.0+local.d83be2337ac9",
+          "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+          "is_latest": true,
+          "created_at": "2026-08-11T23:15:30.956392+00:00",
+          "trust_tier": 3,
+          "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+          "fingerprint": "3068c7bcea7e2b98f74e879b3e2447c3c95195f85d99c88c4789e9ca7c7511d0",
+          "content_hash": "d83be2337ac9f063709bc1697a6a0ca9f73c612796f00c3703078da60c57864a",
+          "derives_from": null
+        }
+      }
+    ],
+    "atom_parameters": [
+      {
+        "row": {
+          "kind": "positional_or_keyword",
+          "name": "bg_phi",
+          "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+          "position": 3,
+          "required": true,
+          "type_desc": "NDArray[np.float64]",
+          "version_id": null,
+          "parameter_id": "bdd722ee-150a-43fc-bff0-6b3fd4d2f71f",
+          "constraints_json": {},
+          "default_value_repr": "",
+          "technical_description": "",
+          "dejargonized_description": ""
+        }
+      },
+      {
+        "row": {
+          "kind": "positional_or_keyword",
+          "name": "bg_theta",
+          "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+          "position": 2,
+          "required": true,
+          "type_desc": "NDArray[np.float64]",
+          "version_id": null,
+          "parameter_id": "d7f6c9f3-e46e-496a-93ff-a354c9e9a24d",
+          "constraints_json": {},
+          "default_value_repr": "",
+          "technical_description": "",
+          "dejargonized_description": ""
+        }
+      },
+      {
+        "row": {
+          "kind": "positional_or_keyword",
+          "name": "cut_factor",
+          "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+          "position": 6,
+          "required": false,
+          "type_desc": "float",
+          "version_id": null,
+          "parameter_id": "7c7c567b-90d4-4ebd-9ad6-e0a32c6e9710",
+          "constraints_json": {},
+          "default_value_repr": "",
+          "technical_description": "",
+          "dejargonized_description": ""
+        }
+      },
+      {
+        "row": {
+          "kind": "positional_or_keyword",
+          "name": "dist_trust",
+          "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+          "position": 7,
+          "required": false,
+          "type_desc": "float",
+          "version_id": null,
+          "parameter_id": "6e4c250a-8bb8-4474-b540-d00fed0f0a3a",
+          "constraints_json": {},
+          "default_value_repr": "",
+          "technical_description": "",
+          "dejargonized_description": ""
+        }
+      },
+      {
+        "row": {
+          "kind": "positional_or_keyword",
+          "name": "d_phi",
+          "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+          "position": 1,
+          "required": true,
+          "type_desc": "NDArray[np.float64]",
+          "version_id": null,
+          "parameter_id": "4520ae9b-268c-459c-8aed-58d6b6c87163",
+          "constraints_json": {},
+          "default_value_repr": "",
+          "technical_description": "",
+          "dejargonized_description": ""
+        }
+      },
+      {
+        "row": {
+          "kind": "positional_or_keyword",
+          "name": "d_theta",
+          "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+          "position": 0,
+          "required": true,
+          "type_desc": "NDArray[np.float64]",
+          "version_id": null,
+          "parameter_id": "11075b2a-28ce-4a7d-9a7e-996c42027c6c",
+          "constraints_json": {},
+          "default_value_repr": "",
+          "technical_description": "",
+          "dejargonized_description": ""
+        }
+      },
+      {
+        "row": {
+          "kind": "positional_or_keyword",
+          "name": "e_phi",
+          "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+          "position": 5,
+          "required": true,
+          "type_desc": "NDArray[np.float64]",
+          "version_id": null,
+          "parameter_id": "5effa559-1522-4631-8924-84052b35976c",
+          "constraints_json": {},
+          "default_value_repr": "",
+          "technical_description": "",
+          "dejargonized_description": ""
+        }
+      },
+      {
+        "row": {
+          "kind": "positional_or_keyword",
+          "name": "e_theta",
+          "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+          "position": 4,
+          "required": true,
+          "type_desc": "NDArray[np.float64]",
+          "version_id": null,
+          "parameter_id": "8acf4a74-9ce4-412e-9c27-9ce282ed20be",
+          "constraints_json": {},
+          "default_value_repr": "",
+          "technical_description": "",
+          "dejargonized_description": ""
+        }
+      }
+    ],
+    "atom_references": [
+      {
+        "row": {
+          "doi": null,
+          "url": "https://github.com/edwinst/trackml_solution",
+          "year": 2018,
+          "title": "TrackML Particle Tracking Challenge Solution (5th place)",
+          "ref_id": "steiner2018trackml",
+          "source": "manual",
+          "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+          "authors": [
+            "Edwin Steiner"
+          ],
+          "ref_key": "steiner2018trackml",
+          "verified": false,
+          "confidence": "high",
+          "created_at": "2026-08-11T23:13:10.69568+00:00",
+          "reference_id": "c0b49eb5-3fab-4502-b6bc-0bcf8c11287e",
+          "matched_nodes": [],
+          "relevance_note": "Upstream source: algorithm.py:Algorithm.bayesianNeighborEvaluation(). Error-normalized Bayesian cut."
+        }
+      },
+      {
+        "row": {
+          "doi": null,
+          "url": "",
+          "year": 2021,
+          "title": "The Tracking Machine Learning challenge: Throughput phase",
+          "ref_id": "amrouche2021trackml_throughput",
+          "source": "manual",
+          "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+          "authors": [
+            "Sabrina Amrouche",
+            "et al."
+          ],
+          "ref_key": "amrouche2021trackml_throughput",
+          "verified": false,
+          "confidence": "high",
+          "created_at": "2026-08-11T23:13:10.697606+00:00",
+          "reference_id": "a1ebb2b3-11c7-4dc0-aaf7-3b279b97455f",
+          "matched_nodes": [],
+          "relevance_note": "Throughput-phase competition context for neighbor evaluation strategy."
+        }
+      }
+    ],
+    "atom_io_specs": [
+      {
+        "row": {
+          "name": "bg_phi",
+          "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+          "ordinal": 3,
+          "required": true,
+          "direction": "input",
+          "type_desc": "NDArray[np.float64]",
+          "io_spec_id": "857b63bc-073a-4333-9f63-7471694c5c0b",
+          "version_id": null,
+          "constraints": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "bg_theta",
+          "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+          "ordinal": 2,
+          "required": true,
+          "direction": "input",
+          "type_desc": "NDArray[np.float64]",
+          "io_spec_id": "53b9ea49-507c-40bf-9398-0fbec9c2440a",
+          "version_id": null,
+          "constraints": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "cut_factor",
+          "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+          "ordinal": 6,
+          "required": true,
+          "direction": "input",
+          "type_desc": "float",
+          "io_spec_id": "a922bf74-153b-48ab-9948-36d208c969e1",
+          "version_id": null,
+          "constraints": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "dist_trust",
+          "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+          "ordinal": 7,
+          "required": true,
+          "direction": "input",
+          "type_desc": "float",
+          "io_spec_id": "557ed0a4-385b-4a37-9ac5-1296c2602cea",
+          "version_id": null,
+          "constraints": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "d_phi",
+          "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "NDArray[np.float64]",
+          "io_spec_id": "13814129-7074-42d9-b7f1-bced625a0af6",
+          "version_id": null,
+          "constraints": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "d_theta",
+          "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "NDArray[np.float64]",
+          "io_spec_id": "fab934f5-26e0-404c-9871-66242ff6b13a",
+          "version_id": null,
+          "constraints": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "e_phi",
+          "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+          "ordinal": 5,
+          "required": true,
+          "direction": "input",
+          "type_desc": "NDArray[np.float64]",
+          "io_spec_id": "e368b964-07fc-486c-a152-ffe096dccc8d",
+          "version_id": null,
+          "constraints": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "e_theta",
+          "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+          "ordinal": 4,
+          "required": true,
+          "direction": "input",
+          "type_desc": "NDArray[np.float64]",
+          "io_spec_id": "7d323da4-7112-4dfb-9ab6-adedfe0ad7bb",
+          "version_id": null,
+          "constraints": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "result",
+          "atom_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "tuple[NDArray[np.bool_], NDArray[np.bool_]]",
+          "io_spec_id": "bf420881-a451-4651-bdfc-c881b23ae5f8",
+          "version_id": null,
+          "constraints": "",
+          "default_value_repr": ""
+        }
+      }
+    ],
+    "artifact_versions": [
+      {
+        "row": {
+          "s3_key": "local-seed/atoms/d83be2337ac9f063709bc1697a6a0ca9f73c612796f00c3703078da60c57864a.tar.gz",
+          "semver": "0.0.0+local.d83be2337ac9",
+          "is_latest": true,
+          "created_at": "2026-11-06T14:00:41.424408+00:00",
+          "trust_tier": 3,
+          "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+          "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+          "fingerprint": "3068c7bcea7e2b98f74e879b3e2447c3c95195f85d99c88c4789e9ca7c7511d0",
+          "content_hash": "d83be2337ac9f063709bc1697a6a0ca9f73c612796f00c3703078da60c57864a",
+          "derives_from": null
+        }
+      }
+    ],
+    "artifact_parameters": [],
+    "artifact_references": [],
+    "artifact_io_specs": [
+      {
+        "row": {
+          "name": "bg_phi",
+          "ordinal": 3,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "264a53b9-f804-4b42-b3a0-e2c27be881aa",
+          "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+          "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+          "constraints": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "bg_theta",
+          "ordinal": 2,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "e679f714-b4ca-4e21-9f8f-d52576ccdab1",
+          "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+          "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+          "constraints": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "cut_factor",
+          "ordinal": 6,
+          "required": false,
+          "direction": "input",
+          "type_desc": "float",
+          "io_spec_id": "e0b8b41d-c86d-4165-8081-89868954620c",
+          "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+          "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+          "constraints": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+          "dim_signature": "",
+          "default_value_repr": "3.0"
+        }
+      },
+      {
+        "row": {
+          "name": "dist_trust",
+          "ordinal": 7,
+          "required": false,
+          "direction": "input",
+          "type_desc": "float",
+          "io_spec_id": "9c1bbe17-fb72-42fb-8901-2e11de29e90a",
+          "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+          "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+          "constraints": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+          "dim_signature": "",
+          "default_value_repr": "0.5"
+        }
+      },
+      {
+        "row": {
+          "name": "d_phi",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "711f89e9-b2c4-4868-9313-ae459f804312",
+          "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+          "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+          "constraints": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "d_theta",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "ecee362e-003c-494d-8e63-aa18da3cc140",
+          "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+          "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+          "constraints": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "dubious",
+          "ordinal": 1,
+          "required": true,
+          "direction": "output",
+          "type_desc": "ndarray",
+          "io_spec_id": "91ac4eee-67f4-4e76-9c4f-8d179310089e",
+          "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+          "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+          "constraints": "Aligned boolean vector. Good is normalized distance strictly below cut; dubious is normalized distance strictly above trust times cut. Flags are independent and may both be true. Equality does not pass the respective strict comparison. No calibrated probability or symbolic decision proof is claimed.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "e_phi",
+          "ordinal": 5,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "d3f5d03d-0ab7-4076-97fd-e31adaabd467",
+          "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+          "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+          "constraints": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "e_theta",
+          "ordinal": 4,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "72a601ae-70db-4790-bb8d-3107b4772f08",
+          "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+          "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+          "constraints": "Nonempty aligned finite float64 vectors (N,). Within each component, residual, background and positive error scales must share units; the two components may use different units. Thresholds are finite positive dimensionless scalars. Qualified domain requires finite normalized distances, cut and trust-scaled cut. Background zero is allowed. Source recipe controls must be passed explicitly; provider defaults are not source defaults.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "good_neighbor",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "ndarray",
+          "io_spec_id": "6a7a10bc-0822-47b4-8ee2-7ee204e3904f",
+          "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+          "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+          "constraints": "Aligned boolean vector. Good is normalized distance strictly below cut; dubious is normalized distance strictly above trust times cut. Flags are independent and may both be true. Equality does not pass the respective strict comparison. No calibrated probability or symbolic decision proof is claimed.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      }
+    ],
+    "artifact_audit_evidence": [
+      {
+        "row": {
+          "passed": true,
+          "status": "completed",
+          "details": {
+            "scope": "Exact source and interface draft intake; no publication approval.",
+            "plan_sha256": "6c4b42d17555a3acbb8f3771f0aac040f0367bcc1a6e7723edc60fb152ef41ff",
+            "source_sha256": "dda1f5a1d363efbd45d0357edea25ce1000a6e9df9de29e73d653ee116a2edd4"
+          },
+          "audit_type": "asset_integrity_check",
+          "created_at": "2026-11-06T14:00:41.424408+00:00",
+          "version_id": "e03e1264-f9e5-506f-bb45-898dbfeec4f0",
+          "artifact_id": "b7c6eb3e-f5ae-43e2-bf5b-85b56f2e87b2",
+          "evidence_id": "15f9a0b2-e766-52ac-8adb-b5015dfdd33c",
+          "source_kind": "automated",
+          "runner_version": "trackml-bayesian-provider-intake.v1",
+          "review_basis_at": null,
+          "run_duration_ms": null,
+          "source_revision": "",
+          "upstream_version": ""
+        }
+      }
+    ]
+  },
+  "originals_sha256": "f839940aa40edfe5734827698947ed1a426a79c16bb215d49820714ff632db50",
+  "publisher_sha256": "58e459ccd9c0d57e9edf5dbc7fb96c9ccf3511d11c162c2cd86d79acb29a7611",
+  "review_sha256": "2a3fad60234ce33465d7ad39be671430a9e2e1836e88a65d319cf898a74436ce"
+}
