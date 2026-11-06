@@ -12,7 +12,8 @@ from sklearn.feature_extraction import DictVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.exceptions import ConvergenceWarning
 from sciona.video_multilabel_network import VideoHead, pad_sequences
-from sciona.video_multilabel_thresholds import label_matrix, score_matrix, calibrate, decisions
+from sciona.video_multilabel_thresholds import label_matrix, score_matrix
+from sciona.atoms.ml.calibration.empirical_f1 import fit_empirical_f1_thresholds, apply_column_thresholds
 from sciona.video_multilabel_shards import FeatureShards, validate_populations
 
 
@@ -104,7 +105,9 @@ def fit(training, *, seed=12, hidden=8, epochs=80, batch_size=4, learning_rate=.
     return ShardedVideoEnsemble(model, vectorizer, baseline, batch_size, history)
 
 
-def execute(training, calibration, query, controls):
+def execute(training, calibration, query, controls, *,
+            threshold_fit_function=fit_empirical_f1_thresholds,
+            threshold_apply_function=apply_column_thresholds):
     validate_populations(training, calibration, query)
     if type(controls) is not dict or set(controls) != {'seed','hidden','epochs','batch_size','learning_rate'}:
         raise ValueError('Explicit complete training controls required')
@@ -112,9 +115,10 @@ def execute(training, calibration, query, controls):
     labels = [list(row) for row in calibration.labels]
     label_matrix(labels, (len(calibration), calibration.label_count))
     fitted = fit(training, **controls)
-    thresholds = calibrate(fitted.predict(calibration), labels)
+    thresholds = threshold_fit_function(fitted.predict(calibration), np.asarray(labels, dtype=np.int64))
     scores = fitted.predict(query)
-    return dict(scores=scores.tolist(), labels=decisions(scores, thresholds), thresholds=thresholds,
+    predicted = threshold_apply_function(scores, thresholds)
+    return dict(scores=scores.tolist(), labels=predicted.tolist(), thresholds=thresholds.tolist(),
         training_rows=len(training), calibration_rows=len(calibration), query_rows=len(query),
         label_count=len(thresholds), sparse_models=len(fitted.baseline), epochs=controls['epochs'],
         initial_training_loss=fitted.history[0], final_training_loss=fitted.history[-1])

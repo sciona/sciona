@@ -73,3 +73,19 @@ def test_invalid_training_controls(tmp_path,controls):
     p=payload();p['controls'].update(controls)
     training=store(tmp_path,'training',p['training'])
     with pytest.raises(ValueError):fit(training,**p['controls'])
+
+
+def test_explicit_threshold_functions_are_used(tmp_path):
+    from sciona.atoms.ml.calibration.empirical_f1 import fit_empirical_f1_thresholds, apply_column_thresholds
+    p=payload();p['controls']['epochs']=2
+    populations=[store(tmp_path,n,p[n]) for n in ('training','calibration','query')]
+    calls=[]
+    def fit_thresholds(scores,labels):
+        calls.append(('fit',scores.shape,labels.dtype))
+        return fit_empirical_f1_thresholds(scores,labels)
+    def apply_thresholds(scores,thresholds):
+        calls.append(('apply',scores.shape,thresholds.dtype))
+        return apply_column_thresholds(scores,thresholds)
+    result=execute(*populations,p['controls'],threshold_fit_function=fit_thresholds,threshold_apply_function=apply_thresholds)
+    assert result==reference_execute(prepare(p))
+    assert calls==[('fit',(4,2),np.dtype('int64')),('apply',(2,2),np.dtype('float64'))]
