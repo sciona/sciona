@@ -1,0 +1,321 @@
+{
+  "format": "decomposed-trackml-readiness.v1",
+  "read_only": true,
+  "catalog_mutations": 0,
+  "approved": false,
+  "original": {
+    "artifact_id": "a2067934-0f90-5083-81b3-71025d158b6a",
+    "fqdn": "cdg.competition.solution.kaggle.trackml_5th",
+    "status": "draft",
+    "is_publishable": false,
+    "content_hash": "c0b732d94cd161a98dfc8a24a70a1805453a3de2d5b4d71ee7719fda4c639183",
+    "is_latest": true
+  },
+  "source_version_id": "11c41ece-c648-50b4-b211-7e319ba36dea",
+  "source_stages": [
+    {
+      "stage_id": "detector_geometry_autodiscovery",
+      "description": "Discover detector structure from module positions using KMeans (radial rings) and MeanShift (z-layers). Compute layer radii, z-positions, ring gap boundaries, and monotonic z-coverage for O(1) reachability queries."
+    },
+    {
+      "stage_id": "coordinate_rescaling_for_knn",
+      "description": "Project hits to mean cylinder radius, scale x,y by zscale to create elliptical neighborhoods matching the detector's natural metric. Separate transforms for cylinder and cap layers."
+    },
+    {
+      "stage_id": "per_layer_knn_search",
+      "description": "Build sklearn NearestNeighbors index per detector layer on the rescaled coordinates. Query for k nearest neighbors within radius, returning candidate hit indices and distances."
+    },
+    {
+      "stage_id": "circle_from_three_points",
+      "description": "Fit a circumscribed circle through three x-y hit positions. The x,y-projection of a charged particle helix in uniform B-field is a circle. Handles degenerate cases (collinear/coincident) by constructing large tangent circles."
+    },
+    {
+      "stage_id": "helix_pitch_least_squares",
+      "description": "Given circle center, z-coordinate is linear in phase angle phi. Linear regression of z vs phi for three points with careful phase-unwrapping. Sum-of-squared-residuals serves as track quality signal."
+    },
+    {
+      "stage_id": "helix_cylinder_intersection",
+      "description": "Exploit that r^2 = x^2 + y^2 is a harmonic function of helix phase, so cylinder crossings reduce to solving cos(phi)=C analytically (up to 4 candidates). Pick closest forward-moving solution. Recursive miss-and-retry for lateral misses."
+    },
+    {
+      "stage_id": "helix_cap_intersection",
+      "description": "Intersect helix with planar disk detector layers (z=constant). Simpler than cylinder case but includes recursive miss-and-retry for radial gaps between cap module rings."
+    },
+    {
+      "stage_id": "perturbative_helix_correction",
+      "description": "Real trajectories deviate from perfect helices due to energy loss, scattering, and B-field inhomogeneity. Apply learned displacement maps (per-layer RegularGridInterpolator) scaled by q/momentum for physics-informed transfer across momenta."
+    },
+    {
+      "stage_id": "helix_nearest_point_distance",
+      "description": "Compute nearest point on helix to a reference point. Recognizes this is equivalent to Kepler's equation E - e*sin(E) = M. Solved via Newton's method (3 iterations)."
+    },
+    {
+      "stage_id": "bayesian_neighbor_evaluation",
+      "description": "Cut-off derived from Bayesian signal-vs-background likelihood ratio. Dense regions get tighter cuts, sparse regions get looser cuts. Adaptive thresholding based on local hit density."
+    },
+    {
+      "stage_id": "greedy_track_commit",
+      "description": "Process tracks in descending quality order. Discard tracks exceeding max_nloss of already-claimed hits. reserve_skipped prevents cascade pollution."
+    }
+  ],
+  "derivative": {
+    "artifact_id": "ae6f41f2-cb0b-51ce-a567-0ab855ece4ce",
+    "fqdn": "cdg.competition.solution.kaggle.trackml_5th.execution",
+    "status": "approved",
+    "is_publishable": true,
+    "content_hash": "39fe4a7b3fcb91b85e3dabb5425d53d4d876cdc43baed505a1ab9ff5e442dace",
+    "is_latest": true,
+    "trust_tier": 3
+  },
+  "derivative_version_id": "249c8ff0-9e0a-5ccb-823c-2482f8976592",
+  "derivative_nodes": [
+    {
+      "node_id": "decode"
+    },
+    {
+      "node_id": "encode"
+    },
+    {
+      "node_id": "track"
+    }
+  ],
+  "derivative_bindings": [
+    {
+      "node_id": "decode",
+      "bound_artifact_fqdn": "sciona.atoms.physics.trackml_execution.trackml_decode",
+      "bound_version_content_hash": "26b95f16eff3ae0da7906d165e4b825239eb5c358f5cdc14d6be612a51300bc9"
+    },
+    {
+      "node_id": "encode",
+      "bound_artifact_fqdn": "sciona.atoms.physics.trackml_execution.trackml_encode",
+      "bound_version_content_hash": "0072f209abbc36d89a27dea1da8fc261783df0ccdf32e76ecb57adceeeccf634"
+    },
+    {
+      "node_id": "track",
+      "bound_artifact_fqdn": "sciona.atoms.physics.trackml_execution.trackml_track",
+      "bound_version_content_hash": "01df3e1b1fa02de8b192e2b5719adbd482ec8e70680534a5e626e36d59733617"
+    }
+  ],
+  "draft_originals_with_approved_derivatives": 16,
+  "retained_evidence_sha256": {
+    "competition_trackml_bayesian.json": "de3c79860fd244739490ad5957ab09758187f103c2695b92989a0d18118ebe08",
+    "competition_trackml_candidates.json": "d10fdb1282da000be59c8e58410a7fa8869b07966cf1cb4be9628ca7efb06d3e",
+    "competition_trackml_cells.json": "227c1117415db937da328c86227f71e6e526e653335e69489b5966410b939df1",
+    "competition_trackml_circle.json": "06ac43470e59edb1b478dbd2fe54c32020b3239e11d8e48dde23ed8a0f61c5c6",
+    "competition_trackml_corrections.json": "5a5f009c9e0dc80ade79b5b7355c1a2268b65c571a783dd38db80fc1ec3abda5",
+    "competition_trackml_detector.json": "090545ea1cd62def88b640df0e607d9afb679aaf9958ca7855e300cacb76f188",
+    "competition_trackml_extension.json": "e678e327f0b49ab45ee34ab14193a480e80e5bd845338e8713b37e918936c568",
+    "competition_trackml_helix.json": "51d1e06ca103e47d3a338ab4df75a9b2669dba5ae0e26cb36adf719f44af7810",
+    "competition_trackml_intersections.json": "0375dd403f519bc9cca0abeeede0d16ef4138b245c338e38467eec19db4ba9f6",
+    "competition_trackml_layer_integration.json": "82c8ecc42d577f654023d4e85027da4cc6fda2520f08091b36237e39e542194b",
+    "competition_trackml_lifecycle.json": "03b5794402b34c3accca232773b20122929077720896450ed6a2f00f48d65cae",
+    "competition_trackml_nearest.json": "3a7964f65785b2ee828e7054e933a96e29b8c58341ae7299b3ee30dba2ad4355",
+    "competition_trackml_neighbors.json": "667b871fcaaed7ae4d87615ab9286af6b00e3b71b25bdd3a649446dd72b93863",
+    "competition_trackml_publication.json": "df1e50ea723e3686da3c32324f5301b722d92807fda7449a1240272c8d4cc9e5",
+    "competition_trackml_publication_verification.json": "974a876f230afb32d1fe8b3bc681b167c0173719dfa2795c6392bae6c5a4aa97",
+    "competition_trackml_runtime.json": "e103f42bb42c7a9ad887b379337b22b2894adf95a48eb93bd5b75862fc7bd54f",
+    "competition_trackml_seeding.json": "c563ea36768d4ead414b6f619028886c027ef418a5dfa6d14ea481f3ac6325a7",
+    "competition_trackml_source_pins.json": "d61b598dbf97fb73d7b8546d0af99c4657f894e953e79cf82f2242dfcf90219f",
+    "competition_trackml_source_review.json": "dbf95a7af630b9690f6b4eb1a17df0f580a91d0afda936db6f21b36e48e07dcc"
+  },
+  "distinct_file_hash_checks": 39,
+  "implementation_drift": [],
+  "implementation_inventory": {
+    "trackml_bayesian.py": {
+      "sha256": "5ba0fe8cec6f7cd8d431e8096a634ca0b1c478fca7d5121523133c95b7f0b041",
+      "functions": [
+        "BayesianNeighborScorer"
+      ]
+    },
+    "trackml_candidates.py": {
+      "sha256": "985fedbd7ad1905b0b3ed0e9118674b1257293ee03a5d34d5e46ea23bfa3faa8",
+      "functions": [
+        "zeroUsedHits",
+        "Candidates"
+      ]
+    },
+    "trackml_cells.py": {
+      "sha256": "d5fb6900261a410e1c6a0fc2bec09ef5a969615189ff304a4a82252225545a48",
+      "functions": [
+        "CellFeatures"
+      ]
+    },
+    "trackml_corrections.py": {
+      "sha256": "96770dae09ba1584b7bd7152187a1b96a7b51df9831eff539a0305cf4674b21b",
+      "functions": [
+        "submask",
+        "HelixCorrector"
+      ]
+    },
+    "trackml_defaults.py": {
+      "sha256": "809942a25b9132868bf2a3dada9aa80a74b9f9fe5fe9d037779af8a0d9403d4a",
+      "functions": []
+    },
+    "trackml_detector.py": {
+      "sha256": "ec904e021ca03e817f883af672cd86c423ca58ba695b57ee66b264ee70afcf92",
+      "functions": [
+        "discover_detector",
+        "df_vec2_length",
+        "CylindersSpec",
+        "CapsSpec",
+        "DetectorSpec"
+      ]
+    },
+    "trackml_execution.py": {
+      "sha256": "7544e9924cca4e943e3467345ae56f73b04aa458bd9e528bd0fe260b8b87128b",
+      "functions": [
+        "TrackMLInputError",
+        "_table",
+        "RuntimeEvent",
+        "check_layer_population",
+        "CheckedLifecycle",
+        "execute_tracking"
+      ]
+    },
+    "trackml_extension.py": {
+      "sha256": "11a5dd7c945128edf8630e433e443affe65f17db3ac57cc1c414119604f4ed62",
+      "functions": [
+        "TrackExtension"
+      ]
+    },
+    "trackml_fitting.py": {
+      "sha256": "3c0e731aa27443fa2b673530dff0c8b2abf423da0c6fc83357f8cfdc595436ba",
+      "functions": [
+        "FittedTrackExtension"
+      ]
+    },
+    "trackml_geometry.py": {
+      "sha256": "e8d16ed6c49222717a7ed55c50b220f17c0e29a0651d165c3b0e726aba7482cb",
+      "functions": [
+        "_source_circle",
+        "circle_from_three_points"
+      ]
+    },
+    "trackml_graph.py": {
+      "sha256": "1800dbc574edd1def1fc971daf0502ab584284eac03e32a279ac0775697d0238",
+      "functions": [
+        "build_trackml_graph"
+      ]
+    },
+    "trackml_helix.py": {
+      "sha256": "eb8f4c0895d7ae63618e4f143cc5f04badc4ee98e47622dee0e60fa7db984b05",
+      "functions": [
+        "_vectors",
+        "_evaluate",
+        "_replacement",
+        "pitch_from_two_points",
+        "pitch_least_squares",
+        "move_along_helix",
+        "_pitch_two",
+        "_pitch_three",
+        "_move"
+      ]
+    },
+    "trackml_intersections.py": {
+      "sha256": "9dbd24a154f80f700ffb2ed444d7ba469c64bfdccc14b23d73fa4a670c12f4cc",
+      "functions": [
+        "CylinderIntersector",
+        "CapIntersector",
+        "Intersector"
+      ]
+    },
+    "trackml_layer_functions.py": {
+      "sha256": "b2f1b14b50a5061517c0c33fc0de90f624468ece764e0f5ac0b7c719a00dffa9",
+      "functions": [
+        "createLayerFunctionInterpolators",
+        "CylinderLayer",
+        "CapLayer",
+        "LayerFunctionEvaluator",
+        "build_layer_evaluator"
+      ]
+    },
+    "trackml_lifecycle.py": {
+      "sha256": "f851c8ab317665939fae5c5bac8c9cc53b2686d9173e631156735008cb6e560c",
+      "functions": [
+        "score_event",
+        "TrackLifecycle"
+      ]
+    },
+    "trackml_nearest.py": {
+      "sha256": "28ffa9afe1cc1d65b68423c6423d6ff6ebdc4c4630f92787ef91752657f73773",
+      "functions": [
+        "_parameter",
+        "direction_from_two_points",
+        "helix_from_tangent",
+        "nearest_point_distance",
+        "unit_tangent",
+        "_direction",
+        "_from_tangent",
+        "_nearest",
+        "_unit_tangent"
+      ]
+    },
+    "trackml_neighbors.py": {
+      "sha256": "06b6908a2c19a425359180e373e69ba008c8b4f74077d44679db6d16d67bb748",
+      "functions": [
+        "CylinderNeighbors",
+        "CapNeighbors",
+        "Neighbors"
+      ]
+    },
+    "trackml_pairing.py": {
+      "sha256": "7fe41cccf09819f339e58b7b596efbb1902a8e9b039a56079dbae20f3be1a29b",
+      "functions": [
+        "PairedTrackExtension"
+      ]
+    },
+    "trackml_payload.py": {
+      "sha256": "6eb65bca6922a7926028faa3211d96017bb9dd8f8c00d6c3c1eae064c116c584",
+      "functions": [
+        "encode_table",
+        "decode_table",
+        "GridLayerFunctions",
+        "encode_layer_functions",
+        "decode_tracking_payload",
+        "run_decoded_tracking",
+        "encode_tracking_result",
+        "execute_payload"
+      ]
+    },
+    "trackml_ranking.py": {
+      "sha256": "deab093c41a0985b35eb42590e31edcab80296094f9247ad303a132f27d3a343",
+      "functions": [
+        "RankedTrackExtension"
+      ]
+    },
+    "trackml_runtime.py": {
+      "sha256": "f0225d6261c8d56523ff3fc843f54fda133c2a9826c5a114673a90b040541ee2",
+      "functions": [
+        "TrackRuntime"
+      ]
+    },
+    "trackml_seeding.py": {
+      "sha256": "fd96b59f89166a07320fad4982eb477a91bbf8728709f80c2ecde5d2f60f2999",
+      "functions": [
+        "SeededTrackExtension"
+      ]
+    }
+  },
+  "current_runtime_versions": {
+    "numpy": "2.2.6",
+    "scipy": "1.17.1",
+    "pandas": "2.3.3",
+    "scikit-learn": "1.8.0"
+  },
+  "source_corrections": [
+    "Existing three-node derivative implements iterative tracking with caller-supplied detector geometry and optional maps; its declared exclusions include learned calibration, sparse-layer tracking, truth scoring and file outputs.",
+    "Original eleven-stage scope must be compared with all retained source implementations; an approved tracking derivative alone cannot establish original completion.",
+    "Empty-candidate and no-seed compatibility changes are explicit; no historical competition accuracy claim."
+  ],
+  "reuse_work": [
+    "Separate generic circle/helix geometry, interpolation and neighbor operations from detector topology, track-candidate policy and calibration lifecycle.",
+    "Inspect registered providers before adding implementations and preserve pinned BSD source attribution.",
+    "Expose complete original computation and source-required learning stages, not only decode/track/encode wrappers.",
+    "Revalidate current source comparisons and exact catalog bindings before promotion."
+  ],
+  "limits": [
+    "Readiness only; historical hashes do not establish current numerical execution.",
+    "Public algorithm-template descriptions and software identifiers only; runtime records and identifying dataset metadata excluded."
+  ],
+  "auditor_sha256": "f96de13f2c3d4096c6577b9751d9274b7ff4a5df8fa4a5a2a44207ef6d594d36"
+}
