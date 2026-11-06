@@ -10,7 +10,7 @@ import importlib
 import inspect
 import json
 from pathlib import Path
-from sciona.dsb_decomposed_preparation_graph import build_dsb_preparation_graph
+from sciona.dsb_decomposed_evaluation_graph import build_dsb_evaluation_graph
 from sciona.services.execution_graph_codec import encode_execution_graph
 from sciona.atoms.provider_inventory import ProviderRepo
 from sciona.atoms.supabase_seed import _parse_registered_atoms
@@ -40,9 +40,9 @@ def sha(path):
 
 
 def inventory(offline=False):
-    graph = build_dsb_preparation_graph()
+    graph = build_dsb_evaluation_graph()
     digest, _, _ = encode_execution_graph(graph)
-    evidence_path = ROOT / 'docs/reviews/dsb_spatial_recipe_graph_source_parity.json'
+    evidence_path = ROOT / 'docs/reviews/dsb_evaluation_recipe_graph_source_parity.json'
     evidence = json.loads(evidence_path.read_text())
     if not evidence['passed'] or evidence['execution_graph_sha256'] != digest:
         raise ValueError('Current graph lacks matching full source evidence')
@@ -101,7 +101,7 @@ def inventory(offline=False):
                 both_catalogs_exact_eligible=None if offline else sum(r['atom_exact_eligible'] and r['artifact_exact_eligible'] for r in records),
                 full_graph_evidence_sha256=sha(evidence_path), providers=records,
                 remaining_gates=[
-                    'Training crop/augmentation/anchor recipes are explicit; connect validation and inference consumers and review their contracts.',
+                    'Review complete spatial recipe contracts across training, validation and inference; explicit consumers are connected.',
                     'Expose validation/checkpoint contracts while preserving uninterrupted optimizer and RNG state.',
                     'Review complete transitive dependencies including local imports, model methods and callbacks.',
                     'Complete exact catalog interfaces, parameters, descriptions, references and Tier 3 audit evidence.',

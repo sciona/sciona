@@ -2,7 +2,7 @@
   "read_only": true,
   "catalog_mutations": 0,
   "approved": false,
-  "graph_digest": "d577fb97636540398be9efeb99861887d4ed1e22fb7b1b894701bd035ebd9c84",
+  "graph_digest": "6be5cd381b8ca35af58c52320bd45ffa5a95b28f1d2181e0ecf551dfce83cfa3",
   "catalog_checked": false,
   "graph_nodes": 19,
   "direct_providers": 18,
@@ -10,7 +10,7 @@
   "inventoried_providers": 31,
   "complete_transitive_closure": false,
   "both_catalogs_exact_eligible": null,
-  "full_graph_evidence_sha256": "65bd6028375c06bd8cb4f55b07215aae32905b4605d856d15defabf24de4066e",
+  "full_graph_evidence_sha256": "08cb03da7dc1b965b405a1f71161649381062fcfa75848cc5a93112d33b7eeb0",
   "providers": [
     {
       "runtime_fqdn": "sciona.atoms.dl.detection.dsb_decomposed_training.dsb_decomposed_training_batches",
@@ -21,6 +21,38 @@
       "signature": "(training_arrays: dict, sampling_options: dict) -> object",
       "directly_bound_nodes": [
         "training_batches"
+      ],
+      "classification": "dsb_recipe_adapter",
+      "atom_latest": null,
+      "atom_exact_eligible": null,
+      "artifact_latest": null,
+      "artifact_exact_eligible": null
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.detection.dsb_evaluation_sampling.prepare_classifier_crops",
+      "catalog_fqdn": "sciona.atoms.dl.detection.dsb_evaluation_sampling.prepare_classifier_crops",
+      "version_id": "afddbd04-9d09-5d5a-a9ab-c39d606a37db",
+      "content_hash": "1d126e78578ffb4dd2b4a2f8ec30aadb3f97be4ebc2b7c64aefcf1a51fdc30d5",
+      "provider_sha256": "e4534066d54cf695d43c22fac3e3ceef3eeeb54f81ebe5ea1bad17c94b3593ac",
+      "signature": "(processed_volume: object, proposals: object, topk: int = 5, crop_size: int = 96) -> tuple",
+      "directly_bound_nodes": [
+        "classifier_crops"
+      ],
+      "classification": "dsb_recipe_adapter",
+      "atom_latest": null,
+      "atom_exact_eligible": null,
+      "artifact_latest": null,
+      "artifact_exact_eligible": null
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.detection.dsb_evaluation_sampling.validation_batches",
+      "catalog_fqdn": "sciona.atoms.dl.detection.dsb_evaluation_sampling.validation_batches",
+      "version_id": "14f3dae1-d7f4-5a7b-8ccb-df315cb11bc5",
+      "content_hash": "edff102505b0b5b44f2e6096dba48379fb68c0f119949e5a69a78b65a4e9f8ee",
+      "provider_sha256": "e4534066d54cf695d43c22fac3e3ceef3eeeb54f81ebe5ea1bad17c94b3593ac",
+      "signature": "(validation_arrays: dict, validation_options: dict) -> object",
+      "directly_bound_nodes": [
+        "validation_batches"
       ],
       "classification": "dsb_recipe_adapter",
       "atom_latest": null,
@@ -101,22 +133,6 @@
       "signature": "(tiles: object, coordinates: object, detector: object, tile_batch_size: int = 1) -> object",
       "directly_bound_nodes": [
         "detector_tiles"
-      ],
-      "classification": "dsb_recipe_adapter",
-      "atom_latest": null,
-      "atom_exact_eligible": null,
-      "artifact_latest": null,
-      "artifact_exact_eligible": null
-    },
-    {
-      "runtime_fqdn": "sciona.atoms.dl.detection.dsb_inference_steps.prepare_classifier_crops",
-      "catalog_fqdn": "sciona.atoms.dl.detection.dsb_inference_steps.prepare_classifier_crops",
-      "version_id": "846c3398-8f84-58fb-99e4-bdfae762e3c0",
-      "content_hash": "f7380f1b5070721f7ce786df93b160e0dfca25fc41aa9dead6c22e886da80886",
-      "provider_sha256": "0d913af6c9b80d6ba449bd755cf63d09b9af7bc0cc975c7286c93b9bee691ed8",
-      "signature": "(processed_volume: object, proposals: object, topk: int = 5, crop_size: int = 96) -> tuple",
-      "directly_bound_nodes": [
-        "classifier_crops"
       ],
       "classification": "dsb_recipe_adapter",
       "atom_latest": null,
@@ -323,22 +339,6 @@
       "artifact_exact_eligible": null
     },
     {
-      "runtime_fqdn": "sciona.atoms.dl.detection.dsb_training_execution.dsb_validation_batches",
-      "catalog_fqdn": "sciona.atoms.dl.detection.dsb_training_execution.dsb_validation_batches",
-      "version_id": "24bd048d-63b9-5b97-8c94-dbf9ed4d4dd6",
-      "content_hash": "3c611806efd63e5fe2d61d6a028ab953cb521c28866405706a1fa1cbcb0cdb68",
-      "provider_sha256": "846af11481efccc16666e921a204ec44ca9107d1e71a5657ea5610feb39f7750",
-      "signature": "(validation_arrays: dict, validation_options: dict) -> object",
-      "directly_bound_nodes": [
-        "validation_batches"
-      ],
-      "classification": "dsb_recipe_adapter",
-      "atom_latest": null,
-      "atom_exact_eligible": null,
-      "artifact_latest": null,
-      "artifact_exact_eligible": null
-    },
-    {
       "runtime_fqdn": "sciona.atoms.dl.loss.ranked_selection.highest_scoring_indices",
       "catalog_fqdn": "sciona.atoms.dl.loss.ranked_selection.highest_scoring_indices",
       "version_id": "42fe7b45-180a-55a0-89ca-cc8b032ffc44",
@@ -525,7 +525,7 @@
     }
   ],
   "remaining_gates": [
-    "Training crop/augmentation/anchor recipes are explicit; connect validation and inference consumers and review their contracts.",
+    "Review complete spatial recipe contracts across training, validation and inference; explicit consumers are connected.",
     "Expose validation/checkpoint contracts while preserving uninterrupted optimizer and RNG state.",
     "Review complete transitive dependencies including local imports, model methods and callbacks.",
     "Complete exact catalog interfaces, parameters, descriptions, references and Tier 3 audit evidence.",
