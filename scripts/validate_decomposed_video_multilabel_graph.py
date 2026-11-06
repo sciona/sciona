@@ -32,6 +32,8 @@ def validate():
         'sciona/video_multilabel_network.py','sciona/video_multilabel_thresholds.py',
         'sciona/ghost/registry.py','sciona/visualizer/runner.py',
         'sciona/services/execution_graph_codec.py',
+        'sciona/materialized_prediction.py',
+        '../sciona-atoms-ml/src/sciona/atoms/ml/model_selection/materialized_prediction.py',
         '../sciona-atoms-ml/src/sciona/atoms/ml/masked_attention.py',
         '../sciona-atoms-ml/src/sciona/atoms/ml/calibration/empirical_f1.py',
         '../sciona-atoms-ml/src/sciona/atoms/ml/video_multilabel_sharded_execution.py',
@@ -53,18 +55,18 @@ def validate():
             raise ValueError('Synthetic graph suite failed: '+run.stdout[-3000:]+run.stderr[-1000:])
         suites=list(ET.parse(xml).getroot().iter('testsuite'))
         counts={key:sum(int(s.get(key,'0')) for s in suites) for key in ('tests','failures','errors','skipped')}
-    if counts!=dict(tests=66,failures=0,errors=0,skipped=0):
-        raise ValueError('Complete 66-test suite required')
+    if counts!=dict(tests=67,failures=0,errors=0,skipped=0):
+        raise ValueError('Complete 67-test suite required')
     if before!=fingerprints() or installed!=versions():
         raise ValueError('Software changed during validation')
-    return dict(format='decomposed-video-multilabel-graph.v1',passed=True,approved=False,
+    return dict(format='decomposed-video-multilabel-graph.v2',passed=True,approved=False,
         catalog_mutations=0,synthetic_only=True,tests=counts,software_sha256=before,
         observed_package_versions=installed,graph_sha256=graph_digest,
-        native_graph_executions=3,graph_nodes=5,explicit_callable_edges=4,
+        native_graph_executions=3,graph_nodes=6,explicit_callable_edges=5,
         exact_registered_bindings=True,all_nodes_uncached=True,
         full_configured_lifecycle_parity=True,resource_policy=dict(serial_tests=True,native_threads=1),
         limits=['No catalog staging or approval; original CDG remains separately qualified.',
-                'Sparse fit/predict and score fusion still need reuse review and decomposition.',
+                'Sparse fit/predict still need reuse review and decomposition; score fusion reuses registered vector mean.',
                 'Package versions are observations; dependency closure and installed RECORD qualification remain pending.',
                 'Synthetic full-population parity does not establish competition accuracy or production-scale memory bounds.',
                 'Shard stores are caller-owned private runtime objects; no paths or data are embedded in the graph.'])
@@ -72,5 +74,5 @@ def validate():
 
 if __name__=='__main__':
     result=validate()
-    (ROOT/'docs/reviews/decomposed_video_multilabel_graph_execution.json').write_text(json.dumps(result,indent=2)+'\n')
+    (ROOT/'docs/reviews/decomposed_video_multilabel_graph_execution_v2.json').write_text(json.dumps(result,indent=2)+'\n')
     print(json.dumps(dict(passed=result['passed'],tests=result['tests'],approved=False)))

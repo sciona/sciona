@@ -16,6 +16,7 @@ from sciona.video_multilabel_reusable_network import ReusableVideoHead
 from sciona.video_multilabel_thresholds import label_matrix, score_matrix
 from sciona.atoms.ml.calibration.empirical_f1 import fit_empirical_f1_thresholds, apply_column_thresholds
 from sciona.atoms.ml.masked_attention import masked_attention_pool, sigmoid_context_gate
+from sciona.atoms.ml.model_selection.materialized_prediction import average
 from sciona.video_multilabel_shards import FeatureShards, validate_populations
 
 
@@ -26,6 +27,7 @@ class ShardedVideoEnsemble:
     baseline: list
     batch_size: int
     history: list
+    mean_function: object = average
 
     def components(self, population):
         if not isinstance(population, FeatureShards) or population.width != self.neural.features:
@@ -42,11 +44,14 @@ class ShardedVideoEnsemble:
 
     def predict(self, population):
         neural, linear = self.components(population)
-        return score_matrix((neural + linear) / 2)
+        return score_matrix(np.column_stack([
+            self.mean_function([neural[:, column], linear[:, column]])
+            for column in range(neural.shape[1])]))
 
 
 def fit(training, *, seed=12, hidden=8, epochs=80, batch_size=4, learning_rate=.02,
-        pool_function=masked_attention_pool, gate_function=sigmoid_context_gate):
+        pool_function=masked_attention_pool, gate_function=sigmoid_context_gate,
+        mean_function=average):
     if not isinstance(training, FeatureShards) or not training.labelled:
         raise ValueError('Labelled training shards required')
     for name, value in [('seed',seed), ('hidden',hidden), ('epochs',epochs), ('batch_size',batch_size)]:
@@ -106,11 +111,12 @@ def fit(training, *, seed=12, hidden=8, epochs=80, batch_size=4, learning_rate=.
                 raise ValueError('Invalid neural gradients')
             optimizer.step()
     model.eval()
-    return ShardedVideoEnsemble(model, vectorizer, baseline, batch_size, history)
+    return ShardedVideoEnsemble(model, vectorizer, baseline, batch_size, history, mean_function)
 
 
 def execute(training, calibration, query, controls, *,
             pool_function=masked_attention_pool, gate_function=sigmoid_context_gate,
+            mean_function=average,
             threshold_fit_function=fit_empirical_f1_thresholds,
             threshold_apply_function=apply_column_thresholds):
     validate_populations(training, calibration, query)
@@ -119,7 +125,8 @@ def execute(training, calibration, query, controls, *,
     # Validate calibration classes before fitting, without loading frame populations.
     labels = [list(row) for row in calibration.labels]
     label_matrix(labels, (len(calibration), calibration.label_count))
-    fitted = fit(training, **controls, pool_function=pool_function, gate_function=gate_function)
+    fitted = fit(training, **controls, pool_function=pool_function, gate_function=gate_function,
+        mean_function=mean_function)
     thresholds = threshold_fit_function(fitted.predict(calibration), np.asarray(labels, dtype=np.int64))
     scores = fitted.predict(query)
     predicted = threshold_apply_function(scores, thresholds)

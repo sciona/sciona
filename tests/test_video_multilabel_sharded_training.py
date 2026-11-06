@@ -89,3 +89,17 @@ def test_explicit_threshold_functions_are_used(tmp_path):
     result=execute(*populations,p['controls'],threshold_fit_function=fit_thresholds,threshold_apply_function=apply_thresholds)
     assert result==reference_execute(prepare(p))
     assert calls==[('fit',(4,2),np.dtype('int64')),('apply',(2,2),np.dtype('float64'))]
+
+
+def test_existing_mean_provider_is_used_per_label(tmp_path):
+    from sciona.atoms.ml.model_selection.materialized_prediction import average
+    p=payload();p['controls']['epochs']=2
+    populations=[store(tmp_path,n,p[n]) for n in ('training','calibration','query')]
+    calls=[]
+    def mean(vectors):
+        calls.append([v.shape for v in vectors])
+        result=average(vectors)
+        np.testing.assert_array_equal(result,(vectors[0]+vectors[1])/2)
+        return result
+    assert execute(*populations,p['controls'],mean_function=mean)==reference_execute(prepare(p))
+    assert calls==[[(4,),(4,)],[(4,),(4,)],[(2,),(2,)],[(2,),(2,)]]
