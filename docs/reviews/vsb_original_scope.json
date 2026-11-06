@@ -1,0 +1,49 @@
+{
+  "format": "vsb-original-scope.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "source_version_id": "d79e40e4-45b0-5e74-a83c-c68c91f12afb",
+  "source_content_hash": "565e511ee8d20ce0b32adf5c8cc726150f235b1f97d5502d62c96cfe339f5ac1",
+  "original_stages": [
+    "wavelet_denoising",
+    "peak_detection",
+    "peak_feature_extraction",
+    "signal_to_matrix_transform",
+    "tabular_model",
+    "dl_model",
+    "weighted_blend"
+  ],
+  "source_corrections": {
+    "wavelet_denoising": "Correct to recursive first-order baseline subtraction; no wavelet stage established.",
+    "peak_detection": "Bidirectional directional scan intersection, sorted amplitude gradient and cumulative threshold knee with source negative slicing.",
+    "peak_feature_extraction": "Four normalized waveform descriptors, clipped windows, source offset convention and aligned sawtooth MSE.",
+    "signal_to_matrix_transform": "Correct to three-signal fundamental phase and nine measurement aggregates; no deep image transform established.",
+    "tabular_model": "Full feature permutation and 25 repetitions of five LightGBM folds; both heldouts affect stopping.",
+    "dl_model": "Remove unsupported deep branch; all 125 models are LightGBM.",
+    "weighted_blend": "Correct to equal probability mean and signal-label MCC threshold from in-training scores; strict greater-than decisions broadcast over triples."
+  },
+  "original_outputs": [
+    {
+      "name": "fault_probability",
+      "required": true,
+      "type_desc": "float",
+      "constraints": "Binary fault probability in [0, 1]."
+    }
+  ],
+  "decision": "Preserve full independent source reconstruction: raw signal triples through baseline removal, custom peaks, descriptors and phase aggregates; all 125 repeated-fold tree models; equal query probability averaging; signal-label MCC threshold and strict decisions broadcast over triples.",
+  "output_boundary": "Return one probability per query measurement in input order, three ordered signal decisions per measurement, selected threshold, model count and declared evaluation limitations. The intake scalar shorthand is corrected to this batched numerical result. No file or submission artifact is required by the original root output.",
+  "reuse": "Numeric filtering, peak ranking and knee controls, descriptor and phase operations, generic-width fold fitting and threshold search can be selected separately. Consecutive three-signal grouping, nine-feature permutation, random five-way fold coverage and threshold routing remain explicit recipe assumptions.",
+  "evidence_sha256": {
+    "docs/reviews/competition_vsb_execution_source_review.json": "5517f77133632f61011b1cd1a294b96cb5d4fe47f4a01858d3b76047bd2534d8",
+    "docs/reviews/competition_vsb_semantic_review.json": "056f76832b3bc88b55d57ee45b15a61f643e331d5f12927dd7f6842b6465c04a",
+    "docs/reviews/vsb_current_baseline.json": "f3d64f7822269624727b80d2e0db93b770862a91faea63c8ef8150fed30a446d"
+  },
+  "reviewer_sha256": "a2ab677556b840ab93bbf72d8265ca7e98b19fd178f6005c47f0694a805cbe2b",
+  "limits": [
+    "Automated scope resolution only; decomposed full graph execution and original publication remain pending.",
+    "Retain independent mathematics and source attributions; no notebook code copying or new license-grant claim.",
+    "Both heldouts influence stopping and threshold selection uses in-training scores; no unbiased validation or historical performance claim.",
+    "Actual-length descriptors and FFT phase remain declared generalizations; preserve undefined-case rejection and missing aggregates."
+  ]
+}
