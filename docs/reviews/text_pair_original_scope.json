@@ -34,6 +34,18 @@
           "symbol": "NormalizationPolicy.normalize_populations",
           "line": 73,
           "file_sha256": "d6fe1b5216ab3ba9667743a7a0459895966345384c28475acd7d7c46af1b0de1"
+        },
+        {
+          "file": "sciona/text_pair_fields.py",
+          "symbol": "normalize_records",
+          "line": 13,
+          "file_sha256": "56efbdcc77163085e3769838e4a61cb7ef2498312cf5dd90ebc44066ca214b70"
+        },
+        {
+          "file": "sciona/text_pair_fields.py",
+          "symbol": "normalize_populations",
+          "line": 28,
+          "file_sha256": "56efbdcc77163085e3769838e4a61cb7ef2498312cf5dd90ebc44066ca214b70"
         }
       ]
     },
@@ -45,8 +57,8 @@
           "Features are aligned one row per text pair."
         ]
       },
-      "realization": "Retain character n-gram overlap, token Jaccard, TF-IDF cosine, normalized edit similarity, exact match and length ratio; append symmetric BM25 with training-only corpus statistics.",
-      "limits": "The external boundary declares shared_text: two comparable representations, without distinct title/description subfields or implicit concatenation. BM25 query terms have unit weight, corpus documents are unique training texts, and positive IDF is explicit. Separate-field source fidelity still requires review before original promotion.",
+      "realization": "The title_description branch computes normalized edit similarity from titles through the existing Levenshtein provider, and n-gram overlap, token Jaccard, TF-IDF cosine, exact match, length ratio and symmetric BM25 from descriptions.",
+      "limits": "The original graph must explicitly select title_description; shared_text remains a separate supported request mode. BM25 query terms have unit weight, corpus documents are unique training descriptions, and positive IDF is explicit. Fields are not concatenated.",
       "source_anchors": [
         {
           "file": "sciona/text_pair_features.py",
@@ -70,7 +82,13 @@
           "file": "sciona/text_pair_complete_recipe.py",
           "symbol": "CompletePairFeatures._features",
           "line": 68,
-          "file_sha256": "516daf18a95144134094d75d0ef68a7e3057cbfbfd12b40d4dcfad6dda6a5250"
+          "file_sha256": "ba84e9ffff6847dccea4e625fcfc0cd0253dd2a6f2016ae7fb67ba54216dcd6c"
+        },
+        {
+          "file": "sciona/text_pair_fields.py",
+          "symbol": "FieldPairFeatures._features",
+          "line": 62,
+          "file_sha256": "56efbdcc77163085e3769838e4a61cb7ef2498312cf5dd90ebc44066ca214b70"
         }
       ]
     },
@@ -89,13 +107,19 @@
           "file": "sciona/text_pair_complete_recipe.py",
           "symbol": "CompletePairFeatures.fit",
           "line": 48,
-          "file_sha256": "516daf18a95144134094d75d0ef68a7e3057cbfbfd12b40d4dcfad6dda6a5250"
+          "file_sha256": "ba84e9ffff6847dccea4e625fcfc0cd0253dd2a6f2016ae7fb67ba54216dcd6c"
         },
         {
           "file": "sciona/text_pair_complete_recipe.py",
           "symbol": "Projection.transform",
           "line": 36,
-          "file_sha256": "516daf18a95144134094d75d0ef68a7e3057cbfbfd12b40d4dcfad6dda6a5250"
+          "file_sha256": "ba84e9ffff6847dccea4e625fcfc0cd0253dd2a6f2016ae7fb67ba54216dcd6c"
+        },
+        {
+          "file": "sciona/text_pair_fields.py",
+          "symbol": "FieldPairFeatures.fit",
+          "line": 47,
+          "file_sha256": "56efbdcc77163085e3769838e4a61cb7ef2498312cf5dd90ebc44066ca214b70"
         }
       ]
     },
@@ -108,19 +132,19 @@
         ]
       },
       "realization": "Select unlabeled pair graph degree, neighborhood overlap and pair frequency; exclude the current edge for training feature rows.",
-      "limits": "Only candidate-pair co-occurrence, not semantic equivalence. Population isolation is normalized unordered pair identity, not entity-disjoint splitting; caller must meet any stronger application split requirements.",
+      "limits": "Only candidate-pair co-occurrence, not semantic equivalence. Both title and description define each entity; normalized unordered full-record pairs define population isolation. This is not entity-disjoint splitting; caller must meet any stronger application split requirements.",
       "source_anchors": [
         {
-          "file": "sciona/text_pair_complete_recipe.py",
-          "symbol": "CompletePairFeatures.fit",
-          "line": 48,
-          "file_sha256": "516daf18a95144134094d75d0ef68a7e3057cbfbfd12b40d4dcfad6dda6a5250"
+          "file": "sciona/text_pair_fields.py",
+          "symbol": "FieldPairFeatures.fit",
+          "line": 47,
+          "file_sha256": "56efbdcc77163085e3769838e4a61cb7ef2498312cf5dd90ebc44066ca214b70"
         },
         {
-          "file": "sciona/text_pair_features.py",
-          "symbol": "PairFeatures._features",
-          "line": 64,
-          "file_sha256": "1113c41b3d8018e603f6afdae71bd4a971fc63c9c95529f56c5c3a8967c890ce"
+          "file": "sciona/text_pair_fields.py",
+          "symbol": "FieldPairFeatures._features",
+          "line": 62,
+          "file_sha256": "56efbdcc77163085e3769838e4a61cb7ef2498312cf5dd90ebc44066ca214b70"
         }
       ]
     },
@@ -136,16 +160,22 @@
       "limits": "Model family, equal weights and controls are explicit recipe policy. No benchmark accuracy claim.",
       "source_anchors": [
         {
+          "file": "sciona/text_pair_fields.py",
+          "symbol": "execute",
+          "line": 87,
+          "file_sha256": "56efbdcc77163085e3769838e4a61cb7ef2498312cf5dd90ebc44066ca214b70"
+        },
+        {
           "file": "sciona/text_pair_complete_recipe.py",
-          "symbol": "fit_normalized",
-          "line": 92,
-          "file_sha256": "516daf18a95144134094d75d0ef68a7e3057cbfbfd12b40d4dcfad6dda6a5250"
+          "symbol": "fit_feature_models",
+          "line": 103,
+          "file_sha256": "ba84e9ffff6847dccea4e625fcfc0cd0253dd2a6f2016ae7fb67ba54216dcd6c"
         },
         {
           "file": "sciona/text_pair_complete_recipe.py",
           "symbol": "CompleteFit.scores",
           "line": 83,
-          "file_sha256": "516daf18a95144134094d75d0ef68a7e3057cbfbfd12b40d4dcfad6dda6a5250"
+          "file_sha256": "ba84e9ffff6847dccea4e625fcfc0cd0253dd2a6f2016ae7fb67ba54216dcd6c"
         }
       ]
     },
@@ -162,37 +192,37 @@
       "source_anchors": [
         {
           "file": "sciona/text_pair_complete_recipe.py",
-          "symbol": "execute",
-          "line": 112,
-          "file_sha256": "516daf18a95144134094d75d0ef68a7e3057cbfbfd12b40d4dcfad6dda6a5250"
+          "symbol": "calibrate_and_predict",
+          "line": 140,
+          "file_sha256": "ba84e9ffff6847dccea4e625fcfc0cd0253dd2a6f2016ae7fb67ba54216dcd6c"
         },
         {
           "file": "sciona/text_pair_complete_contract.py",
           "symbol": "prepare",
-          "line": 18,
-          "file_sha256": "1e0c9be2036a14fd32e6a5b521ed4b814dd4298033ed8f1de5ad0ff18d20bbd1"
+          "line": 19,
+          "file_sha256": "41dc0a46d0bc6f87e7c418d900d0e77fe30af78ac0df5249e15f49665407538b"
         },
         {
           "file": "sciona/text_pair_complete_contract.py",
           "symbol": "execute",
-          "line": 60,
-          "file_sha256": "1e0c9be2036a14fd32e6a5b521ed4b814dd4298033ed8f1de5ad0ff18d20bbd1"
+          "line": 65,
+          "file_sha256": "41dc0a46d0bc6f87e7c418d900d0e77fe30af78ac0df5249e15f49665407538b"
         },
         {
           "file": "sciona/text_pair_complete_contract.py",
           "symbol": "execute_json",
-          "line": 88,
-          "file_sha256": "1e0c9be2036a14fd32e6a5b521ed4b814dd4298033ed8f1de5ad0ff18d20bbd1"
+          "line": 94,
+          "file_sha256": "41dc0a46d0bc6f87e7c418d900d0e77fe30af78ac0df5249e15f49665407538b"
         }
       ]
     }
   ],
   "additional_provider_catalog_candidates": [],
-  "reviewer_sha256": "88ed9defdb191fe49faaf6de870801d265bd122fe95e40485f6db2798ce47046",
+  "reviewer_sha256": "0ee3bd3ee2f0ff7a285ff160063a8619b538e663f91965352aeb5e54ab6c6fb2",
   "remaining_requirements": [
     "Qualify the existing isotonic provider branch and source dependencies; a local registered implementation is not proof of catalog approval.",
     "Complete reusable primitive inventory and exact callable bindings, including BM25 and normalization dependencies.",
-    "Qualify the strict finite serialization boundary in the native graph and resolve separate title/description field fidelity against the original source.",
+    "Qualify the strict finite serialization boundary in the native graph, binding the original specifically to the separate title_description realization.",
     "Execute the full serialized/stored original graph and verify exact catalog interfaces, rollback, native eligibility and served selection."
   ],
   "limits": [

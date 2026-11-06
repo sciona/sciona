@@ -94,13 +94,20 @@ def fit_normalized(training, labels, *, components, seed, iterations, oversample
     """Train only on normalized training rows; caller owns population separation."""
     normalized = _pairs(training)
     targets = _labels(labels, len(normalized))
+    with threadpool_limits(limits=1):
+        features = CompletePairFeatures().fit(normalized, components=components, seed=seed,
+                    iterations=iterations, oversamples=oversamples, k1=k1, b=b)
+    return fit_feature_models(features, targets, seed=seed, trees=trees, max_depth=max_depth, min_leaf=min_leaf)
+
+
+def fit_feature_models(features, targets, *, seed, trees, max_depth, min_leaf):
+    """Fit the declared ensemble on a fitted feature recipe's training rows."""
     if any(type(value) is not int or value < 1 for value in (trees, max_depth, min_leaf)):
         raise ValueError('Positive integer forest controls required')
     with threadpool_limits(limits=1), warnings.catch_warnings():
         warnings.simplefilter('error', ConvergenceWarning)
-        features = CompletePairFeatures().fit(normalized, components=components, seed=seed,
-                    iterations=iterations, oversamples=oversamples, k1=k1, b=b)
         x = features.transform_training()
+        targets = _labels(targets, len(x))
         linear = make_pipeline(StandardScaler(), LogisticRegression(max_iter=1000, random_state=seed))
         forest = RandomForestClassifier(n_estimators=trees, max_depth=max_depth,
                     min_samples_leaf=min_leaf, random_state=seed, n_jobs=1)
@@ -127,6 +134,12 @@ def execute(training, training_labels, calibration, calibration_labels, query, *
     train, cal, target = policy.normalize_populations(training, calibration, query)
     cy = _labels(calibration_labels, len(cal))
     fitted = fit_normalized(train, training_labels, **controls)
+    return calibrate_and_predict(fitted, cal, cy, target)
+
+
+def calibrate_and_predict(fitted, cal, labels, target):
+    """Shared held-out score-scaling/decision policy; caller enforces splits."""
+    cy = _labels(labels, len(cal))
     raw_cal_scores = fitted.scores(cal)
     mapping = isotonic_regression_fit(raw_cal_scores, cy.astype(np.float64),
                 increasing=True, y_min=0., y_max=1., out_of_bounds='clip')

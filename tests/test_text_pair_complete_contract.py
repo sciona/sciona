@@ -54,7 +54,7 @@ def test_invalid_requests_rejected_before_training(case, monkeypatch):
     if case == 'extra': p['extra'] = 1
     if case == 'version': p['version'] = True
     if case == 'task': p['task'] = 'ranking'
-    if case == 'role': p['field_role'] = 'title_description'
+    if case == 'role': p['field_role'] = 'unknown_role'
     if case == 'tuple': p['query_pairs'][0] = tuple(p['query_pairs'][0])
     if case == 'nan': p['controls']['b'] = float('nan')
     if case == 'seed': p['controls']['seed'] = 2**32
@@ -77,3 +77,20 @@ def test_invalid_requests_rejected_before_training(case, monkeypatch):
 def test_strict_json_decoder(text):
     with pytest.raises(ValueError):
         execute_json(text)
+
+
+def test_separate_fields_serialized_lifecycle():
+    from tests.test_text_pair_fields import records
+    from sciona.text_pair_fields import execute as run_fields
+    p = payload()
+    p['field_role'] = 'title_description'
+    for name in ('training_pairs', 'calibration_pairs', 'query_pairs'):
+        p[name] = records(p[name])
+    p['query_pairs'][0][0]['title'] = 'purple cloud'
+    result = json.loads(execute_json(json.dumps(p)))
+    reference = run_fields(p['training_pairs'], p['training_labels'], p['calibration_pairs'],
+        p['calibration_labels'], p['query_pairs'], policy=NormalizationPolicy(**p['normalization']), **p['controls'])
+    assert result['field_role'] == 'title_description'
+    assert [r['raw_score'] for r in result['rows']] == reference['scores']
+    assert [r['scaled_score'] for r in result['rows']] == reference['scaled_scores']
+    assert [r['relevant'] for r in result['rows']] == reference['matches']

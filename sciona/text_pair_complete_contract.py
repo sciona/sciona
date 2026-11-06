@@ -8,6 +8,7 @@ from sciona.text_pair_contract import _json
 from sciona.text_pair_complete_recipe import execute as run_recipe
 from sciona.text_pair_normalization_policy import NormalizationPolicy
 from sciona.text_pair_training import _labels
+from sciona.text_pair_fields import execute as run_field_recipe, normalize_populations as normalize_field_populations
 
 
 @dataclass(frozen=True)
@@ -19,8 +20,9 @@ def prepare(payload):
     """Validate a copied request before any model fitting.
 
     shared_text declares that both positions are comparable text representations,
-    used consistently for every lexical feature; separate title/description
-    records are not silently concatenated. Each output ordinal corresponds to
+    used consistently for every lexical feature. title_description instead
+    requires two records with distinct title and description fields; title edit
+    and description similarities remain separate. Each output ordinal corresponds to
     the same input query ordinal. External identifiers remain caller-owned.
     """
     _json(payload)
@@ -30,8 +32,8 @@ def prepare(payload):
         raise ValueError('Exact complete text-pair fields required')
     if type(payload['version']) is not int or payload['version'] != 2:
         raise ValueError('Complete text-pair version 2 required')
-    if payload['task'] != 'binary_relevance' or payload['field_role'] != 'shared_text':
-        raise ValueError('Explicit binary relevance and shared text roles required')
+    if payload['task'] != 'binary_relevance' or payload['field_role'] not in ('shared_text', 'title_description'):
+        raise ValueError('Explicit binary relevance and supported text roles required')
     normalization = payload['normalization']
     if type(normalization) is not dict or set(normalization) != {'vocabulary', 'domain_tokens', 'synonyms'}:
         raise ValueError('Exact normalization policy fields required')
@@ -48,7 +50,10 @@ def prepare(payload):
         raise ValueError('Seed out of range')
     bm25_score([], [], 0, 1, 1., controls['k1'], controls['b'])
     populations = [payload[name + '_pairs'] for name in ('training', 'calibration', 'query')]
-    policy.normalize_populations(*populations)
+    if payload['field_role'] == 'shared_text':
+        policy.normalize_populations(*populations)
+    else:
+        normalize_field_populations(*populations, policy)
     for name in ('training', 'calibration'):
         labels = payload[name + '_labels']
         if type(labels) is not list or any(type(v) is not int for v in labels):
@@ -67,7 +72,8 @@ def execute(prepared):
     if not isinstance(prepared, PreparedCompletePairs):
         raise ValueError('Prepared complete pairs required')
     p = prepare(prepared.payload).payload
-    result = run_recipe(p['training_pairs'], p['training_labels'], p['calibration_pairs'],
+    runner = run_recipe if p['field_role'] == 'shared_text' else run_field_recipe
+    result = runner(p['training_pairs'], p['training_labels'], p['calibration_pairs'],
         p['calibration_labels'], p['query_pairs'], policy=NormalizationPolicy(**p['normalization']), **p['controls'])
     rows = [dict(row_index=i, raw_score=raw, scaled_score=scaled, relevant=decision)
             for i, (raw, scaled, decision) in enumerate(zip(
