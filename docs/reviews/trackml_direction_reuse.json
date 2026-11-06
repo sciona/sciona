@@ -1,0 +1,53 @@
+{
+  "format": "trackml-direction-reuse.v1",
+  "read_only": true,
+  "catalog_mutations": 0,
+  "approved": false,
+  "tests": {
+    "tests": 37,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "synthetic_only": true,
+  "source_parity_cases": 36,
+  "software_sha256": {
+    "sciona-matcher/tests/test_helix_direction_reuse.py": "41e5c311716035a17a66b59193069af41cf3a96f0935f78946f775b7b6caa9fa",
+    "sciona-matcher/scripts/review_trackml_direction_reuse.py": "79b7b6c636c050e3d4c2dd776b55ad8a820d2a88ce7bc700a350b0fcdad95a7d",
+    "sciona-matcher/sciona/trackml_nearest.py": "28ffa9afe1cc1d65b68423c6423d6ff6ebdc4c4630f92787ef91752657f73773",
+    "sciona-atoms-physics/src/sciona/atoms/particle_tracking/helix_geometry/atoms.py": "26677db3581b8be023b489ddf956d71328aea5e66631afa4c00b3601914dfd42",
+    "sciona-atoms-physics/src/sciona/atoms/particle_tracking/helix_geometry/expressions.py": "6a929f5e464e2353e4d5b392e247d390e4b82eb5b03e1e95878c5d779133b544",
+    "sciona-atoms-physics/src/sciona/atoms/particle_tracking/helix_geometry/witnesses.py": "3071db17f2046e612dbe5e3c0f58ca8947064380e9941e6c5300a970b6fa0b12"
+  },
+  "catalog": {
+    "atom": [
+      {
+        "fqdn": "sciona.atoms.particle_tracking.helix_geometry.helix_direction_from_two_points",
+        "status": "approved",
+        "is_publishable": true,
+        "version_id": "938482e2-c3a9-56d0-901e-f34a3d30e7ae",
+        "content_hash": "80763811d458983f68483fb0fbaad952aac9da9090a71d158ca0d7915c03ee23",
+        "trust_tier": 3
+      }
+    ],
+    "artifact": []
+  },
+  "findings": [
+    "Reuse the existing concrete helix-direction implementation rather than duplicate it.",
+    "The provider returns signed axial difference; equal-height points use pitch times transverse rotation sense. Coincident points can return zero.",
+    "Synthetic cases cover both pitch signs, axial/planar/coincident points, point-order reversal, translation, positive unit scaling and input preservation.",
+    "The symbolic expression is explicitly only the main branch and is not a proof of the equal-height fallback.",
+    "Legacy approval does not supply a canonical artifact identity or exact versioned interface for graph selection."
+  ],
+  "next_actions": [
+    "Stage exact canonical source and interfaces, retaining legacy history.",
+    "Qualify aligned finite nonempty float64 inputs and reject source-undefined or nonfinite arithmetic at the recipe boundary.",
+    "Preserve explicit symbolic branch limits and validate source-parity injection through the complete tracking recipe.",
+    "Review separate tangent construction, unit tangent and cell arithmetic for reusable numerical boundaries."
+  ],
+  "limitations": [
+    "Synthetic numerical reuse review only; no publication approval or original-CDG completion.",
+    "Inputs in the same-height fallback need a meaningful transverse rotation sense; zero output is possible.",
+    "No general broadcasting, degenerate-geometry, floating-point error-bound or historical accuracy guarantee."
+  ]
+}
