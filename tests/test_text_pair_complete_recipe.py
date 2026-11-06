@@ -2,6 +2,7 @@
 import numpy as np
 import pytest
 from sklearn.metrics import f1_score
+from sklearn.isotonic import IsotonicRegression
 
 from sciona.text_pair_complete_recipe import execute, fit_normalized
 from sciona.text_pair_normalization_policy import NormalizationPolicy
@@ -25,12 +26,16 @@ def test_full_recipe_reproducible_with_independent_f1_selection():
     assert result == execute(training, y, cal, cy, query, policy=policy(), **CONTROLS)
     train_n, cal_n, query_n = policy().normalize_populations(training, cal, query)
     fitted = fit_normalized(train_n, y, **CONTROLS)
-    scores = fitted.scores(cal_n)
+    raw_scores = fitted.scores(cal_n)
+    reference = IsotonicRegression(increasing=True, y_min=0., y_max=1., out_of_bounds='clip').fit(raw_scores, cy)
+    scores = reference.predict(raw_scores)
     expected_f1, expected_threshold = max((f1_score(cy, scores >= t), t) for t in np.unique(scores))
     assert result['threshold'] == expected_threshold
     assert result['calibration_f1'] == expected_f1
     assert result['scores'] == fitted.scores(query_n).tolist()
-    assert result['matches'] == [int(s >= expected_threshold) for s in result['scores']]
+    np.testing.assert_allclose(result['scaled_scores'], reference.predict(fitted.scores(query_n)), rtol=1e-14, atol=1e-14)
+    assert result['matches'] == [int(s >= expected_threshold) for s in result['scaled_scores']]
+    assert result['score_scaling'] == 'increasing_isotonic_clip'
     assert result['feature_count'] == 13 and result['query_rows'] == 2
     assert len(fitted.forest.estimators_) == CONTROLS['trees']
 
@@ -82,3 +87,20 @@ def test_invalid_controls(control, value):
     controls = dict(CONTROLS, **{control: value})
     with pytest.raises(ValueError):
         execute(training, y, cal, cy, query, policy=policy(), **controls)
+
+
+@pytest.mark.parametrize('scores,labels', [
+    ([.1, .2, .2, .8], [0, 1, 0, 1]),
+    ([.4, .4, .4, .4], [0, 0, 1, 1]),
+    ([.1, .3, .5, .9], [1, 1, 0, 0]),
+])
+def test_reused_isotonic_branch_matches_independent_sklearn(scores, labels):
+    from sciona.atoms.ml.sklearn.isotonic.atoms import isotonic_regression_fit, isotonic_regression_transform
+    x, y = np.array(scores, dtype=np.float64), np.array(labels, dtype=np.float64)
+    state = isotonic_regression_fit(x, y, increasing=True, y_min=0., y_max=1., out_of_bounds='clip')
+    reference = IsotonicRegression(increasing=True, y_min=0., y_max=1., out_of_bounds='clip').fit(x, y)
+    query = np.array([0., .1, .25, .4, .75, 1.], dtype=np.float64)
+    before = (state.x_thresholds.copy(), state.y_thresholds.copy())
+    np.testing.assert_allclose(isotonic_regression_transform(query, state), reference.predict(query), rtol=1e-14, atol=1e-14)
+    np.testing.assert_array_equal(state.x_thresholds, before[0])
+    np.testing.assert_array_equal(state.y_thresholds, before[1])

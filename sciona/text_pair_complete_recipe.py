@@ -16,6 +16,9 @@ from sciona.atoms.ml.calibration.empirical_f1 import (
     apply_column_thresholds, fit_empirical_f1_thresholds,
 )
 from sciona.atoms.ml.model_selection.materialized_prediction import average
+from sciona.atoms.ml.sklearn.isotonic.atoms import (
+    isotonic_regression_fit, isotonic_regression_transform,
+)
 from sciona.atoms.ml.sklearn.decomposition.sparse_projection import (
     fit_sparse_projection, transform_sparse_projection,
 )
@@ -107,10 +110,13 @@ def fit_normalized(training, labels, *, components, seed, iterations, oversample
 
 
 def execute(training, training_labels, calibration, calibration_labels, query, *, policy, **controls):
-    """Normalize, enforce disjoint populations, fit and select a binary-F1 cutoff.
+    """Normalize, fit, scale held-out relevance scores and select an F1 cutoff.
 
-    Returned scores are raw ensemble scores, not calibrated probabilities.
-    Decision calibration maximizes held-out empirical binary F1 (highest cutoff
+    Returned scores retain raw ensemble values. Scaled scores use an increasing
+    isotonic mapping fitted only on calibration labels, bounded to [0,1] with
+    endpoint clipping. This is a calibration procedure, not an empirical
+    probability-calibration or accuracy guarantee. Decision calibration on the
+    scaled scores maximizes held-out empirical binary F1 (highest cutoff
     on a tie); calibration_f1 is an in-sample selection metric, not unbiased test
     accuracy. Output row order matches query input, including repeated rows.
     This explicit binary task realization requires source-scope review before
@@ -121,13 +127,17 @@ def execute(training, training_labels, calibration, calibration_labels, query, *
     train, cal, target = policy.normalize_populations(training, calibration, query)
     cy = _labels(calibration_labels, len(cal))
     fitted = fit_normalized(train, training_labels, **controls)
-    cal_scores = fitted.scores(cal).reshape(-1, 1)
+    raw_cal_scores = fitted.scores(cal)
+    mapping = isotonic_regression_fit(raw_cal_scores, cy.astype(np.float64),
+                increasing=True, y_min=0., y_max=1., out_of_bounds='clip')
+    cal_scores = isotonic_regression_transform(raw_cal_scores, mapping).reshape(-1, 1)
     thresholds = fit_empirical_f1_thresholds(cal_scores, cy.reshape(-1, 1))
     selected = apply_column_thresholds(cal_scores, thresholds)[:, 0]
     tp = int(np.count_nonzero((selected == 1) & (cy == 1)))
     empirical_f1 = 2 * tp / (int(selected.sum()) + int(cy.sum()))
-    query_scores = fitted.scores(target).reshape(-1, 1)
-    matches = apply_column_thresholds(query_scores, thresholds)
-    return dict(scores=query_scores[:, 0].tolist(), matches=matches[:, 0].tolist(),
+    query_scores = fitted.scores(target)
+    scaled = isotonic_regression_transform(query_scores, mapping).reshape(-1, 1)
+    matches = apply_column_thresholds(scaled, thresholds)
+    return dict(scores=query_scores.tolist(), scaled_scores=scaled[:, 0].tolist(), matches=matches[:, 0].tolist(),
                 threshold=float(thresholds[0]), calibration_f1=empirical_f1,
-                metric='binary_f1', feature_count=13, query_rows=len(target))
+                metric='binary_f1', score_scaling='increasing_isotonic_clip', feature_count=13, query_rows=len(target))

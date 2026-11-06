@@ -1,0 +1,184 @@
+{
+  "format": "text-pair-original-scope.v1",
+  "read_only": true,
+  "catalog_mutations": 0,
+  "approved": false,
+  "original": {
+    "artifact_id": "e81e178e-524d-5e8b-8986-c183cea57949",
+    "fqdn": "cdg.competition.solution.kaggle.text_pair_similarity_feature_ensemble_topology",
+    "status": "draft",
+    "is_publishable": false,
+    "content_hash": "896ea8e61c63f03fcb22b6bc418126ac23acf0fb3ad55e5a11c3815ae00e1bd7"
+  },
+  "source_version_id": "1169253d-76d3-5b76-885f-07b58bed795c",
+  "source_stage_review": [
+    {
+      "source_stage": {
+        "stage_id": "pair_normalization",
+        "description": "Clean text pairs with lowercasing, spelling correction, synonym or query expansion, punctuation handling, and domain-specific token normalization.",
+        "guarantees": [
+          "Pair order and normalized tokens are explicit."
+        ]
+      },
+      "realization": "Apply NFKC/casefold, existing spelling correction, word punctuation handling, explicit domain substitutions and one-pass synonym expansion; reject split collisions after normalization.",
+      "limits": "Caller supplies a frozen vocabulary and mappings. Empty mappings express identity policy. No semantic correctness or external vocabulary fitting claim.",
+      "source_anchors": [
+        {
+          "file": "sciona/text_pair_normalization_policy.py",
+          "symbol": "NormalizationPolicy.normalize_pairs",
+          "line": 49,
+          "file_sha256": "d6fe1b5216ab3ba9667743a7a0459895966345384c28475acd7d7c46af1b0de1"
+        },
+        {
+          "file": "sciona/text_pair_normalization_policy.py",
+          "symbol": "NormalizationPolicy.normalize_populations",
+          "line": 73,
+          "file_sha256": "d6fe1b5216ab3ba9667743a7a0459895966345384c28475acd7d7c46af1b0de1"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "lexical_similarity_features",
+        "description": "Compute n-gram overlap, Jaccard on descriptions, cosine TF-IDF matching, Levenshtein/edit distance on titles, BM25, exact match, and length-ratio features for each pair.",
+        "guarantees": [
+          "Features are aligned one row per text pair."
+        ]
+      },
+      "realization": "Retain character n-gram overlap, token Jaccard, TF-IDF cosine, normalized edit similarity, exact match and length ratio; append symmetric BM25 with training-only corpus statistics.",
+      "limits": "Two generic normalized text fields, without distinct title/description subfields. BM25 query terms have unit weight, corpus documents are unique training texts, and positive IDF is explicit. Field-role contract must be declared at the external boundary.",
+      "source_anchors": [
+        {
+          "file": "sciona/text_pair_features.py",
+          "symbol": "PairFeatures._features",
+          "line": 64,
+          "file_sha256": "1113c41b3d8018e603f6afdae71bd4a971fc63c9c95529f56c5c3a8967c890ce"
+        },
+        {
+          "file": "sciona/text_pair_bm25.py",
+          "symbol": "PairBM25",
+          "line": 27,
+          "file_sha256": "2db798b4b413fdd59f0356b0725281287b1c7618993dc7eb3d2778edc148a1b0"
+        },
+        {
+          "file": "sciona/bm25_scoring.py",
+          "symbol": "bm25_score",
+          "line": 5,
+          "file_sha256": "569cf274267453ea699a363d3b25d101a1c75a7d2708b485ba92eea88558be40"
+        },
+        {
+          "file": "sciona/text_pair_complete_recipe.py",
+          "symbol": "CompletePairFeatures._features",
+          "line": 68,
+          "file_sha256": "516daf18a95144134094d75d0ef68a7e3057cbfbfd12b40d4dcfad6dda6a5250"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "embedding_similarity_features",
+        "description": "Compute similarity from GloVe, Word2Vec, LSA/SVD, LDA topic vectors, averaged token vectors, or sentence embeddings.",
+        "guarantees": [
+          "Semantic feature rows match the pair table."
+        ]
+      },
+      "realization": "Select the listed LSA/SVD branch with reusable sparse randomized projection fit and transform; append latent cosine and Euclidean distance.",
+      "limits": "Training-only TF-IDF and uncentered randomized projection. No pretrained embedding or topic-model branch claimed.",
+      "source_anchors": [
+        {
+          "file": "sciona/text_pair_complete_recipe.py",
+          "symbol": "CompletePairFeatures.fit",
+          "line": 48,
+          "file_sha256": "516daf18a95144134094d75d0ef68a7e3057cbfbfd12b40d4dcfad6dda6a5250"
+        },
+        {
+          "file": "sciona/text_pair_complete_recipe.py",
+          "symbol": "Projection.transform",
+          "line": 36,
+          "file_sha256": "516daf18a95144134094d75d0ef68a7e3057cbfbfd12b40d4dcfad6dda6a5250"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "pair_context_features",
+        "description": "Add pair graph degree, duplicate-neighborhood, transitive-closure, candidate frequency, category, or magic features computed with leakage-safe splits.",
+        "guarantees": [
+          "Context features respect validation boundaries."
+        ]
+      },
+      "realization": "Select unlabeled pair graph degree, neighborhood overlap and pair frequency; exclude the current edge for training feature rows.",
+      "limits": "Only candidate-pair co-occurrence, not semantic equivalence. Population isolation is normalized unordered pair identity, not entity-disjoint splitting; caller must meet any stronger application split requirements.",
+      "source_anchors": [
+        {
+          "file": "sciona/text_pair_complete_recipe.py",
+          "symbol": "CompletePairFeatures.fit",
+          "line": 48,
+          "file_sha256": "516daf18a95144134094d75d0ef68a7e3057cbfbfd12b40d4dcfad6dda6a5250"
+        },
+        {
+          "file": "sciona/text_pair_features.py",
+          "symbol": "PairFeatures._features",
+          "line": 64,
+          "file_sha256": "1113c41b3d8018e603f6afdae71bd4a971fc63c9c95529f56c5c3a8967c890ce"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "feature_ensemble",
+        "description": "Train XGBoost, LightGBM, SVR, logistic regression, random forest, ranking heads, or blended models on the combined lexical, embedding, and context features.",
+        "guarantees": [
+          "Each input pair receives a raw score."
+        ]
+      },
+      "realization": "Fit scaled logistic regression and a random forest over all thirteen features; combine ordered probability vectors with the reusable equal mean.",
+      "limits": "Model family, equal weights and controls are explicit recipe policy. No benchmark accuracy claim.",
+      "source_anchors": [
+        {
+          "file": "sciona/text_pair_complete_recipe.py",
+          "symbol": "fit_normalized",
+          "line": 92,
+          "file_sha256": "516daf18a95144134094d75d0ef68a7e3057cbfbfd12b40d4dcfad6dda6a5250"
+        },
+        {
+          "file": "sciona/text_pair_complete_recipe.py",
+          "symbol": "CompleteFit.scores",
+          "line": 83,
+          "file_sha256": "516daf18a95144134094d75d0ef68a7e3057cbfbfd12b40d4dcfad6dda6a5250"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "metric_thresholding",
+        "description": "Calibrate Jaccard, cosine, or Levenshtein thresholds; Kendall Tau or ranking objectives; target normalization to a 0-1 range; relevance-score scaling; or transitive closure against the competition metric.",
+        "guarantees": [
+          "Outputs are calibrated and formatted for submission."
+        ]
+      },
+      "realization": "Select the listed relevance-score scaling branch: fit increasing isotonic regression on held-out raw scores and binary labels, bound to [0,1], clip outside calibration score range, then select an empirical binary-F1 threshold.",
+      "limits": "Mapping and threshold share the calibration population; selection F1 is optimistic and not independent evaluation. Raw and scaled scores are distinguished. Strict serialized output and generic submission row format remain to be qualified; no competition-specific format is claimed.",
+      "source_anchors": [
+        {
+          "file": "sciona/text_pair_complete_recipe.py",
+          "symbol": "execute",
+          "line": 112,
+          "file_sha256": "516daf18a95144134094d75d0ef68a7e3057cbfbfd12b40d4dcfad6dda6a5250"
+        }
+      ]
+    }
+  ],
+  "additional_provider_catalog_candidates": [],
+  "reviewer_sha256": "761a61d27936351916c3ee64b5a008e9047bb78d4a1c8113e84f1600ce283b69",
+  "remaining_requirements": [
+    "Qualify the existing isotonic provider branch and source dependencies; a local registered implementation is not proof of catalog approval.",
+    "Complete reusable primitive inventory and exact callable bindings, including BM25 and normalization dependencies.",
+    "Provide strict finite serialization with explicit field roles, normalization policy, numerical controls and binary-relevance output rows.",
+    "Execute the full serialized/stored original graph and verify exact catalog interfaces, rollback, native eligibility and served selection."
+  ],
+  "limits": [
+    "Scope mapping only; no full graph, submission format, provider approval or original-CDG approval claim.",
+    "The binary relevance task is a declared realization of the generic topology, not every listed competition metric."
+  ]
+}
