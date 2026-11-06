@@ -11,7 +11,8 @@ import torch
 from sklearn.feature_extraction import DictVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.exceptions import ConvergenceWarning
-from sciona.video_multilabel_network import VideoHead, pad_sequences
+from sciona.video_multilabel_network import pad_sequences
+from sciona.video_multilabel_reusable_network import ReusableVideoHead
 from sciona.video_multilabel_thresholds import label_matrix, score_matrix
 from sciona.atoms.ml.calibration.empirical_f1 import fit_empirical_f1_thresholds, apply_column_thresholds
 from sciona.video_multilabel_shards import FeatureShards, validate_populations
@@ -67,7 +68,7 @@ def fit(training, *, seed=12, hidden=8, epochs=80, batch_size=4, learning_rate=.
             baseline.append(model)
     with torch.random.fork_rng(devices=[]):
         torch.manual_seed(seed)
-        model = VideoHead(training.width, hidden, y.shape[1]).double()
+        model = ReusableVideoHead(training.width, hidden, y.shape[1]).double()
     optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
     target = torch.tensor(y, dtype=torch.float64)
     rng = np.random.default_rng(seed)
