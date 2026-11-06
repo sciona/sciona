@@ -1,0 +1,79 @@
+{
+  "passed": true,
+  "catalog_mutations": 0,
+  "rejected_faults": [
+    "candidate_hash",
+    "candidate_tier",
+    "candidate_lineage",
+    "original_latest",
+    "original_history",
+    "parent_history",
+    "parent_latest",
+    "parent_publication",
+    "binding_hash",
+    "binding_missing",
+    "dependency_optional",
+    "root_input_type",
+    "score_output_missing",
+    "failed_staging_audit",
+    "serialized_node",
+    "serialized_edge",
+    "provider_tier"
+  ],
+  "dry_run": {
+    "applied": false,
+    "already_approved": false,
+    "rows_created": 10,
+    "rows_updated": 3,
+    "trust_tier": 3,
+    "original_artifact_id": "fe4236e8-593e-5d74-98a5-81c83b3ea359",
+    "version_id": "3890838e-7202-559b-9962-bf5fe3640026",
+    "graph_sha256": "6bef5348c63363f559c0df16a2498ff565209821ce19699744d343fda60bb1bb",
+    "served_cdgs": 1,
+    "reused_providers": 10,
+    "source_histories_preserved": true,
+    "plan_sha256": "866d2c2d9a9a3d80dae133979ee3b44c5596354cc1ee430de67984d2f91a8928"
+  },
+  "execution_evidence_tests": {
+    "passed": true,
+    "count": 10,
+    "sha256": "875f2050939537fd59549049fbcdca8d9a0f5f6f6f19ef9dbe12460c78285265"
+  },
+  "all_rollbacks_complete": true,
+  "injected_failure_points": [
+    "metadata",
+    "activation"
+  ],
+  "publisher_sha256": "cfbe5de39e86fa54d1a643825f57730c1de677470e3c3f2755f0939e3faa7f69",
+  "validator_sha256": "016e657fbd9f01c5419d014245e91d2da13d73e6ac79deeb5a89bef64b9fc884",
+  "execution_sha256": "308437011254a077ba1c0534d396c3136171e8bbe4034e8bbd24c41c279840be",
+  "qualification": {
+    "review_source": "automated",
+    "proposed_tier": 3,
+    "verdict": "acceptable_with_limits",
+    "evidence_commit": "2a8aeb5f609e6dd3bbb5436ba7f898622db77f13",
+    "execution_sha256": "308437011254a077ba1c0534d396c3136171e8bbe4034e8bbd24c41c279840be",
+    "source_review_sha256": "c2bace4521003104d403edcced44ee9bb2aa9dfe944715bff493a4d2460d6203",
+    "limitations": [
+      "Caller constructs immutable FeatureShards stores outside the graph from private runtime configuration. Record reads are bounded, but index metadata, labels, vocabulary, sparse training CSR, fitted state and scores remain resident. No constant total memory or distributed execution claim.",
+      "Precomputed frame vectors only. No raw feature extraction or temporal position encoding; this selected pooling is invariant to frame order. Other listed alternative families are not claimed.",
+      "Architecture dimensions, optimizer settings and independent output labels are recipe choices. No hierarchy or label-embedding branch is claimed.",
+      "Rare-label coverage improvement is an intended modeling benefit, not established by synthetic parity. Both training classes are required; unknown query features are ignored. No accuracy guarantee.",
+      "Calibration requires both classes per label. No rank averaging, prior correction, top-k format, calibrated-probability or unbiased-performance claim.",
+      "Only the explicitly selected source alternatives are implemented.",
+      "Automated synthetic Tier 3 evidence only; no historical accuracy, generalization or human Tier 1 claim."
+    ],
+    "resolved_source_corrections": {
+      "feature_stream_loading": "Read indexed local shards on demand; preserve all configured batches and epochs and fit sparse vocabulary only from training rows. Caller constructs immutable FeatureShards stores outside the graph from private runtime configuration. Record reads are bounded, but index metadata, labels, vocabulary, sparse training CSR, fitted state and scores remain resident. No constant total memory or distributed execution claim.",
+      "temporal_pooling": "Select the allowed learned attention branch, with masked softmax pooling exposed as a reusable differentiable atom. Precomputed frame vectors only. No raw feature extraction or temporal position encoding; this selected pooling is invariant to frame order. Other listed alternative families are not claimed.",
+      "context_gated_multilabel_head": "Learn attention, context affine gates and per-label logits with CPU float64 Adam/BCE for every configured epoch. Generic sigmoid gating remains independently selectable. Architecture dimensions, optimizer settings and independent output labels are recipe choices. No hierarchy or label-embedding branch is claimed.",
+      "sparse_baseline_fusion": "Fit one sparse L2 logistic model per label with training-only vocabulary; fuse neural and sparse probabilities by equal columnwise mean using the existing approved provider. Rare-label coverage improvement is an intended modeling benefit, not established by synthetic parity. Both training classes are required; unknown query features are ignored. No accuracy guarantee.",
+      "rank_ensemble_calibration": "Select the allowed label-specific threshold branch: maximize empirical F1 on disjoint held-out calibration groups, retain highest threshold on ties, and apply inclusive thresholds to every query row. Calibration requires both classes per label. No rank averaging, prior correction, top-k format, calibrated-probability or unbiased-performance claim."
+    },
+    "output_scope_decision": "Execute all configured training epochs and complete supplied populations using indexed sharded reads, learned attention, context gating, sparse logistic fusion and held-out empirical F1 thresholds. Nine reusable numerical providers remain explicit; architecture, optimizer and population policy belong to the recipe. Synthetic qualification only; no historical accuracy or human Tier 1 claim.",
+    "plan_sha256": "866d2c2d9a9a3d80dae133979ee3b44c5596354cc1ee430de67984d2f91a8928",
+    "parameter_contract": "Four explicit inputs: training and calibration labelled FeatureShards stores, an unlabelled query store, and complete training controls. Aligned widths, disjoint groups and both classes per training/calibration label are required. Private paths and records are runtime-only. All configured epochs and every supplied query row are processed; exact numeric contracts are carried by nine reusable dependencies.",
+    "output_contract": "In-memory result with aligned query scores and binary labels, per-label thresholds, population counts and initial/final training loss. No persistence, historical accuracy, rare-label benefit or generalization guarantee.",
+    "evidence_checker_sha256": "7e217b5bd0d631461816c9b54dacbe238226a08970aeca1c57129543f437c2df"
+  }
+}
