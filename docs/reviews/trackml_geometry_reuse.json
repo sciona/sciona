@@ -1,0 +1,76 @@
+{
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "exact_regular_cases": {
+    "circle_from_three_points": 12,
+    "helix_pitch_from_two_points": 36,
+    "helix_pitch_least_squares": 36
+  },
+  "singular_differences": [
+    {
+      "provider": "circle_from_three_points",
+      "case": "coincident origin",
+      "source": "rejects undefined nonfinite result",
+      "existing_provider": "returns finite substituted geometry"
+    },
+    {
+      "provider": "helix_pitch_least_squares",
+      "case": "zero phase variance",
+      "source": "rejects undefined nonfinite result",
+      "existing_provider": "returns finite substituted geometry"
+    }
+  ],
+  "empty_input_restrictions": [
+    "circle_from_three_points",
+    "helix_pitch_from_two_points",
+    "helix_pitch_least_squares"
+  ],
+  "catalog_candidates": [
+    {
+      "fqdn": "sciona.atoms.particle_tracking.helix_geometry.circle_from_three_points",
+      "status": "approved",
+      "is_publishable": true,
+      "import_module": "sciona.atoms.particle_tracking.helix_geometry.atoms",
+      "source_symbol": "circle_from_three_points",
+      "version_id": "f3dfc1b6-d7e9-57b4-a3a5-a68371ac5ffd",
+      "content_hash": "925d05524eae4b9373cf0dcfc592eb3d2b4564e37d60bf32db9ea7a728d4de11",
+      "trust_tier": 3,
+      "served": true
+    },
+    {
+      "fqdn": "sciona.atoms.particle_tracking.helix_geometry.helix_pitch_from_two_points",
+      "status": "approved",
+      "is_publishable": true,
+      "import_module": "sciona.atoms.particle_tracking.helix_geometry.atoms",
+      "source_symbol": "helix_pitch_from_two_points",
+      "version_id": "54503b4f-7dec-5ea8-9a1a-5413b804a29a",
+      "content_hash": "b3a4503922fe0e551bb543bbdeaeb406138636f6b0216b2b65a5e887c129b133",
+      "trust_tier": 3,
+      "served": true
+    },
+    {
+      "fqdn": "sciona.atoms.particle_tracking.helix_geometry.helix_pitch_least_squares",
+      "status": "approved",
+      "is_publishable": true,
+      "import_module": "sciona.atoms.particle_tracking.helix_geometry.atoms",
+      "source_symbol": "helix_pitch_least_squares",
+      "version_id": "3124f904-f573-5d02-af50-7d2f02cd6a44",
+      "content_hash": "b45e5461dec47cf40f5015fca8f08213c77af44dc3f9fca0906907e7e60ca0f4",
+      "trust_tier": 3,
+      "served": true
+    }
+  ],
+  "provider_sha256": "26677db3581b8be023b489ddf956d71328aea5e66631afa4c00b3601914dfd42",
+  "implementation_sha256": {
+    "scripts/review_trackml_geometry_reuse.py": "684677e976b58d593f377ad97e25f86af836c5913c89d9d17be7a7ea16f62d28",
+    "sciona/trackml_geometry.py": "e8d16ed6c49222717a7ed55c50b220f17c0e29a0651d165c3b0e726aba7482cb",
+    "sciona/trackml_helix.py": "eb8f4c0895d7ae63618e4f143cc5f04badc4ee98e47622dee0e60fa7db984b05"
+  },
+  "decision": "Reuse is conditional: preserve empty internal batches and reject source-undefined singular cases before invoking existing finite-domain providers. Full lifecycle parity and exact catalog qualification remain required.",
+  "limits": [
+    "Nondegenerate synthetic geometry only establishes the compared subset, not arbitrary input equivalence.",
+    "No provider or CDG approval and no runtime observations persisted."
+  ]
+}
