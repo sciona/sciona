@@ -1,0 +1,258 @@
+{
+  "format": "decomposed-m5u-implementation-review.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "source_qualification_complete": false,
+  "graph_nodes": 6,
+  "graph_edges": 8,
+  "graph_digest": "4f820ddfac1367a52bdba178d831420847433a685739b49968a010d2f4c52b98",
+  "providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.m5u_execution.m5u_prepare",
+      "catalog_fqdn": "sciona.atoms.ml.m5u_execution.m5u_prepare",
+      "version_id": "c0aac503-dd3e-5238-ac93-7c23be7333bf",
+      "content_hash": "ba453c392a57eaba56173a3443e7bf29087ffdc61782fb530a8fdc164b64fe56",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "payload",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "16650cbb0659ee72b6e41265f18d525ff1e3a1ffaf0f4c9c65ecf2bdf349814b",
+      "classification": "source_recipe_adapter"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_m5u_execution.fit_forecast",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_m5u_execution.fit_forecast",
+      "version_id": "b1d04e11-e645-5d67-ae9e-33a2fb381771",
+      "content_hash": "5644a7106c1310129e69bb64538ba91677be4525926e5df74e8ec833c9c24802",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "forecasted",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "a1a376be09cd3f7b5b4f8f038dc62bac85b6a39beb0a479c870386c3aa0b19cc",
+      "classification": "source_recipe_adapter"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_m5u_execution.restoration_inputs",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_m5u_execution.restoration_inputs",
+      "version_id": "909e3075-abf4-5bbc-98d9-7ccc02d9601a",
+      "content_hash": "cbd4aa4fbd4fcb00c9368483b6b2b7aa8c258df00ef6c28cc03a1e2e2eed9b7e",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "forecasted",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "state",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "values",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "coefficients",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "a1a376be09cd3f7b5b4f8f038dc62bac85b6a39beb0a479c870386c3aa0b19cc",
+      "classification": "source_recipe_adapter"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.numerical.statistics.ordered_sum.ordered_weighted_sum",
+      "catalog_fqdn": "sciona.atoms.numerical.statistics.ordered_sum.ordered_weighted_sum",
+      "version_id": "5fb9c91f-ff5f-590c-b376-88e2a7360440",
+      "content_hash": "814d0ff20f33820537741e1f116c32dfa69262d56dc16d872f3a055f77bd6968",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "coefficients",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "total",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "893e4fb0c884d1732d9bba0ae2e203b72170bba11fbc89443306e6fd1b6ea359",
+      "classification": "generic_operation"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_m5u_execution.restore",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_m5u_execution.restore",
+      "version_id": "4ce7b6fd-18b0-5599-8171-966b7e956d49",
+      "content_hash": "5b33fc4466869a93748c87ec8528ae2c67e984389f34eb4d4f50071531033322",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "state",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "total",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "restored",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "a1a376be09cd3f7b5b4f8f038dc62bac85b6a39beb0a479c870386c3aa0b19cc",
+      "classification": "source_recipe_adapter"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_m5u_execution.result",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_m5u_execution.result",
+      "version_id": "ea676f4a-18f7-5dc7-89bd-4e6fea62379c",
+      "content_hash": "61d632a8a253de6f1cda73113ccc2e9a68ed4aaf1496276d611f35fb81c7c309",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "forecasted",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "restored",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "a1a376be09cd3f7b5b4f8f038dc62bac85b6a39beb0a479c870386c3aa0b19cc",
+      "classification": "source_recipe_adapter"
+    }
+  ],
+  "execution_evidence_commit": "d17a299b442eff2bffb5c94ea72efbab44b0da9f",
+  "root_inputs": [
+    "payload"
+  ],
+  "root_outputs": [
+    "result"
+  ],
+  "runtime": {
+    "joblib": "1.5.3",
+    "lightgbm": "4.7.0",
+    "narwhals": "2.26.0",
+    "numpy": "2.2.6",
+    "pandas": "2.3.3",
+    "python-dateutil": "2.9.0.post0",
+    "pytz": "2026.1.post1",
+    "scikit-learn": "1.8.0",
+    "scipy": "1.17.1",
+    "six": "1.17.0",
+    "threadpoolctl": "3.6.0",
+    "tzdata": "2025.3"
+  },
+  "evidence_sha256": {
+    "docs/reviews/decomposed_m5u_graph_execution.json": "da1955837eda6a4caac07343452a276f8d4985d37f8cb6b2a39be718354d3305",
+    "docs/reviews/decomposed_m5u_extraction_tests.json": "b29589978649d683f902471320eb2971d3c758efe81cf1e03694463d6689e708",
+    "docs/reviews/decomposed_m5u_package_files.json": "1fee2650901de0b9126e3092c8df3eb22cc731d6f190e4320e4b8cd15f258348"
+  },
+  "reviewer_sha256": "40a94206d6607f887fa0b5c9eba029be99835283679e464bb20e7c1a3938523c",
+  "limitations": [
+    "This review establishes current implementation parity and interfaces, not publication eligibility.",
+    "Exact source correction and provider semantic contracts still require review before promotion.",
+    "Generic ordered combination supports negative and non-unit-sum coefficients; recipe controls remain separate.",
+    "Intermediate shape checks do not authenticate provenance; inputs must come from one graph invocation."
+  ]
+}
