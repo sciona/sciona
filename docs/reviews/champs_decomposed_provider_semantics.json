@@ -1,0 +1,647 @@
+{
+  "format": "champs-decomposed-provider-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "review_source": "automated",
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_champs_execution.ensemble_inputs",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_champs_execution.ensemble_inputs",
+      "version_id": "40a1b1f5-aca6-516c-98d7-3abaf5901d71",
+      "content_hash": "79195382cddbff46fddb8e9dd968dac8983c6d80b439454503fa320558a749ca",
+      "provider_sha256": "9b8611be6c13174cd281afd25ef9dcc5e764692b822ac722939f74746457b62b",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "training_result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "keys",
+          "ordinal": 0,
+          "type_desc": "tuple",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "values",
+          "ordinal": 1,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "retained",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "signature": "(training_result: dict) -> tuple[tuple, numpy.ndarray, int]",
+      "bound_nodes": [
+        "ensemble_inputs"
+      ],
+      "classification": "source_recipe_adapter",
+      "atom_id": "2543f064-47bb-5c44-bee9-0a565737dcc4",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_champs_execution.ensemble_inputs",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_champs_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_champs_execution",
+        "import_module": "sciona.atoms.ml.decomposed_champs_execution",
+        "source_symbol": "ensemble_inputs",
+        "description": "Align identities and select the source nine models for each coupling. All thirteen models are required and validated, including values discarded by selection. Return opaque record keys, selected values and retained count. Molecular categories, model masks and central-five policy stay here.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.79195382cddb",
+      "fingerprint": "52aa77ca8dceebf425c7fa4739516f3149339a35778cb3fb0f982795026bc561",
+      "operation": "Align all model predictions and select the source nine models per coupling category.",
+      "plain_limits": "Use all thirteen finite prediction maps with exactly matching record keys. The adapter supplies the selected values and the fixed retained count.",
+      "validity_bounds": "Exact training-result field set is required. Prediction model keys equal MODEL_ORDER and each map covers exactly coupling_types keys. Keys are nonempty strings, categories are supported source categories, numeric values exclude bool and must fit finite float64. All model values are checked, including discarded ones. Apply the fixed source mask to produce nine selected values per record, in input record order. Empty inputs are accepted only with all thirteen empty maps. No averaging or sorting is hidden here; retained count five is explicit graph data.",
+      "parameters": {
+        "training_result": "Complete same-invocation output of train_models; model_predictions and coupling_types remain coherent."
+      },
+      "outputs": "Tuple of opaque record-key tuple, fresh column-contiguous float64 matrix with nine rows, and Python integer five.",
+      "dependencies": [
+        "sciona.decomposed_champs_ensemble.ensemble_inputs",
+        "sciona.champs_ensemble.MODEL_ORDER",
+        "sciona.champs_ensemble.MODEL_MASK",
+        "sciona.champs_ensemble.COUPLING_TYPES",
+        "numpy",
+        "sciona.ghost.registry (registration only)"
+      ],
+      "reuse": "Source recipe adapter. Chemistry, identities, model selection, training schedules and retained count remain recipe policy. Inputs must belong to the same graph invocation; adapters do not authenticate provenance.",
+      "internal_registered_provider_dependencies": [],
+      "callable_dependency_contracts": {}
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_champs_execution.result",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_champs_execution.result",
+      "version_id": "cf4f19a7-2f22-539d-b9a6-5be07f21812c",
+      "content_hash": "3a977b36c3e6237ffcaa17f93364aecb2530081e2498de658d6a782d2221d566",
+      "provider_sha256": "9b8611be6c13174cd281afd25ef9dcc5e764692b822ac722939f74746457b62b",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "training_result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "keys",
+          "ordinal": 1,
+          "type_desc": "tuple",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 2,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "signature": "(training_result: dict, keys: tuple, values: numpy.ndarray) -> dict",
+      "bound_nodes": [
+        "result"
+      ],
+      "classification": "source_recipe_adapter",
+      "atom_id": "b28d044f-4314-54a5-88ed-07428238d415",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_champs_execution.result",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_champs_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_champs_execution",
+        "import_module": "sciona.atoms.ml.decomposed_champs_execution",
+        "source_symbol": "result",
+        "description": "Restore the complete source result envelope after the generic reduction. Inputs must belong to the same graph invocation; shape and key checks do not authenticate training provenance. Private evidence fields are retained.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.3a977b36c3e6",
+      "fingerprint": "da829c03ecfc7d3820915438a9c757ddddb99c9dda6bc6bd8815509bb7b077a4",
+      "operation": "Attach reduced predictions to the complete training result.",
+      "plain_limits": "Use keys and finite reduced values from the same graph run. Preserve model completion and training reports.",
+      "validity_bounds": "Exact training-result field set is required. Keys must be a tuple of unique nonempty strings in exactly coupling_types iteration order. Values must be a finite float64 ndarray of matching one-dimensional shape. Return a fresh keyed prediction mapping and preserve version, execution_version, models_completed and training by reference. Empty coherent keys/values are accepted. This checks representation and key alignment, not whether values equal a central mean or whether any models were trained.",
+      "parameters": {
+        "training_result": "Complete same-invocation output of train_models.",
+        "keys": "Opaque key tuple from ensemble_inputs for the same invocation.",
+        "values": "Aligned finite float64 result vector from the graph-bound numerical mean."
+      },
+      "outputs": "Source-shaped dictionary with version, execution_version, predictions, models_completed and training.",
+      "dependencies": [
+        "sciona.decomposed_champs_ensemble.result",
+        "numpy",
+        "sciona.ghost.registry (registration only)"
+      ],
+      "reuse": "Source recipe adapter. Chemistry, identities, model selection, training schedules and retained count remain recipe policy. Inputs must belong to the same graph invocation; adapters do not authenticate provenance.",
+      "internal_registered_provider_dependencies": [],
+      "callable_dependency_contracts": {}
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_champs_execution.train_models",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_champs_execution.train_models",
+      "version_id": "8f74bd31-a5a0-54b0-a3ef-72ed85a2807c",
+      "content_hash": "ccdb616d4e34dc6263d445c01d902bdd8d757eda8c0084c3b58d2590e154b33b",
+      "provider_sha256": "9b8611be6c13174cd281afd25ef9dcc5e764692b822ac722939f74746457b62b",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "training_result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "signature": "(prepared: object) -> dict",
+      "bound_nodes": [
+        "train_models"
+      ],
+      "classification": "source_recipe_adapter",
+      "atom_id": "16e8ec1c-3aec-50a6-821b-cbee55c7babf",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_champs_execution.train_models",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_champs_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_champs_execution",
+        "import_module": "sciona.atoms.ml.decomposed_champs_execution",
+        "source_symbol": "train_models",
+        "description": "Run complete chemistry, fitted preprocessing and thirteen full models. Preserve caller-declared schedules, source checkpoint selection, complete state reload, prediction unscaling and six-decimal per-model boundaries. Forward every model prediction before the separate ensemble reduction.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.ccdb616d4e34",
+      "fingerprint": "6eccde05e8c011a9e5ffadd6df6dfe798b3ccef5249e5c7676c9ae4474ab7664",
+      "operation": "Execute complete chemistry, training and inference for all thirteen configured graph transformers.",
+      "plain_limits": "Supply the checked population and all thirteen training schedules. Provision the reviewed software locally. Checkpoints are temporary and outputs remain private.",
+      "validity_bounds": "Require exact Prepared type from champs_prepare, with coherent private populations, model options and selection. Use hash-verified Bosch source, corrected packing and chunked evaluation. Fit vocabulary/scaling before the source split; reserve eight supervised vocabulary slots. Train all thirteen full architectures for caller-declared positive epoch counts, preserving supported optimizer/scheduler options, full batches, checkpoint selection and complete state reload. Infer with restored preprocessing, unscale per subtype and round each model prediction to six decimals. Unsupported motifs, absent vocabulary, degenerate scaling, invalid model options and missing type metrics can fail. Full selection keeps last epoch; validation selection requires all eight finite metrics. Remove temporary checkpoints on success or failure. Historical pretrained/accuracy/duration parity is not claimed.",
+      "parameters": {
+        "prepared": "Coherent unchanged Prepared object from the checked preparation provider for this invocation; all thirteen model schedules are mandatory."
+      },
+      "outputs": "Exact dictionary containing version, execution_version, model_predictions, coupling_types, models_completed and training. Model predictions are opaque-keyed maps; reports and predictions are private runtime state.",
+      "dependencies": [
+        "sciona.decomposed_champs_runtime.train_models",
+        "sciona.champs_contract",
+        "sciona.champs_source_runtime",
+        "sciona.champs_preprocessing",
+        "sciona.champs_lifecycle",
+        "sciona.champs_training",
+        "sciona.champs_prediction",
+        "sciona.champs_population",
+        "torch",
+        "numpy",
+        "pandas",
+        "rdkit",
+        "openbabel-wheel",
+        "networkx",
+        "scipy",
+        "Pinned Bosch CHAMPS software manifest",
+        "sciona.ghost.registry (registration only)"
+      ],
+      "reuse": "Source recipe adapter. Chemistry, identities, model selection, training schedules and retained count remain recipe policy. Inputs must belong to the same graph invocation; adapters do not authenticate provenance.",
+      "internal_registered_provider_dependencies": [],
+      "callable_dependency_contracts": {}
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.numerical.statistics.central_mean.central_rank_mean",
+      "catalog_fqdn": "sciona.atoms.numerical.statistics.central_mean.central_rank_mean",
+      "version_id": "ca87d3f4-357b-5d06-9ba9-093c85c404f5",
+      "content_hash": "48462ac41e82a91b25c8cb79009c384a29e567e50d9d1b3b23b1ac422fa91248",
+      "provider_sha256": "cc059d3373990cea89d85efda808c955bdc9cf2b83081e28ee25137bebaa6308",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "retained",
+          "ordinal": 1,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "signature": "(values: numpy.ndarray, retained: int) -> numpy.ndarray",
+      "bound_nodes": [
+        "central_mean"
+      ],
+      "classification": "generic_operation",
+      "atom_id": "497e6328-6b8f-5ca8-9744-4d92b0e0a472",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.numerical.statistics.central_mean.central_rank_mean",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "numerical.statistics.central_mean",
+        "repo_name": "sciona-atoms",
+        "source_module_path": "numerical.statistics.central_mean",
+        "import_module": "sciona.atoms.numerical.statistics.central_mean",
+        "source_symbol": "central_rank_mean",
+        "description": "Sort each column and average a caller-sized central rank interval. Rows are observations and columns independent quantities. Require at least one row, finite real numeric values and a Python integer retained count in [1, rows]. Zero columns return an empty float64 vector. Convert to a fresh column-contiguous float64 matrix, sort ascending, then apply NumPy mean to ranks [floor((rows-retained)/2), floor((rows-retained)/2)+retained). An odd number of discarded ranks removes one more from the upper tail. Reject conversion or reduction overflow, including intermediate sum overflow. Do not change inputs. Selection, units, identities and interpretation belong to the caller; no model names, categories or fixed ensemble size are assumed.",
+        "domain_tags": [
+          "numerical"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.48462ac41e82",
+      "fingerprint": "2c0f80fc1d8428b99d9257b77b02f5d62fe90545ecc90094816f03a740afbb9d",
+      "operation": "Average a caller-sized central rank interval independently in each numeric column.",
+      "plain_limits": "Use finite real values and retain between one and all observations. Each column is independent. Empty columns are allowed; inputs stay unchanged.",
+      "validity_bounds": "Two-dimensional NumPy array with at least one row and real integer/unsigned/floating dtype; reject booleans, complex, objects and nonfinite inputs. Retained is a Python int in [1, rows], excluding bool and NumPy scalar integers. Convert to a fresh column-contiguous float64 matrix, sort ascending per column, and apply NumPy mean to the slice starting at floor((rows-retained)/2) with exactly retained rows. Odd discarded counts remove one more upper-tail observation. Reject float64 conversion or reduction overflow, including intermediate sum overflow. Zero columns yield an empty float64 vector. No category, identity, model count, retained count, normalization or units are prescribed.",
+      "parameters": {
+        "values": "Finite real two-dimensional ndarray, at least one row, optionally zero columns.",
+        "retained": "Explicit Python integer count from one through the number of rows."
+      },
+      "outputs": "Fresh finite float64 vector with one result per input column, or empty for zero columns.",
+      "dependencies": [
+        "numpy",
+        "sciona.ghost.registry (registration only)"
+      ],
+      "reuse": "Domain-independent robust numeric aggregation. Rows may represent compatible repeated measurements, estimates or samples; their meaning, units and selected rank interval belong to the caller.",
+      "internal_registered_provider_dependencies": [],
+      "callable_dependency_contracts": {}
+    }
+  ],
+  "graph_digest": "1120063d922f0c354c9683a02e0c6ceba7bd88e6fdb8d148b33df034a233012e",
+  "software_sha256": {
+    "sciona-atoms-ml/src/sciona/atoms/ml/decomposed_champs_execution.py": "9b8611be6c13174cd281afd25ef9dcc5e764692b822ac722939f74746457b62b",
+    "sciona-atoms/src/sciona/atoms/numerical/statistics/central_mean.py": "cc059d3373990cea89d85efda808c955bdc9cf2b83081e28ee25137bebaa6308",
+    "sciona/champs_contract.py": "2f1e917e3a0787fc58e0f5c8a2941686fe6237919df472b212286067d4a4a0f3",
+    "sciona/champs_ensemble.py": "d088852ed47b849e620d93677b613655ad9904df6d6f0c1686cf2e8dcf428afd",
+    "sciona/champs_epoch_corrections.py": "f6e8345a02d8a739320f12f11320f0453acb3ab914eda46564044e6f1cd8e483",
+    "sciona/champs_graph.py": "6af553006c3ea494762c18c135ccb5e62f14306604386700d315c57f14c4feaf",
+    "sciona/champs_lifecycle.py": "bcdf4da023f58a8b33e5b20c0febd30edc00c5df8a67a89f5714b2fd45b0467c",
+    "sciona/champs_population.py": "d0bfbe1da139a76a0ec74163f92b7e9ad742fc134f9c92f21f33f9cc933f4d41",
+    "sciona/champs_prediction.py": "a46a92c246c286e9f6de34f2e27dcb203ccb0c09716fa742afa6abba18c03967",
+    "sciona/champs_preprocessing.py": "f2749374e6574832406ae45d6aceb1689b84ff2b0f52509be8d0616ac78cb5dd",
+    "sciona/champs_runtime.py": "d809cb75cd70af656c3d897e0b240f67b13003c814e26a8dbbbf0157aa77dbd6",
+    "sciona/champs_source_corrections.py": "da41df24e2d86dd9df31048d7502496b59e11517579f62ca1b5a1918656ccd10",
+    "sciona/champs_source_runtime.py": "62d91f96f600e9c852c7635995418c646ad86bbf39976f292b7d924885e84788",
+    "sciona/champs_training.py": "9c62553dc0ff76a72cc5dbb42ebeeaac938236fb188da3dc7b0ebe483f98ddd8",
+    "sciona/decomposed_champs_ensemble.py": "98c19e3e4570644707f11ece2079709effc5d6d6d8acfeabb7a88234d6da3a41",
+    "sciona/decomposed_champs_graph.py": "7f6a9fa6f12575deb7a272ec56a9fd9563e7407f8602148ce8f5a4236d1dfab7",
+    "sciona/decomposed_champs_runtime.py": "33490ed96c7e9669503a060efc8c13e02b05f11bb79ab546c005c90424632033",
+    "sciona/services/execution_graph_codec.py": "1ad42332f8e28adf4ee3f8d53184a4af8351f66304efa1703c63ed32989082a6",
+    "sciona/visualizer/runner.py": "22a49655e61c10d800aa2a6a9b5115cd873a9e699ea9903fa0f856aea8af67a4",
+    "scripts/audit_decomposed_champs_packages.py": "c542c162767e9b36ada4d51744e0fac0634f5b45c9b03cce7c6191e0bc56cac6",
+    "scripts/decomposed_champs_provider_contracts.py": "158a2d3522a0d872d48d0f611cff79baec8085b6495627c2591520f87c113958",
+    "scripts/review_champs_decomposed_providers.py": "99c1ab43dcea8fd6bc4779bcd8ded9e5a6e6b8fd7fa9f597fda2b9c7e83f22dd",
+    "scripts/review_decomposed_champs.py": "17c348b000a2d7630010bf93049c80c1332b4f650fb21cfaf792da6bd93d89c2",
+    "scripts/stage_champs_decomposed_providers.py": "c2957cae2862a63991e0465893f74aaa45112ca960e342d475934e2c7e513d6a"
+  },
+  "imports": {
+    "sciona/champs_source_runtime.py": [
+      "from __future__ import annotations",
+      "from pathlib import Path",
+      "from sciona.champs_ensemble import MODEL_ORDER",
+      "from sciona.champs_source_corrections import correct_triplet_layout",
+      "from types import MappingProxyType",
+      "import ast",
+      "import hashlib",
+      "import json",
+      "import numpy as np",
+      "import torch"
+    ],
+    "sciona/champs_epoch_corrections.py": [
+      "import hashlib"
+    ],
+    "sciona/champs_population.py": [
+      "from torch.utils.data import DataLoader, TensorDataset",
+      "import numpy as np",
+      "import torch"
+    ],
+    "sciona/champs_runtime.py": [
+      "from pathlib import Path",
+      "from sciona.champs_contract import Prepared, prepare",
+      "from sciona.champs_ensemble import MODEL_ORDER, blend_predictions",
+      "from sciona.champs_lifecycle import fit_variant, load_for_prediction",
+      "from sciona.champs_population import population_batches, split_population",
+      "from sciona.champs_prediction import predict_batches",
+      "from sciona.champs_preprocessing import ChampsPreprocessor",
+      "from sciona.champs_source_runtime import ChampsSourceRuntime, EXECUTION_VERSION",
+      "import gc",
+      "import os",
+      "import tempfile"
+    ],
+    "sciona/champs_source_corrections.py": [
+      "import hashlib"
+    ],
+    "sciona/champs_preprocessing.py": [
+      "from dataclasses import dataclass",
+      "from rdkit import Chem",
+      "from sciona.champs_ensemble import COUPLING_TYPES",
+      "from sciona.champs_source_corrections import correct_triplet_layout",
+      "from sciona.champs_source_runtime import ChampsSourceRuntime",
+      "import ast",
+      "import collections",
+      "import contextlib",
+      "import copy",
+      "import io",
+      "import itertools",
+      "import numpy as np",
+      "import pandas as pd",
+      "import torch",
+      "import types"
+    ],
+    "sciona/champs_training.py": [
+      "from dataclasses import asdict, dataclass",
+      "from sciona.champs_epoch_corrections import correct_chunked_evaluation",
+      "from sciona.champs_source_runtime import EXECUTION_VERSION",
+      "from types import SimpleNamespace",
+      "import ast",
+      "import copy",
+      "import math",
+      "import numpy as np",
+      "import torch"
+    ],
+    "sciona/champs_lifecycle.py": [
+      "from dataclasses import asdict, replace",
+      "from pathlib import Path",
+      "from sciona.champs_population import population_batches",
+      "from sciona.champs_preprocessing import PreprocessingState",
+      "from sciona.champs_source_runtime import EXECUTION_VERSION",
+      "from sciona.champs_training import ChampsTrainer, TrainingOptions",
+      "import copy",
+      "import math",
+      "import os",
+      "import tempfile",
+      "import torch"
+    ],
+    "sciona/champs_contract.py": [
+      "from dataclasses import dataclass",
+      "from sciona.champs_ensemble import COUPLING_TYPES, MODEL_ORDER",
+      "from sciona.champs_training import TrainingOptions",
+      "import math",
+      "import pandas as pd"
+    ],
+    "sciona/champs_graph.py": [
+      "from sciona.architect.handoff import CDGExport",
+      "from sciona.architect.models import AlgorithmicNode, DependencyEdge, IOSpec, NodeStatus"
+    ],
+    "sciona/champs_ensemble.py": [
+      "from collections.abc import Mapping",
+      "import numpy as np"
+    ],
+    "sciona/champs_prediction.py": [
+      "from collections.abc import Mapping",
+      "import math",
+      "import torch"
+    ],
+    "sciona/decomposed_champs_runtime.py": [
+      "from pathlib import Path",
+      "from sciona.champs_contract import Prepared, prepare",
+      "from sciona.champs_ensemble import MODEL_ORDER",
+      "from sciona.champs_lifecycle import fit_variant, load_for_prediction",
+      "from sciona.champs_population import population_batches, split_population",
+      "from sciona.champs_prediction import predict_batches",
+      "from sciona.champs_preprocessing import ChampsPreprocessor",
+      "from sciona.champs_source_runtime import ChampsSourceRuntime, EXECUTION_VERSION",
+      "import gc",
+      "import os",
+      "import tempfile"
+    ],
+    "sciona/decomposed_champs_graph.py": [
+      "from sciona.architect.models import AlgorithmicNode, DependencyEdge, IOSpec, NodeStatus",
+      "from sciona.champs_graph import build_champs_graph"
+    ],
+    "sciona/visualizer/runner.py": [
+      "from __future__ import annotations",
+      "from pathlib import Path",
+      "from sciona.architect.models import AlgorithmicNode, DependencyEdge, EdgeKind, NodeStatus",
+      "from sciona.ghost.registry import REGISTRY",
+      "from sciona.synthesizer.ghost_sim import _ensure_atoms_imported",
+      "from sciona.telemetry import log_event",
+      "from sciona.visualizer.dataset_manager import DatasetManager",
+      "from typing import Any, Callable, Dict, List, Optional, Tuple",
+      "import dataclasses",
+      "import inspect",
+      "import json",
+      "import logging",
+      "import numpy as np",
+      "import pandas as pd",
+      "import time",
+      "import typing"
+    ],
+    "sciona/services/execution_graph_codec.py": [
+      "from sciona.architect.handoff import CDGExport",
+      "import hashlib",
+      "import json"
+    ],
+    "sciona/decomposed_champs_ensemble.py": [
+      "from collections.abc import Mapping",
+      "from sciona.champs_ensemble import MODEL_ORDER, COUPLING_TYPES, MODEL_MASK",
+      "import numpy as np"
+    ],
+    "scripts/audit_decomposed_champs_packages.py": [
+      "from packaging.requirements import Requirement",
+      "from packaging.utils import canonicalize_name",
+      "from pathlib import Path",
+      "import base64",
+      "import hashlib",
+      "import importlib.metadata as metadata",
+      "import json"
+    ],
+    "scripts/review_decomposed_champs.py": [
+      "from pathlib import Path",
+      "from sciona import champs_runtime as reference",
+      "from sciona import decomposed_champs_runtime as candidate",
+      "from sciona.atoms.provider_inventory import ProviderRepo",
+      "from sciona.atoms.supabase_seed import _parse_registered_atoms",
+      "from sciona.champs_source_runtime import ChampsSourceRuntime",
+      "from sciona.decomposed_champs_graph import build_decomposed_champs_graph",
+      "from sciona.services.execution_graph_codec import encode_execution_graph",
+      "from scripts.promote_connectomics_execution import boundary_ports, provider_ports",
+      "from typing import get_args, get_origin, get_type_hints",
+      "import ast",
+      "import hashlib",
+      "import importlib",
+      "import importlib.metadata",
+      "import inspect",
+      "import json",
+      "import numpy as np",
+      "import subprocess"
+    ],
+    "scripts/stage_champs_decomposed_providers.py": [
+      "from collections import Counter",
+      "from psycopg.types.json import Jsonb",
+      "from sciona.atoms.provider_inventory import ProviderRepo",
+      "from sciona.atoms.supabase_seed import AtomSeedRow, _parse_registered_atoms",
+      "from sciona.decomposed_champs_graph import build_decomposed_champs_graph",
+      "from scripts.import_flavours_provider_drafts import connect",
+      "from scripts.import_residual_execution_drafts import comparable, ensure_row",
+      "from scripts.review_decomposed_champs import ROOT, review, require, sha, interfaces",
+      "from typing import get_type_hints, get_origin, get_args",
+      "from uuid import NAMESPACE_URL, UUID, uuid5",
+      "import argparse",
+      "import hashlib",
+      "import importlib",
+      "import inspect",
+      "import json",
+      "import numpy as np"
+    ],
+    "scripts/decomposed_champs_provider_contracts.py": [],
+    "scripts/review_champs_decomposed_providers.py": [
+      "from pathlib import Path",
+      "from scripts.audit_decomposed_champs_packages import audit as package_audit",
+      "from scripts.decomposed_champs_provider_contracts import CONTRACTS",
+      "from scripts.review_decomposed_champs import ROOT, require, sha, review as integration_review",
+      "from scripts.stage_champs_decomposed_providers import reviewed_plan",
+      "import argparse",
+      "import ast",
+      "import importlib.metadata",
+      "import json",
+      "import os",
+      "import platform",
+      "import subprocess",
+      "import tempfile",
+      "import xml.etree.ElementTree as ET"
+    ],
+    "sciona-atoms/src/sciona/atoms/numerical/statistics/central_mean.py": [
+      "from sciona.ghost.registry import register_atom",
+      "import numpy as np"
+    ],
+    "sciona-atoms-ml/src/sciona/atoms/ml/decomposed_champs_execution.py": [
+      "from sciona.decomposed_champs_ensemble import ensemble_inputs as implementation",
+      "from sciona.decomposed_champs_ensemble import result as implementation",
+      "from sciona.decomposed_champs_runtime import train_models as implementation",
+      "from sciona.ghost.registry import register_atom",
+      "import numpy as np"
+    ]
+  },
+  "package_versions": {
+    "torch": "2.11.0",
+    "numpy": "2.2.6",
+    "pandas": "2.3.3",
+    "rdkit": "2026.3.6",
+    "openbabel-wheel": "3.1.1.23",
+    "networkx": "3.6.1",
+    "scipy": "1.17.1"
+  },
+  "python_version": "3.13.11",
+  "evidence_sha256": {
+    "champs_decomposed_provider_tests.json": "022e9bd672c699626f45e0fa5049aa51fbfb61e11dc94743ec67af298b6bd657",
+    "champs_decomposed_semantic_review.json": "296f56a50d818b28ec4c8c9fe061d2b6e5d3b2c9ecf6fbf34cbfe36923b97a03",
+    "decomposed_champs_graph_execution.json": "cf94f5c02a0b849e4d2c2a196a4b214b9932b47f65d6014c2ba4601083af5731",
+    "champs_decomposed_provider_intake_gates.json": "68956f76490b49c881ea8b7344eb86bfab62daca622c4759be17a68dfa4b0089",
+    "decomposed_champs_package_files.json": "1e833ee5fb204950d77ee6a7933be1882e4633b5c35f6038f6b6a44d8cecdc12",
+    "champs_decomposed_provider_intake_plan.json": "8c7910d55ea173c1eefc251484a89d53082ea0779ce756bf8aec435994dd47e5"
+  },
+  "intake_stage_mapping": [
+    {
+      "intake": "spatial_graphing",
+      "realization": "XYZ bond inference, chemistry tags/charges, atom/bond/triplet/quadruplet motifs and corrected fixed packing"
+    },
+    {
+      "intake": "target_scaling",
+      "realization": "Per-subtype mean/sample-standard-deviation scaling, not a distributional Gaussian guarantee"
+    },
+    {
+      "intake": "message_passing_neural_network_mpnn",
+      "realization": "Thirteen full configured graph transformers, not SchNet"
+    },
+    {
+      "intake": "attention_mechanism",
+      "realization": "Distance-biased multi-head attention across typed motifs with grouped subtype prediction heads"
+    },
+    {
+      "intake": "ensembling",
+      "realization": "Six-decimal unscaled predictions, fixed coupling-specific model masks and central-five mean, no LightGBM"
+    }
+  ],
+  "limitations": [
+    "Automated Tier 3 Community reconstruction. No Tier 1 human certification or Tier 2 usage qualification; original inaccurate intake remains draft.",
+    "Pinned Bosch graph-transformer solution corrects the intake SchNet/LightGBM claims. All thirteen full configurations are retained; no original pretrained checkpoint or historical accuracy parity is claimed.",
+    "Explicit corrected triplet packing/model indices and chunked evaluation; modern OpenBabel/pandas interfaces. Caller-seeded batching and complete structured checkpoints replace launcher global state and model pickles.",
+    "Original chemistry requires supported connected motifs and fixed 29/406/54/117 capacities. Degenerate or absent motifs, unsupported chemistry, out-of-vocabulary labels and nonfinite scaling can fail. This is not a general molecular chemistry predictor.",
+    "Original per-record bond corrections are excluded. Optional manual corrections in lower-level preprocessing are not exposed in this version of the pipeline payload; original-record parity is not claimed.",
+    "Fitted vocabulary/scaling precede the source population split. This preserves source behavior rather than claiming leakage-free validation. The eight supervised primary type slots are explicitly reserved for smaller populations.",
+    "Source inverse-square-root schedule is initialized but never advanced after warmup; this behavior is preserved. Original quadruplet cutout and chunked log-type-loss training combinations remain unsupported.",
+    "Graph evidence uses one explicitly configured synthetic SGD epoch for every full model. Sixteen stochastic optimizer/scheduler resume combinations and validation selection controls were checked separately with analytic synthetic inputs, not historical training runs.",
+    "Validation selection requires all eight finite type metrics. Full-population mode retains the last epoch; finite aggregate MAE alone is not represented as complete competition macro-metric coverage.",
+    "Per-model prediction rounding to six decimals precedes the coupling-specific central-five ensemble, matching original CSV precision. Opaque caller IDs are remapped to exactly representable internal float32 integers.",
+    "CPU execution requires locally provisioned hash-verified software and pinned dependencies in the matcher environment. No downloads, GPU/mixed-precision qualification, clean-environment installation or resource-cap guarantee is claimed.",
+    "Geometry, fitted state, checkpoints, training outputs and predictions are private runtime data. Publication evidence contains synthetic fixtures and aggregate checks only.",
+    "The new graph executes all thirteen full configured models for one explicitly requested synthetic SGD epoch each; historical training-duration and accuracy parity remain unproven.",
+    "Current execution uses NumPy 2.2.6, recorded in the new immutable report; it does not overwrite the earlier NumPy 2.4.2 qualification.",
+    "The complete training body is unchanged apart from moving final ensemble selection/reduction into explicit graph boundaries.",
+    "Central rank mean is domain independent. Molecular identity, model masks and retained count stay in recipe policy.",
+    "Dictionary shape and identity checks do not independently authenticate training provenance.",
+    "Provider eligibility and corrected-original publication require separate transactional qualification.",
+    "Automated Tier 3 only; no Tier 1 human certification or Tier 2 usage qualification.",
+    "Central rank mean is domain independent. The recipe supplies model selection and retained count through explicit graph edges.",
+    "Synthetic training qualification does not establish competition accuracy, historical trained-weight parity or independent-run tensor identity.",
+    "Installed package hashes were checked against their own RECORD files, not independently authenticated publisher signatures. Clean deployment qualification is not claimed.",
+    "Validation bounds native and Torch thread pools to one; deployment must configure its own resource limits.",
+    "Pinned public Bosch software is a runtime dependency. Original pretrained checkpoint parity is not claimed.",
+    "Software dependencies are separate from registered atom dependencies. This review alone does not approve catalog records."
+  ]
+}
