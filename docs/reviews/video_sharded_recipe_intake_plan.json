@@ -1,0 +1,174 @@
+{
+  "approved": false,
+  "graph_digest": "fe156122b528fa6e861411f3f6c679eb7ee0e1c39aaf8834039de0a962c66f0b",
+  "review_sha256": "f839e8fa5ada9a002aeea9c7373dfc2ab50286f9d61d9e09ecc855dbf12e0c10",
+  "runtime_review_sha256": "29fd03f099e17f598e36e06c8c7b889b75e5dad8cd0c430fcf240e917aa32f6b",
+  "intake_script_sha256": "489c1f91f81a5618cb5b6e3ed07e81b7d2c9f18daf0c9507e7674a98b9d5e004",
+  "providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.video_multilabel_sharded_execution.execute",
+      "catalog_fqdn": "sciona.atoms.ml.video_multilabel_sharded_execution.execute",
+      "atom_id": "f39a03c7-20c9-5a7b-a45f-84057d422ca9",
+      "version_id": "f7562ffa-13ff-521f-ae26-52f8adae81f4",
+      "content_hash": "c7563ccc7019da9af172f87d6028a4421ce5168498624dd4b267c3c146e4df8f",
+      "provider_sha256": "cf82c3ae3147ed1c4eccf9a11fb5a1cffa2f1ba8df17edc10dc0832367db3af4",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.video_multilabel_sharded_execution.execute",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.video_multilabel_sharded_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.video_multilabel_sharded_execution",
+        "import_module": "sciona.atoms.ml.video_multilabel_sharded_execution",
+        "source_symbol": "execute",
+        "description": "Train full configured populations, fit held-out thresholds and predict. Caller supplies FeatureShards stores constructed from private runtime configuration. No paths or records belong in the catalog graph. Validates disjoint groups and uses bounded frame reads; labels, sparse training CSR, fitted state and scores remain resident. Numeric callables are explicit; model construction, optimization and population policy belong to this recipe.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.c7563ccc7019",
+      "fingerprint": "7e0a178cfbfab3da4322e1afbed78fddf7ead7edd1180a5eec2856a10c58eab5",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "training",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Concrete labelled FeatureShards store, nonempty finite frame vectors, nonnegative numeric sparse features and binary labels. Every label has both classes. Caller constructs stores from private local runtime configuration; no paths or records may be embedded in catalog metadata."
+        },
+        {
+          "direction": "input",
+          "name": "calibration",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Concrete labelled FeatureShards store with matching feature and label widths and both classes per label. Groups are disjoint from training and query. Used only for empirical threshold fitting after all configured training epochs."
+        },
+        {
+          "direction": "input",
+          "name": "query",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Concrete unlabelled FeatureShards store with matching feature width and groups disjoint from training/calibration. Unknown sparse keys are ignored under the training-only vocabulary. Every supplied query row is scored."
+        },
+        {
+          "direction": "input",
+          "name": "controls",
+          "ordinal": 3,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact dict keys seed, hidden, epochs, batch_size, learning_rate. seed is a Python int in [0,2**32); hidden, epochs and batch_size are positive Python ints. learning_rate is a finite positive Python int or float. CPU float64 Adam/BCE neural fitting and per-label sparse L2 LBFGS with C=1, tolerance=1e-4 and max_iter=1000 are recipe policy."
+        },
+        {
+          "direction": "input",
+          "name": "pool_function",
+          "ordinal": 4,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact reviewed numeric callable supplied by its explicit graph edge; arbitrary replacements are not qualified. The recipe supplies model, label and population policy."
+        },
+        {
+          "direction": "input",
+          "name": "gate_function",
+          "ordinal": 5,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact reviewed numeric callable supplied by its explicit graph edge; arbitrary replacements are not qualified. The recipe supplies model, label and population policy."
+        },
+        {
+          "direction": "input",
+          "name": "mean_function",
+          "ordinal": 6,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact reviewed numeric callable supplied by its explicit graph edge; arbitrary replacements are not qualified. The recipe supplies model, label and population policy."
+        },
+        {
+          "direction": "input",
+          "name": "vocabulary_fit_function",
+          "ordinal": 7,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact reviewed numeric callable supplied by its explicit graph edge; arbitrary replacements are not qualified. The recipe supplies model, label and population policy."
+        },
+        {
+          "direction": "input",
+          "name": "vocabulary_transform_function",
+          "ordinal": 8,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact reviewed numeric callable supplied by its explicit graph edge; arbitrary replacements are not qualified. The recipe supplies model, label and population policy."
+        },
+        {
+          "direction": "input",
+          "name": "logistic_fit_function",
+          "ordinal": 9,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact reviewed numeric callable supplied by its explicit graph edge; arbitrary replacements are not qualified. The recipe supplies model, label and population policy."
+        },
+        {
+          "direction": "input",
+          "name": "logistic_predict_function",
+          "ordinal": 10,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact reviewed numeric callable supplied by its explicit graph edge; arbitrary replacements are not qualified. The recipe supplies model, label and population policy."
+        },
+        {
+          "direction": "input",
+          "name": "threshold_fit_function",
+          "ordinal": 11,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact reviewed numeric callable supplied by its explicit graph edge; arbitrary replacements are not qualified. The recipe supplies model, label and population policy."
+        },
+        {
+          "direction": "input",
+          "name": "threshold_apply_function",
+          "ordinal": 12,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact reviewed numeric callable supplied by its explicit graph edge; arbitrary replacements are not qualified. The recipe supplies model, label and population policy."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Dict with scores and binary labels (query_rows,label_count), per-label thresholds, training_rows, calibration_rows, query_rows, label_count, sparse_models, epochs, initial_training_loss and final_training_loss. Exact row/column ordering follows supplied stores. No historical accuracy guarantee."
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Draft source/interface intake only; semantic publication gates remain.",
+    "Domain recipe boundary; generic numerics remain independently selectable. Exact approved dependency bindings must be qualified before publication.",
+    "Existing numerical providers and original CDGs are not published or modified by this intake."
+  ],
+  "owners": {
+    "sciona-atoms-ml": {
+      "owner_id": "33ed07a2-1bea-5b17-8b71-d6d0e590fdd9",
+      "source_repo_id": "27b787a0-27ed-4760-92b7-ad8e8b4b815c"
+    }
+  },
+  "preserved_sha256": "f8ad8f92504995189c5a2dea185c30a678d45d777e1f9947383cb550dede0a4e"
+}

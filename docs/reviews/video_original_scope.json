@@ -1,0 +1,268 @@
+{
+  "format": "video-original-scope.v1",
+  "read_only": true,
+  "catalog_mutations": 0,
+  "approved": false,
+  "original": {
+    "artifact_id": "fe4236e8-593e-5d74-98a5-81c83b3ea359",
+    "fqdn": "cdg.competition.solution.kaggle.video_multilabel_temporal_pooling_topology",
+    "status": "draft",
+    "is_publishable": false,
+    "content_hash": "30d0444ec640598942c6221136e608d7b15449732ceb848939e1424321c496ad"
+  },
+  "source_version_id": "13b48adf-8fb5-5ea2-a26c-44344bb8907e",
+  "source_stage_review": [
+    {
+      "source_stage": {
+        "stage_id": "feature_stream_loading",
+        "description": "Load precomputed frame-level, segment-level, audio, visual, metadata, or sparse features for each video with sharded and memory-aware access."
+      },
+      "realization": "Read indexed local shards on demand; preserve all configured batches and epochs and fit sparse vocabulary only from training rows.",
+      "limits": "Caller constructs immutable FeatureShards stores outside the graph from private runtime configuration. Record reads are bounded, but index metadata, labels, vocabulary, sparse training CSR, fitted state and scores remain resident. No constant total memory or distributed execution claim.",
+      "source_anchors": [
+        {
+          "file": "sciona/video_multilabel_shards.py",
+          "symbol": "FeatureShards",
+          "line": 56,
+          "file_sha256": "c21881a98074bdc7c15623ad0fe71f4395d69a824b186b324a9e8266d65da7e6"
+        },
+        {
+          "file": "sciona/video_multilabel_shards.py",
+          "symbol": "validate_populations",
+          "line": 144,
+          "file_sha256": "c21881a98074bdc7c15623ad0fe71f4395d69a824b186b324a9e8266d65da7e6"
+        },
+        {
+          "file": "sciona/video_multilabel_sharded_training.py",
+          "symbol": "fit",
+          "line": 52,
+          "file_sha256": "3ee856a553aa1858954fe7b5fb9ec481fcd9790ab2450352cf47eeefefdad908"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "temporal_pooling",
+        "description": "Aggregate frame or segment features with NetVLAD, NetFV, attention pooling, bidirectional LSTM/GRU, transformer pooling, mean/max pooling, or mixture-of-experts pooling."
+      },
+      "realization": "Select the allowed learned attention branch, with masked softmax pooling exposed as a reusable differentiable atom.",
+      "limits": "Precomputed frame vectors only. No raw feature extraction or temporal position encoding; this selected pooling is invariant to frame order. Other listed alternative families are not claimed.",
+      "source_anchors": [
+        {
+          "file": "sciona/video_multilabel_network.py",
+          "symbol": "VideoHead.__init__",
+          "line": 12,
+          "file_sha256": "2787419d79ad600dd53be0cdbaf8c7b3ccf73b5cda73a8ee76884f984e1eb451"
+        },
+        {
+          "file": "sciona/video_multilabel_reusable_network.py",
+          "symbol": "ReusableVideoHead.pool",
+          "line": 14,
+          "file_sha256": "5f51dc896e016f25224a098d2f1c90f3be7256bbe694d6f037d42f171f497517"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "context_gated_multilabel_head",
+        "description": "Train multilabel sigmoid, hierarchy-aware multitask, context gating, label-embedding, or mixture-of-experts heads for video label prediction."
+      },
+      "realization": "Learn attention, context affine gates and per-label logits with CPU float64 Adam/BCE for every configured epoch. Generic sigmoid gating remains independently selectable.",
+      "limits": "Architecture dimensions, optimizer settings and independent output labels are recipe choices. No hierarchy or label-embedding branch is claimed.",
+      "source_anchors": [
+        {
+          "file": "sciona/video_multilabel_reusable_network.py",
+          "symbol": "ReusableVideoHead.forward",
+          "line": 25,
+          "file_sha256": "5f51dc896e016f25224a098d2f1c90f3be7256bbe694d6f037d42f171f497517"
+        },
+        {
+          "file": "sciona/video_multilabel_sharded_training.py",
+          "symbol": "fit",
+          "line": 52,
+          "file_sha256": "3ee856a553aa1858954fe7b5fb9ec481fcd9790ab2450352cf47eeefefdad908"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "sparse_baseline_fusion",
+        "description": "Blend neural scores with bag-of-words, sparse linear, metadata, audio-only, or visual-only baselines to improve rare-label coverage."
+      },
+      "realization": "Fit one sparse L2 logistic model per label with training-only vocabulary; fuse neural and sparse probabilities by equal columnwise mean using the existing approved provider.",
+      "limits": "Rare-label coverage improvement is an intended modeling benefit, not established by synthetic parity. Both training classes are required; unknown query features are ignored. No accuracy guarantee.",
+      "source_anchors": [
+        {
+          "file": "sciona/video_multilabel_sharded_training.py",
+          "symbol": "fit",
+          "line": 52,
+          "file_sha256": "3ee856a553aa1858954fe7b5fb9ec481fcd9790ab2450352cf47eeefefdad908"
+        },
+        {
+          "file": "sciona/video_multilabel_sharded_training.py",
+          "symbol": "ShardedVideoEnsemble.components",
+          "line": 32,
+          "file_sha256": "3ee856a553aa1858954fe7b5fb9ec481fcd9790ab2450352cf47eeefefdad908"
+        },
+        {
+          "file": "sciona/video_multilabel_sharded_training.py",
+          "symbol": "ShardedVideoEnsemble.predict",
+          "line": 45,
+          "file_sha256": "3ee856a553aa1858954fe7b5fb9ec481fcd9790ab2450352cf47eeefefdad908"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "rank_ensemble_calibration",
+        "description": "Apply rank averaging, fold/model ensembling, label-specific threshold optimization, class-prior correction, or metric-specific top-k formatting."
+      },
+      "realization": "Select the allowed label-specific threshold branch: maximize empirical F1 on disjoint held-out calibration groups, retain highest threshold on ties, and apply inclusive thresholds to every query row.",
+      "limits": "Calibration requires both classes per label. No rank averaging, prior correction, top-k format, calibrated-probability or unbiased-performance claim.",
+      "source_anchors": [
+        {
+          "file": "sciona/video_multilabel_sharded_training.py",
+          "symbol": "execute",
+          "line": 114,
+          "file_sha256": "3ee856a553aa1858954fe7b5fb9ec481fcd9790ab2450352cf47eeefefdad908"
+        }
+      ]
+    }
+  ],
+  "numeric_providers": [
+    {
+      "artifact_id": "518db7aa-4510-5597-ae1c-765f440c1276",
+      "fqdn": "sciona.atoms.ml.masked_attention.masked_attention_pool",
+      "status": "approved",
+      "is_publishable": true,
+      "version_id": "b0f2091c-22bd-5002-8743-42c41efcb00f",
+      "content_hash": "2a01012ac49ced9ec73f4b2c9b68a411de9dc1fa27708a31c2f581b8aaad43bc",
+      "trust_tier": 3,
+      "served": true
+    },
+    {
+      "artifact_id": "1224b27f-b754-5478-90a0-e217d703d93a",
+      "fqdn": "sciona.atoms.ml.masked_attention.sigmoid_context_gate",
+      "status": "approved",
+      "is_publishable": true,
+      "version_id": "857ed676-ab85-5dbf-8d13-0abc4f718357",
+      "content_hash": "8ec9ce4dfc887a3f12c04f143015f25356c7901e8b9ffaa80ed936b005de8cc4",
+      "trust_tier": 3,
+      "served": true
+    },
+    {
+      "artifact_id": "3e054efb-38d6-56c1-a7c8-26da81e7a310",
+      "fqdn": "sciona.atoms.ml.model_selection.materialized_prediction.average",
+      "status": "approved",
+      "is_publishable": true,
+      "version_id": "fbea5906-9987-5e67-88c4-5ffe3d971e66",
+      "content_hash": "280b371b126f6d7f580dd169289280af76fc50d64350b784c3aefd346df18af5",
+      "trust_tier": 3,
+      "served": true
+    },
+    {
+      "artifact_id": "e3882f2f-68f1-5acc-a2f0-2c0dc0b46c6d",
+      "fqdn": "sciona.atoms.ml.sklearn.feature_extraction.sparse_numeric.fit_numeric_vocabulary",
+      "status": "approved",
+      "is_publishable": true,
+      "version_id": "fbf99b42-8b78-53ba-a5d3-3b4c2774f077",
+      "content_hash": "1aa767b87ac894561683d96baffaf1d607dfdbb15aea9c4bbc4e49e627159d42",
+      "trust_tier": 3,
+      "served": true
+    },
+    {
+      "artifact_id": "01be5370-5572-50ad-b049-4cfa696fff38",
+      "fqdn": "sciona.atoms.ml.sklearn.feature_extraction.sparse_numeric.transform_numeric_vocabulary",
+      "status": "approved",
+      "is_publishable": true,
+      "version_id": "7b9dd6a5-da00-54aa-bdba-727a7ce830aa",
+      "content_hash": "f3dbb15e6252262a50d333c18d0e2467ca57a72a1738ba0a1ca6547f54efa9f6",
+      "trust_tier": 3,
+      "served": true
+    },
+    {
+      "artifact_id": "789459ad-0c67-5178-82a1-d725a27dd2df",
+      "fqdn": "sciona.atoms.ml.sklearn.linear_model.sparse_binary.fit_sparse_binary_logistic",
+      "status": "approved",
+      "is_publishable": true,
+      "version_id": "5d4b9920-7a78-5e33-8e20-ee8142d8aaf9",
+      "content_hash": "0f170f6329938bf8d4d46c3e0bae91176b746812cac262cc313cf9ee5bae027d",
+      "trust_tier": 3,
+      "served": true
+    },
+    {
+      "artifact_id": "5c3eb952-70aa-50d0-bfc5-6f7f64399ab9",
+      "fqdn": "sciona.atoms.ml.sklearn.linear_model.sparse_binary.predict_sparse_binary_probability",
+      "status": "approved",
+      "is_publishable": true,
+      "version_id": "ffe28bf3-e961-51bf-9b38-6a92a1fd986c",
+      "content_hash": "a15b56d0eec70837c7694aa767cbc9f4bb9036d96abe19cfc4308e58228c97d5",
+      "trust_tier": 3,
+      "served": true
+    },
+    {
+      "artifact_id": "1d426405-3d0e-5545-b9c4-51b4eb2681af",
+      "fqdn": "sciona.atoms.ml.calibration.empirical_f1.fit_empirical_f1_thresholds",
+      "status": "approved",
+      "is_publishable": true,
+      "version_id": "83608ee9-c047-53da-acb5-209901f7b245",
+      "content_hash": "a0c822126d1cfe7c14c4a451a0a8ae1070ffb50a0959a56776c2d3127c4e7c96",
+      "trust_tier": 3,
+      "served": true
+    },
+    {
+      "artifact_id": "fe055a2d-5444-5c56-a52c-b4f1876aeba1",
+      "fqdn": "sciona.atoms.ml.calibration.empirical_f1.apply_column_thresholds",
+      "status": "approved",
+      "is_publishable": true,
+      "version_id": "2c4add48-5699-5485-865c-da509201fc45",
+      "content_hash": "b1df674cf843553cef39c8fefb23c21a23cad31671503a6104e64aa954aebe8f",
+      "trust_tier": 3,
+      "served": true
+    }
+  ],
+  "graph_interface_differences": [
+    {
+      "node_id": "mean",
+      "catalog_ports": [
+        {
+          "direction": "input",
+          "name": "vectors",
+          "ordinal": 0,
+          "type_desc": "list"
+        },
+        {
+          "direction": "output",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "NDArray[np.float64]"
+        }
+      ],
+      "draft_ports": [
+        {
+          "direction": "input",
+          "name": "vectors",
+          "ordinal": 0,
+          "type_desc": "list"
+        },
+        {
+          "direction": "output",
+          "name": "mean",
+          "ordinal": 0,
+          "type_desc": "ndarray"
+        }
+      ]
+    }
+  ],
+  "execution_evidence_sha256": "f839e8fa5ada9a002aeea9c7373dfc2ab50286f9d61d9e09ecc855dbf12e0c10",
+  "reviewer_sha256": "b5aed5886c45bee8087517be09b32d714bd9d119a836cf7a14d87e50e6dcb44e",
+  "remaining_requirements": [
+    "Qualify and publish the recipe boundary with exact approved callable dependencies.",
+    "Construct the corrected graph using exact catalog output names/types, including the reused mean provider, and rerun stored native execution.",
+    "Stage a corrected immutable original version with complete input contracts; validate rollback, eligibility and served selection before approval."
+  ],
+  "limits": [
+    "Source alternatives are explicit selected branches, not implementations of every listed model family.",
+    "This scope review does not approve the original CDG or the recipe boundary."
+  ]
+}
