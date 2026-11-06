@@ -1,0 +1,27 @@
+{
+  "format": "trackml-bayesian-reuse.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "exact_source_batches": 72,
+  "batch_size": 32,
+  "strict_boundary_cases": 4,
+  "implementation_sha256": {
+    "source": "227b2250abda4601ed4ef113aebae9ad5292d2a2f67345d2b0f23694a90a469a",
+    "retained": "5ba0fe8cec6f7cd8d431e8096a634ca0b1c478fca7d5121523133c95b7f0b041",
+    "reviewer": "1db1c09ff27886b81bb3a3a1426038181064c0ca6fd410e2538b0a2e56717e84",
+    "provider": "dda1f5a1d363efbd45d0357edea25ce1000a6e9df9de29e73d653ee116a2edd4"
+  },
+  "decision": "Reuse the existing concrete decision atom with explicit recipe thresholds and qualified finite aligned inputs. Keep coordinate projection, error prediction, coefficient lookup and diagnostics in the recipe or separately reusable providers.",
+  "limitations": [
+    "Residuals, background scales and errors must use matching units for each component; normalized ratios and both thresholds are dimensionless. Source projected residuals have length units despite angular terminology in existing metadata.",
+    "Existing symbolic metadata uses angle dimensions and describes normalized distance only; this review does not qualify a full symbolic decision proof.",
+    "Source recipe defaults are cut_factor=1.0 and dist_trust=0.8; provider defaults are 3.0 and 0.5. Always pass the recipe controls explicitly.",
+    "Qualified domain is nonempty aligned finite float64 vectors, positive error scales and positive scalar thresholds, with finite intermediate arithmetic. Zero background is allowed.",
+    "Good and dubious flags are independent strict comparisons; a point can be both good and dubious. Equality to either respective threshold does not pass that comparison.",
+    "Source diagnostics include normalized distance and cut; the existing atom returns flags only. Integration must preserve diagnostics separately.",
+    "This isolates decision arithmetic. Projection, empirical error model, lifecycle integration and catalog qualification remain separate work.",
+    "Synthetic source parity does not establish calibrated probabilities, arbitrary-input accuracy or historical competition performance."
+  ]
+}
