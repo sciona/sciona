@@ -1,0 +1,2157 @@
+{
+  "records": [
+    {
+      "artifact_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+      "fqdn": "sciona.atoms.physics.helix_tangent.construct_helix_from_tangent",
+      "runtime_fqdn": "sciona.atoms.physics.helix_tangent.construct_helix_from_tangent",
+      "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+      "content_hash": "34785dfce4a5efcaf8f87a5ef015e382e2f2b5eb75b89916451898a65dbfc4be",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "points",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles."
+        },
+        {
+          "direction": "input",
+          "name": "tangents",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned finite float64 matrix (N,3), dimensionless, not necessarily unit vectors. Regulation may change direction and destroys scale invariance near its thresholds."
+        },
+        {
+          "direction": "input",
+          "name": "pitch",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points."
+        },
+        {
+          "direction": "input",
+          "name": "minimum_axial",
+          "ordinal": 3,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Positive finite real scalar, dimensionless. Floors axial tangent magnitude; zero uses positive sign. Caller selects this regularization policy."
+        },
+        {
+          "direction": "input",
+          "name": "maximum_scale",
+          "ordinal": 4,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Positive finite real scalar in point length units. Clips the construction scale magnitude after finite division. Caller selects this regularization policy."
+        },
+        {
+          "direction": "output",
+          "name": "centers",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned finite float64 transverse centers (N,2), in point length units."
+        },
+        {
+          "direction": "output",
+          "name": "radius",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned finite nonnegative float64 radii (N,), in point length units."
+        }
+      ],
+      "operation": "Construct helix transverse centers and radii from points, tangents and signed pitch with explicit regularization.",
+      "plain_description": "Build spiral paths from starting points and directions, with limits chosen by the caller.",
+      "validity_bounds": "Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles. Aligned finite float64 matrix (N,3), dimensionless, not necessarily unit vectors. Regulation may change direction and destroys scale invariance near its thresholds. Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points. Positive finite real scalar, dimensionless. Floors axial tangent magnitude; zero uses positive sign. Caller selects this regularization policy. Positive finite real scalar in point length units. Clips the construction scale magnitude after finite division. Caller selects this regularization policy. Aligned finite float64 transverse centers (N,2), in point length units. Aligned finite nonnegative float64 radii (N,), in point length units.",
+      "reuse": "Generic analytic helix geometry for caller-defined coordinates and units; regularization controls are explicit and detector policy remains in the recipe.",
+      "registered_provider_dependencies": []
+    },
+    {
+      "artifact_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+      "fqdn": "sciona.atoms.physics.helix_tangent.oriented_helix_tangent",
+      "runtime_fqdn": "sciona.atoms.physics.helix_tangent.oriented_helix_tangent",
+      "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+      "content_hash": "b767809ac29ce9b16eacf9be712643f6c6cb540866352c806ab46a93baaaee49",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "points",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles."
+        },
+        {
+          "direction": "input",
+          "name": "centers",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned finite float64 transverse centers (N,2), in point length units."
+        },
+        {
+          "direction": "input",
+          "name": "radius",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned finite nonnegative float64 radii (N,), in point length units."
+        },
+        {
+          "direction": "input",
+          "name": "pitch",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points."
+        },
+        {
+          "direction": "input",
+          "name": "axial_direction",
+          "ordinal": 4,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned finite float64 vector (N,). Only its sign is used; product with pitch must be finite and representably nonzero."
+        },
+        {
+          "direction": "output",
+          "name": "tangent",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 oriented tangent matrix (N,3). Unit length only when supplied points lie on their transverse circles; inconsistent geometry is not normalized."
+        }
+      ],
+      "operation": "Evaluate oriented helix tangents using caller-supplied transverse circles, pitch and axial direction.",
+      "plain_description": "Find the direction of travel along spiral paths using their supplied shape and orientation.",
+      "validity_bounds": "Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles. Aligned finite float64 transverse centers (N,2), in point length units. Aligned finite nonnegative float64 radii (N,), in point length units. Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points. Aligned finite float64 vector (N,). Only its sign is used; product with pitch must be finite and representably nonzero. Finite float64 oriented tangent matrix (N,3). Unit length only when supplied points lie on their transverse circles; inconsistent geometry is not normalized.",
+      "reuse": "Generic analytic helix geometry for caller-defined coordinates and units; regularization controls are explicit and detector policy remains in the recipe.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "qualification": {
+    "format": "trackml-tangent-provider-semantics.v1",
+    "passed": true,
+    "approved": false,
+    "proposed_tier": 3,
+    "verdict": "acceptable_with_limits",
+    "catalog_mutations": 0,
+    "synthetic_only": true,
+    "providers": [
+      {
+        "artifact_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+        "fqdn": "sciona.atoms.physics.helix_tangent.construct_helix_from_tangent",
+        "runtime_fqdn": "sciona.atoms.physics.helix_tangent.construct_helix_from_tangent",
+        "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+        "content_hash": "34785dfce4a5efcaf8f87a5ef015e382e2f2b5eb75b89916451898a65dbfc4be",
+        "interfaces": [
+          {
+            "direction": "input",
+            "name": "points",
+            "ordinal": 0,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles."
+          },
+          {
+            "direction": "input",
+            "name": "tangents",
+            "ordinal": 1,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Aligned finite float64 matrix (N,3), dimensionless, not necessarily unit vectors. Regulation may change direction and destroys scale invariance near its thresholds."
+          },
+          {
+            "direction": "input",
+            "name": "pitch",
+            "ordinal": 2,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points."
+          },
+          {
+            "direction": "input",
+            "name": "minimum_axial",
+            "ordinal": 3,
+            "type_desc": "float",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Positive finite real scalar, dimensionless. Floors axial tangent magnitude; zero uses positive sign. Caller selects this regularization policy."
+          },
+          {
+            "direction": "input",
+            "name": "maximum_scale",
+            "ordinal": 4,
+            "type_desc": "float",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Positive finite real scalar in point length units. Clips the construction scale magnitude after finite division. Caller selects this regularization policy."
+          },
+          {
+            "direction": "output",
+            "name": "centers",
+            "ordinal": 0,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Aligned finite float64 transverse centers (N,2), in point length units."
+          },
+          {
+            "direction": "output",
+            "name": "radius",
+            "ordinal": 1,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Aligned finite nonnegative float64 radii (N,), in point length units."
+          }
+        ],
+        "operation": "Construct helix transverse centers and radii from points, tangents and signed pitch with explicit regularization.",
+        "plain_description": "Build spiral paths from starting points and directions, with limits chosen by the caller.",
+        "validity_bounds": "Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles. Aligned finite float64 matrix (N,3), dimensionless, not necessarily unit vectors. Regulation may change direction and destroys scale invariance near its thresholds. Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points. Positive finite real scalar, dimensionless. Floors axial tangent magnitude; zero uses positive sign. Caller selects this regularization policy. Positive finite real scalar in point length units. Clips the construction scale magnitude after finite division. Caller selects this regularization policy. Aligned finite float64 transverse centers (N,2), in point length units. Aligned finite nonnegative float64 radii (N,), in point length units.",
+        "reuse": "Generic analytic helix geometry for caller-defined coordinates and units; regularization controls are explicit and detector policy remains in the recipe.",
+        "registered_provider_dependencies": []
+      },
+      {
+        "artifact_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+        "fqdn": "sciona.atoms.physics.helix_tangent.oriented_helix_tangent",
+        "runtime_fqdn": "sciona.atoms.physics.helix_tangent.oriented_helix_tangent",
+        "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+        "content_hash": "b767809ac29ce9b16eacf9be712643f6c6cb540866352c806ab46a93baaaee49",
+        "interfaces": [
+          {
+            "direction": "input",
+            "name": "points",
+            "ordinal": 0,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles."
+          },
+          {
+            "direction": "input",
+            "name": "centers",
+            "ordinal": 1,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Aligned finite float64 transverse centers (N,2), in point length units."
+          },
+          {
+            "direction": "input",
+            "name": "radius",
+            "ordinal": 2,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Aligned finite nonnegative float64 radii (N,), in point length units."
+          },
+          {
+            "direction": "input",
+            "name": "pitch",
+            "ordinal": 3,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points."
+          },
+          {
+            "direction": "input",
+            "name": "axial_direction",
+            "ordinal": 4,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Aligned finite float64 vector (N,). Only its sign is used; product with pitch must be finite and representably nonzero."
+          },
+          {
+            "direction": "output",
+            "name": "tangent",
+            "ordinal": 0,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Finite float64 oriented tangent matrix (N,3). Unit length only when supplied points lie on their transverse circles; inconsistent geometry is not normalized."
+          }
+        ],
+        "operation": "Evaluate oriented helix tangents using caller-supplied transverse circles, pitch and axial direction.",
+        "plain_description": "Find the direction of travel along spiral paths using their supplied shape and orientation.",
+        "validity_bounds": "Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles. Aligned finite float64 transverse centers (N,2), in point length units. Aligned finite nonnegative float64 radii (N,), in point length units. Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points. Aligned finite float64 vector (N,). Only its sign is used; product with pitch must be finite and representably nonzero. Finite float64 oriented tangent matrix (N,3). Unit length only when supplied points lie on their transverse circles; inconsistent geometry is not normalized.",
+        "reuse": "Generic analytic helix geometry for caller-defined coordinates and units; regularization controls are explicit and detector policy remains in the recipe.",
+        "registered_provider_dependencies": []
+      }
+    ],
+    "tests": {
+      "tests": 52,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exact_source_cases": 24,
+    "independent_analytic_tangent_cases": 12,
+    "software_sha256": {
+      "tests/test_helix_tangent_providers.py": "385df6c6c4f02236767de16b12775dcecaea79ba5b3ad984d4df634289feb8b3",
+      "tests/test_trackml_tangent_boundary.py": "b04abe8a5eba1f6a212d5c57bfa59b9c9b7d5d461b263b0acf15e7de0b47eb32",
+      "scripts/review_trackml_tangent_provider_semantics.py": "e2c242ae8b31ce737b99cb9bd89208929bc9c17f579ee1e6cee8f360ae593cf9",
+      "scripts/stage_trackml_tangent_providers.py": "3c899851c060288f79cf130ea077efc80b7b0ce46c1faa0f4768b9d999467911",
+      "sciona/ghost/registry.py": "793723a75d07a88eed39f59d8d4dc327c54adbf75db7a03003516a6f74c81b51",
+      "sciona/decomposed_trackml_tangent_lifecycle.py": "029072a25f95339a84cf293eeed1cc0ab1edd8f7ce67bcdbb93a2cd0352e7973",
+      "sciona/trackml_nearest.py": "28ffa9afe1cc1d65b68423c6423d6ff6ebdc4c4630f92787ef91752657f73773",
+      "sciona-atoms-physics/src/sciona/atoms/physics/helix_tangent.py": "5da19b65fb36b7071cc63a2bc4066d64d9cf99cc6f2d9cc615ef9ce9f27bd9ff"
+    },
+    "installed_packages": {
+      "annotated-types": {
+        "version": "0.7.0",
+        "hashed_files_verified": 7,
+        "active_requirements": []
+      },
+      "asttokens": {
+        "version": "2.4.1",
+        "hashed_files_verified": 13,
+        "active_requirements": [
+          "six>=1.12.0"
+        ]
+      },
+      "icontract": {
+        "version": "2.7.3",
+        "hashed_files_verified": 16,
+        "active_requirements": [
+          "asttokens<3,>=2",
+          "typing_extensions"
+        ]
+      },
+      "mpmath": {
+        "version": "1.3.0",
+        "hashed_files_verified": 92,
+        "active_requirements": []
+      },
+      "numpy": {
+        "version": "2.2.6",
+        "hashed_files_verified": 876,
+        "active_requirements": []
+      },
+      "pydantic": {
+        "version": "2.12.5",
+        "hashed_files_verified": 111,
+        "active_requirements": [
+          "annotated-types>=0.6.0",
+          "pydantic-core==2.41.5",
+          "typing-extensions>=4.14.1",
+          "typing-inspection>=0.4.2"
+        ]
+      },
+      "pydantic-core": {
+        "version": "2.41.5",
+        "hashed_files_verified": 9,
+        "active_requirements": [
+          "typing-extensions>=4.14.1"
+        ]
+      },
+      "six": {
+        "version": "1.17.0",
+        "hashed_files_verified": 6,
+        "active_requirements": []
+      },
+      "sympy": {
+        "version": "1.14.0",
+        "hashed_files_verified": 1571,
+        "active_requirements": [
+          "mpmath<1.4,>=1.1.0"
+        ]
+      },
+      "threadpoolctl": {
+        "version": "3.6.0",
+        "hashed_files_verified": 5,
+        "active_requirements": []
+      },
+      "typing-extensions": {
+        "version": "4.16.0",
+        "hashed_files_verified": 6,
+        "active_requirements": []
+      },
+      "typing-inspection": {
+        "version": "0.4.2",
+        "hashed_files_verified": 9,
+        "active_requirements": [
+          "typing-extensions>=4.12.0"
+        ]
+      }
+    },
+    "intake_plan_sha256": "f897bb0c1d11f7e4d04d65b9a43c544f92e093b911939ddf0351b728ec7dc402",
+    "resource_policy": {
+      "serial_tests": true,
+      "native_threads": 1
+    },
+    "limitations": [
+      "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+      "Aligned finite float64 geometry arrays only. Empty batches are supported. Caller defines coordinate units.",
+      "Construction accepts nonunit dimensionless tangents, signed pitch and explicit positive regulation controls.",
+      "Axial flooring and scale clipping preserve source arithmetic; regulation may change direction and tangent scale invariance.",
+      "Oriented tangent uses caller-supplied centers and radii. Unit length is guaranteed only for points on their transverse circles.",
+      "Direction times pitch must be finite and representably nonzero. Nonfinite arithmetic rejects; rounding error is not exhaustively bounded.",
+      "No detector geometry, coordinate conversion or physical field model is supplied. Selection and cell policy remain in the recipe.",
+      "Registered concrete witnesses reject abstract execution; no symbolic proof is claimed.",
+      "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+      "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+      "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate."
+    ]
+  },
+  "inserts": [
+    {
+      "table": "references_registry",
+      "keys": {
+        "ref_id": "trackml_tangent-provider-review-v1"
+      },
+      "row": {
+        "ref_id": "trackml_tangent-provider-review-v1",
+        "ref_type": "web",
+        "title": "Reusable helix tangent geometry synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/7e2ffc09/docs/reviews/trackml_tangent_provider_semantics.json"
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+        "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+        "name": "points"
+      },
+      "row": {
+        "atom_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+        "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+        "name": "points",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles.",
+        "dejargonized_description": "Caller supplies points.",
+        "constraints_json": {
+          "parameter_contract": "Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Aligned finite float64 geometry arrays only. Empty batches are supported. Caller defines coordinate units.",
+            "Construction accepts nonunit dimensionless tangents, signed pitch and explicit positive regulation controls.",
+            "Axial flooring and scale clipping preserve source arithmetic; regulation may change direction and tangent scale invariance.",
+            "Oriented tangent uses caller-supplied centers and radii. Unit length is guaranteed only for points on their transverse circles.",
+            "Direction times pitch must be finite and representably nonzero. Nonfinite arithmetic rejects; rounding error is not exhaustively bounded.",
+            "No detector geometry, coordinate conversion or physical field model is supplied. Selection and cell policy remain in the recipe.",
+            "Registered concrete witnesses reject abstract execution; no symbolic proof is claimed.",
+            "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+        "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+        "name": "tangents"
+      },
+      "row": {
+        "atom_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+        "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+        "name": "tangents",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Aligned finite float64 matrix (N,3), dimensionless, not necessarily unit vectors. Regulation may change direction and destroys scale invariance near its thresholds.",
+        "dejargonized_description": "Caller supplies tangents.",
+        "constraints_json": {
+          "parameter_contract": "Aligned finite float64 matrix (N,3), dimensionless, not necessarily unit vectors. Regulation may change direction and destroys scale invariance near its thresholds.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Aligned finite float64 geometry arrays only. Empty batches are supported. Caller defines coordinate units.",
+            "Construction accepts nonunit dimensionless tangents, signed pitch and explicit positive regulation controls.",
+            "Axial flooring and scale clipping preserve source arithmetic; regulation may change direction and tangent scale invariance.",
+            "Oriented tangent uses caller-supplied centers and radii. Unit length is guaranteed only for points on their transverse circles.",
+            "Direction times pitch must be finite and representably nonzero. Nonfinite arithmetic rejects; rounding error is not exhaustively bounded.",
+            "No detector geometry, coordinate conversion or physical field model is supplied. Selection and cell policy remain in the recipe.",
+            "Registered concrete witnesses reject abstract execution; no symbolic proof is claimed.",
+            "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+        "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+        "name": "pitch"
+      },
+      "row": {
+        "atom_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+        "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+        "name": "pitch",
+        "position": 2,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points.",
+        "dejargonized_description": "Caller supplies pitch.",
+        "constraints_json": {
+          "parameter_contract": "Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Aligned finite float64 geometry arrays only. Empty batches are supported. Caller defines coordinate units.",
+            "Construction accepts nonunit dimensionless tangents, signed pitch and explicit positive regulation controls.",
+            "Axial flooring and scale clipping preserve source arithmetic; regulation may change direction and tangent scale invariance.",
+            "Oriented tangent uses caller-supplied centers and radii. Unit length is guaranteed only for points on their transverse circles.",
+            "Direction times pitch must be finite and representably nonzero. Nonfinite arithmetic rejects; rounding error is not exhaustively bounded.",
+            "No detector geometry, coordinate conversion or physical field model is supplied. Selection and cell policy remain in the recipe.",
+            "Registered concrete witnesses reject abstract execution; no symbolic proof is claimed.",
+            "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+        "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+        "name": "minimum_axial"
+      },
+      "row": {
+        "atom_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+        "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+        "name": "minimum_axial",
+        "position": 3,
+        "kind": "positional_or_keyword",
+        "type_desc": "float",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Positive finite real scalar, dimensionless. Floors axial tangent magnitude; zero uses positive sign. Caller selects this regularization policy.",
+        "dejargonized_description": "Caller supplies minimum axial.",
+        "constraints_json": {
+          "parameter_contract": "Positive finite real scalar, dimensionless. Floors axial tangent magnitude; zero uses positive sign. Caller selects this regularization policy.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Aligned finite float64 geometry arrays only. Empty batches are supported. Caller defines coordinate units.",
+            "Construction accepts nonunit dimensionless tangents, signed pitch and explicit positive regulation controls.",
+            "Axial flooring and scale clipping preserve source arithmetic; regulation may change direction and tangent scale invariance.",
+            "Oriented tangent uses caller-supplied centers and radii. Unit length is guaranteed only for points on their transverse circles.",
+            "Direction times pitch must be finite and representably nonzero. Nonfinite arithmetic rejects; rounding error is not exhaustively bounded.",
+            "No detector geometry, coordinate conversion or physical field model is supplied. Selection and cell policy remain in the recipe.",
+            "Registered concrete witnesses reject abstract execution; no symbolic proof is claimed.",
+            "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+        "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+        "name": "maximum_scale"
+      },
+      "row": {
+        "atom_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+        "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+        "name": "maximum_scale",
+        "position": 4,
+        "kind": "positional_or_keyword",
+        "type_desc": "float",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Positive finite real scalar in point length units. Clips the construction scale magnitude after finite division. Caller selects this regularization policy.",
+        "dejargonized_description": "Caller supplies maximum scale.",
+        "constraints_json": {
+          "parameter_contract": "Positive finite real scalar in point length units. Clips the construction scale magnitude after finite division. Caller selects this regularization policy.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Aligned finite float64 geometry arrays only. Empty batches are supported. Caller defines coordinate units.",
+            "Construction accepts nonunit dimensionless tangents, signed pitch and explicit positive regulation controls.",
+            "Axial flooring and scale clipping preserve source arithmetic; regulation may change direction and tangent scale invariance.",
+            "Oriented tangent uses caller-supplied centers and radii. Unit length is guaranteed only for points on their transverse circles.",
+            "Direction times pitch must be finite and representably nonzero. Nonfinite arithmetic rejects; rounding error is not exhaustively bounded.",
+            "No detector geometry, coordinate conversion or physical field model is supplied. Selection and cell policy remain in the recipe.",
+            "Registered concrete witnesses reject abstract execution; no symbolic proof is claimed.",
+            "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+        "kind": "technical",
+        "language": "en",
+        "content": "Construct helix transverse centers and radii from points, tangents and signed pitch with explicit regularization. Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles. Aligned finite float64 matrix (N,3), dimensionless, not necessarily unit vectors. Regulation may change direction and destroys scale invariance near its thresholds. Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points. Positive finite real scalar, dimensionless. Floors axial tangent magnitude; zero uses positive sign. Caller selects this regularization policy. Positive finite real scalar in point length units. Clips the construction scale magnitude after finite division. Caller selects this regularization policy. Aligned finite float64 transverse centers (N,2), in point length units. Aligned finite nonnegative float64 radii (N,), in point length units. Generic analytic helix geometry for caller-defined coordinates and units; regularization controls are explicit and detector policy remains in the recipe.",
+        "generated_by": "trackml_tangent-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Build spiral paths from starting points and directions, with limits chosen by the caller. Accuracy on new problems must be checked separately.",
+        "generated_by": "trackml_tangent-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "atom_references",
+      "keys": {
+        "atom_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+        "ref_key": "trackml_tangent-provider-review-v1"
+      },
+      "row": {
+        "atom_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+        "ref_key": "trackml_tangent-provider-review-v1",
+        "ref_id": "trackml_tangent-provider-review-v1",
+        "title": "Reusable helix tangent geometry synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/7e2ffc09/docs/reviews/trackml_tangent_provider_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Construct helix transverse centers and radii from points, tangents and signed pitch with explicit regularization. Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles. Aligned finite float64 matrix (N,3), dimensionless, not necessarily unit vectors. Regulation may change direction and destroys scale invariance near its thresholds. Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points. Positive finite real scalar, dimensionless. Floors axial tangent magnitude; zero uses positive sign. Caller selects this regularization policy. Positive finite real scalar in point length units. Clips the construction scale magnitude after finite division. Caller selects this regularization policy. Aligned finite float64 transverse centers (N,2), in point length units. Aligned finite nonnegative float64 radii (N,), in point length units."
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+        "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+        "name": "points"
+      },
+      "row": {
+        "artifact_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+        "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+        "name": "points",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles.",
+        "dejargonized_description": "Caller supplies points.",
+        "constraints_json": {
+          "parameter_contract": "Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Aligned finite float64 geometry arrays only. Empty batches are supported. Caller defines coordinate units.",
+            "Construction accepts nonunit dimensionless tangents, signed pitch and explicit positive regulation controls.",
+            "Axial flooring and scale clipping preserve source arithmetic; regulation may change direction and tangent scale invariance.",
+            "Oriented tangent uses caller-supplied centers and radii. Unit length is guaranteed only for points on their transverse circles.",
+            "Direction times pitch must be finite and representably nonzero. Nonfinite arithmetic rejects; rounding error is not exhaustively bounded.",
+            "No detector geometry, coordinate conversion or physical field model is supplied. Selection and cell policy remain in the recipe.",
+            "Registered concrete witnesses reject abstract execution; no symbolic proof is claimed.",
+            "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+        "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+        "name": "tangents"
+      },
+      "row": {
+        "artifact_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+        "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+        "name": "tangents",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Aligned finite float64 matrix (N,3), dimensionless, not necessarily unit vectors. Regulation may change direction and destroys scale invariance near its thresholds.",
+        "dejargonized_description": "Caller supplies tangents.",
+        "constraints_json": {
+          "parameter_contract": "Aligned finite float64 matrix (N,3), dimensionless, not necessarily unit vectors. Regulation may change direction and destroys scale invariance near its thresholds.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Aligned finite float64 geometry arrays only. Empty batches are supported. Caller defines coordinate units.",
+            "Construction accepts nonunit dimensionless tangents, signed pitch and explicit positive regulation controls.",
+            "Axial flooring and scale clipping preserve source arithmetic; regulation may change direction and tangent scale invariance.",
+            "Oriented tangent uses caller-supplied centers and radii. Unit length is guaranteed only for points on their transverse circles.",
+            "Direction times pitch must be finite and representably nonzero. Nonfinite arithmetic rejects; rounding error is not exhaustively bounded.",
+            "No detector geometry, coordinate conversion or physical field model is supplied. Selection and cell policy remain in the recipe.",
+            "Registered concrete witnesses reject abstract execution; no symbolic proof is claimed.",
+            "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+        "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+        "name": "pitch"
+      },
+      "row": {
+        "artifact_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+        "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+        "name": "pitch",
+        "position": 2,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points.",
+        "dejargonized_description": "Caller supplies pitch.",
+        "constraints_json": {
+          "parameter_contract": "Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Aligned finite float64 geometry arrays only. Empty batches are supported. Caller defines coordinate units.",
+            "Construction accepts nonunit dimensionless tangents, signed pitch and explicit positive regulation controls.",
+            "Axial flooring and scale clipping preserve source arithmetic; regulation may change direction and tangent scale invariance.",
+            "Oriented tangent uses caller-supplied centers and radii. Unit length is guaranteed only for points on their transverse circles.",
+            "Direction times pitch must be finite and representably nonzero. Nonfinite arithmetic rejects; rounding error is not exhaustively bounded.",
+            "No detector geometry, coordinate conversion or physical field model is supplied. Selection and cell policy remain in the recipe.",
+            "Registered concrete witnesses reject abstract execution; no symbolic proof is claimed.",
+            "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+        "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+        "name": "minimum_axial"
+      },
+      "row": {
+        "artifact_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+        "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+        "name": "minimum_axial",
+        "position": 3,
+        "kind": "positional_or_keyword",
+        "type_desc": "float",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Positive finite real scalar, dimensionless. Floors axial tangent magnitude; zero uses positive sign. Caller selects this regularization policy.",
+        "dejargonized_description": "Caller supplies minimum axial.",
+        "constraints_json": {
+          "parameter_contract": "Positive finite real scalar, dimensionless. Floors axial tangent magnitude; zero uses positive sign. Caller selects this regularization policy.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Aligned finite float64 geometry arrays only. Empty batches are supported. Caller defines coordinate units.",
+            "Construction accepts nonunit dimensionless tangents, signed pitch and explicit positive regulation controls.",
+            "Axial flooring and scale clipping preserve source arithmetic; regulation may change direction and tangent scale invariance.",
+            "Oriented tangent uses caller-supplied centers and radii. Unit length is guaranteed only for points on their transverse circles.",
+            "Direction times pitch must be finite and representably nonzero. Nonfinite arithmetic rejects; rounding error is not exhaustively bounded.",
+            "No detector geometry, coordinate conversion or physical field model is supplied. Selection and cell policy remain in the recipe.",
+            "Registered concrete witnesses reject abstract execution; no symbolic proof is claimed.",
+            "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+        "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+        "name": "maximum_scale"
+      },
+      "row": {
+        "artifact_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+        "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+        "name": "maximum_scale",
+        "position": 4,
+        "kind": "positional_or_keyword",
+        "type_desc": "float",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Positive finite real scalar in point length units. Clips the construction scale magnitude after finite division. Caller selects this regularization policy.",
+        "dejargonized_description": "Caller supplies maximum scale.",
+        "constraints_json": {
+          "parameter_contract": "Positive finite real scalar in point length units. Clips the construction scale magnitude after finite division. Caller selects this regularization policy.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Aligned finite float64 geometry arrays only. Empty batches are supported. Caller defines coordinate units.",
+            "Construction accepts nonunit dimensionless tangents, signed pitch and explicit positive regulation controls.",
+            "Axial flooring and scale clipping preserve source arithmetic; regulation may change direction and tangent scale invariance.",
+            "Oriented tangent uses caller-supplied centers and radii. Unit length is guaranteed only for points on their transverse circles.",
+            "Direction times pitch must be finite and representably nonzero. Nonfinite arithmetic rejects; rounding error is not exhaustively bounded.",
+            "No detector geometry, coordinate conversion or physical field model is supplied. Selection and cell policy remain in the recipe.",
+            "Registered concrete witnesses reject abstract execution; no symbolic proof is claimed.",
+            "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+        "kind": "technical",
+        "language": "en",
+        "content": "Construct helix transverse centers and radii from points, tangents and signed pitch with explicit regularization. Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles. Aligned finite float64 matrix (N,3), dimensionless, not necessarily unit vectors. Regulation may change direction and destroys scale invariance near its thresholds. Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points. Positive finite real scalar, dimensionless. Floors axial tangent magnitude; zero uses positive sign. Caller selects this regularization policy. Positive finite real scalar in point length units. Clips the construction scale magnitude after finite division. Caller selects this regularization policy. Aligned finite float64 transverse centers (N,2), in point length units. Aligned finite nonnegative float64 radii (N,), in point length units. Generic analytic helix geometry for caller-defined coordinates and units; regularization controls are explicit and detector policy remains in the recipe.",
+        "generated_by": "trackml_tangent-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Build spiral paths from starting points and directions, with limits chosen by the caller. Accuracy on new problems must be checked separately.",
+        "generated_by": "trackml_tangent-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "artifact_references",
+      "keys": {
+        "artifact_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+        "ref_key": "trackml_tangent-provider-review-v1"
+      },
+      "row": {
+        "artifact_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+        "ref_key": "trackml_tangent-provider-review-v1",
+        "ref_id": "trackml_tangent-provider-review-v1",
+        "title": "Reusable helix tangent geometry synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/7e2ffc09/docs/reviews/trackml_tangent_provider_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Construct helix transverse centers and radii from points, tangents and signed pitch with explicit regularization. Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles. Aligned finite float64 matrix (N,3), dimensionless, not necessarily unit vectors. Regulation may change direction and destroys scale invariance near its thresholds. Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points. Positive finite real scalar, dimensionless. Floors axial tangent magnitude; zero uses positive sign. Caller selects this regularization policy. Positive finite real scalar in point length units. Clips the construction scale magnitude after finite division. Caller selects this regularization policy. Aligned finite float64 transverse centers (N,2), in point length units. Aligned finite nonnegative float64 radii (N,), in point length units."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+        "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+        "name": "points"
+      },
+      "row": {
+        "atom_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+        "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+        "name": "points",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles.",
+        "dejargonized_description": "Caller supplies points.",
+        "constraints_json": {
+          "parameter_contract": "Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Aligned finite float64 geometry arrays only. Empty batches are supported. Caller defines coordinate units.",
+            "Construction accepts nonunit dimensionless tangents, signed pitch and explicit positive regulation controls.",
+            "Axial flooring and scale clipping preserve source arithmetic; regulation may change direction and tangent scale invariance.",
+            "Oriented tangent uses caller-supplied centers and radii. Unit length is guaranteed only for points on their transverse circles.",
+            "Direction times pitch must be finite and representably nonzero. Nonfinite arithmetic rejects; rounding error is not exhaustively bounded.",
+            "No detector geometry, coordinate conversion or physical field model is supplied. Selection and cell policy remain in the recipe.",
+            "Registered concrete witnesses reject abstract execution; no symbolic proof is claimed.",
+            "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+        "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+        "name": "centers"
+      },
+      "row": {
+        "atom_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+        "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+        "name": "centers",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Aligned finite float64 transverse centers (N,2), in point length units.",
+        "dejargonized_description": "Caller supplies centers.",
+        "constraints_json": {
+          "parameter_contract": "Aligned finite float64 transverse centers (N,2), in point length units.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Aligned finite float64 geometry arrays only. Empty batches are supported. Caller defines coordinate units.",
+            "Construction accepts nonunit dimensionless tangents, signed pitch and explicit positive regulation controls.",
+            "Axial flooring and scale clipping preserve source arithmetic; regulation may change direction and tangent scale invariance.",
+            "Oriented tangent uses caller-supplied centers and radii. Unit length is guaranteed only for points on their transverse circles.",
+            "Direction times pitch must be finite and representably nonzero. Nonfinite arithmetic rejects; rounding error is not exhaustively bounded.",
+            "No detector geometry, coordinate conversion or physical field model is supplied. Selection and cell policy remain in the recipe.",
+            "Registered concrete witnesses reject abstract execution; no symbolic proof is claimed.",
+            "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+        "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+        "name": "radius"
+      },
+      "row": {
+        "atom_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+        "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+        "name": "radius",
+        "position": 2,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Aligned finite nonnegative float64 radii (N,), in point length units.",
+        "dejargonized_description": "Caller supplies radius.",
+        "constraints_json": {
+          "parameter_contract": "Aligned finite nonnegative float64 radii (N,), in point length units.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Aligned finite float64 geometry arrays only. Empty batches are supported. Caller defines coordinate units.",
+            "Construction accepts nonunit dimensionless tangents, signed pitch and explicit positive regulation controls.",
+            "Axial flooring and scale clipping preserve source arithmetic; regulation may change direction and tangent scale invariance.",
+            "Oriented tangent uses caller-supplied centers and radii. Unit length is guaranteed only for points on their transverse circles.",
+            "Direction times pitch must be finite and representably nonzero. Nonfinite arithmetic rejects; rounding error is not exhaustively bounded.",
+            "No detector geometry, coordinate conversion or physical field model is supplied. Selection and cell policy remain in the recipe.",
+            "Registered concrete witnesses reject abstract execution; no symbolic proof is claimed.",
+            "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+        "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+        "name": "pitch"
+      },
+      "row": {
+        "atom_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+        "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+        "name": "pitch",
+        "position": 3,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points.",
+        "dejargonized_description": "Caller supplies pitch.",
+        "constraints_json": {
+          "parameter_contract": "Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Aligned finite float64 geometry arrays only. Empty batches are supported. Caller defines coordinate units.",
+            "Construction accepts nonunit dimensionless tangents, signed pitch and explicit positive regulation controls.",
+            "Axial flooring and scale clipping preserve source arithmetic; regulation may change direction and tangent scale invariance.",
+            "Oriented tangent uses caller-supplied centers and radii. Unit length is guaranteed only for points on their transverse circles.",
+            "Direction times pitch must be finite and representably nonzero. Nonfinite arithmetic rejects; rounding error is not exhaustively bounded.",
+            "No detector geometry, coordinate conversion or physical field model is supplied. Selection and cell policy remain in the recipe.",
+            "Registered concrete witnesses reject abstract execution; no symbolic proof is claimed.",
+            "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+        "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+        "name": "axial_direction"
+      },
+      "row": {
+        "atom_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+        "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+        "name": "axial_direction",
+        "position": 4,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Aligned finite float64 vector (N,). Only its sign is used; product with pitch must be finite and representably nonzero.",
+        "dejargonized_description": "Caller supplies axial direction.",
+        "constraints_json": {
+          "parameter_contract": "Aligned finite float64 vector (N,). Only its sign is used; product with pitch must be finite and representably nonzero.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Aligned finite float64 geometry arrays only. Empty batches are supported. Caller defines coordinate units.",
+            "Construction accepts nonunit dimensionless tangents, signed pitch and explicit positive regulation controls.",
+            "Axial flooring and scale clipping preserve source arithmetic; regulation may change direction and tangent scale invariance.",
+            "Oriented tangent uses caller-supplied centers and radii. Unit length is guaranteed only for points on their transverse circles.",
+            "Direction times pitch must be finite and representably nonzero. Nonfinite arithmetic rejects; rounding error is not exhaustively bounded.",
+            "No detector geometry, coordinate conversion or physical field model is supplied. Selection and cell policy remain in the recipe.",
+            "Registered concrete witnesses reject abstract execution; no symbolic proof is claimed.",
+            "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+        "kind": "technical",
+        "language": "en",
+        "content": "Evaluate oriented helix tangents using caller-supplied transverse circles, pitch and axial direction. Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles. Aligned finite float64 transverse centers (N,2), in point length units. Aligned finite nonnegative float64 radii (N,), in point length units. Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points. Aligned finite float64 vector (N,). Only its sign is used; product with pitch must be finite and representably nonzero. Finite float64 oriented tangent matrix (N,3). Unit length only when supplied points lie on their transverse circles; inconsistent geometry is not normalized. Generic analytic helix geometry for caller-defined coordinates and units; regularization controls are explicit and detector policy remains in the recipe.",
+        "generated_by": "trackml_tangent-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.007576
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Find the direction of travel along spiral paths using their supplied shape and orientation. Accuracy on new problems must be checked separately.",
+        "generated_by": "trackml_tangent-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "atom_references",
+      "keys": {
+        "atom_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+        "ref_key": "trackml_tangent-provider-review-v1"
+      },
+      "row": {
+        "atom_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+        "ref_key": "trackml_tangent-provider-review-v1",
+        "ref_id": "trackml_tangent-provider-review-v1",
+        "title": "Reusable helix tangent geometry synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/7e2ffc09/docs/reviews/trackml_tangent_provider_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Evaluate oriented helix tangents using caller-supplied transverse circles, pitch and axial direction. Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles. Aligned finite float64 transverse centers (N,2), in point length units. Aligned finite nonnegative float64 radii (N,), in point length units. Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points. Aligned finite float64 vector (N,). Only its sign is used; product with pitch must be finite and representably nonzero. Finite float64 oriented tangent matrix (N,3). Unit length only when supplied points lie on their transverse circles; inconsistent geometry is not normalized."
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+        "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+        "name": "points"
+      },
+      "row": {
+        "artifact_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+        "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+        "name": "points",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles.",
+        "dejargonized_description": "Caller supplies points.",
+        "constraints_json": {
+          "parameter_contract": "Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Aligned finite float64 geometry arrays only. Empty batches are supported. Caller defines coordinate units.",
+            "Construction accepts nonunit dimensionless tangents, signed pitch and explicit positive regulation controls.",
+            "Axial flooring and scale clipping preserve source arithmetic; regulation may change direction and tangent scale invariance.",
+            "Oriented tangent uses caller-supplied centers and radii. Unit length is guaranteed only for points on their transverse circles.",
+            "Direction times pitch must be finite and representably nonzero. Nonfinite arithmetic rejects; rounding error is not exhaustively bounded.",
+            "No detector geometry, coordinate conversion or physical field model is supplied. Selection and cell policy remain in the recipe.",
+            "Registered concrete witnesses reject abstract execution; no symbolic proof is claimed.",
+            "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+        "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+        "name": "centers"
+      },
+      "row": {
+        "artifact_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+        "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+        "name": "centers",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Aligned finite float64 transverse centers (N,2), in point length units.",
+        "dejargonized_description": "Caller supplies centers.",
+        "constraints_json": {
+          "parameter_contract": "Aligned finite float64 transverse centers (N,2), in point length units.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Aligned finite float64 geometry arrays only. Empty batches are supported. Caller defines coordinate units.",
+            "Construction accepts nonunit dimensionless tangents, signed pitch and explicit positive regulation controls.",
+            "Axial flooring and scale clipping preserve source arithmetic; regulation may change direction and tangent scale invariance.",
+            "Oriented tangent uses caller-supplied centers and radii. Unit length is guaranteed only for points on their transverse circles.",
+            "Direction times pitch must be finite and representably nonzero. Nonfinite arithmetic rejects; rounding error is not exhaustively bounded.",
+            "No detector geometry, coordinate conversion or physical field model is supplied. Selection and cell policy remain in the recipe.",
+            "Registered concrete witnesses reject abstract execution; no symbolic proof is claimed.",
+            "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+        "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+        "name": "radius"
+      },
+      "row": {
+        "artifact_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+        "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+        "name": "radius",
+        "position": 2,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Aligned finite nonnegative float64 radii (N,), in point length units.",
+        "dejargonized_description": "Caller supplies radius.",
+        "constraints_json": {
+          "parameter_contract": "Aligned finite nonnegative float64 radii (N,), in point length units.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Aligned finite float64 geometry arrays only. Empty batches are supported. Caller defines coordinate units.",
+            "Construction accepts nonunit dimensionless tangents, signed pitch and explicit positive regulation controls.",
+            "Axial flooring and scale clipping preserve source arithmetic; regulation may change direction and tangent scale invariance.",
+            "Oriented tangent uses caller-supplied centers and radii. Unit length is guaranteed only for points on their transverse circles.",
+            "Direction times pitch must be finite and representably nonzero. Nonfinite arithmetic rejects; rounding error is not exhaustively bounded.",
+            "No detector geometry, coordinate conversion or physical field model is supplied. Selection and cell policy remain in the recipe.",
+            "Registered concrete witnesses reject abstract execution; no symbolic proof is claimed.",
+            "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+        "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+        "name": "pitch"
+      },
+      "row": {
+        "artifact_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+        "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+        "name": "pitch",
+        "position": 3,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points.",
+        "dejargonized_description": "Caller supplies pitch.",
+        "constraints_json": {
+          "parameter_contract": "Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Aligned finite float64 geometry arrays only. Empty batches are supported. Caller defines coordinate units.",
+            "Construction accepts nonunit dimensionless tangents, signed pitch and explicit positive regulation controls.",
+            "Axial flooring and scale clipping preserve source arithmetic; regulation may change direction and tangent scale invariance.",
+            "Oriented tangent uses caller-supplied centers and radii. Unit length is guaranteed only for points on their transverse circles.",
+            "Direction times pitch must be finite and representably nonzero. Nonfinite arithmetic rejects; rounding error is not exhaustively bounded.",
+            "No detector geometry, coordinate conversion or physical field model is supplied. Selection and cell policy remain in the recipe.",
+            "Registered concrete witnesses reject abstract execution; no symbolic proof is claimed.",
+            "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+        "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+        "name": "axial_direction"
+      },
+      "row": {
+        "artifact_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+        "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+        "name": "axial_direction",
+        "position": 4,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Aligned finite float64 vector (N,). Only its sign is used; product with pitch must be finite and representably nonzero.",
+        "dejargonized_description": "Caller supplies axial direction.",
+        "constraints_json": {
+          "parameter_contract": "Aligned finite float64 vector (N,). Only its sign is used; product with pitch must be finite and representably nonzero.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Aligned finite float64 geometry arrays only. Empty batches are supported. Caller defines coordinate units.",
+            "Construction accepts nonunit dimensionless tangents, signed pitch and explicit positive regulation controls.",
+            "Axial flooring and scale clipping preserve source arithmetic; regulation may change direction and tangent scale invariance.",
+            "Oriented tangent uses caller-supplied centers and radii. Unit length is guaranteed only for points on their transverse circles.",
+            "Direction times pitch must be finite and representably nonzero. Nonfinite arithmetic rejects; rounding error is not exhaustively bounded.",
+            "No detector geometry, coordinate conversion or physical field model is supplied. Selection and cell policy remain in the recipe.",
+            "Registered concrete witnesses reject abstract execution; no symbolic proof is claimed.",
+            "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+        "kind": "technical",
+        "language": "en",
+        "content": "Evaluate oriented helix tangents using caller-supplied transverse circles, pitch and axial direction. Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles. Aligned finite float64 transverse centers (N,2), in point length units. Aligned finite nonnegative float64 radii (N,), in point length units. Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points. Aligned finite float64 vector (N,). Only its sign is used; product with pitch must be finite and representably nonzero. Finite float64 oriented tangent matrix (N,3). Unit length only when supplied points lie on their transverse circles; inconsistent geometry is not normalized. Generic analytic helix geometry for caller-defined coordinates and units; regularization controls are explicit and detector policy remains in the recipe.",
+        "generated_by": "trackml_tangent-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.007576
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Find the direction of travel along spiral paths using their supplied shape and orientation. Accuracy on new problems must be checked separately.",
+        "generated_by": "trackml_tangent-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "artifact_references",
+      "keys": {
+        "artifact_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+        "ref_key": "trackml_tangent-provider-review-v1"
+      },
+      "row": {
+        "artifact_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+        "ref_key": "trackml_tangent-provider-review-v1",
+        "ref_id": "trackml_tangent-provider-review-v1",
+        "title": "Reusable helix tangent geometry synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/7e2ffc09/docs/reviews/trackml_tangent_provider_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Evaluate oriented helix tangents using caller-supplied transverse circles, pitch and axial direction. Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles. Aligned finite float64 transverse centers (N,2), in point length units. Aligned finite nonnegative float64 radii (N,), in point length units. Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points. Aligned finite float64 vector (N,). Only its sign is used; product with pitch must be finite and representably nonzero. Finite float64 oriented tangent matrix (N,3). Unit length only when supplied points lie on their transverse circles; inconsistent geometry is not normalized."
+      }
+    }
+  ],
+  "rollups": [
+    {
+      "table": "atom_audit_rollups",
+      "key": "atom_id",
+      "identity": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+          "Aligned finite float64 geometry arrays only. Empty batches are supported. Caller defines coordinate units.",
+          "Construction accepts nonunit dimensionless tangents, signed pitch and explicit positive regulation controls.",
+          "Axial flooring and scale clipping preserve source arithmetic; regulation may change direction and tangent scale invariance.",
+          "Oriented tangent uses caller-supplied centers and radii. Unit length is guaranteed only for points on their transverse circles.",
+          "Direction times pitch must be finite and representably nonzero. Nonfinite arithmetic rejects; rounding error is not exhaustively bounded.",
+          "No detector geometry, coordinate conversion or physical field model is supplied. Selection and cell policy remain in the recipe.",
+          "Registered concrete witnesses reject abstract execution; no symbolic proof is claimed.",
+          "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+          "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+          "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate.",
+          "Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles. Aligned finite float64 matrix (N,3), dimensionless, not necessarily unit vectors. Regulation may change direction and destroys scale invariance near its thresholds. Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points. Positive finite real scalar, dimensionless. Floors axial tangent magnitude; zero uses positive sign. Caller selects this regularization policy. Positive finite real scalar in point length units. Clips the construction scale magnitude after finite division. Caller selects this regularization policy. Aligned finite float64 transverse centers (N,2), in point length units. Aligned finite nonnegative float64 radii (N,), in point length units."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "artifact_audit_rollups",
+      "key": "artifact_id",
+      "identity": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+          "Aligned finite float64 geometry arrays only. Empty batches are supported. Caller defines coordinate units.",
+          "Construction accepts nonunit dimensionless tangents, signed pitch and explicit positive regulation controls.",
+          "Axial flooring and scale clipping preserve source arithmetic; regulation may change direction and tangent scale invariance.",
+          "Oriented tangent uses caller-supplied centers and radii. Unit length is guaranteed only for points on their transverse circles.",
+          "Direction times pitch must be finite and representably nonzero. Nonfinite arithmetic rejects; rounding error is not exhaustively bounded.",
+          "No detector geometry, coordinate conversion or physical field model is supplied. Selection and cell policy remain in the recipe.",
+          "Registered concrete witnesses reject abstract execution; no symbolic proof is claimed.",
+          "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+          "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+          "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate.",
+          "Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles. Aligned finite float64 matrix (N,3), dimensionless, not necessarily unit vectors. Regulation may change direction and destroys scale invariance near its thresholds. Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points. Positive finite real scalar, dimensionless. Floors axial tangent magnitude; zero uses positive sign. Caller selects this regularization policy. Positive finite real scalar in point length units. Clips the construction scale magnitude after finite division. Caller selects this regularization policy. Aligned finite float64 transverse centers (N,2), in point length units. Aligned finite nonnegative float64 radii (N,), in point length units."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "atom_audit_rollups",
+      "key": "atom_id",
+      "identity": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+          "Aligned finite float64 geometry arrays only. Empty batches are supported. Caller defines coordinate units.",
+          "Construction accepts nonunit dimensionless tangents, signed pitch and explicit positive regulation controls.",
+          "Axial flooring and scale clipping preserve source arithmetic; regulation may change direction and tangent scale invariance.",
+          "Oriented tangent uses caller-supplied centers and radii. Unit length is guaranteed only for points on their transverse circles.",
+          "Direction times pitch must be finite and representably nonzero. Nonfinite arithmetic rejects; rounding error is not exhaustively bounded.",
+          "No detector geometry, coordinate conversion or physical field model is supplied. Selection and cell policy remain in the recipe.",
+          "Registered concrete witnesses reject abstract execution; no symbolic proof is claimed.",
+          "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+          "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+          "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate.",
+          "Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles. Aligned finite float64 transverse centers (N,2), in point length units. Aligned finite nonnegative float64 radii (N,), in point length units. Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points. Aligned finite float64 vector (N,). Only its sign is used; product with pitch must be finite and representably nonzero. Finite float64 oriented tangent matrix (N,3). Unit length only when supplied points lie on their transverse circles; inconsistent geometry is not normalized."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "artifact_audit_rollups",
+      "key": "artifact_id",
+      "identity": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+          "Aligned finite float64 geometry arrays only. Empty batches are supported. Caller defines coordinate units.",
+          "Construction accepts nonunit dimensionless tangents, signed pitch and explicit positive regulation controls.",
+          "Axial flooring and scale clipping preserve source arithmetic; regulation may change direction and tangent scale invariance.",
+          "Oriented tangent uses caller-supplied centers and radii. Unit length is guaranteed only for points on their transverse circles.",
+          "Direction times pitch must be finite and representably nonzero. Nonfinite arithmetic rejects; rounding error is not exhaustively bounded.",
+          "No detector geometry, coordinate conversion or physical field model is supplied. Selection and cell policy remain in the recipe.",
+          "Registered concrete witnesses reject abstract execution; no symbolic proof is claimed.",
+          "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+          "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+          "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate.",
+          "Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles. Aligned finite float64 transverse centers (N,2), in point length units. Aligned finite nonnegative float64 radii (N,), in point length units. Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points. Aligned finite float64 vector (N,). Only its sign is used; product with pitch must be finite and representably nonzero. Finite float64 oriented tangent matrix (N,3). Unit length only when supplied points lie on their transverse circles; inconsistent geometry is not normalized."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    }
+  ],
+  "states": {
+    "3790beb0-6e7f-5177-9d92-4daeb75246b0": {
+      "atom": {
+        "status": "flagged",
+        "is_publishable": false
+      },
+      "artifact": {
+        "status": "draft",
+        "is_publishable": false
+      }
+    },
+    "a6c39896-7e52-5721-9169-b2dbfe090d91": {
+      "atom": {
+        "status": "flagged",
+        "is_publishable": false
+      },
+      "artifact": {
+        "status": "draft",
+        "is_publishable": false
+      }
+    }
+  },
+  "before": {
+    "atoms": "e454f4f3490e66b3dad1a57dd9abbe2810ae3d9e1f3e03d3db75d0522238d19d",
+    "artifacts": "eeb0c7715f472e31e19a97dd05b7787c279af57169a1c39ff338a55a7d6ad934",
+    "atom_versions": "e1f033d1c4245d4690aeb964042ae847100ec120198828ff7ba718a0d0837579",
+    "artifact_versions": "82ae15648386680e2d0dd996865217467035f6e01a0e346564915850fafba098",
+    "atom_io_specs": "5bb3dbadf68221f4b8513f8cc9dafc49c56ec3c63731b6554203cde43dd5233f",
+    "artifact_io_specs": "578d25bb9fcaae941cbe3b5d450d51961c0ed30d3fce5a145394227ac79c6561",
+    "atom_parameters": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_parameters": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_descriptions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_descriptions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_references": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_references": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_audit_rollups": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_audit_rollups": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_audit_evidence": "eabe5c256fb7587c8330381add5d441081009fad03b6fa5e2f6741cb2c0be5c5"
+  },
+  "preserved": {
+    "atom_versions": [
+      {
+        "row": {
+          "s3_key": "",
+          "semver": "0.0.0+local.34785dfce4a5",
+          "atom_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+          "is_latest": true,
+          "created_at": "2026-11-06T15:03:52.713885+00:00",
+          "trust_tier": 3,
+          "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+          "fingerprint": "a18300ea0293bed20c6496bc9165c128b10aa3d259da3e3a9783c0e24d2b2a2b",
+          "content_hash": "34785dfce4a5efcaf8f87a5ef015e382e2f2b5eb75b89916451898a65dbfc4be",
+          "derives_from": null
+        }
+      },
+      {
+        "row": {
+          "s3_key": "",
+          "semver": "0.0.0+local.b767809ac29c",
+          "atom_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+          "is_latest": true,
+          "created_at": "2026-11-06T15:03:52.713885+00:00",
+          "trust_tier": 3,
+          "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+          "fingerprint": "aad3dee1c4460e483b024e725942e27d79d21c490a265e0a0f3f3a386670da91",
+          "content_hash": "b767809ac29ce9b16eacf9be712643f6c6cb540866352c806ab46a93baaaee49",
+          "derives_from": null
+        }
+      }
+    ],
+    "atom_parameters": [],
+    "atom_references": [],
+    "atom_io_specs": [
+      {
+        "row": {
+          "name": "axial_direction",
+          "atom_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+          "ordinal": 4,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "515c0c05-6f99-438b-9ed2-55e76e6bd769",
+          "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+          "constraints": "Aligned finite float64 vector (N,). Only its sign is used; product with pitch must be finite and representably nonzero.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "centers",
+          "atom_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "ndarray",
+          "io_spec_id": "a69a2547-2a2b-4ac1-9ee9-22b292db150e",
+          "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+          "constraints": "Aligned finite float64 transverse centers (N,2), in point length units.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "centers",
+          "atom_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "6c6d1b1e-1264-402b-a7cb-4f22c4277ddc",
+          "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+          "constraints": "Aligned finite float64 transverse centers (N,2), in point length units.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "maximum_scale",
+          "atom_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+          "ordinal": 4,
+          "required": true,
+          "direction": "input",
+          "type_desc": "float",
+          "io_spec_id": "15246fe3-0d68-424d-b6bc-a0879c563cdb",
+          "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+          "constraints": "Positive finite real scalar in point length units. Clips the construction scale magnitude after finite division. Caller selects this regularization policy.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "minimum_axial",
+          "atom_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+          "ordinal": 3,
+          "required": true,
+          "direction": "input",
+          "type_desc": "float",
+          "io_spec_id": "9cd68ec6-b2fd-4c8b-a4cd-334861b0ff35",
+          "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+          "constraints": "Positive finite real scalar, dimensionless. Floors axial tangent magnitude; zero uses positive sign. Caller selects this regularization policy.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "pitch",
+          "atom_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+          "ordinal": 2,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "3eccf1c1-d45b-476f-97e2-6c7fe6a9485d",
+          "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+          "constraints": "Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "pitch",
+          "atom_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+          "ordinal": 3,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "33253c66-1207-488f-85dd-b6e7363905ee",
+          "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+          "constraints": "Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "points",
+          "atom_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "6ae304b8-0668-4ff1-9815-3eccdb42ddd3",
+          "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+          "constraints": "Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "points",
+          "atom_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "31f30596-07eb-4870-a91f-b114591ae323",
+          "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+          "constraints": "Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "radius",
+          "atom_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+          "ordinal": 1,
+          "required": true,
+          "direction": "output",
+          "type_desc": "ndarray",
+          "io_spec_id": "6bcbffb1-bf36-49fd-9162-d90e259ac2e3",
+          "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+          "constraints": "Aligned finite nonnegative float64 radii (N,), in point length units.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "radius",
+          "atom_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+          "ordinal": 2,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "a4eaf8d0-47f8-432c-ac5e-5b5c506ec1b4",
+          "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+          "constraints": "Aligned finite nonnegative float64 radii (N,), in point length units.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "tangent",
+          "atom_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "ndarray",
+          "io_spec_id": "39fa1137-b3f8-4059-bac2-6dc7d63c3c72",
+          "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+          "constraints": "Finite float64 oriented tangent matrix (N,3). Unit length only when supplied points lie on their transverse circles; inconsistent geometry is not normalized.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "tangents",
+          "atom_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "a5718041-3eda-4846-804f-7995bf2d22cb",
+          "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+          "constraints": "Aligned finite float64 matrix (N,3), dimensionless, not necessarily unit vectors. Regulation may change direction and destroys scale invariance near its thresholds.",
+          "default_value_repr": ""
+        }
+      }
+    ],
+    "artifact_versions": [
+      {
+        "row": {
+          "s3_key": "",
+          "semver": "0.0.0+local.34785dfce4a5",
+          "is_latest": true,
+          "created_at": "2026-11-06T15:03:52.713885+00:00",
+          "trust_tier": 3,
+          "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+          "artifact_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+          "fingerprint": "a18300ea0293bed20c6496bc9165c128b10aa3d259da3e3a9783c0e24d2b2a2b",
+          "content_hash": "34785dfce4a5efcaf8f87a5ef015e382e2f2b5eb75b89916451898a65dbfc4be",
+          "derives_from": null
+        }
+      },
+      {
+        "row": {
+          "s3_key": "",
+          "semver": "0.0.0+local.b767809ac29c",
+          "is_latest": true,
+          "created_at": "2026-11-06T15:03:52.713885+00:00",
+          "trust_tier": 3,
+          "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+          "artifact_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+          "fingerprint": "aad3dee1c4460e483b024e725942e27d79d21c490a265e0a0f3f3a386670da91",
+          "content_hash": "b767809ac29ce9b16eacf9be712643f6c6cb540866352c806ab46a93baaaee49",
+          "derives_from": null
+        }
+      }
+    ],
+    "artifact_parameters": [],
+    "artifact_references": [],
+    "artifact_io_specs": [
+      {
+        "row": {
+          "name": "axial_direction",
+          "ordinal": 4,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "ab532944-ca2b-48b5-be26-e48a703d8da2",
+          "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+          "artifact_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+          "constraints": "Aligned finite float64 vector (N,). Only its sign is used; product with pitch must be finite and representably nonzero.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "centers",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "ndarray",
+          "io_spec_id": "265cd68b-2f05-4411-8ac2-5835c85b27a3",
+          "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+          "artifact_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+          "constraints": "Aligned finite float64 transverse centers (N,2), in point length units.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "centers",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "fff9dee9-3d1e-4f6c-8513-b4a113cb0d68",
+          "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+          "artifact_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+          "constraints": "Aligned finite float64 transverse centers (N,2), in point length units.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "maximum_scale",
+          "ordinal": 4,
+          "required": true,
+          "direction": "input",
+          "type_desc": "float",
+          "io_spec_id": "1c65ea29-b4c9-41f3-b4e0-2ff98f746933",
+          "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+          "artifact_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+          "constraints": "Positive finite real scalar in point length units. Clips the construction scale magnitude after finite division. Caller selects this regularization policy.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "minimum_axial",
+          "ordinal": 3,
+          "required": true,
+          "direction": "input",
+          "type_desc": "float",
+          "io_spec_id": "443395cb-2c20-44bc-9e00-055a67289e6d",
+          "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+          "artifact_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+          "constraints": "Positive finite real scalar, dimensionless. Floors axial tangent magnitude; zero uses positive sign. Caller selects this regularization policy.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "pitch",
+          "ordinal": 2,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "e9176723-7c17-43d3-98ba-bd0bb04a8e95",
+          "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+          "artifact_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+          "constraints": "Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "pitch",
+          "ordinal": 3,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "b09b75e5-fb5e-4b29-b57f-6f9bfdc5372c",
+          "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+          "artifact_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+          "constraints": "Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "points",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "67250e98-69b4-453a-92ab-221ec8f8627a",
+          "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+          "artifact_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+          "constraints": "Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "points",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "fcfb047b-9583-41d5-b79f-2f9f7584596e",
+          "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+          "artifact_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+          "constraints": "Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "radius",
+          "ordinal": 1,
+          "required": true,
+          "direction": "output",
+          "type_desc": "ndarray",
+          "io_spec_id": "70ab1244-63f7-47c1-a538-488a0864c2b1",
+          "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+          "artifact_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+          "constraints": "Aligned finite nonnegative float64 radii (N,), in point length units.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "radius",
+          "ordinal": 2,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "8ab136a1-ddd3-4b72-8cf7-c3e819236216",
+          "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+          "artifact_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+          "constraints": "Aligned finite nonnegative float64 radii (N,), in point length units.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "tangent",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "ndarray",
+          "io_spec_id": "3a96bd1c-1e30-4481-85de-dae0eda68960",
+          "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+          "artifact_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+          "constraints": "Finite float64 oriented tangent matrix (N,3). Unit length only when supplied points lie on their transverse circles; inconsistent geometry is not normalized.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "tangents",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "382715ae-ab3e-468f-9f75-54ccc5809fcc",
+          "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+          "artifact_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+          "constraints": "Aligned finite float64 matrix (N,3), dimensionless, not necessarily unit vectors. Regulation may change direction and destroys scale invariance near its thresholds.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      }
+    ],
+    "artifact_audit_evidence": [
+      {
+        "row": {
+          "passed": true,
+          "status": "completed",
+          "details": {
+            "scope": "Exact source/interface draft intake only; no publication approval.",
+            "interfaces": [
+              {
+                "name": "points",
+                "ordinal": 0,
+                "required": true,
+                "direction": "input",
+                "type_desc": "ndarray",
+                "constraints": "Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles.",
+                "default_value_repr": ""
+              },
+              {
+                "name": "centers",
+                "ordinal": 1,
+                "required": true,
+                "direction": "input",
+                "type_desc": "ndarray",
+                "constraints": "Aligned finite float64 transverse centers (N,2), in point length units.",
+                "default_value_repr": ""
+              },
+              {
+                "name": "radius",
+                "ordinal": 2,
+                "required": true,
+                "direction": "input",
+                "type_desc": "ndarray",
+                "constraints": "Aligned finite nonnegative float64 radii (N,), in point length units.",
+                "default_value_repr": ""
+              },
+              {
+                "name": "pitch",
+                "ordinal": 3,
+                "required": true,
+                "direction": "input",
+                "type_desc": "ndarray",
+                "constraints": "Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points.",
+                "default_value_repr": ""
+              },
+              {
+                "name": "axial_direction",
+                "ordinal": 4,
+                "required": true,
+                "direction": "input",
+                "type_desc": "ndarray",
+                "constraints": "Aligned finite float64 vector (N,). Only its sign is used; product with pitch must be finite and representably nonzero.",
+                "default_value_repr": ""
+              },
+              {
+                "name": "tangent",
+                "ordinal": 0,
+                "required": true,
+                "direction": "output",
+                "type_desc": "ndarray",
+                "constraints": "Finite float64 oriented tangent matrix (N,3). Unit length only when supplied points lie on their transverse circles; inconsistent geometry is not normalized.",
+                "default_value_repr": ""
+              }
+            ],
+            "plan_sha256": "f897bb0c1d11f7e4d04d65b9a43c544f92e093b911939ddf0351b728ec7dc402",
+            "review_sha256": "8955fbc4527258fe6c9a5c9ba1c7c22577bae3680624c16b36606d17c7d119af",
+            "source_sha256": "5da19b65fb36b7071cc63a2bc4066d64d9cf99cc6f2d9cc615ef9ce9f27bd9ff"
+          },
+          "audit_type": "asset_integrity_check",
+          "created_at": "2026-11-06T15:03:52.713885+00:00",
+          "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+          "artifact_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+          "evidence_id": "e7f13cba-1124-588f-a06c-6b65ed10e8bc",
+          "source_kind": "automated",
+          "runner_version": "trackml-tangent-provider-intake.v1",
+          "review_basis_at": null,
+          "run_duration_ms": null,
+          "source_revision": "",
+          "upstream_version": ""
+        }
+      },
+      {
+        "row": {
+          "passed": true,
+          "status": "completed",
+          "details": {
+            "scope": "Exact source/interface draft intake only; no publication approval.",
+            "interfaces": [
+              {
+                "name": "points",
+                "ordinal": 0,
+                "required": true,
+                "direction": "input",
+                "type_desc": "ndarray",
+                "constraints": "Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles.",
+                "default_value_repr": ""
+              },
+              {
+                "name": "tangents",
+                "ordinal": 1,
+                "required": true,
+                "direction": "input",
+                "type_desc": "ndarray",
+                "constraints": "Aligned finite float64 matrix (N,3), dimensionless, not necessarily unit vectors. Regulation may change direction and destroys scale invariance near its thresholds.",
+                "default_value_repr": ""
+              },
+              {
+                "name": "pitch",
+                "ordinal": 2,
+                "required": true,
+                "direction": "input",
+                "type_desc": "ndarray",
+                "constraints": "Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points.",
+                "default_value_repr": ""
+              },
+              {
+                "name": "minimum_axial",
+                "ordinal": 3,
+                "required": true,
+                "direction": "input",
+                "type_desc": "float",
+                "constraints": "Positive finite real scalar, dimensionless. Floors axial tangent magnitude; zero uses positive sign. Caller selects this regularization policy.",
+                "default_value_repr": ""
+              },
+              {
+                "name": "maximum_scale",
+                "ordinal": 4,
+                "required": true,
+                "direction": "input",
+                "type_desc": "float",
+                "constraints": "Positive finite real scalar in point length units. Clips the construction scale magnitude after finite division. Caller selects this regularization policy.",
+                "default_value_repr": ""
+              },
+              {
+                "name": "centers",
+                "ordinal": 0,
+                "required": true,
+                "direction": "output",
+                "type_desc": "ndarray",
+                "constraints": "Aligned finite float64 transverse centers (N,2), in point length units.",
+                "default_value_repr": ""
+              },
+              {
+                "name": "radius",
+                "ordinal": 1,
+                "required": true,
+                "direction": "output",
+                "type_desc": "ndarray",
+                "constraints": "Aligned finite nonnegative float64 radii (N,), in point length units.",
+                "default_value_repr": ""
+              }
+            ],
+            "plan_sha256": "f897bb0c1d11f7e4d04d65b9a43c544f92e093b911939ddf0351b728ec7dc402",
+            "review_sha256": "8955fbc4527258fe6c9a5c9ba1c7c22577bae3680624c16b36606d17c7d119af",
+            "source_sha256": "5da19b65fb36b7071cc63a2bc4066d64d9cf99cc6f2d9cc615ef9ce9f27bd9ff"
+          },
+          "audit_type": "asset_integrity_check",
+          "created_at": "2026-11-06T15:03:52.713885+00:00",
+          "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+          "artifact_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+          "evidence_id": "50a0c66a-3b35-55d8-b5f4-807fd15eb1be",
+          "source_kind": "automated",
+          "runner_version": "trackml-tangent-provider-intake.v1",
+          "review_basis_at": null,
+          "run_duration_ms": null,
+          "source_revision": "",
+          "upstream_version": ""
+        }
+      }
+    ]
+  },
+  "originals_sha256": "f839940aa40edfe5734827698947ed1a426a79c16bb215d49820714ff632db50",
+  "publisher_sha256": "5d5b840523214ebb4b762d4e5273a45787747b791d3217e03ddbf04f7484f69d",
+  "review_sha256": "7ca9dc5f3ae6c63a54f3591f7a1595a7e3d049bff794ebb8ac197709fae60f62"
+}
