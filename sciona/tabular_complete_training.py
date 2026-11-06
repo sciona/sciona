@@ -16,6 +16,7 @@ from threadpoolctl import threadpool_limits
 from sciona.tabular_ensemble_features import validate_table
 from sciona.tabular_ensemble_training import binary_labels, group_ids, BaseModels, StackedModel
 from sciona.tabular_complete_features import fit_binary_tabular_features
+from sciona.tabular_feature_selection import select_training_features
 
 
 def fit_complete_stacker(numeric, categorical, labels, folds, groups, *, feature_controls,
@@ -28,7 +29,7 @@ def fit_complete_stacker(numeric, categorical, labels, folds, groups, *, feature
     Group identifiers and fold assignment remain caller policy.
     """
     if type(feature_controls) is not dict or set(feature_controls) != {
-        'clip_low', 'clip_high', 'max_mode_fraction', 'log_columns', 'interactions', 'smoothing', 'group_aggregates'}:
+        'clip_low', 'clip_high', 'max_mode_fraction', 'log_columns', 'interactions', 'smoothing', 'group_aggregates', 'selection'}:
         raise ValueError('Exact complete feature policy required')
     with threadpool_limits(limits=1):
         return _fit_complete_stacker(numeric,categorical,labels,folds,groups,
@@ -36,7 +37,10 @@ def fit_complete_stacker(numeric, categorical, labels, folds, groups, *, feature
 
 
 def _fit_base(numeric,categorical,labels,groups,controls):
-    features,x=fit_binary_tabular_features(numeric,categorical,labels.tolist(),groups,**controls['feature_controls'])
+    feature_controls = dict(controls['feature_controls'])
+    selection = feature_controls.pop('selection')
+    features,x=fit_binary_tabular_features(numeric,categorical,labels.tolist(),groups,**feature_controls)
+    features,x=select_training_features(features,x,labels,policy=selection,seed=controls['seed'])
     linear=make_pipeline(StandardScaler(),LogisticRegression(max_iter=1000,random_state=controls['seed']))
     trees=ExtraTreesClassifier(n_estimators=controls['trees'],max_depth=controls['max_depth'],min_samples_leaf=controls['min_leaf'],random_state=controls['seed'],n_jobs=1)
     with warnings.catch_warnings():
