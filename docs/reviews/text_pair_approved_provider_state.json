@@ -1,0 +1,1543 @@
+{
+  "passed": true,
+  "catalog_mutations": 0,
+  "records": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.calibration.empirical_f1.apply_column_thresholds",
+      "artifact_id": "fe055a2d-5444-5c56-a52c-b4f1876aeba1",
+      "version_id": "2c4add48-5699-5485-865c-da509201fc45",
+      "content_hash": "b1df674cf843553cef39c8fefb23c21a23cad31671503a6104e64aa954aebe8f",
+      "catalog_fqdn": "sciona.atoms.ml.calibration.empirical_f1.apply_column_thresholds",
+      "recipe_adapter": false,
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "scores",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input scores. Apply inclusive per-column thresholds to finite float64 scores (N,L).\n\nScores must be nonempty and in [0,1]. Thresholds are a finite float64 vector\n(L,), allowed outside [0,1] to express all/none decisions. Returns a new\nint64 binary matrix of identical shape. No fitting, clipping or mutation."
+        },
+        {
+          "direction": "input",
+          "name": "thresholds",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input thresholds. Apply inclusive per-column thresholds to finite float64 scores (N,L).\n\nScores must be nonempty and in [0,1]. Thresholds are a finite float64 vector\n(L,), allowed outside [0,1] to express all/none decisions. Returns a new\nint64 binary matrix of identical shape. No fitting, clipping or mutation."
+        },
+        {
+          "direction": "output",
+          "name": "predictions",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "output predictions. Apply inclusive per-column thresholds to finite float64 scores (N,L).\n\nScores must be nonempty and in [0,1]. Thresholds are a finite float64 vector\n(L,), allowed outside [0,1] to express all/none decisions. Returns a new\nint64 binary matrix of identical shape. No fitting, clipping or mutation."
+        }
+      ],
+      "ports": [
+        {
+          "direction": "input",
+          "name": "scores",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input scores. Apply inclusive per-column thresholds to finite float64 scores (N,L).\n\nScores must be nonempty and in [0,1]. Thresholds are a finite float64 vector\n(L,), allowed outside [0,1] to express all/none decisions. Returns a new\nint64 binary matrix of identical shape. No fitting, clipping or mutation."
+        },
+        {
+          "direction": "input",
+          "name": "thresholds",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input thresholds. Apply inclusive per-column thresholds to finite float64 scores (N,L).\n\nScores must be nonempty and in [0,1]. Thresholds are a finite float64 vector\n(L,), allowed outside [0,1] to express all/none decisions. Returns a new\nint64 binary matrix of identical shape. No fitting, clipping or mutation."
+        },
+        {
+          "direction": "output",
+          "name": "predictions",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "output predictions. Apply inclusive per-column thresholds to finite float64 scores (N,L).\n\nScores must be nonempty and in [0,1]. Thresholds are a finite float64 vector\n(L,), allowed outside [0,1] to express all/none decisions. Returns a new\nint64 binary matrix of identical shape. No fitting, clipping or mutation."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.calibration.empirical_f1.fit_empirical_f1_thresholds",
+      "artifact_id": "1d426405-3d0e-5545-b9c4-51b4eb2681af",
+      "version_id": "83608ee9-c047-53da-acb5-209901f7b245",
+      "content_hash": "a0c822126d1cfe7c14c4a451a0a8ae1070ffb50a0959a56776c2d3127c4e7c96",
+      "catalog_fqdn": "sciona.atoms.ml.calibration.empirical_f1.fit_empirical_f1_thresholds",
+      "recipe_adapter": false,
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "scores",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input scores. Maximize held-out empirical F1 independently for each score column.\n\nNonempty finite float64 scores (N,L) in [0,1] and aligned int64 binary\nlabels are required; every column must contain both classes. Predictions\nuse score >= threshold. Among equal computed float64 F1 values, choose\nthe highest observed-score threshold. Tied scores are processed together.\nReturns a new float64 vector (L,); inputs are unchanged. Sorting takes\nO(L*N*log(N)) time and O(N) temporary memory per column.\n\nCaller must enforce training/calibration/query separation. This fits a\ndecision threshold, not calibrated probabilities or unbiased accuracy.\nNo expected-F1 approximation, class weighting or domain policy is used."
+        },
+        {
+          "direction": "input",
+          "name": "labels",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input labels. Maximize held-out empirical F1 independently for each score column.\n\nNonempty finite float64 scores (N,L) in [0,1] and aligned int64 binary\nlabels are required; every column must contain both classes. Predictions\nuse score >= threshold. Among equal computed float64 F1 values, choose\nthe highest observed-score threshold. Tied scores are processed together.\nReturns a new float64 vector (L,); inputs are unchanged. Sorting takes\nO(L*N*log(N)) time and O(N) temporary memory per column.\n\nCaller must enforce training/calibration/query separation. This fits a\ndecision threshold, not calibrated probabilities or unbiased accuracy.\nNo expected-F1 approximation, class weighting or domain policy is used."
+        },
+        {
+          "direction": "output",
+          "name": "thresholds",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "output thresholds. Maximize held-out empirical F1 independently for each score column.\n\nNonempty finite float64 scores (N,L) in [0,1] and aligned int64 binary\nlabels are required; every column must contain both classes. Predictions\nuse score >= threshold. Among equal computed float64 F1 values, choose\nthe highest observed-score threshold. Tied scores are processed together.\nReturns a new float64 vector (L,); inputs are unchanged. Sorting takes\nO(L*N*log(N)) time and O(N) temporary memory per column.\n\nCaller must enforce training/calibration/query separation. This fits a\ndecision threshold, not calibrated probabilities or unbiased accuracy.\nNo expected-F1 approximation, class weighting or domain policy is used."
+        }
+      ],
+      "ports": [
+        {
+          "direction": "input",
+          "name": "scores",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input scores. Maximize held-out empirical F1 independently for each score column.\n\nNonempty finite float64 scores (N,L) in [0,1] and aligned int64 binary\nlabels are required; every column must contain both classes. Predictions\nuse score >= threshold. Among equal computed float64 F1 values, choose\nthe highest observed-score threshold. Tied scores are processed together.\nReturns a new float64 vector (L,); inputs are unchanged. Sorting takes\nO(L*N*log(N)) time and O(N) temporary memory per column.\n\nCaller must enforce training/calibration/query separation. This fits a\ndecision threshold, not calibrated probabilities or unbiased accuracy.\nNo expected-F1 approximation, class weighting or domain policy is used."
+        },
+        {
+          "direction": "input",
+          "name": "labels",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input labels. Maximize held-out empirical F1 independently for each score column.\n\nNonempty finite float64 scores (N,L) in [0,1] and aligned int64 binary\nlabels are required; every column must contain both classes. Predictions\nuse score >= threshold. Among equal computed float64 F1 values, choose\nthe highest observed-score threshold. Tied scores are processed together.\nReturns a new float64 vector (L,); inputs are unchanged. Sorting takes\nO(L*N*log(N)) time and O(N) temporary memory per column.\n\nCaller must enforce training/calibration/query separation. This fits a\ndecision threshold, not calibrated probabilities or unbiased accuracy.\nNo expected-F1 approximation, class weighting or domain policy is used."
+        },
+        {
+          "direction": "output",
+          "name": "thresholds",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "output thresholds. Maximize held-out empirical F1 independently for each score column.\n\nNonempty finite float64 scores (N,L) in [0,1] and aligned int64 binary\nlabels are required; every column must contain both classes. Predictions\nuse score >= threshold. Among equal computed float64 F1 values, choose\nthe highest observed-score threshold. Tied scores are processed together.\nReturns a new float64 vector (L,); inputs are unchanged. Sorting takes\nO(L*N*log(N)) time and O(N) temporary memory per column.\n\nCaller must enforce training/calibration/query separation. This fits a\ndecision threshold, not calibrated probabilities or unbiased accuracy.\nNo expected-F1 approximation, class weighting or domain policy is used."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.model_selection.materialized_prediction.average",
+      "artifact_id": "3e054efb-38d6-56c1-a7c8-26da81e7a310",
+      "version_id": "fbea5906-9987-5e67-88c4-5ffe3d971e66",
+      "content_hash": "280b371b126f6d7f580dd169289280af76fc50d64350b784c3aefd346df18af5",
+      "catalog_fqdn": "sciona.atoms.ml.model_selection.materialized_prediction.average",
+      "recipe_adapter": false,
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "vectors",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty ordered list of finite real vectors with identical shape and physical units."
+        },
+        {
+          "direction": "output",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "NDArray[np.float64]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Owned positional arithmetic mean using caller order; rejects nonfinite sum or incompatible shapes."
+        }
+      ],
+      "ports": [
+        {
+          "direction": "input",
+          "name": "vectors",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty ordered list of finite real vectors with identical shape and physical units."
+        },
+        {
+          "direction": "output",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "NDArray[np.float64]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Owned positional arithmetic mean using caller order; rejects nonfinite sum or incompatible shapes."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.sklearn.decomposition.sparse_projection.fit_sparse_projection",
+      "artifact_id": "ddb952af-3379-56a0-a38f-e92c99b3794e",
+      "version_id": "277291e7-b3df-506c-9f3c-954eb6b7b6ba",
+      "content_hash": "2f5b9ae3a9a441834cf443dc2dd7d2a78f03d34cdad4d006398802a888ca7555",
+      "catalog_fqdn": "sciona.atoms.ml.sklearn.decomposition.sparse_projection.fit_sparse_projection",
+      "recipe_adapter": false,
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "matrix",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Fit uncentered randomized right singular vectors of finite float64 CSR.\n\nRank is a positive Python int less than both matrix dimensions; iterations\nand oversamples are positive Python ints; seed is in [0,2**32). Uses auto\norientation and power normalization, a randomized range finder and gesdd.\nA dense basis lift uses unoptimized einsum. Returns owned float64 components\n(rank,features) and singular values (rank,), with right-vector sign choice.\n\nCopies CSR storage while retaining entry order and duplicates. Full input\nis not densified; reduced factors are dense and can approach input size for\nlarge rank/oversampling. Native pools are bounded to one. Caller owns total\nconcurrency, feature ordering, training split and numerical scale. Finite\ninput does not guarantee freedom from intermediate overflow; nonfinite\nfactors reject. No text, label, vocabulary, centering or scaling policy."
+        },
+        {
+          "direction": "input",
+          "name": "rank",
+          "ordinal": 1,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Fit uncentered randomized right singular vectors of finite float64 CSR.\n\nRank is a positive Python int less than both matrix dimensions; iterations\nand oversamples are positive Python ints; seed is in [0,2**32). Uses auto\norientation and power normalization, a randomized range finder and gesdd.\nA dense basis lift uses unoptimized einsum. Returns owned float64 components\n(rank,features) and singular values (rank,), with right-vector sign choice.\n\nCopies CSR storage while retaining entry order and duplicates. Full input\nis not densified; reduced factors are dense and can approach input size for\nlarge rank/oversampling. Native pools are bounded to one. Caller owns total\nconcurrency, feature ordering, training split and numerical scale. Finite\ninput does not guarantee freedom from intermediate overflow; nonfinite\nfactors reject. No text, label, vocabulary, centering or scaling policy."
+        },
+        {
+          "direction": "input",
+          "name": "iterations",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Fit uncentered randomized right singular vectors of finite float64 CSR.\n\nRank is a positive Python int less than both matrix dimensions; iterations\nand oversamples are positive Python ints; seed is in [0,2**32). Uses auto\norientation and power normalization, a randomized range finder and gesdd.\nA dense basis lift uses unoptimized einsum. Returns owned float64 components\n(rank,features) and singular values (rank,), with right-vector sign choice.\n\nCopies CSR storage while retaining entry order and duplicates. Full input\nis not densified; reduced factors are dense and can approach input size for\nlarge rank/oversampling. Native pools are bounded to one. Caller owns total\nconcurrency, feature ordering, training split and numerical scale. Finite\ninput does not guarantee freedom from intermediate overflow; nonfinite\nfactors reject. No text, label, vocabulary, centering or scaling policy."
+        },
+        {
+          "direction": "input",
+          "name": "oversamples",
+          "ordinal": 3,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Fit uncentered randomized right singular vectors of finite float64 CSR.\n\nRank is a positive Python int less than both matrix dimensions; iterations\nand oversamples are positive Python ints; seed is in [0,2**32). Uses auto\norientation and power normalization, a randomized range finder and gesdd.\nA dense basis lift uses unoptimized einsum. Returns owned float64 components\n(rank,features) and singular values (rank,), with right-vector sign choice.\n\nCopies CSR storage while retaining entry order and duplicates. Full input\nis not densified; reduced factors are dense and can approach input size for\nlarge rank/oversampling. Native pools are bounded to one. Caller owns total\nconcurrency, feature ordering, training split and numerical scale. Finite\ninput does not guarantee freedom from intermediate overflow; nonfinite\nfactors reject. No text, label, vocabulary, centering or scaling policy."
+        },
+        {
+          "direction": "input",
+          "name": "seed",
+          "ordinal": 4,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Fit uncentered randomized right singular vectors of finite float64 CSR.\n\nRank is a positive Python int less than both matrix dimensions; iterations\nand oversamples are positive Python ints; seed is in [0,2**32). Uses auto\norientation and power normalization, a randomized range finder and gesdd.\nA dense basis lift uses unoptimized einsum. Returns owned float64 components\n(rank,features) and singular values (rank,), with right-vector sign choice.\n\nCopies CSR storage while retaining entry order and duplicates. Full input\nis not densified; reduced factors are dense and can approach input size for\nlarge rank/oversampling. Native pools are bounded to one. Caller owns total\nconcurrency, feature ordering, training split and numerical scale. Finite\ninput does not guarantee freedom from intermediate overflow; nonfinite\nfactors reject. No text, label, vocabulary, centering or scaling policy."
+        },
+        {
+          "direction": "output",
+          "name": "components",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Fit uncentered randomized right singular vectors of finite float64 CSR.\n\nRank is a positive Python int less than both matrix dimensions; iterations\nand oversamples are positive Python ints; seed is in [0,2**32). Uses auto\norientation and power normalization, a randomized range finder and gesdd.\nA dense basis lift uses unoptimized einsum. Returns owned float64 components\n(rank,features) and singular values (rank,), with right-vector sign choice.\n\nCopies CSR storage while retaining entry order and duplicates. Full input\nis not densified; reduced factors are dense and can approach input size for\nlarge rank/oversampling. Native pools are bounded to one. Caller owns total\nconcurrency, feature ordering, training split and numerical scale. Finite\ninput does not guarantee freedom from intermediate overflow; nonfinite\nfactors reject. No text, label, vocabulary, centering or scaling policy."
+        },
+        {
+          "direction": "output",
+          "name": "singular_values",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Fit uncentered randomized right singular vectors of finite float64 CSR.\n\nRank is a positive Python int less than both matrix dimensions; iterations\nand oversamples are positive Python ints; seed is in [0,2**32). Uses auto\norientation and power normalization, a randomized range finder and gesdd.\nA dense basis lift uses unoptimized einsum. Returns owned float64 components\n(rank,features) and singular values (rank,), with right-vector sign choice.\n\nCopies CSR storage while retaining entry order and duplicates. Full input\nis not densified; reduced factors are dense and can approach input size for\nlarge rank/oversampling. Native pools are bounded to one. Caller owns total\nconcurrency, feature ordering, training split and numerical scale. Finite\ninput does not guarantee freedom from intermediate overflow; nonfinite\nfactors reject. No text, label, vocabulary, centering or scaling policy."
+        }
+      ],
+      "ports": [
+        {
+          "direction": "input",
+          "name": "matrix",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Fit uncentered randomized right singular vectors of finite float64 CSR.\n\nRank is a positive Python int less than both matrix dimensions; iterations\nand oversamples are positive Python ints; seed is in [0,2**32). Uses auto\norientation and power normalization, a randomized range finder and gesdd.\nA dense basis lift uses unoptimized einsum. Returns owned float64 components\n(rank,features) and singular values (rank,), with right-vector sign choice.\n\nCopies CSR storage while retaining entry order and duplicates. Full input\nis not densified; reduced factors are dense and can approach input size for\nlarge rank/oversampling. Native pools are bounded to one. Caller owns total\nconcurrency, feature ordering, training split and numerical scale. Finite\ninput does not guarantee freedom from intermediate overflow; nonfinite\nfactors reject. No text, label, vocabulary, centering or scaling policy."
+        },
+        {
+          "direction": "input",
+          "name": "rank",
+          "ordinal": 1,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Fit uncentered randomized right singular vectors of finite float64 CSR.\n\nRank is a positive Python int less than both matrix dimensions; iterations\nand oversamples are positive Python ints; seed is in [0,2**32). Uses auto\norientation and power normalization, a randomized range finder and gesdd.\nA dense basis lift uses unoptimized einsum. Returns owned float64 components\n(rank,features) and singular values (rank,), with right-vector sign choice.\n\nCopies CSR storage while retaining entry order and duplicates. Full input\nis not densified; reduced factors are dense and can approach input size for\nlarge rank/oversampling. Native pools are bounded to one. Caller owns total\nconcurrency, feature ordering, training split and numerical scale. Finite\ninput does not guarantee freedom from intermediate overflow; nonfinite\nfactors reject. No text, label, vocabulary, centering or scaling policy."
+        },
+        {
+          "direction": "input",
+          "name": "iterations",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Fit uncentered randomized right singular vectors of finite float64 CSR.\n\nRank is a positive Python int less than both matrix dimensions; iterations\nand oversamples are positive Python ints; seed is in [0,2**32). Uses auto\norientation and power normalization, a randomized range finder and gesdd.\nA dense basis lift uses unoptimized einsum. Returns owned float64 components\n(rank,features) and singular values (rank,), with right-vector sign choice.\n\nCopies CSR storage while retaining entry order and duplicates. Full input\nis not densified; reduced factors are dense and can approach input size for\nlarge rank/oversampling. Native pools are bounded to one. Caller owns total\nconcurrency, feature ordering, training split and numerical scale. Finite\ninput does not guarantee freedom from intermediate overflow; nonfinite\nfactors reject. No text, label, vocabulary, centering or scaling policy."
+        },
+        {
+          "direction": "input",
+          "name": "oversamples",
+          "ordinal": 3,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Fit uncentered randomized right singular vectors of finite float64 CSR.\n\nRank is a positive Python int less than both matrix dimensions; iterations\nand oversamples are positive Python ints; seed is in [0,2**32). Uses auto\norientation and power normalization, a randomized range finder and gesdd.\nA dense basis lift uses unoptimized einsum. Returns owned float64 components\n(rank,features) and singular values (rank,), with right-vector sign choice.\n\nCopies CSR storage while retaining entry order and duplicates. Full input\nis not densified; reduced factors are dense and can approach input size for\nlarge rank/oversampling. Native pools are bounded to one. Caller owns total\nconcurrency, feature ordering, training split and numerical scale. Finite\ninput does not guarantee freedom from intermediate overflow; nonfinite\nfactors reject. No text, label, vocabulary, centering or scaling policy."
+        },
+        {
+          "direction": "input",
+          "name": "seed",
+          "ordinal": 4,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Fit uncentered randomized right singular vectors of finite float64 CSR.\n\nRank is a positive Python int less than both matrix dimensions; iterations\nand oversamples are positive Python ints; seed is in [0,2**32). Uses auto\norientation and power normalization, a randomized range finder and gesdd.\nA dense basis lift uses unoptimized einsum. Returns owned float64 components\n(rank,features) and singular values (rank,), with right-vector sign choice.\n\nCopies CSR storage while retaining entry order and duplicates. Full input\nis not densified; reduced factors are dense and can approach input size for\nlarge rank/oversampling. Native pools are bounded to one. Caller owns total\nconcurrency, feature ordering, training split and numerical scale. Finite\ninput does not guarantee freedom from intermediate overflow; nonfinite\nfactors reject. No text, label, vocabulary, centering or scaling policy."
+        },
+        {
+          "direction": "output",
+          "name": "components",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Fit uncentered randomized right singular vectors of finite float64 CSR.\n\nRank is a positive Python int less than both matrix dimensions; iterations\nand oversamples are positive Python ints; seed is in [0,2**32). Uses auto\norientation and power normalization, a randomized range finder and gesdd.\nA dense basis lift uses unoptimized einsum. Returns owned float64 components\n(rank,features) and singular values (rank,), with right-vector sign choice.\n\nCopies CSR storage while retaining entry order and duplicates. Full input\nis not densified; reduced factors are dense and can approach input size for\nlarge rank/oversampling. Native pools are bounded to one. Caller owns total\nconcurrency, feature ordering, training split and numerical scale. Finite\ninput does not guarantee freedom from intermediate overflow; nonfinite\nfactors reject. No text, label, vocabulary, centering or scaling policy."
+        },
+        {
+          "direction": "output",
+          "name": "singular_values",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Fit uncentered randomized right singular vectors of finite float64 CSR.\n\nRank is a positive Python int less than both matrix dimensions; iterations\nand oversamples are positive Python ints; seed is in [0,2**32). Uses auto\norientation and power normalization, a randomized range finder and gesdd.\nA dense basis lift uses unoptimized einsum. Returns owned float64 components\n(rank,features) and singular values (rank,), with right-vector sign choice.\n\nCopies CSR storage while retaining entry order and duplicates. Full input\nis not densified; reduced factors are dense and can approach input size for\nlarge rank/oversampling. Native pools are bounded to one. Caller owns total\nconcurrency, feature ordering, training split and numerical scale. Finite\ninput does not guarantee freedom from intermediate overflow; nonfinite\nfactors reject. No text, label, vocabulary, centering or scaling policy."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.sklearn.decomposition.sparse_projection.transform_sparse_projection",
+      "artifact_id": "d84f65b4-0e20-561b-bd43-dc3cf9f14e71",
+      "version_id": "078cb171-1a34-5469-bec9-66d9039d3f82",
+      "content_hash": "20414518df42b5262acc43c7bc1c52b3014984047389d05c619131a07931da52",
+      "catalog_fqdn": "sciona.atoms.ml.sklearn.decomposition.sparse_projection.transform_sparse_projection",
+      "recipe_adapter": false,
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "matrix",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Project finite float64 CSR rows through finite float64 components.\n\nNonempty rows and at least one component are required; component feature\nwidth matches the sparse matrix. Preserves row order and returns an owned\ndense float64 matrix (rows,components). Copies sparse storage, preserving\nentry order and duplicates; inputs are unchanged. Rejects malformed sparse\nstorage and nonfinite input/output. Native pools are limited to one.\nCaller supplies fitted components and feature ordering; no refit, labels,\nsplit checks, text policy or authentication of component provenance."
+        },
+        {
+          "direction": "input",
+          "name": "components",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Project finite float64 CSR rows through finite float64 components.\n\nNonempty rows and at least one component are required; component feature\nwidth matches the sparse matrix. Preserves row order and returns an owned\ndense float64 matrix (rows,components). Copies sparse storage, preserving\nentry order and duplicates; inputs are unchanged. Rejects malformed sparse\nstorage and nonfinite input/output. Native pools are limited to one.\nCaller supplies fitted components and feature ordering; no refit, labels,\nsplit checks, text policy or authentication of component provenance."
+        },
+        {
+          "direction": "output",
+          "name": "projected",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Project finite float64 CSR rows through finite float64 components.\n\nNonempty rows and at least one component are required; component feature\nwidth matches the sparse matrix. Preserves row order and returns an owned\ndense float64 matrix (rows,components). Copies sparse storage, preserving\nentry order and duplicates; inputs are unchanged. Rejects malformed sparse\nstorage and nonfinite input/output. Native pools are limited to one.\nCaller supplies fitted components and feature ordering; no refit, labels,\nsplit checks, text policy or authentication of component provenance."
+        }
+      ],
+      "ports": [
+        {
+          "direction": "input",
+          "name": "matrix",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Project finite float64 CSR rows through finite float64 components.\n\nNonempty rows and at least one component are required; component feature\nwidth matches the sparse matrix. Preserves row order and returns an owned\ndense float64 matrix (rows,components). Copies sparse storage, preserving\nentry order and duplicates; inputs are unchanged. Rejects malformed sparse\nstorage and nonfinite input/output. Native pools are limited to one.\nCaller supplies fitted components and feature ordering; no refit, labels,\nsplit checks, text policy or authentication of component provenance."
+        },
+        {
+          "direction": "input",
+          "name": "components",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Project finite float64 CSR rows through finite float64 components.\n\nNonempty rows and at least one component are required; component feature\nwidth matches the sparse matrix. Preserves row order and returns an owned\ndense float64 matrix (rows,components). Copies sparse storage, preserving\nentry order and duplicates; inputs are unchanged. Rejects malformed sparse\nstorage and nonfinite input/output. Native pools are limited to one.\nCaller supplies fitted components and feature ordering; no refit, labels,\nsplit checks, text policy or authentication of component provenance."
+        },
+        {
+          "direction": "output",
+          "name": "projected",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Project finite float64 CSR rows through finite float64 components.\n\nNonempty rows and at least one component are required; component feature\nwidth matches the sparse matrix. Preserves row order and returns an owned\ndense float64 matrix (rows,components). Copies sparse storage, preserving\nentry order and duplicates; inputs are unchanged. Rejects malformed sparse\nstorage and nonfinite input/output. Native pools are limited to one.\nCaller supplies fitted components and feature ordering; no refit, labels,\nsplit checks, text policy or authentication of component provenance."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.sklearn.isotonic.atoms.isotonic_regression",
+      "artifact_id": "46e31de0-ba8d-4807-afeb-91f83f9872a5",
+      "version_id": "5e0791b2-d932-5556-a678-ec447331cfe3",
+      "content_hash": "33921162f0f39f88695cd0523cd5ebe3f1e11f7c38f16284ffb318f5424a84c4",
+      "catalog_fqdn": "sciona.atoms.ml.sklearn.isotonic.isotonic_regression",
+      "recipe_adapter": false,
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "y",
+          "ordinal": 0,
+          "type_desc": "NDArray[np.float64]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite float64 response vector. Optional aligned finite strictly positive weights. Increasing is a boolean. Optional finite lower/upper bounds must be ordered. Uses SciPy isotonic regression then clips to bounds; returns an owned vector in input order. Caller defines the order and numerical scale; no sorting by a separate predictor occurs."
+        },
+        {
+          "direction": "input",
+          "name": "sample_weight",
+          "ordinal": 1,
+          "type_desc": "NDArray[np.float64] | None",
+          "required": false,
+          "default_value_repr": "None",
+          "constraints": "Nonempty finite float64 response vector. Optional aligned finite strictly positive weights. Increasing is a boolean. Optional finite lower/upper bounds must be ordered. Uses SciPy isotonic regression then clips to bounds; returns an owned vector in input order. Caller defines the order and numerical scale; no sorting by a separate predictor occurs."
+        },
+        {
+          "direction": "input",
+          "name": "y_min",
+          "ordinal": 2,
+          "type_desc": "float | None",
+          "required": false,
+          "default_value_repr": "None",
+          "constraints": "Nonempty finite float64 response vector. Optional aligned finite strictly positive weights. Increasing is a boolean. Optional finite lower/upper bounds must be ordered. Uses SciPy isotonic regression then clips to bounds; returns an owned vector in input order. Caller defines the order and numerical scale; no sorting by a separate predictor occurs."
+        },
+        {
+          "direction": "input",
+          "name": "y_max",
+          "ordinal": 3,
+          "type_desc": "float | None",
+          "required": false,
+          "default_value_repr": "None",
+          "constraints": "Nonempty finite float64 response vector. Optional aligned finite strictly positive weights. Increasing is a boolean. Optional finite lower/upper bounds must be ordered. Uses SciPy isotonic regression then clips to bounds; returns an owned vector in input order. Caller defines the order and numerical scale; no sorting by a separate predictor occurs."
+        },
+        {
+          "direction": "input",
+          "name": "increasing",
+          "ordinal": 4,
+          "type_desc": "bool",
+          "required": false,
+          "default_value_repr": "True",
+          "constraints": "Nonempty finite float64 response vector. Optional aligned finite strictly positive weights. Increasing is a boolean. Optional finite lower/upper bounds must be ordered. Uses SciPy isotonic regression then clips to bounds; returns an owned vector in input order. Caller defines the order and numerical scale; no sorting by a separate predictor occurs."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "NDArray[np.float64]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite float64 response vector. Optional aligned finite strictly positive weights. Increasing is a boolean. Optional finite lower/upper bounds must be ordered. Uses SciPy isotonic regression then clips to bounds; returns an owned vector in input order. Caller defines the order and numerical scale; no sorting by a separate predictor occurs."
+        }
+      ],
+      "ports": [
+        {
+          "direction": "input",
+          "name": "y",
+          "ordinal": 0,
+          "type_desc": "NDArray[np.float64]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite float64 response vector. Optional aligned finite strictly positive weights. Increasing is a boolean. Optional finite lower/upper bounds must be ordered. Uses SciPy isotonic regression then clips to bounds; returns an owned vector in input order. Caller defines the order and numerical scale; no sorting by a separate predictor occurs."
+        },
+        {
+          "direction": "input",
+          "name": "sample_weight",
+          "ordinal": 1,
+          "type_desc": "NDArray[np.float64] | None",
+          "required": false,
+          "default_value_repr": "None",
+          "constraints": "Nonempty finite float64 response vector. Optional aligned finite strictly positive weights. Increasing is a boolean. Optional finite lower/upper bounds must be ordered. Uses SciPy isotonic regression then clips to bounds; returns an owned vector in input order. Caller defines the order and numerical scale; no sorting by a separate predictor occurs."
+        },
+        {
+          "direction": "input",
+          "name": "y_min",
+          "ordinal": 2,
+          "type_desc": "float | None",
+          "required": false,
+          "default_value_repr": "None",
+          "constraints": "Nonempty finite float64 response vector. Optional aligned finite strictly positive weights. Increasing is a boolean. Optional finite lower/upper bounds must be ordered. Uses SciPy isotonic regression then clips to bounds; returns an owned vector in input order. Caller defines the order and numerical scale; no sorting by a separate predictor occurs."
+        },
+        {
+          "direction": "input",
+          "name": "y_max",
+          "ordinal": 3,
+          "type_desc": "float | None",
+          "required": false,
+          "default_value_repr": "None",
+          "constraints": "Nonempty finite float64 response vector. Optional aligned finite strictly positive weights. Increasing is a boolean. Optional finite lower/upper bounds must be ordered. Uses SciPy isotonic regression then clips to bounds; returns an owned vector in input order. Caller defines the order and numerical scale; no sorting by a separate predictor occurs."
+        },
+        {
+          "direction": "input",
+          "name": "increasing",
+          "ordinal": 4,
+          "type_desc": "bool",
+          "required": false,
+          "default_value_repr": "True",
+          "constraints": "Nonempty finite float64 response vector. Optional aligned finite strictly positive weights. Increasing is a boolean. Optional finite lower/upper bounds must be ordered. Uses SciPy isotonic regression then clips to bounds; returns an owned vector in input order. Caller defines the order and numerical scale; no sorting by a separate predictor occurs."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "NDArray[np.float64]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite float64 response vector. Optional aligned finite strictly positive weights. Increasing is a boolean. Optional finite lower/upper bounds must be ordered. Uses SciPy isotonic regression then clips to bounds; returns an owned vector in input order. Caller defines the order and numerical scale; no sorting by a separate predictor occurs."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.sklearn.isotonic.atoms.isotonic_regression_fit",
+      "artifact_id": "777018bd-19bf-466c-93e1-3b7ee5cd2554",
+      "version_id": "f91ca3b0-656e-5afc-8cdc-7aadeb961655",
+      "content_hash": "076afd2e339934fd8b103328693fb851e2fa0ba38ea835b868c03688082ac219",
+      "catalog_fqdn": "sciona.atoms.ml.sklearn.isotonic.isotonic_regression_fit",
+      "recipe_adapter": false,
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "X",
+          "ordinal": 0,
+          "type_desc": "NDArray[np.float64]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite float64 X vector or single-column matrix and aligned finite float64 response vector. Optional aligned finite nonnegative weights with at least one positive value; zero-weight rows are excluded. Duplicate predictors are aggregated by weighted mean. Increasing is True, False or auto; auto requires a defined nonconstant rank correlation and may warn when direction is uncertain. Optional finite response bounds must be ordered. Out-of-bounds policy is nan, clip or raise. Returned threshold arrays are owned but mutable; callers must preserve them. No probability or domain interpretation is inherent."
+        },
+        {
+          "direction": "input",
+          "name": "y",
+          "ordinal": 1,
+          "type_desc": "NDArray[np.float64]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite float64 X vector or single-column matrix and aligned finite float64 response vector. Optional aligned finite nonnegative weights with at least one positive value; zero-weight rows are excluded. Duplicate predictors are aggregated by weighted mean. Increasing is True, False or auto; auto requires a defined nonconstant rank correlation and may warn when direction is uncertain. Optional finite response bounds must be ordered. Out-of-bounds policy is nan, clip or raise. Returned threshold arrays are owned but mutable; callers must preserve them. No probability or domain interpretation is inherent."
+        },
+        {
+          "direction": "input",
+          "name": "sample_weight",
+          "ordinal": 2,
+          "type_desc": "NDArray[np.float64] | None",
+          "required": false,
+          "default_value_repr": "None",
+          "constraints": "Nonempty finite float64 X vector or single-column matrix and aligned finite float64 response vector. Optional aligned finite nonnegative weights with at least one positive value; zero-weight rows are excluded. Duplicate predictors are aggregated by weighted mean. Increasing is True, False or auto; auto requires a defined nonconstant rank correlation and may warn when direction is uncertain. Optional finite response bounds must be ordered. Out-of-bounds policy is nan, clip or raise. Returned threshold arrays are owned but mutable; callers must preserve them. No probability or domain interpretation is inherent."
+        },
+        {
+          "direction": "input",
+          "name": "y_min",
+          "ordinal": 3,
+          "type_desc": "float | None",
+          "required": false,
+          "default_value_repr": "None",
+          "constraints": "Nonempty finite float64 X vector or single-column matrix and aligned finite float64 response vector. Optional aligned finite nonnegative weights with at least one positive value; zero-weight rows are excluded. Duplicate predictors are aggregated by weighted mean. Increasing is True, False or auto; auto requires a defined nonconstant rank correlation and may warn when direction is uncertain. Optional finite response bounds must be ordered. Out-of-bounds policy is nan, clip or raise. Returned threshold arrays are owned but mutable; callers must preserve them. No probability or domain interpretation is inherent."
+        },
+        {
+          "direction": "input",
+          "name": "y_max",
+          "ordinal": 4,
+          "type_desc": "float | None",
+          "required": false,
+          "default_value_repr": "None",
+          "constraints": "Nonempty finite float64 X vector or single-column matrix and aligned finite float64 response vector. Optional aligned finite nonnegative weights with at least one positive value; zero-weight rows are excluded. Duplicate predictors are aggregated by weighted mean. Increasing is True, False or auto; auto requires a defined nonconstant rank correlation and may warn when direction is uncertain. Optional finite response bounds must be ordered. Out-of-bounds policy is nan, clip or raise. Returned threshold arrays are owned but mutable; callers must preserve them. No probability or domain interpretation is inherent."
+        },
+        {
+          "direction": "input",
+          "name": "increasing",
+          "ordinal": 5,
+          "type_desc": "bool | str",
+          "required": false,
+          "default_value_repr": "True",
+          "constraints": "Nonempty finite float64 X vector or single-column matrix and aligned finite float64 response vector. Optional aligned finite nonnegative weights with at least one positive value; zero-weight rows are excluded. Duplicate predictors are aggregated by weighted mean. Increasing is True, False or auto; auto requires a defined nonconstant rank correlation and may warn when direction is uncertain. Optional finite response bounds must be ordered. Out-of-bounds policy is nan, clip or raise. Returned threshold arrays are owned but mutable; callers must preserve them. No probability or domain interpretation is inherent."
+        },
+        {
+          "direction": "input",
+          "name": "out_of_bounds",
+          "ordinal": 6,
+          "type_desc": "str",
+          "required": false,
+          "default_value_repr": "'nan'",
+          "constraints": "Nonempty finite float64 X vector or single-column matrix and aligned finite float64 response vector. Optional aligned finite nonnegative weights with at least one positive value; zero-weight rows are excluded. Duplicate predictors are aggregated by weighted mean. Increasing is True, False or auto; auto requires a defined nonconstant rank correlation and may warn when direction is uncertain. Optional finite response bounds must be ordered. Out-of-bounds policy is nan, clip or raise. Returned threshold arrays are owned but mutable; callers must preserve them. No probability or domain interpretation is inherent."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "IsotonicRegressionState",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite float64 X vector or single-column matrix and aligned finite float64 response vector. Optional aligned finite nonnegative weights with at least one positive value; zero-weight rows are excluded. Duplicate predictors are aggregated by weighted mean. Increasing is True, False or auto; auto requires a defined nonconstant rank correlation and may warn when direction is uncertain. Optional finite response bounds must be ordered. Out-of-bounds policy is nan, clip or raise. Returned threshold arrays are owned but mutable; callers must preserve them. No probability or domain interpretation is inherent."
+        }
+      ],
+      "ports": [
+        {
+          "direction": "input",
+          "name": "X",
+          "ordinal": 0,
+          "type_desc": "NDArray[np.float64]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite float64 X vector or single-column matrix and aligned finite float64 response vector. Optional aligned finite nonnegative weights with at least one positive value; zero-weight rows are excluded. Duplicate predictors are aggregated by weighted mean. Increasing is True, False or auto; auto requires a defined nonconstant rank correlation and may warn when direction is uncertain. Optional finite response bounds must be ordered. Out-of-bounds policy is nan, clip or raise. Returned threshold arrays are owned but mutable; callers must preserve them. No probability or domain interpretation is inherent."
+        },
+        {
+          "direction": "input",
+          "name": "y",
+          "ordinal": 1,
+          "type_desc": "NDArray[np.float64]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite float64 X vector or single-column matrix and aligned finite float64 response vector. Optional aligned finite nonnegative weights with at least one positive value; zero-weight rows are excluded. Duplicate predictors are aggregated by weighted mean. Increasing is True, False or auto; auto requires a defined nonconstant rank correlation and may warn when direction is uncertain. Optional finite response bounds must be ordered. Out-of-bounds policy is nan, clip or raise. Returned threshold arrays are owned but mutable; callers must preserve them. No probability or domain interpretation is inherent."
+        },
+        {
+          "direction": "input",
+          "name": "sample_weight",
+          "ordinal": 2,
+          "type_desc": "NDArray[np.float64] | None",
+          "required": false,
+          "default_value_repr": "None",
+          "constraints": "Nonempty finite float64 X vector or single-column matrix and aligned finite float64 response vector. Optional aligned finite nonnegative weights with at least one positive value; zero-weight rows are excluded. Duplicate predictors are aggregated by weighted mean. Increasing is True, False or auto; auto requires a defined nonconstant rank correlation and may warn when direction is uncertain. Optional finite response bounds must be ordered. Out-of-bounds policy is nan, clip or raise. Returned threshold arrays are owned but mutable; callers must preserve them. No probability or domain interpretation is inherent."
+        },
+        {
+          "direction": "input",
+          "name": "y_min",
+          "ordinal": 3,
+          "type_desc": "float | None",
+          "required": false,
+          "default_value_repr": "None",
+          "constraints": "Nonempty finite float64 X vector or single-column matrix and aligned finite float64 response vector. Optional aligned finite nonnegative weights with at least one positive value; zero-weight rows are excluded. Duplicate predictors are aggregated by weighted mean. Increasing is True, False or auto; auto requires a defined nonconstant rank correlation and may warn when direction is uncertain. Optional finite response bounds must be ordered. Out-of-bounds policy is nan, clip or raise. Returned threshold arrays are owned but mutable; callers must preserve them. No probability or domain interpretation is inherent."
+        },
+        {
+          "direction": "input",
+          "name": "y_max",
+          "ordinal": 4,
+          "type_desc": "float | None",
+          "required": false,
+          "default_value_repr": "None",
+          "constraints": "Nonempty finite float64 X vector or single-column matrix and aligned finite float64 response vector. Optional aligned finite nonnegative weights with at least one positive value; zero-weight rows are excluded. Duplicate predictors are aggregated by weighted mean. Increasing is True, False or auto; auto requires a defined nonconstant rank correlation and may warn when direction is uncertain. Optional finite response bounds must be ordered. Out-of-bounds policy is nan, clip or raise. Returned threshold arrays are owned but mutable; callers must preserve them. No probability or domain interpretation is inherent."
+        },
+        {
+          "direction": "input",
+          "name": "increasing",
+          "ordinal": 5,
+          "type_desc": "bool | str",
+          "required": false,
+          "default_value_repr": "True",
+          "constraints": "Nonempty finite float64 X vector or single-column matrix and aligned finite float64 response vector. Optional aligned finite nonnegative weights with at least one positive value; zero-weight rows are excluded. Duplicate predictors are aggregated by weighted mean. Increasing is True, False or auto; auto requires a defined nonconstant rank correlation and may warn when direction is uncertain. Optional finite response bounds must be ordered. Out-of-bounds policy is nan, clip or raise. Returned threshold arrays are owned but mutable; callers must preserve them. No probability or domain interpretation is inherent."
+        },
+        {
+          "direction": "input",
+          "name": "out_of_bounds",
+          "ordinal": 6,
+          "type_desc": "str",
+          "required": false,
+          "default_value_repr": "'nan'",
+          "constraints": "Nonempty finite float64 X vector or single-column matrix and aligned finite float64 response vector. Optional aligned finite nonnegative weights with at least one positive value; zero-weight rows are excluded. Duplicate predictors are aggregated by weighted mean. Increasing is True, False or auto; auto requires a defined nonconstant rank correlation and may warn when direction is uncertain. Optional finite response bounds must be ordered. Out-of-bounds policy is nan, clip or raise. Returned threshold arrays are owned but mutable; callers must preserve them. No probability or domain interpretation is inherent."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "IsotonicRegressionState",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite float64 X vector or single-column matrix and aligned finite float64 response vector. Optional aligned finite nonnegative weights with at least one positive value; zero-weight rows are excluded. Duplicate predictors are aggregated by weighted mean. Increasing is True, False or auto; auto requires a defined nonconstant rank correlation and may warn when direction is uncertain. Optional finite response bounds must be ordered. Out-of-bounds policy is nan, clip or raise. Returned threshold arrays are owned but mutable; callers must preserve them. No probability or domain interpretation is inherent."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.sklearn.isotonic.atoms.isotonic_regression_transform",
+      "artifact_id": "45d3cfd3-5b31-4526-83a4-dfadf75a3366",
+      "version_id": "bd2155a5-a167-5b22-88a8-a0227e28ecc8",
+      "content_hash": "a784245c6ea9017fe7e77f7bd8e891fc5c7e9c8a0bf03eaa171c19601208cb7e",
+      "catalog_fqdn": "sciona.atoms.ml.sklearn.isotonic.isotonic_regression_transform",
+      "recipe_adapter": false,
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "T",
+          "ordinal": 0,
+          "type_desc": "NDArray[np.float64]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite float64 query vector or single-column matrix and a valid state from the qualified fit provider. Threshold arrays must remain aligned, finite and sorted with strictly increasing X (or one threshold), monotone responses, and consistent endpoint bounds and policy. Multiple-threshold states clip, raise or return NaN outside the fitted range according to policy. A single-threshold state returns its constant response for every finite query, regardless of policy. No fitting or state mutation. Caller owns state provenance and population isolation; arbitrary fabricated states are not qualified."
+        },
+        {
+          "direction": "input",
+          "name": "state",
+          "ordinal": 1,
+          "type_desc": "IsotonicRegressionState",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite float64 query vector or single-column matrix and a valid state from the qualified fit provider. Threshold arrays must remain aligned, finite and sorted with strictly increasing X (or one threshold), monotone responses, and consistent endpoint bounds and policy. Multiple-threshold states clip, raise or return NaN outside the fitted range according to policy. A single-threshold state returns its constant response for every finite query, regardless of policy. No fitting or state mutation. Caller owns state provenance and population isolation; arbitrary fabricated states are not qualified."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "NDArray[np.float64]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite float64 query vector or single-column matrix and a valid state from the qualified fit provider. Threshold arrays must remain aligned, finite and sorted with strictly increasing X (or one threshold), monotone responses, and consistent endpoint bounds and policy. Multiple-threshold states clip, raise or return NaN outside the fitted range according to policy. A single-threshold state returns its constant response for every finite query, regardless of policy. No fitting or state mutation. Caller owns state provenance and population isolation; arbitrary fabricated states are not qualified."
+        }
+      ],
+      "ports": [
+        {
+          "direction": "input",
+          "name": "T",
+          "ordinal": 0,
+          "type_desc": "NDArray[np.float64]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite float64 query vector or single-column matrix and a valid state from the qualified fit provider. Threshold arrays must remain aligned, finite and sorted with strictly increasing X (or one threshold), monotone responses, and consistent endpoint bounds and policy. Multiple-threshold states clip, raise or return NaN outside the fitted range according to policy. A single-threshold state returns its constant response for every finite query, regardless of policy. No fitting or state mutation. Caller owns state provenance and population isolation; arbitrary fabricated states are not qualified."
+        },
+        {
+          "direction": "input",
+          "name": "state",
+          "ordinal": 1,
+          "type_desc": "IsotonicRegressionState",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite float64 query vector or single-column matrix and a valid state from the qualified fit provider. Threshold arrays must remain aligned, finite and sorted with strictly increasing X (or one threshold), monotone responses, and consistent endpoint bounds and policy. Multiple-threshold states clip, raise or return NaN outside the fitted range according to policy. A single-threshold state returns its constant response for every finite query, regardless of policy. No fitting or state mutation. Caller owns state provenance and population isolation; arbitrary fabricated states are not qualified."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "NDArray[np.float64]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite float64 query vector or single-column matrix and a valid state from the qualified fit provider. Threshold arrays must remain aligned, finite and sorted with strictly increasing X (or one threshold), monotone responses, and consistent endpoint bounds and policy. Multiple-threshold states clip, raise or return NaN outside the fitted range according to policy. A single-threshold state returns its constant response for every finite query, regardless of policy. No fitting or state mutation. Caller owns state provenance and population isolation; arbitrary fabricated states are not qualified."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.text_nlp.atoms.clean_text",
+      "artifact_id": "e81f7609-265b-44cd-9954-5384822299c9",
+      "version_id": "6336deb9-4112-5541-aa0c-18c15fb53b44",
+      "content_hash": "fac71b12a314d709fe3925df4fe59adb680d325141617bc5ea53a13247450ff3",
+      "catalog_fqdn": "sciona.atoms.ml.text_nlp.clean_text",
+      "recipe_adapter": false,
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "text",
+          "ordinal": 0,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "String input and nonempty list drawn from html, url, unicode, lower and spell. Operations execute in that fixed order, irrespective of list order; duplicates do not repeat work. Unicode uses NFKC and lower uses lower(), not casefold(). Nonprintable non-whitespace characters are removed; whitespace is collapsed and stripped. Spell requires a nonempty string-key vocabulary of nonnegative integer counts, excluding booleans. ASCII alphabetic tokens use known original, then one-edit, then two-edit candidates; ties prefer higher count, shorter word, then lexicographically greatest candidate. Unknown tokens become lowercase. Vocabulary is not learned or modified. HTML/URL handling is regex cleanup, not a security sanitizer. Two-edit candidate generation may be expensive; caller bounds input size."
+        },
+        {
+          "direction": "input",
+          "name": "operations",
+          "ordinal": 1,
+          "type_desc": "list[str]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "String input and nonempty list drawn from html, url, unicode, lower and spell. Operations execute in that fixed order, irrespective of list order; duplicates do not repeat work. Unicode uses NFKC and lower uses lower(), not casefold(). Nonprintable non-whitespace characters are removed; whitespace is collapsed and stripped. Spell requires a nonempty string-key vocabulary of nonnegative integer counts, excluding booleans. ASCII alphabetic tokens use known original, then one-edit, then two-edit candidates; ties prefer higher count, shorter word, then lexicographically greatest candidate. Unknown tokens become lowercase. Vocabulary is not learned or modified. HTML/URL handling is regex cleanup, not a security sanitizer. Two-edit candidate generation may be expensive; caller bounds input size."
+        },
+        {
+          "direction": "input",
+          "name": "vocab_freq",
+          "ordinal": 2,
+          "type_desc": "dict[str, int] | None",
+          "required": false,
+          "default_value_repr": "None",
+          "constraints": "String input and nonempty list drawn from html, url, unicode, lower and spell. Operations execute in that fixed order, irrespective of list order; duplicates do not repeat work. Unicode uses NFKC and lower uses lower(), not casefold(). Nonprintable non-whitespace characters are removed; whitespace is collapsed and stripped. Spell requires a nonempty string-key vocabulary of nonnegative integer counts, excluding booleans. ASCII alphabetic tokens use known original, then one-edit, then two-edit candidates; ties prefer higher count, shorter word, then lexicographically greatest candidate. Unknown tokens become lowercase. Vocabulary is not learned or modified. HTML/URL handling is regex cleanup, not a security sanitizer. Two-edit candidate generation may be expensive; caller bounds input size."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "String input and nonempty list drawn from html, url, unicode, lower and spell. Operations execute in that fixed order, irrespective of list order; duplicates do not repeat work. Unicode uses NFKC and lower uses lower(), not casefold(). Nonprintable non-whitespace characters are removed; whitespace is collapsed and stripped. Spell requires a nonempty string-key vocabulary of nonnegative integer counts, excluding booleans. ASCII alphabetic tokens use known original, then one-edit, then two-edit candidates; ties prefer higher count, shorter word, then lexicographically greatest candidate. Unknown tokens become lowercase. Vocabulary is not learned or modified. HTML/URL handling is regex cleanup, not a security sanitizer. Two-edit candidate generation may be expensive; caller bounds input size."
+        }
+      ],
+      "ports": [
+        {
+          "direction": "input",
+          "name": "text",
+          "ordinal": 0,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "String input and nonempty list drawn from html, url, unicode, lower and spell. Operations execute in that fixed order, irrespective of list order; duplicates do not repeat work. Unicode uses NFKC and lower uses lower(), not casefold(). Nonprintable non-whitespace characters are removed; whitespace is collapsed and stripped. Spell requires a nonempty string-key vocabulary of nonnegative integer counts, excluding booleans. ASCII alphabetic tokens use known original, then one-edit, then two-edit candidates; ties prefer higher count, shorter word, then lexicographically greatest candidate. Unknown tokens become lowercase. Vocabulary is not learned or modified. HTML/URL handling is regex cleanup, not a security sanitizer. Two-edit candidate generation may be expensive; caller bounds input size."
+        },
+        {
+          "direction": "input",
+          "name": "operations",
+          "ordinal": 1,
+          "type_desc": "list[str]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "String input and nonempty list drawn from html, url, unicode, lower and spell. Operations execute in that fixed order, irrespective of list order; duplicates do not repeat work. Unicode uses NFKC and lower uses lower(), not casefold(). Nonprintable non-whitespace characters are removed; whitespace is collapsed and stripped. Spell requires a nonempty string-key vocabulary of nonnegative integer counts, excluding booleans. ASCII alphabetic tokens use known original, then one-edit, then two-edit candidates; ties prefer higher count, shorter word, then lexicographically greatest candidate. Unknown tokens become lowercase. Vocabulary is not learned or modified. HTML/URL handling is regex cleanup, not a security sanitizer. Two-edit candidate generation may be expensive; caller bounds input size."
+        },
+        {
+          "direction": "input",
+          "name": "vocab_freq",
+          "ordinal": 2,
+          "type_desc": "dict[str, int] | None",
+          "required": false,
+          "default_value_repr": "None",
+          "constraints": "String input and nonempty list drawn from html, url, unicode, lower and spell. Operations execute in that fixed order, irrespective of list order; duplicates do not repeat work. Unicode uses NFKC and lower uses lower(), not casefold(). Nonprintable non-whitespace characters are removed; whitespace is collapsed and stripped. Spell requires a nonempty string-key vocabulary of nonnegative integer counts, excluding booleans. ASCII alphabetic tokens use known original, then one-edit, then two-edit candidates; ties prefer higher count, shorter word, then lexicographically greatest candidate. Unknown tokens become lowercase. Vocabulary is not learned or modified. HTML/URL handling is regex cleanup, not a security sanitizer. Two-edit candidate generation may be expensive; caller bounds input size."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "String input and nonempty list drawn from html, url, unicode, lower and spell. Operations execute in that fixed order, irrespective of list order; duplicates do not repeat work. Unicode uses NFKC and lower uses lower(), not casefold(). Nonprintable non-whitespace characters are removed; whitespace is collapsed and stripped. Spell requires a nonempty string-key vocabulary of nonnegative integer counts, excluding booleans. ASCII alphabetic tokens use known original, then one-edit, then two-edit candidates; ties prefer higher count, shorter word, then lexicographically greatest candidate. Unknown tokens become lowercase. Vocabulary is not learned or modified. HTML/URL handling is regex cleanup, not a security sanitizer. Two-edit candidate generation may be expensive; caller bounds input size."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.text_nlp.atoms.levenshtein",
+      "artifact_id": "270959cd-a379-4305-b3b6-d55c5a3235ed",
+      "version_id": "211724b6-3494-5629-a6d4-2d0522090be8",
+      "content_hash": "354b2116ef43e38bd5f68638b041ccd99d5e1ceb03ab811d5722c31e8f9e4c67",
+      "catalog_fqdn": "sciona.atoms.ml.text_nlp.levenshtein",
+      "recipe_adapter": false,
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "s1",
+          "ordinal": 0,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Two Python strings, including empty strings. Distance compares Python code points without Unicode normalization; transposition is not a single edit. Returns a nonnegative integer no greater than the longer length. Dynamic programming uses O(m*n) time and O(min(m,n)) auxiliary space. Caller owns text normalization and practical size limits."
+        },
+        {
+          "direction": "input",
+          "name": "s2",
+          "ordinal": 1,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Two Python strings, including empty strings. Distance compares Python code points without Unicode normalization; transposition is not a single edit. Returns a nonnegative integer no greater than the longer length. Dynamic programming uses O(m*n) time and O(min(m,n)) auxiliary space. Caller owns text normalization and practical size limits."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Two Python strings, including empty strings. Distance compares Python code points without Unicode normalization; transposition is not a single edit. Returns a nonnegative integer no greater than the longer length. Dynamic programming uses O(m*n) time and O(min(m,n)) auxiliary space. Caller owns text normalization and practical size limits."
+        }
+      ],
+      "ports": [
+        {
+          "direction": "input",
+          "name": "s1",
+          "ordinal": 0,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Two Python strings, including empty strings. Distance compares Python code points without Unicode normalization; transposition is not a single edit. Returns a nonnegative integer no greater than the longer length. Dynamic programming uses O(m*n) time and O(min(m,n)) auxiliary space. Caller owns text normalization and practical size limits."
+        },
+        {
+          "direction": "input",
+          "name": "s2",
+          "ordinal": 1,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Two Python strings, including empty strings. Distance compares Python code points without Unicode normalization; transposition is not a single edit. Returns a nonnegative integer no greater than the longer length. Dynamic programming uses O(m*n) time and O(min(m,n)) auxiliary space. Caller owns text normalization and practical size limits."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Two Python strings, including empty strings. Distance compares Python code points without Unicode normalization; transposition is not a single edit. Returns a nonnegative integer no greater than the longer length. Dynamic programming uses O(m*n) time and O(min(m,n)) auxiliary space. Caller owns text normalization and practical size limits."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.text_nlp.bm25.score_bm25",
+      "artifact_id": "8f0da8ba-9199-547a-9ae4-1b7e684a827c",
+      "version_id": "04038b26-2f54-5968-9d73-5ca86fe1f5aa",
+      "content_hash": "694aa344d694ea817a51bd770cf529d005f04ea536def53b5154891b692b5710",
+      "catalog_fqdn": "sciona.atoms.ml.text_nlp.bm25.score_bm25",
+      "recipe_adapter": false,
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "term_frequencies",
+          "ordinal": 0,
+          "type_desc": "list[int]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned count lists for distinct unit-weight query terms; Python integer counts in [0,2**53], positive corpus size, document frequencies at most corpus size, and total supplied term frequency at most document length. Positive finite average length and k1 at most 2**53; b in [0,1]. Uses positive log1p IDF and the explicit (k1+1) saturation scale. Zero frequencies contribute zero; empty query and empty document score zero when arithmetic controls are representable. Rejects nonfinite intermediate/output arithmetic. No text, token alignment, corpus fitting, labels or split policy is inferred."
+        },
+        {
+          "direction": "input",
+          "name": "document_frequencies",
+          "ordinal": 1,
+          "type_desc": "list[int]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned count lists for distinct unit-weight query terms; Python integer counts in [0,2**53], positive corpus size, document frequencies at most corpus size, and total supplied term frequency at most document length. Positive finite average length and k1 at most 2**53; b in [0,1]. Uses positive log1p IDF and the explicit (k1+1) saturation scale. Zero frequencies contribute zero; empty query and empty document score zero when arithmetic controls are representable. Rejects nonfinite intermediate/output arithmetic. No text, token alignment, corpus fitting, labels or split policy is inferred."
+        },
+        {
+          "direction": "input",
+          "name": "document_length",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned count lists for distinct unit-weight query terms; Python integer counts in [0,2**53], positive corpus size, document frequencies at most corpus size, and total supplied term frequency at most document length. Positive finite average length and k1 at most 2**53; b in [0,1]. Uses positive log1p IDF and the explicit (k1+1) saturation scale. Zero frequencies contribute zero; empty query and empty document score zero when arithmetic controls are representable. Rejects nonfinite intermediate/output arithmetic. No text, token alignment, corpus fitting, labels or split policy is inferred."
+        },
+        {
+          "direction": "input",
+          "name": "document_count",
+          "ordinal": 3,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned count lists for distinct unit-weight query terms; Python integer counts in [0,2**53], positive corpus size, document frequencies at most corpus size, and total supplied term frequency at most document length. Positive finite average length and k1 at most 2**53; b in [0,1]. Uses positive log1p IDF and the explicit (k1+1) saturation scale. Zero frequencies contribute zero; empty query and empty document score zero when arithmetic controls are representable. Rejects nonfinite intermediate/output arithmetic. No text, token alignment, corpus fitting, labels or split policy is inferred."
+        },
+        {
+          "direction": "input",
+          "name": "average_length",
+          "ordinal": 4,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned count lists for distinct unit-weight query terms; Python integer counts in [0,2**53], positive corpus size, document frequencies at most corpus size, and total supplied term frequency at most document length. Positive finite average length and k1 at most 2**53; b in [0,1]. Uses positive log1p IDF and the explicit (k1+1) saturation scale. Zero frequencies contribute zero; empty query and empty document score zero when arithmetic controls are representable. Rejects nonfinite intermediate/output arithmetic. No text, token alignment, corpus fitting, labels or split policy is inferred."
+        },
+        {
+          "direction": "input",
+          "name": "k1",
+          "ordinal": 5,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned count lists for distinct unit-weight query terms; Python integer counts in [0,2**53], positive corpus size, document frequencies at most corpus size, and total supplied term frequency at most document length. Positive finite average length and k1 at most 2**53; b in [0,1]. Uses positive log1p IDF and the explicit (k1+1) saturation scale. Zero frequencies contribute zero; empty query and empty document score zero when arithmetic controls are representable. Rejects nonfinite intermediate/output arithmetic. No text, token alignment, corpus fitting, labels or split policy is inferred."
+        },
+        {
+          "direction": "input",
+          "name": "b",
+          "ordinal": 6,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned count lists for distinct unit-weight query terms; Python integer counts in [0,2**53], positive corpus size, document frequencies at most corpus size, and total supplied term frequency at most document length. Positive finite average length and k1 at most 2**53; b in [0,1]. Uses positive log1p IDF and the explicit (k1+1) saturation scale. Zero frequencies contribute zero; empty query and empty document score zero when arithmetic controls are representable. Rejects nonfinite intermediate/output arithmetic. No text, token alignment, corpus fitting, labels or split policy is inferred."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned count lists for distinct unit-weight query terms; Python integer counts in [0,2**53], positive corpus size, document frequencies at most corpus size, and total supplied term frequency at most document length. Positive finite average length and k1 at most 2**53; b in [0,1]. Uses positive log1p IDF and the explicit (k1+1) saturation scale. Zero frequencies contribute zero; empty query and empty document score zero when arithmetic controls are representable. Rejects nonfinite intermediate/output arithmetic. No text, token alignment, corpus fitting, labels or split policy is inferred."
+        }
+      ],
+      "ports": [
+        {
+          "direction": "input",
+          "name": "term_frequencies",
+          "ordinal": 0,
+          "type_desc": "list[int]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned count lists for distinct unit-weight query terms; Python integer counts in [0,2**53], positive corpus size, document frequencies at most corpus size, and total supplied term frequency at most document length. Positive finite average length and k1 at most 2**53; b in [0,1]. Uses positive log1p IDF and the explicit (k1+1) saturation scale. Zero frequencies contribute zero; empty query and empty document score zero when arithmetic controls are representable. Rejects nonfinite intermediate/output arithmetic. No text, token alignment, corpus fitting, labels or split policy is inferred."
+        },
+        {
+          "direction": "input",
+          "name": "document_frequencies",
+          "ordinal": 1,
+          "type_desc": "list[int]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned count lists for distinct unit-weight query terms; Python integer counts in [0,2**53], positive corpus size, document frequencies at most corpus size, and total supplied term frequency at most document length. Positive finite average length and k1 at most 2**53; b in [0,1]. Uses positive log1p IDF and the explicit (k1+1) saturation scale. Zero frequencies contribute zero; empty query and empty document score zero when arithmetic controls are representable. Rejects nonfinite intermediate/output arithmetic. No text, token alignment, corpus fitting, labels or split policy is inferred."
+        },
+        {
+          "direction": "input",
+          "name": "document_length",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned count lists for distinct unit-weight query terms; Python integer counts in [0,2**53], positive corpus size, document frequencies at most corpus size, and total supplied term frequency at most document length. Positive finite average length and k1 at most 2**53; b in [0,1]. Uses positive log1p IDF and the explicit (k1+1) saturation scale. Zero frequencies contribute zero; empty query and empty document score zero when arithmetic controls are representable. Rejects nonfinite intermediate/output arithmetic. No text, token alignment, corpus fitting, labels or split policy is inferred."
+        },
+        {
+          "direction": "input",
+          "name": "document_count",
+          "ordinal": 3,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned count lists for distinct unit-weight query terms; Python integer counts in [0,2**53], positive corpus size, document frequencies at most corpus size, and total supplied term frequency at most document length. Positive finite average length and k1 at most 2**53; b in [0,1]. Uses positive log1p IDF and the explicit (k1+1) saturation scale. Zero frequencies contribute zero; empty query and empty document score zero when arithmetic controls are representable. Rejects nonfinite intermediate/output arithmetic. No text, token alignment, corpus fitting, labels or split policy is inferred."
+        },
+        {
+          "direction": "input",
+          "name": "average_length",
+          "ordinal": 4,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned count lists for distinct unit-weight query terms; Python integer counts in [0,2**53], positive corpus size, document frequencies at most corpus size, and total supplied term frequency at most document length. Positive finite average length and k1 at most 2**53; b in [0,1]. Uses positive log1p IDF and the explicit (k1+1) saturation scale. Zero frequencies contribute zero; empty query and empty document score zero when arithmetic controls are representable. Rejects nonfinite intermediate/output arithmetic. No text, token alignment, corpus fitting, labels or split policy is inferred."
+        },
+        {
+          "direction": "input",
+          "name": "k1",
+          "ordinal": 5,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned count lists for distinct unit-weight query terms; Python integer counts in [0,2**53], positive corpus size, document frequencies at most corpus size, and total supplied term frequency at most document length. Positive finite average length and k1 at most 2**53; b in [0,1]. Uses positive log1p IDF and the explicit (k1+1) saturation scale. Zero frequencies contribute zero; empty query and empty document score zero when arithmetic controls are representable. Rejects nonfinite intermediate/output arithmetic. No text, token alignment, corpus fitting, labels or split policy is inferred."
+        },
+        {
+          "direction": "input",
+          "name": "b",
+          "ordinal": 6,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned count lists for distinct unit-weight query terms; Python integer counts in [0,2**53], positive corpus size, document frequencies at most corpus size, and total supplied term frequency at most document length. Positive finite average length and k1 at most 2**53; b in [0,1]. Uses positive log1p IDF and the explicit (k1+1) saturation scale. Zero frequencies contribute zero; empty query and empty document score zero when arithmetic controls are representable. Rejects nonfinite intermediate/output arithmetic. No text, token alignment, corpus fitting, labels or split policy is inferred."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned count lists for distinct unit-weight query terms; Python integer counts in [0,2**53], positive corpus size, document frequencies at most corpus size, and total supplied term frequency at most document length. Positive finite average length and k1 at most 2**53; b in [0,1]. Uses positive log1p IDF and the explicit (k1+1) saturation scale. Zero frequencies contribute zero; empty query and empty document score zero when arithmetic controls are representable. Rejects nonfinite intermediate/output arithmetic. No text, token alignment, corpus fitting, labels or split policy is inferred."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.text_pair_complete_execution.fit_features",
+      "artifact_id": "b7e55f41-64cb-5693-91b0-865269e667d8",
+      "version_id": "c2351877-8637-568a-8b8c-d4c7281ee989",
+      "content_hash": "bdf070554e16965ec07867a11e8e1f2406cf92625e9fda8551915be4502c375b",
+      "catalog_fqdn": "sciona.atoms.ml.text_pair_complete_execution.fit_features",
+      "recipe_adapter": true,
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "normalized",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Normalized state from the qualified normalization stage, with valid nonempty training rows and feasible projection controls. Fits unique training descriptions using word unigram/bigram TF-IDF and uncentered randomized sparse projection, and training-only BM25 corpus statistics. Builds candidate co-occurrence context from full title/description entities. Does not read labels, calibration or query text to fit. Returns execution-local mutable feature state; memory/runtime depend on caller population and vocabulary size."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Normalized state from the qualified normalization stage, with valid nonempty training rows and feasible projection controls. Fits unique training descriptions using word unigram/bigram TF-IDF and uncentered randomized sparse projection, and training-only BM25 corpus statistics. Builds candidate co-occurrence context from full title/description entities. Does not read labels, calibration or query text to fit. Returns execution-local mutable feature state; memory/runtime depend on caller population and vocabulary size."
+        }
+      ],
+      "ports": [
+        {
+          "direction": "input",
+          "name": "normalized",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Normalized state from the qualified normalization stage, with valid nonempty training rows and feasible projection controls. Fits unique training descriptions using word unigram/bigram TF-IDF and uncentered randomized sparse projection, and training-only BM25 corpus statistics. Builds candidate co-occurrence context from full title/description entities. Does not read labels, calibration or query text to fit. Returns execution-local mutable feature state; memory/runtime depend on caller population and vocabulary size."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Normalized state from the qualified normalization stage, with valid nonempty training rows and feasible projection controls. Fits unique training descriptions using word unigram/bigram TF-IDF and uncentered randomized sparse projection, and training-only BM25 corpus statistics. Builds candidate co-occurrence context from full title/description entities. Does not read labels, calibration or query text to fit. Returns execution-local mutable feature state; memory/runtime depend on caller population and vocabulary size."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.text_pair_complete_execution.fit_models",
+      "artifact_id": "15006584-e426-5d80-a9a0-3f3397b21537",
+      "version_id": "6c914275-f7c9-505a-9679-b30a0f74dafb",
+      "content_hash": "7435012aa09a7ade48f47322e36fe1b4b11aa0c460363b6df478aa6f341bbefa",
+      "catalog_fqdn": "sciona.atoms.ml.text_pair_complete_execution.fit_models",
+      "recipe_adapter": true,
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "features",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Features state from the qualified feature-fit stage. Thirteen features retain separate title edit and description similarities; current training pair occurrence is excluded from graph context. Fit standardized logistic regression with max_iter=1000 and a random forest with explicit trees/depth/leaf/seed controls and n_jobs=1. Native thread pools are bounded to one. Convergence warnings fail execution. Caller owns the choice of model families and feature policy; calibration labels and query rows do not fit these models."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Features state from the qualified feature-fit stage. Thirteen features retain separate title edit and description similarities; current training pair occurrence is excluded from graph context. Fit standardized logistic regression with max_iter=1000 and a random forest with explicit trees/depth/leaf/seed controls and n_jobs=1. Native thread pools are bounded to one. Convergence warnings fail execution. Caller owns the choice of model families and feature policy; calibration labels and query rows do not fit these models."
+        }
+      ],
+      "ports": [
+        {
+          "direction": "input",
+          "name": "features",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Features state from the qualified feature-fit stage. Thirteen features retain separate title edit and description similarities; current training pair occurrence is excluded from graph context. Fit standardized logistic regression with max_iter=1000 and a random forest with explicit trees/depth/leaf/seed controls and n_jobs=1. Native thread pools are bounded to one. Convergence warnings fail execution. Caller owns the choice of model families and feature policy; calibration labels and query rows do not fit these models."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Features state from the qualified feature-fit stage. Thirteen features retain separate title edit and description similarities; current training pair occurrence is excluded from graph context. Fit standardized logistic regression with max_iter=1000 and a random forest with explicit trees/depth/leaf/seed controls and n_jobs=1. Native thread pools are bounded to one. Convergence warnings fail execution. Caller owns the choice of model families and feature policy; calibration labels and query rows do not fit these models."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.text_pair_complete_execution.format_rows",
+      "artifact_id": "1a4ab961-b85d-5605-b5cb-1028f6fa6863",
+      "version_id": "d1d1a6d4-c069-5445-9df9-d3b1dc109fe6",
+      "content_hash": "365121a4b9f49f30740c510bd30050dff48df073bc2f303dd1f34d3922b36c06",
+      "catalog_fqdn": "sciona.atoms.ml.text_pair_complete_execution.format_rows",
+      "recipe_adapter": true,
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "predictions",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Predictions state from the qualified prediction stage. Checks equal score/decision lengths, query count, finite JSON values, score ranges and inclusive-threshold decisions. Returns version-2 binary_relevance/title_description output with ordinal row indices, raw and scaled scores, binary decisions, cutoff and selection F1. This is a generic result table; competition-specific file formats and external identifiers remain caller-owned. Arbitrary fabricated intermediate records are not qualified."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Predictions state from the qualified prediction stage. Checks equal score/decision lengths, query count, finite JSON values, score ranges and inclusive-threshold decisions. Returns version-2 binary_relevance/title_description output with ordinal row indices, raw and scaled scores, binary decisions, cutoff and selection F1. This is a generic result table; competition-specific file formats and external identifiers remain caller-owned. Arbitrary fabricated intermediate records are not qualified."
+        }
+      ],
+      "ports": [
+        {
+          "direction": "input",
+          "name": "predictions",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Predictions state from the qualified prediction stage. Checks equal score/decision lengths, query count, finite JSON values, score ranges and inclusive-threshold decisions. Returns version-2 binary_relevance/title_description output with ordinal row indices, raw and scaled scores, binary decisions, cutoff and selection F1. This is a generic result table; competition-specific file formats and external identifiers remain caller-owned. Arbitrary fabricated intermediate records are not qualified."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Predictions state from the qualified prediction stage. Checks equal score/decision lengths, query count, finite JSON values, score ranges and inclusive-threshold decisions. Returns version-2 binary_relevance/title_description output with ordinal row indices, raw and scaled scores, binary decisions, cutoff and selection F1. This is a generic result table; competition-specific file formats and external identifiers remain caller-owned. Arbitrary fabricated intermediate records are not qualified."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.text_pair_complete_execution.normalize_fields",
+      "artifact_id": "6fd2d992-5f28-5b44-8efc-98e850680633",
+      "version_id": "d1410a50-c8a1-505c-874d-f319db026851",
+      "content_hash": "07411656c15d2bf7bd759ff7476ff18c8ef943cccee3a12055df7aefcc17f4ac",
+      "catalog_fqdn": "sciona.atoms.ml.text_pair_complete_execution.normalize_fields",
+      "recipe_adapter": true,
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified PreparedCompletePairs from the qualified prepare stage. Revalidates and copies the request. NFKC/casefold, spelling, tokenization, one-pass domain substitution and synonym expansion are explicit policy; titles and descriptions are never concatenated. Train/calibration unordered full-record pairs must be unique and all three populations disjoint; repeated query rows are allowed. Output holds copied payload and normalized rows in original order. Vocabulary and mapping adequacy remain caller responsibilities."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified PreparedCompletePairs from the qualified prepare stage. Revalidates and copies the request. NFKC/casefold, spelling, tokenization, one-pass domain substitution and synonym expansion are explicit policy; titles and descriptions are never concatenated. Train/calibration unordered full-record pairs must be unique and all three populations disjoint; repeated query rows are allowed. Output holds copied payload and normalized rows in original order. Vocabulary and mapping adequacy remain caller responsibilities."
+        }
+      ],
+      "ports": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified PreparedCompletePairs from the qualified prepare stage. Revalidates and copies the request. NFKC/casefold, spelling, tokenization, one-pass domain substitution and synonym expansion are explicit policy; titles and descriptions are never concatenated. Train/calibration unordered full-record pairs must be unique and all three populations disjoint; repeated query rows are allowed. Output holds copied payload and normalized rows in original order. Vocabulary and mapping adequacy remain caller responsibilities."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified PreparedCompletePairs from the qualified prepare stage. Revalidates and copies the request. NFKC/casefold, spelling, tokenization, one-pass domain substitution and synonym expansion are explicit policy; titles and descriptions are never concatenated. Train/calibration unordered full-record pairs must be unique and all three populations disjoint; repeated query rows are allowed. Output holds copied payload and normalized rows in original order. Vocabulary and mapping adequacy remain caller responsibilities."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.text_pair_complete_execution.predict",
+      "artifact_id": "a21c58da-8f1d-54ce-8655-96c78d0b60d0",
+      "version_id": "0d701f42-d6ae-560d-b90f-8e6cb7a8bb58",
+      "content_hash": "60a00eb55815dece46fb3a1139da298b718103fb4509d206a6929f1f772af233",
+      "catalog_fqdn": "sciona.atoms.ml.text_pair_complete_execution.predict",
+      "recipe_adapter": true,
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "models",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Models state from the qualified model-fit stage. Average two class-1 score vectors equally. Fit increasing isotonic mapping bounded to [0,1], clipping outside calibration score range; then select the highest observed-score cutoff among equal empirical binary F1 values. Apply score >= cutoff to query rows without refitting text features or base models. Mapping and cutoff use the same calibration rows, so reported selection F1 is not independent accuracy. Returns raw and scaled scores, decisions and selection metrics; no probability-calibration guarantee."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Models state from the qualified model-fit stage. Average two class-1 score vectors equally. Fit increasing isotonic mapping bounded to [0,1], clipping outside calibration score range; then select the highest observed-score cutoff among equal empirical binary F1 values. Apply score >= cutoff to query rows without refitting text features or base models. Mapping and cutoff use the same calibration rows, so reported selection F1 is not independent accuracy. Returns raw and scaled scores, decisions and selection metrics; no probability-calibration guarantee."
+        }
+      ],
+      "ports": [
+        {
+          "direction": "input",
+          "name": "models",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Models state from the qualified model-fit stage. Average two class-1 score vectors equally. Fit increasing isotonic mapping bounded to [0,1], clipping outside calibration score range; then select the highest observed-score cutoff among equal empirical binary F1 values. Apply score >= cutoff to query rows without refitting text features or base models. Mapping and cutoff use the same calibration rows, so reported selection F1 is not independent accuracy. Returns raw and scaled scores, decisions and selection metrics; no probability-calibration guarantee."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Models state from the qualified model-fit stage. Average two class-1 score vectors equally. Fit increasing isotonic mapping bounded to [0,1], clipping outside calibration score range; then select the highest observed-score cutoff among equal empirical binary F1 values. Apply score >= cutoff to query rows without refitting text features or base models. Mapping and cutoff use the same calibration rows, so reported selection F1 is not independent accuracy. Returns raw and scaled scores, decisions and selection metrics; no probability-calibration guarantee."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.text_pair_complete_execution.prepare_fields",
+      "artifact_id": "f5d62d51-9656-50cd-9c9b-7ecd2e6e2a0a",
+      "version_id": "9262dcf1-8ff7-5fb5-bf89-e23ef790d3b1",
+      "content_hash": "3a5c077cd7a8767dff8b7c1cf0ace0e6473491bc217395e871611a305487df71",
+      "catalog_fqdn": "sciona.atoms.ml.text_pair_complete_execution.prepare_fields",
+      "recipe_adapter": true,
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "payload",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact finite JSON-compatible version-2 request with binary_relevance task and title_description role. Nonempty training, calibration and query record pairs; each record has exactly string title and description fields. Training and calibration labels are integer 0/1 with both classes. Explicit vocabulary, domain substitutions and synonyms; explicit projection, BM25 and forest controls. Text limits and normalized full-record population collision rules apply. No entity-disjointness guarantee. Deep-copies the request; caller must not mutate the resulting payload before the next stage."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact finite JSON-compatible version-2 request with binary_relevance task and title_description role. Nonempty training, calibration and query record pairs; each record has exactly string title and description fields. Training and calibration labels are integer 0/1 with both classes. Explicit vocabulary, domain substitutions and synonyms; explicit projection, BM25 and forest controls. Text limits and normalized full-record population collision rules apply. No entity-disjointness guarantee. Deep-copies the request; caller must not mutate the resulting payload before the next stage."
+        }
+      ],
+      "ports": [
+        {
+          "direction": "input",
+          "name": "payload",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact finite JSON-compatible version-2 request with binary_relevance task and title_description role. Nonempty training, calibration and query record pairs; each record has exactly string title and description fields. Training and calibration labels are integer 0/1 with both classes. Explicit vocabulary, domain substitutions and synonyms; explicit projection, BM25 and forest controls. Text limits and normalized full-record population collision rules apply. No entity-disjointness guarantee. Deep-copies the request; caller must not mutate the resulting payload before the next stage."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact finite JSON-compatible version-2 request with binary_relevance task and title_description role. Nonempty training, calibration and query record pairs; each record has exactly string title and description fields. Training and calibration labels are integer 0/1 with both classes. Explicit vocabulary, domain substitutions and synonyms; explicit projection, BM25 and forest controls. Text limits and normalized full-record population collision rules apply. No entity-disjointness guarantee. Deep-copies the request; caller must not mutate the resulting payload before the next stage."
+        }
+      ]
+    }
+  ],
+  "checker_sha256": "10f29950732fbad3f3ef0475f03c61bd3344f37f2fdf3f57cec63caa95046634",
+  "evidence_sha256": {
+    "docs/reviews/text_pair_complete_graph_qualification.json": "1c65a7ee8d1e67f54fc3c43bab678af6269c03ee98e4d416290d804b6d0c34bc",
+    "docs/reviews/text_pair_complete_adapter_semantics.json": "25c664537c4e831221a965b9dfd0d988052eb4e27bdab79a2a7b7bb951545b37",
+    "docs/reviews/text_pair_complete_adapter_publication_plan.json": "f674376337ac3a616bfddff85f0b4a4104139a26b222cb7b9c61b7744637a93b"
+  },
+  "catalog_snapshot": {
+    "atoms": "3952c335669caa7e6dbe4b4e1710fe279c2e24d77d7d7d8eead52241ed2edc09",
+    "artifacts": "157079ad3f8d28a759e008993772838d685d6f21f71f3f669a39583080451d8c",
+    "atom_versions": "7d7eb882817f254c6880096842a62bc04d912f0884d5a9caf86f6607b808d8ee",
+    "artifact_versions": "5b8c4d3f298b458e15ae0e742213d53467b6c8302ec8d33b1e736ece04e83c74",
+    "atom_io_specs": "0b4cbe8c738202a7b7c64e3a9b0a096248c94ef0325037836cb8c58ecfca90da",
+    "artifact_io_specs": "78c7a9aa73eb0ad8c249c4ea1f3a6bf6f471dac80606d32aac9cd4fd7bd22c4e",
+    "atom_parameters": "332946e74ad21b1d97cf8b3d009ba26b381ce0b3de05f23f9fb563841d2829b0",
+    "artifact_parameters": "4725a980e5f2981d73831b1e2c085548f381ab8fbb471436f4703670a3d9d29a",
+    "atom_descriptions": "ac50a25833cdfa12a1af69fa0c43d85d8a927d96bd3a949f39dddceaa7102f17",
+    "artifact_descriptions": "36f39012999f4cd77527d852913d227ed0d9031f422d1ff99a40c564cfd8f35e",
+    "atom_references": "412ae7a19c5cae69d6827751ce807cd6d75fe812a57d91aa793b70f3e256ce3e",
+    "artifact_references": "87e62707d33a8fefd7f8a6a9315fadf0b5d48ea5294a8a2cfd9cd4f02350e996",
+    "atom_audit_rollups": "3f0fb110e54f6c0c6b98a5e443c6916fec781cd40c3eed02ffe9486124fc1f27",
+    "artifact_audit_rollups": "1d05f3bc3b1cc2f7ef6cc475be2354e9ebb41f9b65aa3368f83a2ad62f1a6b56",
+    "artifact_audit_evidence": "05d5bafcb81e5a2456f213d7ad881aba64db47d7171da4b03fd23076ce246e9a"
+  },
+  "dependencies": [
+    {
+      "dependent_version_id": "0d701f42-d6ae-560d-b90f-8e6cb7a8bb58",
+      "dependency_artifact_fqdn": "sciona.atoms.ml.calibration.empirical_f1.apply_column_thresholds",
+      "dependency_content_hash": "b1df674cf843553cef39c8fefb23c21a23cad31671503a6104e64aa954aebe8f",
+      "port_name": "",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "binding_metadata": {
+        "dependency_version_id": "2c4add48-5699-5485-865c-da509201fc45",
+        "dependency_artifact_id": "fe055a2d-5444-5c56-a52c-b4f1876aeba1"
+      }
+    },
+    {
+      "dependent_version_id": "0d701f42-d6ae-560d-b90f-8e6cb7a8bb58",
+      "dependency_artifact_fqdn": "sciona.atoms.ml.calibration.empirical_f1.fit_empirical_f1_thresholds",
+      "dependency_content_hash": "a0c822126d1cfe7c14c4a451a0a8ae1070ffb50a0959a56776c2d3127c4e7c96",
+      "port_name": "",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "binding_metadata": {
+        "dependency_version_id": "83608ee9-c047-53da-acb5-209901f7b245",
+        "dependency_artifact_id": "1d426405-3d0e-5545-b9c4-51b4eb2681af"
+      }
+    },
+    {
+      "dependent_version_id": "0d701f42-d6ae-560d-b90f-8e6cb7a8bb58",
+      "dependency_artifact_fqdn": "sciona.atoms.ml.model_selection.materialized_prediction.average",
+      "dependency_content_hash": "280b371b126f6d7f580dd169289280af76fc50d64350b784c3aefd346df18af5",
+      "port_name": "",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "binding_metadata": {
+        "dependency_version_id": "fbea5906-9987-5e67-88c4-5ffe3d971e66",
+        "dependency_artifact_id": "3e054efb-38d6-56c1-a7c8-26da81e7a310"
+      }
+    },
+    {
+      "dependent_version_id": "0d701f42-d6ae-560d-b90f-8e6cb7a8bb58",
+      "dependency_artifact_fqdn": "sciona.atoms.ml.sklearn.decomposition.sparse_projection.transform_sparse_projection",
+      "dependency_content_hash": "20414518df42b5262acc43c7bc1c52b3014984047389d05c619131a07931da52",
+      "port_name": "",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "binding_metadata": {
+        "dependency_version_id": "078cb171-1a34-5469-bec9-66d9039d3f82",
+        "dependency_artifact_id": "d84f65b4-0e20-561b-bd43-dc3cf9f14e71"
+      }
+    },
+    {
+      "dependent_version_id": "0d701f42-d6ae-560d-b90f-8e6cb7a8bb58",
+      "dependency_artifact_fqdn": "sciona.atoms.ml.sklearn.isotonic.isotonic_regression",
+      "dependency_content_hash": "33921162f0f39f88695cd0523cd5ebe3f1e11f7c38f16284ffb318f5424a84c4",
+      "port_name": "",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "binding_metadata": {
+        "dependency_version_id": "5e0791b2-d932-5556-a678-ec447331cfe3",
+        "dependency_artifact_id": "46e31de0-ba8d-4807-afeb-91f83f9872a5"
+      }
+    },
+    {
+      "dependent_version_id": "0d701f42-d6ae-560d-b90f-8e6cb7a8bb58",
+      "dependency_artifact_fqdn": "sciona.atoms.ml.sklearn.isotonic.isotonic_regression_fit",
+      "dependency_content_hash": "076afd2e339934fd8b103328693fb851e2fa0ba38ea835b868c03688082ac219",
+      "port_name": "",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "binding_metadata": {
+        "dependency_version_id": "f91ca3b0-656e-5afc-8cdc-7aadeb961655",
+        "dependency_artifact_id": "777018bd-19bf-466c-93e1-3b7ee5cd2554"
+      }
+    },
+    {
+      "dependent_version_id": "0d701f42-d6ae-560d-b90f-8e6cb7a8bb58",
+      "dependency_artifact_fqdn": "sciona.atoms.ml.sklearn.isotonic.isotonic_regression_transform",
+      "dependency_content_hash": "a784245c6ea9017fe7e77f7bd8e891fc5c7e9c8a0bf03eaa171c19601208cb7e",
+      "port_name": "",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "binding_metadata": {
+        "dependency_version_id": "bd2155a5-a167-5b22-88a8-a0227e28ecc8",
+        "dependency_artifact_id": "45d3cfd3-5b31-4526-83a4-dfadf75a3366"
+      }
+    },
+    {
+      "dependent_version_id": "0d701f42-d6ae-560d-b90f-8e6cb7a8bb58",
+      "dependency_artifact_fqdn": "sciona.atoms.ml.text_nlp.bm25.score_bm25",
+      "dependency_content_hash": "694aa344d694ea817a51bd770cf529d005f04ea536def53b5154891b692b5710",
+      "port_name": "",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "binding_metadata": {
+        "dependency_version_id": "04038b26-2f54-5968-9d73-5ca86fe1f5aa",
+        "dependency_artifact_id": "8f0da8ba-9199-547a-9ae4-1b7e684a827c"
+      }
+    },
+    {
+      "dependent_version_id": "0d701f42-d6ae-560d-b90f-8e6cb7a8bb58",
+      "dependency_artifact_fqdn": "sciona.atoms.ml.text_nlp.levenshtein",
+      "dependency_content_hash": "354b2116ef43e38bd5f68638b041ccd99d5e1ceb03ab811d5722c31e8f9e4c67",
+      "port_name": "",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "binding_metadata": {
+        "dependency_version_id": "211724b6-3494-5629-a6d4-2d0522090be8",
+        "dependency_artifact_id": "270959cd-a379-4305-b3b6-d55c5a3235ed"
+      }
+    },
+    {
+      "dependent_version_id": "6c914275-f7c9-505a-9679-b30a0f74dafb",
+      "dependency_artifact_fqdn": "sciona.atoms.ml.sklearn.decomposition.sparse_projection.transform_sparse_projection",
+      "dependency_content_hash": "20414518df42b5262acc43c7bc1c52b3014984047389d05c619131a07931da52",
+      "port_name": "",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "binding_metadata": {
+        "dependency_version_id": "078cb171-1a34-5469-bec9-66d9039d3f82",
+        "dependency_artifact_id": "d84f65b4-0e20-561b-bd43-dc3cf9f14e71"
+      }
+    },
+    {
+      "dependent_version_id": "6c914275-f7c9-505a-9679-b30a0f74dafb",
+      "dependency_artifact_fqdn": "sciona.atoms.ml.text_nlp.bm25.score_bm25",
+      "dependency_content_hash": "694aa344d694ea817a51bd770cf529d005f04ea536def53b5154891b692b5710",
+      "port_name": "",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "binding_metadata": {
+        "dependency_version_id": "04038b26-2f54-5968-9d73-5ca86fe1f5aa",
+        "dependency_artifact_id": "8f0da8ba-9199-547a-9ae4-1b7e684a827c"
+      }
+    },
+    {
+      "dependent_version_id": "6c914275-f7c9-505a-9679-b30a0f74dafb",
+      "dependency_artifact_fqdn": "sciona.atoms.ml.text_nlp.levenshtein",
+      "dependency_content_hash": "354b2116ef43e38bd5f68638b041ccd99d5e1ceb03ab811d5722c31e8f9e4c67",
+      "port_name": "",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "binding_metadata": {
+        "dependency_version_id": "211724b6-3494-5629-a6d4-2d0522090be8",
+        "dependency_artifact_id": "270959cd-a379-4305-b3b6-d55c5a3235ed"
+      }
+    },
+    {
+      "dependent_version_id": "9262dcf1-8ff7-5fb5-bf89-e23ef790d3b1",
+      "dependency_artifact_fqdn": "sciona.atoms.ml.text_nlp.clean_text",
+      "dependency_content_hash": "fac71b12a314d709fe3925df4fe59adb680d325141617bc5ea53a13247450ff3",
+      "port_name": "",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "binding_metadata": {
+        "dependency_version_id": "6336deb9-4112-5541-aa0c-18c15fb53b44",
+        "dependency_artifact_id": "e81f7609-265b-44cd-9954-5384822299c9"
+      }
+    },
+    {
+      "dependent_version_id": "c2351877-8637-568a-8b8c-d4c7281ee989",
+      "dependency_artifact_fqdn": "sciona.atoms.ml.sklearn.decomposition.sparse_projection.fit_sparse_projection",
+      "dependency_content_hash": "2f5b9ae3a9a441834cf443dc2dd7d2a78f03d34cdad4d006398802a888ca7555",
+      "port_name": "",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "binding_metadata": {
+        "dependency_version_id": "277291e7-b3df-506c-9f3c-954eb6b7b6ba",
+        "dependency_artifact_id": "ddb952af-3379-56a0-a38f-e92c99b3794e"
+      }
+    },
+    {
+      "dependent_version_id": "d1410a50-c8a1-505c-874d-f319db026851",
+      "dependency_artifact_fqdn": "sciona.atoms.ml.text_nlp.clean_text",
+      "dependency_content_hash": "fac71b12a314d709fe3925df4fe59adb680d325141617bc5ea53a13247450ff3",
+      "port_name": "",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "binding_metadata": {
+        "dependency_version_id": "6336deb9-4112-5541-aa0c-18c15fb53b44",
+        "dependency_artifact_id": "e81f7609-265b-44cd-9954-5384822299c9"
+      }
+    },
+    {
+      "dependent_version_id": "f91ca3b0-656e-5afc-8cdc-7aadeb961655",
+      "dependency_artifact_fqdn": "sciona.atoms.ml.sklearn.isotonic.isotonic_regression",
+      "dependency_content_hash": "33921162f0f39f88695cd0523cd5ebe3f1e11f7c38f16284ffb318f5424a84c4",
+      "port_name": "",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "binding_metadata": {
+        "dependency_version_id": "5e0791b2-d932-5556-a678-ec447331cfe3",
+        "dependency_artifact_id": "46e31de0-ba8d-4807-afeb-91f83f9872a5"
+      }
+    }
+  ]
+}
