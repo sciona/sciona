@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "exact_source_batches": {
+    "cap": 72,
+    "cylinder": 72
+  },
+  "batch_size": 32,
+  "undefined_domain_differences": [
+    "cap_axis_substitution",
+    "cylinder_axis_substitution"
+  ],
+  "implementation_sha256": {
+    "source": "2832433043f000b1230c6196369797ab98bcfa78e8d6dbc2041a82eb50619b08",
+    "reviewer": "9df8d568dcc0e5219378a9e5d7768f8d57a50d2a12d034ed7a838950640ff4be",
+    "retained": "96770dae09ba1584b7bd7152187a1b96a7b51df9831eff539a0305cf4674b21b",
+    "provider": "6ef61e3acdb19cd56ef28c2b224a97a363e5d4dc5563cb0baef9c6e0e34c1277"
+  },
+  "decision": "Reuse both existing correction atoms on finite nonempty aligned vectors with nonzero transverse radius and finite positive scaling denominators. Keep coefficient lookup, missing-map policy, geometry bounds and in-place state updates in the recipe; explicitly handle empty/masked batches.",
+  "limitations": [
+    "Existing safe-denominator substitutions are not qualified as source-equivalent; recipe boundaries must exclude undefined geometry.",
+    "Charge sign is an explicit signed orientation multiplier; particle interpretation belongs to the recipe.",
+    "Coefficients are caller supplied and have squared-length units for length-valued corrections; no learned calibration is bundled or qualified.",
+    "Source mutates intersection arrays; pure providers return new arrays. Recipe adapters must preserve intended state updates.",
+    "Synthetic ordinary-range parity does not establish arbitrary-input or historical tracking accuracy.",
+    "Lifecycle integration, catalog identity checks and semantic publication remain pending."
+  ]
+}
