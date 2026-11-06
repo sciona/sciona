@@ -60,3 +60,11 @@ def test_empty_and_singular_and_overflow():
         with pytest.raises(ValueError):oriented_helix_tangent(np.ones((1,3)),np.zeros((1,2)),np.array([radius]),np.array([pitch]),np.array([direction]))
     with pytest.raises(ValueError):construct_helix_from_tangent(np.zeros((1,3)),np.array([[1.,1.,1e-308]]),np.array([1e308]),1e-308,1.)
     with pytest.raises(ValueError):concrete_only()
+
+
+def test_registered_abstract_witness_rejects():
+    from sciona.ghost.registry import get_witness
+    for function in (construct_helix_from_tangent, oriented_helix_tangent):
+        witness = get_witness(function.__module__+'.'+function.__name__)
+        with pytest.raises(ValueError, match='Concrete finite helix'):
+            witness()

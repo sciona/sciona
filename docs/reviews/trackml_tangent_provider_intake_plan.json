@@ -1,0 +1,190 @@
+{
+  "approved": false,
+  "graph_digest": "fd158f38d3aed9ecdd299156809ba053cbf68b16f50e79bbe24f511694e3c05d",
+  "review_sha256": "8955fbc4527258fe6c9a5c9ba1c7c22577bae3680624c16b36606d17c7d119af",
+  "intake_script_sha256": "3c899851c060288f79cf130ea077efc80b7b0ce46c1faa0f4768b9d999467911",
+  "providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.physics.helix_tangent.construct_helix_from_tangent",
+      "catalog_fqdn": "sciona.atoms.physics.helix_tangent.construct_helix_from_tangent",
+      "atom_id": "3790beb0-6e7f-5177-9d92-4daeb75246b0",
+      "version_id": "bdf0bfcb-ca83-5666-bc8b-6ed763385b20",
+      "content_hash": "34785dfce4a5efcaf8f87a5ef015e382e2f2b5eb75b89916451898a65dbfc4be",
+      "provider_sha256": "5da19b65fb36b7071cc63a2bc4066d64d9cf99cc6f2d9cc615ef9ce9f27bd9ff",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.physics.helix_tangent.construct_helix_from_tangent",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "physics.helix_tangent",
+        "repo_name": "sciona-atoms-physics",
+        "source_module_path": "physics.helix_tangent",
+        "import_module": "sciona.atoms.physics.helix_tangent",
+        "source_symbol": "construct_helix_from_tangent",
+        "description": "Construct transverse centers and radii with explicit regulation. Points and tangents are aligned finite float64 (N,3); pitch is (N,), in the same caller-defined length unit as points. Tangents are dimensionless and need not be unit vectors. minimum_axial is positive and dimensionless; maximum_scale is positive with length units. The axial tangent component is floored in magnitude (zero uses positive sign), then -pitch/(2*pi*axial) is clipped to maximum_scale. Regulation can change the input tangent direction; rescaling tangents can change regulated results. Returns centers (N,2) and nonnegative radii (N,). Empty batches allowed. No detector policy is embedded. Nonfinite intermediates reject before clipping can conceal overflow.",
+        "domain_tags": [
+          "physics"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.34785dfce4a5",
+      "fingerprint": "a18300ea0293bed20c6496bc9165c128b10aa3d259da3e3a9783c0e24d2b2a2b",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "points",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles."
+        },
+        {
+          "direction": "input",
+          "name": "tangents",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned finite float64 matrix (N,3), dimensionless, not necessarily unit vectors. Regulation may change direction and destroys scale invariance near its thresholds."
+        },
+        {
+          "direction": "input",
+          "name": "pitch",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points."
+        },
+        {
+          "direction": "input",
+          "name": "minimum_axial",
+          "ordinal": 3,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Positive finite real scalar, dimensionless. Floors axial tangent magnitude; zero uses positive sign. Caller selects this regularization policy."
+        },
+        {
+          "direction": "input",
+          "name": "maximum_scale",
+          "ordinal": 4,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Positive finite real scalar in point length units. Clips the construction scale magnitude after finite division. Caller selects this regularization policy."
+        },
+        {
+          "direction": "output",
+          "name": "centers",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned finite float64 transverse centers (N,2), in point length units."
+        },
+        {
+          "direction": "output",
+          "name": "radius",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned finite nonnegative float64 radii (N,), in point length units."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.physics.helix_tangent.oriented_helix_tangent",
+      "catalog_fqdn": "sciona.atoms.physics.helix_tangent.oriented_helix_tangent",
+      "atom_id": "a6c39896-7e52-5721-9169-b2dbfe090d91",
+      "version_id": "07b5502e-7e16-568e-81f8-cbc09bb7c4a2",
+      "content_hash": "b767809ac29ce9b16eacf9be712643f6c6cb540866352c806ab46a93baaaee49",
+      "provider_sha256": "5da19b65fb36b7071cc63a2bc4066d64d9cf99cc6f2d9cc615ef9ce9f27bd9ff",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.physics.helix_tangent.oriented_helix_tangent",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "physics.helix_tangent",
+        "repo_name": "sciona-atoms-physics",
+        "source_module_path": "physics.helix_tangent",
+        "import_module": "sciona.atoms.physics.helix_tangent",
+        "source_symbol": "oriented_helix_tangent",
+        "description": "Evaluate an oriented tangent using supplied helix geometry. Finite float64 points (N,3), centers (N,2), and vectors radius, pitch and axial_direction (N,) must align. Coordinates, nonnegative radii and signed pitch per revolution share caller-defined length units. Caller must supply points on each transverse circle; only then is the result a unit vector. Only the sign of axial_direction is used. Its product with pitch must be finite and nonzero. Empty batches allowed; nonfinite arithmetic rejects. Returns float64 (N,3). No unit normalization of inconsistent geometry, coordinate conversion, detector topology or physical field model is supplied.",
+        "domain_tags": [
+          "physics"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.b767809ac29c",
+      "fingerprint": "aad3dee1c4460e483b024e725942e27d79d21c490a265e0a0f3f3a386670da91",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "points",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 matrix (N,3), caller-defined length units. Empty batches allowed. For a unit oriented tangent, caller must supply points on the transverse circles."
+        },
+        {
+          "direction": "input",
+          "name": "centers",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned finite float64 transverse centers (N,2), in point length units."
+        },
+        {
+          "direction": "input",
+          "name": "radius",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned finite nonnegative float64 radii (N,), in point length units."
+        },
+        {
+          "direction": "input",
+          "name": "pitch",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned finite float64 vector (N,), signed axial length per revolution in the same units as points."
+        },
+        {
+          "direction": "input",
+          "name": "axial_direction",
+          "ordinal": 4,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned finite float64 vector (N,). Only its sign is used; product with pitch must be finite and representably nonzero."
+        },
+        {
+          "direction": "output",
+          "name": "tangent",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 oriented tangent matrix (N,3). Unit length only when supplied points lie on their transverse circles; inconsistent geometry is not normalized."
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Draft source/interface intake only; semantic publication and dependency gates remain.",
+    "Generic helix geometry; units and regularization are caller supplied. Detector selection and cell-direction policy stay in the recipe."
+  ],
+  "owners": {
+    "sciona-atoms-physics": {
+      "owner_id": "33ed07a2-1bea-5b17-8b71-d6d0e590fdd9",
+      "source_repo_id": "b7900d28-7c79-45bd-8548-483f64154882"
+    }
+  },
+  "preserved_sha256": "f839940aa40edfe5734827698947ed1a426a79c16bb215d49820714ff632db50"
+}
