@@ -8,7 +8,7 @@ from sciona.m5u_inference import forecast
 from sciona.m5u_harmonization import restore
 
 
-def run(units,prices,roles,category_partitions,calendar,*,minimum_day=299,
+def run_unrestored(units,prices,roles,category_partitions,calendar,*,minimum_day=299,
         seed=514,speed=False,super_speed=False,capacity=3_000_000,progress=None):
     """Forecast 28 days after the last history day at every source level.
 
@@ -54,7 +54,19 @@ def run(units,prices,roles,category_partitions,calendar,*,minimum_day=299,
     if not np.array_equal(indices[order],np.arange(len(indices))):raise ValueError('Hierarchy coverage is incomplete or duplicated')
     levels=np.concatenate(levels)[order];factors=np.concatenate(factors)[order]
     unadjusted=np.concatenate(predictions,axis=2)[:,:,order]
-    restored=restore(unadjusted,levels,factors,QUANTILES,adjustment=1. if speed or super_speed else .7)
-    return dict(predictions=restored,levels=levels,quantiles=QUANTILES,
+    return dict(unadjusted=unadjusted,factors=factors,adjustment=1. if speed or super_speed else .7,
+                levels=levels,quantiles=QUANTILES,
                 hierarchy_indices=indices[order],reports=reports,
                 normalization='retained_base_reference',scope='Corrected independent reconstruction; no historical-score parity claim.')
+
+
+def run(units,prices,roles,category_partitions,calendar,*,minimum_day=299,
+        seed=514,speed=False,super_speed=False,capacity=3_000_000,progress=None):
+    """Retain the complete reference lifecycle and original restoration arithmetic."""
+    result=run_unrestored(units,prices,roles,category_partitions,calendar,
+        minimum_day=minimum_day,seed=seed,speed=speed,super_speed=super_speed,
+        capacity=capacity,progress=progress)
+    restored=restore(result['unadjusted'],result['levels'],result['factors'],result['quantiles'],
+                     adjustment=result['adjustment'])
+    return dict(predictions=restored,**{key:result[key] for key in
+        ('levels','quantiles','hierarchy_indices','reports','normalization','scope')})
