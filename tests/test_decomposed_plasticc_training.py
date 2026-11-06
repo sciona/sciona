@@ -1,5 +1,6 @@
 """Complete synthetic training parity, including OOF state and all folds."""
 import copy
+from types import SimpleNamespace
 import numpy as np
 import pandas as pd
 import pytest
@@ -10,6 +11,29 @@ from sciona.plasticc_runtime import prepare_runtime, train_runtime, predict_runt
 from sciona.plasticc_weighting import weighted_multi_logloss
 from scripts.validate_plasticc_runtime import synthetic_payload
 from sciona.decomposed_plasticc_prediction import predict, predict_scores, normalize_scores
+
+
+@pytest.mark.parametrize('width', [2, 7])
+def test_generic_width_nonastronomy_classes(width):
+    from sciona.plasticc_training import LightGBMClassifier
+    from sciona.atoms.ml import decomposed_plasticc_lifecycle as providers
+    rng = np.random.default_rng(73)
+    features = pd.DataFrame(rng.normal(size=(36, width)), columns=[f'feature_{i}' for i in range(width)])
+    labels = pd.Series(np.repeat(['category-a', 'category-b', 'category-c'], 12))
+    references = pd.Series(None, index=labels.index, dtype=object)
+    folds = reference_stratified_folds(labels, references, 3, 17)
+    weights = balanced_weights(labels, None)
+    parameters = dict(n_jobs=1, n_estimators=60, min_child_weight=.01, min_child_samples=2, min_split_gain=0, random_seed=4)
+    dataset = SimpleNamespace(metadata=pd.DataFrame({'class': labels}), select_features=lambda _: features,
+                              label_folds=lambda *_: folds)
+    expected = LightGBMClassifier('synthetic', None)
+    expected.train(dataset, num_folds=3, random_state=17, **parameters)
+    actual = providers.fit_folds(features, labels, weights, folds, parameters, providers.fit_fold)
+    pd.testing.assert_frame_equal(actual.predictions, expected.train_predictions, check_exact=True)
+    pd.testing.assert_frame_equal(actual.importances, expected.importances, check_exact=True)
+    assert len(actual.models) == 3
+    for left, right in zip(actual.models, expected.classifiers, strict=True):
+        assert left.booster_.model_to_string() == right.booster_.model_to_string()
 
 
 @pytest.mark.parametrize('weighting,class_weighting', [('flat', 'flat'), ('redshift', 'kaggle')])

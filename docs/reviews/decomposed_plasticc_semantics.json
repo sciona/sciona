@@ -1,0 +1,1843 @@
+{
+  "format": "decomposed-plasticc-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_plasticc_numeric.initial_amplitude",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_plasticc_numeric.initial_amplitude",
+      "version_id": "34cdcfcb-2fae-58ea-9839-eca5f3758280",
+      "content_hash": "665b8a60810a6f49459cef2765a8013ee5f5af50e61f5dc36d118e944334ad40",
+      "provider_sha256": "4bd753b1043f5e01d049f25812eb51868eb6b78ec90088fe7dbf87bb9801ba90",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "targets",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "errors",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "relative_floor",
+          "ordinal": 2,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "amplitude_fraction",
+          "ordinal": 3,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "amplitude",
+          "ordinal": 0,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Estimate positive covariance amplitude using noise-adjusted absolute response.",
+      "parameters": {
+        "targets": "Nonempty finite real vector.",
+        "errors": "Aligned finite strictly positive error vector.",
+        "relative_floor": "Finite nonnegative scalar.",
+        "amplitude_fraction": "Finite strictly positive scalar."
+      },
+      "validity_bounds": "Score abs(y)/sqrt(error**2+(relative_floor*max(y))**2); select first maximum and square amplitude_fraction*abs(selected y). Reject nonfinite arithmetic or zero amplitude.",
+      "outputs": "Positive float variance.",
+      "plain_limits": "Choose a response scale using the supplied noise controls.",
+      "reuse": "Generic response/error operation; no coordinate or astronomy policy."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_plasticc_numeric.fit_gp",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_plasticc_numeric.fit_gp",
+      "version_id": "093a597b-cbd8-5bf9-abe1-b487f9211980",
+      "content_hash": "e83425d4d31de94c934271c1576ef82070c8c93f5da53cb8de9e67f9792ee92b",
+      "provider_sha256": "4bd753b1043f5e01d049f25812eb51868eb6b78ec90088fe7dbf87bb9801ba90",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "coordinates",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "targets",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "errors",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "amplitude",
+          "ordinal": 3,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "lengths",
+          "ordinal": 4,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "optimized_axis",
+          "ordinal": 5,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "metric_log_bounds",
+          "ordinal": 6,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "amplitude_log_radius",
+          "ordinal": 7,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "fix_amplitude",
+          "ordinal": 8,
+          "type_desc": "bool",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "white_noise_variance",
+          "ordinal": 9,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "fitted",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Optimize one Mat\u00e9rn32 coordinate length and optionally amplitude with analytic gradients.",
+      "parameters": {
+        "coordinates": "Nonempty finite real observation-by-coordinate matrix.",
+        "targets": "Aligned finite real response vector.",
+        "errors": "Aligned finite strictly positive error vector.",
+        "amplitude": "Finite positive covariance variance.",
+        "lengths": "Finite positive vector matching coordinate width; units match coordinates.",
+        "optimized_axis": "Python integer selecting one coordinate axis.",
+        "metric_log_bounds": "Increasing finite two-vector bounding log(length squared).",
+        "amplitude_log_radius": "Finite positive radius around initial log-amplitude.",
+        "fix_amplitude": "Python bool; true freezes amplitude.",
+        "white_noise_variance": "Finite strictly positive scalar white variance."
+      },
+      "validity_bounds": "Freeze all other lengths. Use george likelihood/gradient and scipy bounded minimize without an extra iteration cap or restarts. On optimizer failure restore initial active parameters while retaining optimizer.x separately, even if diagnostic values are nonfinite. No jitter repair.",
+      "outputs": "Mutable Fitted object containing effective model, copied numeric inputs, reported/effective parameters and optimizer success.",
+      "plain_limits": "Fit a smooth response model with explicit bounds and retain failure diagnostics.",
+      "reuse": "Generic arbitrary-width coordinates; wavelength and recipe constants are supplied separately."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_plasticc_numeric.scale_covariance",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_plasticc_numeric.scale_covariance",
+      "version_id": "d075a0c9-ee8e-5d37-ab5f-dd77792ce0f1",
+      "content_hash": "abe0248c7049cf56a95dc2003db0e936cb9adac6b84df39087dc55954f375739",
+      "provider_sha256": "4bd753b1043f5e01d049f25812eb51868eb6b78ec90088fe7dbf87bb9801ba90",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "normalized",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "amplitude",
+          "ordinal": 1,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "covariance",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Multiply a normalized covariance block by amplitude.",
+      "parameters": {
+        "normalized": "Nonempty finite real rank-two matrix.",
+        "amplitude": "Positive finite scalar excluding bool."
+      },
+      "validity_bounds": "Copy to float64; reject multiplication overflow. Does not prove kernel provenance or positive definiteness.",
+      "outputs": "Independent finite covariance matrix.",
+      "plain_limits": "Scale a matrix by a supplied variance.",
+      "reuse": "Generic numeric matrix scaling."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_plasticc_numeric.observation_variance",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_plasticc_numeric.observation_variance",
+      "version_id": "8953bcdb-0063-53fc-94f2-6c12bfdf9743",
+      "content_hash": "b2b492451591c8b48d5f1cc1fc4d90beab42c70b2ab17b1ef7ed632b818f506c",
+      "provider_sha256": "4bd753b1043f5e01d049f25812eb51868eb6b78ec90088fe7dbf87bb9801ba90",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "errors",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "white_noise_variance",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "variance",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Combine measurement error and explicit white variance.",
+      "parameters": {
+        "errors": "Nonempty finite nonnegative real vector.",
+        "white_noise_variance": "Aligned finite nonnegative real vector."
+      },
+      "validity_bounds": "Preserve sqrt(error squared + white variance) squared arithmetic; reject overflow. No implicit noise floor.",
+      "outputs": "Aligned float64 variance vector.",
+      "plain_limits": "Combine two sources of observation noise.",
+      "reuse": "Generic numeric noise operation."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_plasticc_numeric.condition",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_plasticc_numeric.condition",
+      "version_id": "f6a8222a-8fef-5e33-80a4-b34ff19a0290",
+      "content_hash": "9484dc4bf62993aed0b19cc445c9b38e5f612aee8b27827b8cdc7ec6c271a054",
+      "provider_sha256": "4bd753b1043f5e01d049f25812eb51868eb6b78ec90088fe7dbf87bb9801ba90",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "covariance",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "targets",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "noise_variance",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "factor",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "alpha",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "logdet",
+          "ordinal": 2,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Condition a zero-mean Gaussian process on covariance and diagonal noise.",
+      "parameters": {
+        "covariance": "Nonempty finite real exactly symmetric square matrix.",
+        "targets": "Aligned finite real vector.",
+        "noise_variance": "Aligned finite nonnegative real vector."
+      },
+      "validity_bounds": "Add noise to diagonal and use upper Cholesky plus cho_solve. Reject nonfinite arithmetic; singular or non-positive-definite matrices fail. No jitter or repair.",
+      "outputs": "Upper factor, precision-weighted targets and log determinant.",
+      "plain_limits": "Prepare a covariance model to predict responses.",
+      "reuse": "Generic linear algebra independent of labels, units and domain."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_plasticc_numeric.predict_gp",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_plasticc_numeric.predict_gp",
+      "version_id": "db15a03b-1a0d-5b0e-95f9-5cd5a273e7b4",
+      "content_hash": "3aa83ecc3c638a59f181e8c28691d7c013b47c243488e21b0cb98a158dcb4b12",
+      "provider_sha256": "4bd753b1043f5e01d049f25812eb51868eb6b78ec90088fe7dbf87bb9801ba90",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "factor",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "alpha",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "cross_covariance",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "prior_variance",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "mean",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "variance",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Compute zero-mean conditional means and latent marginal variances.",
+      "parameters": {
+        "factor": "Finite nonempty square upper-triangular factor with positive diagonal.",
+        "alpha": "Aligned finite precision-weighted target vector.",
+        "cross_covariance": "Nonempty finite query-by-training matrix.",
+        "prior_variance": "Query-aligned finite nonnegative variance vector."
+      },
+      "validity_bounds": "Mean=cross@alpha; variance=prior-sum(cross.T*cho_solve(factor,cross.T),axis0). Preserve negative roundoff variance; no clipping. All inputs must originate from one model.",
+      "outputs": "Finite query mean and variance vectors.",
+      "plain_limits": "Predict responses and their model variance.",
+      "reuse": "Generic conditioned covariance prediction with explicit same-model provenance."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_plasticc_numeric.balanced_weights",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_plasticc_numeric.balanced_weights",
+      "version_id": "ec966c9a-6ee4-59a8-a7a0-2476a11c0726",
+      "content_hash": "957ec4c1eaa0545601137ff088e882b3e82cb7015f88281c59d48212ef165f86",
+      "provider_sha256": "4bd753b1043f5e01d049f25812eb51868eb6b78ec90088fe7dbf87bb9801ba90",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "labels",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "class_weights",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "weights",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Balance class contributions by inverse frequency.",
+      "parameters": {
+        "labels": "Nonempty pandas Series with unique nonnull index and nonnull homogeneous sortable class labels.",
+        "class_weights": "None for equal class weights, or mapping covering each observed class with finite positive nonboolean scalars."
+      },
+      "validity_bounds": "Weight=class_weight*N/count(class), retaining source arithmetic and Series index. Qualified inputs must avoid arithmetic overflow; output finiteness is not independently checked.",
+      "outputs": "Indexed weight Series.",
+      "plain_limits": "Give each class its chosen total training weight.",
+      "reuse": "Generic categorical balancing independent of astronomy classes."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_plasticc_numeric.reference_stratified_folds",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_plasticc_numeric.reference_stratified_folds",
+      "version_id": "8499967f-ba8b-5dfe-8d3c-f9e094bc45cd",
+      "content_hash": "e927bcffd69a50db05cda50909fc1852c3de88ad301531e8c271e6f5ef54b0fa",
+      "provider_sha256": "4bd753b1043f5e01d049f25812eb51868eb6b78ec90088fe7dbf87bb9801ba90",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "labels",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "references",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "num_folds",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "seed",
+          "ordinal": 3,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "folds",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Stratify originals and assign derivatives to the same fold as their original.",
+      "parameters": {
+        "labels": "Nonempty pandas Series with unique nonnull index and nonnull homogeneous sortable class labels.",
+        "references": "Exactly aligned Series; null denotes original, otherwise points directly to an original of the same class.",
+        "num_folds": "Python integer at least two; each original class has at least this many members.",
+        "seed": "Python integer in[0,2**32)."
+      },
+      "validity_bounds": "Use shuffled sklearn StratifiedKFold on originals in supplied order. Reject missing references, chains, conflicting labels and index misalignment. No independence claim beyond supplied references.",
+      "outputs": "Aligned integer fold Series in[0,num_folds).",
+      "plain_limits": "Keep related examples together while distributing classes across folds.",
+      "reuse": "Generic augmentation/reference grouping; caller supplies the relationship."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_plasticc_numeric.normalize_scores",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_plasticc_numeric.normalize_scores",
+      "version_id": "47df8a94-0122-52e4-a09e-18a406b63340",
+      "content_hash": "e02f1f0c0b57a2250e7e0e03db7567497cb11b008854d1130fe74fe28a87cf19",
+      "provider_sha256": "4bd753b1043f5e01d049f25812eb51868eb6b78ec90088fe7dbf87bb9801ba90",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "scores",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "probabilities",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Normalize score rows using retained unshifted exponentials.",
+      "parameters": {
+        "scores": "Nonempty finite real rank-two matrix; qualified comparisons use float64."
+      },
+      "validity_bounds": "Compute exp(scores)/row_sum(exp(scores)) without maximum subtraction. Reject nonfinite results including overflow or total underflow. Individual zero probabilities are allowed.",
+      "outputs": "Same-shape probability matrix.",
+      "plain_limits": "Turn each score row into relative weights.",
+      "reuse": "Generic numeric normalization; exact retained arithmetic rather than a stabilized replacement."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_plasticc_numeric.predict_scores",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_plasticc_numeric.predict_scores",
+      "version_id": "c2d0c3fa-9b5d-59d3-9853-a350de4657b8",
+      "content_hash": "6832c17b648c2ed497ae94f299571b2e5842305be29008121780519f2b23c81a",
+      "provider_sha256": "4bd753b1043f5e01d049f25812eb51868eb6b78ec90088fe7dbf87bb9801ba90",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "model",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "features",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "classes",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "scores",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Predict raw model scores at the selected training iteration.",
+      "parameters": {
+        "model": "Matching qualified multiclass LightGBM model with classes_, best_iteration_ and predict_proba.",
+        "features": "Nonempty indexed numeric pandas DataFrame of matching feature width and ordered columns; missing feature values may be NaN, infinity excluded from the qualified subset.",
+        "classes": "Ordered class labels exactly equal to model.classes_."
+      },
+      "validity_bounds": "Call predict_proba(raw_score=True,num_iteration=best_iteration_); require row/class shape. Does not independently reject nonfinite scores; normalization is a separate operation.",
+      "outputs": "Query-by-class raw score matrix.",
+      "plain_limits": "Read class scores from one fitted model.",
+      "reuse": "Generic multiclass model inference with explicit class alignment."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_plasticc_lifecycle.fit_fold",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_plasticc_lifecycle.fit_fold",
+      "version_id": "52f23590-7fe1-5c88-9421-8dcc81a35d67",
+      "content_hash": "9945359e2f4508792502a5297e87b26bee0903895825c7401f614dba063ffc86",
+      "provider_sha256": "87781e386ec08dd6a62f1d03f08202349b87471b94f19349c6df946098dd87d5",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "train_features",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "train_classes",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "train_weights",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "validation_features",
+          "ordinal": 3,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "validation_classes",
+          "ordinal": 4,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "validation_weights",
+          "ordinal": 5,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "parameters",
+          "ordinal": 6,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "model",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Fit one weighted multiclass LightGBM model.",
+      "parameters": {
+        "train_features": "Nonempty indexed numeric pandas DataFrame of matching feature width and ordered columns; missing feature values may be NaN, infinity excluded from the qualified subset.",
+        "train_classes": "Aligned training label Series containing all output classes.",
+        "train_weights": "Aligned finite positive training weights.",
+        "validation_features": "Nonempty indexed numeric pandas DataFrame of matching feature width and ordered columns; missing feature values may be NaN, infinity excluded from the qualified subset.",
+        "validation_classes": "Aligned validation labels drawn from training classes.",
+        "validation_weights": "Aligned finite positive validation weights.",
+        "parameters": "Dictionary restricted to the validated runtime training_parameters keys and bounds; explicit n_jobs=1. No alternative thread aliases, device overrides or executable callbacks."
+      },
+      "validity_bounds": "Retain source GBDT/multiclass defaults, override allowed controls, use weighted validation logloss with50-round early stopping and100-round logging callbacks. Reject n_jobs other than1; other parameter restrictions rely on validated caller provenance. Validation affects stopping and is not untouched test evidence.",
+      "outputs": "Fitted LightGBM classifier with selected iteration.",
+      "plain_limits": "Fit one model using weighted examples and a stopping set.",
+      "reuse": "Generic-width multiclass learning; no astronomy features or class identifiers are hardcoded."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_plasticc_lifecycle.prepare",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_plasticc_lifecycle.prepare",
+      "version_id": "6dcd482f-25bb-522f-82f3-14324e8e3abd",
+      "content_hash": "e88026604b677f10a5e071e369cdb64f746848a78a89a6431dfe24147f7ff990",
+      "provider_sha256": "87781e386ec08dd6a62f1d03f08202349b87471b94f19349c6df946098dd87d5",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "payload",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "amplitude_function",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "fit_function",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "kernel_function",
+          "ordinal": 3,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "scale_function",
+          "ordinal": 4,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "noise_function",
+          "ordinal": 5,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "condition_function",
+          "ordinal": 6,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "predict_function",
+          "ordinal": 7,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Validate a complete runtime invocation and bind numeric GP operations.",
+      "parameters": {
+        "payload": "Version1 runtime dictionary with training, prediction, photoz_reference and config, satisfying prepare_runtime validation.",
+        "amplitude_function": "Qualified initial_amplitude callable.",
+        "fit_function": "Qualified fit_gp callable.",
+        "kernel_function": "Published Mat\u00e9rn covariance callable with nu=1.5.",
+        "scale_function": "Qualified scale_covariance callable.",
+        "noise_function": "Qualified observation_variance callable.",
+        "condition_function": "Qualified condition callable.",
+        "predict_function": "Qualified predict_gp callable."
+      },
+      "validity_bounds": "Retain root validation, astronomy wavelength mapping, explicit GP defaults and source augmentation RNG. Copy observations into NumericObjects. Default GP lookup caches per object; explicit fit refits. Callability alone does not authenticate semantics.",
+      "outputs": "Prepared state with numeric-bound training/query objects and augmentor.",
+      "plain_limits": "Prepare the requested astronomy workflow and its numerical functions.",
+      "reuse": "Astronomy boundary; supplied numeric functions remain independently selectable."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_plasticc_lifecycle.augment",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_plasticc_lifecycle.augment",
+      "version_id": "f4ce6342-7773-565c-945a-a53f4f9b95b5",
+      "content_hash": "c43b2be80b8949d8abef1872d0d23e7dcf950ab125ba9ab9ff72735002b77a54",
+      "provider_sha256": "87781e386ec08dd6a62f1d03f08202349b87471b94f19349c6df946098dd87d5",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "population",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Execute the configured population augmentation schedule.",
+      "parameters": {
+        "prepared": "Matching validated Prepared object from prepare, with unchanged settings and numeric bindings."
+      },
+      "validity_bounds": "Visit every original and every requested attempt with retained RNG draws, source rejection/retry policy and original inclusion. Successful derivatives use bound numeric GP operations; rejected attempts may produce fewer derivatives. Mutable invocation-local state is not serialized or independently authenticated; do not mix populations, feature policies, model classes or provider versions.",
+      "outputs": "Augmented invocation-local Dataset with original references.",
+      "plain_limits": "Generate all requested candidate variations.",
+      "reuse": "Astronomy augmentation policy, not a generic data augmentation claim."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_plasticc_lifecycle.featurizer",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_plasticc_lifecycle.featurizer",
+      "version_id": "fb9ed48c-805c-5ee1-aaa8-76cac66fad39",
+      "content_hash": "4f2e5c8e4f745632f1a818c051e4c989d979fb513f713f69297387dd35de4dd4",
+      "provider_sha256": "87781e386ec08dd6a62f1d03f08202349b87471b94f19349c6df946098dd87d5",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "featurizer",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Construct the retained astronomy feature policy.",
+      "parameters": {
+        "prepared": "Matching validated Prepared object from prepare, with unchanged settings and numeric bindings."
+      },
+      "validity_bounds": "Prepared is a graph dependency only; this function does not inspect or revalidate it. Returns a fresh PlasticcFeaturizer.",
+      "outputs": "Feature-policy object.",
+      "plain_limits": "Choose the defined astronomy features.",
+      "reuse": "Explicit domain-specific feature definition."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_plasticc_lifecycle.extract_features",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_plasticc_lifecycle.extract_features",
+      "version_id": "8dc08e24-32e0-5fde-a62b-6cd351d46117",
+      "content_hash": "cb20b048a96e6969956ddb7fcd600cc579cab4d51de7c20f50d286f936b32cfb",
+      "provider_sha256": "87781e386ec08dd6a62f1d03f08202349b87471b94f19349c6df946098dd87d5",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "population",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "featurizer",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "features",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Extract and select features for every population object.",
+      "parameters": {
+        "population": "Invocation-local Dataset from the matching prepared or augmented population; caller preserves object order and metadata alignment.",
+        "featurizer": "Matching PlasticcFeaturizer instance; feature definitions and selected order remain unchanged."
+      },
+      "validity_bounds": "Run full raw-feature extraction then selection; mutate population.raw_features and population.features. Retain per-object GP cache and source missing-value behavior. Mutable invocation-local state is not serialized or independently authenticated; do not mix populations, feature policies, model classes or provider versions.",
+      "outputs": "Selected indexed feature DataFrame.",
+      "plain_limits": "Compute the chosen features for all objects.",
+      "reuse": "Population lifecycle adapter; the supplied feature policy determines domain meaning."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_plasticc_lifecycle.assign_folds",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_plasticc_lifecycle.assign_folds",
+      "version_id": "5f3d63b5-b6d5-5e98-987b-63cc3d0b0413",
+      "content_hash": "028bc0682b8224d94c95920f81f018d7c7efe4054625f8bb8f8b85dcf17763d5",
+      "provider_sha256": "87781e386ec08dd6a62f1d03f08202349b87471b94f19349c6df946098dd87d5",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "population",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "fold_function",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "folds",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Project original references into an explicit fold callable.",
+      "parameters": {
+        "population": "Invocation-local Dataset from the matching prepared or augmented population; caller preserves object order and metadata alignment.",
+        "prepared": "Matching validated Prepared object from prepare, with unchanged settings and numeric bindings.",
+        "fold_function": "Qualified reference_stratified_folds callable."
+      },
+      "validity_bounds": "Pass class Series, references or all-null references, requested fold count and seed unchanged. Validation is delegated to the supplied callable. Mutable invocation-local state is not serialized or independently authenticated; do not mix populations, feature policies, model classes or provider versions.",
+      "outputs": "Aligned fold Series.",
+      "plain_limits": "Connect the population to its fold assignment rule.",
+      "reuse": "Recipe field projection over a separately reusable grouping operation."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_plasticc_lifecycle.training_weights",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_plasticc_lifecycle.training_weights",
+      "version_id": "cd96b88f-0473-5886-961a-d864f367429d",
+      "content_hash": "e3eb78f7a89399683f6fd5f48bf6a6b669f0afa76561c5c240fc7ed1c615dce6",
+      "provider_sha256": "87781e386ec08dd6a62f1d03f08202349b87471b94f19349c6df946098dd87d5",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "population",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "balance_function",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "weights",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "class_weights",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Select flat or redshift weighting and explicit task class weights.",
+      "parameters": {
+        "population": "Invocation-local Dataset from the matching prepared or augmented population; caller preserves object order and metadata alignment.",
+        "prepared": "Matching validated Prepared object from prepare, with unchanged settings and numeric bindings.",
+        "balance_function": "Qualified balanced_weights callable for flat mode."
+      },
+      "validity_bounds": "Flat mode invokes supplied balancing. Redshift mode retains source logarithmic bins, group counts, floors and galactic/extragalactic scaling from DEFAULTS. Kaggle mode doubles classes15/64; flat class mode uses None. Mutable invocation-local state is not serialized or independently authenticated; do not mix populations, feature policies, model classes or provider versions.",
+      "outputs": "Object weight Series and class-weight mapping or None.",
+      "plain_limits": "Choose the training weight policy requested for this task.",
+      "reuse": "Explicit astronomy weighting policy; flat class balancing is separately reusable."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_plasticc_lifecycle.training_inputs",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_plasticc_lifecycle.training_inputs",
+      "version_id": "2637e0b1-8949-57fb-a1cc-87de95915846",
+      "content_hash": "4bade0f3de34330ddff338b3410783e811f0a38083a46487f14a69a309ecb5bf",
+      "provider_sha256": "87781e386ec08dd6a62f1d03f08202349b87471b94f19349c6df946098dd87d5",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "population",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "labels",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "parameters",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Expose training labels and copied model controls.",
+      "parameters": {
+        "population": "Invocation-local Dataset from the matching prepared or augmented population; caller preserves object order and metadata alignment.",
+        "prepared": "Matching validated Prepared object from prepare, with unchanged settings and numeric bindings."
+      },
+      "validity_bounds": "Return aliased class Series; copy training_parameters and default n_jobs to1. Reject any other n_jobs. Root validation must already restrict allowed parameter names and values.",
+      "outputs": "Labels and parameter dictionary.",
+      "plain_limits": "Supply labels and the requested model settings.",
+      "reuse": "Recipe projection; preserve validated provenance and shared resource allocation."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_plasticc_lifecycle.fit_folds",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_plasticc_lifecycle.fit_folds",
+      "version_id": "b5454ae8-2d09-59fc-aca3-a060c039c7a3",
+      "content_hash": "bceaf3faf7e5bf6c9d44c9a17295634f91a6a45ea06aa1cca417182f7b992584",
+      "provider_sha256": "87781e386ec08dd6a62f1d03f08202349b87471b94f19349c6df946098dd87d5",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "features",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "labels",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "weights",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "folds",
+          "ordinal": 3,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "parameters",
+          "ordinal": 4,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "fit_function",
+          "ordinal": 5,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Fit every fold serially and retain complete out-of-fold state.",
+      "parameters": {
+        "features": "Nonempty indexed numeric pandas DataFrame of matching feature width and ordered columns; missing feature values may be NaN, infinity excluded from the qualified subset.",
+        "labels": "Nonempty pandas Series with unique nonnull index and nonnull homogeneous sortable class labels.",
+        "weights": "Exactly aligned finite positive Series.",
+        "folds": "Exactly aligned integer Series with contiguous nonempty folds starting0, at least two folds.",
+        "parameters": "Dictionary restricted to the validated runtime training_parameters keys and bounds; explicit n_jobs=1. No alternative thread aliases, device overrides or executable callbacks.",
+        "fit_function": "Qualified callable(train_features,train_classes,train_weights,validation_features,validation_classes,validation_weights,parameters)."
+      },
+      "validity_bounds": "Require every training partition to contain every class. Execute every fold in increasing order; check fitted class ordering; store OOF predict_proba and feature_importances_. No nested or parallel training. Output probability validity and model provenance require qualified fit binding.",
+      "outputs": "FoldResult containing all models, OOF predictions and feature importances.",
+      "plain_limits": "Train every planned model and retain its held-out predictions.",
+      "reuse": "Generic tabular fold execution independent of domain-specific feature extraction."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_plasticc_lifecycle.complete",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_plasticc_lifecycle.complete",
+      "version_id": "a8ceb977-f5ef-524c-976b-13446e2daac6",
+      "content_hash": "1fd795aa70bb0d22e3fabae9fba0ec285eb78561c8efe4c33a445b5d130622ac",
+      "provider_sha256": "87781e386ec08dd6a62f1d03f08202349b87471b94f19349c6df946098dd87d5",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "population",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "featurizer",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "result",
+          "ordinal": 3,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "weights",
+          "ordinal": 4,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "class_weights",
+          "ordinal": 5,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "completed",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Assemble trained runtime state and retain source loss diagnostics.",
+      "parameters": {
+        "prepared": "Matching validated Prepared object from prepare, with unchanged settings and numeric bindings.",
+        "population": "Invocation-local Dataset from the matching prepared or augmented population; caller preserves object order and metadata alignment.",
+        "featurizer": "Matching PlasticcFeaturizer instance; feature definitions and selected order remain unchanged.",
+        "result": "Matching FoldResult from all configured folds.",
+        "weights": "Matching object weight Series.",
+        "class_weights": "Matching class-weight mapping or None."
+      },
+      "validity_bounds": "Compute weighted/unweighted multiclass logloss for all rows and originals if reference metadata exists. Attach models, OOF predictions, labels and importances without refitting. Zero probabilities can produce infinite diagnostic loss as in source. Mutable invocation-local state is not serialized or independently authenticated; do not mix populations, feature policies, model classes or provider versions.",
+      "outputs": "Completed state with classifier and query population.",
+      "plain_limits": "Collect trained models and their training diagnostics.",
+      "reuse": "Runtime assembly policy; diagnostic loss is not independent generalization evidence."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_plasticc_lifecycle.prediction_inputs",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_plasticc_lifecycle.prediction_inputs",
+      "version_id": "5e8bfc5c-8014-506c-b1f8-7c939195cd1a",
+      "content_hash": "bc56d72b21195d83acbd2355be939b3aaab97309c3e6b2d5ec4139bced4b6d9e",
+      "provider_sha256": "87781e386ec08dd6a62f1d03f08202349b87471b94f19349c6df946098dd87d5",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "completed",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "population",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "featurizer",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "models",
+          "ordinal": 2,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "classes",
+          "ordinal": 3,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Project prediction population, policy, models and class order.",
+      "parameters": {
+        "completed": "Matching Completed state from complete."
+      },
+      "validity_bounds": "Returns existing objects without copies or independent validation. Mutable invocation-local state is not serialized or independently authenticated; do not mix populations, feature policies, model classes or provider versions.",
+      "outputs": "Population, featurizer, model list and class index.",
+      "plain_limits": "Expose all inputs needed for prediction.",
+      "reuse": "Runtime state projection with explicit aliasing."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_plasticc_numeric.average_folds",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_plasticc_numeric.average_folds",
+      "version_id": "aa6ec90e-f530-5e6b-84ba-4ab45fd02e8d",
+      "content_hash": "fedc55bc35de069d0126488c8eccc254629c82454f8314b55fb587f59fadf5cf",
+      "provider_sha256": "4bd753b1043f5e01d049f25812eb51868eb6b78ec90088fe7dbf87bb9801ba90",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "models",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "features",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "classes",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "score_operation",
+          "ordinal": 3,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "normalize_operation",
+          "ordinal": 4,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "probabilities",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Predict and average every model in supplied order.",
+      "parameters": {
+        "models": "Nonempty list of compatible qualified models.",
+        "features": "Nonempty indexed numeric pandas DataFrame of matching feature width and ordered columns; missing feature values may be NaN, infinity excluded from the qualified subset.",
+        "classes": "Unique nonnull ordered labels.",
+        "score_operation": "Qualified callable(model,features,classes) returning aligned scores.",
+        "normalize_operation": "Qualified callable(scores) returning probabilities."
+      },
+      "validity_bounds": "Invoke both callables for every model. Check finite nonnegative aligned probability mass and row sums; copy first result, accumulate in order, divide by count. Callable identity and model provenance require graph qualification.",
+      "outputs": "Indexed probability DataFrame with ordered class columns.",
+      "plain_limits": "Average all fitted models equally.",
+      "reuse": "Generic ensemble inference; no astronomy masks or unknown-class formula."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_plasticc_lifecycle.task_policy",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_plasticc_lifecycle.task_policy",
+      "version_id": "9510113d-2f88-5011-916f-86f563281545",
+      "content_hash": "5b0a6d20e64a0d677952522aacd0343c98b45475152246212e86b2443b70d725",
+      "provider_sha256": "87781e386ec08dd6a62f1d03f08202349b87471b94f19349c6df946098dd87d5",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "population",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "probabilities",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "final",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Apply galactic masks and the retained unknown-class formula.",
+      "parameters": {
+        "population": "Invocation-local Dataset from the matching prepared or augmented population; caller preserves object order and metadata alignment.",
+        "probabilities": "Aligned indexed class-probability DataFrame containing source-required classes42,52,62,95 and any applicable galactic classes."
+      },
+      "validity_bounds": "Require exact population index. Copy probabilities; if99 exists zero and renormalize it first. Mask incompatible classes; set99 to p42+.6*p62+.2*p52+.2*p95, or.04 for galactic objects; renormalize. Final validity checked by encode.",
+      "outputs": "Adjusted probability DataFrame including class99.",
+      "plain_limits": "Apply the task-specific final class rules.",
+      "reuse": "Astronomy competition policy; not general novelty detection."
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_plasticc_lifecycle.encode",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_plasticc_lifecycle.encode",
+      "version_id": "1943e37c-98f5-5cff-8280-a1302aba56fb",
+      "content_hash": "5902f2dceecec839865252e419d3cf3f46e25963bd6e69c4ec0e43bc2e22c9f9",
+      "provider_sha256": "87781e386ec08dd6a62f1d03f08202349b87471b94f19349c6df946098dd87d5",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "final",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Validate final probability mass and encode response values.",
+      "parameters": {
+        "final": "Matching final indexed DataFrame with runtime identity index and integer-convertible class columns."
+      },
+      "validity_bounds": "Require finite nonnegative entries and row sums close to1; return version1, index, integer classes and probability lists. Does not independently validate unique identities or provenance. Runtime values must not be committed as evidence.",
+      "outputs": "Runtime JSON-compatible response dictionary.",
+      "plain_limits": "Return aligned class probabilities to the caller.",
+      "reuse": "Serialization boundary for this runtime contract."
+    }
+  ],
+  "reused_providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.sklearn.gaussian_process.kernels.atoms.matern_kernel_matrix",
+      "artifact_id": "228a0adf-f685-4739-bdf4-71e0ae68835e",
+      "fqdn": "sciona.atoms.ml.sklearn.gaussian_process.kernels.matern_kernel_matrix",
+      "version_id": "84104a39-6352-516b-b1a2-5a33a3834bc1",
+      "content_hash": "17bd8119554525ece1323da65f105ff3015ac2f94d53fcdf29a16c4263d7d353",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "X",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Qualified subset: nonempty finite float64 rank-two numeric coordinates with at least one feature; no domain-specific units or labels."
+        },
+        {
+          "direction": "input",
+          "name": "Y",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": false,
+          "default_value_repr": "None",
+          "constraints": "None for symmetric covariance on X, or nonempty finite float64 rank-two query coordinates with the same feature count."
+        },
+        {
+          "direction": "input",
+          "name": "length_scale",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": false,
+          "default_value_repr": "1.0",
+          "constraints": "Finite positive scalar, one-element vector, or feature-matched vector of unsquared length scales. Coordinate units must match each scale. Qualified arithmetic requires finite scaled coordinates and distances."
+        },
+        {
+          "direction": "input",
+          "name": "nu",
+          "ordinal": 3,
+          "type_desc": "float",
+          "required": false,
+          "default_value_repr": "1.5",
+          "constraints": "Qualified subset fixes Python float1.5 for Matern32 covariance. Other positive smoothness values accepted by the broader implementation are outside this review."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Normalized float64 covariance matrix: len(X)-by-len(X) for Y=None, otherwise len(X)-by-len(Y). Formula (1+sqrt(3)*r)*exp(-sqrt(3)*r), r=Euclidean distance after coordinate scaling. Unit self diagonal; no amplitude, observation noise, GP fitting or prediction state. Finite-output contracts may reject arithmetic overflow."
+        }
+      ],
+      "operation": "Compute normalized Matern32 covariance between numeric coordinate rows with explicit scalar or anisotropic length scales.",
+      "plain_description": "Compare numeric points using their scaled distance and return their pairwise similarity values.",
+      "validity_bounds": "Qualified subset: nonempty finite float64 rank-two numeric coordinates with at least one feature; no domain-specific units or labels. None for symmetric covariance on X, or nonempty finite float64 rank-two query coordinates with the same feature count. Finite positive scalar, one-element vector, or feature-matched vector of unsquared length scales. Coordinate units must match each scale. Qualified arithmetic requires finite scaled coordinates and distances. Qualified subset fixes Python float1.5 for Matern32 covariance. Other positive smoothness values accepted by the broader implementation are outside this review. Normalized float64 covariance matrix: len(X)-by-len(X) for Y=None, otherwise len(X)-by-len(Y). Formula (1+sqrt(3)*r)*exp(-sqrt(3)*r), r=Euclidean distance after coordinate scaling. Unit self diagonal; no amplitude, observation noise, GP fitting or prediction state. Finite-output contracts may reject arithmetic overflow.",
+      "reuse": "Domain-independent numeric covariance with explicit coordinate scales; no astronomy bands, redshift, labels or observation-table semantics.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "tests": {
+    "tests": 67,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "graph_digest": "2846a4048dcd369999aec90a0bb4cced1993d8163f63d1650a1315ff0c857b50",
+  "graph_cases": [
+    {
+      "weighting": "flat",
+      "class_weighting": "flat",
+      "models": 3,
+      "configured_tree_ceiling": 60,
+      "all_nodes_uncached": true,
+      "exact_numeric_bindings": true,
+      "root_input_unchanged": true,
+      "output_alignment_equal": true,
+      "probabilities_match": true,
+      "atol": 1e-08,
+      "rtol": 1e-08
+    },
+    {
+      "weighting": "redshift",
+      "class_weighting": "kaggle",
+      "models": 3,
+      "configured_tree_ceiling": 60,
+      "all_nodes_uncached": true,
+      "exact_numeric_bindings": true,
+      "root_input_unchanged": true,
+      "output_alignment_equal": true,
+      "probabilities_match": true,
+      "atol": 1e-08,
+      "rtol": 1e-08
+    }
+  ],
+  "software_sha256": {
+    "tests/test_decomposed_plasticc_gp.py": "24643b0fce76ee4082de659bb1ba4088e3d2b4320bd3751cb2f6bf22e751a2f5",
+    "tests/test_decomposed_plasticc_gp_fit.py": "e2e8a386f210714ba180f8f3c753e46327b40e83274b69fdb6ebbb11e2598162",
+    "tests/test_decomposed_plasticc_sampling.py": "6d52098375d2eca5c61434f29ae548ca44e5537276425034c27ec48cb194637f",
+    "tests/test_decomposed_plasticc_training.py": "c874b33dfd696e2684717babbf93a2eed60f87ba2e5058fd25018e29ea6f858d",
+    "tests/test_decomposed_plasticc_prediction.py": "5a45ab1716eafad7e83f923b9b6b4a4727a62d4f8a9e264d1eba7d0ae98e7f9b",
+    "tests/test_decomposed_plasticc_observations.py": "9d96ecc98cc0dbb17353dfbde48200e14ec3278a54a54fe140588db7c5da5fcb",
+    "tests/test_decomposed_plasticc_registered.py": "d852e9206ae9f5999559987ac0ee9c384dcf1882a42dcef46ab16073d6e8d4ad",
+    "tests/test_decomposed_plasticc_graph.py": "7cbec6098c685a7f87564f076fc994dcf0194c8650cc190d5a41443193532c55",
+    "sciona/plasticc_augmentation.py": "66f5ad6d847368d845fa128f57af737519c602fedf2a0b800a5fbaf5d89d8fa4",
+    "sciona/plasticc_defaults.py": "5143ee8d74dec155c01b1456037de03c1c12c8bd82257c76d72f9eee51c8be78",
+    "sciona/plasticc_features.py": "e2b0841b8c65008cf8b11088192688c1d7d22f9742b4bb60ff0a0ecc64ad6c69",
+    "sciona/plasticc_graph.py": "2c557dfff3b74123ec4aa071d3f327b0e50f49bef383f5ff979cef2ea23cb2d0",
+    "sciona/plasticc_observations.py": "694196bf77c42833f07aa0367d67d0a0fbe5491a5d0aaf5d4acf174260310385",
+    "sciona/plasticc_population.py": "64022bdcd6f38344e0e03e34d863f8ae4bad4a2aa90953b6d4d8ffa77600729f",
+    "sciona/plasticc_predictions.py": "22fa11fb13ea480be21bb31b04094363434e458cbcb039b6e6edb6e6a74ed0a3",
+    "sciona/plasticc_runtime.py": "d83c141ea3510bfa92fd8f2511470a7c7398e51b0049b627f747aafd1e0b4010",
+    "sciona/plasticc_training.py": "3d0937fbe12431f5de58dd1b7737da6651901115f4f78aca7b8a3bb5dfa8727c",
+    "sciona/plasticc_weighting.py": "cb2a5293d4d02399f1a627c6139555182178afa88e3ac9f4bdc9362ca2473013",
+    "sciona/decomposed_plasticc_gp.py": "166d71209117af04299cd2c7cd39359cd90a4561eb4d1d96943a19fe5899e6de",
+    "sciona/decomposed_plasticc_gp_fit.py": "672e27e8685148ccf3b8290a75401526e249870b5538380d5e05b9fa48890fe6",
+    "sciona/decomposed_plasticc_graph.py": "83208d8303016d95c04518b2923db94dff5215fb03bd9de7160d545c788ce133",
+    "sciona/decomposed_plasticc_observations.py": "4c5916689cf10ac59a8dd58627ad09893952b682bbf919ec330dea22e559e884",
+    "sciona/decomposed_plasticc_prediction.py": "5d8f815cd761696fe8ddb2decbb1f3bee24eaa7c1266e4c703a7dbc6339d0ea9",
+    "sciona/decomposed_plasticc_sampling.py": "b33705d539567145fcd2fd9fefb4a10a66fc9d2e3a828ae92917160f0b03c959",
+    "sciona/decomposed_plasticc_training.py": "649351b45f30c55587838e62eccd84222b4a42da426e04e2522fb2994b962e24",
+    "scripts/validate_decomposed_plasticc_graph_v2.py": "a7d3854c40b1a1f91640c9e957466bc4cb0418120878292ac41f1fab2177188d",
+    "scripts/validate_plasticc_runtime.py": "14046fa4e6ee999e33cdb1533779df194299acdb8cda9c38f0553a0cbce916b4",
+    "sciona/visualizer/runner.py": "22a49655e61c10d800aa2a6a9b5115cd873a9e699ea9903fa0f856aea8af67a4",
+    "sciona/services/execution_graph_codec.py": "1ad42332f8e28adf4ee3f8d53184a4af8351f66304efa1703c63ed32989082a6",
+    "scripts/review_decomposed_plasticc_interfaces.py": "6aa7f618f976980fc4b34cb24cad4d6a645a8b36c5655801774524a24ec8a40d",
+    "scripts/promote_connectomics_execution.py": "e345459079d47c7dc6431c8f6400faba25c7c929abaabe85d64eae4e82774613",
+    "scripts/promote_matern_providers.py": "d2c7a03d15986559337a8aac6471be462c26ba1baba679ba97dc229a42ee4b64",
+    "scripts/decomposed_plasticc_provider_contracts.py": "7951c8862e358b4e5ed13e6303fbbdd1f5678659cd92b1d73ab4c16af0e6b8fd",
+    "scripts/review_decomposed_plasticc_semantics.py": "e555bce74799b9442292b8df90ee16275d20ca907b0c35c98f76d9825a7ede64",
+    "sciona-atoms-ml/src/sciona/atoms/ml/decomposed_plasticc_numeric.py": "4bd753b1043f5e01d049f25812eb51868eb6b78ec90088fe7dbf87bb9801ba90",
+    "sciona-atoms-ml/src/sciona/atoms/ml/decomposed_plasticc_lifecycle.py": "87781e386ec08dd6a62f1d03f08202349b87471b94f19349c6df946098dd87d5",
+    "sciona-atoms-ml/src/sciona/atoms/ml/sklearn/gaussian_process/kernels/atoms.py": "003b00a6bd423fda21eee86e54cf18376f8f95e12d1b05efb8f080f5fb6c6547"
+  },
+  "installed_packages": {
+    "annotated-types": {
+      "version": "0.7.0",
+      "hashed_files_verified": 7,
+      "active_requirements": []
+    },
+    "astropy": {
+      "version": "8.0.1",
+      "hashed_files_verified": 1447,
+      "active_requirements": [
+        "PyYAML>=6.0.0",
+        "astropy-iers-data>=0.2026.6.22.1.23.34",
+        "numpy>=2.0",
+        "packaging>=25.0",
+        "pyerfa>=2.0.1.3"
+      ]
+    },
+    "astropy-iers-data": {
+      "version": "0.2026.9.7.0.56.14",
+      "hashed_files_verified": 12,
+      "active_requirements": []
+    },
+    "asttokens": {
+      "version": "2.4.1",
+      "hashed_files_verified": 13,
+      "active_requirements": [
+        "six>=1.12.0"
+      ]
+    },
+    "george": {
+      "version": "0.4.4",
+      "hashed_files_verified": 28,
+      "active_requirements": [
+        "numpy",
+        "scipy"
+      ]
+    },
+    "icontract": {
+      "version": "2.7.3",
+      "hashed_files_verified": 16,
+      "active_requirements": [
+        "asttokens<3,>=2",
+        "typing_extensions"
+      ]
+    },
+    "joblib": {
+      "version": "1.5.3",
+      "hashed_files_verified": 143,
+      "active_requirements": []
+    },
+    "lightgbm": {
+      "version": "4.7.0",
+      "hashed_files_verified": 17,
+      "active_requirements": [
+        "narwhals>=1.15",
+        "numpy>=1.21.3",
+        "scipy"
+      ]
+    },
+    "narwhals": {
+      "version": "2.26.0",
+      "hashed_files_verified": 167,
+      "active_requirements": []
+    },
+    "numpy": {
+      "version": "2.2.6",
+      "hashed_files_verified": 876,
+      "active_requirements": []
+    },
+    "packaging": {
+      "version": "26.3",
+      "hashed_files_verified": 30,
+      "active_requirements": []
+    },
+    "pandas": {
+      "version": "2.3.3",
+      "hashed_files_verified": 1513,
+      "active_requirements": [
+        "numpy>=1.26.0; python_version >= \"3.12\"",
+        "python-dateutil>=2.8.2",
+        "pytz>=2020.1",
+        "tzdata>=2022.7"
+      ]
+    },
+    "pydantic": {
+      "version": "2.12.5",
+      "hashed_files_verified": 111,
+      "active_requirements": [
+        "annotated-types>=0.6.0",
+        "pydantic-core==2.41.5",
+        "typing-extensions>=4.14.1",
+        "typing-inspection>=0.4.2"
+      ]
+    },
+    "pydantic-core": {
+      "version": "2.41.5",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.14.1"
+      ]
+    },
+    "pyerfa": {
+      "version": "2.0.1.5",
+      "hashed_files_verified": 14,
+      "active_requirements": [
+        "numpy>=1.19.3"
+      ]
+    },
+    "python-dateutil": {
+      "version": "2.9.0.post0",
+      "hashed_files_verified": 25,
+      "active_requirements": [
+        "six>=1.5"
+      ]
+    },
+    "pytz": {
+      "version": "2026.1.post1",
+      "hashed_files_verified": 616,
+      "active_requirements": []
+    },
+    "pyyaml": {
+      "version": "6.0.3",
+      "hashed_files_verified": 24,
+      "active_requirements": []
+    },
+    "scikit-learn": {
+      "version": "1.8.0",
+      "hashed_files_verified": 960,
+      "active_requirements": [
+        "joblib>=1.3.0",
+        "numpy>=1.24.1",
+        "scipy>=1.10.0",
+        "threadpoolctl>=3.2.0"
+      ]
+    },
+    "scipy": {
+      "version": "1.17.1",
+      "hashed_files_verified": 1423,
+      "active_requirements": [
+        "numpy<2.7,>=1.26.4"
+      ]
+    },
+    "six": {
+      "version": "1.17.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "threadpoolctl": {
+      "version": "3.6.0",
+      "hashed_files_verified": 5,
+      "active_requirements": []
+    },
+    "tqdm": {
+      "version": "4.67.3",
+      "hashed_files_verified": 40,
+      "active_requirements": []
+    },
+    "typing-extensions": {
+      "version": "4.16.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "typing-inspection": {
+      "version": "0.4.2",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.12.0"
+      ]
+    },
+    "tzdata": {
+      "version": "2025.3",
+      "hashed_files_verified": 633,
+      "active_requirements": []
+    }
+  },
+  "evidence_sha256": {
+    "docs/reviews/decomposed_plasticc_interfaces.json": "d83ee7c167d80d4d5fbad04844925232dac048da57ba5bf90f7fa65f03d79eee",
+    "docs/reviews/decomposed_plasticc_graph_execution_v2.json": "e9677243a4f7e5ce9159ebee8bd5507bfd3cd0984712cc319fb685540d3d5044"
+  },
+  "limitations": [
+    "Automated Tier3 qualification only; no human Tier1 review or usage-qualified Tier2 designation.",
+    "Publication remains separate and must bind these exact providers, contracts, software and graph.",
+    "Complete configured synthetic runs use three folds, one augmentation attempt per original and a60-tree ceiling; historical scale and historical competition accuracy are not established.",
+    "Generic GP coordinates, categorical reference grouping and arbitrary-width multiclass fitting have separate synthetic evidence. Astronomy augmentation, features, redshift weights and final class policy remain explicit restrictions.",
+    "Mutable state and callable types do not authenticate same-invocation provenance; exact graph bindings and qualified inputs are required.",
+    "Validation influences early stopping. OOF diagnostics do not establish unbiased final generalization or unknown-class detection.",
+    "The source normalization uses unshifted exponentials; nonfinite outcomes reject rather than switching algorithms. GP optimizer failure restores initial effective parameters but preserves reported diagnostics.",
+    "Installed files are checked against their own distribution RECORD; publisher authentication, clean deployment and other platforms are not certified.",
+    "Reuse review covers the already-published Matern32 provider and retained whole-pipeline implementation, not exhaustive equivalence with every catalog item."
+  ],
+  "resource_policy": {
+    "serial_tests": true,
+    "serial_models": true,
+    "native_threads": 1
+  }
+}
