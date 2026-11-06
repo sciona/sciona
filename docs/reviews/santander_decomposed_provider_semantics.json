@@ -1,0 +1,658 @@
+{
+  "format": "santander-decomposed-provider-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "review_source": "automated",
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_santander_execution.blend_inputs",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_santander_execution.blend_inputs",
+      "version_id": "4cf1db38-a8a8-5334-93f4-36b81662a51d",
+      "content_hash": "511943e5da5861bbe8198f266c802cdd82eba19084c951e7a5cc24d4410987bc",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "fitted",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "coefficients",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "14f369163beaa3471ac534b29261a01a84c73ad5efd85e64fc91cb55a4d876a8",
+      "classification": "source_recipe_adapter",
+      "atom_id": "08cf8878-d369-5966-9214-2b764056c393",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_santander_execution.blend_inputs",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_santander_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_santander_execution",
+        "import_module": "sciona.atoms.ml.decomposed_santander_execution",
+        "source_symbol": "blend_inputs",
+        "description": "Expose average-tie ranks and the explicit 2.1:1 recipe coefficients.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.511943e5da58",
+      "fingerprint": "597b39f9e05a370c9eea8b78b70a381584b97077a7c9893a47d85e32ca6fa51a",
+      "operation": "Rank the two branch scores and expose the ordered recipe weights.",
+      "plain_limits": "Use aligned query scores from both branches. Tied scores receive average ranks. The weights remain separate from the reusable numeric sum.",
+      "validity_bounds": "Require exactly neural and tree result keys. Read their mean_ranks as nonempty finite real one-dimensional arrays of equal shape. Rank each vector with scipy average ties, then stack neural first and tree second. Return coefficients [2.1,1.0]. This adapter neither adds the rows nor divides by 3.1. Shape equality does not establish query identity or ordering; same-invocation alignment is required.",
+      "parameters": {
+        "fitted": "Same-invocation branch results with aligned finite mean_ranks."
+      },
+      "outputs": "Tuple of a fresh two-row rank matrix and a two-element coefficient vector. Caller arrays are unchanged.",
+      "dependencies": [
+        "sciona.decomposed_santander_runtime.blend_inputs",
+        "numpy",
+        "scipy.stats.rankdata",
+        "sciona.ghost.registry (registration only)"
+      ],
+      "reuse": "Independent supervised neural/tree pseudo-label recipe. Intermediate populations and model records must come from the same invocation. Structural checks do not authenticate their provenance. Global encoding and query-dependent preparation prevent independent generalization claims. Historical winner equivalence is unproven.",
+      "internal_registered_provider_dependencies": [],
+      "callable_dependency_contracts": {}
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_santander_execution.branches",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_santander_execution.branches",
+      "version_id": "8c7414c9-95be-5758-bd86-f93e63d157d5",
+      "content_hash": "79bb7be65924a3bb0d3da076ca5e9749c06510ae668b43b06ed78bc1bd91dcd3",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "selected",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "fitted",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "14f369163beaa3471ac534b29261a01a84c73ad5efd85e64fc91cb55a4d876a8",
+      "classification": "source_recipe_adapter",
+      "atom_id": "b2418131-b851-5fa4-91fc-a45c13a906a4",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_santander_execution.branches",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_santander_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_santander_execution",
+        "import_module": "sciona.atoms.ml.decomposed_santander_execution",
+        "source_symbol": "branches",
+        "description": "Regenerate features and refit all neural and tree folds sequentially.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.79bb7be65924",
+      "fingerprint": "a70390d1b5d397c4d3fbbeee8e3042a35b8903abc5432c07c0f3277570df2ef3",
+      "operation": "Regenerate features and refit every neural and tree fold.",
+      "plain_limits": "Supply both selected populations from this run. Train the neural branch then the tree branch. Query rows remain in their original order.",
+      "validity_bounds": "Revalidate Prepared and require a dictionary with exactly neural and tree keys. Each selected population must supply training, labels and query accepted by the unchanged learner. Regenerate supervised class-presence categories and substituted features, then scale the neural populations jointly with query rows. Train every seed in each of ten stratified folds for fifteen epochs, using the full shared feature-group attention network. Retain class-preserving triplet augmentation, repeated epoch permutations, Adam updates with explicit decoupled decay and cosine scheduling. Restore the epoch with strictly best validation AUROC, verify its score, predict every query row, and average average-tie ranks across all fold/seed predictions. Return mean ranks, every model probability vector and fold/seed checkpoint histories. Validation scores use globally prepared features and are not independent estimates. Then regenerate tree features for the tree-specific expanded population. For every stratified fold and seed, keep original fit rows and append sixteen positive and four negative shuffled copies, preserving feature triplets within class. Train deterministic single-thread LightGBM with explicit caller controls, held-out AUROC early stopping and selected-iteration verification. Predict all query rows, retain finite probabilities and average average-tie model ranks. Intermediate selection provenance is a precondition, not reauthenticated by this adapter.",
+      "parameters": {
+        "prepared": "Canonical same-invocation Prepared returned by santander_prepare, containing private populations and explicit lifecycle controls.",
+        "selected": "Same-invocation complete selections output containing both expanded populations."
+      },
+      "outputs": "Dictionary with neural and tree learner results, each containing mean_ranks, model_probabilities, model records and validation_scope.",
+      "dependencies": [
+        "sciona.decomposed_santander_runtime.branches",
+        "sciona.santander_execution",
+        "sciona.santander_training",
+        "sciona.santander_tree",
+        "sciona.santander_encoding",
+        "sciona.santander_augmentation",
+        "numpy",
+        "torch",
+        "lightgbm",
+        "scikit-learn",
+        "scipy",
+        "sciona.ghost.registry (registration only)"
+      ],
+      "reuse": "Independent supervised neural/tree pseudo-label recipe. Intermediate populations and model records must come from the same invocation. Structural checks do not authenticate their provenance. Global encoding and query-dependent preparation prevent independent generalization claims. Historical winner equivalence is unproven.",
+      "internal_registered_provider_dependencies": [],
+      "callable_dependency_contracts": {}
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_santander_execution.initial",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_santander_execution.initial",
+      "version_id": "bf76d83b-1c96-5f59-b658-f84d60b9c25b",
+      "content_hash": "72c961ea73f4b415861e9f0372b6e89e6a832d2afaafe85439a19d0be1d4a4b0",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "initial_models",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "14f369163beaa3471ac534b29261a01a84c73ad5efd85e64fc91cb55a4d876a8",
+      "classification": "source_recipe_adapter",
+      "atom_id": "3f932c9e-1390-597c-a27d-e54666ce0bba",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_santander_execution.initial",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_santander_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_santander_execution",
+        "import_module": "sciona.atoms.ml.decomposed_santander_execution",
+        "source_symbol": "initial",
+        "description": "Train the complete initial neural cross-validation lifecycle.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.72c961ea73f4",
+      "fingerprint": "29787497f0f9f8425f0bd960bf0fc63faa1d7a172ee924f8f710a2feda5d71f2",
+      "operation": "Train all initial neural folds and retain their query ranks.",
+      "plain_limits": "Use checked private populations and all supplied seeds. Each fold runs the full training schedule. These ranks are not probabilities.",
+      "validity_bounds": "Require exact Prepared type, matching fingerprint and canonical payload revalidation. Convert population values to floating arrays. Regenerate supervised class-presence categories and substituted features, then scale the neural populations jointly with query rows. Train every seed in each of ten stratified folds for fifteen epochs, using the full shared feature-group attention network. Retain class-preserving triplet augmentation, repeated epoch permutations, Adam updates with explicit decoupled decay and cosine scheduling. Restore the epoch with strictly best validation AUROC, verify its score, predict every query row, and average average-tie ranks across all fold/seed predictions. Return mean ranks, every model probability vector and fold/seed checkpoint histories. Validation scores use globally prepared features and are not independent estimates.",
+      "parameters": {
+        "prepared": "Canonical same-invocation Prepared returned by santander_prepare, containing private populations and explicit lifecycle controls."
+      },
+      "outputs": "Dictionary containing mean_ranks, stacked model_probabilities, model records and validation_scope; no model objects are returned.",
+      "dependencies": [
+        "sciona.decomposed_santander_runtime.initial",
+        "sciona.santander_execution",
+        "sciona.santander_training",
+        "sciona.santander_preparation",
+        "sciona.santander_network",
+        "numpy",
+        "torch",
+        "scikit-learn",
+        "scipy",
+        "sciona.ghost.registry (registration only)"
+      ],
+      "reuse": "Independent supervised neural/tree pseudo-label recipe. Intermediate populations and model records must come from the same invocation. Structural checks do not authenticate their provenance. Global encoding and query-dependent preparation prevent independent generalization claims. Historical winner equivalence is unproven.",
+      "internal_registered_provider_dependencies": [],
+      "callable_dependency_contracts": {}
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_santander_execution.result",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_santander_execution.result",
+      "version_id": "d43f99b1-0172-5fde-831d-f94a77e5810c",
+      "content_hash": "8e7021705a1b8eb2f7e96731d72eaf961f7696d33a63e6db6b1af66c77c6222e",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "initial_models",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "selected",
+          "ordinal": 2,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "fitted",
+          "ordinal": 3,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "weighted",
+          "ordinal": 4,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "14f369163beaa3471ac534b29261a01a84c73ad5efd85e64fc91cb55a4d876a8",
+      "classification": "source_recipe_adapter",
+      "atom_id": "71b4ddb4-770e-5d8e-a6e9-d0201b94374f",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_santander_execution.result",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_santander_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_santander_execution",
+        "import_module": "sciona.atoms.ml.decomposed_santander_execution",
+        "source_symbol": "result",
+        "description": "Divide the ordered sum by 3.1 and retain full branch selection evidence.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.8e7021705a1b",
+      "fingerprint": "562e561acc29909d452490cc00013fe95c2882a2db39f156cd00a65a894caff3",
+      "operation": "Normalize the weighted sum and retain full selection and model counts.",
+      "plain_limits": "Divide only after the numeric rows have been added. Keep all query scores and the counts from the same run. Scores are ranks, not probabilities.",
+      "validity_bounds": "Revalidate Prepared. Require exactly neural and tree keys in selected and fitted dictionaries. Require a finite real weighted vector aligned to the full query population. Divide by 3.1 after the ordered weighted sum, preserving original floating operation order. Count selected binary labels, expanded labeled rows, retained query rows and each branch model-record list including initial neural records. Return all scores, counts, rank_blend marker, retained-reference policy and global-encoding validation limitation. Require strict finite JSON serialization. Count records and selection provenance are not authenticated here.",
+      "parameters": {
+        "prepared": "Canonical same-invocation Prepared returned by santander_prepare, containing private populations and explicit lifecycle controls.",
+        "initial_models": "Same-invocation initial result containing its complete models record list.",
+        "selected": "Same-invocation selected populations with labels, query and selected_labels.",
+        "fitted": "Same-invocation neural/tree results with complete models record lists.",
+        "weighted": "Same-invocation generic ordered sum of ranked neural/tree rows with coefficients 2.1 and 1."
+      },
+      "outputs": "Strict JSON dictionary containing scores, selection_counts, model_counts, score_kind, reference_policy and validation_scope.",
+      "dependencies": [
+        "sciona.decomposed_santander_runtime.result",
+        "sciona.santander_execution",
+        "numpy",
+        "json (Python standard library)",
+        "sciona.ghost.registry (registration only)"
+      ],
+      "reuse": "Independent supervised neural/tree pseudo-label recipe. Intermediate populations and model records must come from the same invocation. Structural checks do not authenticate their provenance. Global encoding and query-dependent preparation prevent independent generalization claims. Historical winner equivalence is unproven.",
+      "internal_registered_provider_dependencies": [],
+      "callable_dependency_contracts": {}
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_santander_execution.selections",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_santander_execution.selections",
+      "version_id": "582254be-79d2-5605-b77c-53d7abc4cf5d",
+      "content_hash": "95d0840e1eee7687ea54c4424dc2e6f603805228d3c6c40fb0d1924f879071ef",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "initial_models",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "selected",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "14f369163beaa3471ac534b29261a01a84c73ad5efd85e64fc91cb55a4d876a8",
+      "classification": "source_recipe_adapter",
+      "atom_id": "26218a04-c7d6-53c0-90b7-ef5b7196785e",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_santander_execution.selections",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_santander_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_santander_execution",
+        "import_module": "sciona.atoms.ml.decomposed_santander_execution",
+        "source_symbol": "selections",
+        "description": "Select both full pseudo-label tails before branch training.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.95d0840e1eee",
+      "fingerprint": "3a8226522fae3281e052ca4c9ce8f3a35ffa93ac0e3fa4f16d908944e856321b",
+      "operation": "Select both complete hard pseudo-label tails and expand the labeled populations.",
+      "plain_limits": "Keep all requested high and low tails. Reject tied selection boundaries. Selected query rows also stay in the reference population.",
+      "validity_bounds": "Revalidate Prepared. Require an initial-result dictionary containing mean_ranks aligned to all query rows. Call expanded_population for neural positive/negative counts 5000/3000 and tree counts 2700/2000. Both selections complete before any branch refit. Preserve retain_selected policy, finite aligned floating populations, binary labels, disjoint high/low selections and rejection of ambiguous ties. Append selected query rows and hard labels to original training rows; copy the full query population. No tail shrinking or hidden fitting.",
+      "parameters": {
+        "prepared": "Canonical same-invocation Prepared returned by santander_prepare, containing private populations and explicit lifecycle controls.",
+        "initial_models": "Same-invocation initial neural result with mean_ranks aligned to the entire query population."
+      },
+      "outputs": "Neural and tree dictionaries each containing expanded training, labels, copied full query, selected_positions and selected_labels.",
+      "dependencies": [
+        "sciona.decomposed_santander_runtime.selections",
+        "sciona.santander_execution",
+        "sciona.santander_retraining.expanded_population",
+        "sciona.santander_pseudo_labels",
+        "numpy",
+        "sciona.ghost.registry (registration only)"
+      ],
+      "reuse": "Independent supervised neural/tree pseudo-label recipe. Intermediate populations and model records must come from the same invocation. Structural checks do not authenticate their provenance. Global encoding and query-dependent preparation prevent independent generalization claims. Historical winner equivalence is unproven.",
+      "internal_registered_provider_dependencies": [],
+      "callable_dependency_contracts": {}
+    }
+  ],
+  "graph_digest": "ff5ed47be691563e22d0f7cc6da121436a512869341c98d846909c46124a587e",
+  "software_sha256": {
+    "sciona-atoms-ml/src/sciona/atoms/ml/decomposed_santander_execution.py": "14f369163beaa3471ac534b29261a01a84c73ad5efd85e64fc91cb55a4d876a8",
+    "sciona/decomposed_santander_graph.py": "d120e28c0ac803cb5799b974c1cce957dfd1d7291802d7b42b7248fe36fbc3a3",
+    "sciona/decomposed_santander_runtime.py": "284df84f5c5b6d04b3ec85805d6e1cd94b0a0384a22aa4ac31e7920b8f289cfd",
+    "sciona/santander_augmentation.py": "7bc7a080d7bf0fe1ce0755a7422be14ef8e25ba0d20ebdb4ac054cc4bd6b7ed5",
+    "sciona/santander_blend.py": "c5acf4b55cae02d0a21b5830540a884a78da1fc7850476632bc2eb1dcbebee74",
+    "sciona/santander_encoding.py": "db28fc3e83721741929c394a32add8e447b0428f0d1bafd53479b294bbcc25c5",
+    "sciona/santander_execution.py": "d8ebdd88e1c241d00b4582aec21720bd3de988ecf3ed44e3639d85235915ffe0",
+    "sciona/santander_features.py": "4ee95e6f91b5839d423f257a98c01383ae991bdd3279e59620db4861101b35e6",
+    "sciona/santander_graph.py": "e2cfe2bd2725c8e7d00c48a71c5c74fbdfe1fffe5c3b08bef052b61c31dec090",
+    "sciona/santander_lifecycle.py": "34bf5d0889b7162486447d2644f35cb4579add6102c52a71d1eaae193e5fc488",
+    "sciona/santander_network.py": "9602955027f5bb745d474991816196d1f7bf4e68cb1696ed61a1561184a2b7d8",
+    "sciona/santander_preparation.py": "ad5c10bba0ed9b9de1e58e7913402cb162accc0d4d734213fa9fac8b32fffee8",
+    "sciona/santander_pseudo_labels.py": "1ce11f01b95918de6401316d52944fb2ac6285c9f9fd990688c70aceff660ab6",
+    "sciona/santander_retraining.py": "e72af657ad01d2596b0a6efb05645897bd781df55ef34b80161cc1be799920b3",
+    "sciona/santander_training.py": "bd32ce0626d4e034a93592495b8e2b7e1a1045058a75aa4356fbeafa26928737",
+    "sciona/santander_tree.py": "19329fc56a92fba1ddf96bd05f164aa9c5d7c9b1c908a3a4a764c0041ea040e6",
+    "sciona/services/execution_graph_codec.py": "1ad42332f8e28adf4ee3f8d53184a4af8351f66304efa1703c63ed32989082a6",
+    "sciona/visualizer/runner.py": "22a49655e61c10d800aa2a6a9b5115cd873a9e699ea9903fa0f856aea8af67a4",
+    "scripts/audit_decomposed_santander_packages.py": "7618652a57d53a0fc2d101f257e49ac4f13a0c3dccd8383c722241d6a4ae0201",
+    "scripts/decomposed_santander_provider_contracts.py": "820b648a7f67f8afb4c9e5c2a063d7a6695b30af98e0c2700340e7dd9f00fe12",
+    "scripts/review_decomposed_santander_implementation.py": "69477bc546e43391a0f2b8cdbe263acb62b324472d3e8e70e6539a9e0fc3b237",
+    "scripts/review_santander_decomposed_providers.py": "3e04e2064df9502ccedca1cfac4d37f7bfa0a33697c60da09b36ae01c2687f0a",
+    "scripts/stage_santander_decomposed_providers.py": "cc8f8fc46880929088efde9ac5d1dc213a0dbc04a63dad74d53a486408fc499b"
+  },
+  "imports": {
+    "sciona/santander_augmentation.py": [
+      "import numpy as np"
+    ],
+    "sciona/santander_graph.py": [
+      "from sciona.architect.handoff import CDGExport",
+      "from sciona.architect.models import AlgorithmicNode, DependencyEdge, IOSpec, NodeStatus"
+    ],
+    "sciona/santander_preparation.py": [
+      "from sciona.santander_encoding import encode_populations",
+      "from sklearn.preprocessing import StandardScaler",
+      "import numpy as np"
+    ],
+    "sciona/santander_blend.py": [
+      "from scipy.stats import rankdata",
+      "import numpy as np"
+    ],
+    "sciona/santander_lifecycle.py": [
+      "from sciona.santander_retraining import retrain",
+      "from sciona.santander_training import train_neural_cv"
+    ],
+    "sciona/santander_retraining.py": [
+      "from sciona.santander_blend import blend_neural_tree",
+      "from sciona.santander_pseudo_labels import select_pseudo_labels",
+      "from sciona.santander_training import train_neural_cv",
+      "from sciona.santander_tree import train_tree_cv",
+      "import numpy as np"
+    ],
+    "sciona/santander_pseudo_labels.py": [
+      "import numpy as np"
+    ],
+    "sciona/santander_training.py": [
+      "from sciona.santander_augmentation import shuffle_feature_groups",
+      "from sciona.santander_network import GroupedAttentionClassifier",
+      "from sciona.santander_preparation import prepare_neural_populations",
+      "from scipy.stats import rankdata",
+      "from sklearn.metrics import roc_auc_score",
+      "from sklearn.model_selection import StratifiedKFold",
+      "import math",
+      "import numpy as np",
+      "import torch"
+    ],
+    "sciona/santander_tree.py": [
+      "from sciona.santander_augmentation import shuffle_feature_groups",
+      "from sciona.santander_encoding import encode_populations",
+      "from scipy.stats import rankdata",
+      "from sklearn.metrics import roc_auc_score",
+      "from sklearn.model_selection import StratifiedKFold",
+      "import lightgbm as lgb",
+      "import numpy as np"
+    ],
+    "sciona/santander_encoding.py": [
+      "from collections import Counter",
+      "from sciona.santander_features import real_test_mask",
+      "import math",
+      "import numpy as np"
+    ],
+    "sciona/santander_network.py": [
+      "from torch import nn",
+      "import torch"
+    ],
+    "sciona/santander_execution.py": [
+      "from dataclasses import dataclass, field",
+      "from sciona.santander_lifecycle import fit",
+      "import hashlib",
+      "import json",
+      "import numpy as np"
+    ],
+    "sciona/santander_features.py": [
+      "import numpy as np"
+    ],
+    "sciona/decomposed_santander_runtime.py": [
+      "from sciona.santander_execution import Prepared, prepare",
+      "from sciona.santander_retraining import expanded_population",
+      "from sciona.santander_training import train_neural_cv",
+      "from sciona.santander_tree import train_tree_cv",
+      "from scipy.stats import rankdata",
+      "import hashlib",
+      "import json",
+      "import numpy as np"
+    ],
+    "sciona/decomposed_santander_graph.py": [
+      "from sciona.architect.models import AlgorithmicNode, DependencyEdge, IOSpec, NodeStatus",
+      "from sciona.santander_graph import build_santander_graph"
+    ],
+    "sciona/visualizer/runner.py": [
+      "from __future__ import annotations",
+      "from pathlib import Path",
+      "from sciona.architect.models import AlgorithmicNode, DependencyEdge, EdgeKind, NodeStatus",
+      "from sciona.ghost.registry import REGISTRY",
+      "from sciona.synthesizer.ghost_sim import _ensure_atoms_imported",
+      "from sciona.telemetry import log_event",
+      "from sciona.visualizer.dataset_manager import DatasetManager",
+      "from typing import Any, Callable, Dict, List, Optional, Tuple",
+      "import dataclasses",
+      "import inspect",
+      "import json",
+      "import logging",
+      "import numpy as np",
+      "import pandas as pd",
+      "import time",
+      "import typing"
+    ],
+    "sciona/services/execution_graph_codec.py": [
+      "from sciona.architect.handoff import CDGExport",
+      "import hashlib",
+      "import json"
+    ],
+    "scripts/audit_decomposed_santander_packages.py": [
+      "from packaging.requirements import Requirement",
+      "from packaging.utils import canonicalize_name",
+      "from pathlib import Path",
+      "import base64",
+      "import hashlib",
+      "import importlib.metadata as metadata",
+      "import json"
+    ],
+    "scripts/review_decomposed_santander_implementation.py": [
+      "from pathlib import Path",
+      "from sciona import santander_execution as original, decomposed_santander_runtime as candidate",
+      "from sciona import santander_lifecycle, santander_retraining",
+      "from sciona.atoms.provider_inventory import ProviderRepo",
+      "from sciona.atoms.supabase_seed import _parse_registered_atoms",
+      "from sciona.decomposed_santander_graph import build_decomposed_santander_graph",
+      "from sciona.services.execution_graph_codec import encode_execution_graph",
+      "from scripts.audit_decomposed_santander_packages import audit",
+      "from scripts.promote_connectomics_execution import boundary_ports, provider_ports",
+      "from typing import get_args, get_origin, get_type_hints",
+      "import hashlib",
+      "import importlib",
+      "import importlib.metadata as metadata",
+      "import inspect",
+      "import json",
+      "import numpy as np",
+      "import subprocess"
+    ],
+    "scripts/stage_santander_decomposed_providers.py": [
+      "from collections import Counter",
+      "from psycopg.types.json import Jsonb",
+      "from sciona.atoms.provider_inventory import ProviderRepo",
+      "from sciona.atoms.supabase_seed import AtomSeedRow, _parse_registered_atoms",
+      "from sciona.decomposed_santander_graph import build_decomposed_santander_graph",
+      "from scripts.import_flavours_provider_drafts import connect",
+      "from scripts.import_residual_execution_drafts import comparable, ensure_row",
+      "from scripts.review_decomposed_santander_implementation import ROOT, review, require, sha, interfaces",
+      "from typing import get_type_hints, get_origin, get_args",
+      "from uuid import NAMESPACE_URL, UUID, uuid5",
+      "import argparse",
+      "import hashlib",
+      "import importlib",
+      "import inspect",
+      "import json",
+      "import numpy as np"
+    ],
+    "scripts/decomposed_santander_provider_contracts.py": [],
+    "scripts/review_santander_decomposed_providers.py": [
+      "from pathlib import Path",
+      "from scripts.audit_decomposed_santander_packages import audit as package_audit",
+      "from scripts.decomposed_santander_provider_contracts import CONTRACTS",
+      "from scripts.review_decomposed_santander_implementation import ROOT, require, sha, review as integration_review",
+      "from scripts.stage_santander_decomposed_providers import reviewed_plan",
+      "import argparse",
+      "import ast",
+      "import importlib.metadata",
+      "import json",
+      "import os",
+      "import platform",
+      "import subprocess",
+      "import tempfile",
+      "import xml.etree.ElementTree as ET"
+    ],
+    "sciona-atoms-ml/src/sciona/atoms/ml/decomposed_santander_execution.py": [
+      "from sciona.decomposed_santander_runtime import blend_inputs as implementation",
+      "from sciona.decomposed_santander_runtime import branches as implementation",
+      "from sciona.decomposed_santander_runtime import initial as implementation",
+      "from sciona.decomposed_santander_runtime import result as implementation",
+      "from sciona.decomposed_santander_runtime import selections as implementation",
+      "from sciona.ghost.registry import register_atom",
+      "import numpy as np"
+    ]
+  },
+  "package_versions": {
+    "filelock": "3.25.2",
+    "fsspec": "2026.2.0",
+    "jinja2": "3.1.6",
+    "joblib": "1.5.3",
+    "lightgbm": "4.7.0",
+    "markupsafe": "3.0.3",
+    "mpmath": "1.3.0",
+    "narwhals": "2.26.0",
+    "networkx": "3.6.1",
+    "numpy": "2.2.6",
+    "pandas": "2.3.3",
+    "python-dateutil": "2.9.0.post0",
+    "pytz": "2026.1.post1",
+    "scikit-learn": "1.8.0",
+    "scipy": "1.17.1",
+    "setuptools": "80.9.0",
+    "six": "1.17.0",
+    "sympy": "1.14.0",
+    "threadpoolctl": "3.6.0",
+    "torch": "2.11.0",
+    "typing-extensions": "4.16.0",
+    "tzdata": "2025.3"
+  },
+  "python_version": "3.13.11",
+  "evidence_sha256": {
+    "santander_decomposed_provider_tests.json": "3daf40a861307131e9f9f37beba62c44a754fc377180512477163cc48795e33a",
+    "decomposed_santander_implementation_review.json": "29b3fb90a9a8438de1d8fe9e7866cd14a44f1e96f6d17911b3b555381173286f",
+    "decomposed_santander_graph_execution.json": "4d446497f955990a62f9eded3f8c64beadc63b8f7825900819d07ea038d2948a",
+    "santander_decomposed_provider_intake_gates.json": "d365c8518a8c53908876403874140fe6b7158972e72e74dbfcf179bccaa49eb8",
+    "decomposed_santander_package_files.json": "865a977b07eac617b993ec1a3dda74c251debd3f64c3407162f16ef75a358772",
+    "santander_decomposed_provider_intake_plan.json": "976d32c30c371e03950dab695e1611cb8363444b84a6d7d235e5287ef5782a16"
+  },
+  "source_qualification_complete": false,
+  "original_cdg_publication_qualified": false,
+  "limitations": [
+    "Automated Tier 3 implementation semantics only; no Tier 1 human certification or Tier 2 usage qualification.",
+    "Five recipe adapters preserve the complete existing neural/pseudo-label/tree reconstruction. The generic ordered weighted sum remains independently bound and domain independent.",
+    "Exact historical notebook details remain unverified. This review qualifies the stated implementation contracts, not historical winning-agent equivalence or original-CDG publication.",
+    "Fresh execution exactly matches the existing reconstruction on generated populations; historical population membership and competitive accuracy are unproven.",
+    "Installed package hashes were checked against their own RECORD files. Clean deployment and independently authenticated publisher signatures are not qualified.",
+    "Native pools, Torch intra/inter-op pools and LightGBM calls are bounded to one thread; models train serially. Deployment must configure its own resource limits.",
+    "Software imports are separate from registered-provider dependencies. Same-invocation intermediate provenance is required but not authenticated by structural checks.",
+    "Catalog eligibility, publication transaction gates and existing-provider metadata remain separate checks."
+  ]
+}
