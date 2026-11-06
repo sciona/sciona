@@ -1,0 +1,252 @@
+{
+  "format": "trackml-meanshift-provider-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "providers": [
+    {
+      "artifact_id": "e2bcd47a-b48c-4d6b-a749-4db2f6b62919",
+      "fqdn": "sciona.atoms.ml.sklearn.cluster.mean_shift",
+      "runtime_fqdn": "sciona.atoms.ml.sklearn.cluster.atoms.mean_shift",
+      "version_id": "359c5a5b-ecb0-5994-b5d1-4e90542a55d1",
+      "content_hash": "df6e86753cb9e12a090191d650f4e3ecf74e0fe361baf653bd9c307e0291af7a",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "X",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite dense numeric matrix (N,D), converted to float64. Caller owns feature scaling for Euclidean neighborhoods; no detector policy."
+        },
+        {
+          "direction": "input",
+          "name": "bandwidth",
+          "ordinal": 1,
+          "type_desc": "float",
+          "required": false,
+          "default_value_repr": "None",
+          "constraints": "Positive finite neighborhood radius in feature units, or None for backend bandwidth estimation. Explicit positive bandwidth is the currently exercised detector path."
+        },
+        {
+          "direction": "input",
+          "name": "seeds",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": false,
+          "default_value_repr": "None",
+          "constraints": "None uses input rows or bin seeds; supplied seeds must be a nonempty finite matrix with D columns."
+        },
+        {
+          "direction": "input",
+          "name": "bin_seeding",
+          "ordinal": 3,
+          "type_desc": "bool",
+          "required": false,
+          "default_value_repr": "False",
+          "constraints": "Boolean; when true and seeds are None, use grid bins as initial seeds."
+        },
+        {
+          "direction": "input",
+          "name": "min_bin_freq",
+          "ordinal": 4,
+          "type_desc": "int",
+          "required": false,
+          "default_value_repr": "1",
+          "constraints": "Positive integer minimum populated-bin count; relevant to bin seeding."
+        },
+        {
+          "direction": "input",
+          "name": "cluster_all",
+          "ordinal": 5,
+          "type_desc": "bool",
+          "required": false,
+          "default_value_repr": "True",
+          "constraints": "Boolean; false permits label -1 for points beyond bandwidth from every retained center."
+        },
+        {
+          "direction": "input",
+          "name": "max_iter",
+          "ordinal": 6,
+          "type_desc": "int",
+          "required": false,
+          "default_value_repr": "300",
+          "constraints": "Nonnegative integer iteration bound. Does not guarantee convergence or global optimality."
+        },
+        {
+          "direction": "input",
+          "name": "n_jobs",
+          "ordinal": 7,
+          "type_desc": "int",
+          "required": false,
+          "default_value_repr": "None",
+          "constraints": "Qualified execution uses n_jobs=1 and externally bounded native threads. Caller owns total concurrency; None follows joblib context."
+        },
+        {
+          "direction": "output",
+          "name": "centers",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 center matrix (K,D) in backend mode ordering; feature units match input."
+        },
+        {
+          "direction": "output",
+          "name": "labels",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Integer vector (N,) of retained-center indices; -1 denotes an unassigned point when cluster_all is false. Numbering is backend-dependent."
+        }
+      ],
+      "operation": "Find Euclidean density modes by repeated neighborhood means, suppress nearby modes, and assign points to retained centers.",
+      "plain_description": "Find groups of nearby points and report their centers and assignments.",
+      "validity_bounds": "Nonempty finite dense numeric matrix (N,D), converted to float64. Caller owns feature scaling for Euclidean neighborhoods; no detector policy. Positive finite neighborhood radius in feature units, or None for backend bandwidth estimation. Explicit positive bandwidth is the currently exercised detector path. None uses input rows or bin seeds; supplied seeds must be a nonempty finite matrix with D columns. Boolean; when true and seeds are None, use grid bins as initial seeds. Positive integer minimum populated-bin count; relevant to bin seeding. Boolean; false permits label -1 for points beyond bandwidth from every retained center. Nonnegative integer iteration bound. Does not guarantee convergence or global optimality. Qualified execution uses n_jobs=1 and externally bounded native threads. Caller owns total concurrency; None follows joblib context. Finite float64 center matrix (K,D) in backend mode ordering; feature units match input. Integer vector (N,) of retained-center indices; -1 denotes an unassigned point when cluster_all is false. Numbering is backend-dependent.",
+      "reuse": "Generic Euclidean mode clustering over caller-supplied features; detector topology and grouping stay outside the operation.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "tests": {
+    "tests": 28,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "exact_backend_cases": 26,
+  "software_sha256": {
+    "tests/test_meanshift_provider_semantics.py": "9f95aac653ee70a8260e947ac13557ceab047e1075b91644298b3896e2415631",
+    "scripts/review_trackml_meanshift_provider_semantics.py": "3e74efdb8162824de91cf38bb09a3d190702f3f1a5acbb7a5af9e4c6c9f518df",
+    "scripts/stage_trackml_meanshift_providers.py": "e64547401262becf154b726589dd7c626f33c43b02e3899898bc8cc189cc19e0",
+    "sciona/ghost/registry.py": "793723a75d07a88eed39f59d8d4dc327c54adbf75db7a03003516a6f74c81b51",
+    "sciona/decomposed_trackml_detector_lifecycle.py": "40203dd5117c965aa77e40c64e7259164dd0523aa6288740c3a3ce457f45bca0",
+    "sciona-atoms-ml/src/sciona/atoms/ml/sklearn/cluster/atoms.py": "c8a78a13625c22a4427de39fb21faad478776cfaaab5b6d7dec65b1804265c8d",
+    "scripts/review_trackml_kmeans_provider_semantics.py": "d1430da95ba7cb4f4b29d52490463ae13ceca4d65387733e9eb83498afd38e47",
+    "sciona-atoms-ml/src/sciona/atoms/ml/sklearn/cluster/state_models.py": "51b644973b5634da82d3cfcb89a9742f6a208cfaf75e46f72628243bfaafaf16",
+    "sciona-atoms-ml/src/sciona/atoms/ml/sklearn/cluster/witnesses.py": "9edcc058d2c667cd146600369a082b5ec76eb0d3e35e64a87a13bcb97c91eb87"
+  },
+  "installed_packages": {
+    "annotated-types": {
+      "version": "0.7.0",
+      "hashed_files_verified": 7,
+      "active_requirements": []
+    },
+    "asttokens": {
+      "version": "2.4.1",
+      "hashed_files_verified": 13,
+      "active_requirements": [
+        "six>=1.12.0"
+      ]
+    },
+    "icontract": {
+      "version": "2.7.3",
+      "hashed_files_verified": 16,
+      "active_requirements": [
+        "asttokens<3,>=2",
+        "typing_extensions"
+      ]
+    },
+    "joblib": {
+      "version": "1.5.3",
+      "hashed_files_verified": 143,
+      "active_requirements": []
+    },
+    "mpmath": {
+      "version": "1.3.0",
+      "hashed_files_verified": 92,
+      "active_requirements": []
+    },
+    "numpy": {
+      "version": "2.2.6",
+      "hashed_files_verified": 876,
+      "active_requirements": []
+    },
+    "pydantic": {
+      "version": "2.12.5",
+      "hashed_files_verified": 111,
+      "active_requirements": [
+        "annotated-types>=0.6.0",
+        "pydantic-core==2.41.5",
+        "typing-extensions>=4.14.1",
+        "typing-inspection>=0.4.2"
+      ]
+    },
+    "pydantic-core": {
+      "version": "2.41.5",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.14.1"
+      ]
+    },
+    "scikit-learn": {
+      "version": "1.8.0",
+      "hashed_files_verified": 960,
+      "active_requirements": [
+        "joblib>=1.3.0",
+        "numpy>=1.24.1",
+        "scipy>=1.10.0",
+        "threadpoolctl>=3.2.0"
+      ]
+    },
+    "scipy": {
+      "version": "1.17.1",
+      "hashed_files_verified": 1423,
+      "active_requirements": [
+        "numpy<2.7,>=1.26.4"
+      ]
+    },
+    "six": {
+      "version": "1.17.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "sympy": {
+      "version": "1.14.0",
+      "hashed_files_verified": 1571,
+      "active_requirements": [
+        "mpmath<1.4,>=1.1.0"
+      ]
+    },
+    "threadpoolctl": {
+      "version": "3.6.0",
+      "hashed_files_verified": 5,
+      "active_requirements": []
+    },
+    "typing-extensions": {
+      "version": "4.16.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "typing-inspection": {
+      "version": "0.4.2",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.12.0"
+      ]
+    }
+  },
+  "intake_plan_sha256": "7b48cb27fb2ee00b48899e93b73c03269077e4fd46ecfc2c0685badaeefaa748",
+  "resource_policy": {
+    "serial_tests": true,
+    "native_threads": 1
+  },
+  "limitations": [
+    "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+    "Nonempty finite dense numeric points and optional seeds are converted to float64; float32 backend execution is not preserved. Caller owns Euclidean feature scaling.",
+    "Positive finite explicit bandwidth or None for bandwidth estimation. Estimates can be zero on degenerate input; universal nondegenerate estimation is not promised.",
+    "Seeds may be caller supplied, input rows, or populated grid bins. Empty seeds or no populated bins are not qualified; seeds with no neighbors reject.",
+    "min_bin_freq is a positive integer. max_iter is nonnegative; zero still performs the source first mean update and does not mean no computation.",
+    "cluster_all=false permits -1 labels. Centers and label numbering retain installed backend ordering, not a stable cross-version identity.",
+    "Finite inputs may overflow intermediate arithmetic. No exhaustive floating-point accuracy, global optimum or historical competition accuracy claim.",
+    "Qualification uses n_jobs=1 with native threads externally bounded to one; callers must bound total concurrency.",
+    "Existing witness and symbolic metadata are not a proof of iterative clustering semantics.",
+    "Ring counts, detector topology, gap detection and grouping remain separate recipe policy.",
+    "Installed RECORD checks validate current dependency files, not publisher authentication or deployment on other platforms.",
+    "Legacy approval and serving remain preserved; canonical publication and original CDG qualification are separate actions."
+  ]
+}
