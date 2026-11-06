@@ -1,0 +1,91 @@
+{
+  "approved": false,
+  "graph_digest": "4ebb82297f8f60517b660c948e2a4fbcfbdb6cbf750f8749c7bf7c828c8c06a5",
+  "review_sha256": "4671b8babebf81cbcdce63a01895efd30ff56b3c3ef356c563e8ff838ac6d27f",
+  "intake_script_sha256": "34db895d8dc4d5467edccd92bcdeb7fa8b9d24432427b60d6a6f22ccd627bf4c",
+  "providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.physics.vector_selection.select_by_absolute_inner_product",
+      "catalog_fqdn": "sciona.atoms.physics.vector_selection.select_by_absolute_inner_product",
+      "atom_id": "69758197-20ec-5826-b846-c159cf4b367f",
+      "version_id": "8f9ef931-faac-520f-9035-64ac682ccc04",
+      "content_hash": "06d5a1e1df5e6a60f99c3ad46db5fbf8a964b15a7f469b9b0d79642e5bb061b6",
+      "provider_sha256": "c4dada7ffe23f8b79b5563af2aa34bd60109209460bfb9a3419f216a371722d9",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.physics.vector_selection.select_by_absolute_inner_product",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "physics.vector_selection",
+        "repo_name": "sciona-atoms-physics",
+        "source_module_path": "physics.vector_selection",
+        "import_module": "sciona.atoms.physics.vector_selection",
+        "source_symbol": "select_by_absolute_inner_product",
+        "description": "Select and orient one of two vectors by absolute inner product. Inputs are aligned finite float64 matrices (N,D), D>=1. Empty batches are allowed. Choose first only when its absolute inner product with reference is strictly larger; ties choose second. Negate the selected vector if its inner product is negative, leaving zero unchanged. Return the oriented vector (N,D) and nonnegative inner product (N,). Inputs are not modified. No normalization: this is an angular closest-axis rule only for equal-length candidates. Zero vectors are allowed. Caller owns units; no confidence score or domain policy is supplied. Nonfinite inner products reject before selection can hide them.",
+        "domain_tags": [
+          "physics"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.06d5a1e1df5e",
+      "fingerprint": "135c392ee51437d2ecdf9f6e1642ae9084752b60026b06f4e938eff57aa0e5eb",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "reference",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 matrix (N,D), D>=1. Empty batches and zero vectors allowed. Caller defines units; no normalization."
+        },
+        {
+          "direction": "input",
+          "name": "first",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 candidate matrix aligned to reference. Chosen only if its absolute inner product is strictly larger than second."
+        },
+        {
+          "direction": "input",
+          "name": "second",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 candidate matrix aligned to reference. Chosen on ties. Equal candidate lengths and nonzero vectors are needed for an angular closest-axis interpretation."
+        },
+        {
+          "direction": "output",
+          "name": "selected",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 selected vector matrix (N,D), negated when its reference inner product is negative; zero inner product leaves orientation unchanged. Inputs are not modified."
+        },
+        {
+          "direction": "output",
+          "name": "inner",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite nonnegative float64 vector (N,) of selected absolute inner products. No confidence score or normalization; nonfinite arithmetic rejects before selection."
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Draft source/interface intake only; semantic publication and dependency gates remain.",
+    "Generic vector selection in arbitrary positive dimension; caller controls units and scaling. Pixel-count confidence and cell construction stay in the recipe."
+  ],
+  "owners": {
+    "sciona-atoms-physics": {
+      "owner_id": "33ed07a2-1bea-5b17-8b71-d6d0e590fdd9",
+      "source_repo_id": "b7900d28-7c79-45bd-8548-483f64154882"
+    }
+  },
+  "preserved_sha256": "f839940aa40edfe5734827698947ed1a426a79c16bb215d49820714ff632db50"
+}
