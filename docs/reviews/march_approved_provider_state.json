@@ -1,0 +1,743 @@
+{
+  "passed": true,
+  "records": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_march_execution.features",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_march_execution.features",
+      "version_id": "fc628767-65ba-566b-abf6-9f42a70640ab",
+      "content_hash": "4ec23c162d429b52fbd62577eca75c968e61c45c2ef80320859b84267456ca08",
+      "provider_sha256": "9eb88dafd5dbcb47bc8b6746bd8246b36b704768dcd97a65bf60c8f975397db9",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "featured",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Compute complete season box-score efficiencies, loser-to-winner PageRank and chronological scaled Elo.",
+      "parameters": {
+        "prepared": "Prepared from march_prepare; its deep-copied strict finite JSON payload is revalidated before feature work."
+      },
+      "validity_bounds": "Require explicit finite feature and optimizer controls. Preserve the original possessions formula and ratios of summed totals, per-season rating resets, stable custom-scale Elo expectation, directed weighted PageRank with explicit tolerance and iteration budget, sorted game order, unique game chronology and rejection of tied completed games. PageRank exhaustion propagates as an error. Team vectors are float64 with five components: offensive efficiency, defensive efficiency, turnover rate, PageRank and Elo. No training or calibration occurs.",
+      "outputs": "Dictionary containing seasons, training, calibration, prediction and regularization/max_iterations/tolerance/seed. Raw games are removed.",
+      "plain_limits": "Build five team features from completed games using explicit settings. These features retain the season and box-score recipe.",
+      "reuse": "Season feature policy is domain-specific. Numeric model fitting and calibration are separate and do not require these raw inputs.",
+      "atom_id": "4ebeb687-887e-5b4b-958d-4362324e43f8",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_march_execution.features",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_march_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_march_execution",
+        "import_module": "sciona.atoms.ml.decomposed_march_execution",
+        "source_symbol": "features",
+        "description": "Aggregate box scores, directed PageRank and chronological scaled Elo.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.4ec23c162d42",
+      "fingerprint": "c993df8017bdb1ea2e2e77884c91204be74807d46299db3aef1f7a42d1174d7b",
+      "internal_registered_provider_dependencies": [],
+      "artifact_id": "4ebeb687-887e-5b4b-958d-4362324e43f8",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "featured",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_march_execution.fit_scores",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_march_execution.fit_scores",
+      "version_id": "97c233bd-e3b3-577b-95d5-982e67d7bbc5",
+      "content_hash": "4f0e11320894e9feb8e18ebe74970d3a1a2479dab7ea5ed7e306033f1f014a45",
+      "provider_sha256": "9eb88dafd5dbcb47bc8b6746bd8246b36b704768dcd97a65bf60c8f975397db9",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "arrays",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "calibration_scores",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "labels",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "sample_weight",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "forward_scores",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "reverse_scores",
+          "ordinal": 4,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "counts",
+          "ordinal": 5,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Fit StandardScaler and binary LogisticRegression on training rows only and expose scores for external calibration and prediction.",
+      "parameters": {
+        "arrays": "Exact matrix packet: train_x/train_y/calibration_x/calibration_y/forward_x/reverse_x and regularization/max_iterations/tolerance/seed."
+      },
+      "validity_bounds": "Prevalidate every input before fitting. Matrices are nonempty finite float64 rank-two arrays with a shared arbitrary positive feature width; forward and reverse shapes match. Labels are aligned int64 rank-one arrays with both 0 and 1 represented and at least two rows per labeled population. Copy arrays before use. Seed is a Python integer in [0,2**32); iteration budget is a positive Python integer; C and tolerance are finite positive Python int/float excluding bool. Fit StandardScaler then LogisticRegression using lbfgs and explicit controls. Promote ConvergenceWarning to an error. Require classes [0,1]. Evaluate three separate decision_function calls for calibration, forward and reverse; require finite rank-one float64 scores. No base refit during external calibration. Caller establishes independent populations and shared feature meaning; this stage does not prove either.",
+      "outputs": "Tuple: calibration scores, float64 binary calibration targets, None sample weights, forward scores, reverse scores, and counts(training_rows,calibration_rows,predicted_matchups). Model objects are not returned.",
+      "plain_limits": "Fit a binary model on numeric training rows and produce scores for separate calibration and prediction rows. All rows must use the same feature meaning.",
+      "reuse": "Domain-independent dense matrix fitting with arbitrary positive feature widths, tested at 1, 3, 8 and 23 columns. No season, team or box-score inputs are required. Logistic solver and scaling policy remain explicit.",
+      "atom_id": "022b1cf7-4ab7-55d5-9d8a-43474e1e98db",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_march_execution.fit_scores",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_march_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_march_execution",
+        "import_module": "sciona.atoms.ml.decomposed_march_execution",
+        "source_symbol": "fit_scores",
+        "description": "Fit standardized binary logistic scores from arbitrary-width matrices.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.4f0e11320894",
+      "fingerprint": "9c4523cda4ea4bc7c8944b451c12acf27aa1126f349a8b25d4f25fb69bc036ca",
+      "internal_registered_provider_dependencies": [],
+      "artifact_id": "022b1cf7-4ab7-55d5-9d8a-43474e1e98db",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "arrays",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "calibration_scores",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "labels",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "sample_weight",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "forward_scores",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "reverse_scores",
+          "ordinal": 4,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "counts",
+          "ordinal": 5,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_march_execution.pairings",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_march_execution.pairings",
+      "version_id": "bee431e3-290b-5d15-b0ef-219e456776e4",
+      "content_hash": "cdfe252124f16291aafcecd02a4f60186fa3dfaa82bc6ba25bc9d147505e4ca0",
+      "provider_sha256": "9eb88dafd5dbcb47bc8b6746bd8246b36b704768dcd97a65bf60c8f975397db9",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "featured",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "arrays",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Validate chronological populations and form mirrored fitting/calibration matrices plus both prediction orientations.",
+      "parameters": {
+        "featured": "Complete feature packet with nonempty season/team states, finite float64 five-component vectors, explicit last game order and all three target populations."
+      },
+      "validity_bounds": "Deep-copy and validate exact packet fields. Require nonnegative Python integer season/team/order identifiers, distinct teams known to their season, exact target row fields and binary fitting/calibration outcomes. Every target follows its season feature cutoff. Labeled (season,order) identities are unique. All training seasons precede all calibration seasons, which precede all prediction seasons. Require at least two original fitting and two calibration matchups. Concatenate A, B and A-B for each orientation; append reversed rows and complemented labels in source order. Reject invalid optimizer controls. Supplied features and chronology must be trustworthy; structural checks do not authenticate provenance.",
+      "outputs": "Exact dictionary train_x/train_y/calibration_x/calibration_y/forward_x/reverse_x plus four optimizer controls. Feature matrices have 15 columns under this recipe; fitting/calibration labels are mirrored int64.",
+      "plain_limits": "Build ordered pairs and their reversals, keeping fitting, calibration and prediction seasons separate.",
+      "reuse": "Pair construction retains the five-feature season recipe. The following numeric fitting stage accepts other feature widths independently.",
+      "atom_id": "66547149-3404-5877-8503-1187eefe0f66",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_march_execution.pairings",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_march_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_march_execution",
+        "import_module": "sciona.atoms.ml.decomposed_march_execution",
+        "source_symbol": "pairings",
+        "description": "Validate season chronology and build mirrored numeric populations.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.cdfe252124f1",
+      "fingerprint": "9a6ef27d46306a3759c4a461f7946e25998df38d085ea50bd6315be1be971eb7",
+      "internal_registered_provider_dependencies": [],
+      "artifact_id": "66547149-3404-5877-8503-1187eefe0f66",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "featured",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "arrays",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_march_execution.projection_inputs",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_march_execution.projection_inputs",
+      "version_id": "3f1faca8-06ee-5ff2-92c8-de013d67cd58",
+      "content_hash": "3f968dc5b06884f5f50884682f5b6f23805c575bc9e667fcc14fa3ee6c277654",
+      "provider_sha256": "9eb88dafd5dbcb47bc8b6746bd8246b36b704768dcd97a65bf60c8f975397db9",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "forward",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "reverse",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "coefficients",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Prepare the orientation policy as numeric rows and coefficients for an external ordered sum.",
+      "parameters": {
+        "forward": "Nonempty finite float64 rank-one forward probabilities in [0,1].",
+        "reverse": "Matching-shape finite float64 reverse probabilities in [0,1], calibrated with the same state."
+      },
+      "validity_bounds": "Require identical vector shapes and strict dtype/range checks. Return rows [forward,ones,reverse] and coefficients [1,1,-1] as fresh arrays. Do not sum or rescale here. The graph must preserve both prediction orientations and shared calibration state.",
+      "outputs": "Tuple of float64 matrix (3,N) and float64 coefficients (3,), consumed by generic ordered_weighted_sum.",
+      "plain_limits": "Prepare forward plus one minus reverse, in that arithmetic order. Pair orientation is the caller recipe.",
+      "reuse": "Works for compatible paired binary predictions across domains; assumes reversing a pair complements the target probability.",
+      "atom_id": "f67735c4-00ca-5fb5-8e94-0d2771c7ccdf",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_march_execution.projection_inputs",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_march_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_march_execution",
+        "import_module": "sciona.atoms.ml.decomposed_march_execution",
+        "source_symbol": "projection_inputs",
+        "description": "Expose orientation probabilities and coefficients for an ordered sum.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.3f968dc5b068",
+      "fingerprint": "443f16f62972dd3e56ec95ed2af833976cfed7d6b51244ec22da0640f4001d62",
+      "internal_registered_provider_dependencies": [],
+      "artifact_id": "f67735c4-00ca-5fb5-8e94-0d2771c7ccdf",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "forward",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "reverse",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "coefficients",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_march_execution.result",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_march_execution.result",
+      "version_id": "1dbf4b4d-f584-5322-a34c-25add3cd68f2",
+      "content_hash": "0fc3619be40ca84f8e343aff766036d8bef7a6816e5a5e7be3ae5ff1c6461490",
+      "provider_sha256": "9eb88dafd5dbcb47bc8b6746bd8246b36b704768dcd97a65bf60c8f975397db9",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "total",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "counts",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Divide the external ordered orientation total by two and restore the complete JSON result.",
+      "parameters": {
+        "total": "Nonempty finite float64 rank-one total in [0,2] from the same-invocation ordered sum.",
+        "counts": "Exact training_rows/calibration_rows/predicted_matchups dictionary from fit_scores."
+      },
+      "validity_bounds": "Require Python integer counts excluding bool, at least two training/calibration rows, and predicted_matchups equal to total length. Multiply total by .5 and convert probabilities to a list; require strict JSON serialization. Bounds and counts do not authenticate execution or same-invocation provenance.",
+      "outputs": "Strict JSON probabilities plus training_rows, calibration_rows and predicted_matchups.",
+      "plain_limits": "Return paired prediction probabilities and row counts. The input total must belong to this invocation.",
+      "reuse": "Compatible paired binary prediction aggregation across domains; preserves the original result naming and half-sum policy.",
+      "atom_id": "69a68863-cb2a-5867-a5ec-516fbdd1eda9",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_march_execution.result",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_march_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_march_execution",
+        "import_module": "sciona.atoms.ml.decomposed_march_execution",
+        "source_symbol": "result",
+        "description": "Scale the external sum and return probabilities with lifecycle counts.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.0fc3619be40c",
+      "fingerprint": "c0fefcfbcbdabe1a02a39287181c82e494603f82a596e5d9afc2f99d2f038b97",
+      "internal_registered_provider_dependencies": [],
+      "artifact_id": "69a68863-cb2a-5867-a5ec-516fbdd1eda9",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": [
+        {
+          "direction": "input",
+          "name": "total",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "counts",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.march_execution.march_prepare",
+      "catalog_fqdn": "sciona.atoms.ml.march_execution.march_prepare",
+      "artifact_id": "8d80ec36-802f-5c34-9296-29c6d1eb1fc0",
+      "version_id": "5af8d2fe-d53b-5eed-a1ca-7c6bbcb3ce0f",
+      "content_hash": "d13d1a47056758b0bc3a4f2cf95f57fd3e0f6c843ce309671b78e6b305b19633",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "payload",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.sklearn.calibration.atoms.sigmoid_calibration_fit",
+      "catalog_fqdn": "sciona.atoms.ml.sklearn.calibration.sigmoid_calibration_fit",
+      "artifact_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+      "version_id": "41cba2bf-ce59-5b54-9cfd-b5c0a9e7ddf5",
+      "content_hash": "70e225fddbec4e9d7a39378f6dffdf55fdcfa63dafa7c5ad9e2c73a977421738",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "predictions",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities."
+        },
+        {
+          "direction": "input",
+          "name": "y",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned float64 binary targets encoded 0 and 1; both classes represented in an independent calibration population."
+        },
+        {
+          "direction": "input",
+          "name": "sample_weight",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": false,
+          "default_value_repr": "None",
+          "constraints": "None or aligned finite nonnegative float64 weights with positive total mass in each class."
+        },
+        {
+          "direction": "output",
+          "name": "state",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite sigmoid slope and intercept."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.sklearn.calibration.atoms.sigmoid_calibration_predict",
+      "catalog_fqdn": "sciona.atoms.ml.sklearn.calibration.sigmoid_calibration_predict",
+      "artifact_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+      "version_id": "e54f2ea7-9cc7-5f35-93b3-1956f480ed00",
+      "content_hash": "c4e3c6a65aec1ec5db26067637ca0972d77484ee32fcf03798f32cad600ceff8",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "predictions",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities."
+        },
+        {
+          "direction": "input",
+          "name": "state",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "SigmoidCalibrationState with finite a and b, fitted for the same score definition; predicts expit(-(a*score+b))."
+        },
+        {
+          "direction": "output",
+          "name": "probabilities",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned float64 probabilities in [0,1]; no empirical accuracy or calibration guarantee."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.numerical.statistics.ordered_sum.ordered_weighted_sum",
+      "catalog_fqdn": "sciona.atoms.numerical.statistics.ordered_sum.ordered_weighted_sum",
+      "artifact_id": "4f486f1c-82db-50db-b5d2-188aeaa8cc4a",
+      "version_id": "5fb9c91f-ff5f-590c-b376-88e2a7360440",
+      "content_hash": "814d0ff20f33820537741e1f116c32dfa69262d56dc16d872f3a055f77bd6968",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "coefficients",
+          "ordinal": 1,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "scores",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    }
+  ],
+  "checker_sha256": "6e27943ebf32a15fcc334b9cdabcee7707051516b182fcdffec871213d8df455",
+  "catalog_snapshot": {
+    "atoms": "d5163d64c8cb886122ef20f7c0f37e617ec35692b32a5f52df4c2cf52fc94b00",
+    "artifacts": "70d20de67b0318c728c78a1cf04723cf068063a67e1a7dc71834bea5316d9e21",
+    "atom_versions": "b1758c1cb66c0b9274fcbbd73d9678311c4d9a0e4023a22b01e65f077940114c",
+    "artifact_versions": "35e347f26872fa977a2c5ea3991106fecf4c0efe11771c67f7881872457cd70d",
+    "atom_io_specs": "5259d9e564b01d0bf1a9c3e7cc4e261144cd7c178dd8f97c7da8ddce89683cb2",
+    "artifact_io_specs": "31ca9a7bdc867aff2ec5157d42d4e59a15017fe0ee17fd4c3a4259757bead449",
+    "atom_parameters": "7a6ec2bba7e42099c8b46aa419c138130ef648c43772afafbb2a8ce73d6fb989",
+    "artifact_parameters": "05c5356b55bfde0e79cdf02995b3c7c9604d612e9ac00f015423fe3b041b3774",
+    "atom_descriptions": "2e380889bb29828dc5d0fede3d50b9b836a83e3ffe6f17236a8f3822fd616f67",
+    "artifact_descriptions": "1a4498d2a2ab3d8d836ec433321624bae6d280b303cf5dd9388ef092184451a1",
+    "atom_references": "bc0d46b3dc0e71ffc82901856512955b12563096c142c193b913609e622e9f84",
+    "artifact_references": "722bcfcbc5665e989f4a51695b75aadd17d99b6b78e74692661679075f73e34d",
+    "atom_audit_rollups": "1354d2784fd7538688307f2d2391a27a8052f9142d7d8d0ba6148b6e199d6171",
+    "artifact_audit_rollups": "f99b5c97a79a60164ff5e83917b1830cb64331159bd17e400890e3f43c063ec5",
+    "artifact_audit_evidence": "f127e559d7e15c51dd7a477a47a79c21fa0a0a72e5e255817a3a668a3789d849"
+  }
+}
