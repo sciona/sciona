@@ -1,0 +1,408 @@
+{
+  "format": "trackml-intersection-provider-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "providers": [
+    {
+      "artifact_id": "0320ce4d-524a-4ecc-b669-9c709830d522",
+      "fqdn": "sciona.atoms.particle_tracking.track_matching.helix_cap_intersection",
+      "runtime_fqdn": "sciona.atoms.particle_tracking.track_matching.atoms.helix_cap_intersection",
+      "version_id": "40d350c4-3bb8-56e2-958a-f5a331e390bc",
+      "content_hash": "9df65fd3e4398b24dd958497ca025590af53fa279488ae4ff260fa67dd2f85d9",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "x0",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vectors (N,) in consistent caller-defined length units. Pitch is nonzero axial advance per revolution. Initial points must lie on the specified helix. Radius argument is unused by the coordinate calculation. Qualified domain excludes nonfinite intermediate arithmetic or output."
+        },
+        {
+          "direction": "input",
+          "name": "y0",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vectors (N,) in consistent caller-defined length units. Pitch is nonzero axial advance per revolution. Initial points must lie on the specified helix. Radius argument is unused by the coordinate calculation. Qualified domain excludes nonfinite intermediate arithmetic or output."
+        },
+        {
+          "direction": "input",
+          "name": "z0",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vectors (N,) in consistent caller-defined length units. Pitch is nonzero axial advance per revolution. Initial points must lie on the specified helix. Radius argument is unused by the coordinate calculation. Qualified domain excludes nonfinite intermediate arithmetic or output."
+        },
+        {
+          "direction": "input",
+          "name": "hel_xm",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vectors (N,) in consistent caller-defined length units. Pitch is nonzero axial advance per revolution. Initial points must lie on the specified helix. Radius argument is unused by the coordinate calculation. Qualified domain excludes nonfinite intermediate arithmetic or output."
+        },
+        {
+          "direction": "input",
+          "name": "hel_ym",
+          "ordinal": 4,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vectors (N,) in consistent caller-defined length units. Pitch is nonzero axial advance per revolution. Initial points must lie on the specified helix. Radius argument is unused by the coordinate calculation. Qualified domain excludes nonfinite intermediate arithmetic or output."
+        },
+        {
+          "direction": "input",
+          "name": "hel_r",
+          "ordinal": 5,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vectors (N,) in consistent caller-defined length units. Pitch is nonzero axial advance per revolution. Initial points must lie on the specified helix. Radius argument is unused by the coordinate calculation. Qualified domain excludes nonfinite intermediate arithmetic or output."
+        },
+        {
+          "direction": "input",
+          "name": "hel_pitch",
+          "ordinal": 6,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vectors (N,) in consistent caller-defined length units. Pitch is nonzero axial advance per revolution. Initial points must lie on the specified helix. Radius argument is unused by the coordinate calculation. Qualified domain excludes nonfinite intermediate arithmetic or output."
+        },
+        {
+          "direction": "input",
+          "name": "target_z",
+          "ordinal": 7,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vectors (N,) in consistent caller-defined length units. Pitch is nonzero axial advance per revolution. Initial points must lie on the specified helix. Radius argument is unused by the coordinate calculation. Qualified domain excludes nonfinite intermediate arithmetic or output."
+        },
+        {
+          "direction": "output",
+          "name": "x",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned float64 coordinate or signed phase vector. Coordinates use caller length units; phase is dimensionless. Finite outputs on the qualified domain."
+        },
+        {
+          "direction": "output",
+          "name": "y",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned float64 coordinate or signed phase vector. Coordinates use caller length units; phase is dimensionless. Finite outputs on the qualified domain."
+        },
+        {
+          "direction": "output",
+          "name": "z",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned float64 coordinate or signed phase vector. Coordinates use caller length units; phase is dimensionless. Finite outputs on the qualified domain."
+        },
+        {
+          "direction": "output",
+          "name": "phase",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned float64 coordinate or signed phase vector. Coordinates use caller length units; phase is dimensionless. Finite outputs on the qualified domain."
+        }
+      ],
+      "operation": "Intersect a helix with a caller-selected axial plane; return coordinates and signed phase.",
+      "plain_description": "Find where a spiral path meets a chosen flat surface.",
+      "validity_bounds": "Nonempty aligned finite float64 vectors (N,) in consistent caller-defined length units. Pitch is nonzero axial advance per revolution. Initial points must lie on the specified helix. Radius argument is unused by the coordinate calculation. Qualified domain excludes nonfinite intermediate arithmetic or output. Aligned float64 coordinate or signed phase vector. Coordinates use caller length units; phase is dimensionless. Finite outputs on the qualified domain.",
+      "reuse": "Caller-defined helix and reference surface; no detector layout, layer selection, correction or ranking policy.",
+      "registered_provider_dependencies": []
+    },
+    {
+      "artifact_id": "8104fef5-9715-539f-b359-cbe462a633c6",
+      "fqdn": "sciona.atoms.physics.helix_cylinder.helix_cylinder_intersection",
+      "runtime_fqdn": "sciona.atoms.physics.helix_cylinder.helix_cylinder_intersection",
+      "version_id": "60e74fe0-d9e2-5454-b17f-14f613b2b5fe",
+      "content_hash": "58d2b457a4d491b29de2106eb047ea00011d564bc11e55d023632130a4793c25",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "x0",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned finite float64 vectors (N,), including empty batches. Positive radius and target radius squared; nonzero pitch, axial direction and transverse center magnitude. Caller supplies consistent length units and initial points on the specified helix. Minimum phase is a signed movement bound. Four candidate phases only. Undefined or nonfinite arithmetic rejects."
+        },
+        {
+          "direction": "input",
+          "name": "y0",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned finite float64 vectors (N,), including empty batches. Positive radius and target radius squared; nonzero pitch, axial direction and transverse center magnitude. Caller supplies consistent length units and initial points on the specified helix. Minimum phase is a signed movement bound. Four candidate phases only. Undefined or nonfinite arithmetic rejects."
+        },
+        {
+          "direction": "input",
+          "name": "z0",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned finite float64 vectors (N,), including empty batches. Positive radius and target radius squared; nonzero pitch, axial direction and transverse center magnitude. Caller supplies consistent length units and initial points on the specified helix. Minimum phase is a signed movement bound. Four candidate phases only. Undefined or nonfinite arithmetic rejects."
+        },
+        {
+          "direction": "input",
+          "name": "center_x",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned finite float64 vectors (N,), including empty batches. Positive radius and target radius squared; nonzero pitch, axial direction and transverse center magnitude. Caller supplies consistent length units and initial points on the specified helix. Minimum phase is a signed movement bound. Four candidate phases only. Undefined or nonfinite arithmetic rejects."
+        },
+        {
+          "direction": "input",
+          "name": "center_y",
+          "ordinal": 4,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned finite float64 vectors (N,), including empty batches. Positive radius and target radius squared; nonzero pitch, axial direction and transverse center magnitude. Caller supplies consistent length units and initial points on the specified helix. Minimum phase is a signed movement bound. Four candidate phases only. Undefined or nonfinite arithmetic rejects."
+        },
+        {
+          "direction": "input",
+          "name": "radius",
+          "ordinal": 5,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned finite float64 vectors (N,), including empty batches. Positive radius and target radius squared; nonzero pitch, axial direction and transverse center magnitude. Caller supplies consistent length units and initial points on the specified helix. Minimum phase is a signed movement bound. Four candidate phases only. Undefined or nonfinite arithmetic rejects."
+        },
+        {
+          "direction": "input",
+          "name": "pitch",
+          "ordinal": 6,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned finite float64 vectors (N,), including empty batches. Positive radius and target radius squared; nonzero pitch, axial direction and transverse center magnitude. Caller supplies consistent length units and initial points on the specified helix. Minimum phase is a signed movement bound. Four candidate phases only. Undefined or nonfinite arithmetic rejects."
+        },
+        {
+          "direction": "input",
+          "name": "axial_direction",
+          "ordinal": 7,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned finite float64 vectors (N,), including empty batches. Positive radius and target radius squared; nonzero pitch, axial direction and transverse center magnitude. Caller supplies consistent length units and initial points on the specified helix. Minimum phase is a signed movement bound. Four candidate phases only. Undefined or nonfinite arithmetic rejects."
+        },
+        {
+          "direction": "input",
+          "name": "target_radius_squared",
+          "ordinal": 8,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned finite float64 vectors (N,), including empty batches. Positive radius and target radius squared; nonzero pitch, axial direction and transverse center magnitude. Caller supplies consistent length units and initial points on the specified helix. Minimum phase is a signed movement bound. Four candidate phases only. Undefined or nonfinite arithmetic rejects."
+        },
+        {
+          "direction": "input",
+          "name": "minimum_phase",
+          "ordinal": 9,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned finite float64 vectors (N,), including empty batches. Positive radius and target radius squared; nonzero pitch, axial direction and transverse center magnitude. Caller supplies consistent length units and initial points on the specified helix. Minimum phase is a signed movement bound. Four candidate phases only. Undefined or nonfinite arithmetic rejects."
+        },
+        {
+          "direction": "output",
+          "name": "x",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned float64 coordinate or signed phase vector. Coordinates use caller length units; phase is dimensionless. Misses are NaN; use the hit mask."
+        },
+        {
+          "direction": "output",
+          "name": "y",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned float64 coordinate or signed phase vector. Coordinates use caller length units; phase is dimensionless. Misses are NaN; use the hit mask."
+        },
+        {
+          "direction": "output",
+          "name": "z",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned float64 coordinate or signed phase vector. Coordinates use caller length units; phase is dimensionless. Misses are NaN; use the hit mask."
+        },
+        {
+          "direction": "output",
+          "name": "phase",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned float64 coordinate or signed phase vector. Coordinates use caller length units; phase is dimensionless. Misses are NaN; use the hit mask."
+        },
+        {
+          "direction": "output",
+          "name": "hit",
+          "ordinal": 4,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Boolean hit vector; false denotes geometric miss or no candidate within the four-phase search."
+        }
+      ],
+      "operation": "Intersect a helix with a caller-selected coaxial cylinder under an explicit phase movement bound; return coordinates, signed phase and hit mask.",
+      "plain_description": "Find where a spiral path meets a chosen round surface, or report no crossing.",
+      "validity_bounds": "Aligned finite float64 vectors (N,), including empty batches. Positive radius and target radius squared; nonzero pitch, axial direction and transverse center magnitude. Caller supplies consistent length units and initial points on the specified helix. Minimum phase is a signed movement bound. Four candidate phases only. Undefined or nonfinite arithmetic rejects. Aligned float64 coordinate or signed phase vector. Coordinates use caller length units; phase is dimensionless. Misses are NaN; use the hit mask. Boolean hit vector; false denotes geometric miss or no candidate within the four-phase search.",
+      "reuse": "Caller-defined helix and reference surface; no detector layout, layer selection, correction or ranking policy.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "tests": {
+    "tests": 132,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "exact_source_cases": {
+    "cylinder_batches": 96,
+    "cylinder_batch_size": 32,
+    "plane_batches": 48,
+    "plane_batch_size": 32
+  },
+  "software_sha256": {
+    "tests/test_helix_cylinder_provider.py": "204cd6c8a9b32c57a028b427d5e9eced7a2556460edd03c4859abe37752d5cba",
+    "tests/test_intersection_provider_semantics.py": "350f97def85bc26bd05b7b79ffffea0aac974ceb4e07420e9c1b0c925de74fd0",
+    "scripts/review_trackml_intersection_provider_semantics.py": "b7afc62422659d01b62dd172faf5a93199173b9e14a6f12a767a52a7eb91c6dc",
+    "scripts/review_trackml_intersection_reuse.py": "2af19465545c35d1d331b39f7df402b54c72f8799f5ac8e83b68d25a4b3e48d8",
+    "scripts/review_trackml_geometry_provider_semantics.py": "c1d650e245a181370160d0d859871cdc6fb4d0b3b10a1e82c8f309423bb575b8",
+    "scripts/stage_trackml_intersection_providers.py": "660b20c89573a75c858be8df7ee86818c81a52300fe824e8180e1451fc51c1fe",
+    "sciona/trackml_intersections.py": "9dbd24a154f80f700ffb2ed444d7ba469c64bfdccc14b23d73fa4a670c12f4cc",
+    "sciona/ghost/registry.py": "793723a75d07a88eed39f59d8d4dc327c54adbf75db7a03003516a6f74c81b51",
+    "sciona-atoms-physics/src/sciona/atoms/physics/helix_cylinder.py": "85b6848feece021b2863f8179b2b4189b056f436937a5b23e7d5888d5b738242",
+    "sciona-atoms-physics/src/sciona/atoms/particle_tracking/track_matching/atoms.py": "dda1f5a1d363efbd45d0357edea25ce1000a6e9df9de29e73d653ee116a2edd4",
+    "sciona-atoms-physics/src/sciona/atoms/particle_tracking/track_matching/expressions.py": "9692e1ddc0911dfb96ac48d7ab6529b0265376bf4bdc190ee0c3bc9bd3f88a89",
+    "sciona-atoms-physics/src/sciona/atoms/particle_tracking/track_matching/witnesses.py": "a8976f7975ca099bddcbc1fd4e2a81e878a315eb980ff6d0181e47e44a93a962",
+    "sciona-atoms-physics/src/sciona/atoms/particle_tracking/source_tracking/solution_LICENSE.source": "00404581925abc4b8435bb7813eee07ac1df8b834326a33ee969d8315e9471fe"
+  },
+  "installed_packages": {
+    "annotated-types": {
+      "version": "0.7.0",
+      "hashed_files_verified": 7,
+      "active_requirements": []
+    },
+    "asttokens": {
+      "version": "2.4.1",
+      "hashed_files_verified": 13,
+      "active_requirements": [
+        "six>=1.12.0"
+      ]
+    },
+    "icontract": {
+      "version": "2.7.3",
+      "hashed_files_verified": 16,
+      "active_requirements": [
+        "asttokens<3,>=2",
+        "typing_extensions"
+      ]
+    },
+    "mpmath": {
+      "version": "1.3.0",
+      "hashed_files_verified": 92,
+      "active_requirements": []
+    },
+    "numpy": {
+      "version": "2.2.6",
+      "hashed_files_verified": 876,
+      "active_requirements": []
+    },
+    "pydantic": {
+      "version": "2.12.5",
+      "hashed_files_verified": 111,
+      "active_requirements": [
+        "annotated-types>=0.6.0",
+        "pydantic-core==2.41.5",
+        "typing-extensions>=4.14.1",
+        "typing-inspection>=0.4.2"
+      ]
+    },
+    "pydantic-core": {
+      "version": "2.41.5",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.14.1"
+      ]
+    },
+    "six": {
+      "version": "1.17.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "sympy": {
+      "version": "1.14.0",
+      "hashed_files_verified": 1571,
+      "active_requirements": [
+        "mpmath<1.4,>=1.1.0"
+      ]
+    },
+    "threadpoolctl": {
+      "version": "3.6.0",
+      "hashed_files_verified": 5,
+      "active_requirements": []
+    },
+    "typing-extensions": {
+      "version": "4.16.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "typing-inspection": {
+      "version": "0.4.2",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.12.0"
+      ]
+    }
+  },
+  "intake_plan_sha256": "bc984a1d88852bedc0dfecbbbd86dc4be2d3ed650153cb13c0ee268fccbbd90a",
+  "resource_policy": {
+    "serial_tests": true,
+    "native_threads": 1
+  },
+  "limitations": [
+    "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+    "Caller supplies finite aligned float64 vectors, consistent length units, and initial points on the specified helix. Pitch is axial advance per revolution. Reference surfaces and movement bounds are explicit for cross-domain reuse.",
+    "Cylinder requires positive radius and target radius squared, nonzero pitch and axial direction, and nonzero transverse center magnitude. Empty batches are supported. Concentric degeneracy rejects.",
+    "Cylinder considers four retained source phase candidates. A signed minimum phase permits backward reselection; no unbounded multi-revolution search is claimed. Geometric misses return NaN coordinates and phase with a false hit flag.",
+    "Cylinder computes orientation from separate signs, avoiding product underflow or overflow. This intentionally differs from the source when multiplying tiny direction and pitch underflows to zero; exact source comparisons cover the tested ordinary numeric domain.",
+    "Plane requires nonempty vectors and nonzero pitch. It intersects the axial plane in either direction; layer selection and empty selected batches are recipe responsibilities. Its radius argument is unused by the coordinate calculation.",
+    "Plane preconditions do not enforce every qualified shape, dtype or geometric consistency condition. Callers must satisfy the recorded domain; witness output shapes do not validate those conditions.",
+    "The plane symbolic expression specifies phase advance only, not a proof of full coordinate rotation. Its witness returns output shapes and dtypes only. Cylinder witness rejects abstract execution.",
+    "Plane symbolic validity metadata has a zero lower bound for pitch and pitch-per-radian, while concrete execution supports either nonzero sign. This review qualifies the concrete signed-pitch interface only and does not extend symbolic validity metadata.",
+    "Floating-point range and rounding remain limits. No clipping or finite replacement of cylinder misses. A reachable arccos argument outside its floating-point domain rejects rather than clipping.",
+    "Detector layout, identifiers, lateral extent, correction maps, layer selection, multiplicity and recursive retries remain in the recipe; provider approval does not qualify those policies.",
+    "Synthetic source parity and analytical invariants do not establish arbitrary-input accuracy, historical competition accuracy or clean deployment on other platforms.",
+    "Installed RECORD validation checks current package files, not publisher authentication.",
+    "Provider publication and original TrackML CDG qualification remain separate actions."
+  ]
+}
