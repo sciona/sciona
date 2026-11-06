@@ -1,0 +1,127 @@
+{
+  "approved": false,
+  "graph_digest": "57831eb4eadabbbddd1b24f7403d71756394d5bc786d4419706e24172f34da7d",
+  "review_sha256": "5aa381691ed131e6ddebb0eca927f0cefa6354acf457ee377fafd62e04153cc2",
+  "intake_script_sha256": "42de50b4bfd0b3ff94281f8de55524b976a10f5c0c1869d27c6279acd47d9a1a",
+  "providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.physics.regular_grid.evaluate_linear_grid",
+      "catalog_fqdn": "sciona.atoms.physics.regular_grid.evaluate_linear_grid",
+      "atom_id": "17939969-5346-573b-b04c-2f5e26cb1228",
+      "version_id": "24f0550b-c68d-537c-8497-decd99201e8f",
+      "content_hash": "a5f0f251fa77d88591109e20e54c67cde3ccdd591770bce6434eda1dad8b2720",
+      "provider_sha256": "9e697739290fac724de4c0749860c41ec24221d966ea94984c9ad2efce3dea6b",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.physics.regular_grid.evaluate_linear_grid",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "physics.regular_grid",
+        "repo_name": "sciona-atoms-physics",
+        "source_module_path": "physics.regular_grid",
+        "import_module": "sciona.atoms.physics.regular_grid",
+        "source_symbol": "evaluate_linear_grid",
+        "description": "Evaluate copied linear grid state at finite float64 points (Q,D). Returns shape (Q,) plus any trailing value component dimensions. Q=0 is supported. Axis order and units must match the fitted grid. Extrapolation is enabled; nonfinite arithmetic results reject. No interpolation error bound or cross-version bitwise guarantee is supplied. State must remain unmodified.",
+        "domain_tags": [
+          "physics"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.a5f0f251fa77",
+      "fingerprint": "550fc9f059a35be8c56e61034da9caf408386ca813461daa1f5fb1863ad6fb33",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "points",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 matrix (Q,D) matching fitted axis order and units. Empty queries allowed; no coordinate conversion."
+        },
+        {
+          "direction": "input",
+          "name": "state",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Float64 interpolated values with shape (Q,) plus trailing value dimensions. Linear extrapolation outside the grid; nonfinite results reject. No physical validity or interpolation error bound."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.physics.regular_grid.fit_linear_grid",
+      "catalog_fqdn": "sciona.atoms.physics.regular_grid.fit_linear_grid",
+      "atom_id": "8a4cc294-6740-5ee7-8350-055c2c4895ad",
+      "version_id": "3c1ba3ed-e5ed-54f3-868f-5faadbd2a6a6",
+      "content_hash": "b2cf2424254bedefee23ec6ce1b7abc84cb6ec5691ee20e15ee69929d423e678",
+      "provider_sha256": "9e697739290fac724de4c0749860c41ec24221d966ea94984c9ad2efce3dea6b",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.physics.regular_grid.fit_linear_grid",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "physics.regular_grid",
+        "repo_name": "sciona-atoms-physics",
+        "source_module_path": "physics.regular_grid",
+        "import_module": "sciona.atoms.physics.regular_grid",
+        "source_symbol": "fit_linear_grid",
+        "description": "Build a copied linear interpolator on a rectilinear grid. Axes is a nonempty tuple/list of finite float64 vectors, each at least length two and strictly ascending or descending. Values is finite float64, with leading dimensions matching axis lengths and optional trailing component dimensions. Caller defines axis units and component units. No sorting, singleton removal, coordinate conversion or domain policy is performed. The opaque runtime state must not be modified; it is not a portable artifact. Queries extrapolate linearly outside the grid without a physical validity claim.",
+        "domain_tags": [
+          "physics"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.b2cf2424254b",
+      "fingerprint": "63190cd0d61e4147ed62a7bf64bd04ef06de587c3cdb0af84e70dd923e6ad647",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "axes",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty tuple/list of finite float64 vectors, each strictly ascending or descending with at least two entries. Caller defines units; no sorting or singleton removal."
+        },
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 values whose leading dimensions match axis lengths; optional trailing component dimensions. Caller storage is copied."
+        },
+        {
+          "direction": "output",
+          "name": "state",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact."
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Draft source/interface intake only; semantic publication and dependency gates remain.",
+    "Generic rectilinear linear interpolation; detector coordinate dispatch, singleton removal and map policy stay in the recipe."
+  ],
+  "owners": {
+    "sciona-atoms-physics": {
+      "owner_id": "33ed07a2-1bea-5b17-8b71-d6d0e590fdd9",
+      "source_repo_id": "b7900d28-7c79-45bd-8548-483f64154882"
+    }
+  },
+  "preserved_sha256": "f839940aa40edfe5734827698947ed1a426a79c16bb215d49820714ff632db50"
+}
