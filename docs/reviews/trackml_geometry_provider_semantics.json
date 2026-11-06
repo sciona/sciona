@@ -1,0 +1,531 @@
+{
+  "format": "trackml_geometry-provider-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "providers": [
+    {
+      "artifact_id": "6be92ead-9c17-4678-9d94-1a5561c6f423",
+      "fqdn": "sciona.atoms.particle_tracking.helix_geometry.circle_from_three_points",
+      "version_id": "f3dfc1b6-d7e9-57b4-a3a5-a68371ac5ffd",
+      "content_hash": "925d05524eae4b9373cf0dcfc592eb3d2b4564e37d60bf32db9ea7a728d4de11",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "x1",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry."
+        },
+        {
+          "direction": "input",
+          "name": "y1",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry."
+        },
+        {
+          "direction": "input",
+          "name": "x2",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry."
+        },
+        {
+          "direction": "input",
+          "name": "y2",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry."
+        },
+        {
+          "direction": "input",
+          "name": "x3",
+          "ordinal": 4,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry."
+        },
+        {
+          "direction": "input",
+          "name": "y3",
+          "ordinal": 5,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry."
+        },
+        {
+          "direction": "input",
+          "name": "large_radius",
+          "ordinal": 6,
+          "type_desc": "float",
+          "required": false,
+          "default_value_repr": "1000000.0",
+          "constraints": "Positive finite radius cap in the coordinate length unit; source-compatible tangent fallback requires nonzero representable tangent magnitude."
+        },
+        {
+          "direction": "output",
+          "name": "xm",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned float64 vector. Circle center and radius per triple; radius is capped by large_radius. Coincident origin finite substitution differs from source and is outside qualified source parity."
+        },
+        {
+          "direction": "output",
+          "name": "ym",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned float64 vector. Circle center and radius per triple; radius is capped by large_radius. Coincident origin finite substitution differs from source and is outside qualified source parity."
+        },
+        {
+          "direction": "output",
+          "name": "radius",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned float64 vector. Circle center and radius per triple; radius is capped by large_radius. Coincident origin finite substitution differs from source and is outside qualified source parity."
+        }
+      ],
+      "operation": "Fit a circle through each numeric point triple with an explicit radius cap.",
+      "plain_description": "Fit circles through groups of three points.",
+      "validity_bounds": "Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry. Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry. Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry. Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry. Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry. Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry. Positive finite radius cap in the coordinate length unit; source-compatible tangent fallback requires nonzero representable tangent magnitude. Aligned float64 vector. Circle center and radius per triple; radius is capped by large_radius. Coincident origin finite substitution differs from source and is outside qualified source parity. Aligned float64 vector. Circle center and radius per triple; radius is capped by large_radius. Coincident origin finite substitution differs from source and is outside qualified source parity. Aligned float64 vector. Circle center and radius per triple; radius is capped by large_radius. Coincident origin finite substitution differs from source and is outside qualified source parity.",
+      "reuse": "Numeric geometry with caller-defined consistent units; no detector topology, field strength, particle identity or calibration map is hardcoded.",
+      "registered_provider_dependencies": []
+    },
+    {
+      "artifact_id": "4a12f880-b347-4f10-a5ef-df632453cb21",
+      "fqdn": "sciona.atoms.particle_tracking.helix_geometry.helix_pitch_from_two_points",
+      "version_id": "54503b4f-7dec-5ea8-9a1a-5413b804a29a",
+      "content_hash": "b3a4503922fe0e551bb543bbdeaeb406138636f6b0216b2b65a5e887c129b133",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "x1",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry."
+        },
+        {
+          "direction": "input",
+          "name": "y1",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry."
+        },
+        {
+          "direction": "input",
+          "name": "z1",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry."
+        },
+        {
+          "direction": "input",
+          "name": "x2",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry."
+        },
+        {
+          "direction": "input",
+          "name": "y2",
+          "ordinal": 4,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry."
+        },
+        {
+          "direction": "input",
+          "name": "z2",
+          "ordinal": 5,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry."
+        },
+        {
+          "direction": "input",
+          "name": "hel_xm",
+          "ordinal": 6,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry."
+        },
+        {
+          "direction": "input",
+          "name": "hel_ym",
+          "ordinal": 7,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry."
+        },
+        {
+          "direction": "input",
+          "name": "zero_pitch",
+          "ordinal": 8,
+          "type_desc": "float",
+          "required": false,
+          "default_value_repr": "0.001",
+          "constraints": "Finite real replacement for exactly zero pitch in the coordinate length unit; source default is 0.001."
+        },
+        {
+          "direction": "output",
+          "name": "pitch",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned float64 vector. Pitch per full revolution, wrapped phase difference in radians and possibly zero-pitch-adjusted axial difference. Assumes less than half a turn; exact zero phase uses source 0.001 replacement."
+        },
+        {
+          "direction": "output",
+          "name": "phase",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned float64 vector. Pitch per full revolution, wrapped phase difference in radians and possibly zero-pitch-adjusted axial difference. Assumes less than half a turn; exact zero phase uses source 0.001 replacement."
+        },
+        {
+          "direction": "output",
+          "name": "dz",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned float64 vector. Pitch per full revolution, wrapped phase difference in radians and possibly zero-pitch-adjusted axial difference. Assumes less than half a turn; exact zero phase uses source 0.001 replacement."
+        }
+      ],
+      "operation": "Estimate axial advance per revolution from two points and an explicit center.",
+      "plain_description": "Estimate how far a spiral rises during one turn.",
+      "validity_bounds": "Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry. Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry. Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry. Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry. Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry. Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry. Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry. Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry. Finite real replacement for exactly zero pitch in the coordinate length unit; source default is 0.001. Aligned float64 vector. Pitch per full revolution, wrapped phase difference in radians and possibly zero-pitch-adjusted axial difference. Assumes less than half a turn; exact zero phase uses source 0.001 replacement. Aligned float64 vector. Pitch per full revolution, wrapped phase difference in radians and possibly zero-pitch-adjusted axial difference. Assumes less than half a turn; exact zero phase uses source 0.001 replacement. Aligned float64 vector. Pitch per full revolution, wrapped phase difference in radians and possibly zero-pitch-adjusted axial difference. Assumes less than half a turn; exact zero phase uses source 0.001 replacement.",
+      "reuse": "Numeric geometry with caller-defined consistent units; no detector topology, field strength, particle identity or calibration map is hardcoded.",
+      "registered_provider_dependencies": []
+    },
+    {
+      "artifact_id": "f4f2d8ae-6ea0-44a9-9768-37ebe7d63610",
+      "fqdn": "sciona.atoms.particle_tracking.helix_geometry.helix_pitch_least_squares",
+      "version_id": "3124f904-f573-5d02-af50-7d2f02cd6a44",
+      "content_hash": "b45e5461dec47cf40f5015fca8f08213c77af44dc3f9fca0906907e7e60ca0f4",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "x1",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry."
+        },
+        {
+          "direction": "input",
+          "name": "y1",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry."
+        },
+        {
+          "direction": "input",
+          "name": "z1",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry."
+        },
+        {
+          "direction": "input",
+          "name": "x2",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry."
+        },
+        {
+          "direction": "input",
+          "name": "y2",
+          "ordinal": 4,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry."
+        },
+        {
+          "direction": "input",
+          "name": "z2",
+          "ordinal": 5,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry."
+        },
+        {
+          "direction": "input",
+          "name": "x3",
+          "ordinal": 6,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry."
+        },
+        {
+          "direction": "input",
+          "name": "y3",
+          "ordinal": 7,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry."
+        },
+        {
+          "direction": "input",
+          "name": "z3",
+          "ordinal": 8,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry."
+        },
+        {
+          "direction": "input",
+          "name": "hel_xm",
+          "ordinal": 9,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry."
+        },
+        {
+          "direction": "input",
+          "name": "hel_ym",
+          "ordinal": 10,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry."
+        },
+        {
+          "direction": "input",
+          "name": "zero_pitch",
+          "ordinal": 11,
+          "type_desc": "float",
+          "required": false,
+          "default_value_repr": "0.001",
+          "constraints": "Finite real replacement for exactly zero pitch in the coordinate length unit; source default is 0.001."
+        },
+        {
+          "direction": "output",
+          "name": "pitch",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned float64 vector. Least-squares pitch, phase and adjusted axial difference between last two points, plus squared axial residual loss. Ordered consecutive points under half a turn; zero regression denominator finite substitution is outside qualified source parity."
+        },
+        {
+          "direction": "output",
+          "name": "phase",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned float64 vector. Least-squares pitch, phase and adjusted axial difference between last two points, plus squared axial residual loss. Ordered consecutive points under half a turn; zero regression denominator finite substitution is outside qualified source parity."
+        },
+        {
+          "direction": "output",
+          "name": "dz",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned float64 vector. Least-squares pitch, phase and adjusted axial difference between last two points, plus squared axial residual loss. Ordered consecutive points under half a turn; zero regression denominator finite substitution is outside qualified source parity."
+        },
+        {
+          "direction": "output",
+          "name": "loss",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned float64 vector. Least-squares pitch, phase and adjusted axial difference between last two points, plus squared axial residual loss. Ordered consecutive points under half a turn; zero regression denominator finite substitution is outside qualified source parity."
+        }
+      ],
+      "operation": "Fit axial advance per revolution by least squares over three ordered points and an explicit center.",
+      "plain_description": "Fit a spiral rise using three points and report its squared error.",
+      "validity_bounds": "Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry. Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry. Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry. Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry. Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry. Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry. Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry. Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry. Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry. Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry. Nonempty aligned finite float64 vector. Coordinates and centers share a consistent caller-defined length unit. Qualified subset excludes nonfinite intermediate arithmetic and source-undefined singular geometry. Finite real replacement for exactly zero pitch in the coordinate length unit; source default is 0.001. Aligned float64 vector. Least-squares pitch, phase and adjusted axial difference between last two points, plus squared axial residual loss. Ordered consecutive points under half a turn; zero regression denominator finite substitution is outside qualified source parity. Aligned float64 vector. Least-squares pitch, phase and adjusted axial difference between last two points, plus squared axial residual loss. Ordered consecutive points under half a turn; zero regression denominator finite substitution is outside qualified source parity. Aligned float64 vector. Least-squares pitch, phase and adjusted axial difference between last two points, plus squared axial residual loss. Ordered consecutive points under half a turn; zero regression denominator finite substitution is outside qualified source parity. Aligned float64 vector. Least-squares pitch, phase and adjusted axial difference between last two points, plus squared axial residual loss. Ordered consecutive points under half a turn; zero regression denominator finite substitution is outside qualified source parity.",
+      "reuse": "Numeric geometry with caller-defined consistent units; no detector topology, field strength, particle identity or calibration map is hardcoded.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "tests": {
+    "tests": 15,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "exact_source_cases": {
+    "circle_from_three_points": 12,
+    "helix_pitch_from_two_points": 36,
+    "helix_pitch_least_squares": 36
+  },
+  "singular_differences": [
+    {
+      "provider": "circle_from_three_points",
+      "case": "coincident origin",
+      "source": "rejects undefined nonfinite result",
+      "existing_provider": "returns finite substituted geometry"
+    },
+    {
+      "provider": "helix_pitch_least_squares",
+      "case": "zero phase variance",
+      "source": "rejects undefined nonfinite result",
+      "existing_provider": "returns finite substituted geometry"
+    }
+  ],
+  "empty_input_restrictions": [
+    "circle_from_three_points",
+    "helix_pitch_from_two_points",
+    "helix_pitch_least_squares"
+  ],
+  "software_sha256": {
+    "tests/test_trackml_geometry_provider_reuse.py": "78492a0431c8053f704963893a24af43468094610f46388fafb6e6d70325fb86",
+    "scripts/review_trackml_geometry_provider_semantics.py": "c1d650e245a181370160d0d859871cdc6fb4d0b3b10a1e82c8f309423bb575b8",
+    "scripts/review_trackml_geometry_reuse.py": "684677e976b58d593f377ad97e25f86af836c5913c89d9d17be7a7ea16f62d28",
+    "scripts/stage_trackml_geometry_canonical_records.py": "30cffa08e44680814dd56bb0c909649375cb321f5f622786e5ffc65b2f8ba9f4",
+    "scripts/audit_trackml_geometry_intake.py": "a044d35b1f5690fdca120c1a499fe88b52069c09fe6762b57c59d8ba3c0a64cd",
+    "sciona/trackml_geometry.py": "e8d16ed6c49222717a7ed55c50b220f17c0e29a0651d165c3b0e726aba7482cb",
+    "sciona/trackml_helix.py": "eb8f4c0895d7ae63618e4f143cc5f04badc4ee98e47622dee0e60fa7db984b05",
+    "sciona/ghost/decorators.py": "9c29d4fd89992fd15e3cd48fc39b4e36e5815201f6cd714ea567c12c5a2deed8",
+    "sciona/ghost/registry.py": "793723a75d07a88eed39f59d8d4dc327c54adbf75db7a03003516a6f74c81b51",
+    "sciona/ghost/dimensions.py": "61be1958aa50725f3c6598d5b5447a806d2549698d5ce3ec243d467816754b7e",
+    "sciona-atoms-physics/src/sciona/atoms/particle_tracking/helix_geometry/atoms.py": "26677db3581b8be023b489ddf956d71328aea5e66631afa4c00b3601914dfd42",
+    "sciona-atoms-physics/src/sciona/atoms/particle_tracking/helix_geometry/expressions.py": "6a929f5e464e2353e4d5b392e247d390e4b82eb5b03e1e95878c5d779133b544",
+    "sciona-atoms-physics/src/sciona/atoms/particle_tracking/helix_geometry/witnesses.py": "3071db17f2046e612dbe5e3c0f58ca8947064380e9941e6c5300a970b6fa0b12",
+    "sciona-atoms-physics/src/sciona/atoms/particle_tracking/helix_geometry/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "installed_packages": {
+    "annotated-types": {
+      "version": "0.7.0",
+      "hashed_files_verified": 7,
+      "active_requirements": []
+    },
+    "asttokens": {
+      "version": "2.4.1",
+      "hashed_files_verified": 13,
+      "active_requirements": [
+        "six>=1.12.0"
+      ]
+    },
+    "icontract": {
+      "version": "2.7.3",
+      "hashed_files_verified": 16,
+      "active_requirements": [
+        "asttokens<3,>=2",
+        "typing_extensions"
+      ]
+    },
+    "mpmath": {
+      "version": "1.3.0",
+      "hashed_files_verified": 92,
+      "active_requirements": []
+    },
+    "numpy": {
+      "version": "2.2.6",
+      "hashed_files_verified": 876,
+      "active_requirements": []
+    },
+    "pydantic": {
+      "version": "2.12.5",
+      "hashed_files_verified": 111,
+      "active_requirements": [
+        "annotated-types>=0.6.0",
+        "pydantic-core==2.41.5",
+        "typing-extensions>=4.14.1",
+        "typing-inspection>=0.4.2"
+      ]
+    },
+    "pydantic-core": {
+      "version": "2.41.5",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.14.1"
+      ]
+    },
+    "six": {
+      "version": "1.17.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "sympy": {
+      "version": "1.14.0",
+      "hashed_files_verified": 1571,
+      "active_requirements": [
+        "mpmath<1.4,>=1.1.0"
+      ]
+    },
+    "threadpoolctl": {
+      "version": "3.6.0",
+      "hashed_files_verified": 5,
+      "active_requirements": []
+    },
+    "typing-extensions": {
+      "version": "4.16.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "typing-inspection": {
+      "version": "0.4.2",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.12.0"
+      ]
+    }
+  },
+  "intake_plan_sha256": "452fbe24fde33640fb0d8f944ba0be3b8d104a8a01f809d0beece6a0b5279a18",
+  "resource_policy": {
+    "serial_tests": true,
+    "native_threads": 1
+  },
+  "limitations": [
+    "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+    "Nonempty aligned finite float64 vectors with consistent caller-defined length units; require finite intermediate arithmetic, nonzero tangent magnitude for circle fallback and nonzero least-squares phase variance.",
+    "Known finite substitutions at coincident origin and zero phase variance differ from retained source. Source-compatible adapters reject them; empty internal batches bypass these nonempty providers.",
+    "The providers do not independently validate every stated shape, unit or provenance precondition. Qualified callers must enforce them; synthetic checks are not proof over all rounded inputs.",
+    "Two-point and least-squares phase conventions differ at half-turn boundaries. Ordered successive points under half a turn are the regular qualified domain; explicit zero-pitch replacement remains caller policy.",
+    "Geometry is reusable across applications with consistent units. Detector topology, candidate ranking, magnetic-field interpretation, calibration maps and tracking lifecycle remain separate.",
+    "Installed RECORD validation does not authenticate publisher wheels, clean deployment or other platforms.",
+    "Legacy history and approval remain preserved. Canonical publication and original TrackML graph qualification remain separate actions."
+  ]
+}
