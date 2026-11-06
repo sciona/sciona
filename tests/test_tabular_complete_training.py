@@ -5,7 +5,22 @@ import pytest
 from sciona.tabular_complete_training import fit_complete_stacker
 from tests.test_tabular_ensemble_training import sample
 
-POLICY = dict(clip_low=0., clip_high=1., max_mode_fraction=1., log_columns=[0], interactions=[], smoothing=1.)
+POLICY = dict(clip_low=0., clip_high=1., max_mode_fraction=1., log_columns=[0], interactions=[], smoothing=1., group_aggregates=[])
+
+
+def test_aggregate_maps_exclude_outer_validation_values():
+    n, c, y, f, g = sample()
+    policy = dict(POLICY, group_aggregates=[dict(key_column=0, value_columns=[0],
+        statistics=['mean', 'count'], unknown_value=-1.)])
+    first = fit_complete_stacker(n, c, y, f, g, feature_controls=policy, trees=8)
+    changed = [list(row) for row in n]
+    for i, fold in enumerate(f):
+        if fold == 0:
+            changed[i][0] = 100000.
+    second = fit_complete_stacker(changed, c, y, f, g, feature_controls=policy, trees=8)
+    a = first.fold_models[0].features.aggregates[0][1]
+    b = second.fold_models[0].features.aggregates[0][1]
+    assert dict(a.mapping) == dict(b.mapping)
 
 
 def fit(values=None):

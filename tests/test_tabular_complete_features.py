@@ -7,7 +7,28 @@ import pytest
 from sciona.tabular_complete_features import fit_binary_tabular_features
 
 
-CONTROLS = dict(clip_low=0., clip_high=1., max_mode_fraction=1., log_columns=[], interactions=[], smoothing=0.)
+CONTROLS = dict(clip_low=0., clip_high=1., max_mode_fraction=1., log_columns=[], interactions=[], smoothing=0., group_aggregates=[])
+
+
+def test_aggregate_features_use_training_cleaning_and_frozen_keys():
+    spec = dict(key_column=0, value_columns=[0], statistics=['mean', 'count'], unknown_value=-1.)
+    state, training = fit_binary_tabular_features([[2.], [None], [10.], [6.]],
+        [['a'], ['a'], ['b'], ['b']], [0, 1, 0, 1], ['g0', 'g1', 'g2', 'g3'],
+        **dict(CONTROLS, group_aggregates=[spec]))
+    # Training median is 6; a has mean 4, b has mean 8.
+    np.testing.assert_array_equal(training[:, -2:], [[4, 2], [4, 2], [8, 2], [8, 2]])
+    query = state.transform([[1000.], [-1000.], [None]], [['a'], ['b'], ['new']])
+    np.testing.assert_array_equal(query[:, -2:], [[4, 2], [8, 2], [-1, -1]])
+
+
+@pytest.mark.parametrize('spec', [
+    {}, dict(key_column=9, value_columns=[0], statistics=['mean'], unknown_value=0),
+    dict(key_column=0, value_columns=[0, 0], statistics=['mean'], unknown_value=0),
+])
+def test_rejects_invalid_aggregate_policy(spec):
+    with pytest.raises(ValueError):
+        fit_binary_tabular_features([[1.], [2.]], [['a'], ['b']], [0, 1], ['g0', 'g1'],
+            **dict(CONTROLS, group_aggregates=[spec]))
 
 
 def fit(numeric, categorical, labels=None, groups=None, **controls):

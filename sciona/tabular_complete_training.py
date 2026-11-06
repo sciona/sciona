@@ -28,7 +28,7 @@ def fit_complete_stacker(numeric, categorical, labels, folds, groups, *, feature
     Group identifiers and fold assignment remain caller policy.
     """
     if type(feature_controls) is not dict or set(feature_controls) != {
-        'clip_low', 'clip_high', 'max_mode_fraction', 'log_columns', 'interactions', 'smoothing'}:
+        'clip_low', 'clip_high', 'max_mode_fraction', 'log_columns', 'interactions', 'smoothing', 'group_aggregates'}:
         raise ValueError('Exact complete feature policy required')
     with threadpool_limits(limits=1):
         return _fit_complete_stacker(numeric,categorical,labels,folds,groups,
