@@ -8,6 +8,7 @@ from sciona.tabular_ensemble_features import TabularFeatures, validate_table
 from sciona.tabular_ensemble_training import binary_labels, group_ids
 from sciona.tabular_category_features import fit_category_features, _interactions
 from sciona.tabular_group_features import fit_group_features
+from sciona.tabular_text_topics import fit_text_topics
 
 
 def _logs(numeric, columns):
@@ -28,6 +29,7 @@ class CompleteTabularFeatures:
     base_columns: tuple
     categories: object
     aggregates: tuple
+    text_topics: tuple
 
     def transform(self, numeric, categorical):
         """Frozen query transform, never the target-encoded training transform."""
@@ -42,13 +44,15 @@ class CompleteTabularFeatures:
             result = np.column_stack((base, self.categories.transform(tokens[:, self.categorical_columns].tolist())))
         for key_column, aggregate in self.aggregates:
             result = np.column_stack((result, aggregate.transform(tokens[:, key_column].tolist())))
+        for column, topics in self.text_topics:
+            result = np.column_stack((result, topics.transform([row[column] or '' for row in categorical])))
         if not np.isfinite(result).all():
             raise ValueError('Nonfinite complete table features')
         return result
 
 
 def fit_binary_tabular_features(numeric, categorical, labels, groups, *, clip_low, clip_high,
-                               max_mode_fraction, log_columns, interactions, smoothing, group_aggregates):
+                               max_mode_fraction, log_columns, interactions, smoothing, group_aggregates, text_topics):
     """Return frozen state and the distinct group-excluded training matrix.
 
 Cleaning fits only supplied training rows. Drop constant, duplicate and
@@ -63,6 +67,9 @@ value columns, with explicit statistics and unknown-key fill. They use training
 median-imputed, clipped values, even if a source column is later screened out.
 Keys are feature choices, separate from fold-isolation groups. No temporal
 aggregation or use of validation/query values is implied.
+Text topics use explicitly selected original string columns, treating null as
+empty text. Each field has its own vocabulary and topic model fitted only on
+training rows. Existing category encodings remain separately available.
 
 Keep one-hot features, then count/frequency/group-excluded target features.
 Do not call transform on training rows to fit a model: that would replace
@@ -80,6 +87,13 @@ folds and population isolation. Dense state and arrays are execution-local.
         raise ValueError('Finite nonnegative smoothing required')
     if type(group_aggregates) is not list:
         raise ValueError('Explicit group-aggregate specifications required')
+    if type(text_topics) is not list:
+        raise ValueError('Explicit text-topic specifications required')
+    for spec in text_topics:
+        if type(spec) is not dict or set(spec) != {'column', 'topics', 'max_features', 'iterations', 'lowercase', 'seed'}:
+            raise ValueError('Exact text-topic specification required')
+        if type(spec['column']) is not int or not 0 <= spec['column'] < tokens.shape[1]:
+            raise ValueError('Valid original string column required')
     for spec in group_aggregates:
         if type(spec) is not dict or set(spec) != {'key_column', 'value_columns', 'statistics', 'unknown_value'}:
             raise ValueError('Exact group-aggregate specification required')
@@ -122,8 +136,14 @@ folds and population isolation. Dense state and arrays are execution-local.
             unknown_value=spec['unknown_value'])
         aggregates.append((spec['key_column'], aggregate))
         training = np.column_stack((training, features))
+    topic_states = []
+    for spec in text_topics:
+        controls = dict(spec); column = controls.pop('column')
+        topics, features = fit_text_topics([row[column] or '' for row in categorical], **controls)
+        topic_states.append((column, topics))
+        training = np.column_stack((training, features))
     if training.shape[1] == 0 or not np.isfinite(training).all():
         raise ValueError('No finite varying table features remain')
     state = CompleteTabularFeatures((numbers.shape[1], tokens.shape[1]), tuple(log_columns), tuple(kept),
-        base, base_columns, categorical_state, tuple(aggregates))
+        base, base_columns, categorical_state, tuple(aggregates), tuple(topic_states))
     return state, training

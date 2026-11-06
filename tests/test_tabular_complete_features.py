@@ -7,7 +7,7 @@ import pytest
 from sciona.tabular_complete_features import fit_binary_tabular_features
 
 
-CONTROLS = dict(clip_low=0., clip_high=1., max_mode_fraction=1., log_columns=[], interactions=[], smoothing=0., group_aggregates=[])
+CONTROLS = dict(clip_low=0., clip_high=1., max_mode_fraction=1., log_columns=[], interactions=[], smoothing=0., group_aggregates=[], text_topics=[])
 
 
 def test_aggregate_features_use_training_cleaning_and_frozen_keys():
