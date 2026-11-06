@@ -1,0 +1,136 @@
+{
+  "approved": false,
+  "graph_digest": "71262bc5a6d52071d4b8120dd24a707fef11f11e2ac57e8788558ea9e8142de2",
+  "review_sha256": "c751138633ddeccfc43c485448b8ed0c4d8685ca43088f21e6d76cdd38c3c55d",
+  "intake_script_sha256": "25c0090f9bea89c2ffae8ba64540d4771dc1bf5eba5e53e7079717522eb85b79",
+  "providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.physics.coordinate_projection.cylindrical_projection",
+      "catalog_fqdn": "sciona.atoms.physics.coordinate_projection.cylindrical_projection",
+      "atom_id": "69005530-7abb-5317-83d3-696b1557100f",
+      "version_id": "3c9bfe8a-eadc-592f-8bfa-d39ec8eba6a3",
+      "content_hash": "99d7318365b0925e2d2908861984a4fc986cbda2ce5fe0a5e358014ab68ce503",
+      "provider_sha256": "ff9584e548fa266b8e03a4be7a06f78c4aed06c37b25e200aaa3aad625ed3c58",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.physics.coordinate_projection.cylindrical_projection",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "physics.coordinate_projection",
+        "repo_name": "sciona-atoms-physics",
+        "source_module_path": "physics.coordinate_projection",
+        "import_module": "sciona.atoms.physics.coordinate_projection",
+        "source_symbol": "cylindrical_projection",
+        "description": "Project rays to a cylinder, then weight transverse coordinates. Coordinates and reference_radius use the same caller-defined length unit; transverse_weight is dimensionless. Axis points and nonfinite arithmetic reject. Empty batches return shape (0, 3). Multiplication precedes division to preserve the retained source's floating-point evaluation order.",
+        "domain_tags": [
+          "physics"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.99d7318365b0",
+      "fingerprint": "514cb7b8a459e22d45c1962e01d2c0724198ec4f5924cc36abf7c3503af103b7",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "coords",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 array (N,3), including empty batches. Consistent caller-defined length units. Cylindrical projection requires finite nonzero transverse norm; plane projection requires nonzero axial coordinate. Nonfinite arithmetic rejects."
+        },
+        {
+          "direction": "input",
+          "name": "reference_radius",
+          "ordinal": 1,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Positive finite real scalar in the coordinate length unit."
+        },
+        {
+          "direction": "input",
+          "name": "transverse_weight",
+          "ordinal": 2,
+          "type_desc": "float",
+          "required": false,
+          "default_value_repr": "1.0",
+          "constraints": "Finite real dimensionless weight for the first two projected coordinates; caller policy, default 1.0."
+        },
+        {
+          "direction": "output",
+          "name": "projected",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 array (N,3) for cylindrical projection or (N,2) for plane projection; source arithmetic order retained. No detector or neighbor-selection policy."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.physics.coordinate_projection.plane_projection",
+      "catalog_fqdn": "sciona.atoms.physics.coordinate_projection.plane_projection",
+      "atom_id": "537ce0d9-9bbf-5506-be9d-d328c70aec81",
+      "version_id": "ff1340c9-c34f-5af3-a3b8-8743d87669c3",
+      "content_hash": "a7b7fc92c27dad04a959e74fd737419d5a9994257fe8301275105818b32b90ec",
+      "provider_sha256": "ff9584e548fa266b8e03a4be7a06f78c4aed06c37b25e200aaa3aad625ed3c58",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.physics.coordinate_projection.plane_projection",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "physics.coordinate_projection",
+        "repo_name": "sciona-atoms-physics",
+        "source_module_path": "physics.coordinate_projection",
+        "import_module": "sciona.atoms.physics.coordinate_projection",
+        "source_symbol": "plane_projection",
+        "description": "Project rays from the origin onto z=reference_height; return x,y. Coordinates and reference_height use the same caller-defined length unit. Points on z=0 reject; negative heights and empty batches are supported.",
+        "domain_tags": [
+          "physics"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.a7b7fc92c27d",
+      "fingerprint": "b94a24938a33c7e03ed164bb4de8abab2a1cf60670ba0555532a4ba9b28cf762",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "coords",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 array (N,3), including empty batches. Consistent caller-defined length units. Cylindrical projection requires finite nonzero transverse norm; plane projection requires nonzero axial coordinate. Nonfinite arithmetic rejects."
+        },
+        {
+          "direction": "input",
+          "name": "reference_height",
+          "ordinal": 1,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite real axial plane coordinate in the coordinate length unit; either sign or zero is allowed."
+        },
+        {
+          "direction": "output",
+          "name": "projected",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 array (N,3) for cylindrical projection or (N,2) for plane projection; source arithmetic order retained. No detector or neighbor-selection policy."
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Draft source/interface intake only; semantic publication and dependency gates remain.",
+    "Generic numerical projections with caller-defined units and reference geometry; tracking policy stays in the recipe."
+  ],
+  "owners": {
+    "sciona-atoms-physics": {
+      "owner_id": "33ed07a2-1bea-5b17-8b71-d6d0e590fdd9",
+      "source_repo_id": "b7900d28-7c79-45bd-8548-483f64154882"
+    }
+  },
+  "preserved_sha256": "f839940aa40edfe5734827698947ed1a426a79c16bb215d49820714ff632db50"
+}
