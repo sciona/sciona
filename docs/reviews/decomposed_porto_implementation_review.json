@@ -1,0 +1,268 @@
+{
+  "format": "decomposed-porto-implementation-review.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "source_qualification_complete": false,
+  "graph_nodes": 6,
+  "graph_edges": 9,
+  "graph_digest": "3eb5e77b9bb18b8c608fb5ad9a4e072a0fba966c6bcb37dfa9adb906800be3e0",
+  "providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.porto_execution.porto_prepare",
+      "catalog_fqdn": "sciona.atoms.ml.porto_execution.porto_prepare",
+      "version_id": "ddd75882-64a0-5410-80a9-3ef800321eca",
+      "content_hash": "24a8624bd048bb3f9052832b7e3c2eb3b20f7e54e306bc6bb2033cdd34da2af5",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "payload",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "78bc42f10309977214c3b8b169ddd78165ae1c00a1696a9144f1f96e4b5be11c",
+      "classification": "source_recipe_adapter"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_porto_execution.features",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_porto_execution.features",
+      "version_id": "b069bbbc-e90e-510d-aae9-88588f57a1ff",
+      "content_hash": "b734f57e94da04a95ed173c388148408a5861466a122ff96e3e71c9043b0e254",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "transformed",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "d8038fc98bb962596ed8c0224deb70af28dd353cb2cbe1e77e20f2be946b975d",
+      "classification": "source_recipe_adapter"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_porto_execution.fit",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_porto_execution.fit",
+      "version_id": "d9b9bfbd-f435-5423-a9c3-69942d35a96b",
+      "content_hash": "0a50fe54788b58dd46845350e12b04b1140a2ba0cada3863e6812fe9e596ee93",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "transformed",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "fitted",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "d8038fc98bb962596ed8c0224deb70af28dd353cb2cbe1e77e20f2be946b975d",
+      "classification": "source_recipe_adapter"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_porto_execution.blend_inputs",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_porto_execution.blend_inputs",
+      "version_id": "9c0f9a9e-8e67-5b3b-bbd6-41b170b9b9a9",
+      "content_hash": "754517b4ab08ac01ea00a99def35a2530522b03404c7490ed00e6151df9dbdc2",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "fitted",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "coefficients",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "d8038fc98bb962596ed8c0224deb70af28dd353cb2cbe1e77e20f2be946b975d",
+      "classification": "source_recipe_adapter"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.numerical.statistics.ordered_sum.ordered_weighted_sum",
+      "catalog_fqdn": "sciona.atoms.numerical.statistics.ordered_sum.ordered_weighted_sum",
+      "version_id": "5fb9c91f-ff5f-590c-b376-88e2a7360440",
+      "content_hash": "814d0ff20f33820537741e1f116c32dfa69262d56dc16d872f3a055f77bd6968",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "coefficients",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "neural_sum",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "893e4fb0c884d1732d9bba0ae2e203b72170bba11fbc89443306e6fd1b6ea359",
+      "classification": "generic_operation"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_porto_execution.result",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_porto_execution.result",
+      "version_id": "3333402e-b6c3-5160-ab76-cd13862dc934",
+      "content_hash": "3de5b45c7f5e7bbe7ba28c42eaae09c5fdf587710f13a432b853cb377f754e97",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "fitted",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "neural_sum",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "d8038fc98bb962596ed8c0224deb70af28dd353cb2cbe1e77e20f2be946b975d",
+      "classification": "source_recipe_adapter"
+    }
+  ],
+  "execution_evidence_commit": "7c523344cfaa304769c9d2239d1f53fe091aacdc",
+  "root_inputs": [
+    "payload"
+  ],
+  "root_outputs": [
+    "result"
+  ],
+  "runtime": {
+    "filelock": "3.25.2",
+    "fsspec": "2026.2.0",
+    "jinja2": "3.1.6",
+    "joblib": "1.5.3",
+    "lightgbm": "4.7.0",
+    "markupsafe": "3.0.3",
+    "mpmath": "1.3.0",
+    "narwhals": "2.26.0",
+    "networkx": "3.6.1",
+    "numpy": "2.2.6",
+    "pandas": "2.3.3",
+    "python-dateutil": "2.9.0.post0",
+    "pytz": "2026.1.post1",
+    "scikit-learn": "1.8.0",
+    "scipy": "1.17.1",
+    "setuptools": "80.9.0",
+    "six": "1.17.0",
+    "sympy": "1.14.0",
+    "threadpoolctl": "3.6.0",
+    "torch": "2.11.0",
+    "typing-extensions": "4.16.0",
+    "tzdata": "2025.3"
+  },
+  "evidence_sha256": {
+    "docs/reviews/decomposed_porto_graph_execution.json": "50a2a279ac4a9a3ecf2499d705dc21b0fc5eeef41013f47428c09034e2e9395b",
+    "docs/reviews/decomposed_porto_runtime_tests.json": "13536f34f8353b1eef9b70551b180dde5de8037de3573d52d3677924b8107354",
+    "docs/reviews/decomposed_porto_package_files.json": "18aa7f13d43843bcacf8c118ca3c3f70b6a619eff3f02308d1ffa126844b09da"
+  },
+  "reviewer_sha256": "fe1375728bbc183bd02484e6560a59bb7de5a74576492972651b930d4481edc2",
+  "limitations": [
+    "This review establishes current implementation parity and interfaces, not publication eligibility.",
+    "Exact source correction and provider semantic contracts still require review before promotion.",
+    "Generic ordered combination supports negative and non-unit-sum coefficients; recipe controls remain separate.",
+    "Intermediate shape checks do not authenticate provenance; inputs must come from one graph invocation."
+  ]
+}
