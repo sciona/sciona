@@ -1,0 +1,404 @@
+{
+  "format": "matern-provider-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "providers": [
+    {
+      "artifact_id": "228a0adf-f685-4739-bdf4-71e0ae68835e",
+      "fqdn": "sciona.atoms.ml.sklearn.gaussian_process.kernels.matern_kernel_matrix",
+      "version_id": "84104a39-6352-516b-b1a2-5a33a3834bc1",
+      "content_hash": "17bd8119554525ece1323da65f105ff3015ac2f94d53fcdf29a16c4263d7d353",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "X",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Qualified subset: nonempty finite float64 rank-two numeric coordinates with at least one feature; no domain-specific units or labels."
+        },
+        {
+          "direction": "input",
+          "name": "Y",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": false,
+          "default_value_repr": "None",
+          "constraints": "None for symmetric covariance on X, or nonempty finite float64 rank-two query coordinates with the same feature count."
+        },
+        {
+          "direction": "input",
+          "name": "length_scale",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": false,
+          "default_value_repr": "1.0",
+          "constraints": "Finite positive scalar, one-element vector, or feature-matched vector of unsquared length scales. Coordinate units must match each scale. Qualified arithmetic requires finite scaled coordinates and distances."
+        },
+        {
+          "direction": "input",
+          "name": "nu",
+          "ordinal": 3,
+          "type_desc": "float",
+          "required": false,
+          "default_value_repr": "1.5",
+          "constraints": "Qualified subset fixes Python float1.5 for Matern32 covariance. Other positive smoothness values accepted by the broader implementation are outside this review."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Normalized float64 covariance matrix: len(X)-by-len(X) for Y=None, otherwise len(X)-by-len(Y). Formula (1+sqrt(3)*r)*exp(-sqrt(3)*r), r=Euclidean distance after coordinate scaling. Unit self diagonal; no amplitude, observation noise, GP fitting or prediction state. Finite-output contracts may reject arithmetic overflow."
+        }
+      ],
+      "operation": "Compute normalized Matern32 covariance between numeric coordinate rows with explicit scalar or anisotropic length scales.",
+      "plain_description": "Compare numeric points using their scaled distance and return their pairwise similarity values.",
+      "validity_bounds": "Qualified subset: nonempty finite float64 rank-two numeric coordinates with at least one feature; no domain-specific units or labels. None for symmetric covariance on X, or nonempty finite float64 rank-two query coordinates with the same feature count. Finite positive scalar, one-element vector, or feature-matched vector of unsquared length scales. Coordinate units must match each scale. Qualified arithmetic requires finite scaled coordinates and distances. Qualified subset fixes Python float1.5 for Matern32 covariance. Other positive smoothness values accepted by the broader implementation are outside this review. Normalized float64 covariance matrix: len(X)-by-len(X) for Y=None, otherwise len(X)-by-len(Y). Formula (1+sqrt(3)*r)*exp(-sqrt(3)*r), r=Euclidean distance after coordinate scaling. Unit self diagonal; no amplitude, observation noise, GP fitting or prediction state. Finite-output contracts may reject arithmetic overflow.",
+      "reuse": "Domain-independent numeric covariance with explicit coordinate scales; no astronomy bands, redshift, labels or observation-table semantics.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "tests": {
+    "tests": 20,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "covariance_reuse_cases": [
+    {
+      "seed": 3,
+      "time_length": 1.0,
+      "amplitude": 0.25,
+      "cross_covariance": false,
+      "max_absolute_error": 5.551115123125783e-17
+    },
+    {
+      "seed": 3,
+      "time_length": 1.0,
+      "amplitude": 0.25,
+      "cross_covariance": true,
+      "max_absolute_error": 1.3877787807814457e-17
+    },
+    {
+      "seed": 3,
+      "time_length": 1.0,
+      "amplitude": 49.0,
+      "cross_covariance": false,
+      "max_absolute_error": 7.105427357601002e-15
+    },
+    {
+      "seed": 3,
+      "time_length": 1.0,
+      "amplitude": 49.0,
+      "cross_covariance": true,
+      "max_absolute_error": 3.552713678800501e-15
+    },
+    {
+      "seed": 3,
+      "time_length": 20.0,
+      "amplitude": 0.25,
+      "cross_covariance": false,
+      "max_absolute_error": 5.551115123125783e-17
+    },
+    {
+      "seed": 3,
+      "time_length": 20.0,
+      "amplitude": 0.25,
+      "cross_covariance": true,
+      "max_absolute_error": 9.71445146547012e-17
+    },
+    {
+      "seed": 3,
+      "time_length": 20.0,
+      "amplitude": 49.0,
+      "cross_covariance": false,
+      "max_absolute_error": 7.105427357601002e-15
+    },
+    {
+      "seed": 3,
+      "time_length": 20.0,
+      "amplitude": 49.0,
+      "cross_covariance": true,
+      "max_absolute_error": 2.1316282072803006e-14
+    },
+    {
+      "seed": 3,
+      "time_length": 1000.0,
+      "amplitude": 0.25,
+      "cross_covariance": false,
+      "max_absolute_error": 8.326672684688674e-17
+    },
+    {
+      "seed": 3,
+      "time_length": 1000.0,
+      "amplitude": 0.25,
+      "cross_covariance": true,
+      "max_absolute_error": 1.1102230246251565e-16
+    },
+    {
+      "seed": 3,
+      "time_length": 1000.0,
+      "amplitude": 49.0,
+      "cross_covariance": false,
+      "max_absolute_error": 1.4210854715202004e-14
+    },
+    {
+      "seed": 3,
+      "time_length": 1000.0,
+      "amplitude": 49.0,
+      "cross_covariance": true,
+      "max_absolute_error": 2.1316282072803006e-14
+    },
+    {
+      "seed": 17,
+      "time_length": 1.0,
+      "amplitude": 0.25,
+      "cross_covariance": false,
+      "max_absolute_error": 5.551115123125783e-17
+    },
+    {
+      "seed": 17,
+      "time_length": 1.0,
+      "amplitude": 0.25,
+      "cross_covariance": true,
+      "max_absolute_error": 5.551115123125783e-17
+    },
+    {
+      "seed": 17,
+      "time_length": 1.0,
+      "amplitude": 49.0,
+      "cross_covariance": false,
+      "max_absolute_error": 7.105427357601002e-15
+    },
+    {
+      "seed": 17,
+      "time_length": 1.0,
+      "amplitude": 49.0,
+      "cross_covariance": true,
+      "max_absolute_error": 1.0658141036401503e-14
+    },
+    {
+      "seed": 17,
+      "time_length": 20.0,
+      "amplitude": 0.25,
+      "cross_covariance": false,
+      "max_absolute_error": 9.71445146547012e-17
+    },
+    {
+      "seed": 17,
+      "time_length": 20.0,
+      "amplitude": 0.25,
+      "cross_covariance": true,
+      "max_absolute_error": 9.71445146547012e-17
+    },
+    {
+      "seed": 17,
+      "time_length": 20.0,
+      "amplitude": 49.0,
+      "cross_covariance": false,
+      "max_absolute_error": 2.1316282072803006e-14
+    },
+    {
+      "seed": 17,
+      "time_length": 20.0,
+      "amplitude": 49.0,
+      "cross_covariance": true,
+      "max_absolute_error": 2.1316282072803006e-14
+    },
+    {
+      "seed": 17,
+      "time_length": 1000.0,
+      "amplitude": 0.25,
+      "cross_covariance": false,
+      "max_absolute_error": 9.71445146547012e-17
+    },
+    {
+      "seed": 17,
+      "time_length": 1000.0,
+      "amplitude": 0.25,
+      "cross_covariance": true,
+      "max_absolute_error": 1.249000902703301e-16
+    },
+    {
+      "seed": 17,
+      "time_length": 1000.0,
+      "amplitude": 49.0,
+      "cross_covariance": false,
+      "max_absolute_error": 2.1316282072803006e-14
+    },
+    {
+      "seed": 17,
+      "time_length": 1000.0,
+      "amplitude": 49.0,
+      "cross_covariance": true,
+      "max_absolute_error": 2.4868995751603507e-14
+    },
+    {
+      "seed": 51,
+      "time_length": 1.0,
+      "amplitude": 0.25,
+      "cross_covariance": false,
+      "max_absolute_error": 6.938893903907228e-17
+    },
+    {
+      "seed": 51,
+      "time_length": 1.0,
+      "amplitude": 0.25,
+      "cross_covariance": true,
+      "max_absolute_error": 3.122502256758253e-17
+    },
+    {
+      "seed": 51,
+      "time_length": 1.0,
+      "amplitude": 49.0,
+      "cross_covariance": false,
+      "max_absolute_error": 1.4210854715202004e-14
+    },
+    {
+      "seed": 51,
+      "time_length": 1.0,
+      "amplitude": 49.0,
+      "cross_covariance": true,
+      "max_absolute_error": 6.217248937900877e-15
+    },
+    {
+      "seed": 51,
+      "time_length": 20.0,
+      "amplitude": 0.25,
+      "cross_covariance": false,
+      "max_absolute_error": 8.326672684688674e-17
+    },
+    {
+      "seed": 51,
+      "time_length": 20.0,
+      "amplitude": 0.25,
+      "cross_covariance": true,
+      "max_absolute_error": 6.938893903907228e-17
+    },
+    {
+      "seed": 51,
+      "time_length": 20.0,
+      "amplitude": 49.0,
+      "cross_covariance": false,
+      "max_absolute_error": 2.1316282072803006e-14
+    },
+    {
+      "seed": 51,
+      "time_length": 20.0,
+      "amplitude": 49.0,
+      "cross_covariance": true,
+      "max_absolute_error": 1.4210854715202004e-14
+    },
+    {
+      "seed": 51,
+      "time_length": 1000.0,
+      "amplitude": 0.25,
+      "cross_covariance": false,
+      "max_absolute_error": 1.1102230246251565e-16
+    },
+    {
+      "seed": 51,
+      "time_length": 1000.0,
+      "amplitude": 0.25,
+      "cross_covariance": true,
+      "max_absolute_error": 1.1102230246251565e-16
+    },
+    {
+      "seed": 51,
+      "time_length": 1000.0,
+      "amplitude": 49.0,
+      "cross_covariance": false,
+      "max_absolute_error": 2.4868995751603507e-14
+    },
+    {
+      "seed": 51,
+      "time_length": 1000.0,
+      "amplitude": 49.0,
+      "cross_covariance": true,
+      "max_absolute_error": 2.3092638912203256e-14
+    }
+  ],
+  "software_sha256": {
+    "tests/test_matern_provider_reuse.py": "8442237fd3740bd2dbfd1dfea2b3b83fe2cc48b94f7c5147ac8983bf4c02a64a",
+    "scripts/review_matern_provider_semantics.py": "8e7558461dbc475c36ab27bdca4508f3a565ea2eefdd536d4f1ee9d9087f3268",
+    "scripts/review_plasticc_matern_reuse.py": "2f9262e95fccfdeb5af3d23ab070a2a28179ad1ded677774032f9409a8ba436d",
+    "scripts/stage_matern_canonical_records.py": "dffca7e9e41ae71fd437fbf53b338fb96f46572dcf622739c53a49b04cd188c9",
+    "scripts/audit_matern_provider_intake.py": "1e703159b00ce67c47524793092728460b5a25a2ffd1ee30c86e365ca3ec78aa",
+    "sciona/plasticc_observations.py": "694196bf77c42833f07aa0367d67d0a0fbe5491a5d0aaf5d4acf174260310385",
+    "sciona-atoms-ml/src/sciona/atoms/ml/sklearn/gaussian_process/kernels/atoms.py": "003b00a6bd423fda21eee86e54cf18376f8f95e12d1b05efb8f080f5fb6c6547"
+  },
+  "installed_packages": {
+    "asttokens": {
+      "version": "2.4.1",
+      "hashed_files_verified": 13,
+      "active_requirements": [
+        "six>=1.12.0"
+      ]
+    },
+    "george": {
+      "version": "0.4.4",
+      "hashed_files_verified": 28,
+      "active_requirements": [
+        "numpy",
+        "scipy"
+      ]
+    },
+    "icontract": {
+      "version": "2.7.3",
+      "hashed_files_verified": 16,
+      "active_requirements": [
+        "asttokens<3,>=2",
+        "typing_extensions"
+      ]
+    },
+    "numpy": {
+      "version": "2.2.6",
+      "hashed_files_verified": 876,
+      "active_requirements": []
+    },
+    "scipy": {
+      "version": "1.17.1",
+      "hashed_files_verified": 1423,
+      "active_requirements": [
+        "numpy<2.7,>=1.26.4"
+      ]
+    },
+    "six": {
+      "version": "1.17.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "threadpoolctl": {
+      "version": "3.6.0",
+      "hashed_files_verified": 5,
+      "active_requirements": []
+    },
+    "typing-extensions": {
+      "version": "4.16.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    }
+  },
+  "intake_plan_sha256": "7d040d1faf7900ac8047889784510b4daffb9fb7d4099a117ca7b1f732f5b268",
+  "resource_policy": {
+    "serial_tests": true,
+    "native_threads": 1
+  },
+  "limitations": [
+    "Automated Tier3 qualification of normalized Matern32 covariance only; no human Tier1 or usage-qualified Tier2 designation.",
+    "Qualified inputs are nonempty finite float64 coordinate matrices, optional matching query matrix, positive finite unsquared length scales and nu=1.5. Extreme scales or coordinates that overflow scaled distances are outside the qualified arithmetic range.",
+    "Output is normalized covariance only. Amplitude scaling, measurement noise, GP optimization, optimizer fallback, cached state and prediction remain separate operations.",
+    "Other smoothness values supported by the wider implementation are outside this review. Units and same-invocation provenance remain caller responsibilities.",
+    "Synthetic covariance checks do not establish positive definiteness for arbitrary rounded or extreme inputs, application accuracy or historical fitting parity.",
+    "Installed files match their own RECORD hashes; independent publisher authentication, clean deployment and other platforms are not certified.",
+    "Legacy provider metadata and approval remain preserved. Canonical publication and PLAsTiCC original graph qualification remain separate actions."
+  ]
+}
