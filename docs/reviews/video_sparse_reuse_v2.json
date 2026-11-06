@@ -1,0 +1,65 @@
+{
+  "format": "video-sparse-reuse.v2",
+  "read_only": true,
+  "catalog_mutations": 0,
+  "approved": false,
+  "inspected_candidates": {
+    "sciona.atoms.ml.model_selection.materialized_prediction": "Reuse average per label column: finite ordered vectors, equal weights, sum then divide. Recipe owns column alignment.",
+    "sciona.atoms.ml.sklearn.feature_extraction.atoms": "dict_vectorizer_fit requires materialized records; transform allocates dense rows by vocabulary. Not a drop-in for iterable sparse CSR execution.",
+    "sciona.atoms.ml.tabular.supervised_classification.atoms": "Logistic fit adds DataFrame preprocessing and fixed controls; prediction additionally requires targets. Does not preserve the existing sparse fit/predict boundary.",
+    "sciona.atoms.ml.sklearn.linear_model.logistic_public_api_shell.atoms": "Public fit/prediction payload atoms validate dense arrays and package calls without executing the estimator. Not a fitted sparse estimator implementation.",
+    "sciona.atoms.ml.sklearn.linear_model.feng_glm": "Segment/window tensors, float32 conversion, scaling and fixed C=.6/max_iter100 differ from the sparse binary fitting recipe. Fits and predicts in one call."
+  },
+  "catalog_candidates": [
+    {
+      "fqdn": "sciona.atoms.ml.model_selection.materialized_prediction.average",
+      "import_module": "sciona.atoms.ml.model_selection.materialized_prediction",
+      "source_symbol": "average",
+      "status": "approved",
+      "is_publishable": true,
+      "version_id": "fbea5906-9987-5e67-88c4-5ffe3d971e66",
+      "content_hash": "280b371b126f6d7f580dd169289280af76fc50d64350b784c3aefd346df18af5",
+      "trust_tier": 3,
+      "served": true
+    },
+    {
+      "fqdn": "sciona.atoms.ml.model_selection.materialized_prediction.predict",
+      "import_module": "sciona.atoms.ml.model_selection.materialized_prediction",
+      "source_symbol": "predict",
+      "status": "approved",
+      "is_publishable": true,
+      "version_id": "51b825e1-99af-5b6d-97f4-4fa3a85ccb0b",
+      "content_hash": "bf0af04ced44fecf06bc2afda7b6a91416c4bff370be84fe497d76f0df856f8a",
+      "trust_tier": 3,
+      "served": true
+    },
+    {
+      "fqdn": "sciona.atoms.ml.sklearn.linear_model.feng_glm.feng_glm_segment_probabilities",
+      "import_module": "sciona.atoms.ml.sklearn.linear_model.feng_glm",
+      "source_symbol": "feng_glm_segment_probabilities",
+      "status": "approved",
+      "is_publishable": true,
+      "version_id": "45353401-c86d-533a-a638-e541d1b9bfca",
+      "content_hash": "0b9dfc7fb6e4aa320d16181bbda62b4a225a9ef6c2b2083806075799f1f508cf",
+      "trust_tier": 3,
+      "served": true
+    }
+  ],
+  "broader_name_candidates": [],
+  "software_sha256": {
+    "../sciona-atoms-ml/src/sciona/atoms/ml/model_selection/materialized_prediction.py": "961ecaf2d804a77e9e3d89d002ef52a7c77427984e0b3261a49fde98546ae7f7",
+    "../sciona-atoms-ml/src/sciona/atoms/ml/sklearn/feature_extraction/atoms.py": "61c623bc558b220fb9128e00f03c34f89bf6e64fa91d2ca4e2175974c280f07c",
+    "../sciona-atoms-ml/src/sciona/atoms/ml/tabular/supervised_classification/atoms.py": "91f9e1eb6076f0d0288eae76c3a20d5a09355c61e6ff53614ad6dc646070a68e",
+    "../sciona-atoms-ml/src/sciona/atoms/ml/sklearn/linear_model/logistic_public_api_shell/atoms.py": "ff93675b861a93aebae70923bd077bd57b1745a43f6e71ecf25e1e0f845f84b7",
+    "../sciona-atoms-ml/src/sciona/atoms/ml/sklearn/linear_model/feng_glm.py": "1492f00125d6a8d903986b8e9f898030f536a310afe9d9dbc4834125b95a2009",
+    "sciona/materialized_prediction.py": "8f46ac4f9478f9dcdb19f53d97629eded2ea144f23f3c0a0d7180866a4915df0",
+    "sciona/video_multilabel_sharded_training.py": "1d9446e39b775ce4ecb6759ab129e6493737c28dc181a7fde3d3f5b989b8c3c7",
+    "scripts/review_video_sparse_reuse.py": "e56bc7f875d499a97214949f109da889940357ae4a964ce496fba6f37464b0cc"
+  },
+  "decision": "Reuse registered vector mean columnwise. Implemented iterable numeric CSR vocabulary operations after inspecting dense alternatives; catalog qualification pending. Separate sparse binary logistic fitting and prediction remain.",
+  "limits": [
+    "Targeted source/catalog review, not an exhaustive proof that no alternative provider exists.",
+    "Catalog status alone does not establish current source or dependency qualification.",
+    "No training data, runtime paths or dataset metadata are included."
+  ]
+}

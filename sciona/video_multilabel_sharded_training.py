@@ -8,7 +8,7 @@ from dataclasses import dataclass
 import warnings
 import numpy as np
 import torch
-from sklearn.feature_extraction import DictVectorizer
+from sciona.atoms.ml.sklearn.feature_extraction.sparse_numeric import fit_numeric_vocabulary, transform_numeric_vocabulary
 from sklearn.linear_model import LogisticRegression
 from sklearn.exceptions import ConvergenceWarning
 from sciona.video_multilabel_network import pad_sequences
@@ -28,6 +28,7 @@ class ShardedVideoEnsemble:
     batch_size: int
     history: list
     mean_function: object = average
+    vocabulary_transform_function: object = transform_numeric_vocabulary
 
     def components(self, population):
         if not isinstance(population, FeatureShards) or population.width != self.neural.features:
@@ -38,7 +39,7 @@ class ShardedVideoEnsemble:
             for batch in population.batches(self.batch_size):
                 frames, mask = pad_sequences([row['frames'] for row in batch])
                 neural.append(torch.sigmoid(self.neural(frames, mask)).numpy())
-                features = self.vectorizer.transform(row['sparse'] for row in batch)
+                features = self.vocabulary_transform_function((row['sparse'] for row in batch), self.vectorizer)
                 linear.append(np.column_stack([model.predict_proba(features)[:,1] for model in self.baseline]))
         return score_matrix(np.concatenate(neural)), score_matrix(np.concatenate(linear))
 
@@ -51,7 +52,8 @@ class ShardedVideoEnsemble:
 
 def fit(training, *, seed=12, hidden=8, epochs=80, batch_size=4, learning_rate=.02,
         pool_function=masked_attention_pool, gate_function=sigmoid_context_gate,
-        mean_function=average):
+        mean_function=average, vocabulary_fit_function=fit_numeric_vocabulary,
+        vocabulary_transform_function=transform_numeric_vocabulary):
     if not isinstance(training, FeatureShards) or not training.labelled:
         raise ValueError('Labelled training shards required')
     for name, value in [('seed',seed), ('hidden',hidden), ('epochs',epochs), ('batch_size',batch_size)]:
@@ -62,8 +64,7 @@ def fit(training, *, seed=12, hidden=8, epochs=80, batch_size=4, learning_rate=.
     if type(learning_rate) not in (int,float) or not np.isfinite(learning_rate) or learning_rate <= 0:
         raise ValueError('Invalid learning rate')
     y = label_matrix([list(row) for row in training.labels], (len(training), training.label_count))
-    vectorizer = DictVectorizer(sparse=True, sort=True)
-    features = vectorizer.fit_transform(row['sparse'] for row in training)
+    vectorizer, features = vocabulary_fit_function(row['sparse'] for row in training)
     if not features.shape[1]:
         raise ValueError('Training sparse vocabulary is empty')
     baseline = []
@@ -111,12 +112,15 @@ def fit(training, *, seed=12, hidden=8, epochs=80, batch_size=4, learning_rate=.
                 raise ValueError('Invalid neural gradients')
             optimizer.step()
     model.eval()
-    return ShardedVideoEnsemble(model, vectorizer, baseline, batch_size, history, mean_function)
+    return ShardedVideoEnsemble(model, vectorizer, baseline, batch_size, history, mean_function,
+        vocabulary_transform_function)
 
 
 def execute(training, calibration, query, controls, *,
             pool_function=masked_attention_pool, gate_function=sigmoid_context_gate,
             mean_function=average,
+            vocabulary_fit_function=fit_numeric_vocabulary,
+            vocabulary_transform_function=transform_numeric_vocabulary,
             threshold_fit_function=fit_empirical_f1_thresholds,
             threshold_apply_function=apply_column_thresholds):
     validate_populations(training, calibration, query)
@@ -126,7 +130,8 @@ def execute(training, calibration, query, controls, *,
     labels = [list(row) for row in calibration.labels]
     label_matrix(labels, (len(calibration), calibration.label_count))
     fitted = fit(training, **controls, pool_function=pool_function, gate_function=gate_function,
-        mean_function=mean_function)
+        mean_function=mean_function, vocabulary_fit_function=vocabulary_fit_function,
+        vocabulary_transform_function=vocabulary_transform_function)
     thresholds = threshold_fit_function(fitted.predict(calibration), np.asarray(labels, dtype=np.int64))
     scores = fitted.predict(query)
     predicted = threshold_apply_function(scores, thresholds)
