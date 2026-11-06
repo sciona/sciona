@@ -1,0 +1,77 @@
+{
+  "approved": false,
+  "records": [
+    {
+      "artifact": {
+        "fqdn": "sciona.atoms.ml.tabular.gradient_boosting.rolling_statistics",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.tabular.gradient_boosting",
+        "source_module_path": "ml.tabular.gradient_boosting",
+        "description": "",
+        "source_kind": "hand_written",
+        "is_ffi": false,
+        "source_package": "sciona.atoms",
+        "owner_id": "33ed07a2-1bea-5b17-8b71-d6d0e590fdd9",
+        "source_repo_id": "27b787a0-27ed-4760-92b7-ad8e8b4b815c",
+        "artifact_id": "9dc67af4-d131-42dc-8bb3-dd3b2e1a7009",
+        "artifact_kind": "atom",
+        "status": "draft",
+        "is_publishable": false
+      },
+      "version": {
+        "version_id": "8ff9681f-f14e-57dd-9237-c34193cdc3a0",
+        "content_hash": "60db40fb38e90f530117dbbb8447664c6ef77ac6d38514f345f3bc77837abeff",
+        "semver": "0.0.0+local.60db40fb38e9",
+        "s3_key": "local-seed/atoms/60db40fb38e90f530117dbbb8447664c6ef77ac6d38514f345f3bc77837abeff.tar.gz",
+        "fingerprint": "c74531de1679f6c90e0be6ced9d4e2da871850d1970f9316e838db042eb72ece",
+        "trust_tier": 3,
+        "is_latest": true,
+        "artifact_id": "9dc67af4-d131-42dc-8bb3-dd3b2e1a7009"
+      },
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite nonempty rank-one float64 numeric series; supported subset of the existing numeric-array implementation."
+        },
+        {
+          "direction": "input",
+          "name": "window_size",
+          "ordinal": 1,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Positive Python integer width; supported subset. The implementation checks positivity then converts with int."
+        },
+        {
+          "direction": "input",
+          "name": "agg_fns",
+          "ordinal": 2,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty ordered list of mean, std, min, max or sum. Partial startup windows include the current row."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 matrix (len(values),len(agg_fns)); trailing current-inclusive windows with partial startup. std uses ddof=0. Nonfinite outputs fail. Temporal shifting and full-window masking are caller policy."
+        }
+      ],
+      "source_sha256": "fbe13604dc943db6b77b9c2f7da1284cb39da90cc0924566cc36e12a2eb8eb72"
+    }
+  ],
+  "legacy_sha256": "66bf95ab0dec56cff45deca062ba64d69b830605804fa632b1112b6b0e251264",
+  "served_sha256": "e64d88881cc834a98c3dd033a7d060169c77c973fe64391afd4468124932d85b",
+  "stager_sha256": "e7c61ca0e8484881ba399e5f5ccb357fcf5234f09fba46ac3f5f3bdffcf142d6",
+  "audit_sha256": "fe2aa87491f6441edc789280d54e8b6e92d0e33df0278ecde69b721632026844",
+  "source_state_sha256": "fbe13604dc943db6b77b9c2f7da1284cb39da90cc0924566cc36e12a2eb8eb72"
+}
