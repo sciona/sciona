@@ -1,4 +1,4 @@
-"""Restore missing metadata for two unchanged, already approved providers."""
+"""Restore metadata and normalize legacy verdict terms for two approved providers."""
 import argparse
 import inspect
 import json
@@ -37,6 +37,8 @@ def protected(db):
         for suffix in ('s', '_versions', '_io_specs', '_references', '_audit_rollups'):
             table = prefix+suffix
             expression = "to_jsonb(t)-'updated_at'" if suffix == 's' else 'to_jsonb(t)'
+            if suffix == '_audit_rollups':
+                expression = "to_jsonb(t)-'updated_at'-'review_semantic_verdict'-'review_developer_semantics_verdict'"
             state[table] = comparable(db.execute(f'SELECT {expression} AS row FROM {table} t WHERE {key}=ANY(%s) ORDER BY to_jsonb(t)::text', (IDENTITIES,)).fetchall())
     state['prior_evidence'] = comparable(db.execute('''SELECT to_jsonb(t) AS row FROM artifact_audit_evidence t
         WHERE artifact_id=ANY(%s) AND runner_version IS DISTINCT FROM %s ORDER BY to_jsonb(t)::text''', (IDENTITIES, RUNNER)).fetchall())
@@ -56,13 +58,15 @@ def repair(apply=False, fail_after=None):
         repo=ProviderRepo('sciona-atoms-ml', directory), artifact_root=directory/'src/sciona/atoms')
         if spec.fqdn in nodes}
     require(set(specs) == set(nodes), 'Exact provider registrations missing')
-    writes = 0
+    writes = created = updated = 0
     with connect() as db:
         db.execute('SELECT pg_advisory_xact_lock(hashtext(%s))', (RUNNER,))
         before = protected(db)
         def ensure(table, keys, row):
-            nonlocal writes
-            writes += int(ensure_row(db, table, keys, row))
+            nonlocal writes, created
+            count = int(ensure_row(db, table, keys, row))
+            writes += count
+            created += count
             if fail_after == writes:
                 raise InjectedFailure('Injected metadata repair failure')
         for record in records:
@@ -89,6 +93,18 @@ def repair(apply=False, fail_after=None):
                     FROM {prefix}_io_specs WHERE version_id=%s ORDER BY direction,ordinal''', (version,)).fetchall()
                 require(actual_ports == ports, 'Approved provider interface differs')
                 require(estimate_jargon_score(PLAIN[symbol]) < .4, 'Description needs plainer language')
+                rollup = db.execute(f'''SELECT review_semantic_verdict,review_developer_semantics_verdict,review_limitations
+                    FROM {prefix}_audit_rollups WHERE {key}=%s FOR UPDATE''', (identity,)).fetchone()
+                require(rollup and rollup['review_limitations'] == reviewed['original_conditions'], 'Prior review conditions differ')
+                verdicts = (rollup['review_semantic_verdict'], rollup['review_developer_semantics_verdict'])
+                require(verdicts in [('conditional_pass', 'conditional_pass'), ('pass_with_limits', 'pass_with_limits')],
+                        'Unexpected prior review verdicts')
+                if verdicts == ('conditional_pass', 'conditional_pass'):
+                    count = db.execute(f"UPDATE {prefix}_audit_rollups SET review_semantic_verdict='pass_with_limits',review_developer_semantics_verdict='pass_with_limits' WHERE {key}=%s", (identity,)).rowcount
+                    writes += count
+                    updated += count
+                    if fail_after == writes:
+                        raise InjectedFailure('Injected verdict normalization failure')
                 for kind, content in [('technical', CONTRACT[symbol]), ('dejargonized', PLAIN[symbol])]:
                     keys = {key: identity, 'kind': kind, 'language': 'en'}
                     ensure(prefix+'_descriptions', keys, dict(keys, content=content, generated_by=RUNNER,
@@ -105,7 +121,8 @@ def repair(apply=False, fail_after=None):
             evidence = uuid5(version, RUNNER)
             ensure('artifact_audit_evidence', {'evidence_id': evidence}, dict(evidence_id=evidence, artifact_id=identity,
                 version_id=version, audit_type='semantic_audit', passed=True, status='completed', source_kind='automated',
-                runner_version=RUNNER, details=Jsonb(dict(scope='Missing description and parameter metadata only; prior approval unchanged.',
+                runner_version=RUNNER, details=Jsonb(dict(scope='Missing description/parameter metadata and legacy conditional_pass to pass_with_limits verdict normalization; approval and all conditions unchanged.',
+                    prior_rollup_verdicts={prefix: dict(review_semantic_verdict='conditional_pass',review_developer_semantics_verdict='conditional_pass') for prefix in ('atom','artifact')},
                     implementation_sha256=reviewed['provider_sha256'], publication_tier=3,
                     review_sha256=sha(ROOT/'docs/reviews/decomposed_aptos_baseline_review.json'),
                     repair_script_sha256=sha(ROOT/'scripts/repair_decomposed_aptos_metadata.py')))))
@@ -117,7 +134,7 @@ def repair(apply=False, fail_after=None):
         require(fail_after is None, 'Requested failure point not reached')
         if not apply:
             db.rollback()
-    return dict(applied=apply, rows_created=writes, native_eligible_providers=2,
+    return dict(applied=apply, rows_created=created, rows_updated=updated, rows_changed=writes, native_eligible_providers=2,
         existing_approval_and_history_preserved=True, new_provider_approvals=0,
         script_sha256=sha(ROOT/'scripts/repair_decomposed_aptos_metadata.py'))
 

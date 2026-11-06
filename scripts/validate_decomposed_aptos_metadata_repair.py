@@ -11,7 +11,7 @@ def snapshot():
         db.execute('SET TRANSACTION READ ONLY')
         state = protected(db)
         for prefix, key in [('atom', 'atom_id'), ('artifact', 'artifact_id')]:
-            for suffix in ('descriptions', 'parameters'):
+            for suffix in ('descriptions', 'parameters', 'audit_rollups'):
                 table = prefix+'_'+suffix
                 state[table] = db.execute(f'SELECT to_jsonb(t) AS row FROM {table} t WHERE {key}=ANY(%s) ORDER BY to_jsonb(t)::text', (IDENTITIES,)).fetchall()
         state['all_evidence'] = db.execute('SELECT to_jsonb(t) AS row FROM artifact_audit_evidence t WHERE artifact_id=ANY(%s) ORDER BY to_jsonb(t)::text', (IDENTITIES,)).fetchall()
@@ -26,9 +26,9 @@ def main():
     dry_run = repair()
     assert snapshot() == before
     failures = []
-    if dry_run['rows_created']:
-        assert dry_run['rows_created'] == 42
-        for step in (1, 10, 21, 42):
+    if dry_run['rows_changed']:
+        assert dry_run['rows_changed'] == 46
+        for step in (1, 10, 23, 46):
             try:
                 repair(fail_after=step)
             except InjectedFailure:
@@ -42,7 +42,7 @@ def main():
     if apply:
         result = repair(apply=True)
         repeat = repair(apply=True)
-        assert repeat['rows_created'] == 0
+        assert repeat['rows_changed'] == 0
         report.update(applied=True, result=result, repeat=repeat)
     name = 'decomposed_aptos_metadata_repair.json' if apply else 'decomposed_aptos_metadata_repair_gates.json'
     (ROOT/'docs/reviews'/name).write_text(json.dumps(report, indent=2)+'\n')

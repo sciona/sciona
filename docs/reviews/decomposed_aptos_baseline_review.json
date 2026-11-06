@@ -1,0 +1,47 @@
+{
+  "format": "aptos-current-baseline-review.v1",
+  "approved": false,
+  "catalog_mutations": 0,
+  "proposed_tier": 3,
+  "source_version_id": "94df8d52-0272-5d0b-b84f-1f150d8e11f0",
+  "source_content_hash": "02129e9c5bef75cf05490e52f2291f5d336d70a92e114d022a1b635ad35b3f58",
+  "provider_sha256": "97953529d448b804912e47eee127293094de60fc63f12ecf05dfacab15c966ab",
+  "serialized_graph_sha256": "5d81a258553ad5e1737ee9ec38799315a20ee1bde92e67fa986f2902ca9ffebe",
+  "source_stage_mapping": {
+    "image_standardization": "Plain full-image resizing replaces unsupported retinal cropping/local-color subtraction. Reference augmentation and publisher normalization are explicit choices.",
+    "cnn_backbone": "Eight models: two each of Inception-ResNet-v2, Inception-v4, SE-ResNeXt-50 and SE-ResNeXt-101, with trainable GeM and scalar regression head. EfficientNet substitution excluded.",
+    "quadratic_weighted_kappa_qwk_loss": "Smooth-L1 regression replaces unsupported differentiable-QWK training loss. QWK motivates final fixed ordinal thresholds, not the training objective.",
+    "pre_training_fine_tuning": "All pretrained backbone parameters train in stage one; an ensemble teacher builds three added target roles, and each own model continues ten epochs. Four-level grouping differs from five-level averaging labels.",
+    "threshold_calibration": "Fixed manually selected cuts 0.7,1.5,2.5,3.5 replace unsupported Nelder-Mead optimization. Equality convention is explicit."
+  },
+  "original_conditions": [
+    "Automated Community Tier 3 reference; no human-reviewed Tier 1 or usage-qualified Tier 2 designation.",
+    "Corrected eight-model CPU reconstruction; original winner runtime, artifact identity and leaderboard equivalence remain unproven.",
+    "First-stage budgets in five-epoch increments, Adam settings, ensemble teacher and fresh second-stage optimizer are explicit reference choices.",
+    "Augmentation units/distributions/order, bilinear resize, publisher normalization, scalar head and single-view inference are explicit choices.",
+    "Symmetric group bounds and threshold equality convention are explicit; the source establishes only the demonstrated lower-bound example.",
+    "Caller establishes population-role provenance and physical-image identity; supplied-label queries reject, while pseudo-label queries are deliberately transductive.",
+    "Synthetic full-resolution execution uses five first-stage and ten second-stage epochs per model; original population-scale performance is unproven.",
+    "Local external model artifacts require caller use rights. Each call retrains; temporary checkpoints are verified and removed.",
+    "Retain pooling, upstream, dependency and supplemental notices with the reconstruction.",
+    "Caller supplies model artifacts they are entitled to use; integrity and source correspondence checks do not establish usage rights.",
+    "Smp-hub cards declare license other; no independent model-weight grant or redistribution permission is inferred.",
+    "Review future distribution of external model artifacts or dependency wheels separately.",
+    "Pinned maintainer mirror identity is established; exact winner artifact/runtime identity and competitive accuracy remain unproven."
+  ],
+  "current_runner_qualified": true,
+  "model_count": 8,
+  "training_stage_fits": 16,
+  "optimizer_updates": 280,
+  "evidence_sha256": {
+    "docs/reviews/competition_aptos_semantic_review.json": "eb8f04982b11bc4a468921f9fbdd2e50912698c3e808fc8efcb08f3897d9c8d8",
+    "docs/reviews/decomposed_aptos_baseline.json": "be5626450255a52658de5ecadc4e3676b46c3ecb20989711cfe8e7f2efbfdc40",
+    "docs/reviews/decomposed_aptos_package_files.json": "64fd0f7ca23003ae87dd83353a4c6751d2fbd06d5510882f0febffb727511c26",
+    "scripts/review_decomposed_aptos_baseline.py": "f91cd45d0c8a169dc8321b38e40826e6debe8fb5839221360982bf65750caa95"
+  },
+  "limitations": [
+    "This bridges the unchanged two-node reference only; reusable decomposition, native provider eligibility and original CDG publication remain separate requirements.",
+    "Installed files were compared with their own distribution RECORD; this does not independently authenticate the publisher.",
+    "All prior reconstruction, external-artifact use and synthetic-only qualification conditions remain in force."
+  ]
+}
