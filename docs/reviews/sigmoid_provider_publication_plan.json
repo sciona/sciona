@@ -1,0 +1,1805 @@
+{
+  "records": [
+    {
+      "artifact_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+      "fqdn": "sciona.atoms.ml.sklearn.calibration.sigmoid_calibration_fit",
+      "version_id": "41cba2bf-ce59-5b54-9cfd-b5c0a9e7ddf5",
+      "content_hash": "70e225fddbec4e9d7a39378f6dffdf55fdcfa63dafa7c5ad9e2c73a977421738",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "predictions",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities."
+        },
+        {
+          "direction": "input",
+          "name": "y",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned float64 binary targets encoded 0 and 1; both classes represented in an independent calibration population."
+        },
+        {
+          "direction": "input",
+          "name": "sample_weight",
+          "ordinal": 2,
+          "type_desc": "object",
+          "required": false,
+          "default_value_repr": "None",
+          "constraints": "None or aligned finite nonnegative float64 weights with positive total mass in each class."
+        },
+        {
+          "direction": "output",
+          "name": "state",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite sigmoid slope and intercept."
+        }
+      ],
+      "operation": "Fit Platt sigmoid slope and intercept using the installed sklearn binary calibration routine, with optional sample weights.",
+      "plain_description": "Learn two numbers that convert model scores into probabilities, using separate labeled examples and optional weights.",
+      "validity_bounds": "One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities. Aligned float64 binary targets encoded 0 and 1; both classes represented in an independent calibration population. None or aligned finite nonnegative float64 weights with positive total mass in each class.",
+      "reuse": "Domain-independent numeric calibration; no season, sport, team, task-specific feature layout or original competition data required.",
+      "registered_provider_dependencies": []
+    },
+    {
+      "artifact_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+      "fqdn": "sciona.atoms.ml.sklearn.calibration.sigmoid_calibration_predict",
+      "version_id": "e54f2ea7-9cc7-5f35-93b3-1956f480ed00",
+      "content_hash": "c4e3c6a65aec1ec5db26067637ca0972d77484ee32fcf03798f32cad600ceff8",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "predictions",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities."
+        },
+        {
+          "direction": "input",
+          "name": "state",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "SigmoidCalibrationState with finite a and b, fitted for the same score definition; predicts expit(-(a*score+b))."
+        },
+        {
+          "direction": "output",
+          "name": "probabilities",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned float64 probabilities in [0,1]; no empirical accuracy or calibration guarantee."
+        }
+      ],
+      "operation": "Apply a fitted sigmoid to raw scores using expit(-(a*score+b)).",
+      "plain_description": "Convert model scores into probabilities using two previously fitted numbers.",
+      "validity_bounds": "One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities. SigmoidCalibrationState with finite a and b, fitted for the same score definition; predicts expit(-(a*score+b)).",
+      "reuse": "Domain-independent numeric calibration; no season, sport, team, task-specific feature layout or original competition data required.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "qualification": {
+    "format": "sigmoid-provider-semantics.v1",
+    "passed": true,
+    "approved": false,
+    "proposed_tier": 3,
+    "verdict": "acceptable_with_limits",
+    "catalog_mutations": 0,
+    "synthetic_only": true,
+    "providers": [
+      {
+        "artifact_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+        "fqdn": "sciona.atoms.ml.sklearn.calibration.sigmoid_calibration_fit",
+        "version_id": "41cba2bf-ce59-5b54-9cfd-b5c0a9e7ddf5",
+        "content_hash": "70e225fddbec4e9d7a39378f6dffdf55fdcfa63dafa7c5ad9e2c73a977421738",
+        "interfaces": [
+          {
+            "direction": "input",
+            "name": "predictions",
+            "ordinal": 0,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities."
+          },
+          {
+            "direction": "input",
+            "name": "y",
+            "ordinal": 1,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Aligned float64 binary targets encoded 0 and 1; both classes represented in an independent calibration population."
+          },
+          {
+            "direction": "input",
+            "name": "sample_weight",
+            "ordinal": 2,
+            "type_desc": "object",
+            "required": false,
+            "default_value_repr": "None",
+            "constraints": "None or aligned finite nonnegative float64 weights with positive total mass in each class."
+          },
+          {
+            "direction": "output",
+            "name": "state",
+            "ordinal": 0,
+            "type_desc": "object",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Finite sigmoid slope and intercept."
+          }
+        ],
+        "operation": "Fit Platt sigmoid slope and intercept using the installed sklearn binary calibration routine, with optional sample weights.",
+        "plain_description": "Learn two numbers that convert model scores into probabilities, using separate labeled examples and optional weights.",
+        "validity_bounds": "One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities. Aligned float64 binary targets encoded 0 and 1; both classes represented in an independent calibration population. None or aligned finite nonnegative float64 weights with positive total mass in each class.",
+        "reuse": "Domain-independent numeric calibration; no season, sport, team, task-specific feature layout or original competition data required.",
+        "registered_provider_dependencies": []
+      },
+      {
+        "artifact_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+        "fqdn": "sciona.atoms.ml.sklearn.calibration.sigmoid_calibration_predict",
+        "version_id": "e54f2ea7-9cc7-5f35-93b3-1956f480ed00",
+        "content_hash": "c4e3c6a65aec1ec5db26067637ca0972d77484ee32fcf03798f32cad600ceff8",
+        "interfaces": [
+          {
+            "direction": "input",
+            "name": "predictions",
+            "ordinal": 0,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities."
+          },
+          {
+            "direction": "input",
+            "name": "state",
+            "ordinal": 1,
+            "type_desc": "object",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "SigmoidCalibrationState with finite a and b, fitted for the same score definition; predicts expit(-(a*score+b))."
+          },
+          {
+            "direction": "output",
+            "name": "probabilities",
+            "ordinal": 0,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Aligned float64 probabilities in [0,1]; no empirical accuracy or calibration guarantee."
+          }
+        ],
+        "operation": "Apply a fitted sigmoid to raw scores using expit(-(a*score+b)).",
+        "plain_description": "Convert model scores into probabilities using two previously fitted numbers.",
+        "validity_bounds": "One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities. SigmoidCalibrationState with finite a and b, fitted for the same score definition; predicts expit(-(a*score+b)).",
+        "reuse": "Domain-independent numeric calibration; no season, sport, team, task-specific feature layout or original competition data required.",
+        "registered_provider_dependencies": []
+      }
+    ],
+    "tests": {
+      "tests": 88,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "software_sha256": {
+      "tests/test_sigmoid_provider_reuse.py": "63feffa2249f781cc1c5de36b8408422eec98ddb09df1cb694bba6f6e8fda729",
+      "tests/test_decomposed_march_runtime.py": "2c8bd1a036a6aaf933a5216f32889a555f888854bfea3f9ae61d7e13a4adb010",
+      "tests/test_march_features.py": "de45686fba8b5291ffe95215f76e8a85ee4fa015b54a6f3bd25d7b04cb1e23dc",
+      "tests/test_march_training.py": "164b99f26e384ce41660cb0db4472ed9c1cabc61f8fc5efe8c0fee420b3ff337",
+      "tests/test_march_contract.py": "59e049bd53c3b03e12764376ca4bf0dbf16250711765621017a8c28b2dde4069",
+      "scripts/review_sigmoid_provider_semantics.py": "af99a2d68ea1f17c82ccb0d169fea5c246644c6e0efad028ab6ea101a0265dfb",
+      "scripts/stage_sigmoid_canonical_records.py": "3d20ac96b1959faea77109ca8957a68f6e534c771f661cd938a51d77021ec206",
+      "scripts/audit_sigmoid_provider_intake.py": "b73bf342a3c471eb8c91dbc858ef744667aca5dffac052af6e231b952805b714",
+      "sciona/decomposed_march_runtime.py": "608491a50438779eaefaccb080d0922badef500487dd2dc6dc7cbfaa7fb5463d",
+      "sciona/march_contract.py": "2a131fdec7724ec13ed6da2bb030afb94dc415aec71e1b33dd74824449e11b5c",
+      "sciona/march_training.py": "3617008fefdff0d2748282b1407739bc956e1d9f61489216d720a9aa4fec86ee",
+      "sciona/march_features.py": "54a23fd4979ec75d8d3823d658f3b809b4bb51bc57240e6ae36094d09b633f55",
+      "scripts/march_synthetic.py": "c9579a596868e9ef25a63300b5513ca66b38460fdd3292408740461f950462aa",
+      "sciona.atoms.ml.sklearn.calibration.atoms": "c5b2102a62e286d2b1b4f7eee41d0630626042472b5bd52bec7476a6d4b20c10",
+      "sciona.atoms.ml.sklearn.calibration.state_models": "90dbcd8dfd1c4db692034b1039a9e209ada8689098cde0a1c5ced75c9a43ce01",
+      "sciona.atoms.ml.sklearn.calibration.witnesses": "c8ae72efba718583a6cec40901ee1560cfe9011b353fcda0b6e8b793489ca606",
+      "sciona.ghost.registry": "793723a75d07a88eed39f59d8d4dc327c54adbf75db7a03003516a6f74c81b51",
+      "sciona.ghost.abstract": "9574bed61c8292b2eaf6ff054bcf46504b07e679c521a19d2440396c3ea63670",
+      "sciona.ghost.dimensions": "61be1958aa50725f3c6598d5b5447a806d2549698d5ce3ec243d467816754b7e",
+      "sciona.atoms.numerical.statistics.ordered_sum": "893e4fb0c884d1732d9bba0ae2e203b72170bba11fbc89443306e6fd1b6ea359"
+    },
+    "installed_packages": {
+      "annotated-types": {
+        "version": "0.7.0",
+        "hashed_files_verified": 7,
+        "active_requirements": []
+      },
+      "asttokens": {
+        "version": "2.4.1",
+        "hashed_files_verified": 13,
+        "active_requirements": [
+          "six>=1.12.0"
+        ]
+      },
+      "icontract": {
+        "version": "2.7.3",
+        "hashed_files_verified": 16,
+        "active_requirements": [
+          "asttokens<3,>=2",
+          "typing_extensions"
+        ]
+      },
+      "joblib": {
+        "version": "1.5.3",
+        "hashed_files_verified": 143,
+        "active_requirements": []
+      },
+      "networkx": {
+        "version": "3.6.1",
+        "hashed_files_verified": 602,
+        "active_requirements": []
+      },
+      "numpy": {
+        "version": "2.2.6",
+        "hashed_files_verified": 876,
+        "active_requirements": []
+      },
+      "pydantic": {
+        "version": "2.12.5",
+        "hashed_files_verified": 111,
+        "active_requirements": [
+          "annotated-types>=0.6.0",
+          "pydantic-core==2.41.5",
+          "typing-extensions>=4.14.1",
+          "typing-inspection>=0.4.2"
+        ]
+      },
+      "pydantic-core": {
+        "version": "2.41.5",
+        "hashed_files_verified": 9,
+        "active_requirements": [
+          "typing-extensions>=4.14.1"
+        ]
+      },
+      "scikit-learn": {
+        "version": "1.8.0",
+        "hashed_files_verified": 960,
+        "active_requirements": [
+          "joblib>=1.3.0",
+          "numpy>=1.24.1",
+          "scipy>=1.10.0",
+          "threadpoolctl>=3.2.0"
+        ]
+      },
+      "scipy": {
+        "version": "1.17.1",
+        "hashed_files_verified": 1423,
+        "active_requirements": [
+          "numpy<2.7,>=1.26.4"
+        ]
+      },
+      "six": {
+        "version": "1.17.0",
+        "hashed_files_verified": 6,
+        "active_requirements": []
+      },
+      "threadpoolctl": {
+        "version": "3.6.0",
+        "hashed_files_verified": 5,
+        "active_requirements": []
+      },
+      "typing-extensions": {
+        "version": "4.16.0",
+        "hashed_files_verified": 6,
+        "active_requirements": []
+      },
+      "typing-inspection": {
+        "version": "0.4.2",
+        "hashed_files_verified": 9,
+        "active_requirements": [
+          "typing-extensions>=4.12.0"
+        ]
+      }
+    },
+    "intake_plan_sha256": "1390ba78d41e6dbef8cd8ef87c90ae874d89097faa6134ab26bbb5a3ceb7b006",
+    "resource_policy": {
+      "native_threads": 1,
+      "test_workers": 1
+    },
+    "limitations": [
+      "Automated Tier 3 qualification only; no human review or Tier 2 usage certification.",
+      "Synthetic mechanical reuse and reference parity do not establish empirical calibration, accuracy or generalization in any domain.",
+      "The supported catalog interface uses finite float64 binary scores and 0/1 labels; independence and score meaning are caller responsibilities, not authenticated by the provider.",
+      "Runtime decorators check shape and finite output state but do not enforce every documented dtype, finite-input, class-balance or weight restriction. Callers must satisfy the full supported input contract.",
+      "The installed private sklearn sigmoid fitter returns optimizer coefficients without checking solver success; finite coefficients do not certify convergence or optimality.",
+      "The registered witness is symbolic metadata, not evidence that concrete fitting succeeded.",
+      "Installed files match their own RECORD hashes; independent publisher authentication, optional extras, clean deployment and other platforms are not certified.",
+      "This review does not publish the providers or certify execution/publication of the corrected March CDG."
+    ]
+  },
+  "inserts": [
+    {
+      "table": "references_registry",
+      "keys": {
+        "ref_id": "sigmoid-provider-review-v1"
+      },
+      "row": {
+        "ref_id": "sigmoid-provider-review-v1",
+        "ref_type": "web",
+        "title": "Generic sigmoid implementation and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/da674bc7/docs/reviews/sigmoid_provider_semantics.json"
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+        "version_id": "41cba2bf-ce59-5b54-9cfd-b5c0a9e7ddf5",
+        "direction": "input",
+        "name": "predictions"
+      },
+      "row": {
+        "atom_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+        "version_id": "41cba2bf-ce59-5b54-9cfd-b5c0a9e7ddf5",
+        "direction": "input",
+        "name": "predictions",
+        "ordinal": 0,
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+        "version_id": "41cba2bf-ce59-5b54-9cfd-b5c0a9e7ddf5",
+        "name": "predictions"
+      },
+      "row": {
+        "atom_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+        "version_id": "41cba2bf-ce59-5b54-9cfd-b5c0a9e7ddf5",
+        "name": "predictions",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities.",
+        "dejargonized_description": "Caller supplies predictions.",
+        "constraints_json": {
+          "parameter_contract": "One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities.",
+          "limitations": [
+            "Automated Tier 3 qualification only; no human review or Tier 2 usage certification.",
+            "Synthetic mechanical reuse and reference parity do not establish empirical calibration, accuracy or generalization in any domain.",
+            "The supported catalog interface uses finite float64 binary scores and 0/1 labels; independence and score meaning are caller responsibilities, not authenticated by the provider.",
+            "Runtime decorators check shape and finite output state but do not enforce every documented dtype, finite-input, class-balance or weight restriction. Callers must satisfy the full supported input contract.",
+            "The installed private sklearn sigmoid fitter returns optimizer coefficients without checking solver success; finite coefficients do not certify convergence or optimality.",
+            "The registered witness is symbolic metadata, not evidence that concrete fitting succeeded.",
+            "Installed files match their own RECORD hashes; independent publisher authentication, optional extras, clean deployment and other platforms are not certified.",
+            "This review does not publish the providers or certify execution/publication of the corrected March CDG."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+        "version_id": "41cba2bf-ce59-5b54-9cfd-b5c0a9e7ddf5",
+        "direction": "input",
+        "name": "y"
+      },
+      "row": {
+        "atom_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+        "version_id": "41cba2bf-ce59-5b54-9cfd-b5c0a9e7ddf5",
+        "direction": "input",
+        "name": "y",
+        "ordinal": 1,
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Aligned float64 binary targets encoded 0 and 1; both classes represented in an independent calibration population."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+        "version_id": "41cba2bf-ce59-5b54-9cfd-b5c0a9e7ddf5",
+        "name": "y"
+      },
+      "row": {
+        "atom_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+        "version_id": "41cba2bf-ce59-5b54-9cfd-b5c0a9e7ddf5",
+        "name": "y",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Aligned float64 binary targets encoded 0 and 1; both classes represented in an independent calibration population.",
+        "dejargonized_description": "Caller supplies y.",
+        "constraints_json": {
+          "parameter_contract": "Aligned float64 binary targets encoded 0 and 1; both classes represented in an independent calibration population.",
+          "limitations": [
+            "Automated Tier 3 qualification only; no human review or Tier 2 usage certification.",
+            "Synthetic mechanical reuse and reference parity do not establish empirical calibration, accuracy or generalization in any domain.",
+            "The supported catalog interface uses finite float64 binary scores and 0/1 labels; independence and score meaning are caller responsibilities, not authenticated by the provider.",
+            "Runtime decorators check shape and finite output state but do not enforce every documented dtype, finite-input, class-balance or weight restriction. Callers must satisfy the full supported input contract.",
+            "The installed private sklearn sigmoid fitter returns optimizer coefficients without checking solver success; finite coefficients do not certify convergence or optimality.",
+            "The registered witness is symbolic metadata, not evidence that concrete fitting succeeded.",
+            "Installed files match their own RECORD hashes; independent publisher authentication, optional extras, clean deployment and other platforms are not certified.",
+            "This review does not publish the providers or certify execution/publication of the corrected March CDG."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+        "version_id": "41cba2bf-ce59-5b54-9cfd-b5c0a9e7ddf5",
+        "direction": "input",
+        "name": "sample_weight"
+      },
+      "row": {
+        "atom_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+        "version_id": "41cba2bf-ce59-5b54-9cfd-b5c0a9e7ddf5",
+        "direction": "input",
+        "name": "sample_weight",
+        "ordinal": 2,
+        "type_desc": "object",
+        "required": false,
+        "default_value_repr": "None",
+        "constraints": "None or aligned finite nonnegative float64 weights with positive total mass in each class."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+        "version_id": "41cba2bf-ce59-5b54-9cfd-b5c0a9e7ddf5",
+        "name": "sample_weight"
+      },
+      "row": {
+        "atom_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+        "version_id": "41cba2bf-ce59-5b54-9cfd-b5c0a9e7ddf5",
+        "name": "sample_weight",
+        "position": 2,
+        "kind": "keyword_only",
+        "type_desc": "object",
+        "required": false,
+        "default_value_repr": "None",
+        "technical_description": "None or aligned finite nonnegative float64 weights with positive total mass in each class.",
+        "dejargonized_description": "Caller supplies sample weight.",
+        "constraints_json": {
+          "parameter_contract": "None or aligned finite nonnegative float64 weights with positive total mass in each class.",
+          "limitations": [
+            "Automated Tier 3 qualification only; no human review or Tier 2 usage certification.",
+            "Synthetic mechanical reuse and reference parity do not establish empirical calibration, accuracy or generalization in any domain.",
+            "The supported catalog interface uses finite float64 binary scores and 0/1 labels; independence and score meaning are caller responsibilities, not authenticated by the provider.",
+            "Runtime decorators check shape and finite output state but do not enforce every documented dtype, finite-input, class-balance or weight restriction. Callers must satisfy the full supported input contract.",
+            "The installed private sklearn sigmoid fitter returns optimizer coefficients without checking solver success; finite coefficients do not certify convergence or optimality.",
+            "The registered witness is symbolic metadata, not evidence that concrete fitting succeeded.",
+            "Installed files match their own RECORD hashes; independent publisher authentication, optional extras, clean deployment and other platforms are not certified.",
+            "This review does not publish the providers or certify execution/publication of the corrected March CDG."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+        "version_id": "41cba2bf-ce59-5b54-9cfd-b5c0a9e7ddf5",
+        "direction": "output",
+        "name": "state"
+      },
+      "row": {
+        "atom_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+        "version_id": "41cba2bf-ce59-5b54-9cfd-b5c0a9e7ddf5",
+        "direction": "output",
+        "name": "state",
+        "ordinal": 0,
+        "type_desc": "object",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Finite sigmoid slope and intercept."
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+        "kind": "technical",
+        "language": "en",
+        "content": "Fit Platt sigmoid slope and intercept using the installed sklearn binary calibration routine, with optional sample weights. One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities. Aligned float64 binary targets encoded 0 and 1; both classes represented in an independent calibration population. None or aligned finite nonnegative float64 weights with positive total mass in each class. Domain-independent numeric calibration; no season, sport, team, task-specific feature layout or original competition data required.",
+        "generated_by": "sigmoid-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.027778
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Learn two numbers that convert model scores into probabilities, using separate labeled examples and optional weights. Accuracy on new problems must be checked separately.",
+        "generated_by": "sigmoid-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "atom_references",
+      "keys": {
+        "atom_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+        "ref_key": "sigmoid-provider-review-v1"
+      },
+      "row": {
+        "atom_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+        "ref_key": "sigmoid-provider-review-v1",
+        "ref_id": "sigmoid-provider-review-v1",
+        "title": "Generic sigmoid implementation and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/da674bc7/docs/reviews/sigmoid_provider_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Fit Platt sigmoid slope and intercept using the installed sklearn binary calibration routine, with optional sample weights. One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities. Aligned float64 binary targets encoded 0 and 1; both classes represented in an independent calibration population. None or aligned finite nonnegative float64 weights with positive total mass in each class."
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+        "version_id": "41cba2bf-ce59-5b54-9cfd-b5c0a9e7ddf5",
+        "name": "predictions"
+      },
+      "row": {
+        "artifact_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+        "version_id": "41cba2bf-ce59-5b54-9cfd-b5c0a9e7ddf5",
+        "name": "predictions",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities.",
+        "dejargonized_description": "Caller supplies predictions.",
+        "constraints_json": {
+          "parameter_contract": "One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities.",
+          "limitations": [
+            "Automated Tier 3 qualification only; no human review or Tier 2 usage certification.",
+            "Synthetic mechanical reuse and reference parity do not establish empirical calibration, accuracy or generalization in any domain.",
+            "The supported catalog interface uses finite float64 binary scores and 0/1 labels; independence and score meaning are caller responsibilities, not authenticated by the provider.",
+            "Runtime decorators check shape and finite output state but do not enforce every documented dtype, finite-input, class-balance or weight restriction. Callers must satisfy the full supported input contract.",
+            "The installed private sklearn sigmoid fitter returns optimizer coefficients without checking solver success; finite coefficients do not certify convergence or optimality.",
+            "The registered witness is symbolic metadata, not evidence that concrete fitting succeeded.",
+            "Installed files match their own RECORD hashes; independent publisher authentication, optional extras, clean deployment and other platforms are not certified.",
+            "This review does not publish the providers or certify execution/publication of the corrected March CDG."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+        "version_id": "41cba2bf-ce59-5b54-9cfd-b5c0a9e7ddf5",
+        "name": "y"
+      },
+      "row": {
+        "artifact_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+        "version_id": "41cba2bf-ce59-5b54-9cfd-b5c0a9e7ddf5",
+        "name": "y",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Aligned float64 binary targets encoded 0 and 1; both classes represented in an independent calibration population.",
+        "dejargonized_description": "Caller supplies y.",
+        "constraints_json": {
+          "parameter_contract": "Aligned float64 binary targets encoded 0 and 1; both classes represented in an independent calibration population.",
+          "limitations": [
+            "Automated Tier 3 qualification only; no human review or Tier 2 usage certification.",
+            "Synthetic mechanical reuse and reference parity do not establish empirical calibration, accuracy or generalization in any domain.",
+            "The supported catalog interface uses finite float64 binary scores and 0/1 labels; independence and score meaning are caller responsibilities, not authenticated by the provider.",
+            "Runtime decorators check shape and finite output state but do not enforce every documented dtype, finite-input, class-balance or weight restriction. Callers must satisfy the full supported input contract.",
+            "The installed private sklearn sigmoid fitter returns optimizer coefficients without checking solver success; finite coefficients do not certify convergence or optimality.",
+            "The registered witness is symbolic metadata, not evidence that concrete fitting succeeded.",
+            "Installed files match their own RECORD hashes; independent publisher authentication, optional extras, clean deployment and other platforms are not certified.",
+            "This review does not publish the providers or certify execution/publication of the corrected March CDG."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+        "version_id": "41cba2bf-ce59-5b54-9cfd-b5c0a9e7ddf5",
+        "name": "sample_weight"
+      },
+      "row": {
+        "artifact_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+        "version_id": "41cba2bf-ce59-5b54-9cfd-b5c0a9e7ddf5",
+        "name": "sample_weight",
+        "position": 2,
+        "kind": "keyword_only",
+        "type_desc": "object",
+        "required": false,
+        "default_value_repr": "None",
+        "technical_description": "None or aligned finite nonnegative float64 weights with positive total mass in each class.",
+        "dejargonized_description": "Caller supplies sample weight.",
+        "constraints_json": {
+          "parameter_contract": "None or aligned finite nonnegative float64 weights with positive total mass in each class.",
+          "limitations": [
+            "Automated Tier 3 qualification only; no human review or Tier 2 usage certification.",
+            "Synthetic mechanical reuse and reference parity do not establish empirical calibration, accuracy or generalization in any domain.",
+            "The supported catalog interface uses finite float64 binary scores and 0/1 labels; independence and score meaning are caller responsibilities, not authenticated by the provider.",
+            "Runtime decorators check shape and finite output state but do not enforce every documented dtype, finite-input, class-balance or weight restriction. Callers must satisfy the full supported input contract.",
+            "The installed private sklearn sigmoid fitter returns optimizer coefficients without checking solver success; finite coefficients do not certify convergence or optimality.",
+            "The registered witness is symbolic metadata, not evidence that concrete fitting succeeded.",
+            "Installed files match their own RECORD hashes; independent publisher authentication, optional extras, clean deployment and other platforms are not certified.",
+            "This review does not publish the providers or certify execution/publication of the corrected March CDG."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+        "kind": "technical",
+        "language": "en",
+        "content": "Fit Platt sigmoid slope and intercept using the installed sklearn binary calibration routine, with optional sample weights. One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities. Aligned float64 binary targets encoded 0 and 1; both classes represented in an independent calibration population. None or aligned finite nonnegative float64 weights with positive total mass in each class. Domain-independent numeric calibration; no season, sport, team, task-specific feature layout or original competition data required.",
+        "generated_by": "sigmoid-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.027778
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Learn two numbers that convert model scores into probabilities, using separate labeled examples and optional weights. Accuracy on new problems must be checked separately.",
+        "generated_by": "sigmoid-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "artifact_references",
+      "keys": {
+        "artifact_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+        "ref_key": "sigmoid-provider-review-v1"
+      },
+      "row": {
+        "artifact_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+        "ref_key": "sigmoid-provider-review-v1",
+        "ref_id": "sigmoid-provider-review-v1",
+        "title": "Generic sigmoid implementation and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/da674bc7/docs/reviews/sigmoid_provider_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Fit Platt sigmoid slope and intercept using the installed sklearn binary calibration routine, with optional sample weights. One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities. Aligned float64 binary targets encoded 0 and 1; both classes represented in an independent calibration population. None or aligned finite nonnegative float64 weights with positive total mass in each class."
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+        "version_id": "e54f2ea7-9cc7-5f35-93b3-1956f480ed00",
+        "direction": "input",
+        "name": "predictions"
+      },
+      "row": {
+        "atom_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+        "version_id": "e54f2ea7-9cc7-5f35-93b3-1956f480ed00",
+        "direction": "input",
+        "name": "predictions",
+        "ordinal": 0,
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+        "version_id": "e54f2ea7-9cc7-5f35-93b3-1956f480ed00",
+        "name": "predictions"
+      },
+      "row": {
+        "atom_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+        "version_id": "e54f2ea7-9cc7-5f35-93b3-1956f480ed00",
+        "name": "predictions",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities.",
+        "dejargonized_description": "Caller supplies predictions.",
+        "constraints_json": {
+          "parameter_contract": "One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities.",
+          "limitations": [
+            "Automated Tier 3 qualification only; no human review or Tier 2 usage certification.",
+            "Synthetic mechanical reuse and reference parity do not establish empirical calibration, accuracy or generalization in any domain.",
+            "The supported catalog interface uses finite float64 binary scores and 0/1 labels; independence and score meaning are caller responsibilities, not authenticated by the provider.",
+            "Runtime decorators check shape and finite output state but do not enforce every documented dtype, finite-input, class-balance or weight restriction. Callers must satisfy the full supported input contract.",
+            "The installed private sklearn sigmoid fitter returns optimizer coefficients without checking solver success; finite coefficients do not certify convergence or optimality.",
+            "The registered witness is symbolic metadata, not evidence that concrete fitting succeeded.",
+            "Installed files match their own RECORD hashes; independent publisher authentication, optional extras, clean deployment and other platforms are not certified.",
+            "This review does not publish the providers or certify execution/publication of the corrected March CDG."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+        "version_id": "e54f2ea7-9cc7-5f35-93b3-1956f480ed00",
+        "direction": "input",
+        "name": "state"
+      },
+      "row": {
+        "atom_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+        "version_id": "e54f2ea7-9cc7-5f35-93b3-1956f480ed00",
+        "direction": "input",
+        "name": "state",
+        "ordinal": 1,
+        "type_desc": "object",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "SigmoidCalibrationState with finite a and b, fitted for the same score definition; predicts expit(-(a*score+b))."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+        "version_id": "e54f2ea7-9cc7-5f35-93b3-1956f480ed00",
+        "name": "state"
+      },
+      "row": {
+        "atom_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+        "version_id": "e54f2ea7-9cc7-5f35-93b3-1956f480ed00",
+        "name": "state",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "object",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "SigmoidCalibrationState with finite a and b, fitted for the same score definition; predicts expit(-(a*score+b)).",
+        "dejargonized_description": "Caller supplies state.",
+        "constraints_json": {
+          "parameter_contract": "SigmoidCalibrationState with finite a and b, fitted for the same score definition; predicts expit(-(a*score+b)).",
+          "limitations": [
+            "Automated Tier 3 qualification only; no human review or Tier 2 usage certification.",
+            "Synthetic mechanical reuse and reference parity do not establish empirical calibration, accuracy or generalization in any domain.",
+            "The supported catalog interface uses finite float64 binary scores and 0/1 labels; independence and score meaning are caller responsibilities, not authenticated by the provider.",
+            "Runtime decorators check shape and finite output state but do not enforce every documented dtype, finite-input, class-balance or weight restriction. Callers must satisfy the full supported input contract.",
+            "The installed private sklearn sigmoid fitter returns optimizer coefficients without checking solver success; finite coefficients do not certify convergence or optimality.",
+            "The registered witness is symbolic metadata, not evidence that concrete fitting succeeded.",
+            "Installed files match their own RECORD hashes; independent publisher authentication, optional extras, clean deployment and other platforms are not certified.",
+            "This review does not publish the providers or certify execution/publication of the corrected March CDG."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+        "version_id": "e54f2ea7-9cc7-5f35-93b3-1956f480ed00",
+        "direction": "output",
+        "name": "probabilities"
+      },
+      "row": {
+        "atom_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+        "version_id": "e54f2ea7-9cc7-5f35-93b3-1956f480ed00",
+        "direction": "output",
+        "name": "probabilities",
+        "ordinal": 0,
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Aligned float64 probabilities in [0,1]; no empirical accuracy or calibration guarantee."
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+        "kind": "technical",
+        "language": "en",
+        "content": "Apply a fitted sigmoid to raw scores using expit(-(a*score+b)). One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities. SigmoidCalibrationState with finite a and b, fitted for the same score definition; predicts expit(-(a*score+b)). Domain-independent numeric calibration; no season, sport, team, task-specific feature layout or original competition data required.",
+        "generated_by": "sigmoid-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.055556
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Convert model scores into probabilities using two previously fitted numbers. Accuracy on new problems must be checked separately.",
+        "generated_by": "sigmoid-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "atom_references",
+      "keys": {
+        "atom_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+        "ref_key": "sigmoid-provider-review-v1"
+      },
+      "row": {
+        "atom_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+        "ref_key": "sigmoid-provider-review-v1",
+        "ref_id": "sigmoid-provider-review-v1",
+        "title": "Generic sigmoid implementation and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/da674bc7/docs/reviews/sigmoid_provider_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Apply a fitted sigmoid to raw scores using expit(-(a*score+b)). One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities. SigmoidCalibrationState with finite a and b, fitted for the same score definition; predicts expit(-(a*score+b))."
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+        "version_id": "e54f2ea7-9cc7-5f35-93b3-1956f480ed00",
+        "name": "predictions"
+      },
+      "row": {
+        "artifact_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+        "version_id": "e54f2ea7-9cc7-5f35-93b3-1956f480ed00",
+        "name": "predictions",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities.",
+        "dejargonized_description": "Caller supplies predictions.",
+        "constraints_json": {
+          "parameter_contract": "One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities.",
+          "limitations": [
+            "Automated Tier 3 qualification only; no human review or Tier 2 usage certification.",
+            "Synthetic mechanical reuse and reference parity do not establish empirical calibration, accuracy or generalization in any domain.",
+            "The supported catalog interface uses finite float64 binary scores and 0/1 labels; independence and score meaning are caller responsibilities, not authenticated by the provider.",
+            "Runtime decorators check shape and finite output state but do not enforce every documented dtype, finite-input, class-balance or weight restriction. Callers must satisfy the full supported input contract.",
+            "The installed private sklearn sigmoid fitter returns optimizer coefficients without checking solver success; finite coefficients do not certify convergence or optimality.",
+            "The registered witness is symbolic metadata, not evidence that concrete fitting succeeded.",
+            "Installed files match their own RECORD hashes; independent publisher authentication, optional extras, clean deployment and other platforms are not certified.",
+            "This review does not publish the providers or certify execution/publication of the corrected March CDG."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+        "version_id": "e54f2ea7-9cc7-5f35-93b3-1956f480ed00",
+        "name": "state"
+      },
+      "row": {
+        "artifact_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+        "version_id": "e54f2ea7-9cc7-5f35-93b3-1956f480ed00",
+        "name": "state",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "object",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "SigmoidCalibrationState with finite a and b, fitted for the same score definition; predicts expit(-(a*score+b)).",
+        "dejargonized_description": "Caller supplies state.",
+        "constraints_json": {
+          "parameter_contract": "SigmoidCalibrationState with finite a and b, fitted for the same score definition; predicts expit(-(a*score+b)).",
+          "limitations": [
+            "Automated Tier 3 qualification only; no human review or Tier 2 usage certification.",
+            "Synthetic mechanical reuse and reference parity do not establish empirical calibration, accuracy or generalization in any domain.",
+            "The supported catalog interface uses finite float64 binary scores and 0/1 labels; independence and score meaning are caller responsibilities, not authenticated by the provider.",
+            "Runtime decorators check shape and finite output state but do not enforce every documented dtype, finite-input, class-balance or weight restriction. Callers must satisfy the full supported input contract.",
+            "The installed private sklearn sigmoid fitter returns optimizer coefficients without checking solver success; finite coefficients do not certify convergence or optimality.",
+            "The registered witness is symbolic metadata, not evidence that concrete fitting succeeded.",
+            "Installed files match their own RECORD hashes; independent publisher authentication, optional extras, clean deployment and other platforms are not certified.",
+            "This review does not publish the providers or certify execution/publication of the corrected March CDG."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+        "kind": "technical",
+        "language": "en",
+        "content": "Apply a fitted sigmoid to raw scores using expit(-(a*score+b)). One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities. SigmoidCalibrationState with finite a and b, fitted for the same score definition; predicts expit(-(a*score+b)). Domain-independent numeric calibration; no season, sport, team, task-specific feature layout or original competition data required.",
+        "generated_by": "sigmoid-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.055556
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Convert model scores into probabilities using two previously fitted numbers. Accuracy on new problems must be checked separately.",
+        "generated_by": "sigmoid-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "artifact_references",
+      "keys": {
+        "artifact_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+        "ref_key": "sigmoid-provider-review-v1"
+      },
+      "row": {
+        "artifact_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+        "ref_key": "sigmoid-provider-review-v1",
+        "ref_id": "sigmoid-provider-review-v1",
+        "title": "Generic sigmoid implementation and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/da674bc7/docs/reviews/sigmoid_provider_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Apply a fitted sigmoid to raw scores using expit(-(a*score+b)). One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities. SigmoidCalibrationState with finite a and b, fitted for the same score definition; predicts expit(-(a*score+b))."
+      }
+    }
+  ],
+  "rollups": [
+    {
+      "table": "atom_audit_rollups",
+      "key": "atom_id",
+      "identity": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+      "before": {
+        "atom_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+        "risk_tier": "low",
+        "risk_score": 16,
+        "updated_at": "2026-08-11T23:13:20.399967+00:00",
+        "risk_reasons": [],
+        "review_status": "approved",
+        "runtime_status": "pass",
+        "trust_blockers": [],
+        "overall_verdict": "unknown",
+        "risk_dimensions": {
+          "runtime": "low",
+          "provenance": "low",
+          "api_surface": "low",
+          "semantic_drift": "low"
+        },
+        "semantic_status": "pass",
+        "trust_readiness": "reviewed_with_limits",
+        "parity_case_count": 6,
+        "structural_status": "pass",
+        "acceptability_band": "acceptable_with_limits_candidate",
+        "parity_test_status": "pass",
+        "review_limitations": [],
+        "acceptability_score": 88,
+        "parity_fixture_count": 4,
+        "parity_coverage_level": "parity_or_usage_equivalent",
+        "review_required_actions": [],
+        "review_semantic_verdict": "pass_with_limits",
+        "developer_semantics_status": "pass",
+        "review_developer_semantics_verdict": "pass_with_limits"
+      },
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 qualification only; no human review or Tier 2 usage certification.",
+          "Synthetic mechanical reuse and reference parity do not establish empirical calibration, accuracy or generalization in any domain.",
+          "The supported catalog interface uses finite float64 binary scores and 0/1 labels; independence and score meaning are caller responsibilities, not authenticated by the provider.",
+          "Runtime decorators check shape and finite output state but do not enforce every documented dtype, finite-input, class-balance or weight restriction. Callers must satisfy the full supported input contract.",
+          "The installed private sklearn sigmoid fitter returns optimizer coefficients without checking solver success; finite coefficients do not certify convergence or optimality.",
+          "The registered witness is symbolic metadata, not evidence that concrete fitting succeeded.",
+          "Installed files match their own RECORD hashes; independent publisher authentication, optional extras, clean deployment and other platforms are not certified.",
+          "This review does not publish the providers or certify execution/publication of the corrected March CDG.",
+          "One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities. Aligned float64 binary targets encoded 0 and 1; both classes represented in an independent calibration population. None or aligned finite nonnegative float64 weights with positive total mass in each class."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "artifact_audit_rollups",
+      "key": "artifact_id",
+      "identity": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 qualification only; no human review or Tier 2 usage certification.",
+          "Synthetic mechanical reuse and reference parity do not establish empirical calibration, accuracy or generalization in any domain.",
+          "The supported catalog interface uses finite float64 binary scores and 0/1 labels; independence and score meaning are caller responsibilities, not authenticated by the provider.",
+          "Runtime decorators check shape and finite output state but do not enforce every documented dtype, finite-input, class-balance or weight restriction. Callers must satisfy the full supported input contract.",
+          "The installed private sklearn sigmoid fitter returns optimizer coefficients without checking solver success; finite coefficients do not certify convergence or optimality.",
+          "The registered witness is symbolic metadata, not evidence that concrete fitting succeeded.",
+          "Installed files match their own RECORD hashes; independent publisher authentication, optional extras, clean deployment and other platforms are not certified.",
+          "This review does not publish the providers or certify execution/publication of the corrected March CDG.",
+          "One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities. Aligned float64 binary targets encoded 0 and 1; both classes represented in an independent calibration population. None or aligned finite nonnegative float64 weights with positive total mass in each class."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "atom_audit_rollups",
+      "key": "atom_id",
+      "identity": "642a780b-46b8-4d2c-91d6-ab3146416759",
+      "before": {
+        "atom_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+        "risk_tier": "low",
+        "risk_score": 12,
+        "updated_at": "2026-08-11T23:13:20.399967+00:00",
+        "risk_reasons": [],
+        "review_status": "approved",
+        "runtime_status": "pass",
+        "trust_blockers": [],
+        "overall_verdict": "unknown",
+        "risk_dimensions": {
+          "runtime": "low",
+          "provenance": "low",
+          "api_surface": "low",
+          "semantic_drift": "low"
+        },
+        "semantic_status": "pass",
+        "trust_readiness": "reviewed_with_limits",
+        "parity_case_count": 6,
+        "structural_status": "pass",
+        "acceptability_band": "acceptable_with_limits_candidate",
+        "parity_test_status": "pass",
+        "review_limitations": [],
+        "acceptability_score": 90,
+        "parity_fixture_count": 4,
+        "parity_coverage_level": "parity_or_usage_equivalent",
+        "review_required_actions": [],
+        "review_semantic_verdict": "pass_with_limits",
+        "developer_semantics_status": "pass",
+        "review_developer_semantics_verdict": "pass_with_limits"
+      },
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 qualification only; no human review or Tier 2 usage certification.",
+          "Synthetic mechanical reuse and reference parity do not establish empirical calibration, accuracy or generalization in any domain.",
+          "The supported catalog interface uses finite float64 binary scores and 0/1 labels; independence and score meaning are caller responsibilities, not authenticated by the provider.",
+          "Runtime decorators check shape and finite output state but do not enforce every documented dtype, finite-input, class-balance or weight restriction. Callers must satisfy the full supported input contract.",
+          "The installed private sklearn sigmoid fitter returns optimizer coefficients without checking solver success; finite coefficients do not certify convergence or optimality.",
+          "The registered witness is symbolic metadata, not evidence that concrete fitting succeeded.",
+          "Installed files match their own RECORD hashes; independent publisher authentication, optional extras, clean deployment and other platforms are not certified.",
+          "This review does not publish the providers or certify execution/publication of the corrected March CDG.",
+          "One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities. SigmoidCalibrationState with finite a and b, fitted for the same score definition; predicts expit(-(a*score+b))."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "artifact_audit_rollups",
+      "key": "artifact_id",
+      "identity": "642a780b-46b8-4d2c-91d6-ab3146416759",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 qualification only; no human review or Tier 2 usage certification.",
+          "Synthetic mechanical reuse and reference parity do not establish empirical calibration, accuracy or generalization in any domain.",
+          "The supported catalog interface uses finite float64 binary scores and 0/1 labels; independence and score meaning are caller responsibilities, not authenticated by the provider.",
+          "Runtime decorators check shape and finite output state but do not enforce every documented dtype, finite-input, class-balance or weight restriction. Callers must satisfy the full supported input contract.",
+          "The installed private sklearn sigmoid fitter returns optimizer coefficients without checking solver success; finite coefficients do not certify convergence or optimality.",
+          "The registered witness is symbolic metadata, not evidence that concrete fitting succeeded.",
+          "Installed files match their own RECORD hashes; independent publisher authentication, optional extras, clean deployment and other platforms are not certified.",
+          "This review does not publish the providers or certify execution/publication of the corrected March CDG.",
+          "One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities. SigmoidCalibrationState with finite a and b, fitted for the same score definition; predicts expit(-(a*score+b))."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    }
+  ],
+  "states": {
+    "48449994-ed0c-4cb4-8ef5-812fa2746f35": {
+      "atom": {
+        "status": "approved",
+        "is_publishable": false
+      },
+      "artifact": {
+        "status": "draft",
+        "is_publishable": false
+      }
+    },
+    "642a780b-46b8-4d2c-91d6-ab3146416759": {
+      "atom": {
+        "status": "approved",
+        "is_publishable": false
+      },
+      "artifact": {
+        "status": "draft",
+        "is_publishable": false
+      }
+    }
+  },
+  "before": {
+    "atoms": "409a8b1c54ced5f41cfc398c289232d9474e2529608e09fd6d19181ded54d03b",
+    "artifacts": "308dcdf20f2d9576a40687216563c0edbdf7163dbbce509770e0e986215a164f",
+    "atom_versions": "5dd572868adbe21d2bdfd0f2dc7cedf373a0585d782323118189766dc080fe82",
+    "artifact_versions": "675f59f097b22e2567c93f1ec8215aa3035e8f424871902fdafcd368da182d93",
+    "atom_io_specs": "de5564e3f5c9616f5ca117805136ef0a4e037b8ee8d5f077987ddc7a897f94cb",
+    "artifact_io_specs": "53fb911955c6beea5b0936d86fdbea31bf8c0e21cfceed19e0d0f35676ddfd42",
+    "atom_parameters": "d1722b31cdfa9d729a0a8dca47f128dee99a3e486a0e0eb2a0da14c0b8a9c31c",
+    "artifact_parameters": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_descriptions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_descriptions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_references": "3cfbc8ccc67a812aa5b4ba0159e4a75433b2332604291ba16536c064b8a1faf0",
+    "artifact_references": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_audit_rollups": "ce78a6fe2b0409b9c17735dc08d596b6cddb4f3f33fe26e459aae426045bdb75",
+    "artifact_audit_rollups": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_audit_evidence": "52598e821a0eadfc7962529ed5a797224ffc802edb7c78f90294582d135994da"
+  },
+  "preserved": {
+    "atom_versions": [
+      {
+        "row": {
+          "s3_key": "local-seed/atoms/70e225fddbec4e9d7a39378f6dffdf55fdcfa63dafa7c5ad9e2c73a977421738.tar.gz",
+          "semver": "0.0.0+local.70e225fddbec",
+          "atom_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+          "is_latest": true,
+          "created_at": "2026-08-11T23:15:30.956392+00:00",
+          "trust_tier": 3,
+          "version_id": "41cba2bf-ce59-5b54-9cfd-b5c0a9e7ddf5",
+          "fingerprint": "48ff33f0d8e20290fa9a0dce27a3a7d0a7849f5eeaf2994e2050d2aebd6c89f5",
+          "content_hash": "70e225fddbec4e9d7a39378f6dffdf55fdcfa63dafa7c5ad9e2c73a977421738",
+          "derives_from": null
+        }
+      },
+      {
+        "row": {
+          "s3_key": "local-seed/atoms/c4e3c6a65aec1ec5db26067637ca0972d77484ee32fcf03798f32cad600ceff8.tar.gz",
+          "semver": "0.0.0+local.c4e3c6a65aec",
+          "atom_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+          "is_latest": true,
+          "created_at": "2026-08-11T23:15:30.956392+00:00",
+          "trust_tier": 3,
+          "version_id": "e54f2ea7-9cc7-5f35-93b3-1956f480ed00",
+          "fingerprint": "fe1010a619ec51ed285b01d4c2f054e0fca556a5eb178d15a6ede76e3bb89b23",
+          "content_hash": "c4e3c6a65aec1ec5db26067637ca0972d77484ee32fcf03798f32cad600ceff8",
+          "derives_from": null
+        }
+      }
+    ],
+    "atom_parameters": [
+      {
+        "row": {
+          "kind": "keyword_only",
+          "name": "sample_weight",
+          "atom_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+          "position": 2,
+          "required": false,
+          "type_desc": "NDArray[np.float64] | None",
+          "version_id": null,
+          "parameter_id": "bd8b8432-1300-4a61-a744-5f7972e89f63",
+          "constraints_json": {},
+          "default_value_repr": "",
+          "technical_description": "",
+          "dejargonized_description": ""
+        }
+      },
+      {
+        "row": {
+          "kind": "positional_or_keyword",
+          "name": "predictions",
+          "atom_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+          "position": 0,
+          "required": true,
+          "type_desc": "NDArray[np.float64]",
+          "version_id": null,
+          "parameter_id": "d505ae44-b8fc-421b-8d31-030b3a8e1820",
+          "constraints_json": {},
+          "default_value_repr": "",
+          "technical_description": "",
+          "dejargonized_description": ""
+        }
+      },
+      {
+        "row": {
+          "kind": "positional_or_keyword",
+          "name": "predictions",
+          "atom_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+          "position": 0,
+          "required": true,
+          "type_desc": "NDArray[np.float64]",
+          "version_id": null,
+          "parameter_id": "3635732e-bb64-48a5-9661-5d62541b58a1",
+          "constraints_json": {},
+          "default_value_repr": "",
+          "technical_description": "",
+          "dejargonized_description": ""
+        }
+      },
+      {
+        "row": {
+          "kind": "positional_or_keyword",
+          "name": "state",
+          "atom_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+          "position": 1,
+          "required": true,
+          "type_desc": "SigmoidCalibrationState",
+          "version_id": null,
+          "parameter_id": "0d41db52-66b7-46d1-86c5-3677f7f3cd05",
+          "constraints_json": {},
+          "default_value_repr": "",
+          "technical_description": "",
+          "dejargonized_description": ""
+        }
+      },
+      {
+        "row": {
+          "kind": "positional_or_keyword",
+          "name": "y",
+          "atom_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+          "position": 1,
+          "required": true,
+          "type_desc": "NDArray[np.float64]",
+          "version_id": null,
+          "parameter_id": "ae4a4cdb-229d-4fa6-8d84-bf8617de5ecf",
+          "constraints_json": {},
+          "default_value_repr": "",
+          "technical_description": "",
+          "dejargonized_description": ""
+        }
+      }
+    ],
+    "atom_references": [
+      {
+        "row": {
+          "doi": null,
+          "url": "https://github.com/scikit-learn/scikit-learn",
+          "year": 2026,
+          "title": "scikit-learn",
+          "ref_id": "repo_sklearn",
+          "source": "manual",
+          "atom_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+          "authors": [
+            "The scikit-learn developers"
+          ],
+          "ref_key": "repo_sklearn",
+          "verified": false,
+          "confidence": "high",
+          "created_at": "2026-08-11T23:13:00.750046+00:00",
+          "reference_id": "c37cf4e5-567f-4aff-b05b-3703a8c15275",
+          "matched_nodes": [],
+          "relevance_note": "Adapted from sklearn.calibration._sigmoid_calibration and _SigmoidCalibration.fit in scikit-learn 1.8.0."
+        }
+      },
+      {
+        "row": {
+          "doi": null,
+          "url": "https://github.com/scikit-learn/scikit-learn",
+          "year": 2026,
+          "title": "scikit-learn",
+          "ref_id": "repo_sklearn",
+          "source": "manual",
+          "atom_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+          "authors": [
+            "The scikit-learn developers"
+          ],
+          "ref_key": "repo_sklearn",
+          "verified": false,
+          "confidence": "high",
+          "created_at": "2026-08-11T23:13:00.755492+00:00",
+          "reference_id": "62a98b8c-02b4-4198-b5de-cdf2481a6c49",
+          "matched_nodes": [],
+          "relevance_note": "Adapted from sklearn.calibration._SigmoidCalibration.predict in scikit-learn 1.8.0."
+        }
+      },
+      {
+        "row": {
+          "doi": null,
+          "url": "https://jmlr.org/papers/v12/pedregosa11a.html",
+          "year": 2011,
+          "title": "Scikit-learn: Machine Learning in Python",
+          "ref_id": "pedregosa2011sklearn",
+          "source": "manual",
+          "atom_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+          "authors": [
+            "Fabian Pedregosa",
+            "Gael Varoquaux",
+            "Alexandre Gramfort",
+            "Vincent Michel",
+            "Bertrand Thirion",
+            "Olivier Grisel",
+            "Mathieu Blondel",
+            "Peter Prettenhofer",
+            "Ron Weiss",
+            "Vincent Dubourg",
+            "Jake VanderPlas",
+            "Alexandre Passos",
+            "David Cournapeau",
+            "Matthieu Brucher",
+            "Matthieu Perrot",
+            "Edouard Duchesnay"
+          ],
+          "ref_key": "pedregosa2011sklearn",
+          "verified": false,
+          "confidence": "high",
+          "created_at": "2026-08-11T23:13:00.752043+00:00",
+          "reference_id": "a5c86f6e-0413-4f3e-8dbf-56f5a446a266",
+          "matched_nodes": [],
+          "relevance_note": "Project-level publication for scikit-learn."
+        }
+      },
+      {
+        "row": {
+          "doi": null,
+          "url": "https://jmlr.org/papers/v12/pedregosa11a.html",
+          "year": 2011,
+          "title": "Scikit-learn: Machine Learning in Python",
+          "ref_id": "pedregosa2011sklearn",
+          "source": "manual",
+          "atom_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+          "authors": [
+            "Fabian Pedregosa",
+            "Gael Varoquaux",
+            "Alexandre Gramfort",
+            "Vincent Michel",
+            "Bertrand Thirion",
+            "Olivier Grisel",
+            "Mathieu Blondel",
+            "Peter Prettenhofer",
+            "Ron Weiss",
+            "Vincent Dubourg",
+            "Jake VanderPlas",
+            "Alexandre Passos",
+            "David Cournapeau",
+            "Matthieu Brucher",
+            "Matthieu Perrot",
+            "Edouard Duchesnay"
+          ],
+          "ref_key": "pedregosa2011sklearn",
+          "verified": false,
+          "confidence": "high",
+          "created_at": "2026-08-11T23:13:00.757192+00:00",
+          "reference_id": "15ecf664-5ee0-43d2-a83a-28feca8f4456",
+          "matched_nodes": [],
+          "relevance_note": "Project-level publication for scikit-learn."
+        }
+      },
+      {
+        "row": {
+          "doi": null,
+          "url": "https://www.researchgate.net/publication/2594015_Probabilistic_Outputs_for_Support_Vector_Machines_and_Comparisons_to_Regularized_Likelihood_Methods",
+          "year": 1999,
+          "title": "Probabilistic Outputs for Support Vector Machines and Comparisons to Regularized Likelihood Methods",
+          "ref_id": "platt1999probabilistic",
+          "source": "manual",
+          "atom_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+          "authors": [
+            "John C. Platt"
+          ],
+          "ref_key": "platt1999probabilistic",
+          "verified": false,
+          "confidence": "high",
+          "created_at": "2026-08-11T23:13:00.75379+00:00",
+          "reference_id": "6658ea31-a95c-4611-841f-6f395b8f275f",
+          "matched_nodes": [],
+          "relevance_note": "Algorithm reference cited by scikit-learn calibration documentation."
+        }
+      },
+      {
+        "row": {
+          "doi": null,
+          "url": "https://www.researchgate.net/publication/2594015_Probabilistic_Outputs_for_Support_Vector_Machines_and_Comparisons_to_Regularized_Likelihood_Methods",
+          "year": 1999,
+          "title": "Probabilistic Outputs for Support Vector Machines and Comparisons to Regularized Likelihood Methods",
+          "ref_id": "platt1999probabilistic",
+          "source": "manual",
+          "atom_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+          "authors": [
+            "John C. Platt"
+          ],
+          "ref_key": "platt1999probabilistic",
+          "verified": false,
+          "confidence": "high",
+          "created_at": "2026-08-11T23:13:00.759367+00:00",
+          "reference_id": "8f538c5a-e07e-4b53-8207-29ae64d8f07b",
+          "matched_nodes": [],
+          "relevance_note": "Algorithm reference cited by scikit-learn calibration documentation."
+        }
+      }
+    ],
+    "atom_io_specs": [
+      {
+        "row": {
+          "name": "predictions",
+          "atom_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "NDArray[np.float64]",
+          "io_spec_id": "0ec3f3ad-b3c8-4b39-b842-40b2ce09bb41",
+          "version_id": null,
+          "constraints": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "predictions",
+          "atom_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "NDArray[np.float64]",
+          "io_spec_id": "89a2d754-937a-44aa-b707-60c779746d15",
+          "version_id": null,
+          "constraints": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "result",
+          "atom_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "SigmoidCalibrationState",
+          "io_spec_id": "154a2738-50c0-4ed6-8a1e-8b761023a364",
+          "version_id": null,
+          "constraints": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "result",
+          "atom_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "NDArray[np.float64]",
+          "io_spec_id": "0f43aa8b-232e-4081-8b85-2db3901fde9b",
+          "version_id": null,
+          "constraints": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "sample_weight",
+          "atom_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+          "ordinal": 2,
+          "required": true,
+          "direction": "input",
+          "type_desc": "NDArray[np.float64] | None",
+          "io_spec_id": "86dbb363-3192-4598-84db-f3bb1e31b20a",
+          "version_id": null,
+          "constraints": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "state",
+          "atom_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "SigmoidCalibrationState",
+          "io_spec_id": "8ef42ed6-3c42-43e9-a339-1c339d269796",
+          "version_id": null,
+          "constraints": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "y",
+          "atom_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "NDArray[np.float64]",
+          "io_spec_id": "253ad5b4-11a9-4e97-8f78-f74cde9bf528",
+          "version_id": null,
+          "constraints": "",
+          "default_value_repr": ""
+        }
+      }
+    ],
+    "artifact_versions": [
+      {
+        "row": {
+          "s3_key": "local-seed/atoms/70e225fddbec4e9d7a39378f6dffdf55fdcfa63dafa7c5ad9e2c73a977421738.tar.gz",
+          "semver": "0.0.0+local.70e225fddbec",
+          "is_latest": true,
+          "created_at": "2026-11-06T10:22:40.076974+00:00",
+          "trust_tier": 3,
+          "version_id": "41cba2bf-ce59-5b54-9cfd-b5c0a9e7ddf5",
+          "artifact_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+          "fingerprint": "48ff33f0d8e20290fa9a0dce27a3a7d0a7849f5eeaf2994e2050d2aebd6c89f5",
+          "content_hash": "70e225fddbec4e9d7a39378f6dffdf55fdcfa63dafa7c5ad9e2c73a977421738",
+          "derives_from": null
+        }
+      },
+      {
+        "row": {
+          "s3_key": "local-seed/atoms/c4e3c6a65aec1ec5db26067637ca0972d77484ee32fcf03798f32cad600ceff8.tar.gz",
+          "semver": "0.0.0+local.c4e3c6a65aec",
+          "is_latest": true,
+          "created_at": "2026-11-06T10:22:40.076974+00:00",
+          "trust_tier": 3,
+          "version_id": "e54f2ea7-9cc7-5f35-93b3-1956f480ed00",
+          "artifact_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+          "fingerprint": "fe1010a619ec51ed285b01d4c2f054e0fca556a5eb178d15a6ede76e3bb89b23",
+          "content_hash": "c4e3c6a65aec1ec5db26067637ca0972d77484ee32fcf03798f32cad600ceff8",
+          "derives_from": null
+        }
+      }
+    ],
+    "artifact_parameters": [],
+    "artifact_references": [],
+    "artifact_io_specs": [
+      {
+        "row": {
+          "name": "predictions",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "3212dc72-e9f9-4ae8-a449-7bfa19494608",
+          "version_id": "41cba2bf-ce59-5b54-9cfd-b5c0a9e7ddf5",
+          "artifact_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+          "constraints": "One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "predictions",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "9afba9f0-6b64-4b1e-944a-21822e35c022",
+          "version_id": "e54f2ea7-9cc7-5f35-93b3-1956f480ed00",
+          "artifact_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+          "constraints": "One-dimensional finite float64 raw decision scores; not class labels or pre-calibrated probabilities.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "probabilities",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "ndarray",
+          "io_spec_id": "874d0709-a5b6-4acf-a151-5fbdcda4c8a4",
+          "version_id": "e54f2ea7-9cc7-5f35-93b3-1956f480ed00",
+          "artifact_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+          "constraints": "Aligned float64 probabilities in [0,1]; no empirical accuracy or calibration guarantee.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "sample_weight",
+          "ordinal": 2,
+          "required": false,
+          "direction": "input",
+          "type_desc": "object",
+          "io_spec_id": "1232c149-4b02-4738-a85f-063807dcf1a7",
+          "version_id": "41cba2bf-ce59-5b54-9cfd-b5c0a9e7ddf5",
+          "artifact_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+          "constraints": "None or aligned finite nonnegative float64 weights with positive total mass in each class.",
+          "dim_signature": "",
+          "default_value_repr": "None"
+        }
+      },
+      {
+        "row": {
+          "name": "state",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "object",
+          "io_spec_id": "238cc858-2779-46e8-9ed1-d0f4fc1f073c",
+          "version_id": "41cba2bf-ce59-5b54-9cfd-b5c0a9e7ddf5",
+          "artifact_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+          "constraints": "Finite sigmoid slope and intercept.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "state",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "object",
+          "io_spec_id": "8ab46c37-ef1d-46e7-9388-744637c7d5a9",
+          "version_id": "e54f2ea7-9cc7-5f35-93b3-1956f480ed00",
+          "artifact_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+          "constraints": "SigmoidCalibrationState with finite a and b, fitted for the same score definition; predicts expit(-(a*score+b)).",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "y",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "23b32e2b-f72e-4257-aaa9-34cd99ce225d",
+          "version_id": "41cba2bf-ce59-5b54-9cfd-b5c0a9e7ddf5",
+          "artifact_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+          "constraints": "Aligned float64 binary targets encoded 0 and 1; both classes represented in an independent calibration population.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      }
+    ],
+    "artifact_audit_evidence": [
+      {
+        "row": {
+          "passed": true,
+          "status": "completed",
+          "details": {
+            "scope": "Exact existing identity mirrored as draft with explicit supported interface; not publication approval.",
+            "plan_sha256": "1390ba78d41e6dbef8cd8ef87c90ae874d89097faa6134ab26bbb5a3ceb7b006",
+            "source_sha256": "c5b2102a62e286d2b1b4f7eee41d0630626042472b5bd52bec7476a6d4b20c10"
+          },
+          "audit_type": "asset_integrity_check",
+          "created_at": "2026-11-06T10:22:40.076974+00:00",
+          "version_id": "41cba2bf-ce59-5b54-9cfd-b5c0a9e7ddf5",
+          "artifact_id": "48449994-ed0c-4cb4-8ef5-812fa2746f35",
+          "evidence_id": "03a832fc-7e2b-5456-82a3-2efd4a9919d2",
+          "source_kind": "automated",
+          "runner_version": "sigmoid-canonical-intake.v1",
+          "review_basis_at": null,
+          "run_duration_ms": null,
+          "source_revision": "",
+          "upstream_version": ""
+        }
+      },
+      {
+        "row": {
+          "passed": true,
+          "status": "completed",
+          "details": {
+            "scope": "Exact existing identity mirrored as draft with explicit supported interface; not publication approval.",
+            "plan_sha256": "1390ba78d41e6dbef8cd8ef87c90ae874d89097faa6134ab26bbb5a3ceb7b006",
+            "source_sha256": "c5b2102a62e286d2b1b4f7eee41d0630626042472b5bd52bec7476a6d4b20c10"
+          },
+          "audit_type": "asset_integrity_check",
+          "created_at": "2026-11-06T10:22:40.076974+00:00",
+          "version_id": "e54f2ea7-9cc7-5f35-93b3-1956f480ed00",
+          "artifact_id": "642a780b-46b8-4d2c-91d6-ab3146416759",
+          "evidence_id": "e2eed717-d6d5-5cd1-a183-d5466ad732f5",
+          "source_kind": "automated",
+          "runner_version": "sigmoid-canonical-intake.v1",
+          "review_basis_at": null,
+          "run_duration_ms": null,
+          "source_revision": "",
+          "upstream_version": ""
+        }
+      }
+    ]
+  },
+  "publisher_sha256": "ee5b5c4dc7210453e8a157142c946c67ad36b58f404ced418f826420322120f3",
+  "review_sha256": "63e6e6a4bf6590c2f35e4e6b726122d23a56ee75383d587169a2511a6701014c"
+}
