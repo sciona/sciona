@@ -41,6 +41,39 @@ def test_inputs(points):
         fit_lloyd_clusters(points, 1)
 
 
+@pytest.mark.parametrize('dtype', [np.float32, np.float64])
+@pytest.mark.parametrize('iterations', [1, 2, 300])
+@pytest.mark.parametrize('tolerance', [0., .25])
+def test_convergence_controls(dtype, iterations, tolerance):
+    points = np.random.default_rng(72).normal(size=(40, 3)).astype(dtype)
+    centers, labels = fit_lloyd_clusters(points, 5, 7, 2, iterations, tolerance)
+    with threadpool_limits(limits=1):
+        expected = KMeans(n_clusters=5, random_state=7, n_init=2,
+                          max_iter=iterations, tol=tolerance).fit(points)
+    np.testing.assert_array_equal(centers, expected.cluster_centers_)
+    np.testing.assert_array_equal(labels, expected.labels_)
+
+
+@pytest.mark.parametrize('dtype', [np.float32, np.float64])
+def test_duplicate_points(dtype):
+    from sklearn.exceptions import ConvergenceWarning
+    points = np.array([[0., 0.], [0., 0.], [2., 2.], [2., 2.]], dtype=dtype)
+    with pytest.warns(ConvergenceWarning):
+        centers, labels = fit_lloyd_clusters(points, 3)
+    assert centers.shape == (3, 2)
+    assert len(np.unique(labels)) == 2
+    np.testing.assert_array_equal(centers[labels], points)
+
+
+@pytest.mark.parametrize('dtype', [np.float32, np.float64])
+def test_feature_translation(dtype):
+    points = np.array([[0., 0.], [0., 2.], [16., 0.], [16., 2.]], dtype=dtype)
+    centers, labels = fit_lloyd_clusters(points, 2)
+    shifted, shifted_labels = fit_lloyd_clusters(points + 32, 2)
+    np.testing.assert_array_equal(labels, shifted_labels)
+    np.testing.assert_array_equal(centers + 32, shifted)
+
+
 @pytest.mark.parametrize('scale', [.8, 1., 1.3])
 @pytest.mark.parametrize('paired', [False, True])
 @pytest.mark.parametrize('seed', [0, 1])
