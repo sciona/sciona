@@ -1,0 +1,1345 @@
+{
+  "records": [
+    {
+      "artifact_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+      "fqdn": "sciona.atoms.ml.sklearn.cluster.lloyd_fit.fit_lloyd_clusters",
+      "runtime_fqdn": "sciona.atoms.ml.sklearn.cluster.lloyd_fit.fit_lloyd_clusters",
+      "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+      "content_hash": "6bc731a7bb4bc45de7e185901c3222b20636cd4529d23e07aa61c506c72b521b",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "points",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite float32 or float64 matrix (N,D). Input precision is preserved and storage copied. Caller controls feature scaling and the Euclidean metric; no domain identifiers or partitioning policy."
+        },
+        {
+          "direction": "input",
+          "name": "n_clusters",
+          "ordinal": 1,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Positive integer K <= N; booleans rejected. Duplicate points can yield fewer distinct clusters."
+        },
+        {
+          "direction": "input",
+          "name": "random_state",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": false,
+          "default_value_repr": "0",
+          "constraints": "Integer seed in [0, 2**32-1]; booleans rejected. No cross-version reproducibility guarantee."
+        },
+        {
+          "direction": "input",
+          "name": "n_init",
+          "ordinal": 3,
+          "type_desc": "int",
+          "required": false,
+          "default_value_repr": "1",
+          "constraints": "Positive integer restart count. Each run uses k-means++ initialization; best inertia is selected by the installed backend."
+        },
+        {
+          "direction": "input",
+          "name": "max_iter",
+          "ordinal": 4,
+          "type_desc": "int",
+          "required": false,
+          "default_value_repr": "300",
+          "constraints": "Positive integer Lloyd iteration limit per restart. A limit does not guarantee convergence or global optimality."
+        },
+        {
+          "direction": "input",
+          "name": "tolerance",
+          "ordinal": 5,
+          "type_desc": "float",
+          "required": false,
+          "default_value_repr": "0.0001",
+          "constraints": "Finite nonnegative convergence tolerance interpreted by the installed scikit-learn backend; booleans rejected."
+        },
+        {
+          "direction": "output",
+          "name": "centers",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite copied center matrix (K,D), preserving input float precision and backend cluster order. Single native thread; no global optimum guarantee."
+        },
+        {
+          "direction": "output",
+          "name": "labels",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Copied integer vector (N,) indexing returned centers, in caller row order. Cluster numbering is backend-dependent."
+        }
+      ],
+      "operation": "Fit dense Euclidean clusters using k-means++ initialization and Lloyd updates with explicit seed, restart, iteration and tolerance controls.",
+      "plain_description": "Group nearby points and return each group center and each point assignment.",
+      "validity_bounds": "Nonempty finite float32 or float64 matrix (N,D). Input precision is preserved and storage copied. Caller controls feature scaling and the Euclidean metric; no domain identifiers or partitioning policy. Positive integer K <= N; booleans rejected. Duplicate points can yield fewer distinct clusters. Integer seed in [0, 2**32-1]; booleans rejected. No cross-version reproducibility guarantee. Positive integer restart count. Each run uses k-means++ initialization; best inertia is selected by the installed backend. Positive integer Lloyd iteration limit per restart. A limit does not guarantee convergence or global optimality. Finite nonnegative convergence tolerance interpreted by the installed scikit-learn backend; booleans rejected. Finite copied center matrix (K,D), preserving input float precision and backend cluster order. Single native thread; no global optimum guarantee. Copied integer vector (N,) indexing returned centers, in caller row order. Cluster numbering is backend-dependent.",
+      "reuse": "Generic Euclidean clustering over caller-supplied features; feature scaling, detector grouping, ring counts and gap detection remain recipe policy.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "qualification": {
+    "format": "trackml-kmeans-provider-semantics.v1",
+    "passed": true,
+    "approved": false,
+    "proposed_tier": 3,
+    "verdict": "acceptable_with_limits",
+    "catalog_mutations": 0,
+    "synthetic_only": true,
+    "providers": [
+      {
+        "artifact_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "fqdn": "sciona.atoms.ml.sklearn.cluster.lloyd_fit.fit_lloyd_clusters",
+        "runtime_fqdn": "sciona.atoms.ml.sklearn.cluster.lloyd_fit.fit_lloyd_clusters",
+        "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+        "content_hash": "6bc731a7bb4bc45de7e185901c3222b20636cd4529d23e07aa61c506c72b521b",
+        "interfaces": [
+          {
+            "direction": "input",
+            "name": "points",
+            "ordinal": 0,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Nonempty finite float32 or float64 matrix (N,D). Input precision is preserved and storage copied. Caller controls feature scaling and the Euclidean metric; no domain identifiers or partitioning policy."
+          },
+          {
+            "direction": "input",
+            "name": "n_clusters",
+            "ordinal": 1,
+            "type_desc": "int",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Positive integer K <= N; booleans rejected. Duplicate points can yield fewer distinct clusters."
+          },
+          {
+            "direction": "input",
+            "name": "random_state",
+            "ordinal": 2,
+            "type_desc": "int",
+            "required": false,
+            "default_value_repr": "0",
+            "constraints": "Integer seed in [0, 2**32-1]; booleans rejected. No cross-version reproducibility guarantee."
+          },
+          {
+            "direction": "input",
+            "name": "n_init",
+            "ordinal": 3,
+            "type_desc": "int",
+            "required": false,
+            "default_value_repr": "1",
+            "constraints": "Positive integer restart count. Each run uses k-means++ initialization; best inertia is selected by the installed backend."
+          },
+          {
+            "direction": "input",
+            "name": "max_iter",
+            "ordinal": 4,
+            "type_desc": "int",
+            "required": false,
+            "default_value_repr": "300",
+            "constraints": "Positive integer Lloyd iteration limit per restart. A limit does not guarantee convergence or global optimality."
+          },
+          {
+            "direction": "input",
+            "name": "tolerance",
+            "ordinal": 5,
+            "type_desc": "float",
+            "required": false,
+            "default_value_repr": "0.0001",
+            "constraints": "Finite nonnegative convergence tolerance interpreted by the installed scikit-learn backend; booleans rejected."
+          },
+          {
+            "direction": "output",
+            "name": "centers",
+            "ordinal": 0,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Finite copied center matrix (K,D), preserving input float precision and backend cluster order. Single native thread; no global optimum guarantee."
+          },
+          {
+            "direction": "output",
+            "name": "labels",
+            "ordinal": 1,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Copied integer vector (N,) indexing returned centers, in caller row order. Cluster numbering is backend-dependent."
+          }
+        ],
+        "operation": "Fit dense Euclidean clusters using k-means++ initialization and Lloyd updates with explicit seed, restart, iteration and tolerance controls.",
+        "plain_description": "Group nearby points and return each group center and each point assignment.",
+        "validity_bounds": "Nonempty finite float32 or float64 matrix (N,D). Input precision is preserved and storage copied. Caller controls feature scaling and the Euclidean metric; no domain identifiers or partitioning policy. Positive integer K <= N; booleans rejected. Duplicate points can yield fewer distinct clusters. Integer seed in [0, 2**32-1]; booleans rejected. No cross-version reproducibility guarantee. Positive integer restart count. Each run uses k-means++ initialization; best inertia is selected by the installed backend. Positive integer Lloyd iteration limit per restart. A limit does not guarantee convergence or global optimality. Finite nonnegative convergence tolerance interpreted by the installed scikit-learn backend; booleans rejected. Finite copied center matrix (K,D), preserving input float precision and backend cluster order. Single native thread; no global optimum guarantee. Copied integer vector (N,) indexing returned centers, in caller row order. Cluster numbering is backend-dependent.",
+        "reuse": "Generic Euclidean clustering over caller-supplied features; feature scaling, detector grouping, ring counts and gap detection remain recipe policy.",
+        "registered_provider_dependencies": []
+      }
+    ],
+    "tests": {
+      "tests": 67,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exact_backend_cases": 36,
+    "software_sha256": {
+      "tests/test_lloyd_cluster_provider.py": "89c51ecf6a0cd1814e93821c320f610f9d9ebd8cea097300a799bac00ce1d043",
+      "scripts/review_trackml_kmeans_provider_semantics.py": "d1430da95ba7cb4f4b29d52490463ae13ceca4d65387733e9eb83498afd38e47",
+      "scripts/stage_trackml_kmeans_providers.py": "6e5cde768330cbb2b73294f21b5a8d5bbd24038ec0b80252465dc477828977a4",
+      "sciona/ghost/registry.py": "793723a75d07a88eed39f59d8d4dc327c54adbf75db7a03003516a6f74c81b51",
+      "sciona/decomposed_trackml_detector_lifecycle.py": "40203dd5117c965aa77e40c64e7259164dd0523aa6288740c3a3ce457f45bca0",
+      "sciona-atoms-ml/src/sciona/atoms/ml/sklearn/cluster/lloyd_fit.py": "f1035bd95ab67f2265ae4b106dd5d7b6aaae9d6a864d57738b127283e4e38e3f"
+    },
+    "installed_packages": {
+      "annotated-types": {
+        "version": "0.7.0",
+        "hashed_files_verified": 7,
+        "active_requirements": []
+      },
+      "asttokens": {
+        "version": "2.4.1",
+        "hashed_files_verified": 13,
+        "active_requirements": [
+          "six>=1.12.0"
+        ]
+      },
+      "icontract": {
+        "version": "2.7.3",
+        "hashed_files_verified": 16,
+        "active_requirements": [
+          "asttokens<3,>=2",
+          "typing_extensions"
+        ]
+      },
+      "joblib": {
+        "version": "1.5.3",
+        "hashed_files_verified": 143,
+        "active_requirements": []
+      },
+      "mpmath": {
+        "version": "1.3.0",
+        "hashed_files_verified": 92,
+        "active_requirements": []
+      },
+      "numpy": {
+        "version": "2.2.6",
+        "hashed_files_verified": 876,
+        "active_requirements": []
+      },
+      "pydantic": {
+        "version": "2.12.5",
+        "hashed_files_verified": 111,
+        "active_requirements": [
+          "annotated-types>=0.6.0",
+          "pydantic-core==2.41.5",
+          "typing-extensions>=4.14.1",
+          "typing-inspection>=0.4.2"
+        ]
+      },
+      "pydantic-core": {
+        "version": "2.41.5",
+        "hashed_files_verified": 9,
+        "active_requirements": [
+          "typing-extensions>=4.14.1"
+        ]
+      },
+      "scikit-learn": {
+        "version": "1.8.0",
+        "hashed_files_verified": 960,
+        "active_requirements": [
+          "joblib>=1.3.0",
+          "numpy>=1.24.1",
+          "scipy>=1.10.0",
+          "threadpoolctl>=3.2.0"
+        ]
+      },
+      "scipy": {
+        "version": "1.17.1",
+        "hashed_files_verified": 1423,
+        "active_requirements": [
+          "numpy<2.7,>=1.26.4"
+        ]
+      },
+      "six": {
+        "version": "1.17.0",
+        "hashed_files_verified": 6,
+        "active_requirements": []
+      },
+      "sympy": {
+        "version": "1.14.0",
+        "hashed_files_verified": 1571,
+        "active_requirements": [
+          "mpmath<1.4,>=1.1.0"
+        ]
+      },
+      "threadpoolctl": {
+        "version": "3.6.0",
+        "hashed_files_verified": 5,
+        "active_requirements": []
+      },
+      "typing-extensions": {
+        "version": "4.16.0",
+        "hashed_files_verified": 6,
+        "active_requirements": []
+      },
+      "typing-inspection": {
+        "version": "0.4.2",
+        "hashed_files_verified": 9,
+        "active_requirements": [
+          "typing-extensions>=4.12.0"
+        ]
+      }
+    },
+    "intake_plan_sha256": "0396b1f90f2019854db279dde82243c40c9f23c15cebae60cdc3ba7032f15fac",
+    "resource_policy": {
+      "serial_tests": true,
+      "native_threads": 1
+    },
+    "limitations": [
+      "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+      "Nonempty finite float32 or float64 points with caller-defined Euclidean feature scaling; input precision preserved and storage copied.",
+      "K must be a positive integer no greater than N. Duplicate points can yield fewer than K distinct clusters; backend warnings remain visible.",
+      "Unsigned 32-bit integer seed and positive restart/iteration counts required. Initialization uses k-means++; updates use Lloyd. Finite nonnegative tolerance has installed backend semantics.",
+      "Iteration limits and convergence tolerance do not promise global optimality or converged centers. Labels preserve caller row order and index returned centers; cluster numbering is backend-dependent.",
+      "Finite inputs may overflow intermediate arithmetic. Nonfinite returned centers reject; exhaustive floating-point accuracy is not claimed.",
+      "Abstract witness rejects; no symbolic proof of iterative clustering is claimed.",
+      "One native thread per fit. Caller owns aggregate concurrency. No historical accuracy or cross-version reproducibility claim.",
+      "No ring count, detector layout, grouping, identifier mapping or gap detection is embedded; these remain recipe policy.",
+      "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+      "Provider publication and original TrackML CDG qualification remain separate actions."
+    ]
+  },
+  "inserts": [
+    {
+      "table": "references_registry",
+      "keys": {
+        "ref_id": "trackml_kmeans-provider-review-v1"
+      },
+      "row": {
+        "ref_id": "trackml_kmeans-provider-review-v1",
+        "ref_type": "web",
+        "title": "Reusable dense Lloyd clustering synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/4cb76c87/docs/reviews/trackml_kmeans_provider_semantics.json"
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+        "name": "points"
+      },
+      "row": {
+        "atom_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+        "name": "points",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonempty finite float32 or float64 matrix (N,D). Input precision is preserved and storage copied. Caller controls feature scaling and the Euclidean metric; no domain identifiers or partitioning policy.",
+        "dejargonized_description": "Caller supplies points.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty finite float32 or float64 matrix (N,D). Input precision is preserved and storage copied. Caller controls feature scaling and the Euclidean metric; no domain identifiers or partitioning policy.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Nonempty finite float32 or float64 points with caller-defined Euclidean feature scaling; input precision preserved and storage copied.",
+            "K must be a positive integer no greater than N. Duplicate points can yield fewer than K distinct clusters; backend warnings remain visible.",
+            "Unsigned 32-bit integer seed and positive restart/iteration counts required. Initialization uses k-means++; updates use Lloyd. Finite nonnegative tolerance has installed backend semantics.",
+            "Iteration limits and convergence tolerance do not promise global optimality or converged centers. Labels preserve caller row order and index returned centers; cluster numbering is backend-dependent.",
+            "Finite inputs may overflow intermediate arithmetic. Nonfinite returned centers reject; exhaustive floating-point accuracy is not claimed.",
+            "Abstract witness rejects; no symbolic proof of iterative clustering is claimed.",
+            "One native thread per fit. Caller owns aggregate concurrency. No historical accuracy or cross-version reproducibility claim.",
+            "No ring count, detector layout, grouping, identifier mapping or gap detection is embedded; these remain recipe policy.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Provider publication and original TrackML CDG qualification remain separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+        "name": "n_clusters"
+      },
+      "row": {
+        "atom_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+        "name": "n_clusters",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "int",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Positive integer K <= N; booleans rejected. Duplicate points can yield fewer distinct clusters.",
+        "dejargonized_description": "Caller supplies n clusters.",
+        "constraints_json": {
+          "parameter_contract": "Positive integer K <= N; booleans rejected. Duplicate points can yield fewer distinct clusters.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Nonempty finite float32 or float64 points with caller-defined Euclidean feature scaling; input precision preserved and storage copied.",
+            "K must be a positive integer no greater than N. Duplicate points can yield fewer than K distinct clusters; backend warnings remain visible.",
+            "Unsigned 32-bit integer seed and positive restart/iteration counts required. Initialization uses k-means++; updates use Lloyd. Finite nonnegative tolerance has installed backend semantics.",
+            "Iteration limits and convergence tolerance do not promise global optimality or converged centers. Labels preserve caller row order and index returned centers; cluster numbering is backend-dependent.",
+            "Finite inputs may overflow intermediate arithmetic. Nonfinite returned centers reject; exhaustive floating-point accuracy is not claimed.",
+            "Abstract witness rejects; no symbolic proof of iterative clustering is claimed.",
+            "One native thread per fit. Caller owns aggregate concurrency. No historical accuracy or cross-version reproducibility claim.",
+            "No ring count, detector layout, grouping, identifier mapping or gap detection is embedded; these remain recipe policy.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Provider publication and original TrackML CDG qualification remain separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+        "name": "random_state"
+      },
+      "row": {
+        "atom_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+        "name": "random_state",
+        "position": 2,
+        "kind": "positional_or_keyword",
+        "type_desc": "int",
+        "required": false,
+        "default_value_repr": "0",
+        "technical_description": "Integer seed in [0, 2**32-1]; booleans rejected. No cross-version reproducibility guarantee.",
+        "dejargonized_description": "Caller supplies random state.",
+        "constraints_json": {
+          "parameter_contract": "Integer seed in [0, 2**32-1]; booleans rejected. No cross-version reproducibility guarantee.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Nonempty finite float32 or float64 points with caller-defined Euclidean feature scaling; input precision preserved and storage copied.",
+            "K must be a positive integer no greater than N. Duplicate points can yield fewer than K distinct clusters; backend warnings remain visible.",
+            "Unsigned 32-bit integer seed and positive restart/iteration counts required. Initialization uses k-means++; updates use Lloyd. Finite nonnegative tolerance has installed backend semantics.",
+            "Iteration limits and convergence tolerance do not promise global optimality or converged centers. Labels preserve caller row order and index returned centers; cluster numbering is backend-dependent.",
+            "Finite inputs may overflow intermediate arithmetic. Nonfinite returned centers reject; exhaustive floating-point accuracy is not claimed.",
+            "Abstract witness rejects; no symbolic proof of iterative clustering is claimed.",
+            "One native thread per fit. Caller owns aggregate concurrency. No historical accuracy or cross-version reproducibility claim.",
+            "No ring count, detector layout, grouping, identifier mapping or gap detection is embedded; these remain recipe policy.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Provider publication and original TrackML CDG qualification remain separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+        "name": "n_init"
+      },
+      "row": {
+        "atom_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+        "name": "n_init",
+        "position": 3,
+        "kind": "positional_or_keyword",
+        "type_desc": "int",
+        "required": false,
+        "default_value_repr": "1",
+        "technical_description": "Positive integer restart count. Each run uses k-means++ initialization; best inertia is selected by the installed backend.",
+        "dejargonized_description": "Caller supplies n init.",
+        "constraints_json": {
+          "parameter_contract": "Positive integer restart count. Each run uses k-means++ initialization; best inertia is selected by the installed backend.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Nonempty finite float32 or float64 points with caller-defined Euclidean feature scaling; input precision preserved and storage copied.",
+            "K must be a positive integer no greater than N. Duplicate points can yield fewer than K distinct clusters; backend warnings remain visible.",
+            "Unsigned 32-bit integer seed and positive restart/iteration counts required. Initialization uses k-means++; updates use Lloyd. Finite nonnegative tolerance has installed backend semantics.",
+            "Iteration limits and convergence tolerance do not promise global optimality or converged centers. Labels preserve caller row order and index returned centers; cluster numbering is backend-dependent.",
+            "Finite inputs may overflow intermediate arithmetic. Nonfinite returned centers reject; exhaustive floating-point accuracy is not claimed.",
+            "Abstract witness rejects; no symbolic proof of iterative clustering is claimed.",
+            "One native thread per fit. Caller owns aggregate concurrency. No historical accuracy or cross-version reproducibility claim.",
+            "No ring count, detector layout, grouping, identifier mapping or gap detection is embedded; these remain recipe policy.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Provider publication and original TrackML CDG qualification remain separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+        "name": "max_iter"
+      },
+      "row": {
+        "atom_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+        "name": "max_iter",
+        "position": 4,
+        "kind": "positional_or_keyword",
+        "type_desc": "int",
+        "required": false,
+        "default_value_repr": "300",
+        "technical_description": "Positive integer Lloyd iteration limit per restart. A limit does not guarantee convergence or global optimality.",
+        "dejargonized_description": "Caller supplies max iter.",
+        "constraints_json": {
+          "parameter_contract": "Positive integer Lloyd iteration limit per restart. A limit does not guarantee convergence or global optimality.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Nonempty finite float32 or float64 points with caller-defined Euclidean feature scaling; input precision preserved and storage copied.",
+            "K must be a positive integer no greater than N. Duplicate points can yield fewer than K distinct clusters; backend warnings remain visible.",
+            "Unsigned 32-bit integer seed and positive restart/iteration counts required. Initialization uses k-means++; updates use Lloyd. Finite nonnegative tolerance has installed backend semantics.",
+            "Iteration limits and convergence tolerance do not promise global optimality or converged centers. Labels preserve caller row order and index returned centers; cluster numbering is backend-dependent.",
+            "Finite inputs may overflow intermediate arithmetic. Nonfinite returned centers reject; exhaustive floating-point accuracy is not claimed.",
+            "Abstract witness rejects; no symbolic proof of iterative clustering is claimed.",
+            "One native thread per fit. Caller owns aggregate concurrency. No historical accuracy or cross-version reproducibility claim.",
+            "No ring count, detector layout, grouping, identifier mapping or gap detection is embedded; these remain recipe policy.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Provider publication and original TrackML CDG qualification remain separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+        "name": "tolerance"
+      },
+      "row": {
+        "atom_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+        "name": "tolerance",
+        "position": 5,
+        "kind": "positional_or_keyword",
+        "type_desc": "float",
+        "required": false,
+        "default_value_repr": "0.0001",
+        "technical_description": "Finite nonnegative convergence tolerance interpreted by the installed scikit-learn backend; booleans rejected.",
+        "dejargonized_description": "Caller supplies tolerance.",
+        "constraints_json": {
+          "parameter_contract": "Finite nonnegative convergence tolerance interpreted by the installed scikit-learn backend; booleans rejected.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Nonempty finite float32 or float64 points with caller-defined Euclidean feature scaling; input precision preserved and storage copied.",
+            "K must be a positive integer no greater than N. Duplicate points can yield fewer than K distinct clusters; backend warnings remain visible.",
+            "Unsigned 32-bit integer seed and positive restart/iteration counts required. Initialization uses k-means++; updates use Lloyd. Finite nonnegative tolerance has installed backend semantics.",
+            "Iteration limits and convergence tolerance do not promise global optimality or converged centers. Labels preserve caller row order and index returned centers; cluster numbering is backend-dependent.",
+            "Finite inputs may overflow intermediate arithmetic. Nonfinite returned centers reject; exhaustive floating-point accuracy is not claimed.",
+            "Abstract witness rejects; no symbolic proof of iterative clustering is claimed.",
+            "One native thread per fit. Caller owns aggregate concurrency. No historical accuracy or cross-version reproducibility claim.",
+            "No ring count, detector layout, grouping, identifier mapping or gap detection is embedded; these remain recipe policy.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Provider publication and original TrackML CDG qualification remain separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "kind": "technical",
+        "language": "en",
+        "content": "Fit dense Euclidean clusters using k-means++ initialization and Lloyd updates with explicit seed, restart, iteration and tolerance controls. Nonempty finite float32 or float64 matrix (N,D). Input precision is preserved and storage copied. Caller controls feature scaling and the Euclidean metric; no domain identifiers or partitioning policy. Positive integer K <= N; booleans rejected. Duplicate points can yield fewer distinct clusters. Integer seed in [0, 2**32-1]; booleans rejected. No cross-version reproducibility guarantee. Positive integer restart count. Each run uses k-means++ initialization; best inertia is selected by the installed backend. Positive integer Lloyd iteration limit per restart. A limit does not guarantee convergence or global optimality. Finite nonnegative convergence tolerance interpreted by the installed scikit-learn backend; booleans rejected. Finite copied center matrix (K,D), preserving input float precision and backend cluster order. Single native thread; no global optimum guarantee. Copied integer vector (N,) indexing returned centers, in caller row order. Cluster numbering is backend-dependent. Generic Euclidean clustering over caller-supplied features; feature scaling, detector grouping, ring counts and gap detection remain recipe policy.",
+        "generated_by": "trackml_kmeans-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.017857
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Group nearby points and return each group center and each point assignment. Accuracy on new problems must be checked separately.",
+        "generated_by": "trackml_kmeans-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "atom_references",
+      "keys": {
+        "atom_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "ref_key": "trackml_kmeans-provider-review-v1"
+      },
+      "row": {
+        "atom_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "ref_key": "trackml_kmeans-provider-review-v1",
+        "ref_id": "trackml_kmeans-provider-review-v1",
+        "title": "Reusable dense Lloyd clustering synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/4cb76c87/docs/reviews/trackml_kmeans_provider_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Fit dense Euclidean clusters using k-means++ initialization and Lloyd updates with explicit seed, restart, iteration and tolerance controls. Nonempty finite float32 or float64 matrix (N,D). Input precision is preserved and storage copied. Caller controls feature scaling and the Euclidean metric; no domain identifiers or partitioning policy. Positive integer K <= N; booleans rejected. Duplicate points can yield fewer distinct clusters. Integer seed in [0, 2**32-1]; booleans rejected. No cross-version reproducibility guarantee. Positive integer restart count. Each run uses k-means++ initialization; best inertia is selected by the installed backend. Positive integer Lloyd iteration limit per restart. A limit does not guarantee convergence or global optimality. Finite nonnegative convergence tolerance interpreted by the installed scikit-learn backend; booleans rejected. Finite copied center matrix (K,D), preserving input float precision and backend cluster order. Single native thread; no global optimum guarantee. Copied integer vector (N,) indexing returned centers, in caller row order. Cluster numbering is backend-dependent."
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+        "name": "points"
+      },
+      "row": {
+        "artifact_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+        "name": "points",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonempty finite float32 or float64 matrix (N,D). Input precision is preserved and storage copied. Caller controls feature scaling and the Euclidean metric; no domain identifiers or partitioning policy.",
+        "dejargonized_description": "Caller supplies points.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty finite float32 or float64 matrix (N,D). Input precision is preserved and storage copied. Caller controls feature scaling and the Euclidean metric; no domain identifiers or partitioning policy.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Nonempty finite float32 or float64 points with caller-defined Euclidean feature scaling; input precision preserved and storage copied.",
+            "K must be a positive integer no greater than N. Duplicate points can yield fewer than K distinct clusters; backend warnings remain visible.",
+            "Unsigned 32-bit integer seed and positive restart/iteration counts required. Initialization uses k-means++; updates use Lloyd. Finite nonnegative tolerance has installed backend semantics.",
+            "Iteration limits and convergence tolerance do not promise global optimality or converged centers. Labels preserve caller row order and index returned centers; cluster numbering is backend-dependent.",
+            "Finite inputs may overflow intermediate arithmetic. Nonfinite returned centers reject; exhaustive floating-point accuracy is not claimed.",
+            "Abstract witness rejects; no symbolic proof of iterative clustering is claimed.",
+            "One native thread per fit. Caller owns aggregate concurrency. No historical accuracy or cross-version reproducibility claim.",
+            "No ring count, detector layout, grouping, identifier mapping or gap detection is embedded; these remain recipe policy.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Provider publication and original TrackML CDG qualification remain separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+        "name": "n_clusters"
+      },
+      "row": {
+        "artifact_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+        "name": "n_clusters",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "int",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Positive integer K <= N; booleans rejected. Duplicate points can yield fewer distinct clusters.",
+        "dejargonized_description": "Caller supplies n clusters.",
+        "constraints_json": {
+          "parameter_contract": "Positive integer K <= N; booleans rejected. Duplicate points can yield fewer distinct clusters.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Nonempty finite float32 or float64 points with caller-defined Euclidean feature scaling; input precision preserved and storage copied.",
+            "K must be a positive integer no greater than N. Duplicate points can yield fewer than K distinct clusters; backend warnings remain visible.",
+            "Unsigned 32-bit integer seed and positive restart/iteration counts required. Initialization uses k-means++; updates use Lloyd. Finite nonnegative tolerance has installed backend semantics.",
+            "Iteration limits and convergence tolerance do not promise global optimality or converged centers. Labels preserve caller row order and index returned centers; cluster numbering is backend-dependent.",
+            "Finite inputs may overflow intermediate arithmetic. Nonfinite returned centers reject; exhaustive floating-point accuracy is not claimed.",
+            "Abstract witness rejects; no symbolic proof of iterative clustering is claimed.",
+            "One native thread per fit. Caller owns aggregate concurrency. No historical accuracy or cross-version reproducibility claim.",
+            "No ring count, detector layout, grouping, identifier mapping or gap detection is embedded; these remain recipe policy.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Provider publication and original TrackML CDG qualification remain separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+        "name": "random_state"
+      },
+      "row": {
+        "artifact_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+        "name": "random_state",
+        "position": 2,
+        "kind": "positional_or_keyword",
+        "type_desc": "int",
+        "required": false,
+        "default_value_repr": "0",
+        "technical_description": "Integer seed in [0, 2**32-1]; booleans rejected. No cross-version reproducibility guarantee.",
+        "dejargonized_description": "Caller supplies random state.",
+        "constraints_json": {
+          "parameter_contract": "Integer seed in [0, 2**32-1]; booleans rejected. No cross-version reproducibility guarantee.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Nonempty finite float32 or float64 points with caller-defined Euclidean feature scaling; input precision preserved and storage copied.",
+            "K must be a positive integer no greater than N. Duplicate points can yield fewer than K distinct clusters; backend warnings remain visible.",
+            "Unsigned 32-bit integer seed and positive restart/iteration counts required. Initialization uses k-means++; updates use Lloyd. Finite nonnegative tolerance has installed backend semantics.",
+            "Iteration limits and convergence tolerance do not promise global optimality or converged centers. Labels preserve caller row order and index returned centers; cluster numbering is backend-dependent.",
+            "Finite inputs may overflow intermediate arithmetic. Nonfinite returned centers reject; exhaustive floating-point accuracy is not claimed.",
+            "Abstract witness rejects; no symbolic proof of iterative clustering is claimed.",
+            "One native thread per fit. Caller owns aggregate concurrency. No historical accuracy or cross-version reproducibility claim.",
+            "No ring count, detector layout, grouping, identifier mapping or gap detection is embedded; these remain recipe policy.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Provider publication and original TrackML CDG qualification remain separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+        "name": "n_init"
+      },
+      "row": {
+        "artifact_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+        "name": "n_init",
+        "position": 3,
+        "kind": "positional_or_keyword",
+        "type_desc": "int",
+        "required": false,
+        "default_value_repr": "1",
+        "technical_description": "Positive integer restart count. Each run uses k-means++ initialization; best inertia is selected by the installed backend.",
+        "dejargonized_description": "Caller supplies n init.",
+        "constraints_json": {
+          "parameter_contract": "Positive integer restart count. Each run uses k-means++ initialization; best inertia is selected by the installed backend.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Nonempty finite float32 or float64 points with caller-defined Euclidean feature scaling; input precision preserved and storage copied.",
+            "K must be a positive integer no greater than N. Duplicate points can yield fewer than K distinct clusters; backend warnings remain visible.",
+            "Unsigned 32-bit integer seed and positive restart/iteration counts required. Initialization uses k-means++; updates use Lloyd. Finite nonnegative tolerance has installed backend semantics.",
+            "Iteration limits and convergence tolerance do not promise global optimality or converged centers. Labels preserve caller row order and index returned centers; cluster numbering is backend-dependent.",
+            "Finite inputs may overflow intermediate arithmetic. Nonfinite returned centers reject; exhaustive floating-point accuracy is not claimed.",
+            "Abstract witness rejects; no symbolic proof of iterative clustering is claimed.",
+            "One native thread per fit. Caller owns aggregate concurrency. No historical accuracy or cross-version reproducibility claim.",
+            "No ring count, detector layout, grouping, identifier mapping or gap detection is embedded; these remain recipe policy.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Provider publication and original TrackML CDG qualification remain separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+        "name": "max_iter"
+      },
+      "row": {
+        "artifact_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+        "name": "max_iter",
+        "position": 4,
+        "kind": "positional_or_keyword",
+        "type_desc": "int",
+        "required": false,
+        "default_value_repr": "300",
+        "technical_description": "Positive integer Lloyd iteration limit per restart. A limit does not guarantee convergence or global optimality.",
+        "dejargonized_description": "Caller supplies max iter.",
+        "constraints_json": {
+          "parameter_contract": "Positive integer Lloyd iteration limit per restart. A limit does not guarantee convergence or global optimality.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Nonempty finite float32 or float64 points with caller-defined Euclidean feature scaling; input precision preserved and storage copied.",
+            "K must be a positive integer no greater than N. Duplicate points can yield fewer than K distinct clusters; backend warnings remain visible.",
+            "Unsigned 32-bit integer seed and positive restart/iteration counts required. Initialization uses k-means++; updates use Lloyd. Finite nonnegative tolerance has installed backend semantics.",
+            "Iteration limits and convergence tolerance do not promise global optimality or converged centers. Labels preserve caller row order and index returned centers; cluster numbering is backend-dependent.",
+            "Finite inputs may overflow intermediate arithmetic. Nonfinite returned centers reject; exhaustive floating-point accuracy is not claimed.",
+            "Abstract witness rejects; no symbolic proof of iterative clustering is claimed.",
+            "One native thread per fit. Caller owns aggregate concurrency. No historical accuracy or cross-version reproducibility claim.",
+            "No ring count, detector layout, grouping, identifier mapping or gap detection is embedded; these remain recipe policy.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Provider publication and original TrackML CDG qualification remain separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+        "name": "tolerance"
+      },
+      "row": {
+        "artifact_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+        "name": "tolerance",
+        "position": 5,
+        "kind": "positional_or_keyword",
+        "type_desc": "float",
+        "required": false,
+        "default_value_repr": "0.0001",
+        "technical_description": "Finite nonnegative convergence tolerance interpreted by the installed scikit-learn backend; booleans rejected.",
+        "dejargonized_description": "Caller supplies tolerance.",
+        "constraints_json": {
+          "parameter_contract": "Finite nonnegative convergence tolerance interpreted by the installed scikit-learn backend; booleans rejected.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Nonempty finite float32 or float64 points with caller-defined Euclidean feature scaling; input precision preserved and storage copied.",
+            "K must be a positive integer no greater than N. Duplicate points can yield fewer than K distinct clusters; backend warnings remain visible.",
+            "Unsigned 32-bit integer seed and positive restart/iteration counts required. Initialization uses k-means++; updates use Lloyd. Finite nonnegative tolerance has installed backend semantics.",
+            "Iteration limits and convergence tolerance do not promise global optimality or converged centers. Labels preserve caller row order and index returned centers; cluster numbering is backend-dependent.",
+            "Finite inputs may overflow intermediate arithmetic. Nonfinite returned centers reject; exhaustive floating-point accuracy is not claimed.",
+            "Abstract witness rejects; no symbolic proof of iterative clustering is claimed.",
+            "One native thread per fit. Caller owns aggregate concurrency. No historical accuracy or cross-version reproducibility claim.",
+            "No ring count, detector layout, grouping, identifier mapping or gap detection is embedded; these remain recipe policy.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Provider publication and original TrackML CDG qualification remain separate actions."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "kind": "technical",
+        "language": "en",
+        "content": "Fit dense Euclidean clusters using k-means++ initialization and Lloyd updates with explicit seed, restart, iteration and tolerance controls. Nonempty finite float32 or float64 matrix (N,D). Input precision is preserved and storage copied. Caller controls feature scaling and the Euclidean metric; no domain identifiers or partitioning policy. Positive integer K <= N; booleans rejected. Duplicate points can yield fewer distinct clusters. Integer seed in [0, 2**32-1]; booleans rejected. No cross-version reproducibility guarantee. Positive integer restart count. Each run uses k-means++ initialization; best inertia is selected by the installed backend. Positive integer Lloyd iteration limit per restart. A limit does not guarantee convergence or global optimality. Finite nonnegative convergence tolerance interpreted by the installed scikit-learn backend; booleans rejected. Finite copied center matrix (K,D), preserving input float precision and backend cluster order. Single native thread; no global optimum guarantee. Copied integer vector (N,) indexing returned centers, in caller row order. Cluster numbering is backend-dependent. Generic Euclidean clustering over caller-supplied features; feature scaling, detector grouping, ring counts and gap detection remain recipe policy.",
+        "generated_by": "trackml_kmeans-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.017857
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Group nearby points and return each group center and each point assignment. Accuracy on new problems must be checked separately.",
+        "generated_by": "trackml_kmeans-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "artifact_references",
+      "keys": {
+        "artifact_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "ref_key": "trackml_kmeans-provider-review-v1"
+      },
+      "row": {
+        "artifact_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+        "ref_key": "trackml_kmeans-provider-review-v1",
+        "ref_id": "trackml_kmeans-provider-review-v1",
+        "title": "Reusable dense Lloyd clustering synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/4cb76c87/docs/reviews/trackml_kmeans_provider_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Fit dense Euclidean clusters using k-means++ initialization and Lloyd updates with explicit seed, restart, iteration and tolerance controls. Nonempty finite float32 or float64 matrix (N,D). Input precision is preserved and storage copied. Caller controls feature scaling and the Euclidean metric; no domain identifiers or partitioning policy. Positive integer K <= N; booleans rejected. Duplicate points can yield fewer distinct clusters. Integer seed in [0, 2**32-1]; booleans rejected. No cross-version reproducibility guarantee. Positive integer restart count. Each run uses k-means++ initialization; best inertia is selected by the installed backend. Positive integer Lloyd iteration limit per restart. A limit does not guarantee convergence or global optimality. Finite nonnegative convergence tolerance interpreted by the installed scikit-learn backend; booleans rejected. Finite copied center matrix (K,D), preserving input float precision and backend cluster order. Single native thread; no global optimum guarantee. Copied integer vector (N,) indexing returned centers, in caller row order. Cluster numbering is backend-dependent."
+      }
+    }
+  ],
+  "rollups": [
+    {
+      "table": "atom_audit_rollups",
+      "key": "atom_id",
+      "identity": "10608a02-5127-51ac-81b4-4b216d91d209",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+          "Nonempty finite float32 or float64 points with caller-defined Euclidean feature scaling; input precision preserved and storage copied.",
+          "K must be a positive integer no greater than N. Duplicate points can yield fewer than K distinct clusters; backend warnings remain visible.",
+          "Unsigned 32-bit integer seed and positive restart/iteration counts required. Initialization uses k-means++; updates use Lloyd. Finite nonnegative tolerance has installed backend semantics.",
+          "Iteration limits and convergence tolerance do not promise global optimality or converged centers. Labels preserve caller row order and index returned centers; cluster numbering is backend-dependent.",
+          "Finite inputs may overflow intermediate arithmetic. Nonfinite returned centers reject; exhaustive floating-point accuracy is not claimed.",
+          "Abstract witness rejects; no symbolic proof of iterative clustering is claimed.",
+          "One native thread per fit. Caller owns aggregate concurrency. No historical accuracy or cross-version reproducibility claim.",
+          "No ring count, detector layout, grouping, identifier mapping or gap detection is embedded; these remain recipe policy.",
+          "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+          "Provider publication and original TrackML CDG qualification remain separate actions.",
+          "Nonempty finite float32 or float64 matrix (N,D). Input precision is preserved and storage copied. Caller controls feature scaling and the Euclidean metric; no domain identifiers or partitioning policy. Positive integer K <= N; booleans rejected. Duplicate points can yield fewer distinct clusters. Integer seed in [0, 2**32-1]; booleans rejected. No cross-version reproducibility guarantee. Positive integer restart count. Each run uses k-means++ initialization; best inertia is selected by the installed backend. Positive integer Lloyd iteration limit per restart. A limit does not guarantee convergence or global optimality. Finite nonnegative convergence tolerance interpreted by the installed scikit-learn backend; booleans rejected. Finite copied center matrix (K,D), preserving input float precision and backend cluster order. Single native thread; no global optimum guarantee. Copied integer vector (N,) indexing returned centers, in caller row order. Cluster numbering is backend-dependent."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "artifact_audit_rollups",
+      "key": "artifact_id",
+      "identity": "10608a02-5127-51ac-81b4-4b216d91d209",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+          "Nonempty finite float32 or float64 points with caller-defined Euclidean feature scaling; input precision preserved and storage copied.",
+          "K must be a positive integer no greater than N. Duplicate points can yield fewer than K distinct clusters; backend warnings remain visible.",
+          "Unsigned 32-bit integer seed and positive restart/iteration counts required. Initialization uses k-means++; updates use Lloyd. Finite nonnegative tolerance has installed backend semantics.",
+          "Iteration limits and convergence tolerance do not promise global optimality or converged centers. Labels preserve caller row order and index returned centers; cluster numbering is backend-dependent.",
+          "Finite inputs may overflow intermediate arithmetic. Nonfinite returned centers reject; exhaustive floating-point accuracy is not claimed.",
+          "Abstract witness rejects; no symbolic proof of iterative clustering is claimed.",
+          "One native thread per fit. Caller owns aggregate concurrency. No historical accuracy or cross-version reproducibility claim.",
+          "No ring count, detector layout, grouping, identifier mapping or gap detection is embedded; these remain recipe policy.",
+          "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+          "Provider publication and original TrackML CDG qualification remain separate actions.",
+          "Nonempty finite float32 or float64 matrix (N,D). Input precision is preserved and storage copied. Caller controls feature scaling and the Euclidean metric; no domain identifiers or partitioning policy. Positive integer K <= N; booleans rejected. Duplicate points can yield fewer distinct clusters. Integer seed in [0, 2**32-1]; booleans rejected. No cross-version reproducibility guarantee. Positive integer restart count. Each run uses k-means++ initialization; best inertia is selected by the installed backend. Positive integer Lloyd iteration limit per restart. A limit does not guarantee convergence or global optimality. Finite nonnegative convergence tolerance interpreted by the installed scikit-learn backend; booleans rejected. Finite copied center matrix (K,D), preserving input float precision and backend cluster order. Single native thread; no global optimum guarantee. Copied integer vector (N,) indexing returned centers, in caller row order. Cluster numbering is backend-dependent."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    }
+  ],
+  "states": {
+    "10608a02-5127-51ac-81b4-4b216d91d209": {
+      "atom": {
+        "status": "flagged",
+        "is_publishable": false
+      },
+      "artifact": {
+        "status": "draft",
+        "is_publishable": false
+      }
+    }
+  },
+  "before": {
+    "atoms": "9b5a9c73835a4fed84cc494a4947b6d500aeab6e5016b17cfb3b34b88b76e5b7",
+    "artifacts": "dce45b690d20972247cbfb12705e498ba3a2d8d6887b85444a7b4b34998964ed",
+    "atom_versions": "6fa83fa27f84b08f635e96bc743bccc147ab0d33eb0dd31c69df674d0b1243fb",
+    "artifact_versions": "7a406dec786ccbcff787cf92be20534c7b1734fd6de4f05cf2ca625220b7a6bd",
+    "atom_io_specs": "6e3ac7be280c5764b5c84b8fd9d4e37aec0eba790353b143caf8b904dae3590f",
+    "artifact_io_specs": "0af82c39a460509813fdb8b636fd3c69d330b5d20de12540bd8b3af10f4fd54c",
+    "atom_parameters": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_parameters": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_descriptions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_descriptions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_references": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_references": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_audit_rollups": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_audit_rollups": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_audit_evidence": "2f83e10ea4aaea47dba0eba7f6540600a3a64a84e08d546fe571bde6cb009f9e"
+  },
+  "preserved": {
+    "atom_versions": [
+      {
+        "row": {
+          "s3_key": "",
+          "semver": "0.0.0+local.6bc731a7bb4b",
+          "atom_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+          "is_latest": true,
+          "created_at": "2026-11-06T14:18:07.904991+00:00",
+          "trust_tier": 3,
+          "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+          "fingerprint": "79285af27705ba01625266a5db6b2e5e9317209eb2654a1f1ce6654f7f4672e0",
+          "content_hash": "6bc731a7bb4bc45de7e185901c3222b20636cd4529d23e07aa61c506c72b521b",
+          "derives_from": null
+        }
+      }
+    ],
+    "atom_parameters": [],
+    "atom_references": [],
+    "atom_io_specs": [
+      {
+        "row": {
+          "name": "centers",
+          "atom_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "ndarray",
+          "io_spec_id": "37d1a444-014b-4974-a6d8-8ebe84e505c8",
+          "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+          "constraints": "Finite copied center matrix (K,D), preserving input float precision and backend cluster order. Single native thread; no global optimum guarantee.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "labels",
+          "atom_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+          "ordinal": 1,
+          "required": true,
+          "direction": "output",
+          "type_desc": "ndarray",
+          "io_spec_id": "8ae36220-1430-412d-bde1-529bb0486fd3",
+          "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+          "constraints": "Copied integer vector (N,) indexing returned centers, in caller row order. Cluster numbering is backend-dependent.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "max_iter",
+          "atom_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+          "ordinal": 4,
+          "required": false,
+          "direction": "input",
+          "type_desc": "int",
+          "io_spec_id": "2c7cfb0b-b600-4c4c-8553-76fb5eceec89",
+          "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+          "constraints": "Positive integer Lloyd iteration limit per restart. A limit does not guarantee convergence or global optimality.",
+          "default_value_repr": "300"
+        }
+      },
+      {
+        "row": {
+          "name": "n_clusters",
+          "atom_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "int",
+          "io_spec_id": "5eb08e54-fef3-4797-ab61-0b6626f78e8b",
+          "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+          "constraints": "Positive integer K <= N; booleans rejected. Duplicate points can yield fewer distinct clusters.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "n_init",
+          "atom_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+          "ordinal": 3,
+          "required": false,
+          "direction": "input",
+          "type_desc": "int",
+          "io_spec_id": "3cf03182-f0dc-4193-a00c-4b6409e826aa",
+          "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+          "constraints": "Positive integer restart count. Each run uses k-means++ initialization; best inertia is selected by the installed backend.",
+          "default_value_repr": "1"
+        }
+      },
+      {
+        "row": {
+          "name": "points",
+          "atom_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "fcc1c115-23db-4a9e-875a-9b12aee940f1",
+          "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+          "constraints": "Nonempty finite float32 or float64 matrix (N,D). Input precision is preserved and storage copied. Caller controls feature scaling and the Euclidean metric; no domain identifiers or partitioning policy.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "random_state",
+          "atom_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+          "ordinal": 2,
+          "required": false,
+          "direction": "input",
+          "type_desc": "int",
+          "io_spec_id": "9b96ce92-0869-46f0-a8b0-97903aa7de46",
+          "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+          "constraints": "Integer seed in [0, 2**32-1]; booleans rejected. No cross-version reproducibility guarantee.",
+          "default_value_repr": "0"
+        }
+      },
+      {
+        "row": {
+          "name": "tolerance",
+          "atom_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+          "ordinal": 5,
+          "required": false,
+          "direction": "input",
+          "type_desc": "float",
+          "io_spec_id": "aaee787d-e565-40fc-9fc3-89f27e74d3c6",
+          "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+          "constraints": "Finite nonnegative convergence tolerance interpreted by the installed scikit-learn backend; booleans rejected.",
+          "default_value_repr": "0.0001"
+        }
+      }
+    ],
+    "artifact_versions": [
+      {
+        "row": {
+          "s3_key": "",
+          "semver": "0.0.0+local.6bc731a7bb4b",
+          "is_latest": true,
+          "created_at": "2026-11-06T14:18:07.904991+00:00",
+          "trust_tier": 3,
+          "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+          "artifact_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+          "fingerprint": "79285af27705ba01625266a5db6b2e5e9317209eb2654a1f1ce6654f7f4672e0",
+          "content_hash": "6bc731a7bb4bc45de7e185901c3222b20636cd4529d23e07aa61c506c72b521b",
+          "derives_from": null
+        }
+      }
+    ],
+    "artifact_parameters": [],
+    "artifact_references": [],
+    "artifact_io_specs": [
+      {
+        "row": {
+          "name": "centers",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "ndarray",
+          "io_spec_id": "ba2483fe-d0f4-4865-bccb-f7d3ebd458b2",
+          "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+          "artifact_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+          "constraints": "Finite copied center matrix (K,D), preserving input float precision and backend cluster order. Single native thread; no global optimum guarantee.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "labels",
+          "ordinal": 1,
+          "required": true,
+          "direction": "output",
+          "type_desc": "ndarray",
+          "io_spec_id": "21e3b2b9-d5ef-4cb2-9f91-29f2f04d1527",
+          "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+          "artifact_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+          "constraints": "Copied integer vector (N,) indexing returned centers, in caller row order. Cluster numbering is backend-dependent.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "max_iter",
+          "ordinal": 4,
+          "required": false,
+          "direction": "input",
+          "type_desc": "int",
+          "io_spec_id": "0d7e7b95-4f15-4615-9766-a11fd75465d2",
+          "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+          "artifact_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+          "constraints": "Positive integer Lloyd iteration limit per restart. A limit does not guarantee convergence or global optimality.",
+          "dim_signature": "",
+          "default_value_repr": "300"
+        }
+      },
+      {
+        "row": {
+          "name": "n_clusters",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "int",
+          "io_spec_id": "4af29aa3-fe80-4866-ac17-a2ce1607681b",
+          "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+          "artifact_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+          "constraints": "Positive integer K <= N; booleans rejected. Duplicate points can yield fewer distinct clusters.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "n_init",
+          "ordinal": 3,
+          "required": false,
+          "direction": "input",
+          "type_desc": "int",
+          "io_spec_id": "0ac09d44-21fa-498b-a70d-0905b61825ad",
+          "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+          "artifact_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+          "constraints": "Positive integer restart count. Each run uses k-means++ initialization; best inertia is selected by the installed backend.",
+          "dim_signature": "",
+          "default_value_repr": "1"
+        }
+      },
+      {
+        "row": {
+          "name": "points",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "02cc14cf-5b56-4a45-87b2-04311033f224",
+          "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+          "artifact_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+          "constraints": "Nonempty finite float32 or float64 matrix (N,D). Input precision is preserved and storage copied. Caller controls feature scaling and the Euclidean metric; no domain identifiers or partitioning policy.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "random_state",
+          "ordinal": 2,
+          "required": false,
+          "direction": "input",
+          "type_desc": "int",
+          "io_spec_id": "4231effb-d740-471b-ac3b-a2473243e2cb",
+          "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+          "artifact_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+          "constraints": "Integer seed in [0, 2**32-1]; booleans rejected. No cross-version reproducibility guarantee.",
+          "dim_signature": "",
+          "default_value_repr": "0"
+        }
+      },
+      {
+        "row": {
+          "name": "tolerance",
+          "ordinal": 5,
+          "required": false,
+          "direction": "input",
+          "type_desc": "float",
+          "io_spec_id": "b1f12dcc-4e2b-4691-b137-2f8bba86c0a8",
+          "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+          "artifact_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+          "constraints": "Finite nonnegative convergence tolerance interpreted by the installed scikit-learn backend; booleans rejected.",
+          "dim_signature": "",
+          "default_value_repr": "0.0001"
+        }
+      }
+    ],
+    "artifact_audit_evidence": [
+      {
+        "row": {
+          "passed": true,
+          "status": "completed",
+          "details": {
+            "scope": "Exact source/interface draft intake only; no publication approval.",
+            "interfaces": [
+              {
+                "name": "points",
+                "ordinal": 0,
+                "required": true,
+                "direction": "input",
+                "type_desc": "ndarray",
+                "constraints": "Nonempty finite float32 or float64 matrix (N,D). Input precision is preserved and storage copied. Caller controls feature scaling and the Euclidean metric; no domain identifiers or partitioning policy.",
+                "default_value_repr": ""
+              },
+              {
+                "name": "n_clusters",
+                "ordinal": 1,
+                "required": true,
+                "direction": "input",
+                "type_desc": "int",
+                "constraints": "Positive integer K <= N; booleans rejected. Duplicate points can yield fewer distinct clusters.",
+                "default_value_repr": ""
+              },
+              {
+                "name": "random_state",
+                "ordinal": 2,
+                "required": false,
+                "direction": "input",
+                "type_desc": "int",
+                "constraints": "Integer seed in [0, 2**32-1]; booleans rejected. No cross-version reproducibility guarantee.",
+                "default_value_repr": "0"
+              },
+              {
+                "name": "n_init",
+                "ordinal": 3,
+                "required": false,
+                "direction": "input",
+                "type_desc": "int",
+                "constraints": "Positive integer restart count. Each run uses k-means++ initialization; best inertia is selected by the installed backend.",
+                "default_value_repr": "1"
+              },
+              {
+                "name": "max_iter",
+                "ordinal": 4,
+                "required": false,
+                "direction": "input",
+                "type_desc": "int",
+                "constraints": "Positive integer Lloyd iteration limit per restart. A limit does not guarantee convergence or global optimality.",
+                "default_value_repr": "300"
+              },
+              {
+                "name": "tolerance",
+                "ordinal": 5,
+                "required": false,
+                "direction": "input",
+                "type_desc": "float",
+                "constraints": "Finite nonnegative convergence tolerance interpreted by the installed scikit-learn backend; booleans rejected.",
+                "default_value_repr": "0.0001"
+              },
+              {
+                "name": "centers",
+                "ordinal": 0,
+                "required": true,
+                "direction": "output",
+                "type_desc": "ndarray",
+                "constraints": "Finite copied center matrix (K,D), preserving input float precision and backend cluster order. Single native thread; no global optimum guarantee.",
+                "default_value_repr": ""
+              },
+              {
+                "name": "labels",
+                "ordinal": 1,
+                "required": true,
+                "direction": "output",
+                "type_desc": "ndarray",
+                "constraints": "Copied integer vector (N,) indexing returned centers, in caller row order. Cluster numbering is backend-dependent.",
+                "default_value_repr": ""
+              }
+            ],
+            "plan_sha256": "0396b1f90f2019854db279dde82243c40c9f23c15cebae60cdc3ba7032f15fac",
+            "review_sha256": "91cb40b39524fe40849d60fc96f7d0dfb2f93644a3d67953674bc08163662f10",
+            "source_sha256": "f1035bd95ab67f2265ae4b106dd5d7b6aaae9d6a864d57738b127283e4e38e3f"
+          },
+          "audit_type": "asset_integrity_check",
+          "created_at": "2026-11-06T14:18:07.904991+00:00",
+          "version_id": "8810598e-ed17-5e12-ac17-3e193b1f8fd4",
+          "artifact_id": "10608a02-5127-51ac-81b4-4b216d91d209",
+          "evidence_id": "7dfa703f-1c60-504c-9ff2-a5d5597f1ede",
+          "source_kind": "automated",
+          "runner_version": "trackml-kmeans-provider-intake.v1",
+          "review_basis_at": null,
+          "run_duration_ms": null,
+          "source_revision": "",
+          "upstream_version": ""
+        }
+      }
+    ]
+  },
+  "originals_sha256": "f839940aa40edfe5734827698947ed1a426a79c16bb215d49820714ff632db50",
+  "publisher_sha256": "9246780ad48cc52b3fa6c409aa1727565aa2c724a08f29514880ed646dde40f5",
+  "review_sha256": "cf79dc16aa03e359ce4299a9169a081072f04b72b7a8621d4d455b4324df643f"
+}
