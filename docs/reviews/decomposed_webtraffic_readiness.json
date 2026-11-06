@@ -1,0 +1,309 @@
+{
+  "format": "decomposed-webtraffic-readiness.v1",
+  "read_only": true,
+  "catalog_mutations": 0,
+  "approved": false,
+  "original": {
+    "artifact_id": "7217a6e8-5fcf-58a0-b0b1-caad0e40a20a",
+    "fqdn": "cdg.competition.solution.kaggle.web_traffic_forecasting_1st",
+    "status": "draft",
+    "is_publishable": false,
+    "content_hash": "dc85ebd516bf6b3832bcab2bf4262e9603b7c8ef2cf2317215495182aef88b8d",
+    "is_latest": true
+  },
+  "source_version_id": "a6298d16-4fa7-5577-b559-7c17c006ccd5",
+  "source_stages": [
+    {
+      "stage_id": "log1p_transformation",
+      "description": "strictly apply log1p to the Wikipedia page views to suppress massive traffic spikes and stabilize neural network gradients (numpy)"
+    },
+    {
+      "stage_id": "missing_value_masking",
+      "description": "tag NaN values with an explicit boolean flag and fill with 0 to inform the network of missing data mechanically (pandas)"
+    },
+    {
+      "stage_id": "seq2seq_architecture",
+      "description": "construct an LSTM Encoder-Decoder network. The encoder ingests the trailing 60 days of traffic, passing the hidden state to the decoder which predicts the next 60 days autoregressively (TensorFlow)"
+    },
+    {
+      "stage_id": "exogenous_concatenation",
+      "description": "append Wikipedia page metadata (language, domain) to the LSTM inputs at every timestep"
+    },
+    {
+      "stage_id": "smape_optimization",
+      "description": "train the entire network natively on a smooth approximation of the SMAPE (Symmetric Mean Absolute Percentage Error) loss function (TensorFlow)"
+    }
+  ],
+  "derivative": {
+    "artifact_id": "40e129cc-15bd-558c-b13c-1fea2320e2aa",
+    "fqdn": "cdg.competition.solution.kaggle.web_traffic_forecasting_1st.execution",
+    "status": "approved",
+    "is_publishable": true,
+    "content_hash": "44b7abc320eaab36bba8dd45eb1ebaf021cca1352d8295d35be396a2be41c2c0",
+    "is_latest": true,
+    "trust_tier": 3
+  },
+  "derivative_version_id": "41712163-61bd-5345-b735-bca98e5c42b2",
+  "derivative_nodes": [
+    {
+      "node_id": "forecast"
+    },
+    {
+      "node_id": "prepare"
+    },
+    {
+      "node_id": "train"
+    }
+  ],
+  "derivative_bindings": [
+    {
+      "node_id": "forecast",
+      "bound_artifact_fqdn": "sciona.atoms.dl.webtraffic_execution.webtraffic_forecast",
+      "bound_version_content_hash": "29e25e3da0e5a442bf5b88ef477aab331c826df2423a8f3e86bfe65cb7dbda2a"
+    },
+    {
+      "node_id": "prepare",
+      "bound_artifact_fqdn": "sciona.atoms.dl.webtraffic_execution.webtraffic_prepare",
+      "bound_version_content_hash": "d429894ced8802d9a0d156441a2d64458c41c2d86c39769e71aa66ff51d08013"
+    },
+    {
+      "node_id": "train",
+      "bound_artifact_fqdn": "sciona.atoms.dl.webtraffic_execution.webtraffic_train",
+      "bound_version_content_hash": "4293d78ffd9c3fd55fe7ec002a2617e78f96e45714762f94fd672f19239fa0db"
+    }
+  ],
+  "retained_evidence_sha256": {
+    "competition_webtraffic_adam.json": "be93d2d6e05a1e13fb0efb278e42a3dc98933c0009903d042232d7248b1a19fd",
+    "competition_webtraffic_assembly.json": "2bb0b1cf0cbf0ba9e4cd1088fb5bbe2df2d75be1d589d770c98090e84c9ef8dc",
+    "competition_webtraffic_batches.json": "64200076271bea8c6be69f772456a56f60d6337d297136d730151945d0e839d3",
+    "competition_webtraffic_calendar.json": "02f9fbb85a13190ee2faf723bcef4c238c1cdb5667bb8df71f67855ca750f6bd",
+    "competition_webtraffic_decoder.json": "692764ce7de14f97b2a2db80f513745111b2be2d310f2e1ff9a643c38b38471e",
+    "competition_webtraffic_dropout.json": "73bd284372afd6f052c30bb7fe2bff18611cdd21057d1635529039769d1c37f3",
+    "competition_webtraffic_dropout_source.json": "f4d3fa69c49b046b6f59cccf78d00c310fa1bee533459c3fc706a6a84c5886cf",
+    "competition_webtraffic_ema.json": "d6d2681ac485d0fec338f77edf928a2d808a38439d09283e77cc611f706e51d7",
+    "competition_webtraffic_encoder.json": "ca434f30353282dc707ad9be9b6e8448658a8357ae91cdb60950a50d1acaa374",
+    "competition_webtraffic_ensemble.json": "c99f8e36a99dca0a55f69b488f0b170bed8f989e5a5b29f4d7f75ff48cb56287",
+    "competition_webtraffic_features.json": "6ed6ec6eb11142e0cc94daabca74281ff093dfc8b1bff3cbb381493a8da7caa2",
+    "competition_webtraffic_final_route_review.json": "9b19cb5c1c0c4abc3bd134113949d560a56fb3e3b6d01c5c090d5093170d6fc6",
+    "competition_webtraffic_full_batch.json": "f561edad4623d3764b636bdc2d12a25fbed709d93137e0b4e460771ba84ce54b",
+    "competition_webtraffic_graph.json": "9bd82f2a68cfdf6c4ea2a1e0d473e946be288a41abe5c1893604e0d12278416d",
+    "competition_webtraffic_initialization.json": "3415c1d5c9554ffce97a8e6ff46447e86a5c74cf426587a1b5a203ce5bd59029",
+    "competition_webtraffic_initializer_source.json": "e8c72d190d0999d27316e7106a5b453ca7ac2fddbb99dff87d20f3d23e07908c",
+    "competition_webtraffic_lifecycle.json": "56d2293a0ab27656356f773d2aa6db4fa0984ab39a1b11be6b59d681e17dc005",
+    "competition_webtraffic_losses.json": "3949edb62dd0b719e6dfc256380720e85943044b6c77ac6dcdcb7440da88158e",
+    "competition_webtraffic_notebook_pin.json": "354aea1200ca97c3a92ff149b33abb7bb5523df395a1fbae58c3cb23eff2d2f9",
+    "competition_webtraffic_pages.json": "fad895d98cf0b6255d4262aad7cd52fefb849810f6834d5fd3399fc36faf9190",
+    "competition_webtraffic_promotion_requirements.json": "b4e8faed6af14d099515633b943553cf2cc9487865c098476c160dc06707cd75",
+    "competition_webtraffic_publication.json": "83213411af2693e139a415b39dd74c1b7c8b44f15c290626db1e408706b6ec1f",
+    "competition_webtraffic_publication_verification.json": "7ec54e87e16545cbe42c34198366839d1674121987eb07f0138aed34a82c5567",
+    "competition_webtraffic_runtime.json": "41bdeca4ab019f535f7244ee2111920ddde5be083f935d43f6ed94c2f2df8562",
+    "competition_webtraffic_schedule.json": "adb2d541c9ad28ee0abc9f8da7fcf3a0eacc96496129547a50b4597ffe688ea6",
+    "competition_webtraffic_semantic_review.json": "a6e3c80f2dd0a098dd0fa1b48f4955f3daefcecc8abc39041a3499d95304cf2a",
+    "competition_webtraffic_source_inventory.json": "45636e8fa74e5195037d586322417489579d456d9046d9f250310e13dbc09839",
+    "competition_webtraffic_source_pins.json": "7788fe1d3bfa4eb5822a75db70627b3efb96e1da7d087f12aa6ff99cfe2e2891",
+    "competition_webtraffic_source_review.json": "d248758628b56c7384c8987dc16ef4d3dc3d40533889480e46bdc393a45c0e8e",
+    "competition_webtraffic_train_step.json": "b10fcb7865799b8557d899a05f7107e60c42df09bd5420984c78ddbafae5324c",
+    "competition_webtraffic_training_forward.json": "cb048df61d360ea780da8cecf788c18d2eaae91dfaf4153d5c8ff0ae64a7e133",
+    "competition_webtraffic_training_review.json": "63095edd26d293774ad1575844968cab1259d659b2fbd56cca9c37e18339aecd",
+    "competition_webtraffic_windows.json": "590e14e7b291939c2a4dabdd3c4802e75abb9f349cf56f1f4d948f1d45e57328"
+  },
+  "distinct_file_hash_checks": 48,
+  "implementation_drift": [],
+  "implementation_inventory": {
+    "webtraffic_adam.py": {
+      "sha256": "3a8b018b2ca2d0491ebe6f8415107c48e80054370d5d71edd1919c4976fd64f9",
+      "functions": [
+        "initial_state",
+        "adam_step"
+      ]
+    },
+    "webtraffic_assembly.py": {
+      "sha256": "28fd1b0b87866e388bb5b3c863919f153b71210813226a0e54a1a81353a3976c",
+      "functions": [
+        "normalize",
+        "assemble_features"
+      ]
+    },
+    "webtraffic_batches.py": {
+      "sha256": "988dc4c26d52201795f72d7ef2901ae3c24ecd3c4b3c5ba1d17e1b7bab46ddf9",
+      "functions": [
+        "feeder_arrays",
+        "fake_split_indices",
+        "window_batches"
+      ]
+    },
+    "webtraffic_calendar.py": {
+      "sha256": "e2ccf630fa3225e77373d4d8e40805d24ff152e35d877165e5f5d123c10dd205",
+      "functions": [
+        "lag_indexes"
+      ]
+    },
+    "webtraffic_decoder.py": {
+      "sha256": "0a9aed75509a7991b4fb97458f8a5d7b03045519d1feef5fb6787289e90c3436",
+      "functions": [
+        "gru_block_step",
+        "convert_encoder_state",
+        "decode"
+      ]
+    },
+    "webtraffic_dropout.py": {
+      "sha256": "e14169f15d2381f793b2d7e5fc5cf68bce8d2ad67ab4e6a44dd02f238c145259",
+      "functions": [
+        "apply_mask",
+        "decode_with_masks"
+      ]
+    },
+    "webtraffic_ema.py": {
+      "sha256": "aeb201795f711d58b7c3cfe86d8fb53b7f0eb70bdf22286d41d3b7a963bcc3f5",
+      "functions": [
+        "initial_ema",
+        "update_ema",
+        "ema_parameters"
+      ]
+    },
+    "webtraffic_encoder.py": {
+      "sha256": "4861fe7aad9af376f47287ede6342fe098aa10bd88b6a4541ae522fa7a61089b",
+      "functions": [
+        "encode",
+        "predict_without_dropout"
+      ]
+    },
+    "webtraffic_ensemble.py": {
+      "sha256": "bd0fc3b92458a8ded510e3c737607d106852cd535a312169fec768015c244f30",
+      "functions": [
+        "average_checkpoint_predictions",
+        "finalize_predictions"
+      ]
+    },
+    "webtraffic_features.py": {
+      "sha256": "78695bfc0331cb3e6b3e46fdfed5219a690e347390156dbac06aaaf8a8baf543",
+      "functions": [
+        "single_autocorr",
+        "batch_autocorr",
+        "find_start_end",
+        "prepare_series"
+      ]
+    },
+    "webtraffic_graph.py": {
+      "sha256": "1203139c8dc5b62ead80027c63858b5fb49b54d8fdb8b25717a7e1c17712d4cf",
+      "functions": [
+        "build_webtraffic_graph"
+      ]
+    },
+    "webtraffic_initialization.py": {
+      "sha256": "c4dbe90e5c958b14f2ab6f2ec8890a839adc60d015679a14b0ad69a482416a73",
+      "functions": [
+        "uniform_shapes",
+        "initialize_from_uniforms"
+      ]
+    },
+    "webtraffic_lifecycle.py": {
+      "sha256": "947f8843fd38c93b6b34de5a38c19e66773b324a1475680afa3fc825da6378a5",
+      "functions": [
+        "batch_inputs",
+        "initial_lifecycle",
+        "advance",
+        "save_checkpoint",
+        "predict_checkpoints"
+      ]
+    },
+    "webtraffic_losses.py": {
+      "sha256": "3af5d59fd8c9f43a95e0de1db7d4c18bc315b2382446b9c9078eacb6028711a3",
+      "functions": [
+        "weighted_loss",
+        "calc_loss",
+        "decode_predictions",
+        "rnn_stability_loss",
+        "rnn_activation_loss"
+      ]
+    },
+    "webtraffic_pages.py": {
+      "sha256": "5b9e00643a86dc38568b7def1b8322051b89036c5d9a342994407ef7a6153442",
+      "functions": [
+        "extract_page_fields",
+        "make_page_features",
+        "uniq_page_map",
+        "encode_page_features"
+      ]
+    },
+    "webtraffic_payload.py": {
+      "sha256": "550f0449ec92dcbe318e2115ec345458fdb54248dd60c9e0dbaaee9e581cd1c6",
+      "functions": [
+        "decode_payload",
+        "train_payload",
+        "encode_forecast",
+        "execute_payload"
+      ]
+    },
+    "webtraffic_runtime.py": {
+      "sha256": "0bab786fee50f5be127b117dbe191377df852a5fd4666a878d09ea575dda5152",
+      "functions": [
+        "RuntimeConfig",
+        "PreparedRuntime",
+        "prepare_runtime",
+        "train_runtime",
+        "forecast_runtime",
+        "execute_runtime"
+      ]
+    },
+    "webtraffic_schedule.py": {
+      "sha256": "80b84dab37b24bd0387e81dd5cad054d69ac5c1172bf8b0266bf60640fcb4962",
+      "functions": [
+        "training_schedule",
+        "retained_checkpoint_steps"
+      ]
+    },
+    "webtraffic_train_step.py": {
+      "sha256": "b3c6baa092e1493a44c3db799b07b56b440738e8f580898af56854158d56532f",
+      "functions": [
+        "parameter_views",
+        "new_optimizer",
+        "forward",
+        "train_step"
+      ]
+    },
+    "webtraffic_training_forward.py": {
+      "sha256": "37315b609e76acd03c32442f55b88d039b196d6299ec9f53172ea02e1358fe6c",
+      "functions": [
+        "s32_forward"
+      ]
+    },
+    "webtraffic_windows.py": {
+      "sha256": "ed1b61b2de15d9aa3916bb11387f20c707868cd9e54f6e2f5704465e194d2db0",
+      "functions": [
+        "cut_window",
+        "make_window_features",
+        "keep_window",
+        "training_offset_bounds"
+      ]
+    }
+  },
+  "current_runtime_versions": {
+    "numpy": "2.2.6",
+    "pandas": "2.3.3",
+    "torch": "2.11.0"
+  },
+  "source_corrections": [
+    "Retained pinned-source review identifies GRU rather than intake LSTM; active s32 width267,283 input days and63 forecast days rather than fixed60/60.",
+    "Missing values and lag masks drive replacement with zero; do not infer explicit mask-feature concatenation.",
+    "Preserve complete feature/window preparation, three-model training, Adam, EMA observation phases, checkpoint cadence, retention and count-space ensemble.",
+    "CPU NumPy/PyTorch random streams and explicit EMA phases are declared adaptations; no identical-seed legacy TensorFlow or source race replay.",
+    "Competition-specific date slicing and submission routing are excluded by the derivative. Original final-output scope must be resolved explicitly before promotion."
+  ],
+  "reuse_work": [
+    "Inventory registered alternatives for numeric preparation, correlation, normalization, recurrent cells, optimizer updates, EMA and ensemble before adding providers.",
+    "Expose numerical blocks with independent numeric inputs and controls; retain page parsing and source feature order as named recipe policies.",
+    "Preserve recurrent state, gradient flow, every configured update and all retained checkpoints when decomposing lifecycle orchestration; do not replace complete training with a forward-only adapter."
+  ],
+  "next_actions": [
+    "Verify pinned public software against source corrections and resolve original final-output scope.",
+    "Run the unchanged complete synthetic derivative under the current runtime with serial workers and one-thread pools; retain old evidence.",
+    "Qualify reusable decomposition, exact registered bindings and stored original execution before automated Tier3 publication."
+  ],
+  "limits": [
+    "Readiness audit only; matching file hashes do not rerun numerical evidence or establish current runtime equivalence.",
+    "Source stage descriptions are public algorithm-template metadata, not runtime dataset contents.",
+    "No original, derivative or provider rows changed."
+  ],
+  "auditor_sha256": "5e72cd06d23e1cc0b37fcc779b59cff313b2b100475b805b78288e4167ebacee"
+}
