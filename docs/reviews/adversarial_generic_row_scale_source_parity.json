@@ -1,0 +1,63 @@
+{
+  "format": "adversarial-generic-row-scale-validation.v1",
+  "approved": false,
+  "catalog_mutations": 0,
+  "generic_provider_sha256": "4bc3d26b2f702f8bb59741b0a75d34d560156cc0e9bfb487ae3f62253b7ed1ea",
+  "test_sha256": "219776c38c952956d5875112acca2ec20d838678be4e2bc7049913126d578cd2",
+  "complete_synthetic_gradient_schedules": [
+    {
+      "branch": "non_targeted",
+      "dtype": "float32",
+      "iterations": 10,
+      "exact": true
+    },
+    {
+      "branch": "non_targeted",
+      "dtype": "float64",
+      "iterations": 10,
+      "exact": true
+    },
+    {
+      "branch": "targeted_small",
+      "dtype": "float32",
+      "iterations": 40,
+      "exact": true
+    },
+    {
+      "branch": "targeted_small",
+      "dtype": "float64",
+      "iterations": 40,
+      "exact": true
+    },
+    {
+      "branch": "targeted_large",
+      "dtype": "float32",
+      "iterations": 20,
+      "exact": true
+    },
+    {
+      "branch": "targeted_large",
+      "dtype": "float64",
+      "iterations": 20,
+      "exact": true
+    }
+  ],
+  "result": "passed",
+  "checks": {
+    "source_tail_cases": 32,
+    "independent_symmetric_oracles": 3,
+    "rounding_tie_and_step_clip_oracles": 4,
+    "independent_projection_oracle": true,
+    "targeted_epsilon_boundary": true,
+    "source_nan_and_explicit_rejection_cases": 3
+  },
+  "oracle_scope": "Pinned source assignment AST executed with NumPy equivalents for TensorFlow array ops; supplied synthetic gradients. Does not establish TensorFlow binary reduction parity.",
+  "rounding_reference": "https://www.tensorflow.org/api_docs/python/tf/math/round",
+  "adaptation": "Reject zero/nonfinite normalization instead of source NaN propagation, without adding an epsilon stabilizer.",
+  "limits": "Generic row scaling composed into update arithmetic only. Source parity uses contiguous NHWC arrays matching the neural lifecycle boundary. Synthetic supplied gradients cover complete schedules; actual neural gradients and decomposed graph integration remain pending. No original-CDG publication approval.",
+  "sha256": {
+    "sciona/adversarial_updates.py": "7fb8d70efd285d9f43edceacaa9e348aace10e0eddcf97b410c28012931c45aa",
+    "scripts/validate_adversarial_row_scale.py": "f387da57d736b3e5a1fd6cb9a08dfb5982f694b39fc705ab93e13457a3aac413",
+    "docs/reviews/competition_adversarial_source_pins.json": "2aed3607458c133fa2a82f89cecdeac6b6d271f012e77a3b6cd2d53492335b55"
+  }
+}
