@@ -1,0 +1,2183 @@
+{
+  "passed": true,
+  "approved": false,
+  "qualification": {
+    "format": "m5u-decomposed-provider-semantics.v1",
+    "passed": true,
+    "approved": false,
+    "review_source": "automated",
+    "proposed_tier": 3,
+    "verdict": "acceptable_with_limits",
+    "providers": [
+      {
+        "runtime_fqdn": "sciona.atoms.ml.decomposed_m5u_execution.fit_forecast",
+        "catalog_fqdn": "sciona.atoms.ml.decomposed_m5u_execution.fit_forecast",
+        "version_id": "b1d04e11-e645-5d67-ae9e-33a2fb381771",
+        "content_hash": "5644a7106c1310129e69bb64538ba91677be4525926e5df74e8ec833c9c24802",
+        "interfaces": [
+          {
+            "direction": "input",
+            "name": "prepared",
+            "ordinal": 0,
+            "type_desc": "object",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "output",
+            "name": "forecasted",
+            "ordinal": 0,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          }
+        ],
+        "provider_sha256": "a1a376be09cd3f7b5b4f8f038dc62bac85b6a39beb0a479c870386c3aa0b19cc",
+        "classification": "source_recipe_adapter",
+        "atom_id": "443ef8a4-3d73-5dd7-9ddf-58f5c7140c47",
+        "seed_fields": {
+          "fqdn": "sciona.atoms.ml.decomposed_m5u_execution.fit_forecast",
+          "namespace_root": "sciona.atoms",
+          "namespace_path": "ml.decomposed_m5u_execution",
+          "repo_name": "sciona-atoms-ml",
+          "source_module_path": "ml.decomposed_m5u_execution",
+          "import_module": "sciona.atoms.ml.decomposed_m5u_execution",
+          "source_symbol": "fit_forecast",
+          "description": "Train all levels and perform full repeated quantile inference.",
+          "domain_tags": [
+            "ml"
+          ],
+          "source_kind": "hand_written",
+          "is_ffi": false
+        },
+        "semver": "0.0.0+local.5644a7106c13",
+        "fingerprint": "d340174e34668774b0f1dee22758d557136542fcc91b65136d2455d23f41dd07",
+        "operation": "Train every quantile model and forecast the complete hierarchy before unit restoration.",
+        "plain_limits": "Accept validated history and hierarchy configuration. Run the full grouped search and repeated forecasting schedule. Return all quantiles and future steps without the final hierarchy adjustment.",
+        "validity_bounds": "Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical revalidation through prepare. Forward caller minimum_day and seed without speed overrides. Run aggregate controller -1 for levels 1 through 11, followed by separate base controllers 13,14,15. Preserve retained_base_reference normalization for aggregates and source normalization for base partitions. Source calendar cleaning must retain the forecast origin and sufficient year groups. Build complete rolling populations, sample each level with its factor-dependent full schedule, fit all nine quantiles using one bag and the latest outer holdout, and execute nested grouped randomized search with pinned parameter choices. Native LightGBM and search workers are one; models run serially. The latest outer group is excluded from training, but this is not proof of unbiased future accuracy. Run every repeated-query budget for all 28 horizons, preserving scaling, fold weighting and inverse scaling. Reject excessive query allocations rather than silently reducing them. Require all 14 levels and unique contiguous hierarchy coverage; sort outputs by hierarchy index. All 126 final models are required. Candidate-fit and query counts depend on the caller population; synthetic evidence counts are not universal constants. No restoration, quantile sorting, clipping or historical-weight loading occurs here.",
+        "parameters": {
+          "prepared": "Canonical same-invocation Prepared from m5u_prepare, with private nonnegative history, prices, hierarchy roles, three category partitions, calendar, minimum_day and seed."
+        },
+        "outputs": "Dictionary containing unadjusted float64 forecasts shaped (9,28,N), positive per-series factors, adjustment=.7, levels, quantiles, hierarchy_indices, per-level training/query reports, normalization and scope. Private intermediates remain runtime values.",
+        "dependencies": [
+          "sciona.decomposed_m5u_runtime.fit_forecast",
+          "sciona.m5u_execution",
+          "sciona.m5u_pipeline",
+          "sciona.m5u_preparation",
+          "sciona.m5u_population",
+          "sciona.m5u_training",
+          "sciona.m5u_sampling",
+          "sciona.m5u_targets",
+          "sciona.m5u_bagging",
+          "sciona.m5u_inference",
+          "numpy",
+          "pandas",
+          "scikit-learn",
+          "lightgbm",
+          "sciona.ghost.registry (registration only)"
+        ],
+        "reuse": "Grouped nonnegative time-series uncertainty forecasting with caller-defined hierarchy roles, category partitions and calendar covariates. Applicability across domains requires the declared hierarchy relationships, sufficient calendar history, nonnegative inputs and known future covariates. Fourteen levels, nine quantiles, a 28-step horizon, sampling schedules and restoration strength are recipe policy. The independently bound ordered weighted sum is domain independent. Intermediate arrays must come from one invocation; structural checks do not authenticate provenance. No historical competition accuracy or winning-model equivalence is claimed.",
+        "internal_registered_provider_dependencies": [],
+        "callable_dependency_contracts": {}
+      },
+      {
+        "runtime_fqdn": "sciona.atoms.ml.decomposed_m5u_execution.restoration_inputs",
+        "catalog_fqdn": "sciona.atoms.ml.decomposed_m5u_execution.restoration_inputs",
+        "version_id": "909e3075-abf4-5bbc-98d9-7ccc02d9601a",
+        "content_hash": "cbd4aa4fbd4fcb00c9368483b6b2b7aa8c258df00ef6c28cc03a1e2e2eed9b7e",
+        "interfaces": [
+          {
+            "direction": "input",
+            "name": "forecasted",
+            "ordinal": 0,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "output",
+            "name": "state",
+            "ordinal": 0,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "output",
+            "name": "values",
+            "ordinal": 1,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "output",
+            "name": "coefficients",
+            "ordinal": 2,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          }
+        ],
+        "provider_sha256": "a1a376be09cd3f7b5b4f8f038dc62bac85b6a39beb0a479c870386c3aa0b19cc",
+        "classification": "source_recipe_adapter",
+        "atom_id": "c007827f-83ce-5f16-bb74-cdcd54aa7e7b",
+        "seed_fields": {
+          "fqdn": "sciona.atoms.ml.decomposed_m5u_execution.restoration_inputs",
+          "namespace_root": "sciona.atoms",
+          "namespace_path": "ml.decomposed_m5u_execution",
+          "repo_name": "sciona-atoms-ml",
+          "source_module_path": "ml.decomposed_m5u_execution",
+          "import_module": "sciona.atoms.ml.decomposed_m5u_execution",
+          "source_symbol": "restoration_inputs",
+          "description": "Expose native-unit state, ordered median totals and unit coefficients.",
+          "domain_tags": [
+            "ml"
+          ],
+          "source_kind": "hand_written",
+          "is_ffi": false
+        },
+        "semver": "0.0.0+local.cbd4aa4fbd4f",
+        "fingerprint": "a0e306d51fb5fa664f86892458a948a88550f2f86a8c111533dfdeefa8c2d689",
+        "operation": "Restore native units and expose ordered median totals for generic reduction.",
+        "plain_limits": "Divide by each level multiplier. Compute median totals for levels one through nine in ascending order, and supply one coefficient per level.",
+        "validity_bounds": "Require exact dictionary; forecasts convertible to exact float64 array (9,28,N), N positive, finite; aligned integer levels containing exactly 1..11,13,14,15; aligned finite positive real factors with one unique factor per level; exact quantile sequence (.005,.025,.165,.25,.5,.75,.835,.975,.995); and Python float adjustment=.7. Signed forecasts are allowed. Copy forecasts then divide by factors. For each ascending level 1..9, sum median forecasts over its series separately at each horizon. Reject nonfinite native values or totals and any zero total. Return a fresh unit coefficient vector. No cross-level addition or normalization is performed. Shape checks do not establish provenance or validate other metadata.",
+        "parameters": {
+          "forecasted": "Complete same-invocation fit_forecast output before restoration."
+        },
+        "outputs": "Tuple (state, values, coefficients): state holds native forecasts, copied levels, ascending selected levels and copied median totals; values is float64 (9,28); coefficients is float64 (9,) of ones. Values and state totals are independent arrays.",
+        "dependencies": [
+          "sciona.decomposed_m5u_runtime.restoration_inputs",
+          "sciona.m5u_training (quantile and level constants)",
+          "numpy",
+          "sciona.ghost.registry (registration only)"
+        ],
+        "reuse": "Grouped nonnegative time-series uncertainty forecasting with caller-defined hierarchy roles, category partitions and calendar covariates. Applicability across domains requires the declared hierarchy relationships, sufficient calendar history, nonnegative inputs and known future covariates. Fourteen levels, nine quantiles, a 28-step horizon, sampling schedules and restoration strength are recipe policy. The independently bound ordered weighted sum is domain independent. Intermediate arrays must come from one invocation; structural checks do not authenticate provenance. No historical competition accuracy or winning-model equivalence is claimed.",
+        "internal_registered_provider_dependencies": [],
+        "callable_dependency_contracts": {}
+      },
+      {
+        "runtime_fqdn": "sciona.atoms.ml.decomposed_m5u_execution.restore",
+        "catalog_fqdn": "sciona.atoms.ml.decomposed_m5u_execution.restore",
+        "version_id": "4ce7b6fd-18b0-5599-8171-966b7e956d49",
+        "content_hash": "5b33fc4466869a93748c87ec8528ae2c67e984389f34eb4d4f50071531033322",
+        "interfaces": [
+          {
+            "direction": "input",
+            "name": "state",
+            "ordinal": 0,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "input",
+            "name": "total",
+            "ordinal": 1,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "output",
+            "name": "restored",
+            "ordinal": 0,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          }
+        ],
+        "provider_sha256": "a1a376be09cd3f7b5b4f8f038dc62bac85b6a39beb0a479c870386c3aa0b19cc",
+        "classification": "source_recipe_adapter",
+        "atom_id": "1f580fe3-d538-55f5-917f-7d676003cc83",
+        "seed_fields": {
+          "fqdn": "sciona.atoms.ml.decomposed_m5u_execution.restore",
+          "namespace_root": "sciona.atoms",
+          "namespace_path": "ml.decomposed_m5u_execution",
+          "repo_name": "sciona-atoms-ml",
+          "source_module_path": "ml.decomposed_m5u_execution",
+          "import_module": "sciona.atoms.ml.decomposed_m5u_execution",
+          "source_symbol": "restore",
+          "description": "Use the generic total to apply the complete level correction.",
+          "domain_tags": [
+            "ml"
+          ],
+          "source_kind": "hand_written",
+          "is_ffi": false
+        },
+        "semver": "0.0.0+local.5b33fc446686",
+        "fingerprint": "a0e3449242769805b3ecbc7586a245c3355aa6d4d52a2ebd8f141063e93b2fc0",
+        "operation": "Apply the fixed hierarchy adjustment using the independently summed median totals.",
+        "plain_limits": "Divide the supplied level sum by nine. Adjust levels one through nine toward that target with strength .7. Leave the other levels in their restored native units.",
+        "validity_bounds": "Require exact dictionary state with finite float64 native forecasts (9,28,N), N positive, aligned integer levels containing exactly all 14 required levels, selected levels exactly 1..9 in order, finite nonzero float64 totals (9,28), and finite float64 supplied total (28,). Copy native forecasts; target=total/9. For each selected level compute (1-.7)+.7*target/level_total and multiply every quantile and series of that level by the corresponding horizon correction. Reject nonfinite final output. Signed inputs and outputs are supported; there is no clipping, rounding, quantile sorting or monotonicity guarantee. Levels 10,11,13,14,15 receive no additional correction. The adapter does not recompute the supplied sum or verify that stored totals match native forecasts; same-invocation provenance is a precondition.",
+        "parameters": {
+          "state": "Same-invocation state from restoration_inputs.",
+          "total": "Same-invocation generic ordered weighted sum of the nine median-total rows with unit coefficients."
+        },
+        "outputs": "Fresh finite float64 forecast array (9,28,N), retaining quantile, horizon and hierarchy ordering; caller arrays are not mutated.",
+        "dependencies": [
+          "sciona.decomposed_m5u_runtime.restore",
+          "sciona.m5u_training (level constants)",
+          "numpy",
+          "sciona.ghost.registry (registration only)"
+        ],
+        "reuse": "Grouped nonnegative time-series uncertainty forecasting with caller-defined hierarchy roles, category partitions and calendar covariates. Applicability across domains requires the declared hierarchy relationships, sufficient calendar history, nonnegative inputs and known future covariates. Fourteen levels, nine quantiles, a 28-step horizon, sampling schedules and restoration strength are recipe policy. The independently bound ordered weighted sum is domain independent. Intermediate arrays must come from one invocation; structural checks do not authenticate provenance. No historical competition accuracy or winning-model equivalence is claimed.",
+        "internal_registered_provider_dependencies": [],
+        "callable_dependency_contracts": {}
+      },
+      {
+        "runtime_fqdn": "sciona.atoms.ml.decomposed_m5u_execution.result",
+        "catalog_fqdn": "sciona.atoms.ml.decomposed_m5u_execution.result",
+        "version_id": "ea676f4a-18f7-5dc7-89bd-4e6fea62379c",
+        "content_hash": "61d632a8a253de6f1cda73113ccc2e9a68ed4aaf1496276d611f35fb81c7c309",
+        "interfaces": [
+          {
+            "direction": "input",
+            "name": "forecasted",
+            "ordinal": 0,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "input",
+            "name": "restored",
+            "ordinal": 1,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "output",
+            "name": "result",
+            "ordinal": 0,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          }
+        ],
+        "provider_sha256": "a1a376be09cd3f7b5b4f8f038dc62bac85b6a39beb0a479c870386c3aa0b19cc",
+        "classification": "source_recipe_adapter",
+        "atom_id": "29c012d6-dc06-5372-b602-912cbe767fed",
+        "seed_fields": {
+          "fqdn": "sciona.atoms.ml.decomposed_m5u_execution.result",
+          "namespace_root": "sciona.atoms",
+          "namespace_path": "ml.decomposed_m5u_execution",
+          "repo_name": "sciona-atoms-ml",
+          "source_module_path": "ml.decomposed_m5u_execution",
+          "import_module": "sciona.atoms.ml.decomposed_m5u_execution",
+          "source_symbol": "result",
+          "description": "Package all restored quantiles and horizons with complete model reports.",
+          "domain_tags": [
+            "ml"
+          ],
+          "source_kind": "hand_written",
+          "is_ffi": false
+        },
+        "semver": "0.0.0+local.61d632a8a253",
+        "fingerprint": "e8d7eccb3d5367bf730d0ad7e2ea3495b209998ad2eb42b0d2d5b5fe15bec0c9",
+        "operation": "Package every restored forecast and its reconstruction metadata as strict JSON.",
+        "plain_limits": "Check the forecast structure and restored array, then return all quantiles, hierarchy levels and future steps with the training reports and stated scope.",
+        "validity_bounds": "Revalidate forecasted through the same full shape, level, multiplier, quantile and adjustment checks used by restoration_inputs. Require restored values convertible to exact float64 with identical (9,28,N) shape and all finite entries. Convert forecast, levels and hierarchy indices to lists, quantiles to a list, retain reports, normalization and scope, set horizon=28 and require serialization with allow_nan=False. Reports, hierarchy indices, normalization and scope are passed through rather than independently authenticated. No sum, model execution or restoration is recomputed. Same-invocation provenance is required.",
+        "parameters": {
+          "forecasted": "Complete same-invocation fit_forecast output including metadata.",
+          "restored": "Complete same-invocation restore output in unchanged hierarchy order."
+        },
+        "outputs": "Strict JSON dictionary with forecast, levels, hierarchy_indices, quantiles, horizon=28, reports, normalization and scope. Forecast arrays are runtime outputs and must not be included in public evidence for private datasets.",
+        "dependencies": [
+          "sciona.decomposed_m5u_runtime.result",
+          "sciona.m5u_training (quantile and level constants)",
+          "numpy",
+          "json (Python standard library)",
+          "sciona.ghost.registry (registration only)"
+        ],
+        "reuse": "Grouped nonnegative time-series uncertainty forecasting with caller-defined hierarchy roles, category partitions and calendar covariates. Applicability across domains requires the declared hierarchy relationships, sufficient calendar history, nonnegative inputs and known future covariates. Fourteen levels, nine quantiles, a 28-step horizon, sampling schedules and restoration strength are recipe policy. The independently bound ordered weighted sum is domain independent. Intermediate arrays must come from one invocation; structural checks do not authenticate provenance. No historical competition accuracy or winning-model equivalence is claimed.",
+        "internal_registered_provider_dependencies": [],
+        "callable_dependency_contracts": {}
+      }
+    ],
+    "graph_digest": "4f820ddfac1367a52bdba178d831420847433a685739b49968a010d2f4c52b98",
+    "software_sha256": {
+      "sciona-atoms-ml/src/sciona/atoms/ml/decomposed_m5u_execution.py": "a1a376be09cd3f7b5b4f8f038dc62bac85b6a39beb0a479c870386c3aa0b19cc",
+      "sciona/decomposed_m5u_graph.py": "e40ab5e627bdfd3cfd06b96fd73f776fe681799bd72097d74a21b11686cd6276",
+      "sciona/decomposed_m5u_runtime.py": "8535d3ece4850bae96320838226a7b94cda26a99fdb0ff64a9333733d6ca27ce",
+      "sciona/m5u_bagging.py": "343eaf62bf1b67b8633d72b4ac2f24639ba7186a14edc835f0edb0d7b10e74ec",
+      "sciona/m5u_calendar.py": "3ee1863b3b9c17cef229135287a71cfa3dc9524ecc67f4bc118410939d407b5f",
+      "sciona/m5u_cleaning.py": "bbeac0608e2f326b59c026673f99a60cbfb88c577a1ca2ddab3d2f9677f171ff",
+      "sciona/m5u_execution.py": "e252c32b7df2d729216626e9da3909ca6b99775eb933e822566af8035a7d8d61",
+      "sciona/m5u_exponential.py": "8742f3a02a084a96dd6bf6a1d702a2b723fb0522259f63f8c74908304135428d",
+      "sciona/m5u_graph.py": "566add0b3aebd506ed8a18f950ac59247c233ed4c243f8d7c9db7dee036e8945",
+      "sciona/m5u_harmonization.py": "1a394cf9eab63dd14bd7e645cab728033fb596b47a46bf2764960b69b1c82d8f",
+      "sciona/m5u_hierarchy.py": "e748f65d33ed75c877a5e4fc9db73c1eb889045ffbf56e19b72a181952dad4d6",
+      "sciona/m5u_inference.py": "38b670e8aa0a3828da5d7362fc001e39ce611669f205b547b798cd968b6ebd55",
+      "sciona/m5u_loss.py": "838923d8f2bda7f7e0b7856412199afbf51d6e4e36232c60c8ffab0e20d2115f",
+      "sciona/m5u_pipeline.py": "fbcdb896d0916b61e4f2267c61c0b9f3f5165337bc611815201e4a8e9b8b1ce6",
+      "sciona/m5u_population.py": "d6ac47e2286961642208e0fd74d32a053342bffc5b2c56f22ed5d8f188ae3f41",
+      "sciona/m5u_prediction.py": "48640d1423fdad6ffa0c084c4f9bd5cde67303eea21bb600ab22e75aa496b4d8",
+      "sciona/m5u_preparation.py": "3d505e82ccdff8c7fb232517d579b4c9fb717f7a9975036d75c6cbd8bb4ec36b",
+      "sciona/m5u_rolling.py": "b876de2e229f310e4cda03c846ce99fb7a0b2ba04e924def12742361ca3b3e82",
+      "sciona/m5u_sampling.py": "e908ff4711669c5e418318066ff4a5ba0692b1edc23706a1e0f6eadbaf545ff3",
+      "sciona/m5u_scaling.py": "68bae53e9c23c50ffc68fa2b8ae7f47b157ab81d121376da8692599a9c76635c",
+      "sciona/m5u_search.py": "3c770fc2b24e96584aa4e1f5b7e25195f4d32a9a990a35d7df15195f43ba0255",
+      "sciona/m5u_search_parameters.json": "b9d0773352b192184728433e7b55a56e58cb7b7766ff71cbb92537c21fcc01dd",
+      "sciona/m5u_targets.py": "447ed712e8ddb7c0e10cb1d9574afb0182941474566e5ef27adcd4f145820be5",
+      "sciona/m5u_training.py": "1904d50f0ae7e733fe4e9ab3dab6b13bd6f51a310cfb911be2c19ddac476db4a",
+      "sciona/m5u_weights.py": "472ca6f95290e040c0edeb5404970a00ab26b7995e4926b237660583dfdab5ef",
+      "sciona/services/execution_graph_codec.py": "1ad42332f8e28adf4ee3f8d53184a4af8351f66304efa1703c63ed32989082a6",
+      "sciona/visualizer/runner.py": "22a49655e61c10d800aa2a6a9b5115cd873a9e699ea9903fa0f856aea8af67a4",
+      "scripts/audit_decomposed_m5u_packages.py": "74100685523f543a9850d50bf984cf146bcc3597143a252502cd1724c5d2025b",
+      "scripts/decomposed_m5u_provider_contracts.py": "cc8f5179c794f75b61c6527fb02facf81d87d29995c1981be14035ac498fd853",
+      "scripts/review_decomposed_m5u_implementation.py": "40a94206d6607f887fa0b5c9eba029be99835283679e464bb20e7c1a3938523c",
+      "scripts/review_m5u_decomposed_providers.py": "f2a664acec1486311b967b57a394c879708c0dbf8d2125850a4b66dee9b51960",
+      "scripts/stage_m5u_decomposed_providers.py": "e0727b8d098ce971035fc36954c872ee1063caa35cbf2074c5a0505330e07e00"
+    },
+    "imports": {
+      "sciona/m5u_weights.py": [
+        "import numpy as np"
+      ],
+      "sciona/m5u_harmonization.py": [
+        "import numpy as np"
+      ],
+      "sciona/m5u_execution.py": [
+        "from dataclasses import dataclass",
+        "from datetime import date",
+        "from sciona.m5u_cleaning import retained_rows",
+        "from sciona.m5u_hierarchy import aggregate",
+        "from sciona.m5u_pipeline import run",
+        "import hashlib",
+        "import json",
+        "import numpy as np"
+      ],
+      "sciona/m5u_graph.py": [
+        "from sciona.architect.handoff import CDGExport",
+        "from sciona.architect.models import AlgorithmicNode, DependencyEdge, IOSpec, NodeStatus"
+      ],
+      "sciona/m5u_prediction.py": [
+        "import numpy as np",
+        "import pandas as pd"
+      ],
+      "sciona/m5u_preparation.py": [
+        "from sciona.m5u_hierarchy import aggregate, normalize_by_outlet",
+        "from sciona.m5u_weights import level_factors",
+        "import numpy as np"
+      ],
+      "sciona/m5u_hierarchy.py": [
+        "import numpy as np"
+      ],
+      "sciona/m5u_pipeline.py": [
+        "from datetime import date",
+        "from sciona.m5u_harmonization import restore",
+        "from sciona.m5u_inference import forecast",
+        "from sciona.m5u_population import build",
+        "from sciona.m5u_preparation import prepare",
+        "from sciona.m5u_training import train_batch, QUANTILES, PARAMETERS",
+        "import numpy as np"
+      ],
+      "sciona/m5u_population.py": [
+        "from sciona.m5u_cleaning import retained_rows, missing_sentinel",
+        "from sciona.m5u_rolling import blocks",
+        "from sciona.m5u_weights import statistics",
+        "import numpy as np",
+        "import pandas as pd"
+      ],
+      "sciona/m5u_sampling.py": [
+        "import numpy as np"
+      ],
+      "sciona/m5u_search.py": [
+        "from pathlib import Path",
+        "from sciona.m5u_loss import pinball",
+        "from sklearn.metrics import make_scorer",
+        "from sklearn.model_selection import LeaveOneGroupOut, RandomizedSearchCV",
+        "import json",
+        "import lightgbm as lgb",
+        "import numpy as np",
+        "import pandas as pd"
+      ],
+      "sciona/m5u_loss.py": [
+        "import numpy as np"
+      ],
+      "sciona/m5u_bagging.py": [
+        "from dataclasses import dataclass",
+        "from sciona.m5u_loss import pinball",
+        "from sciona.m5u_sampling import quantile_mask",
+        "from sciona.m5u_search import search",
+        "import numpy as np",
+        "import pandas as pd"
+      ],
+      "sciona/m5u_rolling.py": [
+        "from sciona.m5u_exponential import histories",
+        "import numpy as np"
+      ],
+      "sciona/m5u_calendar.py": [
+        "from datetime import date",
+        "import numpy as np"
+      ],
+      "sciona/m5u_inference.py": [
+        "from sciona.m5u_prediction import predict",
+        "from sciona.m5u_targets import assemble",
+        "import numpy as np"
+      ],
+      "sciona/m5u_training.py": [
+        "from sciona.m5u_bagging import train",
+        "from sciona.m5u_sampling import sample",
+        "from sciona.m5u_targets import assemble",
+        "import numpy as np"
+      ],
+      "sciona/m5u_cleaning.py": [
+        "import numpy as np"
+      ],
+      "sciona/m5u_scaling.py": [
+        "import numpy as np"
+      ],
+      "sciona/m5u_targets.py": [
+        "from datetime import date",
+        "from sciona.m5u_calendar import features as calendar_features, state_features",
+        "from sciona.m5u_exponential import crosses",
+        "from sciona.m5u_scaling import transform",
+        "import numpy as np",
+        "import pandas as pd"
+      ],
+      "sciona/m5u_exponential.py": [
+        "import numpy as np"
+      ],
+      "sciona/decomposed_m5u_runtime.py": [
+        "from sciona.m5u_execution import Prepared, prepare, unpack",
+        "from sciona.m5u_pipeline import run_unrestored",
+        "from sciona.m5u_training import QUANTILES, PARAMETERS",
+        "import hashlib",
+        "import json",
+        "import numpy as np"
+      ],
+      "sciona/decomposed_m5u_graph.py": [
+        "from sciona.architect.models import AlgorithmicNode, DependencyEdge, IOSpec, NodeStatus",
+        "from sciona.m5u_graph import build_graph"
+      ],
+      "sciona/visualizer/runner.py": [
+        "from __future__ import annotations",
+        "from pathlib import Path",
+        "from sciona.architect.models import AlgorithmicNode, DependencyEdge, EdgeKind, NodeStatus",
+        "from sciona.ghost.registry import REGISTRY",
+        "from sciona.synthesizer.ghost_sim import _ensure_atoms_imported",
+        "from sciona.telemetry import log_event",
+        "from sciona.visualizer.dataset_manager import DatasetManager",
+        "from typing import Any, Callable, Dict, List, Optional, Tuple",
+        "import dataclasses",
+        "import inspect",
+        "import json",
+        "import logging",
+        "import numpy as np",
+        "import pandas as pd",
+        "import time",
+        "import typing"
+      ],
+      "sciona/services/execution_graph_codec.py": [
+        "from sciona.architect.handoff import CDGExport",
+        "import hashlib",
+        "import json"
+      ],
+      "scripts/audit_decomposed_m5u_packages.py": [
+        "from packaging.requirements import Requirement",
+        "from packaging.utils import canonicalize_name",
+        "from pathlib import Path",
+        "import base64",
+        "import hashlib",
+        "import importlib.metadata as metadata",
+        "import json"
+      ],
+      "scripts/review_decomposed_m5u_implementation.py": [
+        "from pathlib import Path",
+        "from sciona import m5u_execution as original, decomposed_m5u_runtime as candidate",
+        "from sciona import m5u_pipeline, m5u_training, m5u_inference, m5u_harmonization",
+        "from sciona.atoms.provider_inventory import ProviderRepo",
+        "from sciona.atoms.supabase_seed import _parse_registered_atoms",
+        "from sciona.decomposed_m5u_graph import build_decomposed_m5u_graph",
+        "from sciona.services.execution_graph_codec import encode_execution_graph",
+        "from scripts.audit_decomposed_m5u_packages import audit",
+        "from scripts.promote_connectomics_execution import boundary_ports, provider_ports",
+        "from typing import get_args, get_origin, get_type_hints",
+        "import hashlib",
+        "import importlib",
+        "import importlib.metadata as metadata",
+        "import inspect",
+        "import json",
+        "import numpy as np",
+        "import subprocess"
+      ],
+      "scripts/stage_m5u_decomposed_providers.py": [
+        "from collections import Counter",
+        "from psycopg.types.json import Jsonb",
+        "from sciona.atoms.provider_inventory import ProviderRepo",
+        "from sciona.atoms.supabase_seed import AtomSeedRow, _parse_registered_atoms",
+        "from sciona.decomposed_m5u_graph import build_decomposed_m5u_graph",
+        "from scripts.import_flavours_provider_drafts import connect",
+        "from scripts.import_residual_execution_drafts import comparable, ensure_row",
+        "from scripts.review_decomposed_m5u_implementation import ROOT, review, require, sha, interfaces",
+        "from typing import get_type_hints, get_origin, get_args",
+        "from uuid import NAMESPACE_URL, UUID, uuid5",
+        "import argparse",
+        "import hashlib",
+        "import importlib",
+        "import inspect",
+        "import json",
+        "import numpy as np"
+      ],
+      "scripts/decomposed_m5u_provider_contracts.py": [],
+      "scripts/review_m5u_decomposed_providers.py": [
+        "from pathlib import Path",
+        "from scripts.audit_decomposed_m5u_packages import audit as package_audit",
+        "from scripts.decomposed_m5u_provider_contracts import CONTRACTS",
+        "from scripts.review_decomposed_m5u_implementation import ROOT, require, sha, review as integration_review",
+        "from scripts.stage_m5u_decomposed_providers import reviewed_plan",
+        "import argparse",
+        "import ast",
+        "import importlib.metadata",
+        "import json",
+        "import os",
+        "import platform",
+        "import subprocess",
+        "import tempfile",
+        "import xml.etree.ElementTree as ET"
+      ],
+      "sciona-atoms-ml/src/sciona/atoms/ml/decomposed_m5u_execution.py": [
+        "from sciona.decomposed_m5u_runtime import fit_forecast as implementation",
+        "from sciona.decomposed_m5u_runtime import restoration_inputs as implementation",
+        "from sciona.decomposed_m5u_runtime import restore as implementation",
+        "from sciona.decomposed_m5u_runtime import result as implementation",
+        "from sciona.ghost.registry import register_atom",
+        "import numpy as np"
+      ]
+    },
+    "package_versions": {
+      "joblib": "1.5.3",
+      "lightgbm": "4.7.0",
+      "narwhals": "2.26.0",
+      "numpy": "2.2.6",
+      "pandas": "2.3.3",
+      "python-dateutil": "2.9.0.post0",
+      "pytz": "2026.1.post1",
+      "scikit-learn": "1.8.0",
+      "scipy": "1.17.1",
+      "six": "1.17.0",
+      "threadpoolctl": "3.6.0",
+      "tzdata": "2025.3"
+    },
+    "python_version": "3.13.11",
+    "evidence_sha256": {
+      "m5u_decomposed_provider_tests.json": "9707476b8fa256139658447a8ae5d9317088126209c441feaf8d5bfd14c9bcdc",
+      "decomposed_m5u_implementation_review.json": "1443ec3f28ea40d886ee4b207ea64dfb5ea9f83565c7ebb819f3e69284ed1151",
+      "decomposed_m5u_graph_execution.json": "da1955837eda6a4caac07343452a276f8d4985d37f8cb6b2a39be718354d3305",
+      "m5u_decomposed_provider_intake_gates.json": "b6447aca70e56c99739fca36c4b1d2a23591339844e892f6a3788d3a9e402156",
+      "decomposed_m5u_package_files.json": "1fee2650901de0b9126e3092c8df3eb22cc731d6f190e4320e4b8cd15f258348",
+      "m5u_decomposed_provider_intake_plan.json": "17f1b9506935c0f67b3800a323940d49308b744953e9c5c0e41754238c9b2d80"
+    },
+    "source_qualification_complete": false,
+    "original_cdg_publication_qualified": false,
+    "limitations": [
+      "Automated Tier 3 implementation semantics only; no Tier 1 human certification or Tier 2 usage qualification.",
+      "Four recipe adapters preserve all 14 levels, nine quantiles, full grouped search, repeated-query budgets and the complete 28-step horizon. The generic ordered weighted sum remains independently bound and domain independent.",
+      "Exact historical notebook details remain unverified. This review qualifies the stated implementation contracts, not historical winning-agent equivalence or original-CDG publication.",
+      "Fresh execution exactly matches the existing reconstruction on generated populations; historical population membership and competitive accuracy are unproven.",
+      "Installed package hashes were checked against their own RECORD files. Clean deployment and independently authenticated publisher signatures are not qualified.",
+      "Native pools and LightGBM calls are bounded to one thread; models train serially. Deployment must configure its own resource limits.",
+      "Software imports are separate from registered-provider dependencies. Same-invocation intermediate provenance is required but not authenticated by structural checks.",
+      "Catalog eligibility, publication transaction gates and existing-provider metadata remain separate checks."
+    ]
+  },
+  "records": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_m5u_execution.fit_forecast",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_m5u_execution.fit_forecast",
+      "version_id": "b1d04e11-e645-5d67-ae9e-33a2fb381771",
+      "content_hash": "5644a7106c1310129e69bb64538ba91677be4525926e5df74e8ec833c9c24802",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "forecasted",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "a1a376be09cd3f7b5b4f8f038dc62bac85b6a39beb0a479c870386c3aa0b19cc",
+      "classification": "source_recipe_adapter",
+      "atom_id": "443ef8a4-3d73-5dd7-9ddf-58f5c7140c47",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_m5u_execution.fit_forecast",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_m5u_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_m5u_execution",
+        "import_module": "sciona.atoms.ml.decomposed_m5u_execution",
+        "source_symbol": "fit_forecast",
+        "description": "Train all levels and perform full repeated quantile inference.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.5644a7106c13",
+      "fingerprint": "d340174e34668774b0f1dee22758d557136542fcc91b65136d2455d23f41dd07",
+      "operation": "Train every quantile model and forecast the complete hierarchy before unit restoration.",
+      "plain_limits": "Accept validated history and hierarchy configuration. Run the full grouped search and repeated forecasting schedule. Return all quantiles and future steps without the final hierarchy adjustment.",
+      "validity_bounds": "Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical revalidation through prepare. Forward caller minimum_day and seed without speed overrides. Run aggregate controller -1 for levels 1 through 11, followed by separate base controllers 13,14,15. Preserve retained_base_reference normalization for aggregates and source normalization for base partitions. Source calendar cleaning must retain the forecast origin and sufficient year groups. Build complete rolling populations, sample each level with its factor-dependent full schedule, fit all nine quantiles using one bag and the latest outer holdout, and execute nested grouped randomized search with pinned parameter choices. Native LightGBM and search workers are one; models run serially. The latest outer group is excluded from training, but this is not proof of unbiased future accuracy. Run every repeated-query budget for all 28 horizons, preserving scaling, fold weighting and inverse scaling. Reject excessive query allocations rather than silently reducing them. Require all 14 levels and unique contiguous hierarchy coverage; sort outputs by hierarchy index. All 126 final models are required. Candidate-fit and query counts depend on the caller population; synthetic evidence counts are not universal constants. No restoration, quantile sorting, clipping or historical-weight loading occurs here.",
+      "parameters": {
+        "prepared": "Canonical same-invocation Prepared from m5u_prepare, with private nonnegative history, prices, hierarchy roles, three category partitions, calendar, minimum_day and seed."
+      },
+      "outputs": "Dictionary containing unadjusted float64 forecasts shaped (9,28,N), positive per-series factors, adjustment=.7, levels, quantiles, hierarchy_indices, per-level training/query reports, normalization and scope. Private intermediates remain runtime values.",
+      "dependencies": [
+        "sciona.decomposed_m5u_runtime.fit_forecast",
+        "sciona.m5u_execution",
+        "sciona.m5u_pipeline",
+        "sciona.m5u_preparation",
+        "sciona.m5u_population",
+        "sciona.m5u_training",
+        "sciona.m5u_sampling",
+        "sciona.m5u_targets",
+        "sciona.m5u_bagging",
+        "sciona.m5u_inference",
+        "numpy",
+        "pandas",
+        "scikit-learn",
+        "lightgbm",
+        "sciona.ghost.registry (registration only)"
+      ],
+      "reuse": "Grouped nonnegative time-series uncertainty forecasting with caller-defined hierarchy roles, category partitions and calendar covariates. Applicability across domains requires the declared hierarchy relationships, sufficient calendar history, nonnegative inputs and known future covariates. Fourteen levels, nine quantiles, a 28-step horizon, sampling schedules and restoration strength are recipe policy. The independently bound ordered weighted sum is domain independent. Intermediate arrays must come from one invocation; structural checks do not authenticate provenance. No historical competition accuracy or winning-model equivalence is claimed.",
+      "internal_registered_provider_dependencies": [],
+      "callable_dependency_contracts": {},
+      "artifact_id": "443ef8a4-3d73-5dd7-9ddf-58f5c7140c47",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": {
+        "atom_io_specs": [
+          {
+            "direction": "input",
+            "name": "prepared",
+            "ordinal": 0,
+            "type_desc": "object",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "output",
+            "name": "forecasted",
+            "ordinal": 0,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          }
+        ],
+        "artifact_io_specs": [
+          {
+            "direction": "input",
+            "name": "prepared",
+            "ordinal": 0,
+            "type_desc": "object",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "output",
+            "name": "forecasted",
+            "ordinal": 0,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          }
+        ]
+      }
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_m5u_execution.restoration_inputs",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_m5u_execution.restoration_inputs",
+      "version_id": "909e3075-abf4-5bbc-98d9-7ccc02d9601a",
+      "content_hash": "cbd4aa4fbd4fcb00c9368483b6b2b7aa8c258df00ef6c28cc03a1e2e2eed9b7e",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "forecasted",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "state",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "values",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "coefficients",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "a1a376be09cd3f7b5b4f8f038dc62bac85b6a39beb0a479c870386c3aa0b19cc",
+      "classification": "source_recipe_adapter",
+      "atom_id": "c007827f-83ce-5f16-bb74-cdcd54aa7e7b",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_m5u_execution.restoration_inputs",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_m5u_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_m5u_execution",
+        "import_module": "sciona.atoms.ml.decomposed_m5u_execution",
+        "source_symbol": "restoration_inputs",
+        "description": "Expose native-unit state, ordered median totals and unit coefficients.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.cbd4aa4fbd4f",
+      "fingerprint": "a0e306d51fb5fa664f86892458a948a88550f2f86a8c111533dfdeefa8c2d689",
+      "operation": "Restore native units and expose ordered median totals for generic reduction.",
+      "plain_limits": "Divide by each level multiplier. Compute median totals for levels one through nine in ascending order, and supply one coefficient per level.",
+      "validity_bounds": "Require exact dictionary; forecasts convertible to exact float64 array (9,28,N), N positive, finite; aligned integer levels containing exactly 1..11,13,14,15; aligned finite positive real factors with one unique factor per level; exact quantile sequence (.005,.025,.165,.25,.5,.75,.835,.975,.995); and Python float adjustment=.7. Signed forecasts are allowed. Copy forecasts then divide by factors. For each ascending level 1..9, sum median forecasts over its series separately at each horizon. Reject nonfinite native values or totals and any zero total. Return a fresh unit coefficient vector. No cross-level addition or normalization is performed. Shape checks do not establish provenance or validate other metadata.",
+      "parameters": {
+        "forecasted": "Complete same-invocation fit_forecast output before restoration."
+      },
+      "outputs": "Tuple (state, values, coefficients): state holds native forecasts, copied levels, ascending selected levels and copied median totals; values is float64 (9,28); coefficients is float64 (9,) of ones. Values and state totals are independent arrays.",
+      "dependencies": [
+        "sciona.decomposed_m5u_runtime.restoration_inputs",
+        "sciona.m5u_training (quantile and level constants)",
+        "numpy",
+        "sciona.ghost.registry (registration only)"
+      ],
+      "reuse": "Grouped nonnegative time-series uncertainty forecasting with caller-defined hierarchy roles, category partitions and calendar covariates. Applicability across domains requires the declared hierarchy relationships, sufficient calendar history, nonnegative inputs and known future covariates. Fourteen levels, nine quantiles, a 28-step horizon, sampling schedules and restoration strength are recipe policy. The independently bound ordered weighted sum is domain independent. Intermediate arrays must come from one invocation; structural checks do not authenticate provenance. No historical competition accuracy or winning-model equivalence is claimed.",
+      "internal_registered_provider_dependencies": [],
+      "callable_dependency_contracts": {},
+      "artifact_id": "c007827f-83ce-5f16-bb74-cdcd54aa7e7b",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": {
+        "atom_io_specs": [
+          {
+            "direction": "input",
+            "name": "forecasted",
+            "ordinal": 0,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "output",
+            "name": "state",
+            "ordinal": 0,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "output",
+            "name": "values",
+            "ordinal": 1,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "output",
+            "name": "coefficients",
+            "ordinal": 2,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          }
+        ],
+        "artifact_io_specs": [
+          {
+            "direction": "input",
+            "name": "forecasted",
+            "ordinal": 0,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "output",
+            "name": "state",
+            "ordinal": 0,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "output",
+            "name": "values",
+            "ordinal": 1,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "output",
+            "name": "coefficients",
+            "ordinal": 2,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          }
+        ]
+      }
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_m5u_execution.restore",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_m5u_execution.restore",
+      "version_id": "4ce7b6fd-18b0-5599-8171-966b7e956d49",
+      "content_hash": "5b33fc4466869a93748c87ec8528ae2c67e984389f34eb4d4f50071531033322",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "state",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "total",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "restored",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "a1a376be09cd3f7b5b4f8f038dc62bac85b6a39beb0a479c870386c3aa0b19cc",
+      "classification": "source_recipe_adapter",
+      "atom_id": "1f580fe3-d538-55f5-917f-7d676003cc83",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_m5u_execution.restore",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_m5u_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_m5u_execution",
+        "import_module": "sciona.atoms.ml.decomposed_m5u_execution",
+        "source_symbol": "restore",
+        "description": "Use the generic total to apply the complete level correction.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.5b33fc446686",
+      "fingerprint": "a0e3449242769805b3ecbc7586a245c3355aa6d4d52a2ebd8f141063e93b2fc0",
+      "operation": "Apply the fixed hierarchy adjustment using the independently summed median totals.",
+      "plain_limits": "Divide the supplied level sum by nine. Adjust levels one through nine toward that target with strength .7. Leave the other levels in their restored native units.",
+      "validity_bounds": "Require exact dictionary state with finite float64 native forecasts (9,28,N), N positive, aligned integer levels containing exactly all 14 required levels, selected levels exactly 1..9 in order, finite nonzero float64 totals (9,28), and finite float64 supplied total (28,). Copy native forecasts; target=total/9. For each selected level compute (1-.7)+.7*target/level_total and multiply every quantile and series of that level by the corresponding horizon correction. Reject nonfinite final output. Signed inputs and outputs are supported; there is no clipping, rounding, quantile sorting or monotonicity guarantee. Levels 10,11,13,14,15 receive no additional correction. The adapter does not recompute the supplied sum or verify that stored totals match native forecasts; same-invocation provenance is a precondition.",
+      "parameters": {
+        "state": "Same-invocation state from restoration_inputs.",
+        "total": "Same-invocation generic ordered weighted sum of the nine median-total rows with unit coefficients."
+      },
+      "outputs": "Fresh finite float64 forecast array (9,28,N), retaining quantile, horizon and hierarchy ordering; caller arrays are not mutated.",
+      "dependencies": [
+        "sciona.decomposed_m5u_runtime.restore",
+        "sciona.m5u_training (level constants)",
+        "numpy",
+        "sciona.ghost.registry (registration only)"
+      ],
+      "reuse": "Grouped nonnegative time-series uncertainty forecasting with caller-defined hierarchy roles, category partitions and calendar covariates. Applicability across domains requires the declared hierarchy relationships, sufficient calendar history, nonnegative inputs and known future covariates. Fourteen levels, nine quantiles, a 28-step horizon, sampling schedules and restoration strength are recipe policy. The independently bound ordered weighted sum is domain independent. Intermediate arrays must come from one invocation; structural checks do not authenticate provenance. No historical competition accuracy or winning-model equivalence is claimed.",
+      "internal_registered_provider_dependencies": [],
+      "callable_dependency_contracts": {},
+      "artifact_id": "1f580fe3-d538-55f5-917f-7d676003cc83",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": {
+        "atom_io_specs": [
+          {
+            "direction": "input",
+            "name": "state",
+            "ordinal": 0,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "input",
+            "name": "total",
+            "ordinal": 1,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "output",
+            "name": "restored",
+            "ordinal": 0,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          }
+        ],
+        "artifact_io_specs": [
+          {
+            "direction": "input",
+            "name": "state",
+            "ordinal": 0,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "input",
+            "name": "total",
+            "ordinal": 1,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "output",
+            "name": "restored",
+            "ordinal": 0,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          }
+        ]
+      }
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_m5u_execution.result",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_m5u_execution.result",
+      "version_id": "ea676f4a-18f7-5dc7-89bd-4e6fea62379c",
+      "content_hash": "61d632a8a253de6f1cda73113ccc2e9a68ed4aaf1496276d611f35fb81c7c309",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "forecasted",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "restored",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "a1a376be09cd3f7b5b4f8f038dc62bac85b6a39beb0a479c870386c3aa0b19cc",
+      "classification": "source_recipe_adapter",
+      "atom_id": "29c012d6-dc06-5372-b602-912cbe767fed",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_m5u_execution.result",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_m5u_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_m5u_execution",
+        "import_module": "sciona.atoms.ml.decomposed_m5u_execution",
+        "source_symbol": "result",
+        "description": "Package all restored quantiles and horizons with complete model reports.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.61d632a8a253",
+      "fingerprint": "e8d7eccb3d5367bf730d0ad7e2ea3495b209998ad2eb42b0d2d5b5fe15bec0c9",
+      "operation": "Package every restored forecast and its reconstruction metadata as strict JSON.",
+      "plain_limits": "Check the forecast structure and restored array, then return all quantiles, hierarchy levels and future steps with the training reports and stated scope.",
+      "validity_bounds": "Revalidate forecasted through the same full shape, level, multiplier, quantile and adjustment checks used by restoration_inputs. Require restored values convertible to exact float64 with identical (9,28,N) shape and all finite entries. Convert forecast, levels and hierarchy indices to lists, quantiles to a list, retain reports, normalization and scope, set horizon=28 and require serialization with allow_nan=False. Reports, hierarchy indices, normalization and scope are passed through rather than independently authenticated. No sum, model execution or restoration is recomputed. Same-invocation provenance is required.",
+      "parameters": {
+        "forecasted": "Complete same-invocation fit_forecast output including metadata.",
+        "restored": "Complete same-invocation restore output in unchanged hierarchy order."
+      },
+      "outputs": "Strict JSON dictionary with forecast, levels, hierarchy_indices, quantiles, horizon=28, reports, normalization and scope. Forecast arrays are runtime outputs and must not be included in public evidence for private datasets.",
+      "dependencies": [
+        "sciona.decomposed_m5u_runtime.result",
+        "sciona.m5u_training (quantile and level constants)",
+        "numpy",
+        "json (Python standard library)",
+        "sciona.ghost.registry (registration only)"
+      ],
+      "reuse": "Grouped nonnegative time-series uncertainty forecasting with caller-defined hierarchy roles, category partitions and calendar covariates. Applicability across domains requires the declared hierarchy relationships, sufficient calendar history, nonnegative inputs and known future covariates. Fourteen levels, nine quantiles, a 28-step horizon, sampling schedules and restoration strength are recipe policy. The independently bound ordered weighted sum is domain independent. Intermediate arrays must come from one invocation; structural checks do not authenticate provenance. No historical competition accuracy or winning-model equivalence is claimed.",
+      "internal_registered_provider_dependencies": [],
+      "callable_dependency_contracts": {},
+      "artifact_id": "29c012d6-dc06-5372-b602-912cbe767fed",
+      "existing_approved": false,
+      "states": {
+        "atoms": {
+          "status": "flagged",
+          "is_publishable": false
+        },
+        "artifacts": {
+          "status": "draft",
+          "is_publishable": false
+        }
+      },
+      "ports": {
+        "atom_io_specs": [
+          {
+            "direction": "input",
+            "name": "forecasted",
+            "ordinal": 0,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "input",
+            "name": "restored",
+            "ordinal": 1,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "output",
+            "name": "result",
+            "ordinal": 0,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          }
+        ],
+        "artifact_io_specs": [
+          {
+            "direction": "input",
+            "name": "forecasted",
+            "ordinal": 0,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "input",
+            "name": "restored",
+            "ordinal": 1,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          },
+          {
+            "direction": "output",
+            "name": "result",
+            "ordinal": 0,
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": ""
+          }
+        ]
+      }
+    }
+  ],
+  "inserts": [
+    {
+      "table": "references_registry",
+      "keys": {
+        "ref_id": "m5u-decomposed-provider-review-v1"
+      },
+      "row": {
+        "ref_id": "m5u-decomposed-provider-review-v1",
+        "ref_type": "web",
+        "title": "Exact provider semantics and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/3eddb170320a3b27171af3d8eb3d37a2dc5159ec/docs/reviews/m5u_decomposed_provider_semantics.json"
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "443ef8a4-3d73-5dd7-9ddf-58f5c7140c47",
+        "version_id": "b1d04e11-e645-5d67-ae9e-33a2fb381771",
+        "name": "prepared"
+      },
+      "row": {
+        "atom_id": "443ef8a4-3d73-5dd7-9ddf-58f5c7140c47",
+        "version_id": "b1d04e11-e645-5d67-ae9e-33a2fb381771",
+        "name": "prepared",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "object",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Canonical same-invocation Prepared from m5u_prepare, with private nonnegative history, prices, hierarchy roles, three category partitions, calendar, minimum_day and seed.",
+        "dejargonized_description": "Caller supplies prepared.",
+        "constraints_json": {
+          "validity_bounds": "Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical revalidation through prepare. Forward caller minimum_day and seed without speed overrides. Run aggregate controller -1 for levels 1 through 11, followed by separate base controllers 13,14,15. Preserve retained_base_reference normalization for aggregates and source normalization for base partitions. Source calendar cleaning must retain the forecast origin and sufficient year groups. Build complete rolling populations, sample each level with its factor-dependent full schedule, fit all nine quantiles using one bag and the latest outer holdout, and execute nested grouped randomized search with pinned parameter choices. Native LightGBM and search workers are one; models run serially. The latest outer group is excluded from training, but this is not proof of unbiased future accuracy. Run every repeated-query budget for all 28 horizons, preserving scaling, fold weighting and inverse scaling. Reject excessive query allocations rather than silently reducing them. Require all 14 levels and unique contiguous hierarchy coverage; sort outputs by hierarchy index. All 126 final models are required. Candidate-fit and query counts depend on the caller population; synthetic evidence counts are not universal constants. No restoration, quantile sorting, clipping or historical-weight loading occurs here.",
+          "parameter_contract": "Canonical same-invocation Prepared from m5u_prepare, with private nonnegative history, prices, hierarchy roles, three category partitions, calendar, minimum_day and seed."
+        }
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "443ef8a4-3d73-5dd7-9ddf-58f5c7140c47",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "443ef8a4-3d73-5dd7-9ddf-58f5c7140c47",
+        "kind": "technical",
+        "language": "en",
+        "content": "Train every quantile model and forecast the complete hierarchy before unit restoration. Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical revalidation through prepare. Forward caller minimum_day and seed without speed overrides. Run aggregate controller -1 for levels 1 through 11, followed by separate base controllers 13,14,15. Preserve retained_base_reference normalization for aggregates and source normalization for base partitions. Source calendar cleaning must retain the forecast origin and sufficient year groups. Build complete rolling populations, sample each level with its factor-dependent full schedule, fit all nine quantiles using one bag and the latest outer holdout, and execute nested grouped randomized search with pinned parameter choices. Native LightGBM and search workers are one; models run serially. The latest outer group is excluded from training, but this is not proof of unbiased future accuracy. Run every repeated-query budget for all 28 horizons, preserving scaling, fold weighting and inverse scaling. Reject excessive query allocations rather than silently reducing them. Require all 14 levels and unique contiguous hierarchy coverage; sort outputs by hierarchy index. All 126 final models are required. Candidate-fit and query counts depend on the caller population; synthetic evidence counts are not universal constants. No restoration, quantile sorting, clipping or historical-weight loading occurs here. Dictionary containing unadjusted float64 forecasts shaped (9,28,N), positive per-series factors, adjustment=.7, levels, quantiles, hierarchy_indices, per-level training/query reports, normalization and scope. Private intermediates remain runtime values.",
+        "generated_by": "m5u-decomposed-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.022523
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "443ef8a4-3d73-5dd7-9ddf-58f5c7140c47",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "443ef8a4-3d73-5dd7-9ddf-58f5c7140c47",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Train every quantile model and forecast the complete hierarchy before unit restoration. Accept validated history and hierarchy configuration. Run the full grouped search and repeated forecasting schedule. Return all quantiles and future steps without the final hierarchy adjustment.",
+        "generated_by": "m5u-decomposed-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "atom_references",
+      "keys": {
+        "atom_id": "443ef8a4-3d73-5dd7-9ddf-58f5c7140c47",
+        "ref_key": "m5u-decomposed-provider-review-v1"
+      },
+      "row": {
+        "atom_id": "443ef8a4-3d73-5dd7-9ddf-58f5c7140c47",
+        "ref_key": "m5u-decomposed-provider-review-v1",
+        "ref_id": "m5u-decomposed-provider-review-v1",
+        "title": "Exact provider semantics and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/3eddb170320a3b27171af3d8eb3d37a2dc5159ec/docs/reviews/m5u_decomposed_provider_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Train every quantile model and forecast the complete hierarchy before unit restoration. Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical revalidation through prepare. Forward caller minimum_day and seed without speed overrides. Run aggregate controller -1 for levels 1 through 11, followed by separate base controllers 13,14,15. Preserve retained_base_reference normalization for aggregates and source normalization for base partitions. Source calendar cleaning must retain the forecast origin and sufficient year groups. Build complete rolling populations, sample each level with its factor-dependent full schedule, fit all nine quantiles using one bag and the latest outer holdout, and execute nested grouped randomized search with pinned parameter choices. Native LightGBM and search workers are one; models run serially. The latest outer group is excluded from training, but this is not proof of unbiased future accuracy. Run every repeated-query budget for all 28 horizons, preserving scaling, fold weighting and inverse scaling. Reject excessive query allocations rather than silently reducing them. Require all 14 levels and unique contiguous hierarchy coverage; sort outputs by hierarchy index. All 126 final models are required. Candidate-fit and query counts depend on the caller population; synthetic evidence counts are not universal constants. No restoration, quantile sorting, clipping or historical-weight loading occurs here."
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "443ef8a4-3d73-5dd7-9ddf-58f5c7140c47",
+        "version_id": "b1d04e11-e645-5d67-ae9e-33a2fb381771",
+        "name": "prepared"
+      },
+      "row": {
+        "artifact_id": "443ef8a4-3d73-5dd7-9ddf-58f5c7140c47",
+        "version_id": "b1d04e11-e645-5d67-ae9e-33a2fb381771",
+        "name": "prepared",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "object",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Canonical same-invocation Prepared from m5u_prepare, with private nonnegative history, prices, hierarchy roles, three category partitions, calendar, minimum_day and seed.",
+        "dejargonized_description": "Caller supplies prepared.",
+        "constraints_json": {
+          "validity_bounds": "Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical revalidation through prepare. Forward caller minimum_day and seed without speed overrides. Run aggregate controller -1 for levels 1 through 11, followed by separate base controllers 13,14,15. Preserve retained_base_reference normalization for aggregates and source normalization for base partitions. Source calendar cleaning must retain the forecast origin and sufficient year groups. Build complete rolling populations, sample each level with its factor-dependent full schedule, fit all nine quantiles using one bag and the latest outer holdout, and execute nested grouped randomized search with pinned parameter choices. Native LightGBM and search workers are one; models run serially. The latest outer group is excluded from training, but this is not proof of unbiased future accuracy. Run every repeated-query budget for all 28 horizons, preserving scaling, fold weighting and inverse scaling. Reject excessive query allocations rather than silently reducing them. Require all 14 levels and unique contiguous hierarchy coverage; sort outputs by hierarchy index. All 126 final models are required. Candidate-fit and query counts depend on the caller population; synthetic evidence counts are not universal constants. No restoration, quantile sorting, clipping or historical-weight loading occurs here.",
+          "parameter_contract": "Canonical same-invocation Prepared from m5u_prepare, with private nonnegative history, prices, hierarchy roles, three category partitions, calendar, minimum_day and seed."
+        }
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "443ef8a4-3d73-5dd7-9ddf-58f5c7140c47",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "443ef8a4-3d73-5dd7-9ddf-58f5c7140c47",
+        "kind": "technical",
+        "language": "en",
+        "content": "Train every quantile model and forecast the complete hierarchy before unit restoration. Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical revalidation through prepare. Forward caller minimum_day and seed without speed overrides. Run aggregate controller -1 for levels 1 through 11, followed by separate base controllers 13,14,15. Preserve retained_base_reference normalization for aggregates and source normalization for base partitions. Source calendar cleaning must retain the forecast origin and sufficient year groups. Build complete rolling populations, sample each level with its factor-dependent full schedule, fit all nine quantiles using one bag and the latest outer holdout, and execute nested grouped randomized search with pinned parameter choices. Native LightGBM and search workers are one; models run serially. The latest outer group is excluded from training, but this is not proof of unbiased future accuracy. Run every repeated-query budget for all 28 horizons, preserving scaling, fold weighting and inverse scaling. Reject excessive query allocations rather than silently reducing them. Require all 14 levels and unique contiguous hierarchy coverage; sort outputs by hierarchy index. All 126 final models are required. Candidate-fit and query counts depend on the caller population; synthetic evidence counts are not universal constants. No restoration, quantile sorting, clipping or historical-weight loading occurs here. Dictionary containing unadjusted float64 forecasts shaped (9,28,N), positive per-series factors, adjustment=.7, levels, quantiles, hierarchy_indices, per-level training/query reports, normalization and scope. Private intermediates remain runtime values.",
+        "generated_by": "m5u-decomposed-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.022523
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "443ef8a4-3d73-5dd7-9ddf-58f5c7140c47",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "443ef8a4-3d73-5dd7-9ddf-58f5c7140c47",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Train every quantile model and forecast the complete hierarchy before unit restoration. Accept validated history and hierarchy configuration. Run the full grouped search and repeated forecasting schedule. Return all quantiles and future steps without the final hierarchy adjustment.",
+        "generated_by": "m5u-decomposed-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "artifact_references",
+      "keys": {
+        "artifact_id": "443ef8a4-3d73-5dd7-9ddf-58f5c7140c47",
+        "ref_key": "m5u-decomposed-provider-review-v1"
+      },
+      "row": {
+        "artifact_id": "443ef8a4-3d73-5dd7-9ddf-58f5c7140c47",
+        "ref_key": "m5u-decomposed-provider-review-v1",
+        "ref_id": "m5u-decomposed-provider-review-v1",
+        "title": "Exact provider semantics and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/3eddb170320a3b27171af3d8eb3d37a2dc5159ec/docs/reviews/m5u_decomposed_provider_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Train every quantile model and forecast the complete hierarchy before unit restoration. Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical revalidation through prepare. Forward caller minimum_day and seed without speed overrides. Run aggregate controller -1 for levels 1 through 11, followed by separate base controllers 13,14,15. Preserve retained_base_reference normalization for aggregates and source normalization for base partitions. Source calendar cleaning must retain the forecast origin and sufficient year groups. Build complete rolling populations, sample each level with its factor-dependent full schedule, fit all nine quantiles using one bag and the latest outer holdout, and execute nested grouped randomized search with pinned parameter choices. Native LightGBM and search workers are one; models run serially. The latest outer group is excluded from training, but this is not proof of unbiased future accuracy. Run every repeated-query budget for all 28 horizons, preserving scaling, fold weighting and inverse scaling. Reject excessive query allocations rather than silently reducing them. Require all 14 levels and unique contiguous hierarchy coverage; sort outputs by hierarchy index. All 126 final models are required. Candidate-fit and query counts depend on the caller population; synthetic evidence counts are not universal constants. No restoration, quantile sorting, clipping or historical-weight loading occurs here."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "c007827f-83ce-5f16-bb74-cdcd54aa7e7b",
+        "version_id": "909e3075-abf4-5bbc-98d9-7ccc02d9601a",
+        "name": "forecasted"
+      },
+      "row": {
+        "atom_id": "c007827f-83ce-5f16-bb74-cdcd54aa7e7b",
+        "version_id": "909e3075-abf4-5bbc-98d9-7ccc02d9601a",
+        "name": "forecasted",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "dict",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Complete same-invocation fit_forecast output before restoration.",
+        "dejargonized_description": "Caller supplies forecasted.",
+        "constraints_json": {
+          "validity_bounds": "Require exact dictionary; forecasts convertible to exact float64 array (9,28,N), N positive, finite; aligned integer levels containing exactly 1..11,13,14,15; aligned finite positive real factors with one unique factor per level; exact quantile sequence (.005,.025,.165,.25,.5,.75,.835,.975,.995); and Python float adjustment=.7. Signed forecasts are allowed. Copy forecasts then divide by factors. For each ascending level 1..9, sum median forecasts over its series separately at each horizon. Reject nonfinite native values or totals and any zero total. Return a fresh unit coefficient vector. No cross-level addition or normalization is performed. Shape checks do not establish provenance or validate other metadata.",
+          "parameter_contract": "Complete same-invocation fit_forecast output before restoration."
+        }
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "c007827f-83ce-5f16-bb74-cdcd54aa7e7b",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "c007827f-83ce-5f16-bb74-cdcd54aa7e7b",
+        "kind": "technical",
+        "language": "en",
+        "content": "Restore native units and expose ordered median totals for generic reduction. Require exact dictionary; forecasts convertible to exact float64 array (9,28,N), N positive, finite; aligned integer levels containing exactly 1..11,13,14,15; aligned finite positive real factors with one unique factor per level; exact quantile sequence (.005,.025,.165,.25,.5,.75,.835,.975,.995); and Python float adjustment=.7. Signed forecasts are allowed. Copy forecasts then divide by factors. For each ascending level 1..9, sum median forecasts over its series separately at each horizon. Reject nonfinite native values or totals and any zero total. Return a fresh unit coefficient vector. No cross-level addition or normalization is performed. Shape checks do not establish provenance or validate other metadata. Tuple (state, values, coefficients): state holds native forecasts, copied levels, ascending selected levels and copied median totals; values is float64 (9,28); coefficients is float64 (9,) of ones. Values and state totals are independent arrays.",
+        "generated_by": "m5u-decomposed-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "c007827f-83ce-5f16-bb74-cdcd54aa7e7b",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "c007827f-83ce-5f16-bb74-cdcd54aa7e7b",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Restore native units and expose ordered median totals for generic reduction. Divide by each level multiplier. Compute median totals for levels one through nine in ascending order, and supply one coefficient per level.",
+        "generated_by": "m5u-decomposed-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "atom_references",
+      "keys": {
+        "atom_id": "c007827f-83ce-5f16-bb74-cdcd54aa7e7b",
+        "ref_key": "m5u-decomposed-provider-review-v1"
+      },
+      "row": {
+        "atom_id": "c007827f-83ce-5f16-bb74-cdcd54aa7e7b",
+        "ref_key": "m5u-decomposed-provider-review-v1",
+        "ref_id": "m5u-decomposed-provider-review-v1",
+        "title": "Exact provider semantics and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/3eddb170320a3b27171af3d8eb3d37a2dc5159ec/docs/reviews/m5u_decomposed_provider_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Restore native units and expose ordered median totals for generic reduction. Require exact dictionary; forecasts convertible to exact float64 array (9,28,N), N positive, finite; aligned integer levels containing exactly 1..11,13,14,15; aligned finite positive real factors with one unique factor per level; exact quantile sequence (.005,.025,.165,.25,.5,.75,.835,.975,.995); and Python float adjustment=.7. Signed forecasts are allowed. Copy forecasts then divide by factors. For each ascending level 1..9, sum median forecasts over its series separately at each horizon. Reject nonfinite native values or totals and any zero total. Return a fresh unit coefficient vector. No cross-level addition or normalization is performed. Shape checks do not establish provenance or validate other metadata."
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "c007827f-83ce-5f16-bb74-cdcd54aa7e7b",
+        "version_id": "909e3075-abf4-5bbc-98d9-7ccc02d9601a",
+        "name": "forecasted"
+      },
+      "row": {
+        "artifact_id": "c007827f-83ce-5f16-bb74-cdcd54aa7e7b",
+        "version_id": "909e3075-abf4-5bbc-98d9-7ccc02d9601a",
+        "name": "forecasted",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "dict",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Complete same-invocation fit_forecast output before restoration.",
+        "dejargonized_description": "Caller supplies forecasted.",
+        "constraints_json": {
+          "validity_bounds": "Require exact dictionary; forecasts convertible to exact float64 array (9,28,N), N positive, finite; aligned integer levels containing exactly 1..11,13,14,15; aligned finite positive real factors with one unique factor per level; exact quantile sequence (.005,.025,.165,.25,.5,.75,.835,.975,.995); and Python float adjustment=.7. Signed forecasts are allowed. Copy forecasts then divide by factors. For each ascending level 1..9, sum median forecasts over its series separately at each horizon. Reject nonfinite native values or totals and any zero total. Return a fresh unit coefficient vector. No cross-level addition or normalization is performed. Shape checks do not establish provenance or validate other metadata.",
+          "parameter_contract": "Complete same-invocation fit_forecast output before restoration."
+        }
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "c007827f-83ce-5f16-bb74-cdcd54aa7e7b",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "c007827f-83ce-5f16-bb74-cdcd54aa7e7b",
+        "kind": "technical",
+        "language": "en",
+        "content": "Restore native units and expose ordered median totals for generic reduction. Require exact dictionary; forecasts convertible to exact float64 array (9,28,N), N positive, finite; aligned integer levels containing exactly 1..11,13,14,15; aligned finite positive real factors with one unique factor per level; exact quantile sequence (.005,.025,.165,.25,.5,.75,.835,.975,.995); and Python float adjustment=.7. Signed forecasts are allowed. Copy forecasts then divide by factors. For each ascending level 1..9, sum median forecasts over its series separately at each horizon. Reject nonfinite native values or totals and any zero total. Return a fresh unit coefficient vector. No cross-level addition or normalization is performed. Shape checks do not establish provenance or validate other metadata. Tuple (state, values, coefficients): state holds native forecasts, copied levels, ascending selected levels and copied median totals; values is float64 (9,28); coefficients is float64 (9,) of ones. Values and state totals are independent arrays.",
+        "generated_by": "m5u-decomposed-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "c007827f-83ce-5f16-bb74-cdcd54aa7e7b",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "c007827f-83ce-5f16-bb74-cdcd54aa7e7b",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Restore native units and expose ordered median totals for generic reduction. Divide by each level multiplier. Compute median totals for levels one through nine in ascending order, and supply one coefficient per level.",
+        "generated_by": "m5u-decomposed-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "artifact_references",
+      "keys": {
+        "artifact_id": "c007827f-83ce-5f16-bb74-cdcd54aa7e7b",
+        "ref_key": "m5u-decomposed-provider-review-v1"
+      },
+      "row": {
+        "artifact_id": "c007827f-83ce-5f16-bb74-cdcd54aa7e7b",
+        "ref_key": "m5u-decomposed-provider-review-v1",
+        "ref_id": "m5u-decomposed-provider-review-v1",
+        "title": "Exact provider semantics and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/3eddb170320a3b27171af3d8eb3d37a2dc5159ec/docs/reviews/m5u_decomposed_provider_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Restore native units and expose ordered median totals for generic reduction. Require exact dictionary; forecasts convertible to exact float64 array (9,28,N), N positive, finite; aligned integer levels containing exactly 1..11,13,14,15; aligned finite positive real factors with one unique factor per level; exact quantile sequence (.005,.025,.165,.25,.5,.75,.835,.975,.995); and Python float adjustment=.7. Signed forecasts are allowed. Copy forecasts then divide by factors. For each ascending level 1..9, sum median forecasts over its series separately at each horizon. Reject nonfinite native values or totals and any zero total. Return a fresh unit coefficient vector. No cross-level addition or normalization is performed. Shape checks do not establish provenance or validate other metadata."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "1f580fe3-d538-55f5-917f-7d676003cc83",
+        "version_id": "4ce7b6fd-18b0-5599-8171-966b7e956d49",
+        "name": "state"
+      },
+      "row": {
+        "atom_id": "1f580fe3-d538-55f5-917f-7d676003cc83",
+        "version_id": "4ce7b6fd-18b0-5599-8171-966b7e956d49",
+        "name": "state",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "dict",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Same-invocation state from restoration_inputs.",
+        "dejargonized_description": "Caller supplies state.",
+        "constraints_json": {
+          "validity_bounds": "Require exact dictionary state with finite float64 native forecasts (9,28,N), N positive, aligned integer levels containing exactly all 14 required levels, selected levels exactly 1..9 in order, finite nonzero float64 totals (9,28), and finite float64 supplied total (28,). Copy native forecasts; target=total/9. For each selected level compute (1-.7)+.7*target/level_total and multiply every quantile and series of that level by the corresponding horizon correction. Reject nonfinite final output. Signed inputs and outputs are supported; there is no clipping, rounding, quantile sorting or monotonicity guarantee. Levels 10,11,13,14,15 receive no additional correction. The adapter does not recompute the supplied sum or verify that stored totals match native forecasts; same-invocation provenance is a precondition.",
+          "parameter_contract": "Same-invocation state from restoration_inputs."
+        }
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "1f580fe3-d538-55f5-917f-7d676003cc83",
+        "version_id": "4ce7b6fd-18b0-5599-8171-966b7e956d49",
+        "name": "total"
+      },
+      "row": {
+        "atom_id": "1f580fe3-d538-55f5-917f-7d676003cc83",
+        "version_id": "4ce7b6fd-18b0-5599-8171-966b7e956d49",
+        "name": "total",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Same-invocation generic ordered weighted sum of the nine median-total rows with unit coefficients.",
+        "dejargonized_description": "Caller supplies total.",
+        "constraints_json": {
+          "validity_bounds": "Require exact dictionary state with finite float64 native forecasts (9,28,N), N positive, aligned integer levels containing exactly all 14 required levels, selected levels exactly 1..9 in order, finite nonzero float64 totals (9,28), and finite float64 supplied total (28,). Copy native forecasts; target=total/9. For each selected level compute (1-.7)+.7*target/level_total and multiply every quantile and series of that level by the corresponding horizon correction. Reject nonfinite final output. Signed inputs and outputs are supported; there is no clipping, rounding, quantile sorting or monotonicity guarantee. Levels 10,11,13,14,15 receive no additional correction. The adapter does not recompute the supplied sum or verify that stored totals match native forecasts; same-invocation provenance is a precondition.",
+          "parameter_contract": "Same-invocation generic ordered weighted sum of the nine median-total rows with unit coefficients."
+        }
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "1f580fe3-d538-55f5-917f-7d676003cc83",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "1f580fe3-d538-55f5-917f-7d676003cc83",
+        "kind": "technical",
+        "language": "en",
+        "content": "Apply the fixed hierarchy adjustment using the independently summed median totals. Require exact dictionary state with finite float64 native forecasts (9,28,N), N positive, aligned integer levels containing exactly all 14 required levels, selected levels exactly 1..9 in order, finite nonzero float64 totals (9,28), and finite float64 supplied total (28,). Copy native forecasts; target=total/9. For each selected level compute (1-.7)+.7*target/level_total and multiply every quantile and series of that level by the corresponding horizon correction. Reject nonfinite final output. Signed inputs and outputs are supported; there is no clipping, rounding, quantile sorting or monotonicity guarantee. Levels 10,11,13,14,15 receive no additional correction. The adapter does not recompute the supplied sum or verify that stored totals match native forecasts; same-invocation provenance is a precondition. Fresh finite float64 forecast array (9,28,N), retaining quantile, horizon and hierarchy ordering; caller arrays are not mutated.",
+        "generated_by": "m5u-decomposed-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.014925
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "1f580fe3-d538-55f5-917f-7d676003cc83",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "1f580fe3-d538-55f5-917f-7d676003cc83",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Apply the fixed hierarchy adjustment using the independently summed median totals. Divide the supplied level sum by nine. Adjust levels one through nine toward that target with strength .7. Leave the other levels in their restored native units.",
+        "generated_by": "m5u-decomposed-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "atom_references",
+      "keys": {
+        "atom_id": "1f580fe3-d538-55f5-917f-7d676003cc83",
+        "ref_key": "m5u-decomposed-provider-review-v1"
+      },
+      "row": {
+        "atom_id": "1f580fe3-d538-55f5-917f-7d676003cc83",
+        "ref_key": "m5u-decomposed-provider-review-v1",
+        "ref_id": "m5u-decomposed-provider-review-v1",
+        "title": "Exact provider semantics and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/3eddb170320a3b27171af3d8eb3d37a2dc5159ec/docs/reviews/m5u_decomposed_provider_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Apply the fixed hierarchy adjustment using the independently summed median totals. Require exact dictionary state with finite float64 native forecasts (9,28,N), N positive, aligned integer levels containing exactly all 14 required levels, selected levels exactly 1..9 in order, finite nonzero float64 totals (9,28), and finite float64 supplied total (28,). Copy native forecasts; target=total/9. For each selected level compute (1-.7)+.7*target/level_total and multiply every quantile and series of that level by the corresponding horizon correction. Reject nonfinite final output. Signed inputs and outputs are supported; there is no clipping, rounding, quantile sorting or monotonicity guarantee. Levels 10,11,13,14,15 receive no additional correction. The adapter does not recompute the supplied sum or verify that stored totals match native forecasts; same-invocation provenance is a precondition."
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "1f580fe3-d538-55f5-917f-7d676003cc83",
+        "version_id": "4ce7b6fd-18b0-5599-8171-966b7e956d49",
+        "name": "state"
+      },
+      "row": {
+        "artifact_id": "1f580fe3-d538-55f5-917f-7d676003cc83",
+        "version_id": "4ce7b6fd-18b0-5599-8171-966b7e956d49",
+        "name": "state",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "dict",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Same-invocation state from restoration_inputs.",
+        "dejargonized_description": "Caller supplies state.",
+        "constraints_json": {
+          "validity_bounds": "Require exact dictionary state with finite float64 native forecasts (9,28,N), N positive, aligned integer levels containing exactly all 14 required levels, selected levels exactly 1..9 in order, finite nonzero float64 totals (9,28), and finite float64 supplied total (28,). Copy native forecasts; target=total/9. For each selected level compute (1-.7)+.7*target/level_total and multiply every quantile and series of that level by the corresponding horizon correction. Reject nonfinite final output. Signed inputs and outputs are supported; there is no clipping, rounding, quantile sorting or monotonicity guarantee. Levels 10,11,13,14,15 receive no additional correction. The adapter does not recompute the supplied sum or verify that stored totals match native forecasts; same-invocation provenance is a precondition.",
+          "parameter_contract": "Same-invocation state from restoration_inputs."
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "1f580fe3-d538-55f5-917f-7d676003cc83",
+        "version_id": "4ce7b6fd-18b0-5599-8171-966b7e956d49",
+        "name": "total"
+      },
+      "row": {
+        "artifact_id": "1f580fe3-d538-55f5-917f-7d676003cc83",
+        "version_id": "4ce7b6fd-18b0-5599-8171-966b7e956d49",
+        "name": "total",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Same-invocation generic ordered weighted sum of the nine median-total rows with unit coefficients.",
+        "dejargonized_description": "Caller supplies total.",
+        "constraints_json": {
+          "validity_bounds": "Require exact dictionary state with finite float64 native forecasts (9,28,N), N positive, aligned integer levels containing exactly all 14 required levels, selected levels exactly 1..9 in order, finite nonzero float64 totals (9,28), and finite float64 supplied total (28,). Copy native forecasts; target=total/9. For each selected level compute (1-.7)+.7*target/level_total and multiply every quantile and series of that level by the corresponding horizon correction. Reject nonfinite final output. Signed inputs and outputs are supported; there is no clipping, rounding, quantile sorting or monotonicity guarantee. Levels 10,11,13,14,15 receive no additional correction. The adapter does not recompute the supplied sum or verify that stored totals match native forecasts; same-invocation provenance is a precondition.",
+          "parameter_contract": "Same-invocation generic ordered weighted sum of the nine median-total rows with unit coefficients."
+        }
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "1f580fe3-d538-55f5-917f-7d676003cc83",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "1f580fe3-d538-55f5-917f-7d676003cc83",
+        "kind": "technical",
+        "language": "en",
+        "content": "Apply the fixed hierarchy adjustment using the independently summed median totals. Require exact dictionary state with finite float64 native forecasts (9,28,N), N positive, aligned integer levels containing exactly all 14 required levels, selected levels exactly 1..9 in order, finite nonzero float64 totals (9,28), and finite float64 supplied total (28,). Copy native forecasts; target=total/9. For each selected level compute (1-.7)+.7*target/level_total and multiply every quantile and series of that level by the corresponding horizon correction. Reject nonfinite final output. Signed inputs and outputs are supported; there is no clipping, rounding, quantile sorting or monotonicity guarantee. Levels 10,11,13,14,15 receive no additional correction. The adapter does not recompute the supplied sum or verify that stored totals match native forecasts; same-invocation provenance is a precondition. Fresh finite float64 forecast array (9,28,N), retaining quantile, horizon and hierarchy ordering; caller arrays are not mutated.",
+        "generated_by": "m5u-decomposed-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.014925
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "1f580fe3-d538-55f5-917f-7d676003cc83",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "1f580fe3-d538-55f5-917f-7d676003cc83",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Apply the fixed hierarchy adjustment using the independently summed median totals. Divide the supplied level sum by nine. Adjust levels one through nine toward that target with strength .7. Leave the other levels in their restored native units.",
+        "generated_by": "m5u-decomposed-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "artifact_references",
+      "keys": {
+        "artifact_id": "1f580fe3-d538-55f5-917f-7d676003cc83",
+        "ref_key": "m5u-decomposed-provider-review-v1"
+      },
+      "row": {
+        "artifact_id": "1f580fe3-d538-55f5-917f-7d676003cc83",
+        "ref_key": "m5u-decomposed-provider-review-v1",
+        "ref_id": "m5u-decomposed-provider-review-v1",
+        "title": "Exact provider semantics and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/3eddb170320a3b27171af3d8eb3d37a2dc5159ec/docs/reviews/m5u_decomposed_provider_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Apply the fixed hierarchy adjustment using the independently summed median totals. Require exact dictionary state with finite float64 native forecasts (9,28,N), N positive, aligned integer levels containing exactly all 14 required levels, selected levels exactly 1..9 in order, finite nonzero float64 totals (9,28), and finite float64 supplied total (28,). Copy native forecasts; target=total/9. For each selected level compute (1-.7)+.7*target/level_total and multiply every quantile and series of that level by the corresponding horizon correction. Reject nonfinite final output. Signed inputs and outputs are supported; there is no clipping, rounding, quantile sorting or monotonicity guarantee. Levels 10,11,13,14,15 receive no additional correction. The adapter does not recompute the supplied sum or verify that stored totals match native forecasts; same-invocation provenance is a precondition."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "29c012d6-dc06-5372-b602-912cbe767fed",
+        "version_id": "ea676f4a-18f7-5dc7-89bd-4e6fea62379c",
+        "name": "forecasted"
+      },
+      "row": {
+        "atom_id": "29c012d6-dc06-5372-b602-912cbe767fed",
+        "version_id": "ea676f4a-18f7-5dc7-89bd-4e6fea62379c",
+        "name": "forecasted",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "dict",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Complete same-invocation fit_forecast output including metadata.",
+        "dejargonized_description": "Caller supplies forecasted.",
+        "constraints_json": {
+          "validity_bounds": "Revalidate forecasted through the same full shape, level, multiplier, quantile and adjustment checks used by restoration_inputs. Require restored values convertible to exact float64 with identical (9,28,N) shape and all finite entries. Convert forecast, levels and hierarchy indices to lists, quantiles to a list, retain reports, normalization and scope, set horizon=28 and require serialization with allow_nan=False. Reports, hierarchy indices, normalization and scope are passed through rather than independently authenticated. No sum, model execution or restoration is recomputed. Same-invocation provenance is required.",
+          "parameter_contract": "Complete same-invocation fit_forecast output including metadata."
+        }
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "29c012d6-dc06-5372-b602-912cbe767fed",
+        "version_id": "ea676f4a-18f7-5dc7-89bd-4e6fea62379c",
+        "name": "restored"
+      },
+      "row": {
+        "atom_id": "29c012d6-dc06-5372-b602-912cbe767fed",
+        "version_id": "ea676f4a-18f7-5dc7-89bd-4e6fea62379c",
+        "name": "restored",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Complete same-invocation restore output in unchanged hierarchy order.",
+        "dejargonized_description": "Caller supplies restored.",
+        "constraints_json": {
+          "validity_bounds": "Revalidate forecasted through the same full shape, level, multiplier, quantile and adjustment checks used by restoration_inputs. Require restored values convertible to exact float64 with identical (9,28,N) shape and all finite entries. Convert forecast, levels and hierarchy indices to lists, quantiles to a list, retain reports, normalization and scope, set horizon=28 and require serialization with allow_nan=False. Reports, hierarchy indices, normalization and scope are passed through rather than independently authenticated. No sum, model execution or restoration is recomputed. Same-invocation provenance is required.",
+          "parameter_contract": "Complete same-invocation restore output in unchanged hierarchy order."
+        }
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "29c012d6-dc06-5372-b602-912cbe767fed",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "29c012d6-dc06-5372-b602-912cbe767fed",
+        "kind": "technical",
+        "language": "en",
+        "content": "Package every restored forecast and its reconstruction metadata as strict JSON. Revalidate forecasted through the same full shape, level, multiplier, quantile and adjustment checks used by restoration_inputs. Require restored values convertible to exact float64 with identical (9,28,N) shape and all finite entries. Convert forecast, levels and hierarchy indices to lists, quantiles to a list, retain reports, normalization and scope, set horizon=28 and require serialization with allow_nan=False. Reports, hierarchy indices, normalization and scope are passed through rather than independently authenticated. No sum, model execution or restoration is recomputed. Same-invocation provenance is required. Strict JSON dictionary with forecast, levels, hierarchy_indices, quantiles, horizon=28, reports, normalization and scope. Forecast arrays are runtime outputs and must not be included in public evidence for private datasets.",
+        "generated_by": "m5u-decomposed-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.033058
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "29c012d6-dc06-5372-b602-912cbe767fed",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "29c012d6-dc06-5372-b602-912cbe767fed",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Package every restored forecast and its reconstruction metadata as strict JSON. Check the forecast structure and restored array, then return all quantiles, hierarchy levels and future steps with the training reports and stated scope.",
+        "generated_by": "m5u-decomposed-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "atom_references",
+      "keys": {
+        "atom_id": "29c012d6-dc06-5372-b602-912cbe767fed",
+        "ref_key": "m5u-decomposed-provider-review-v1"
+      },
+      "row": {
+        "atom_id": "29c012d6-dc06-5372-b602-912cbe767fed",
+        "ref_key": "m5u-decomposed-provider-review-v1",
+        "ref_id": "m5u-decomposed-provider-review-v1",
+        "title": "Exact provider semantics and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/3eddb170320a3b27171af3d8eb3d37a2dc5159ec/docs/reviews/m5u_decomposed_provider_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Package every restored forecast and its reconstruction metadata as strict JSON. Revalidate forecasted through the same full shape, level, multiplier, quantile and adjustment checks used by restoration_inputs. Require restored values convertible to exact float64 with identical (9,28,N) shape and all finite entries. Convert forecast, levels and hierarchy indices to lists, quantiles to a list, retain reports, normalization and scope, set horizon=28 and require serialization with allow_nan=False. Reports, hierarchy indices, normalization and scope are passed through rather than independently authenticated. No sum, model execution or restoration is recomputed. Same-invocation provenance is required."
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "29c012d6-dc06-5372-b602-912cbe767fed",
+        "version_id": "ea676f4a-18f7-5dc7-89bd-4e6fea62379c",
+        "name": "forecasted"
+      },
+      "row": {
+        "artifact_id": "29c012d6-dc06-5372-b602-912cbe767fed",
+        "version_id": "ea676f4a-18f7-5dc7-89bd-4e6fea62379c",
+        "name": "forecasted",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "dict",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Complete same-invocation fit_forecast output including metadata.",
+        "dejargonized_description": "Caller supplies forecasted.",
+        "constraints_json": {
+          "validity_bounds": "Revalidate forecasted through the same full shape, level, multiplier, quantile and adjustment checks used by restoration_inputs. Require restored values convertible to exact float64 with identical (9,28,N) shape and all finite entries. Convert forecast, levels and hierarchy indices to lists, quantiles to a list, retain reports, normalization and scope, set horizon=28 and require serialization with allow_nan=False. Reports, hierarchy indices, normalization and scope are passed through rather than independently authenticated. No sum, model execution or restoration is recomputed. Same-invocation provenance is required.",
+          "parameter_contract": "Complete same-invocation fit_forecast output including metadata."
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "29c012d6-dc06-5372-b602-912cbe767fed",
+        "version_id": "ea676f4a-18f7-5dc7-89bd-4e6fea62379c",
+        "name": "restored"
+      },
+      "row": {
+        "artifact_id": "29c012d6-dc06-5372-b602-912cbe767fed",
+        "version_id": "ea676f4a-18f7-5dc7-89bd-4e6fea62379c",
+        "name": "restored",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Complete same-invocation restore output in unchanged hierarchy order.",
+        "dejargonized_description": "Caller supplies restored.",
+        "constraints_json": {
+          "validity_bounds": "Revalidate forecasted through the same full shape, level, multiplier, quantile and adjustment checks used by restoration_inputs. Require restored values convertible to exact float64 with identical (9,28,N) shape and all finite entries. Convert forecast, levels and hierarchy indices to lists, quantiles to a list, retain reports, normalization and scope, set horizon=28 and require serialization with allow_nan=False. Reports, hierarchy indices, normalization and scope are passed through rather than independently authenticated. No sum, model execution or restoration is recomputed. Same-invocation provenance is required.",
+          "parameter_contract": "Complete same-invocation restore output in unchanged hierarchy order."
+        }
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "29c012d6-dc06-5372-b602-912cbe767fed",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "29c012d6-dc06-5372-b602-912cbe767fed",
+        "kind": "technical",
+        "language": "en",
+        "content": "Package every restored forecast and its reconstruction metadata as strict JSON. Revalidate forecasted through the same full shape, level, multiplier, quantile and adjustment checks used by restoration_inputs. Require restored values convertible to exact float64 with identical (9,28,N) shape and all finite entries. Convert forecast, levels and hierarchy indices to lists, quantiles to a list, retain reports, normalization and scope, set horizon=28 and require serialization with allow_nan=False. Reports, hierarchy indices, normalization and scope are passed through rather than independently authenticated. No sum, model execution or restoration is recomputed. Same-invocation provenance is required. Strict JSON dictionary with forecast, levels, hierarchy_indices, quantiles, horizon=28, reports, normalization and scope. Forecast arrays are runtime outputs and must not be included in public evidence for private datasets.",
+        "generated_by": "m5u-decomposed-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.033058
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "29c012d6-dc06-5372-b602-912cbe767fed",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "29c012d6-dc06-5372-b602-912cbe767fed",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Package every restored forecast and its reconstruction metadata as strict JSON. Check the forecast structure and restored array, then return all quantiles, hierarchy levels and future steps with the training reports and stated scope.",
+        "generated_by": "m5u-decomposed-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "artifact_references",
+      "keys": {
+        "artifact_id": "29c012d6-dc06-5372-b602-912cbe767fed",
+        "ref_key": "m5u-decomposed-provider-review-v1"
+      },
+      "row": {
+        "artifact_id": "29c012d6-dc06-5372-b602-912cbe767fed",
+        "ref_key": "m5u-decomposed-provider-review-v1",
+        "ref_id": "m5u-decomposed-provider-review-v1",
+        "title": "Exact provider semantics and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/3eddb170320a3b27171af3d8eb3d37a2dc5159ec/docs/reviews/m5u_decomposed_provider_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Package every restored forecast and its reconstruction metadata as strict JSON. Revalidate forecasted through the same full shape, level, multiplier, quantile and adjustment checks used by restoration_inputs. Require restored values convertible to exact float64 with identical (9,28,N) shape and all finite entries. Convert forecast, levels and hierarchy indices to lists, quantiles to a list, retain reports, normalization and scope, set horizon=28 and require serialization with allow_nan=False. Reports, hierarchy indices, normalization and scope are passed through rather than independently authenticated. No sum, model execution or restoration is recomputed. Same-invocation provenance is required."
+      }
+    }
+  ],
+  "rollups": [
+    {
+      "table": "atom_audit_rollups",
+      "key": "atom_id",
+      "identity": "443ef8a4-3d73-5dd7-9ddf-58f5c7140c47",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 implementation semantics only; no Tier 1 human certification or Tier 2 usage qualification.",
+          "Four recipe adapters preserve all 14 levels, nine quantiles, full grouped search, repeated-query budgets and the complete 28-step horizon. The generic ordered weighted sum remains independently bound and domain independent.",
+          "Exact historical notebook details remain unverified. This review qualifies the stated implementation contracts, not historical winning-agent equivalence or original-CDG publication.",
+          "Fresh execution exactly matches the existing reconstruction on generated populations; historical population membership and competitive accuracy are unproven.",
+          "Installed package hashes were checked against their own RECORD files. Clean deployment and independently authenticated publisher signatures are not qualified.",
+          "Native pools and LightGBM calls are bounded to one thread; models train serially. Deployment must configure its own resource limits.",
+          "Software imports are separate from registered-provider dependencies. Same-invocation intermediate provenance is required but not authenticated by structural checks.",
+          "Catalog eligibility, publication transaction gates and existing-provider metadata remain separate checks.",
+          "Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical revalidation through prepare. Forward caller minimum_day and seed without speed overrides. Run aggregate controller -1 for levels 1 through 11, followed by separate base controllers 13,14,15. Preserve retained_base_reference normalization for aggregates and source normalization for base partitions. Source calendar cleaning must retain the forecast origin and sufficient year groups. Build complete rolling populations, sample each level with its factor-dependent full schedule, fit all nine quantiles using one bag and the latest outer holdout, and execute nested grouped randomized search with pinned parameter choices. Native LightGBM and search workers are one; models run serially. The latest outer group is excluded from training, but this is not proof of unbiased future accuracy. Run every repeated-query budget for all 28 horizons, preserving scaling, fold weighting and inverse scaling. Reject excessive query allocations rather than silently reducing them. Require all 14 levels and unique contiguous hierarchy coverage; sort outputs by hierarchy index. All 126 final models are required. Candidate-fit and query counts depend on the caller population; synthetic evidence counts are not universal constants. No restoration, quantile sorting, clipping or historical-weight loading occurs here."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "artifact_audit_rollups",
+      "key": "artifact_id",
+      "identity": "443ef8a4-3d73-5dd7-9ddf-58f5c7140c47",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 implementation semantics only; no Tier 1 human certification or Tier 2 usage qualification.",
+          "Four recipe adapters preserve all 14 levels, nine quantiles, full grouped search, repeated-query budgets and the complete 28-step horizon. The generic ordered weighted sum remains independently bound and domain independent.",
+          "Exact historical notebook details remain unverified. This review qualifies the stated implementation contracts, not historical winning-agent equivalence or original-CDG publication.",
+          "Fresh execution exactly matches the existing reconstruction on generated populations; historical population membership and competitive accuracy are unproven.",
+          "Installed package hashes were checked against their own RECORD files. Clean deployment and independently authenticated publisher signatures are not qualified.",
+          "Native pools and LightGBM calls are bounded to one thread; models train serially. Deployment must configure its own resource limits.",
+          "Software imports are separate from registered-provider dependencies. Same-invocation intermediate provenance is required but not authenticated by structural checks.",
+          "Catalog eligibility, publication transaction gates and existing-provider metadata remain separate checks.",
+          "Require exact Prepared type, string configuration, matching SHA-256 fingerprint and canonical revalidation through prepare. Forward caller minimum_day and seed without speed overrides. Run aggregate controller -1 for levels 1 through 11, followed by separate base controllers 13,14,15. Preserve retained_base_reference normalization for aggregates and source normalization for base partitions. Source calendar cleaning must retain the forecast origin and sufficient year groups. Build complete rolling populations, sample each level with its factor-dependent full schedule, fit all nine quantiles using one bag and the latest outer holdout, and execute nested grouped randomized search with pinned parameter choices. Native LightGBM and search workers are one; models run serially. The latest outer group is excluded from training, but this is not proof of unbiased future accuracy. Run every repeated-query budget for all 28 horizons, preserving scaling, fold weighting and inverse scaling. Reject excessive query allocations rather than silently reducing them. Require all 14 levels and unique contiguous hierarchy coverage; sort outputs by hierarchy index. All 126 final models are required. Candidate-fit and query counts depend on the caller population; synthetic evidence counts are not universal constants. No restoration, quantile sorting, clipping or historical-weight loading occurs here."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "atom_audit_rollups",
+      "key": "atom_id",
+      "identity": "c007827f-83ce-5f16-bb74-cdcd54aa7e7b",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 implementation semantics only; no Tier 1 human certification or Tier 2 usage qualification.",
+          "Four recipe adapters preserve all 14 levels, nine quantiles, full grouped search, repeated-query budgets and the complete 28-step horizon. The generic ordered weighted sum remains independently bound and domain independent.",
+          "Exact historical notebook details remain unverified. This review qualifies the stated implementation contracts, not historical winning-agent equivalence or original-CDG publication.",
+          "Fresh execution exactly matches the existing reconstruction on generated populations; historical population membership and competitive accuracy are unproven.",
+          "Installed package hashes were checked against their own RECORD files. Clean deployment and independently authenticated publisher signatures are not qualified.",
+          "Native pools and LightGBM calls are bounded to one thread; models train serially. Deployment must configure its own resource limits.",
+          "Software imports are separate from registered-provider dependencies. Same-invocation intermediate provenance is required but not authenticated by structural checks.",
+          "Catalog eligibility, publication transaction gates and existing-provider metadata remain separate checks.",
+          "Require exact dictionary; forecasts convertible to exact float64 array (9,28,N), N positive, finite; aligned integer levels containing exactly 1..11,13,14,15; aligned finite positive real factors with one unique factor per level; exact quantile sequence (.005,.025,.165,.25,.5,.75,.835,.975,.995); and Python float adjustment=.7. Signed forecasts are allowed. Copy forecasts then divide by factors. For each ascending level 1..9, sum median forecasts over its series separately at each horizon. Reject nonfinite native values or totals and any zero total. Return a fresh unit coefficient vector. No cross-level addition or normalization is performed. Shape checks do not establish provenance or validate other metadata."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "artifact_audit_rollups",
+      "key": "artifact_id",
+      "identity": "c007827f-83ce-5f16-bb74-cdcd54aa7e7b",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 implementation semantics only; no Tier 1 human certification or Tier 2 usage qualification.",
+          "Four recipe adapters preserve all 14 levels, nine quantiles, full grouped search, repeated-query budgets and the complete 28-step horizon. The generic ordered weighted sum remains independently bound and domain independent.",
+          "Exact historical notebook details remain unverified. This review qualifies the stated implementation contracts, not historical winning-agent equivalence or original-CDG publication.",
+          "Fresh execution exactly matches the existing reconstruction on generated populations; historical population membership and competitive accuracy are unproven.",
+          "Installed package hashes were checked against their own RECORD files. Clean deployment and independently authenticated publisher signatures are not qualified.",
+          "Native pools and LightGBM calls are bounded to one thread; models train serially. Deployment must configure its own resource limits.",
+          "Software imports are separate from registered-provider dependencies. Same-invocation intermediate provenance is required but not authenticated by structural checks.",
+          "Catalog eligibility, publication transaction gates and existing-provider metadata remain separate checks.",
+          "Require exact dictionary; forecasts convertible to exact float64 array (9,28,N), N positive, finite; aligned integer levels containing exactly 1..11,13,14,15; aligned finite positive real factors with one unique factor per level; exact quantile sequence (.005,.025,.165,.25,.5,.75,.835,.975,.995); and Python float adjustment=.7. Signed forecasts are allowed. Copy forecasts then divide by factors. For each ascending level 1..9, sum median forecasts over its series separately at each horizon. Reject nonfinite native values or totals and any zero total. Return a fresh unit coefficient vector. No cross-level addition or normalization is performed. Shape checks do not establish provenance or validate other metadata."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "atom_audit_rollups",
+      "key": "atom_id",
+      "identity": "1f580fe3-d538-55f5-917f-7d676003cc83",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 implementation semantics only; no Tier 1 human certification or Tier 2 usage qualification.",
+          "Four recipe adapters preserve all 14 levels, nine quantiles, full grouped search, repeated-query budgets and the complete 28-step horizon. The generic ordered weighted sum remains independently bound and domain independent.",
+          "Exact historical notebook details remain unverified. This review qualifies the stated implementation contracts, not historical winning-agent equivalence or original-CDG publication.",
+          "Fresh execution exactly matches the existing reconstruction on generated populations; historical population membership and competitive accuracy are unproven.",
+          "Installed package hashes were checked against their own RECORD files. Clean deployment and independently authenticated publisher signatures are not qualified.",
+          "Native pools and LightGBM calls are bounded to one thread; models train serially. Deployment must configure its own resource limits.",
+          "Software imports are separate from registered-provider dependencies. Same-invocation intermediate provenance is required but not authenticated by structural checks.",
+          "Catalog eligibility, publication transaction gates and existing-provider metadata remain separate checks.",
+          "Require exact dictionary state with finite float64 native forecasts (9,28,N), N positive, aligned integer levels containing exactly all 14 required levels, selected levels exactly 1..9 in order, finite nonzero float64 totals (9,28), and finite float64 supplied total (28,). Copy native forecasts; target=total/9. For each selected level compute (1-.7)+.7*target/level_total and multiply every quantile and series of that level by the corresponding horizon correction. Reject nonfinite final output. Signed inputs and outputs are supported; there is no clipping, rounding, quantile sorting or monotonicity guarantee. Levels 10,11,13,14,15 receive no additional correction. The adapter does not recompute the supplied sum or verify that stored totals match native forecasts; same-invocation provenance is a precondition."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "artifact_audit_rollups",
+      "key": "artifact_id",
+      "identity": "1f580fe3-d538-55f5-917f-7d676003cc83",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 implementation semantics only; no Tier 1 human certification or Tier 2 usage qualification.",
+          "Four recipe adapters preserve all 14 levels, nine quantiles, full grouped search, repeated-query budgets and the complete 28-step horizon. The generic ordered weighted sum remains independently bound and domain independent.",
+          "Exact historical notebook details remain unverified. This review qualifies the stated implementation contracts, not historical winning-agent equivalence or original-CDG publication.",
+          "Fresh execution exactly matches the existing reconstruction on generated populations; historical population membership and competitive accuracy are unproven.",
+          "Installed package hashes were checked against their own RECORD files. Clean deployment and independently authenticated publisher signatures are not qualified.",
+          "Native pools and LightGBM calls are bounded to one thread; models train serially. Deployment must configure its own resource limits.",
+          "Software imports are separate from registered-provider dependencies. Same-invocation intermediate provenance is required but not authenticated by structural checks.",
+          "Catalog eligibility, publication transaction gates and existing-provider metadata remain separate checks.",
+          "Require exact dictionary state with finite float64 native forecasts (9,28,N), N positive, aligned integer levels containing exactly all 14 required levels, selected levels exactly 1..9 in order, finite nonzero float64 totals (9,28), and finite float64 supplied total (28,). Copy native forecasts; target=total/9. For each selected level compute (1-.7)+.7*target/level_total and multiply every quantile and series of that level by the corresponding horizon correction. Reject nonfinite final output. Signed inputs and outputs are supported; there is no clipping, rounding, quantile sorting or monotonicity guarantee. Levels 10,11,13,14,15 receive no additional correction. The adapter does not recompute the supplied sum or verify that stored totals match native forecasts; same-invocation provenance is a precondition."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "atom_audit_rollups",
+      "key": "atom_id",
+      "identity": "29c012d6-dc06-5372-b602-912cbe767fed",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 implementation semantics only; no Tier 1 human certification or Tier 2 usage qualification.",
+          "Four recipe adapters preserve all 14 levels, nine quantiles, full grouped search, repeated-query budgets and the complete 28-step horizon. The generic ordered weighted sum remains independently bound and domain independent.",
+          "Exact historical notebook details remain unverified. This review qualifies the stated implementation contracts, not historical winning-agent equivalence or original-CDG publication.",
+          "Fresh execution exactly matches the existing reconstruction on generated populations; historical population membership and competitive accuracy are unproven.",
+          "Installed package hashes were checked against their own RECORD files. Clean deployment and independently authenticated publisher signatures are not qualified.",
+          "Native pools and LightGBM calls are bounded to one thread; models train serially. Deployment must configure its own resource limits.",
+          "Software imports are separate from registered-provider dependencies. Same-invocation intermediate provenance is required but not authenticated by structural checks.",
+          "Catalog eligibility, publication transaction gates and existing-provider metadata remain separate checks.",
+          "Revalidate forecasted through the same full shape, level, multiplier, quantile and adjustment checks used by restoration_inputs. Require restored values convertible to exact float64 with identical (9,28,N) shape and all finite entries. Convert forecast, levels and hierarchy indices to lists, quantiles to a list, retain reports, normalization and scope, set horizon=28 and require serialization with allow_nan=False. Reports, hierarchy indices, normalization and scope are passed through rather than independently authenticated. No sum, model execution or restoration is recomputed. Same-invocation provenance is required."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "artifact_audit_rollups",
+      "key": "artifact_id",
+      "identity": "29c012d6-dc06-5372-b602-912cbe767fed",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 implementation semantics only; no Tier 1 human certification or Tier 2 usage qualification.",
+          "Four recipe adapters preserve all 14 levels, nine quantiles, full grouped search, repeated-query budgets and the complete 28-step horizon. The generic ordered weighted sum remains independently bound and domain independent.",
+          "Exact historical notebook details remain unverified. This review qualifies the stated implementation contracts, not historical winning-agent equivalence or original-CDG publication.",
+          "Fresh execution exactly matches the existing reconstruction on generated populations; historical population membership and competitive accuracy are unproven.",
+          "Installed package hashes were checked against their own RECORD files. Clean deployment and independently authenticated publisher signatures are not qualified.",
+          "Native pools and LightGBM calls are bounded to one thread; models train serially. Deployment must configure its own resource limits.",
+          "Software imports are separate from registered-provider dependencies. Same-invocation intermediate provenance is required but not authenticated by structural checks.",
+          "Catalog eligibility, publication transaction gates and existing-provider metadata remain separate checks.",
+          "Revalidate forecasted through the same full shape, level, multiplier, quantile and adjustment checks used by restoration_inputs. Require restored values convertible to exact float64 with identical (9,28,N) shape and all finite entries. Convert forecast, levels and hierarchy indices to lists, quantiles to a list, retain reports, normalization and scope, set horizon=28 and require serialization with allow_nan=False. Reports, hierarchy indices, normalization and scope are passed through rather than independently authenticated. No sum, model execution or restoration is recomputed. Same-invocation provenance is required."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    }
+  ],
+  "parameter_updates": [],
+  "metadata_expectations": [],
+  "dependencies": [],
+  "before": {
+    "atoms": "278789b5f06e257db066371b7f5b07155357dd6a91927366d82a4ae48266f2a2",
+    "artifacts": "9454c6873d158725b3e25d54ae83b1b4365af02f93645d5038bc11d43aed9c13",
+    "atom_versions": "b78ec59c90fd3202e44b1b24eb1d781a214088be3662d7412abf731bd2fb8fb9",
+    "artifact_versions": "249a33cee2f87872ce07beacf12464d6cbbf2aba8129f648febb26a1a901a593",
+    "atom_io_specs": "03bfc4f6b7a088edc965c9a319d96dd17ac3682d4ba9713dc7621b23cbae6695",
+    "artifact_io_specs": "21c7ed265f621f2fd80c05485b6a3c2a22c84e99d98fb8aced5c71e5b6feacb2",
+    "atom_parameters": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_parameters": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_descriptions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_descriptions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_references": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_references": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_audit_rollups": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_audit_rollups": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_audit_evidence": "47b0e58c1d5e33f5722ca7052bf15c700953f4be129d0d80671916f1e8279741"
+  },
+  "preserved_approved": {
+    "atom_versions": "b78ec59c90fd3202e44b1b24eb1d781a214088be3662d7412abf731bd2fb8fb9",
+    "artifact_versions": "249a33cee2f87872ce07beacf12464d6cbbf2aba8129f648febb26a1a901a593",
+    "atom_io_specs": "03bfc4f6b7a088edc965c9a319d96dd17ac3682d4ba9713dc7621b23cbae6695",
+    "artifact_io_specs": "21c7ed265f621f2fd80c05485b6a3c2a22c84e99d98fb8aced5c71e5b6feacb2",
+    "artifact_audit_evidence": "47b0e58c1d5e33f5722ca7052bf15c700953f4be129d0d80671916f1e8279741"
+  },
+  "outside_preserved": "6de2022d243bf37c92f8a177e400e6a544697ee7ac4d344ff7844d97adb9cc86",
+  "review_sha256": "06fdbe11ff8dce1dfbd694571cc4163669a51ad20b33d5d3c17db0eb3a4cbf74"
+}
