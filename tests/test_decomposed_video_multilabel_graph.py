@@ -6,6 +6,7 @@ from sciona import video_multilabel_sharded_training as lifecycle
 from sciona.atoms.ml.masked_attention import masked_attention_pool, sigmoid_context_gate
 from sciona.atoms.ml.model_selection.materialized_prediction import average
 from sciona.atoms.ml.sklearn.feature_extraction.sparse_numeric import fit_numeric_vocabulary, transform_numeric_vocabulary
+from sciona.atoms.ml.sklearn.linear_model.sparse_binary import fit_sparse_binary_logistic, predict_sparse_binary_probability
 from sciona.atoms.ml.calibration.empirical_f1 import fit_empirical_f1_thresholds, apply_column_thresholds
 from sciona.decomposed_video_multilabel_graph import build_decomposed_video_multilabel_graph
 from sciona.services.execution_graph_codec import encode_execution_graph, decode_execution_graph
@@ -31,6 +32,7 @@ def test_serialized_native_graph_full_lifecycle(tmp_path, monkeypatch, seed, epo
     functions=dict(pool_function=masked_attention_pool,gate_function=sigmoid_context_gate,
         mean_function=average,
         vocabulary_fit_function=fit_numeric_vocabulary,vocabulary_transform_function=transform_numeric_vocabulary,
+        logistic_fit_function=fit_sparse_binary_logistic,logistic_predict_function=predict_sparse_binary_probability,
         threshold_fit_function=fit_empirical_f1_thresholds,threshold_apply_function=apply_column_thresholds)
     bindings=[];observed=[];run=lifecycle.execute
     def checked(*args,**kwargs):
@@ -49,8 +51,8 @@ def test_serialized_native_graph_full_lifecycle(tmp_path, monkeypatch, seed, epo
     result=asyncio.run(runner.CDGExecutionSession(None,'synthetic-sharded-video','case').execute(inputs,cdg=graph))
     assert result['status']=='completed'
     traces={entry['node_id']:entry for entry in result['trace']}
-    assert set(traces)=={'pool','gate','mean','vocabulary_fit','vocabulary_transform','threshold_fit','threshold_apply','execute'}
+    assert set(traces)=={'pool','gate','mean','vocabulary_fit','vocabulary_transform','logistic_fit','logistic_predict','threshold_fit','threshold_apply','execute'}
     assert all(not entry['cached'] for entry in traces.values())
     assert all(traces[name].get('callable_reference') is True
-               for name in ('pool','gate','mean','vocabulary_fit','vocabulary_transform','threshold_fit','threshold_apply'))
+               for name in ('pool','gate','mean','vocabulary_fit','vocabulary_transform','logistic_fit','logistic_predict','threshold_fit','threshold_apply'))
     assert bindings==[True] and observed==[expected]

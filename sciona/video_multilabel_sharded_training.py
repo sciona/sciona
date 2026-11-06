@@ -5,12 +5,10 @@ training CSR matrix, model state, shuffle indices and returned scores remain
 resident; this is bounded frame loading, not a constant-total-memory promise.
 """
 from dataclasses import dataclass
-import warnings
 import numpy as np
 import torch
 from sciona.atoms.ml.sklearn.feature_extraction.sparse_numeric import fit_numeric_vocabulary, transform_numeric_vocabulary
-from sklearn.linear_model import LogisticRegression
-from sklearn.exceptions import ConvergenceWarning
+from sciona.atoms.ml.sklearn.linear_model.sparse_binary import fit_sparse_binary_logistic, predict_sparse_binary_probability
 from sciona.video_multilabel_network import pad_sequences
 from sciona.video_multilabel_reusable_network import ReusableVideoHead
 from sciona.video_multilabel_thresholds import label_matrix, score_matrix
@@ -29,6 +27,7 @@ class ShardedVideoEnsemble:
     history: list
     mean_function: object = average
     vocabulary_transform_function: object = transform_numeric_vocabulary
+    logistic_predict_function: object = predict_sparse_binary_probability
 
     def components(self, population):
         if not isinstance(population, FeatureShards) or population.width != self.neural.features:
@@ -40,7 +39,7 @@ class ShardedVideoEnsemble:
                 frames, mask = pad_sequences([row['frames'] for row in batch])
                 neural.append(torch.sigmoid(self.neural(frames, mask)).numpy())
                 features = self.vocabulary_transform_function((row['sparse'] for row in batch), self.vectorizer)
-                linear.append(np.column_stack([model.predict_proba(features)[:,1] for model in self.baseline]))
+                linear.append(np.column_stack([self.logistic_predict_function(features, model) for model in self.baseline]))
         return score_matrix(np.concatenate(neural)), score_matrix(np.concatenate(linear))
 
     def predict(self, population):
@@ -53,7 +52,8 @@ class ShardedVideoEnsemble:
 def fit(training, *, seed=12, hidden=8, epochs=80, batch_size=4, learning_rate=.02,
         pool_function=masked_attention_pool, gate_function=sigmoid_context_gate,
         mean_function=average, vocabulary_fit_function=fit_numeric_vocabulary,
-        vocabulary_transform_function=transform_numeric_vocabulary):
+        vocabulary_transform_function=transform_numeric_vocabulary,
+        logistic_fit_function=fit_sparse_binary_logistic, logistic_predict_function=predict_sparse_binary_probability):
     if not isinstance(training, FeatureShards) or not training.labelled:
         raise ValueError('Labelled training shards required')
     for name, value in [('seed',seed), ('hidden',hidden), ('epochs',epochs), ('batch_size',batch_size)]:
@@ -67,13 +67,8 @@ def fit(training, *, seed=12, hidden=8, epochs=80, batch_size=4, learning_rate=.
     vectorizer, features = vocabulary_fit_function(row['sparse'] for row in training)
     if not features.shape[1]:
         raise ValueError('Training sparse vocabulary is empty')
-    baseline = []
-    with warnings.catch_warnings():
-        warnings.simplefilter('error', ConvergenceWarning)
-        for column in y.T:
-            model = LogisticRegression(max_iter=1000, random_state=seed)
-            model.fit(features, column)
-            baseline.append(model)
+    baseline = [logistic_fit_function(features, np.asarray(column,dtype=np.int64), 1., 1e-4, 1000, seed)
+                for column in y.T]
     with torch.random.fork_rng(devices=[]):
         torch.manual_seed(seed)
         model = ReusableVideoHead(training.width, hidden, y.shape[1],
@@ -113,7 +108,7 @@ def fit(training, *, seed=12, hidden=8, epochs=80, batch_size=4, learning_rate=.
             optimizer.step()
     model.eval()
     return ShardedVideoEnsemble(model, vectorizer, baseline, batch_size, history, mean_function,
-        vocabulary_transform_function)
+        vocabulary_transform_function, logistic_predict_function)
 
 
 def execute(training, calibration, query, controls, *,
@@ -121,6 +116,8 @@ def execute(training, calibration, query, controls, *,
             mean_function=average,
             vocabulary_fit_function=fit_numeric_vocabulary,
             vocabulary_transform_function=transform_numeric_vocabulary,
+            logistic_fit_function=fit_sparse_binary_logistic,
+            logistic_predict_function=predict_sparse_binary_probability,
             threshold_fit_function=fit_empirical_f1_thresholds,
             threshold_apply_function=apply_column_thresholds):
     validate_populations(training, calibration, query)
@@ -131,7 +128,8 @@ def execute(training, calibration, query, controls, *,
     label_matrix(labels, (len(calibration), calibration.label_count))
     fitted = fit(training, **controls, pool_function=pool_function, gate_function=gate_function,
         mean_function=mean_function, vocabulary_fit_function=vocabulary_fit_function,
-        vocabulary_transform_function=vocabulary_transform_function)
+        vocabulary_transform_function=vocabulary_transform_function,
+        logistic_fit_function=logistic_fit_function, logistic_predict_function=logistic_predict_function)
     thresholds = threshold_fit_function(fitted.predict(calibration), np.asarray(labels, dtype=np.int64))
     scores = fitted.predict(query)
     predicted = threshold_apply_function(scores, thresholds)

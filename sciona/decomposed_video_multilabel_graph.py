@@ -7,6 +7,7 @@ from sciona.atoms.ml.calibration.empirical_f1 import fit_empirical_f1_thresholds
 from sciona.atoms.ml.video_multilabel_sharded_execution import execute
 from sciona.atoms.ml.model_selection.materialized_prediction import average
 from sciona.atoms.ml.sklearn.feature_extraction.sparse_numeric import fit_numeric_vocabulary, transform_numeric_vocabulary
+from sciona.atoms.ml.sklearn.linear_model.sparse_binary import fit_sparse_binary_logistic, predict_sparse_binary_probability
 
 
 def build_decomposed_video_multilabel_graph():
@@ -22,6 +23,8 @@ def build_decomposed_video_multilabel_graph():
         ('mean',average,[('vectors','list')],[('mean','ndarray')]),
         ('vocabulary_fit',fit_numeric_vocabulary,[('records','object')],[('state','object'),('matrix','object')]),
         ('vocabulary_transform',transform_numeric_vocabulary,[('records','object'),('state','object')],[('matrix','object')]),
+        ('logistic_fit',fit_sparse_binary_logistic,[('features','object'),('labels','ndarray'),('inverse_regularization','float'),('tolerance','float'),('maximum_iterations','int'),('seed','int')],[('model','object')]),
+        ('logistic_predict',predict_sparse_binary_probability,[('features','object'),('model','object')],[('probabilities','ndarray')]),
         ('threshold_fit',fit_empirical_f1_thresholds,[('scores','ndarray'),('labels','ndarray')],[('thresholds','ndarray')]),
         ('threshold_apply',apply_column_thresholds,[('scores','ndarray'),('thresholds','ndarray')],[('predictions','ndarray')]),
     ]
@@ -36,6 +39,6 @@ def build_decomposed_video_multilabel_graph():
         artifact_source='video_multilabel_sharded_decomposition',publication_status='draft',
         num_nodes=len(nodes),num_edges=len(edges),
         scope='Complete configured sharded training with explicit pooling, gating and empirical threshold callables.',
-        limits=['Sparse logistic fitting and prediction still require reuse review and decomposition.',
+        limits=['Provider source, interface and runtime qualification remain pending.',
                 'Caller supplies private runtime shard stores; no data or paths are embedded.',
                 'Draft execution evidence only; catalog qualification and original publication pending.']))
