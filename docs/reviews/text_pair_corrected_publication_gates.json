@@ -1,0 +1,81 @@
+{
+  "passed": true,
+  "catalog_mutations": 0,
+  "rejected_faults": [
+    "candidate_hash",
+    "candidate_tier",
+    "candidate_lineage",
+    "original_latest",
+    "original_history",
+    "parent_history",
+    "parent_latest",
+    "parent_publication",
+    "binding_hash",
+    "binding_missing",
+    "dependency_optional",
+    "root_input_type",
+    "score_output_missing",
+    "failed_staging_audit",
+    "serialized_node",
+    "serialized_edge",
+    "provider_tier"
+  ],
+  "dry_run": {
+    "applied": false,
+    "already_approved": false,
+    "rows_created": 7,
+    "rows_updated": 3,
+    "trust_tier": 3,
+    "original_artifact_id": "e81e178e-524d-5e8b-8986-c183cea57949",
+    "version_id": "7959b6c7-a652-5dab-ae57-7819938e56c1",
+    "graph_sha256": "157e03191e75a885c7327fd8f5ce6b9a0e78bb3a12d709a0a85b94b316f3b600",
+    "served_cdgs": 1,
+    "reused_providers": 6,
+    "source_histories_preserved": true,
+    "plan_sha256": "5ae0a3a0a6a133018e3211959ff2eccc1f65ab978019c75b6bcbc00ecaa6dbb0"
+  },
+  "execution_evidence_tests": {
+    "passed": true,
+    "count": 10,
+    "sha256": "39322a9df9ee72f667b94470c68d29fac543b55fddc62312d29bac0263b7241b"
+  },
+  "all_rollbacks_complete": true,
+  "injected_failure_points": [
+    "metadata",
+    "activation"
+  ],
+  "publisher_sha256": "f5cd8f3e62bfd70d6414a065e87ab071e130d9055fb0af3abb6b4759860b83a6",
+  "validator_sha256": "c83a96b394c5a7eb4cabdf13f09283bdda581db6b0502aaadacdab62aa61190a",
+  "execution_sha256": "fc4aad75d1ce0a6dc29f178fb63ed59d8a590de972a920288b8c2cd4c57bb06c",
+  "qualification": {
+    "review_source": "automated",
+    "proposed_tier": 3,
+    "verdict": "acceptable_with_limits",
+    "evidence_commit": "5ad1c4dd6be67d70022c21a1c74beba9e112f9d8",
+    "execution_sha256": "fc4aad75d1ce0a6dc29f178fb63ed59d8a590de972a920288b8c2cd4c57bb06c",
+    "source_review_sha256": "525a8fc45e5491326136e987d0bae45f62fc14d3c143d3d048ba46451f41e9df",
+    "limitations": [
+      "Caller supplies a frozen vocabulary and mappings. Empty mappings express identity policy. No semantic correctness or external vocabulary fitting claim.",
+      "The original graph must explicitly select title_description; shared_text remains a separate supported request mode. BM25 query terms have unit weight, corpus documents are unique training descriptions, and positive IDF is explicit. Fields are not concatenated.",
+      "Training-only TF-IDF and uncentered randomized projection. No pretrained embedding or topic-model branch claimed.",
+      "Only candidate-pair co-occurrence, not semantic equivalence. Both title and description define each entity; normalized unordered full-record pairs define population isolation. This is not entity-disjoint splitting; caller must meet any stronger application split requirements.",
+      "Model family, equal weights and controls are explicit recipe policy. No benchmark accuracy claim.",
+      "Mapping and threshold share the calibration population; selection F1 is optimistic and not independent evaluation. Strict finite JSON distinguishes raw and scaled scores and emits ordered generic binary-relevance rows. No competition-specific format is claimed.",
+      "Only the explicitly selected source alternatives are implemented.",
+      "Automated synthetic Tier 3 evidence only; no historical accuracy, generalization or human Tier 1 claim."
+    ],
+    "resolved_source_corrections": {
+      "pair_normalization": "Apply NFKC/casefold, existing spelling correction, word punctuation handling, explicit domain substitutions and one-pass synonym expansion; reject split collisions after normalization. Caller supplies a frozen vocabulary and mappings. Empty mappings express identity policy. No semantic correctness or external vocabulary fitting claim.",
+      "lexical_similarity_features": "The title_description branch computes normalized edit similarity from titles through the existing Levenshtein provider, and n-gram overlap, token Jaccard, TF-IDF cosine, exact match, length ratio and symmetric BM25 from descriptions. The original graph must explicitly select title_description; shared_text remains a separate supported request mode. BM25 query terms have unit weight, corpus documents are unique training descriptions, and positive IDF is explicit. Fields are not concatenated.",
+      "embedding_similarity_features": "Select the listed LSA/SVD branch with reusable sparse randomized projection fit and transform; append latent cosine and Euclidean distance. Training-only TF-IDF and uncentered randomized projection. No pretrained embedding or topic-model branch claimed.",
+      "pair_context_features": "Select unlabeled pair graph degree, neighborhood overlap and pair frequency; exclude the current edge for training feature rows. Only candidate-pair co-occurrence, not semantic equivalence. Both title and description define each entity; normalized unordered full-record pairs define population isolation. This is not entity-disjoint splitting; caller must meet any stronger application split requirements.",
+      "feature_ensemble": "Fit scaled logistic regression and a random forest over all thirteen features; combine ordered probability vectors with the reusable equal mean. Model family, equal weights and controls are explicit recipe policy. No benchmark accuracy claim.",
+      "metric_thresholding": "Select the listed relevance-score scaling branch: fit increasing isotonic regression on held-out raw scores and binary labels, bound to [0,1], clip outside calibration score range, then select an empirical binary-F1 threshold. Mapping and threshold share the calibration population; selection F1 is optimistic and not independent evaluation. Strict finite JSON distinguishes raw and scaled scores and emits ordered generic binary-relevance rows. No competition-specific format is claimed."
+    },
+    "output_scope_decision": "Execute separate title/description binary relevance with explicit spelling/domain/synonym policy, lexical and BM25 features, training-only LSA and pair context, logistic/random-forest averaging, held-out isotonic score mapping and empirical F1 cutoff. Six recipe adapters depend on eleven independently reusable numerical/text providers. Synthetic qualification only; no historical accuracy or human Tier 1 claim.",
+    "plan_sha256": "5ae0a3a0a6a133018e3211959ff2eccc1f65ab978019c75b6bcbc00ecaa6dbb0",
+    "parameter_contract": "One finite version-2 payload with binary_relevance task, title_description role, explicit vocabulary/domain/synonym policy and numerical controls, and separate training, calibration and query pairs. Training and calibration require both binary classes. Normalized full-record pairs are disjoint across populations; this does not enforce entity-disjoint splits. Six recipe adapters use eleven independently reusable numerical/text providers.",
+    "output_contract": "Finite generic result rows in query order, including repeated rows: ordinal index, raw ensemble score, isotonic-scaled score and binary decision. Includes the selected inclusive F1 cutoff, calibration selection F1 and population counts. Mapping and cutoff share calibration rows; selection F1 is not independent accuracy. No named competition format or probability-calibration guarantee.",
+    "evidence_checker_sha256": "0a9a8fb7cc95b3c4a0843896cf3208981560139ec70ab4c57bbfeb26d69eef48"
+  }
+}
