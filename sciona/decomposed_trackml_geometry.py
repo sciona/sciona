@@ -44,3 +44,13 @@ def pitch_three(x1,y1,z1,x2,y2,z2,x3,y3,z3,xm,ym,zero_pitch,operation):
     if np.any(3.0*(np.square(a)+np.square(b))-np.square(a+b)==0):
         raise ValueError('Zero phase variance has no source-defined regression')
     return _evaluate(operation,values,zero_pitch=replacement)
+
+
+def bind(circle_function,pitch_two_function,pitch_three_function):
+    """Bind explicit numeric providers to source-compatible invocation boundaries."""
+    from functools import partial
+    if not all(callable(f) for f in (circle_function,pitch_two_function,pitch_three_function)):
+        raise ValueError('Three callable geometry providers required')
+    return dict(circle_operation=partial(circle,large_radius=1e6,operation=circle_function),
+                pitch_two_operation=partial(pitch_two,zero_pitch=.001,operation=pitch_two_function),
+                pitch_three_operation=partial(pitch_three,zero_pitch=.001,operation=pitch_three_function))

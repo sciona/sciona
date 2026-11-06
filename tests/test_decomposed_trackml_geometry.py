@@ -60,3 +60,22 @@ def test_collinear_and_repeated_nonzero_points():
     actual=adapter.circle(*values,1e6,atoms.circle_from_three_points)
     expected=circle_from_three_points(*values)
     for a,b in zip(actual,expected):np.testing.assert_array_equal(a,b)
+
+
+def test_binding_is_invocation_local():
+    from sciona.decomposed_trackml_lifecycle import lifecycle_class
+    from sciona.trackml_fitting import FittedTrackExtension
+    from sciona.trackml_geometry import _source_circle
+    args=(atoms.circle_from_three_points,atoms.helix_pitch_from_two_points,atoms.helix_pitch_least_squares)
+    first=lifecycle_class(*args);second=lifecycle_class(*args)
+    assert first.fitTracks.__code__ is FittedTrackExtension.fitTracks.__code__
+    assert first.fitTracks.__globals__ is not second.fitTracks.__globals__
+    assert FittedTrackExtension.fitTracks.__globals__['circleFromThreePoints'] is _source_circle
+    assert first.fitTracks.__globals__['circleFromThreePoints'] is not _source_circle
+
+
+@pytest.mark.parametrize('missing',range(3))
+def test_binding_rejects_noncallable(missing):
+    functions=[atoms.circle_from_three_points,atoms.helix_pitch_from_two_points,atoms.helix_pitch_least_squares]
+    functions[missing]=None
+    with pytest.raises(ValueError):adapter.bind(*functions)
