@@ -12,7 +12,7 @@ import torch
 
 from sciona.physical_operator_state import prepare as validate, tensors, finite_json
 from sciona.physical_operator_training import fit as train
-from sciona.constrained_array_ops import project_nonnegative_fixed_sum, smooth_periodic_rows
+from sciona.atoms.ml.constrained_arrays import project_nonnegative_fixed_sum, smooth_periodic_rows
 
 
 @dataclass(frozen=True)
