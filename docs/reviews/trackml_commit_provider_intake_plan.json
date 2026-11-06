@@ -1,0 +1,330 @@
+{
+  "providers": [
+    {
+      "atom_id": "8f90d8d6-1269-42fe-8f16-2079a27856ad",
+      "existing_legacy": true,
+      "catalog_fqdn": "sciona.atoms.particle_tracking.track_matching.greedy_track_commit",
+      "runtime_fqdn": "sciona.atoms.particle_tracking.track_matching.atoms.greedy_track_commit",
+      "version_id": "77bf56ac-878c-59d1-85c1-58f8cb32513e",
+      "content_hash": "ad31550260f5d966615a319c2b5c13c63c34dbf08cf46cf07af7dbc195c05a36",
+      "fingerprint": "5f78b0d10a12ce6261106c31b6ffee57bba3114046c2c2320ac064400e8a6c1b",
+      "semver": "0.0.0+local.ad31550260f5",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.particle_tracking.track_matching.greedy_track_commit",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "particle_tracking.track_matching",
+        "repo_name": "sciona-atoms-physics",
+        "source_module_path": "particle_tracking.track_matching",
+        "import_module": "sciona.atoms.particle_tracking.track_matching.atoms",
+        "source_symbol": "greedy_track_commit",
+        "description": "",
+        "domain_tags": [
+          "particle_tracking"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "hit_matrix",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Integer resource matrix (N,M) with nonnegative int64 IDs strictly below the nonempty boolean used-mask length. Zero is an empty-slot sentinel. Counts are integers: min_nhits >= 1, max_nloss >= 0, max_nrows >= 0; max_loss_fraction is finite in [0,1]. Rows are processed in supplied order. Duplicate IDs within a row count as repeated positions, not unique resources. Provider copies inputs; caller owns ordering and any mutation or reservation of skipped rows."
+        },
+        {
+          "direction": "input",
+          "name": "used",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Integer resource matrix (N,M) with nonnegative int64 IDs strictly below the nonempty boolean used-mask length. Zero is an empty-slot sentinel. Counts are integers: min_nhits >= 1, max_nloss >= 0, max_nrows >= 0; max_loss_fraction is finite in [0,1]. Rows are processed in supplied order. Duplicate IDs within a row count as repeated positions, not unique resources. Provider copies inputs; caller owns ordering and any mutation or reservation of skipped rows."
+        },
+        {
+          "direction": "input",
+          "name": "min_nhits",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": false,
+          "default_value_repr": "3",
+          "constraints": "Integer resource matrix (N,M) with nonnegative int64 IDs strictly below the nonempty boolean used-mask length. Zero is an empty-slot sentinel. Counts are integers: min_nhits >= 1, max_nloss >= 0, max_nrows >= 0; max_loss_fraction is finite in [0,1]. Rows are processed in supplied order. Duplicate IDs within a row count as repeated positions, not unique resources. Provider copies inputs; caller owns ordering and any mutation or reservation of skipped rows."
+        },
+        {
+          "direction": "input",
+          "name": "max_nloss",
+          "ordinal": 3,
+          "type_desc": "int",
+          "required": false,
+          "default_value_repr": "100",
+          "constraints": "Integer resource matrix (N,M) with nonnegative int64 IDs strictly below the nonempty boolean used-mask length. Zero is an empty-slot sentinel. Counts are integers: min_nhits >= 1, max_nloss >= 0, max_nrows >= 0; max_loss_fraction is finite in [0,1]. Rows are processed in supplied order. Duplicate IDs within a row count as repeated positions, not unique resources. Provider copies inputs; caller owns ordering and any mutation or reservation of skipped rows."
+        },
+        {
+          "direction": "input",
+          "name": "max_loss_fraction",
+          "ordinal": 4,
+          "type_desc": "float",
+          "required": false,
+          "default_value_repr": "1.0",
+          "constraints": "Integer resource matrix (N,M) with nonnegative int64 IDs strictly below the nonempty boolean used-mask length. Zero is an empty-slot sentinel. Counts are integers: min_nhits >= 1, max_nloss >= 0, max_nrows >= 0; max_loss_fraction is finite in [0,1]. Rows are processed in supplied order. Duplicate IDs within a row count as repeated positions, not unique resources. Provider copies inputs; caller owns ordering and any mutation or reservation of skipped rows."
+        },
+        {
+          "direction": "input",
+          "name": "max_nrows",
+          "ordinal": 5,
+          "type_desc": "int",
+          "required": false,
+          "default_value_repr": "100000",
+          "constraints": "Integer resource matrix (N,M) with nonnegative int64 IDs strictly below the nonempty boolean used-mask length. Zero is an empty-slot sentinel. Counts are integers: min_nhits >= 1, max_nloss >= 0, max_nrows >= 0; max_loss_fraction is finite in [0,1]. Rows are processed in supplied order. Duplicate IDs within a row count as repeated positions, not unique resources. Provider copies inputs; caller owns ordering and any mutation or reservation of skipped rows."
+        },
+        {
+          "direction": "output",
+          "name": "selected",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Returns a copied int64 selection matrix and boolean claimed mask with the input shapes. Rejected rows and already-claimed positions are zeroed. Accepted rows claim their resource IDs; rejected rows claim nothing. The sentinel mask entry is always true. Ordered greedy selection is not a globally optimal allocation. Empty matrices and all-zero rows are accepted by this atom, unlike the stricter source recipe."
+        },
+        {
+          "direction": "output",
+          "name": "claimed",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Returns a copied int64 selection matrix and boolean claimed mask with the input shapes. Rejected rows and already-claimed positions are zeroed. Accepted rows claim their resource IDs; rejected rows claim nothing. The sentinel mask entry is always true. Ordered greedy selection is not a globally optimal allocation. Empty matrices and all-zero rows are accepted by this atom, unlike the stricter source recipe."
+        }
+      ],
+      "source_sha256": "dda1f5a1d363efbd45d0357edea25ce1000a6e9df9de29e73d653ee116a2edd4"
+    }
+  ],
+  "stager_sha256": "faeed9e1dd43d6dc3cee284385f5dcab01de3e41a51a299517b37741be2d4f4e",
+  "graph_sha256": "559513b25de2a11874182b92edbdec5048dde12a94473d40628ea9b6765cd45d",
+  "graph_review_sha256": "18ff3bd116928198a9415237c4f916a93115e9c4f7d6f59d7efae5886e3c154a",
+  "inserts": [
+    {
+      "table": "artifacts",
+      "keys": {
+        "artifact_id": "8f90d8d6-1269-42fe-8f16-2079a27856ad"
+      },
+      "row": {
+        "fqdn": "sciona.atoms.particle_tracking.track_matching.greedy_track_commit",
+        "is_ffi": false,
+        "status": "draft",
+        "owner_id": "33ed07a2-1bea-5b17-8b71-d6d0e590fdd9",
+        "description": "",
+        "source_kind": "hand_written",
+        "is_stochastic": false,
+        "source_symbol": "greedy_track_commit",
+        "stateful_kind": "none",
+        "is_publishable": false,
+        "namespace_path": "particle_tracking.track_matching",
+        "namespace_root": "sciona.atoms",
+        "source_package": "sciona.atoms",
+        "source_repo_id": "b7900d28-7c79-45bd-8548-483f64154882",
+        "visibility_tier": "general",
+        "source_module_path": "particle_tracking.track_matching",
+        "artifact_id": "8f90d8d6-1269-42fe-8f16-2079a27856ad",
+        "artifact_kind": "atom"
+      }
+    },
+    {
+      "table": "artifact_versions",
+      "keys": {
+        "version_id": "77bf56ac-878c-59d1-85c1-58f8cb32513e"
+      },
+      "row": {
+        "version_id": "77bf56ac-878c-59d1-85c1-58f8cb32513e",
+        "content_hash": "ad31550260f5d966615a319c2b5c13c63c34dbf08cf46cf07af7dbc195c05a36",
+        "semver": "0.0.0+local.ad31550260f5",
+        "s3_key": "local-seed/atoms/ad31550260f5d966615a319c2b5c13c63c34dbf08cf46cf07af7dbc195c05a36.tar.gz",
+        "fingerprint": "5f78b0d10a12ce6261106c31b6ffee57bba3114046c2c2320ac064400e8a6c1b",
+        "trust_tier": 3,
+        "is_latest": true,
+        "artifact_id": "8f90d8d6-1269-42fe-8f16-2079a27856ad"
+      }
+    },
+    {
+      "table": "artifact_io_specs",
+      "keys": {
+        "artifact_id": "8f90d8d6-1269-42fe-8f16-2079a27856ad",
+        "version_id": "77bf56ac-878c-59d1-85c1-58f8cb32513e",
+        "direction": "input",
+        "name": "hit_matrix"
+      },
+      "row": {
+        "direction": "input",
+        "name": "hit_matrix",
+        "ordinal": 0,
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Integer resource matrix (N,M) with nonnegative int64 IDs strictly below the nonempty boolean used-mask length. Zero is an empty-slot sentinel. Counts are integers: min_nhits >= 1, max_nloss >= 0, max_nrows >= 0; max_loss_fraction is finite in [0,1]. Rows are processed in supplied order. Duplicate IDs within a row count as repeated positions, not unique resources. Provider copies inputs; caller owns ordering and any mutation or reservation of skipped rows.",
+        "version_id": "77bf56ac-878c-59d1-85c1-58f8cb32513e",
+        "artifact_id": "8f90d8d6-1269-42fe-8f16-2079a27856ad"
+      }
+    },
+    {
+      "table": "artifact_io_specs",
+      "keys": {
+        "artifact_id": "8f90d8d6-1269-42fe-8f16-2079a27856ad",
+        "version_id": "77bf56ac-878c-59d1-85c1-58f8cb32513e",
+        "direction": "input",
+        "name": "used"
+      },
+      "row": {
+        "direction": "input",
+        "name": "used",
+        "ordinal": 1,
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Integer resource matrix (N,M) with nonnegative int64 IDs strictly below the nonempty boolean used-mask length. Zero is an empty-slot sentinel. Counts are integers: min_nhits >= 1, max_nloss >= 0, max_nrows >= 0; max_loss_fraction is finite in [0,1]. Rows are processed in supplied order. Duplicate IDs within a row count as repeated positions, not unique resources. Provider copies inputs; caller owns ordering and any mutation or reservation of skipped rows.",
+        "version_id": "77bf56ac-878c-59d1-85c1-58f8cb32513e",
+        "artifact_id": "8f90d8d6-1269-42fe-8f16-2079a27856ad"
+      }
+    },
+    {
+      "table": "artifact_io_specs",
+      "keys": {
+        "artifact_id": "8f90d8d6-1269-42fe-8f16-2079a27856ad",
+        "version_id": "77bf56ac-878c-59d1-85c1-58f8cb32513e",
+        "direction": "input",
+        "name": "min_nhits"
+      },
+      "row": {
+        "direction": "input",
+        "name": "min_nhits",
+        "ordinal": 2,
+        "type_desc": "int",
+        "required": false,
+        "default_value_repr": "3",
+        "constraints": "Integer resource matrix (N,M) with nonnegative int64 IDs strictly below the nonempty boolean used-mask length. Zero is an empty-slot sentinel. Counts are integers: min_nhits >= 1, max_nloss >= 0, max_nrows >= 0; max_loss_fraction is finite in [0,1]. Rows are processed in supplied order. Duplicate IDs within a row count as repeated positions, not unique resources. Provider copies inputs; caller owns ordering and any mutation or reservation of skipped rows.",
+        "version_id": "77bf56ac-878c-59d1-85c1-58f8cb32513e",
+        "artifact_id": "8f90d8d6-1269-42fe-8f16-2079a27856ad"
+      }
+    },
+    {
+      "table": "artifact_io_specs",
+      "keys": {
+        "artifact_id": "8f90d8d6-1269-42fe-8f16-2079a27856ad",
+        "version_id": "77bf56ac-878c-59d1-85c1-58f8cb32513e",
+        "direction": "input",
+        "name": "max_nloss"
+      },
+      "row": {
+        "direction": "input",
+        "name": "max_nloss",
+        "ordinal": 3,
+        "type_desc": "int",
+        "required": false,
+        "default_value_repr": "100",
+        "constraints": "Integer resource matrix (N,M) with nonnegative int64 IDs strictly below the nonempty boolean used-mask length. Zero is an empty-slot sentinel. Counts are integers: min_nhits >= 1, max_nloss >= 0, max_nrows >= 0; max_loss_fraction is finite in [0,1]. Rows are processed in supplied order. Duplicate IDs within a row count as repeated positions, not unique resources. Provider copies inputs; caller owns ordering and any mutation or reservation of skipped rows.",
+        "version_id": "77bf56ac-878c-59d1-85c1-58f8cb32513e",
+        "artifact_id": "8f90d8d6-1269-42fe-8f16-2079a27856ad"
+      }
+    },
+    {
+      "table": "artifact_io_specs",
+      "keys": {
+        "artifact_id": "8f90d8d6-1269-42fe-8f16-2079a27856ad",
+        "version_id": "77bf56ac-878c-59d1-85c1-58f8cb32513e",
+        "direction": "input",
+        "name": "max_loss_fraction"
+      },
+      "row": {
+        "direction": "input",
+        "name": "max_loss_fraction",
+        "ordinal": 4,
+        "type_desc": "float",
+        "required": false,
+        "default_value_repr": "1.0",
+        "constraints": "Integer resource matrix (N,M) with nonnegative int64 IDs strictly below the nonempty boolean used-mask length. Zero is an empty-slot sentinel. Counts are integers: min_nhits >= 1, max_nloss >= 0, max_nrows >= 0; max_loss_fraction is finite in [0,1]. Rows are processed in supplied order. Duplicate IDs within a row count as repeated positions, not unique resources. Provider copies inputs; caller owns ordering and any mutation or reservation of skipped rows.",
+        "version_id": "77bf56ac-878c-59d1-85c1-58f8cb32513e",
+        "artifact_id": "8f90d8d6-1269-42fe-8f16-2079a27856ad"
+      }
+    },
+    {
+      "table": "artifact_io_specs",
+      "keys": {
+        "artifact_id": "8f90d8d6-1269-42fe-8f16-2079a27856ad",
+        "version_id": "77bf56ac-878c-59d1-85c1-58f8cb32513e",
+        "direction": "input",
+        "name": "max_nrows"
+      },
+      "row": {
+        "direction": "input",
+        "name": "max_nrows",
+        "ordinal": 5,
+        "type_desc": "int",
+        "required": false,
+        "default_value_repr": "100000",
+        "constraints": "Integer resource matrix (N,M) with nonnegative int64 IDs strictly below the nonempty boolean used-mask length. Zero is an empty-slot sentinel. Counts are integers: min_nhits >= 1, max_nloss >= 0, max_nrows >= 0; max_loss_fraction is finite in [0,1]. Rows are processed in supplied order. Duplicate IDs within a row count as repeated positions, not unique resources. Provider copies inputs; caller owns ordering and any mutation or reservation of skipped rows.",
+        "version_id": "77bf56ac-878c-59d1-85c1-58f8cb32513e",
+        "artifact_id": "8f90d8d6-1269-42fe-8f16-2079a27856ad"
+      }
+    },
+    {
+      "table": "artifact_io_specs",
+      "keys": {
+        "artifact_id": "8f90d8d6-1269-42fe-8f16-2079a27856ad",
+        "version_id": "77bf56ac-878c-59d1-85c1-58f8cb32513e",
+        "direction": "output",
+        "name": "selected"
+      },
+      "row": {
+        "direction": "output",
+        "name": "selected",
+        "ordinal": 0,
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Returns a copied int64 selection matrix and boolean claimed mask with the input shapes. Rejected rows and already-claimed positions are zeroed. Accepted rows claim their resource IDs; rejected rows claim nothing. The sentinel mask entry is always true. Ordered greedy selection is not a globally optimal allocation. Empty matrices and all-zero rows are accepted by this atom, unlike the stricter source recipe.",
+        "version_id": "77bf56ac-878c-59d1-85c1-58f8cb32513e",
+        "artifact_id": "8f90d8d6-1269-42fe-8f16-2079a27856ad"
+      }
+    },
+    {
+      "table": "artifact_io_specs",
+      "keys": {
+        "artifact_id": "8f90d8d6-1269-42fe-8f16-2079a27856ad",
+        "version_id": "77bf56ac-878c-59d1-85c1-58f8cb32513e",
+        "direction": "output",
+        "name": "claimed"
+      },
+      "row": {
+        "direction": "output",
+        "name": "claimed",
+        "ordinal": 1,
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Returns a copied int64 selection matrix and boolean claimed mask with the input shapes. Rejected rows and already-claimed positions are zeroed. Accepted rows claim their resource IDs; rejected rows claim nothing. The sentinel mask entry is always true. Ordered greedy selection is not a globally optimal allocation. Empty matrices and all-zero rows are accepted by this atom, unlike the stricter source recipe.",
+        "version_id": "77bf56ac-878c-59d1-85c1-58f8cb32513e",
+        "artifact_id": "8f90d8d6-1269-42fe-8f16-2079a27856ad"
+      }
+    }
+  ],
+  "before": {
+    "atoms": "0db5957ccdb1bc045031a5d7f2577c5a177360dd2e5fbee1ce1ce85c6e766a08",
+    "artifacts": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_versions": "71cdec3153ff274ce2d1b8d69a958165b65cfa1702066fc0edf3256efaf12785",
+    "artifact_versions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_io_specs": "907833753a297c181822b1fcacf149ce98afae2319625180300426b98d1b0cb6",
+    "artifact_io_specs": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_parameters": "4a505d4219a391a64057f6f05db99741becef1fd33a4abada1b034e3a5d338da",
+    "artifact_parameters": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_descriptions": "f8a5f96dd8f33d32b4ee0c8e80cf7eda2ca5ab4ac8f15e7c53aae3b7a330c011",
+    "artifact_descriptions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_references": "33107b3789ac823a919ff3bb2dfc99093fd21223ac53b5c8d7ddec09a31b1814",
+    "artifact_references": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_audit_rollups": "f5f1b069c358025662a222badf736f0e8b19c0505cad4cc91d01472bc0e3880e",
+    "artifact_audit_rollups": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_audit_evidence": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+  },
+  "legacy_sha256": "444af87c70a5a003930c9b666f1ac03b749f974216662ca5ecb94cbbd3f60a77",
+  "originals_sha256": "f839940aa40edfe5734827698947ed1a426a79c16bb215d49820714ff632db50"
+}
