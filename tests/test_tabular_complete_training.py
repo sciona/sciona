@@ -5,7 +5,7 @@ import pytest
 from sciona.tabular_complete_training import fit_complete_stacker
 from tests.test_tabular_ensemble_training import sample
 
-POLICY = dict(clip_low=0., clip_high=1., max_mode_fraction=1., log_columns=[0], interactions=[], smoothing=1., group_aggregates=[], text_topics=[], selection=None)
+POLICY = dict(clip_low=0., clip_high=1., max_mode_fraction=1., log_columns=[0], interactions=[], smoothing=1., group_aggregates=[], text_topics=[], entity_embeddings=[], selection=None)
 
 
 def test_aggregate_maps_exclude_outer_validation_values():

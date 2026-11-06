@@ -9,6 +9,7 @@ from sciona.tabular_ensemble_training import binary_labels, group_ids
 from sciona.tabular_category_features import fit_category_features, _interactions
 from sciona.tabular_group_features import fit_group_features
 from sciona.tabular_text_topics import fit_text_topics
+from sciona.tabular_entity_embeddings import fit_entity_embeddings
 
 
 def _logs(numeric, columns):
@@ -30,6 +31,7 @@ class CompleteTabularFeatures:
     categories: object
     aggregates: tuple
     text_topics: tuple
+    embeddings: tuple
 
     def transform(self, numeric, categorical):
         """Frozen query transform, never the target-encoded training transform."""
@@ -46,13 +48,15 @@ class CompleteTabularFeatures:
             result = np.column_stack((result, aggregate.transform(tokens[:, key_column].tolist())))
         for column, topics in self.text_topics:
             result = np.column_stack((result, topics.transform([row[column] or '' for row in categorical])))
+        for columns, embedding in self.embeddings:
+            result = np.column_stack((result, embedding.transform(tokens[:, columns].tolist())))
         if not np.isfinite(result).all():
             raise ValueError('Nonfinite complete table features')
         return result
 
 
 def fit_binary_tabular_features(numeric, categorical, labels, groups, *, clip_low, clip_high,
-                               max_mode_fraction, log_columns, interactions, smoothing, group_aggregates, text_topics):
+                               max_mode_fraction, log_columns, interactions, smoothing, group_aggregates, text_topics, entity_embeddings):
     """Return frozen state and the distinct group-excluded training matrix.
 
 Cleaning fits only supplied training rows. Drop constant, duplicate and
@@ -70,6 +74,8 @@ aggregation or use of validation/query values is implied.
 Text topics use explicitly selected original string columns, treating null as
 empty text. Each field has its own vocabulary and topic model fitted only on
 training rows. Existing category encodings remain separately available.
+Entity embeddings learn per-field vectors supervised by fitting-row labels,
+using explicitly selected original category columns and network controls.
 
 Keep one-hot features, then count/frequency/group-excluded target features.
 Do not call transform on training rows to fit a model: that would replace
@@ -89,6 +95,16 @@ folds and population isolation. Dense state and arrays are execution-local.
         raise ValueError('Explicit group-aggregate specifications required')
     if type(text_topics) is not list:
         raise ValueError('Explicit text-topic specifications required')
+    if type(entity_embeddings) is not list:
+        raise ValueError('Explicit entity-embedding specifications required')
+    for spec in entity_embeddings:
+        if type(spec) is not dict or set(spec) != {'columns', 'dimension', 'iterations', 'regularization', 'tolerance', 'seed'}:
+            raise ValueError('Exact entity-embedding specification required')
+        columns = spec['columns']
+        if (type(columns) is not list or not columns
+                or any(type(i) is not int or not 0 <= i < tokens.shape[1] for i in columns)
+                or len(set(columns)) != len(columns)):
+            raise ValueError('Distinct original categorical embedding columns required')
     for spec in text_topics:
         if type(spec) is not dict or set(spec) != {'column', 'topics', 'max_features', 'iterations', 'lowercase', 'seed'}:
             raise ValueError('Exact text-topic specification required')
@@ -142,8 +158,14 @@ folds and population isolation. Dense state and arrays are execution-local.
         topics, features = fit_text_topics([row[column] or '' for row in categorical], **controls)
         topic_states.append((column, topics))
         training = np.column_stack((training, features))
+    embedding_states = []
+    for spec in entity_embeddings:
+        controls = dict(spec); columns = controls.pop('columns')
+        embedding, features = fit_entity_embeddings(tokens[:, columns].tolist(), labels, **controls)
+        embedding_states.append((tuple(columns), embedding))
+        training = np.column_stack((training, features))
     if training.shape[1] == 0 or not np.isfinite(training).all():
         raise ValueError('No finite varying table features remain')
     state = CompleteTabularFeatures((numbers.shape[1], tokens.shape[1]), tuple(log_columns), tuple(kept),
-        base, base_columns, categorical_state, tuple(aggregates), tuple(topic_states))
+        base, base_columns, categorical_state, tuple(aggregates), tuple(topic_states), tuple(embedding_states))
     return state, training
