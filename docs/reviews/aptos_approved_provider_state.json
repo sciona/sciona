@@ -1,0 +1,359 @@
+{
+  "passed": true,
+  "records": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.aptos_execution.aptos_population",
+      "catalog_fqdn": "sciona.atoms.ml.aptos_execution.aptos_population",
+      "version_id": "cac04171-edbd-5b40-a7bf-a2cb5707c39a",
+      "content_hash": "1d3e9e2aaf6b04a253d66036a4c26bb58147a7f2fd0387fb12325e3582d38cf6",
+      "provider_sha256": "97953529d448b804912e47eee127293094de60fc63f12ecf05dfacab15c966ab",
+      "signature": "(base: list, average: list, grouped: list, pseudo_keys: list) -> object",
+      "bound_nodes": [
+        "population"
+      ],
+      "classification": "source_recipe_adapter",
+      "artifact_id": "68b983ad-1ea6-5c16-abb4-d8bedd8d0670",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "base",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Pair of unique private keys and supplied 0..4 labels; caller-prepared combined first-stage population"
+        },
+        {
+          "direction": "input",
+          "name": "average",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Pair of unique private keys and supplied 0..4 labels; enters only stage two with label/teacher averaging"
+        },
+        {
+          "direction": "input",
+          "name": "grouped",
+          "ordinal": 2,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Pair of unique private keys and supplied 0..3 group labels; enters only stage two with group-mean target bounding"
+        },
+        {
+          "direction": "input",
+          "name": "pseudo_keys",
+          "ordinal": 3,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty unique unlabeled private keys; all four population roles disjoint"
+        },
+        {
+          "direction": "output",
+          "name": "plan",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Validated Aptos Population with source-separated roles; revalidated at execution"
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_aptos_execution.cut_inputs",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_aptos_execution.cut_inputs",
+      "version_id": "48cbce4d-5be3-54ae-b2de-ba262f867250",
+      "content_hash": "46e60d7b25e4e36bd1e0480bd34f4df5fba9098f3b6a7bf1b7fe095ac28c57c9",
+      "provider_sha256": "9573238b946c33b011fa0b5ff0d11d444daf0e570fb5f5073fe380104b5e03bc",
+      "signature": "(training_result: dict) -> tuple[numpy.ndarray, numpy.ndarray, str]",
+      "bound_nodes": [
+        "cut_inputs"
+      ],
+      "classification": "source_recipe_adapter",
+      "artifact_id": "9fc05072-288e-5bfb-854e-4ac6b988f80d",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "training_result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "cut_points",
+          "ordinal": 1,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "tie_policy",
+          "ordinal": 2,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_aptos_execution.result",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_aptos_execution.result",
+      "version_id": "7ccad786-aa2a-5c84-82a1-ca107ac2d343",
+      "content_hash": "0fdf5cc65e55fc92b896404b82d5ba3d39f036ea1b65dce932ab4b955164037f",
+      "provider_sha256": "9573238b946c33b011fa0b5ff0d11d444daf0e570fb5f5073fe380104b5e03bc",
+      "signature": "(training_result: dict, ordinals: numpy.ndarray) -> dict",
+      "bound_nodes": [
+        "result"
+      ],
+      "classification": "source_recipe_adapter",
+      "artifact_id": "7358697c-72b7-5a1a-a1f1-008ffc54241e",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "training_result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "ordinals",
+          "ordinal": 1,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_aptos_execution.train_scores",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_aptos_execution.train_scores",
+      "version_id": "84929392-f85b-5b3d-aef5-9a3b4aa3cf27",
+      "content_hash": "892cb2ed536ff1e4312f593d032500c0e895fd56885d605e5d81a66486fe6348",
+      "provider_sha256": "9573238b946c33b011fa0b5ff0d11d444daf0e570fb5f5073fe380104b5e03bc",
+      "signature": "(plan: object, query_keys: list, images: dict, references: dict, first_stage_epochs: dict, seeds: dict, batch_size: int, learning_rate: float, lower_deviation: float, upper_deviation: float, tie_policy: str, work_root: str) -> dict",
+      "bound_nodes": [
+        "train_scores"
+      ],
+      "classification": "source_recipe_adapter",
+      "artifact_id": "6f3a203c-48fd-543b-adff-30084d80c878",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "plan",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Validated Aptos Population with source-separated roles; revalidated at execution"
+        },
+        {
+          "direction": "input",
+          "name": "query_keys",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty unique private keys; disjoint from supplied-label roles; may overlap pseudo keys"
+        },
+        {
+          "direction": "input",
+          "name": "images",
+          "ordinal": 2,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exactly population and query coverage; values are nonempty RGB uint8 HWC arrays; caller establishes physical identity and provenance"
+        },
+        {
+          "direction": "input",
+          "name": "references",
+          "ordinal": 3,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exactly four model families mapped to local safetensors paths and reviewed full SHA256; no downloads"
+        },
+        {
+          "direction": "input",
+          "name": "first_stage_epochs",
+          "ordinal": 4,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exactly eight (family, integer replica) keys; positive integer multiples of five; historical winning budgets unproven"
+        },
+        {
+          "direction": "input",
+          "name": "seeds",
+          "ordinal": 5,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exactly eight (family, integer replica) keys with distinct nonnegative 32-bit integer seeds"
+        },
+        {
+          "direction": "input",
+          "name": "batch_size",
+          "ordinal": 6,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit positive integer; retains final partial batch"
+        },
+        {
+          "direction": "input",
+          "name": "learning_rate",
+          "ordinal": 7,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit finite positive Adam learning rate; constant schedule and fresh stage-two optimizer are reference choices"
+        },
+        {
+          "direction": "input",
+          "name": "lower_deviation",
+          "ordinal": 8,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite nonnegative lower bound distance from group mean; source demonstrates 0.5"
+        },
+        {
+          "direction": "input",
+          "name": "upper_deviation",
+          "ordinal": 9,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite nonnegative upper bound distance; symmetric 0.5 is a reference choice"
+        },
+        {
+          "direction": "input",
+          "name": "tie_policy",
+          "ordinal": 10,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit upper or lower handling of equality at fixed cut points 0.7,1.5,2.5,3.5"
+        },
+        {
+          "direction": "input",
+          "name": "work_root",
+          "ordinal": 11,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Existing caller-managed private directory; temporary trained checkpoints removed after execution"
+        },
+        {
+          "direction": "output",
+          "name": "training_result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Complete training result before ordinal indexing; includes source tie policy and all fit/replay evidence"
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.numerical.statistics.cut_indices.ordered_cut_indices",
+      "catalog_fqdn": "sciona.atoms.numerical.statistics.cut_indices.ordered_cut_indices",
+      "version_id": "98583dc5-b783-5ae3-b222-8607850227f3",
+      "content_hash": "10de8a9c21dac659bc6dcb81a35c31e2fbb00b994bab4ba7ef047aac9b8ab00b",
+      "provider_sha256": "09b03d64f259fe622c2e33790bb87d2034859bd801fb1a0c678978fff11d8987",
+      "signature": "(values: numpy.ndarray, cut_points: numpy.ndarray, tie_policy: str) -> numpy.ndarray",
+      "bound_nodes": [
+        "classify"
+      ],
+      "classification": "generic_operation",
+      "artifact_id": "7018facd-ca43-5f99-933b-a2e1f650b168",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "cut_points",
+          "ordinal": 1,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "tie_policy",
+          "ordinal": 2,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "ordinals",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ]
+    }
+  ],
+  "checker_sha256": "2d9bee3563f4755f5bc9e5a0ab49c46df916d19665a4ea1d936c43883c53a6ce",
+  "catalog_snapshot": {
+    "atoms": "54f2de4e182fc83a4a39415eebf1eb2efe8c9475ffc30fab9cfd1b6ea724f742",
+    "artifacts": "da8e0e1bf39944b53c7d11bede568dc5f3c460fa9f07901f55195a4d4bfb47ae",
+    "atom_versions": "1448f61dcd6f85e9a0772dcfa247bb9c2bf47dc6e5bb5c3e9bada48222295afa",
+    "artifact_versions": "5a9fd3e221e6e06593e1b7ac85c30b53458cbf196925e886ecefe2e36a8790e3",
+    "atom_io_specs": "a5f0af1236e839f7495e62fa74f8d10e0bee6c79a33551b8c9ae4a1e887aed49",
+    "artifact_io_specs": "a8d43aa54ee7799dae9affc8ec607818d246aff9c2f854a7e1d6e46de62f0826",
+    "atom_parameters": "777a76442c0db7d251659510124002189921edf25b8bf2efc29b46f1d183184a",
+    "artifact_parameters": "377c38e76305bab8b72161f058f71100d29613adc554ea0e010f5ddfaaea3174",
+    "atom_descriptions": "1681743e6ddd0952c67f2d4369ee1b3200e0482b34d2b52bfdd252ac5183df92",
+    "artifact_descriptions": "1588f92f658a4f9f0e59fc1ac4f77c5fc4a60a92d9d117d087e5fbfcf938138e",
+    "atom_references": "9f31aa93393f87fdaf5c4bf3b802022fc2d469c3a63c9502cc4af8d3e6cb00c0",
+    "artifact_references": "b63741c08890ce45c130a08867751d7913696709673753aa16f2eedc6f21c4af",
+    "atom_audit_rollups": "4d00d52b9b39a741e99df123b874603d40df53aa0ee25be81f40aa5f69b61e2d",
+    "artifact_audit_rollups": "d287fc7348189ec3d065c48441dab9ea3efd27a0ba3a2b2459515341375aefbc",
+    "artifact_audit_evidence": "e0f59a876d9b705542e91a289d883af301d06b2feb94f70433edffb155eaaa19"
+  }
+}
