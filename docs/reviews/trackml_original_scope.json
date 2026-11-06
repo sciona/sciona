@@ -1,0 +1,414 @@
+{
+  "format": "trackml-original-scope.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "source_version_id": "11c41ece-c648-50b4-b211-7e319ba36dea",
+  "source_content_hash": "c0b732d94cd161a98dfc8a24a70a1805453a3de2d5b4d71ee7719fda4c639183",
+  "component_revalidation_sha256": "3e1f71648f40f58a7b70079714b845eaa11f235c5a96f05284386779083a355e",
+  "stages": [
+    {
+      "stage_id": "detector_geometry_autodiscovery",
+      "description": "Discover detector structure from module positions using KMeans (radial rings) and MeanShift (z-layers). Compute layer radii, z-positions, ring gap boundaries, and monotonic z-coverage for O(1) reachability queries.",
+      "reviewed_semantics": "Discover layer dimensions within the source detector topology using radial Lloyd clustering and axial mean shift; retain ordering, coverage and gap rules.",
+      "limits": "Fixed volume groups, seven radial rings and exactly three gaps; not arbitrary detector discovery. Clustering remains independently reusable.",
+      "numeric_nodes": [
+        "kmeans",
+        "mean_shift"
+      ],
+      "anchors": [
+        {
+          "file": "sciona/trackml_detector.py",
+          "symbol": "CapsSpec.__init__",
+          "line": 67,
+          "file_sha256": "ec904e021ca03e817f883af672cd86c423ca58ba695b57ee66b264ee70afcf92"
+        },
+        {
+          "file": "sciona/trackml_detector.py",
+          "symbol": "CylindersSpec.__init__",
+          "line": 35,
+          "file_sha256": "ec904e021ca03e817f883af672cd86c423ca58ba695b57ee66b264ee70afcf92"
+        }
+      ],
+      "comparison_evidence": {
+        "detector": {
+          "exact_report_match": true,
+          "report_sha256": "090545ea1cd62def88b640df0e607d9afb679aaf9958ca7855e300cacb76f188",
+          "validator_sha256": "1dd8b244f5e93046f63a80680f28dafe598270fd640d35f6fba1bc02d89064a0"
+        }
+      }
+    },
+    {
+      "stage_id": "coordinate_rescaling_for_knn",
+      "description": "Project hits to mean cylinder radius, scale x,y by zscale to create elliptical neighborhoods matching the detector's natural metric. Separate transforms for cylinder and cap layers.",
+      "reviewed_semantics": "Project onto mean-radius cylinders with configured transverse scaling, or onto the layer plane, before Euclidean neighbor search.",
+      "limits": "Projection singularities are outside the finite-input contract. Layer grouping and source scale selection remain recipe policy.",
+      "numeric_nodes": [
+        "cylinder",
+        "plane"
+      ],
+      "anchors": [
+        {
+          "file": "sciona/trackml_neighbors.py",
+          "symbol": "CylinderNeighbors.Cylinder.transformToNeighborCoords",
+          "line": 30,
+          "file_sha256": "06b6908a2c19a425359180e373e69ba008c8b4f74077d44679db6d16d67bb748"
+        },
+        {
+          "file": "sciona/trackml_neighbors.py",
+          "symbol": "CapNeighbors.Cap.transformToNeighborCoords",
+          "line": 132,
+          "file_sha256": "06b6908a2c19a425359180e373e69ba008c8b4f74077d44679db6d16d67bb748"
+        }
+      ],
+      "comparison_evidence": {
+        "neighbors": {
+          "exact_report_match": true,
+          "report_sha256": "667b871fcaaed7ae4d87615ab9286af6b00e3b71b25bdd3a649446dd72b93863",
+          "validator_sha256": "53acd84c268fdf988058382941782369c2a19a4ca42a6a2f32356b86a72a1bcf"
+        }
+      }
+    },
+    {
+      "stage_id": "per_layer_knn_search",
+      "description": "Build sklearn NearestNeighbors index per detector layer on the rescaled coordinates. Query for k nearest neighbors within radius, returning candidate hit indices and distances.",
+      "reviewed_semantics": "Fit each layer index and perform configured k-neighbor and radius queries, preserving grouping and source result ordering.",
+      "limits": "Sparse or exhausted layers reject explicitly; fitted index objects are in-process objects, not portable serialized models.",
+      "numeric_nodes": [
+        "search_fit",
+        "search_k",
+        "search_radius"
+      ],
+      "anchors": [
+        {
+          "file": "sciona/trackml_neighbors.py",
+          "symbol": "Neighbors",
+          "line": 219,
+          "file_sha256": "06b6908a2c19a425359180e373e69ba008c8b4f74077d44679db6d16d67bb748"
+        },
+        {
+          "file": "sciona/trackml_neighbors.py",
+          "symbol": "CylinderNeighbors",
+          "line": 13,
+          "file_sha256": "06b6908a2c19a425359180e373e69ba008c8b4f74077d44679db6d16d67bb748"
+        },
+        {
+          "file": "sciona/trackml_neighbors.py",
+          "symbol": "CapNeighbors",
+          "line": 119,
+          "file_sha256": "06b6908a2c19a425359180e373e69ba008c8b4f74077d44679db6d16d67bb748"
+        }
+      ],
+      "comparison_evidence": {
+        "neighbors": {
+          "exact_report_match": true,
+          "report_sha256": "667b871fcaaed7ae4d87615ab9286af6b00e3b71b25bdd3a649446dd72b93863",
+          "validator_sha256": "53acd84c268fdf988058382941782369c2a19a4ca42a6a2f32356b86a72a1bcf"
+        },
+        "runtime": {
+          "exact_report_match": true,
+          "report_sha256": "e103f42bb42c7a9ad887b379337b22b2894adf95a48eb93bd5b75862fc7bd54f",
+          "validator_sha256": "17ad948ad9c4b653e0700eba366a315dc3285a695283e546818d30fa6df0e183"
+        }
+      }
+    },
+    {
+      "stage_id": "circle_from_three_points",
+      "description": "Fit a circumscribed circle through three x-y hit positions. The x,y-projection of a charged particle helix in uniform B-field is a circle. Handles degenerate cases (collinear/coincident) by constructing large tangent circles.",
+      "reviewed_semantics": "Fit the circumcircle, retaining source large-radius tangent handling for supported collinear or coincident configurations.",
+      "limits": "Undefined zero tangent geometry rejects instead of certifying source nonfinite output. The large-radius fallback is an approximation.",
+      "numeric_nodes": [
+        "circle"
+      ],
+      "anchors": [
+        {
+          "file": "sciona/trackml_geometry.py",
+          "symbol": "_source_circle",
+          "line": 10,
+          "file_sha256": "e8d16ed6c49222717a7ed55c50b220f17c0e29a0651d165c3b0e726aba7482cb"
+        },
+        {
+          "file": "sciona/decomposed_trackml_geometry.py",
+          "symbol": "circle",
+          "line": 13,
+          "file_sha256": "4ea60a31086700ffff361b2293156e9ae4e3b2c1d6faeab86e638ff27071fdb0"
+        }
+      ],
+      "comparison_evidence": {
+        "circle": {
+          "exact_report_match": true,
+          "report_sha256": "06ac43470e59edb1b478dbd2fe54c32020b3239e11d8e48dde23ed8a0f61c5c6",
+          "validator_sha256": "9e0566f4c4af10461bf1c3131da440ec96f7ee2d70dfcbabcac6f75b26424883"
+        }
+      }
+    },
+    {
+      "stage_id": "helix_pitch_least_squares",
+      "description": "Given circle center, z-coordinate is linear in phase angle phi. Linear regression of z vs phi for three points with careful phase-unwrapping. Sum-of-squared-residuals serves as track quality signal.",
+      "reviewed_semantics": "Use source phase unwrapping and two-point or three-point axial regression with residual quality and explicit zero-pitch replacement.",
+      "limits": "Zero phase variance rejects; the tracking recipe supplies its 0.001 replacement policy rather than making it a universal physical constant.",
+      "numeric_nodes": [
+        "pitch_two",
+        "pitch_three"
+      ],
+      "anchors": [
+        {
+          "file": "sciona/trackml_helix.py",
+          "symbol": "_pitch_two",
+          "line": 42,
+          "file_sha256": "eb8f4c0895d7ae63618e4f143cc5f04badc4ee98e47622dee0e60fa7db984b05"
+        },
+        {
+          "file": "sciona/trackml_helix.py",
+          "symbol": "_pitch_three",
+          "line": 73,
+          "file_sha256": "eb8f4c0895d7ae63618e4f143cc5f04badc4ee98e47622dee0e60fa7db984b05"
+        },
+        {
+          "file": "sciona/decomposed_trackml_geometry.py",
+          "symbol": "pitch_three",
+          "line": 33,
+          "file_sha256": "4ea60a31086700ffff361b2293156e9ae4e3b2c1d6faeab86e638ff27071fdb0"
+        }
+      ],
+      "comparison_evidence": {
+        "helix": {
+          "exact_report_match": true,
+          "report_sha256": "51d1e06ca103e47d3a338ab4df75a9b2669dba5ae0e26cb36adf719f44af7810",
+          "validator_sha256": "ec7f8e59d2cc93d26fc5fd60ec7e9390ca323a73e669f90bd01c6e135296f0b5"
+        }
+      }
+    },
+    {
+      "stage_id": "helix_cylinder_intersection",
+      "description": "Exploit that r^2 = x^2 + y^2 is a harmonic function of helix phase, so cylinder crossings reduce to solving cos(phi)=C analytically (up to 4 candidates). Pick closest forward-moving solution. Recursive miss-and-retry for lateral misses.",
+      "reviewed_semantics": "Compute candidate cylinder intersections, select forward motion, apply axial bounds and optional correction, and retry later layers under source recursion rules.",
+      "limits": "Preserve bounded retry, recursive default pre-move behavior and explicit miss sentinels; no guarantee that a future layer is reached.",
+      "numeric_nodes": [
+        "cylinder_intersection"
+      ],
+      "anchors": [
+        {
+          "file": "sciona/trackml_intersections.py",
+          "symbol": "CylinderIntersector.intersectHelices",
+          "line": 37,
+          "file_sha256": "9dbd24a154f80f700ffb2ed444d7ba469c64bfdccc14b23d73fa4a670c12f4cc"
+        }
+      ],
+      "comparison_evidence": {
+        "intersections": {
+          "exact_report_match": true,
+          "report_sha256": "0375dd403f519bc9cca0abeeede0d16ef4138b245c338e38467eec19db4ba9f6",
+          "validator_sha256": "8c5df6b9a0d8e506fbe53037f8123a148b1eec4300f94cf6bab6e7e48d03ba5c"
+        },
+        "layer_integration": {
+          "exact_report_match": true,
+          "report_sha256": "82c8ecc42d577f654023d4e85027da4cc6fda2520f08091b36237e39e542194b",
+          "validator_sha256": "4b6b5fbb5d0561f944ee245e91d0c170abfe2a0c356583b4ec540a2c7726e8b8"
+        }
+      }
+    },
+    {
+      "stage_id": "helix_cap_intersection",
+      "description": "Intersect helix with planar disk detector layers (z=constant). Simpler than cylinder case but includes recursive miss-and-retry for radial gaps between cap module rings.",
+      "reviewed_semantics": "Intersect axial planes and apply radial coverage, ring-gap, overlap and optional correction policy with bounded later-layer retries.",
+      "limits": "Detector coverage and retry rules belong to the recipe; generic plane intersection remains separately selectable.",
+      "numeric_nodes": [
+        "plane_intersection"
+      ],
+      "anchors": [
+        {
+          "file": "sciona/trackml_intersections.py",
+          "symbol": "CapIntersector.intersectHelices",
+          "line": 160,
+          "file_sha256": "9dbd24a154f80f700ffb2ed444d7ba469c64bfdccc14b23d73fa4a670c12f4cc"
+        }
+      ],
+      "comparison_evidence": {
+        "intersections": {
+          "exact_report_match": true,
+          "report_sha256": "0375dd403f519bc9cca0abeeede0d16ef4138b245c338e38467eec19db4ba9f6",
+          "validator_sha256": "8c5df6b9a0d8e506fbe53037f8123a148b1eec4300f94cf6bab6e7e48d03ba5c"
+        },
+        "layer_integration": {
+          "exact_report_match": true,
+          "report_sha256": "82c8ecc42d577f654023d4e85027da4cc6fda2520f08091b36237e39e542194b",
+          "validator_sha256": "4b6b5fbb5d0561f944ee245e91d0c170abfe2a0c356583b4ec540a2c7726e8b8"
+        }
+      }
+    },
+    {
+      "stage_id": "perturbative_helix_correction",
+      "description": "Real trajectories deviate from perfect helices due to energy loss, scattering, and B-field inhomogeneity. Apply learned displacement maps (per-layer RegularGridInterpolator) scaled by q/momentum for physics-informed transfer across momenta.",
+      "reviewed_semantics": "Apply supplied per-layer interpolated correction maps with source orientation and curvature scaling, masks, missing-value handling and geometry guards.",
+      "limits": "The immutable stage describes applying learned maps. Map training is not part of this execution; supplied maps and calibration validity remain caller responsibilities.",
+      "numeric_nodes": [
+        "cap_correction",
+        "cylinder_correction",
+        "grid_fit",
+        "grid_evaluate"
+      ],
+      "anchors": [
+        {
+          "file": "sciona/trackml_corrections.py",
+          "symbol": "HelixCorrector.correctCapIntersections",
+          "line": 147,
+          "file_sha256": "96770dae09ba1584b7bd7152187a1b96a7b51df9831eff539a0305cf4674b21b"
+        },
+        {
+          "file": "sciona/trackml_corrections.py",
+          "symbol": "HelixCorrector.correctCylinderIntersections",
+          "line": 186,
+          "file_sha256": "96770dae09ba1584b7bd7152187a1b96a7b51df9831eff539a0305cf4674b21b"
+        }
+      ],
+      "comparison_evidence": {
+        "corrections": {
+          "exact_report_match": true,
+          "report_sha256": "5a5f009c9e0dc80ade79b5b7355c1a2268b65c571a783dd38db80fc1ec3abda5",
+          "validator_sha256": "0319ffcbb12074fbb9fe246b47f6eac10b7987d3a14b3a4acbccc4af58a5adcd"
+        },
+        "layer_integration": {
+          "exact_report_match": true,
+          "report_sha256": "82c8ecc42d577f654023d4e85027da4cc6fda2520f08091b36237e39e542194b",
+          "validator_sha256": "4b6b5fbb5d0561f944ee245e91d0c170abfe2a0c356583b4ec540a2c7726e8b8"
+        }
+      }
+    },
+    {
+      "stage_id": "helix_nearest_point_distance",
+      "description": "Compute nearest point on helix to a reference point. Recognizes this is equivalent to Kepler's equation E - e*sin(E) = M. Solved via Newton's method (3 iterations).",
+      "reviewed_semantics": "Compute the source fixed-iteration Newton approximation to nearest helix position and distance, with three iterations in the tracking recipe.",
+      "limits": "No global minimum or convergence guarantee; finite qualified outputs only. Optional phase/arc outputs are outside this graph boundary.",
+      "numeric_nodes": [
+        "nearest"
+      ],
+      "anchors": [
+        {
+          "file": "sciona/trackml_nearest.py",
+          "symbol": "_nearest",
+          "line": 97,
+          "file_sha256": "28ffa9afe1cc1d65b68423c6423d6ff6ebdc4c4630f92787ef91752657f73773"
+        },
+        {
+          "file": "sciona/decomposed_trackml_nearest.py",
+          "symbol": "nearest",
+          "line": 12,
+          "file_sha256": "fe95731f967f5a83d53b4a4ef41db5d35919756d0d7db7aa6900e218f6abdd7d"
+        }
+      ],
+      "comparison_evidence": {
+        "nearest": {
+          "exact_report_match": true,
+          "report_sha256": "3a7964f65785b2ee828e7054e933a96e29b8c58341ae7299b3ee30dba2ad4355",
+          "validator_sha256": "b15e7c566e2fd695513bb5f7c340bb792cf42577873f8bb69a61a41481577ff0"
+        }
+      }
+    },
+    {
+      "stage_id": "bayesian_neighbor_evaluation",
+      "description": "Cut-off derived from Bayesian signal-vs-background likelihood ratio. Dense regions get tighter cuts, sparse regions get looser cuts. Adaptive thresholding based on local hit density.",
+      "reviewed_semantics": "Combine tangent residuals, supplied uncertainty information and local background-density policy to classify neighboring candidates.",
+      "limits": "Source thresholds and uncertainty coefficients remain explicit recipe policy; missing-map behavior is preserved, not statistical calibration certification.",
+      "numeric_nodes": [
+        "decision",
+        "displacement",
+        "uncertainty"
+      ],
+      "anchors": [
+        {
+          "file": "sciona/trackml_bayesian.py",
+          "symbol": "BayesianNeighborScorer",
+          "line": 9,
+          "file_sha256": "5ba0fe8cec6f7cd8d431e8096a634ca0b1c478fca7d5121523133c95b7f0b041"
+        }
+      ],
+      "comparison_evidence": {
+        "bayesian": {
+          "exact_report_match": true,
+          "report_sha256": "de3c79860fd244739490ad5957ab09758187f103c2695b92989a0d18118ebe08",
+          "validator_sha256": "4f9f9a1f45a3cba3bf35502f36b73eca5ab0c49d4fb715e05d029cfa2bfe04f6"
+        },
+        "extension": {
+          "exact_report_match": true,
+          "report_sha256": "e678e327f0b49ab45ee34ab14193a480e80e5bd845338e8713b37e918936c568",
+          "validator_sha256": "dd8a884b698fc63c4c32b05c616efac48eeb80efcaf05fcaf285e735f959eaa7"
+        }
+      }
+    },
+    {
+      "stage_id": "greedy_track_commit",
+      "description": "Process tracks in descending quality order. Discard tracks exceeding max_nloss of already-claimed hits. reserve_skipped prevents cascade pollution.",
+      "reviewed_semantics": "Rank candidates by descending recipe quality, then greedily claim available observations under configured minimum-count and loss bounds across commit rounds.",
+      "limits": "The reusable commit primitive consumes caller ordering and supports reserve-skipped policy; the source lifecycle supplies reserve_skipped=False. No global assignment optimum is claimed.",
+      "numeric_nodes": [
+        "commit"
+      ],
+      "anchors": [
+        {
+          "file": "sciona/trackml_candidates.py",
+          "symbol": "zeroUsedHits",
+          "line": 10,
+          "file_sha256": "985fedbd7ad1905b0b3ed0e9118674b1257293ee03a5d34d5e46ea23bfa3faa8"
+        },
+        {
+          "file": "sciona/trackml_candidates.py",
+          "symbol": "Candidates.submit",
+          "line": 480,
+          "file_sha256": "985fedbd7ad1905b0b3ed0e9118674b1257293ee03a5d34d5e46ea23bfa3faa8"
+        },
+        {
+          "file": "sciona/trackml_lifecycle.py",
+          "symbol": "TrackLifecycle.findTracks",
+          "line": 77,
+          "file_sha256": "f851c8ab317665939fae5c5bac8c9cc53b2686d9173e631156735008cb6e560c"
+        }
+      ],
+      "comparison_evidence": {
+        "candidates": {
+          "exact_report_match": true,
+          "report_sha256": "d10fdb1282da000be59c8e58410a7fa8869b07966cf1cb4be9628ca7efb06d3e",
+          "validator_sha256": "5f71d3ca77d04dab5cd8e3a0f271a3d7dd07750a5b43800c3c8b5131fa648091"
+        },
+        "lifecycle": {
+          "exact_report_match": true,
+          "report_sha256": "03b5794402b34c3accca232773b20122929077720896450ed6a2f00f48d65cae",
+          "validator_sha256": "5907355d497453fe1e6e1b203867733f972d43fe31eb455fbc1192e6c6da5814"
+        }
+      }
+    }
+  ],
+  "cell_reconstruction": {
+    "anchors": [
+      {
+        "file": "sciona/trackml_cells.py",
+        "symbol": "CellFeatures._calculateCellFeatures",
+        "line": 81,
+        "file_sha256": "d5fb6900261a410e1c6a0fc2bec09ef5a969615189ff304a4a82252225545a48"
+      },
+      {
+        "file": "sciona/decomposed_trackml_cell_lifecycle.py",
+        "symbol": "execute",
+        "line": 8,
+        "file_sha256": "08f1b25a4810520f5f37bb28f9f10baaca41511d62c2649dc2a282aefe0bd4c0"
+      }
+    ],
+    "decision": "Retain the complete optional cell reconstruction as source-specific recipe logic. Keep the extracted absolute-inner-product vector selector independently reusable.",
+    "reason": "Weighted moments feed a chosen-axis regression, pixel-extent heuristic, module thickness and rotations. This is not PCA or a general covariance estimator; replacing it with either would change the source algorithm.",
+    "evidence": {
+      "exact_report_match": true,
+      "report_sha256": "227c1117415db937da328c86227f71e6e526e653335e69489b5966410b939df1",
+      "validator_sha256": "7858d69fb248583199186974cd3b68813ceadc3dccc88ba7de39bcb425327146"
+    },
+    "limits": "Synthetic positive weights, complete cell information and orthonormal module rotations; no empirical detector calibration claim."
+  },
+  "reuse_decision": "Twenty-five numerical callable dependencies remain individually selectable across domains under their own contracts. Detector topology, lifecycle, ranking, retry, correction-map dispatch and empirical cell policy remain in the tracking recipe. Whole-recipe portability requires those assumptions; no claim that every arithmetic expression is a separate atom.",
+  "compatibility_limits": [
+    "Explicit empty/no-seed termination replaces source failures; sparse/exhausted layer configurations reject.",
+    "Execution produces in-memory assignments; historical scoring, truth analysis and submission-file side effects are outside the execution contract.",
+    "Synthetic source parity establishes the tested behavior, not historical accuracy, production scale or generalization.",
+    "This automated semantic review supports Tier 3 consideration only; no human Tier 1 designation.",
+    "Corrected original graph staging, stored execution, publication transactions and served retrieval remain required."
+  ],
+  "reviewer_sha256": "5e2ec0066c48bfd6016eb0aca31cbd02be389ba8f53586faa2553c44a68f9a7f"
+}
