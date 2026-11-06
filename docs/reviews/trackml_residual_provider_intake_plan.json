@@ -1,0 +1,154 @@
+{
+  "approved": false,
+  "graph_digest": "f7f2b9ae61e1076e806854f85d90ea93a411944fde8c574dee544ea2ecbc53b9",
+  "review_sha256": "282875f4b66fc28531d6e30810d05d29b89fe88cfdb490e7af4fe561d92b345f",
+  "intake_script_sha256": "64e6311479e98c5bbae8823e728fcb1009974d849aa32cc85cd246b755716149",
+  "providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.physics.tangent_residuals.combine_scaled_uncertainty",
+      "catalog_fqdn": "sciona.atoms.physics.tangent_residuals.combine_scaled_uncertainty",
+      "atom_id": "9a215bc7-e5ba-58db-8674-6474aa4ca983",
+      "version_id": "01404e4e-8fdf-548d-970c-0f887e94e042",
+      "content_hash": "08d816883a4d84e15c9b4a4f1163a309106ea51c847c2021490b44d6970e679e",
+      "provider_sha256": "563d6d2b12053ba134de7a94a01a2018fce8dfcc483d80e7222e9e5e6ced11e5",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.physics.tangent_residuals.combine_scaled_uncertainty",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "physics.tangent_residuals",
+        "repo_name": "sciona-atoms-physics",
+        "source_module_path": "physics.tangent_residuals",
+        "import_module": "sciona.atoms.physics.tangent_residuals",
+        "source_symbol": "combine_scaled_uncertainty",
+        "description": "Combine independent measured and scaled-driver uncertainty in quadrature. Aligned float64 vectors (N,); measured is nonnegative, driver may be signed. Compute sqrt(measured**2 + ((driver*driver_scale)*component_scale)**2). Coefficients are explicit finite nonnegative scalars. Their product converts driver units to measured units; no empirical coefficients or independence inference are supplied. Zero and empty inputs are allowed. Overflow rejects; this preserves multiplication order rather than using an overflow-safe hypot.",
+        "domain_tags": [
+          "physics"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.08d816883a4d",
+      "fingerprint": "b0b0b7f5f67c5ccdefec0de1f231cfbdae8e901a395d03767632efb57ea3272d",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "measured",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite nonnegative float64 vector (N,) in caller-defined uncertainty units. Empty vectors allowed."
+        },
+        {
+          "direction": "input",
+          "name": "driver",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite signed float64 vector (N,), exactly aligned with measured. Coefficients convert driver units to measured units."
+        },
+        {
+          "direction": "input",
+          "name": "driver_scale",
+          "ordinal": 2,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit finite nonnegative real scalar; booleans rejected. First multiplication is driver times driver_scale."
+        },
+        {
+          "direction": "input",
+          "name": "component_scale",
+          "ordinal": 3,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit finite nonnegative real scalar; booleans rejected. Applied after driver_scale; empirical values belong to the recipe."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Float64 vector sqrt(measured**2 + ((driver*driver_scale)*component_scale)**2). Independent components assumed by caller; nonfinite intermediate or output rejects."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.physics.tangent_residuals.hemisphere_tangent_displacement",
+      "catalog_fqdn": "sciona.atoms.physics.tangent_residuals.hemisphere_tangent_displacement",
+      "atom_id": "cb7c65cf-3c97-5ffa-b8b4-3d372705567a",
+      "version_id": "6a1cc8df-d27b-5509-8e5d-ca270b24708e",
+      "content_hash": "86b36655ee78262992f8d8937009ad74206e5ffd2bfa648598e4e26550b46d8b",
+      "provider_sha256": "563d6d2b12053ba134de7a94a01a2018fce8dfcc483d80e7222e9e5e6ced11e5",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.physics.tangent_residuals.hemisphere_tangent_displacement",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "physics.tangent_residuals",
+        "repo_name": "sciona-atoms-physics",
+        "source_module_path": "physics.tangent_residuals",
+        "import_module": "sciona.atoms.physics.tangent_residuals",
+        "source_symbol": "hemisphere_tangent_displacement",
+        "description": "Project point-minus-reference displacement onto hemisphere tangent axes. Both arrays have shape (N,3), share an origin and caller-defined length unit. The polar basis is sign(z) times the conventional increasing-colatitude basis; at z=0 it is the zero vector. The azimuthal basis points toward increasing azimuth. Outputs are signed lengths, not angles. Rotation-axis points reject. Empty batches are allowed. Source arithmetic order is preserved; nonfinite intermediates/results reject rather than representing a valid projection.",
+        "domain_tags": [
+          "physics"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.86b36655ee78",
+      "fingerprint": "6f63df1c3c56914f685cb0f8e28838fa64c7efd9fed8b04528477cc585ea5a89",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "points",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 (N,3) positions sharing origin and length unit with reference. Nonzero finite radial normalization required; empty batches allowed."
+        },
+        {
+          "direction": "input",
+          "name": "reference",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 (N,3), exactly aligned with points. Displacement is points minus reference; no broadcasting."
+        },
+        {
+          "direction": "output",
+          "name": "polar",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Signed length projected onto sign(z) times the increasing-colatitude basis. Zero at z=0; not an angular displacement. Nonfinite arithmetic rejects."
+        },
+        {
+          "direction": "output",
+          "name": "azimuth",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Signed length along increasing azimuth about the z axis. Axis positions reject. Empty inputs return empty vectors."
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Draft source/interface intake only; semantic publication and dependency gates remain.",
+    "Generic tangent residuals and independent uncertainty combination; detector topology and empirical coefficients stay in the recipe."
+  ],
+  "owners": {
+    "sciona-atoms-physics": {
+      "owner_id": "33ed07a2-1bea-5b17-8b71-d6d0e590fdd9",
+      "source_repo_id": "b7900d28-7c79-45bd-8548-483f64154882"
+    }
+  },
+  "preserved_sha256": "f839940aa40edfe5734827698947ed1a426a79c16bb215d49820714ff632db50"
+}
