@@ -1,0 +1,522 @@
+{
+  "format": "santa-decomposed-provider-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "review_source": "automated",
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_santa_execution.blend_inputs",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_santa_execution.blend_inputs",
+      "version_id": "43a12b91-8bdb-559b-a158-1f4fd134725f",
+      "content_hash": "8834c097b03d079896a5f6b3385c326d680eb4f939d2c5e4b621fe8609e9c048",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "predicted",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "coefficients",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "3ab57f6a872287da9bdbe982438609e859d17d6d6af02bd6330e4e50bda8e2c8",
+      "classification": "source_recipe_adapter",
+      "atom_id": "3819874b-9513-511b-a6a0-2d958b1c0393",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_santa_execution.blend_inputs",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_santa_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_santa_execution",
+        "import_module": "sciona.atoms.ml.decomposed_santa_execution",
+        "source_symbol": "blend_inputs",
+        "description": "Invert the exponential target and expose ordered recipe coefficients.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.8834c097b03d",
+      "fingerprint": "05c69b6ba27851311c5c0eb4587773f73844021ef603a1eb61a6a590452fa1ee",
+      "operation": "Invert the exponential prediction and expose the recipe\u2019s ordered blend inputs.",
+      "plain_limits": "Keep the transformed prediction first and the raw prediction second. Negative coefficients are intentional; do not clip or normalize them.",
+      "validity_bounds": "Revalidate Prepared. Require exactly normal/transformed dictionary keys. Convert predictions to float64 arrays of shape (100,), require finite entries and strictly positive transformed values. Rebuild visible history to obtain the step. Compute the existing normalized sigmoid schedule: 1.2 times the difference between logistic(-10*step/2000) and logistic(-10), divided by .5 minus logistic(-10). Return rows log(transformed)/log(1.02) then normal, and coefficients ratio then 1-ratio. The initial raw coefficient is negative. This adapter performs no weighted reduction. The interpolation is retained reconstruction policy; current source prose supports its endpoints but does not establish the exact formula.",
+      "parameters": {
+        "prepared": "Same-invocation canonical Prepared with active query history.",
+        "predicted": "Complete same-invocation dictionary of both model prediction families."
+      },
+      "outputs": "Tuple of a new float64 matrix with two rows and one hundred columns, and a new two-element float64 coefficient vector. No input mutation.",
+      "dependencies": [
+        "sciona.decomposed_santa_runtime.blend_inputs",
+        "sciona.santa_execution",
+        "sciona.santa_agent_features",
+        "sciona.santa_threshold_posterior",
+        "numpy",
+        "math (Python standard library)",
+        "sciona.ghost.registry (registration only)"
+      ],
+      "reuse": "Replay-trained two-regressor recipe adapter. Intermediate values must belong to the same invocation; structural checks do not authenticate their provenance. Hidden replay thresholds supply training labels only. Historical winning-agent equivalence and competitive accuracy are not established.",
+      "internal_registered_provider_dependencies": [],
+      "callable_dependency_contracts": {}
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_santa_execution.fit",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_santa_execution.fit",
+      "version_id": "b184b090-01ea-5043-a0f3-c01a4135bbf0",
+      "content_hash": "9b28a90c78f91b3613445bd33df34e7363475963adcc90d3c3970ab0ce03bfc1",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "models",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "3ab57f6a872287da9bdbe982438609e859d17d6d6af02bd6330e4e50bda8e2c8",
+      "classification": "source_recipe_adapter",
+      "atom_id": "d88970be-c87b-54a3-a639-2108cb0e0c6c",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_santa_execution.fit",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_santa_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_santa_execution",
+        "import_module": "sciona.atoms.ml.decomposed_santa_execution",
+        "source_symbol": "fit",
+        "description": "Generate all sampled replay rows and fit both held-out-selected models.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.9b28a90c78f9",
+      "fingerprint": "6b44f6c58f4badae0bf242be734a3b26b3860fe7b7e4bb80644038498c802710",
+      "operation": "Generate causal replay features and fit both held-out-selected threshold regressors.",
+      "plain_limits": "Supply complete checked replays and explicit controls. Both models train with one native thread. Private replays and fitted models stay private.",
+      "validity_bounds": "Require exact Prepared type, matching configuration fingerprint and canonical payload revalidation. Training, validation and query game identities must be disjoint. Generate ten float32 features before each observed round for each eligible player perspective, with separate seed-derived population RNG streams and independent one-in-five arm-row sampling. Reject sampled populations exceeding max_rows. Hidden initial thresholds become labels only. Fit two regression GBDTs sequentially: raw threshold and 1.02 raised to threshold. Preserve .05 learning rate, .9 feature fraction, .5 bagging fraction every five rounds, deterministic column-wise training and num_threads=1. Use caller seed, leaf count, iteration cap and stopping patience. Held-out RMSE drives early stopping independently for each model; require finite validation predictions and positive transformed predictions. Retain both boosters, best iteration, independently computed held-out RMSE, per-iteration metric history and sampled row counts. Decision seed and query observations do not enter fitting. These explicit reconstruction controls are not authenticated historical notebook parameters.",
+      "parameters": {
+        "prepared": "Same-invocation canonical Prepared object from santa_prepare with private replay populations and explicit controls."
+      },
+      "outputs": "ThresholdModels containing normal and transformed LightGBM boosters, evaluation histories and training/validation row counts. Model objects are process-local; portable persistence is not qualified.",
+      "dependencies": [
+        "sciona.decomposed_santa_runtime.fit",
+        "sciona.santa_execution",
+        "sciona.santa_boosting",
+        "sciona.santa_replay_training",
+        "sciona.santa_agent_features",
+        "sciona.santa_threshold_posterior",
+        "numpy",
+        "lightgbm",
+        "sciona.ghost.registry (registration only)"
+      ],
+      "reuse": "Replay-trained two-regressor recipe adapter. Intermediate values must belong to the same invocation; structural checks do not authenticate their provenance. Hidden replay thresholds supply training labels only. Historical winning-agent equivalence and competitive accuracy are not established.",
+      "internal_registered_provider_dependencies": [],
+      "callable_dependency_contracts": {}
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_santa_execution.predictions",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_santa_execution.predictions",
+      "version_id": "4639ea4e-a6db-5203-80aa-5aeac3766594",
+      "content_hash": "84841ba079661fe620e2a9c8086f47e3e00720f9e53f10f4a7edc61d87499e9a",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "models",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "predicted",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "3ab57f6a872287da9bdbe982438609e859d17d6d6af02bd6330e4e50bda8e2c8",
+      "classification": "source_recipe_adapter",
+      "atom_id": "f99f6349-8d22-53a2-933c-ed66173f0d64",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_santa_execution.predictions",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_santa_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_santa_execution",
+        "import_module": "sciona.atoms.ml.decomposed_santa_execution",
+        "source_symbol": "predictions",
+        "description": "Predict both feature families with each model's selected iteration.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.84841ba07966",
+      "fingerprint": "fadf367190cbb2c513a891f9bf29467bba4dd40163b923d29a8ca5c473db5ade",
+      "operation": "Predict both initial-threshold families using each fitted model\u2019s selected iteration.",
+      "plain_limits": "Use both models and visible query history from the same run. Opponent rewards and hidden thresholds are not query inputs.",
+      "validity_bounds": "Revalidate canonical Prepared and require exact ThresholdModels type. Rebuild the visible BanditHistory from own and opponent actions and own binary rewards. Construct both 100-by-10 float32 feature arrays; they differ in the posterior-mean feature. Predict each family with its booster best_iteration and num_threads=1. This stage passes predictions onward; the following blend-input stage checks finite values, exact lengths and transformed positivity. Structural model type does not prove that it was fitted on this payload.",
+      "parameters": {
+        "prepared": "Same-invocation canonical Prepared including the visible active query history.",
+        "models": "Complete ThresholdModels returned by fit for this invocation."
+      },
+      "outputs": "Dictionary with normal and transformed prediction arrays, one value per action in each family.",
+      "dependencies": [
+        "sciona.decomposed_santa_runtime.predictions",
+        "sciona.santa_execution",
+        "sciona.santa_boosting",
+        "sciona.santa_agent_features",
+        "sciona.santa_threshold_posterior",
+        "numpy",
+        "lightgbm",
+        "sciona.ghost.registry (registration only)"
+      ],
+      "reuse": "Replay-trained two-regressor recipe adapter. Intermediate values must belong to the same invocation; structural checks do not authenticate their provenance. Hidden replay thresholds supply training labels only. Historical winning-agent equivalence and competitive accuracy are not established.",
+      "internal_registered_provider_dependencies": [],
+      "callable_dependency_contracts": {}
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_santa_execution.result",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_santa_execution.result",
+      "version_id": "810cef48-3585-5b2d-8b8b-ef673f5d3226",
+      "content_hash": "57a8c764e029cf1d19d6e31607cde26bb9420eb573811a6a4ab24d8f8ed9856e",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "models",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "initial",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "3ab57f6a872287da9bdbe982438609e859d17d6d6af02bd6330e4e50bda8e2c8",
+      "classification": "source_recipe_adapter",
+      "atom_id": "25cce315-7c0f-5df9-bb63-24d177e15b96",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_santa_execution.result",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_santa_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_santa_execution",
+        "import_module": "sciona.atoms.ml.decomposed_santa_execution",
+        "source_symbol": "result",
+        "description": "Apply shared decay, seeded ties and nonpositive fallback; retain fit evidence.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.57a8c764e029",
+      "fingerprint": "f44366d3bd7daa98aa13cf53c498c2a54c3d7faef4b105d4bda584dbe4931b76",
+      "operation": "Apply shared selection decay, choose an action, and retain complete fit diagnostics.",
+      "plain_limits": "Supply the same-run numeric blend and models. Seeded ties and the all-nonpositive fallback are explicit recipe choices.",
+      "validity_bounds": "Revalidate Prepared and require exact ThresholdModels type. Convert initial blended values to finite float64 shape (100,). Rebuild query history and multiply by .97 raised to the sum of own and opponent pulls for each action. Reject nonfinite scores. Generate a default_rng(decision_seed) permutation of all one hundred actions; choose the first maximum in that order when any score is positive, otherwise retain action zero. Return action, full score list, schedule ratio, query step, model count two, sampled row counts and each model evaluation excluding iteration_rmse. Require strict finite JSON serialization. The model evaluation dictionaries are retained by value but their authenticity is a same-invocation precondition, not established by type checks. No benchmark strength or expected-reward evaluation is implied.",
+      "parameters": {
+        "prepared": "Same-invocation canonical Prepared containing visible history and decision seed.",
+        "models": "Complete same-invocation ThresholdModels with row counts and evaluation dictionaries.",
+        "initial": "Same-invocation ordered weighted-sum result with one finite value per action."
+      },
+      "outputs": "Strict JSON result with selected action, all one hundred decayed scores, schedule ratio, query step, two-model count and fitting diagnostics.",
+      "dependencies": [
+        "sciona.decomposed_santa_runtime.result",
+        "sciona.santa_execution",
+        "sciona.santa_boosting",
+        "sciona.santa_agent_features",
+        "sciona.santa_threshold_posterior",
+        "numpy",
+        "sciona.ghost.registry (registration only)"
+      ],
+      "reuse": "Replay-trained two-regressor recipe adapter. Intermediate values must belong to the same invocation; structural checks do not authenticate their provenance. Hidden replay thresholds supply training labels only. Historical winning-agent equivalence and competitive accuracy are not established.",
+      "internal_registered_provider_dependencies": [],
+      "callable_dependency_contracts": {}
+    }
+  ],
+  "graph_digest": "4f9f38649f504b19596863697bfa53faf3310634cfa8b67b51c44d56d3539ebb",
+  "software_sha256": {
+    "sciona-atoms-ml/src/sciona/atoms/ml/decomposed_santa_execution.py": "3ab57f6a872287da9bdbe982438609e859d17d6d6af02bd6330e4e50bda8e2c8",
+    "sciona/decomposed_santa_graph.py": "9683c3ab35032c8e3d25ed4a890368e9219bc29c270283bda4576bf1682845e7",
+    "sciona/decomposed_santa_runtime.py": "659b6d43ae5808a3d52c160d010efd846d65a71758de9ee89e3024532dea9bb1",
+    "sciona/santa_agent_features.py": "b6cd7831b2dfe7b72024f24273092f5bf62ed297c19d30453cfcf04963b2a127",
+    "sciona/santa_boosting.py": "d6a525b6a80a335484d43f8fdf01b5e97bd0c9055ae2ef6262b77bfdab8c4779",
+    "sciona/santa_execution.py": "eb2c3f568c1a76ea2e674c8a9c5c02edf22b74396bacb82dac9fe63af8a76c1a",
+    "sciona/santa_graph.py": "a17ac27402f1a2e70eb4d08af03f7c4f7705f084f4b2b92f713009204bc2cca1",
+    "sciona/santa_replay_training.py": "f0033fc23cc0d7d3c777e5a0c69cbcde9e1b74c868bce32717f343be34892921",
+    "sciona/santa_simulation.py": "b47b10574ab715befe688b2a2539192bae8cee0606931d448755c984298f357f",
+    "sciona/santa_threshold_posterior.py": "17228b0cf24f76d530df7858df037fdef80ef2b5d8df5cb0fec010cb2d7b1b7f",
+    "sciona/services/execution_graph_codec.py": "1ad42332f8e28adf4ee3f8d53184a4af8351f66304efa1703c63ed32989082a6",
+    "sciona/visualizer/runner.py": "22a49655e61c10d800aa2a6a9b5115cd873a9e699ea9903fa0f856aea8af67a4",
+    "scripts/audit_decomposed_santa_packages.py": "1eb50e42c50b6ba87cacd430bb0843d3adefe5005d883491dfc5c2c3c55fd426",
+    "scripts/decomposed_santa_provider_contracts.py": "af220cd90e118901f1bfce920fdfb1a351d4ecfaa3b0ffe449624ca6956074a8",
+    "scripts/review_decomposed_santa_implementation.py": "7fd50b982c44cc3d586a22e150e855af48f60ffcbbea40b973aad95cce16458e",
+    "scripts/review_santa_decomposed_providers.py": "1d640e9b3f70a0cd9412f2c448da1cbbe0fdb9a16cfa5ef7fe7e83ace1f66ff0",
+    "scripts/stage_santa_decomposed_providers.py": "c07273af53a2224161be7fd766e58fbbea38eca58a1c4d93199910142f671802"
+  },
+  "imports": {
+    "sciona/santa_boosting.py": [
+      "from dataclasses import dataclass",
+      "from sciona.santa_agent_features import BanditHistory, choose_action",
+      "from sciona.santa_replay_training import prepare_replay_training",
+      "import copy",
+      "import lightgbm as lgb",
+      "import numpy as np"
+    ],
+    "sciona/santa_simulation.py": [
+      "from sciona.santa_agent_features import BanditHistory",
+      "import numpy as np"
+    ],
+    "sciona/santa_agent_features.py": [
+      "from sciona.santa_threshold_posterior import infer_threshold",
+      "import math",
+      "import numpy as np"
+    ],
+    "sciona/santa_execution.py": [
+      "from dataclasses import dataclass, field",
+      "from sciona.santa_agent_features import BanditHistory",
+      "from sciona.santa_boosting import fit_threshold_models",
+      "from sciona.santa_replay_training import validate_replay",
+      "import hashlib",
+      "import json"
+    ],
+    "sciona/santa_threshold_posterior.py": [
+      "import math",
+      "import numpy as np"
+    ],
+    "sciona/santa_graph.py": [
+      "from sciona.architect.handoff import CDGExport",
+      "from sciona.architect.models import AlgorithmicNode, DependencyEdge, IOSpec, NodeStatus"
+    ],
+    "sciona/santa_replay_training.py": [
+      "from sciona.santa_agent_features import BanditHistory",
+      "import numpy as np"
+    ],
+    "sciona/decomposed_santa_runtime.py": [
+      "from sciona.santa_agent_features import exploration_ratio",
+      "from sciona.santa_boosting import ThresholdModels, fit_threshold_models",
+      "from sciona.santa_execution import Prepared, prepare, _history",
+      "import hashlib",
+      "import json",
+      "import math",
+      "import numpy as np"
+    ],
+    "sciona/decomposed_santa_graph.py": [
+      "from sciona.architect.models import AlgorithmicNode, DependencyEdge, IOSpec, NodeStatus",
+      "from sciona.santa_graph import build_santa_graph"
+    ],
+    "sciona/visualizer/runner.py": [
+      "from __future__ import annotations",
+      "from pathlib import Path",
+      "from sciona.architect.models import AlgorithmicNode, DependencyEdge, EdgeKind, NodeStatus",
+      "from sciona.ghost.registry import REGISTRY",
+      "from sciona.synthesizer.ghost_sim import _ensure_atoms_imported",
+      "from sciona.telemetry import log_event",
+      "from sciona.visualizer.dataset_manager import DatasetManager",
+      "from typing import Any, Callable, Dict, List, Optional, Tuple",
+      "import dataclasses",
+      "import inspect",
+      "import json",
+      "import logging",
+      "import numpy as np",
+      "import pandas as pd",
+      "import time",
+      "import typing"
+    ],
+    "sciona/services/execution_graph_codec.py": [
+      "from sciona.architect.handoff import CDGExport",
+      "import hashlib",
+      "import json"
+    ],
+    "scripts/audit_decomposed_santa_packages.py": [
+      "from packaging.requirements import Requirement",
+      "from packaging.utils import canonicalize_name",
+      "from pathlib import Path",
+      "import base64",
+      "import hashlib",
+      "import importlib.metadata as metadata",
+      "import json"
+    ],
+    "scripts/review_decomposed_santa_implementation.py": [
+      "from pathlib import Path",
+      "from sciona import santa_execution as original, decomposed_santa_runtime as candidate",
+      "from sciona.atoms.provider_inventory import ProviderRepo",
+      "from sciona.atoms.supabase_seed import _parse_registered_atoms",
+      "from sciona.decomposed_santa_graph import build_decomposed_santa_graph",
+      "from sciona.services.execution_graph_codec import encode_execution_graph",
+      "from scripts.audit_decomposed_santa_packages import audit",
+      "from scripts.promote_connectomics_execution import boundary_ports, provider_ports",
+      "from typing import get_args, get_origin, get_type_hints",
+      "import hashlib",
+      "import importlib",
+      "import importlib.metadata as metadata",
+      "import inspect",
+      "import json",
+      "import numpy as np",
+      "import subprocess"
+    ],
+    "scripts/stage_santa_decomposed_providers.py": [
+      "from collections import Counter",
+      "from psycopg.types.json import Jsonb",
+      "from sciona.atoms.provider_inventory import ProviderRepo",
+      "from sciona.atoms.supabase_seed import AtomSeedRow, _parse_registered_atoms",
+      "from sciona.decomposed_santa_graph import build_decomposed_santa_graph",
+      "from scripts.import_flavours_provider_drafts import connect",
+      "from scripts.import_residual_execution_drafts import comparable, ensure_row",
+      "from scripts.review_decomposed_santa_implementation import ROOT, review, require, sha, interfaces",
+      "from typing import get_type_hints, get_origin, get_args",
+      "from uuid import NAMESPACE_URL, UUID, uuid5",
+      "import argparse",
+      "import hashlib",
+      "import importlib",
+      "import inspect",
+      "import json",
+      "import numpy as np"
+    ],
+    "scripts/decomposed_santa_provider_contracts.py": [],
+    "scripts/review_santa_decomposed_providers.py": [
+      "from pathlib import Path",
+      "from scripts.audit_decomposed_santa_packages import audit as package_audit",
+      "from scripts.decomposed_santa_provider_contracts import CONTRACTS",
+      "from scripts.review_decomposed_santa_implementation import ROOT, require, sha, review as integration_review",
+      "from scripts.stage_santa_decomposed_providers import reviewed_plan",
+      "import argparse",
+      "import ast",
+      "import importlib.metadata",
+      "import json",
+      "import os",
+      "import platform",
+      "import subprocess",
+      "import tempfile",
+      "import xml.etree.ElementTree as ET"
+    ],
+    "sciona-atoms-ml/src/sciona/atoms/ml/decomposed_santa_execution.py": [
+      "from sciona.decomposed_santa_runtime import blend_inputs as implementation",
+      "from sciona.decomposed_santa_runtime import fit as implementation",
+      "from sciona.decomposed_santa_runtime import predictions as implementation",
+      "from sciona.decomposed_santa_runtime import result as implementation",
+      "from sciona.ghost.registry import register_atom",
+      "import numpy as np"
+    ]
+  },
+  "package_versions": {
+    "joblib": "1.5.3",
+    "lightgbm": "4.7.0",
+    "narwhals": "2.26.0",
+    "numpy": "2.2.6",
+    "pandas": "2.3.3",
+    "python-dateutil": "2.9.0.post0",
+    "pytz": "2026.1.post1",
+    "scikit-learn": "1.8.0",
+    "scipy": "1.17.1",
+    "six": "1.17.0",
+    "threadpoolctl": "3.6.0",
+    "tzdata": "2025.3"
+  },
+  "python_version": "3.13.11",
+  "evidence_sha256": {
+    "santa_decomposed_provider_tests.json": "549077457fec1dd7318a90b622ed6ce643449f136e44e6b90bbf2f089743af26",
+    "decomposed_santa_implementation_review.json": "f84790caa29be65d62b6f5b63412082fdbb1869040a1360ee05abf998c9f3784",
+    "decomposed_santa_graph_execution.json": "1064ef9f1b28bc95e22c95c635689f9c59f69776b80708ad730afe4da4564837",
+    "santa_decomposed_provider_intake_gates.json": "c49699bfce166aca3e42f5357d76444bcfffff5e96c3fd2863f8d97a0c706567",
+    "decomposed_santa_package_files.json": "a5600cb498fe87d600ed87ca0b0f2a0ce7ad598b9b33c2cdf043686b5a87fcb8",
+    "santa_decomposed_provider_intake_plan.json": "8779966c7bb5542e2b14b73e4d6fa16e7bfb42259d4fad5bfc5e50e453bcc036"
+  },
+  "source_qualification_complete": false,
+  "original_cdg_publication_qualified": false,
+  "limitations": [
+    "Automated Tier 3 implementation semantics only; no Tier 1 human certification or Tier 2 usage qualification.",
+    "Four recipe adapters preserve the complete existing two-regressor reconstruction. The generic ordered weighted sum remains independently bound and domain independent.",
+    "Exact historical notebook details remain unverified. This review qualifies the stated implementation contracts, not historical winning-agent equivalence or original-CDG publication.",
+    "Fresh execution exactly matches the existing reconstruction on generated replays; historical population membership and competitive accuracy are unproven.",
+    "Installed package hashes were checked against their own RECORD files. Clean deployment and independently authenticated publisher signatures are not qualified.",
+    "Native pools and LightGBM calls are bounded to one thread; models train serially. Deployment must configure its own resource limits.",
+    "Software imports are separate from registered-provider dependencies. Same-invocation intermediate provenance is required but not authenticated by structural checks.",
+    "Catalog eligibility, publication transaction gates and existing-provider metadata remain separate checks."
+  ]
+}
