@@ -1,0 +1,436 @@
+{
+  "format": "adversarial-normalizer-provider-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "review_source": "automated",
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.dl.adversarial_normalized_execution.execute_with_normalizer",
+      "catalog_fqdn": "sciona.atoms.dl.adversarial_normalized_execution.execute_with_normalizer",
+      "version_id": "0a917f45-0efb-5cd3-9e2f-58e2064dba92",
+      "content_hash": "489754d4865ef1867ceb4885c1f75c08d3b4952cf609ad7fc2177a6bf904fbc4",
+      "provider_sha256": "60b0a87bc932bf61ab299576ff4048ebdd68459e544f578f90ed22b3fb7d8662",
+      "signature": "(prepared: object, normalizer: object) -> dict",
+      "bound_nodes": [
+        "execute"
+      ],
+      "classification": "source_recipe_adapter",
+      "atom_id": "2378266d-dafd-5a19-a820-eb07f27f7dc0",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.dl.adversarial_normalized_execution.execute_with_normalizer",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "dl.adversarial_normalized_execution",
+        "repo_name": "sciona-atoms-dl",
+        "source_module_path": "dl.adversarial_normalized_execution",
+        "import_module": "sciona.atoms.dl.adversarial_normalized_execution",
+        "source_symbol": "execute_with_normalizer",
+        "description": "Run the complete padded attack with an explicitly supplied row normalizer. The source recipe chooses mean-absolute or population-standard-deviation scaling at each recurrent update. The graph supplies the numerical function. Preserve all source model branches, label rules, momentum updates, projection, and real-entry PNG encoding. No implicit pretrained state is downloaded.",
+        "domain_tags": [
+          "dl"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.489754d4865e",
+      "fingerprint": "103fc713cba9adc32f20739ab5c1f27c92f934811a7b4afff33b047699b1796d",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "normalizer",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Run the full source attack using the row scaling function supplied by the graph.",
+      "plain_limits": "Use checked image inputs, explicit model settings, and the reviewed scaling function. Keep all model branches, repeated updates, padding, and output rules. Only real images are returned. The bound on normalized values does not guarantee a bound on saved image pixels. No trained weights are downloaded.",
+      "validity_bounds": "Prepared version-1 decoded dictionary from adversarial_prepare, with exact rgb, targets, config and initializations fields, plus an explicit callable accepting values and statistic. The callable must implement the qualified uncentered mean-absolute/population-std row scaling, preserving finite float32 rows; callable identity is a graph binding obligation. Full CPU Torch source-shaped ensembles: non-targeted eight models and caller-positive iteration count (default 10); targeted epsilon>=8 five models/20 steps; targeted epsilon<8 two models/40 steps. Frozen inferred or supplied labels; main/auxiliary objectives, source momentum, round/sign policy, step clipping and fixed-original projection preserved. Source ten-entry padding and real-entry trimming/PNG min-max stretching retained. Zero/nonfinite normalization rejects. Explicit random or caller-decoded Slim states only; exact state shapes validated by model construction. No historical TensorFlow binary or pretrained quality guarantee.",
+      "parameters": {
+        "prepared": "Decoded dictionary from the unchanged version-1 preparation provider. Image layout is nonempty uint8 NHWC 299x299x3 before source padding/normalization; source mode, finite epsilon in [0,255], nonnegative momentum, targets and exact branch initialization scopes must satisfy its contract.",
+        "normalizer": "Explicit callable accepting (values: ndarray, statistic: str) and returning same-shape/dtype finite rows under the qualified uncentered scaling contract. No hidden fallback. The approved graph must bind the qualified generic provider."
+      },
+      "outputs": "Version-1 JSON-compatible dictionary: encoded normalized real images, encoded labels, base64 real-entry PNGs, per-batch losses, initialization kinds, and saved_pixel_bound_guaranteed=False.",
+      "dependencies": [
+        "sciona.decomposed_adversarial_injected.execute",
+        "reviewed source model/loss/state/boundary modules",
+        "sciona.dfdc_codec",
+        "graph-injected row-normalization callable",
+        "numpy",
+        "torch",
+        "Pillow",
+        "sciona.ghost.registry (registration only)"
+      ],
+      "reuse": "Source recipe adapter with an explicit callable port. Generic row scaling is independently selectable and contains no source recipe policy.",
+      "internal_registered_provider_dependencies": [],
+      "callable_dependency_contracts": {
+        "normalizer": "Graph must bind the reviewed row-scaling provider; this is a callable input, not a hardcoded internal atom import."
+      }
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.numerical.statistics.row_scale.normalize_rows_by_scale",
+      "catalog_fqdn": "sciona.atoms.numerical.statistics.row_scale.normalize_rows_by_scale",
+      "version_id": "60034fd4-9033-5422-b44f-b17d5f9dff55",
+      "content_hash": "3b9a131e78cdb001e9cdcc407c7bd1fc971a6b6268599844b60a71b9063d4b2a",
+      "provider_sha256": "4bc3d26b2f702f8bb59741b0a75d34d560156cc0e9bfb487ae3f62253b7ed1ea",
+      "signature": "(values: numpy.ndarray, statistic: str) -> numpy.ndarray",
+      "bound_nodes": [
+        "normalize_rows"
+      ],
+      "classification": "generic_operation",
+      "atom_id": "1eded449-1724-568b-a1c3-6335d1140689",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.numerical.statistics.row_scale.normalize_rows_by_scale",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "numerical.statistics.row_scale",
+        "repo_name": "sciona-atoms",
+        "source_module_path": "numerical.statistics.row_scale",
+        "import_module": "sciona.atoms.numerical.statistics.row_scale",
+        "source_symbol": "normalize_rows_by_scale",
+        "description": "Divide each row by its mean absolute value or population standard deviation. Accept nonempty finite 2D float32/float64 arrays. Statistic must be exactly 'mean_absolute' or 'population_std'. Keep NumPy input-dtype reductions and output dtype. Population standard deviation uses ddof=0; the numerator is NOT centered. Reject zero or nonfinite scales and nonfinite results, without an epsilon stabilizer. Return a fresh array; input is unchanged. Meaning of each row and column, units and downstream use are entirely caller policy.",
+        "domain_tags": [
+          "numerical"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.3b9a131e78cd",
+      "fingerprint": "ee1dd75d29e94c235420bb3160587d84323eaa60aaa9a53229f073fc63e18f20",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "statistic",
+          "ordinal": 1,
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "normalized",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Divide each row by its average absolute size or by its population standard deviation.",
+      "plain_limits": "Use a nonempty table of finite numbers stored in 32 or 64 bit form. Choose the scale explicitly. Do not subtract the row average. The result keeps the shape and number format. The input is unchanged. Zero scales and nonfinite results are rejected.",
+      "validity_bounds": "Nonempty finite 2D NumPy float32/float64 ndarray. Statistic is exactly mean_absolute or population_std. Divide each row by its mean absolute value or population standard deviation (ddof=0), reduced in the input dtype. The numerator is never centered. Preserve dtype and shape; return a fresh array. Reject zero/nonfinite divisors, nonfinite inputs and nonfinite outputs without any stabilizing epsilon. Axis meaning, units, sample interpretation and downstream domain are caller policy.",
+      "parameters": {
+        "values": "Nonempty finite two-dimensional float32/float64 ndarray; no implicit conversion from lists or integer arrays.",
+        "statistic": "Exact string mean_absolute or population_std; selects the per-row divisor, not numerator centering."
+      },
+      "outputs": "Fresh finite array of the same shape and dtype; caller values are unchanged.",
+      "dependencies": [
+        "numpy",
+        "sciona.ghost.registry (registration only)"
+      ],
+      "reuse": "Domain independent: rows and columns have no image, model, competition or task meaning in this operation.",
+      "internal_registered_provider_dependencies": [],
+      "callable_dependency_contracts": {}
+    }
+  ],
+  "graph_digest": "16de238d23319bd1aba8f54b2a50458b906ff724c21c0aabd6e490fc6f2c2689",
+  "software_sha256": {
+    "requirements/adversarial-execution.txt": "3bc6d3161a1f8d4295d0b19395dc30c42a1bffb7e4d99602504cba6dd5543b82",
+    "sciona-atoms-dl/src/sciona/atoms/dl/adversarial_normalized_execution.py": "60b0a87bc932bf61ab299576ff4048ebdd68459e544f578f90ed22b3fb7d8662",
+    "sciona-atoms/src/sciona/atoms/numerical/statistics/row_scale.py": "4bc3d26b2f702f8bb59741b0a75d34d560156cc0e9bfb487ae3f62253b7ed1ea",
+    "sciona/adversarial_ensemble.py": "454f159958dfeb3a5ececfffdeb3c176be5348a30e1dc0534519a018566521eb",
+    "sciona/adversarial_graph.py": "1d154b164bfd2012622222821769ad0b61bacad2736adcfb14145b8796167f29",
+    "sciona/adversarial_image_boundary.py": "8d7fcbb8d939e81441d98367a0c22dfcbcebce250024b466868a95d7ada90566",
+    "sciona/adversarial_inception_ops.py": "2af2b4abb03548fc79a9421496da40e1fc9972afd0f919850ed544c690eb10b7",
+    "sciona/adversarial_inception_resnet.py": "22364cb662b390ebc1d53830ee76d37ded16c61daed09b44b760778c75cdb0b5",
+    "sciona/adversarial_inception_resnet_topology.json": "c2da0c58a5542e8b9aabee0897b58dc3b263acdf059ee6372c60a9087ca54903",
+    "sciona/adversarial_inception_v3.py": "cf2adb7d1b3309bd3665013f8cf0c847302353be52c677b8f619efc7c7b97b71",
+    "sciona/adversarial_inception_v3_topology.json": "59052d911d13a47fb8c9e048e4de3e7fa66d8b4439d715caa1959ad0229c79ed",
+    "sciona/adversarial_inception_v4.py": "2f98b52b06d85aabf2a8d616c4a3e09888fe95c5f15731d9e23934a25c77fc3a",
+    "sciona/adversarial_inception_v4_topology.json": "f33a8109dc4c934b29dbc6677fdb19b23f15fc5583086d90ad60c67af92ae8a4",
+    "sciona/adversarial_lifecycle.py": "19c0bb800a9030b2937cef485d80f5e3ee4e72d8bde124a6a3eebb2517ab3fd5",
+    "sciona/adversarial_losses.py": "125541dea59d890c0dabb3241536391841567e3c6581af119038c20bd04d355b",
+    "sciona/adversarial_normalization.py": "3af9580ea7f45eb3e56b71c8a7bfb308819363f9f9a08a933ca6ec67186aad92",
+    "sciona/adversarial_resnet.py": "5a60047ce948db4e88f75784da8d767afbc14ef7031a7b2c4fde6358110a092b",
+    "sciona/adversarial_resnet_spatial.py": "023d6fe17962eea7025a8472ea028f9ee7fac8e3836f74d6d0e64ca66a3bfb39",
+    "sciona/adversarial_rgb_attack.py": "36e6cfd383b530a2bf239476d47dbf86ac446994ffd669d4153e431a5718b689",
+    "sciona/adversarial_runtime.py": "b843a45806c923971374547701142a0868732a35849a1d2fa9459290269adbea",
+    "sciona/adversarial_state_mapping.py": "138758b19da6ffed43fb17e0065322e34732a3eb4d1cc16637f6c9f6e6ad8a3e",
+    "sciona/adversarial_updates.py": "7fb8d70efd285d9f43edceacaa9e348aace10e0eddcf97b410c28012931c45aa",
+    "sciona/decomposed_adversarial_graph.py": "52467ae8f8b8f8600694afd076d1a6b9e728c57e7f3fc92b88fdb4f7a5ce9855",
+    "sciona/decomposed_adversarial_injected.py": "3815917b543f7cb1b4a8b2c42dd45a15d665bc8e2b7cabdffa168ffe0305c177",
+    "sciona/dfdc_codec.py": "4256101fe8c78ad8df1eec4ff6db08ae53a7291a4506e73784ffad25ad39b15a",
+    "sciona/services/execution_graph_codec.py": "1ad42332f8e28adf4ee3f8d53184a4af8351f66304efa1703c63ed32989082a6",
+    "sciona/visualizer/runner.py": "22a49655e61c10d800aa2a6a9b5115cd873a9e699ea9903fa0f856aea8af67a4"
+  },
+  "imports": {
+    "sciona/adversarial_inception_resnet.py": [
+      "from pathlib import Path",
+      "from sciona.adversarial_inception_ops import InceptionConv, check_input, pool2d",
+      "from torch import nn",
+      "import json",
+      "import torch"
+    ],
+    "sciona/adversarial_ensemble.py": [
+      "from sciona.adversarial_inception_resnet import build_inception_resnet",
+      "from sciona.adversarial_inception_v3 import build_inception_v3",
+      "from sciona.adversarial_inception_v4 import build_inception_v4",
+      "from sciona.adversarial_losses import ensemble_loss, infer_labels",
+      "from sciona.adversarial_resnet import build_resnet101",
+      "from sciona.adversarial_state_mapping import convert_state",
+      "import torch"
+    ],
+    "sciona/adversarial_losses.py": [
+      "from torch.nn import functional as F",
+      "import torch"
+    ],
+    "sciona/adversarial_inception_v4.py": [
+      "from pathlib import Path",
+      "from sciona.adversarial_inception_ops import InceptionConv, check_input, pool2d",
+      "from torch import nn",
+      "import json",
+      "import torch"
+    ],
+    "sciona/adversarial_state_mapping.py": [
+      "import torch"
+    ],
+    "sciona/adversarial_graph.py": [
+      "from sciona.architect.handoff import CDGExport",
+      "from sciona.architect.models import AlgorithmicNode, DependencyEdge, IOSpec, NodeStatus"
+    ],
+    "sciona/adversarial_resnet.py": [
+      "from sciona.adversarial_normalization import FrozenBatchNorm",
+      "from sciona.adversarial_resnet_spatial import conv2d_same",
+      "from torch import nn",
+      "from torch.nn import functional as F",
+      "import torch"
+    ],
+    "sciona/adversarial_inception_ops.py": [
+      "from sciona.adversarial_normalization import FrozenBatchNorm",
+      "from torch import nn",
+      "from torch.nn import functional as F",
+      "import torch"
+    ],
+    "sciona/adversarial_lifecycle.py": [
+      "from sciona.adversarial_ensemble import build_ensemble, gradient",
+      "from sciona.adversarial_updates import configuration, update",
+      "import math",
+      "import numpy as np",
+      "import torch"
+    ],
+    "sciona/adversarial_normalization.py": [
+      "from torch import nn",
+      "import math",
+      "import torch"
+    ],
+    "sciona/adversarial_image_boundary.py": [
+      "from PIL import Image",
+      "from io import BytesIO",
+      "import numpy as np"
+    ],
+    "sciona/adversarial_resnet_spatial.py": [
+      "from torch.nn import functional as F",
+      "import torch"
+    ],
+    "sciona/adversarial_inception_v3.py": [
+      "from pathlib import Path",
+      "from sciona.adversarial_inception_ops import InceptionConv, check_input, pool2d",
+      "from torch import nn",
+      "import json",
+      "import torch"
+    ],
+    "sciona/adversarial_runtime.py": [
+      "from sciona.adversarial_ensemble import ORDER",
+      "from sciona.adversarial_rgb_attack import attack_rgb",
+      "from sciona.adversarial_updates import configuration",
+      "from sciona.dfdc_codec import decode_array, decode_state, encode_array",
+      "import base64",
+      "import math",
+      "import numpy as np"
+    ],
+    "sciona/adversarial_updates.py": [
+      "import math",
+      "import numpy as np"
+    ],
+    "sciona/adversarial_rgb_attack.py": [
+      "from sciona.adversarial_image_boundary import batches, encode_real_entries",
+      "from sciona.adversarial_lifecycle import attack",
+      "from sciona.adversarial_updates import configuration",
+      "import numpy as np"
+    ],
+    "sciona/decomposed_adversarial_injected.py": [
+      "from sciona.adversarial_ensemble import build_ensemble, gradient",
+      "from sciona.adversarial_image_boundary import batches, encode_real_entries",
+      "from sciona.adversarial_runtime import keys",
+      "from sciona.adversarial_updates import configuration",
+      "from sciona.dfdc_codec import encode_array",
+      "import base64",
+      "import math",
+      "import numpy as np",
+      "import torch"
+    ],
+    "sciona/decomposed_adversarial_graph.py": [
+      "from sciona.adversarial_graph import build_adversarial_graph",
+      "from sciona.architect.models import AlgorithmicNode, DependencyEdge, EdgeKind, IOSpec, NodeStatus"
+    ],
+    "sciona/dfdc_codec.py": [
+      "from collections.abc import Mapping",
+      "import base64",
+      "import binascii",
+      "import math",
+      "import numpy as np",
+      "import torch"
+    ],
+    "sciona/visualizer/runner.py": [
+      "from __future__ import annotations",
+      "from pathlib import Path",
+      "from sciona.architect.models import AlgorithmicNode, DependencyEdge, EdgeKind, NodeStatus",
+      "from sciona.ghost.registry import REGISTRY",
+      "from sciona.synthesizer.ghost_sim import _ensure_atoms_imported",
+      "from sciona.telemetry import log_event",
+      "from sciona.visualizer.dataset_manager import DatasetManager",
+      "from typing import Any, Callable, Dict, List, Optional, Tuple",
+      "import dataclasses",
+      "import inspect",
+      "import json",
+      "import logging",
+      "import numpy as np",
+      "import pandas as pd",
+      "import time",
+      "import typing"
+    ],
+    "sciona/services/execution_graph_codec.py": [
+      "from sciona.architect.handoff import CDGExport",
+      "import hashlib",
+      "import json"
+    ],
+    "sciona-atoms/src/sciona/atoms/numerical/statistics/row_scale.py": [
+      "from sciona.ghost.registry import register_atom",
+      "import numpy as np"
+    ],
+    "sciona-atoms-dl/src/sciona/atoms/dl/adversarial_normalized_execution.py": [
+      "from sciona.decomposed_adversarial_injected import execute",
+      "from sciona.ghost.registry import register_atom"
+    ]
+  },
+  "package_versions": {
+    "torch": "2.11.0",
+    "numpy": "2.4.2",
+    "Pillow": "11.3.0"
+  },
+  "python_version": "3.13.11",
+  "evidence_sha256": {
+    "adversarial_normalizer_provider_tests.json": "dc9705afc74de43a004ea10b2cc7cef96f9fb7748fc141fa97e9e80d81c177fb",
+    "adversarial_decomposed_semantic_review.json": "e65343b3b2bfdb770df3d6cd13aba811ca30c5dbfabe7a77df76875f7cc2ff5a",
+    "decomposed_adversarial_graph.json": "5a4717f69e36661ddc71b6783ad1a0e4c8f7f594bb538f43a33505c113dbe92f",
+    "adversarial_generic_row_scale_source_parity.json": "fbca500dbd2d02420109984d2978d84d3681cbefec34169be9e4cc8cced134e1",
+    "adversarial_normalizer_provider_intake_plan.json": "d356199034933df4b3e21e2f24e0ec3c1acee6de9530e61931c79923e9486b7d"
+  },
+  "intake_stage_mapping": [
+    {
+      "intake": "ensemble_prediction_label_inference",
+      "realization": "Unweighted eight-model probabilities on iteration0 then fixed labels",
+      "evidence": [
+        "losses",
+        "ensemble",
+        "lifecycle"
+      ]
+    },
+    {
+      "intake": "adaptive_epsilon_attack_strategy",
+      "realization": "Separate targeted epsilon>=8 five-model20steps versus epsilon<8 two-model40steps; non-targeted eight-model10step default",
+      "evidence": [
+        "updates",
+        "lifecycle",
+        "padded_attack",
+        "graph_execution"
+      ]
+    },
+    {
+      "intake": "ensemble_logit_fusion_with_asymmetric_weights",
+      "realization": "Source-ordered main and auxiliary weighted logits across actual full backbones",
+      "evidence": [
+        "losses",
+        "ensemble"
+      ]
+    },
+    {
+      "intake": "auxiliary_logit_loss_fusion",
+      "realization": "Inference auxiliary heads retained; main CE plus0.4 auxiliary CE",
+      "evidence": [
+        "inception_v3",
+        "inception_v4",
+        "inception_resnet",
+        "losses",
+        "graph_execution"
+      ]
+    },
+    {
+      "intake": "momentum_iterative_gradient_accumulation",
+      "realization": "Actual neural input gradients,mean-absolute non-targeted normalization and recurrent momentum",
+      "evidence": [
+        "updates",
+        "ensemble",
+        "lifecycle"
+      ]
+    },
+    {
+      "intake": "std_normalized_momentum_gradient",
+      "realization": "Targeted population-std input-gradient normalization and post-accumulation renormalization",
+      "evidence": [
+        "updates",
+        "lifecycle"
+      ]
+    },
+    {
+      "intake": "rounded_clipped_perturbation_step",
+      "realization": "Targeted half-even rounding,step clipping and fixedoriginalprojection;non-targeted sign ascent",
+      "evidence": [
+        "updates",
+        "lifecycle",
+        "image_boundary"
+      ]
+    }
+  ],
+  "limitations": [
+    "Automated Tier 3 review only; no Tier 1 human certification or Tier 2 usage qualification.",
+    "Generic scaling is domain independent; users determine the meaning of rows, columns, units and downstream use.",
+    "Source adapter requires a qualified callable binding. Shape checks do not establish that an arbitrary callback implements the source equations.",
+    "Full serialized graph evidence uses synthetic explicit model states; no pretrained effectiveness or historical TensorFlow binary parity claim.",
+    "Source PNG min-max stretching does not preserve the normalized epsilon bound in saved pixels.",
+    "No source runtime downloads. Numerical packages are pinned; clean installation remains untested.",
+    "Validation runs serially with native pools and Torch intra/inter-op threads at one. Deployment must configure its own thread limits.",
+    "Software modules and callable contracts are recorded separately from internal registered atom dependencies.",
+    "This review does not approve catalog records; native metadata, transaction and served-selection gates remain."
+  ]
+}
