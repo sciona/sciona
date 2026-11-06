@@ -6,6 +6,28 @@ from sciona import dsb_losses as original
 from sciona import dsb_decomposed_losses as candidate
 
 
+def test_registered_detector_validation_never_runs_training_ranker():
+    from sciona.atoms.dl.detection.dsb_lifecycle_steps import validate_detector
+
+    class Detector(torch.nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.weight = torch.nn.Parameter(torch.zeros(1))
+
+        def forward(self, images, coordinates):
+            return None, images + self.weight
+
+    predictions = torch.linspace(-2, 2, 30).reshape(1, 6, 5)
+    labels = torch.zeros_like(predictions)
+    labels[..., 0] = -1
+    model = Detector()
+    with patch.object(candidate, 'highest_scoring_indices', side_effect=AssertionError('training-only ranker called')):
+        metrics = validate_detector(model, [(predictions, labels, torch.zeros(1))])
+    assert metrics['batch_count'] == 1
+    assert metrics['negative_count'] == 6
+    assert not model.training
+
+
 @pytest.mark.parametrize('training', [True, False])
 @pytest.mark.parametrize('num_hard', [0, 1, 2, 20])
 @pytest.mark.parametrize('positives', [True, False])
