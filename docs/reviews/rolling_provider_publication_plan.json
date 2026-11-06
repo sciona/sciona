@@ -1,0 +1,778 @@
+{
+  "records": [
+    {
+      "artifact_id": "9dc67af4-d131-42dc-8bb3-dd3b2e1a7009",
+      "fqdn": "sciona.atoms.ml.tabular.gradient_boosting.rolling_statistics",
+      "version_id": "8ff9681f-f14e-57dd-9237-c34193cdc3a0",
+      "content_hash": "60db40fb38e90f530117dbbb8447664c6ef77ac6d38514f345f3bc77837abeff",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite nonempty rank-one float64 numeric series; supported subset of the existing numeric-array implementation."
+        },
+        {
+          "direction": "input",
+          "name": "window_size",
+          "ordinal": 1,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Positive Python integer width; supported subset. The implementation checks positivity then converts with int."
+        },
+        {
+          "direction": "input",
+          "name": "agg_fns",
+          "ordinal": 2,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty ordered list of mean, std, min, max or sum. Partial startup windows include the current row."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 matrix (len(values),len(agg_fns)); trailing current-inclusive windows with partial startup. std uses ddof=0. Nonfinite outputs fail. Temporal shifting and full-window masking are caller policy."
+        }
+      ],
+      "operation": "Compute ordered trailing mean, population standard deviation, minimum, maximum and sum with partial startup windows including the current row.",
+      "plain_description": "For each position, summarize the values in the trailing window, including that position. Use the available shorter window at the beginning.",
+      "validity_bounds": "Finite nonempty rank-one float64 numeric series; supported subset of the existing numeric-array implementation. Positive Python integer width; supported subset. The implementation checks positivity then converts with int. Nonempty ordered list of mean, std, min, max or sum. Partial startup windows include the current row.",
+      "reuse": "Domain-independent numerical sequence statistics; no retail, period-panel, entity or competition-specific input required.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "qualification": {
+    "format": "rolling-provider-semantics.v1",
+    "passed": true,
+    "approved": false,
+    "proposed_tier": 3,
+    "verdict": "acceptable_with_limits",
+    "catalog_mutations": 0,
+    "synthetic_only": true,
+    "providers": [
+      {
+        "artifact_id": "9dc67af4-d131-42dc-8bb3-dd3b2e1a7009",
+        "fqdn": "sciona.atoms.ml.tabular.gradient_boosting.rolling_statistics",
+        "version_id": "8ff9681f-f14e-57dd-9237-c34193cdc3a0",
+        "content_hash": "60db40fb38e90f530117dbbb8447664c6ef77ac6d38514f345f3bc77837abeff",
+        "interfaces": [
+          {
+            "direction": "input",
+            "name": "values",
+            "ordinal": 0,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Finite nonempty rank-one float64 numeric series; supported subset of the existing numeric-array implementation."
+          },
+          {
+            "direction": "input",
+            "name": "window_size",
+            "ordinal": 1,
+            "type_desc": "int",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Positive Python integer width; supported subset. The implementation checks positivity then converts with int."
+          },
+          {
+            "direction": "input",
+            "name": "agg_fns",
+            "ordinal": 2,
+            "type_desc": "list",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Nonempty ordered list of mean, std, min, max or sum. Partial startup windows include the current row."
+          },
+          {
+            "direction": "output",
+            "name": "result",
+            "ordinal": 0,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Finite float64 matrix (len(values),len(agg_fns)); trailing current-inclusive windows with partial startup. std uses ddof=0. Nonfinite outputs fail. Temporal shifting and full-window masking are caller policy."
+          }
+        ],
+        "operation": "Compute ordered trailing mean, population standard deviation, minimum, maximum and sum with partial startup windows including the current row.",
+        "plain_description": "For each position, summarize the values in the trailing window, including that position. Use the available shorter window at the beginning.",
+        "validity_bounds": "Finite nonempty rank-one float64 numeric series; supported subset of the existing numeric-array implementation. Positive Python integer width; supported subset. The implementation checks positivity then converts with int. Nonempty ordered list of mean, std, min, max or sum. Partial startup windows include the current row.",
+        "reuse": "Domain-independent numerical sequence statistics; no retail, period-panel, entity or competition-specific input required.",
+        "registered_provider_dependencies": []
+      }
+    ],
+    "tests": {
+      "tests": 63,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "software_sha256": {
+      "tests/test_rolling_provider_reuse.py": "5d32f738a52a8bfe35fc506e5fe0a149df2af938dac7aa6a6daa819285bfc789",
+      "tests/test_decomposed_future_sales_features.py": "3d5ae7fd947863e8bc2b65e7919c0bb7054620b1928994a5b6e4b3aee9e7ee7d",
+      "scripts/review_rolling_provider_semantics.py": "4b4847e75b5bf708b812857b4362075d08c7901eb374ad6588613032b1406e53",
+      "scripts/stage_rolling_canonical_records.py": "e7c61ca0e8484881ba399e5f5ccb357fcf5234f09fba46ac3f5f3bdffcf142d6",
+      "scripts/audit_rolling_provider_intake.py": "fe2aa87491f6441edc789280d54e8b6e92d0e33df0278ecde69b721632026844",
+      "sciona/decomposed_future_sales_features.py": "64867330781c1941e61b321e38faa488e08dc65b0490f14dd0be6aab84f5419d",
+      "sciona/future_sales_features.py": "ed275594ec8e2a81dceef57fa4b981dded2ca887d200e7a11a65ced32c2b58e1",
+      "sciona/future_sales_training.py": "39a81d674481df6ea3e33d0a7027a27a35c8c17ab1e05aa93b0f740f35ebe1a2",
+      "sciona/future_sales_worker.py": "a77232bdb88568ed0af39f6312d86a67bed1682a4d8889e907d08868ec8a6894",
+      "sciona/future_sales_contract.py": "5af0f45358949919eb2310938a2a64b22eb35fb42dfb1a58330900fe31dd4b34",
+      "scripts/future_sales_synthetic.py": "3532c8d4a8dcb6d713c6a60623d2cfa0ff7c56cd97e331947e073a56551487b1",
+      "sciona.atoms.ml.tabular.gradient_boosting.atoms": "fbe13604dc943db6b77b9c2f7da1284cb39da90cc0924566cc36e12a2eb8eb72",
+      "sciona.atoms.ml.tabular.gradient_boosting.witnesses": "0556ef13c502830198853c99b50208549598e57763265eecc6b8664083cf1c70",
+      "sciona.ghost.registry": "793723a75d07a88eed39f59d8d4dc327c54adbf75db7a03003516a6f74c81b51",
+      "sciona.ghost.abstract": "9574bed61c8292b2eaf6ff054bcf46504b07e679c521a19d2440396c3ea63670",
+      "sciona.ghost.dimensions": "61be1958aa50725f3c6598d5b5447a806d2549698d5ce3ec243d467816754b7e"
+    },
+    "installed_packages": {
+      "alembic": {
+        "version": "1.18.4",
+        "hashed_files_verified": 102,
+        "active_requirements": [
+          "Mako",
+          "SQLAlchemy>=1.4.23",
+          "typing-extensions>=4.12"
+        ]
+      },
+      "annotated-types": {
+        "version": "0.7.0",
+        "hashed_files_verified": 7,
+        "active_requirements": []
+      },
+      "asttokens": {
+        "version": "2.4.1",
+        "hashed_files_verified": 13,
+        "active_requirements": [
+          "six>=1.12.0"
+        ]
+      },
+      "colorlog": {
+        "version": "6.10.1",
+        "hashed_files_verified": 10,
+        "active_requirements": []
+      },
+      "icontract": {
+        "version": "2.7.3",
+        "hashed_files_verified": 16,
+        "active_requirements": [
+          "asttokens<3,>=2",
+          "typing_extensions"
+        ]
+      },
+      "lightgbm": {
+        "version": "4.7.0",
+        "hashed_files_verified": 17,
+        "active_requirements": [
+          "narwhals>=1.15",
+          "numpy>=1.21.3",
+          "scipy"
+        ]
+      },
+      "mako": {
+        "version": "1.3.10",
+        "hashed_files_verified": 40,
+        "active_requirements": [
+          "MarkupSafe>=0.9.2"
+        ]
+      },
+      "markupsafe": {
+        "version": "3.0.3",
+        "hashed_files_verified": 11,
+        "active_requirements": []
+      },
+      "narwhals": {
+        "version": "2.26.0",
+        "hashed_files_verified": 167,
+        "active_requirements": []
+      },
+      "numpy": {
+        "version": "2.2.6",
+        "hashed_files_verified": 876,
+        "active_requirements": []
+      },
+      "optuna": {
+        "version": "4.8.0",
+        "hashed_files_verified": 232,
+        "active_requirements": [
+          "PyYAML",
+          "alembic>=1.5.0",
+          "colorlog",
+          "numpy",
+          "packaging>=20.0",
+          "sqlalchemy>=1.4.2",
+          "tqdm"
+        ]
+      },
+      "packaging": {
+        "version": "26.3",
+        "hashed_files_verified": 30,
+        "active_requirements": []
+      },
+      "pydantic": {
+        "version": "2.12.5",
+        "hashed_files_verified": 111,
+        "active_requirements": [
+          "annotated-types>=0.6.0",
+          "pydantic-core==2.41.5",
+          "typing-extensions>=4.14.1",
+          "typing-inspection>=0.4.2"
+        ]
+      },
+      "pydantic-core": {
+        "version": "2.41.5",
+        "hashed_files_verified": 9,
+        "active_requirements": [
+          "typing-extensions>=4.14.1"
+        ]
+      },
+      "pyyaml": {
+        "version": "6.0.3",
+        "hashed_files_verified": 24,
+        "active_requirements": []
+      },
+      "scipy": {
+        "version": "1.17.1",
+        "hashed_files_verified": 1423,
+        "active_requirements": [
+          "numpy<2.7,>=1.26.4"
+        ]
+      },
+      "six": {
+        "version": "1.17.0",
+        "hashed_files_verified": 6,
+        "active_requirements": []
+      },
+      "sqlalchemy": {
+        "version": "2.0.48",
+        "hashed_files_verified": 274,
+        "active_requirements": [
+          "typing-extensions>=4.6.0"
+        ]
+      },
+      "tqdm": {
+        "version": "4.67.3",
+        "hashed_files_verified": 40,
+        "active_requirements": []
+      },
+      "typing-extensions": {
+        "version": "4.16.0",
+        "hashed_files_verified": 6,
+        "active_requirements": []
+      },
+      "typing-inspection": {
+        "version": "0.4.2",
+        "hashed_files_verified": 9,
+        "active_requirements": [
+          "typing-extensions>=4.12.0"
+        ]
+      }
+    },
+    "intake_plan_sha256": "5fd93a856763ed8f2115e997f5ca24c8dc4673713668a5e59bfa71a28b39d7f3",
+    "resource_policy": {
+      "native_threads": 1,
+      "test_workers": 1
+    },
+    "limitations": [
+      "Automated Tier 3 qualification only; no Tier 1 human review or Tier 2 usage qualification.",
+      "Reusable numerical trailing statistics include the current row and partial startup windows; forecasting callers must shift and mask as appropriate. The Future Sales graph binds this exact provider and applies both policies explicitly.",
+      "Supported publication inputs are finite nonempty float64 vectors, positive Python integer widths and nonempty ordered lists of mean/std/min/max/sum. The implementation also accepts empty vectors, boolean widths and positive float widths converted with int; strict supported types are caller responsibilities.",
+      "std uses population variance (ddof=0). NumPy floating-point reduction and overflow behavior remain visible; nonfinite aggregate outputs fail the registered postcondition.",
+      "Witness metadata does not prove concrete numerical execution or statistical validity.",
+      "Installed files match their own RECORD hashes; independent publisher authentication, optional extras, clean deployment and other platforms are not certified.",
+      "Synthetic numerical correctness and pipeline parity do not establish empirical forecast accuracy or generalization.",
+      "This review does not approve canonical publication or the corrected original Future Sales CDG."
+    ]
+  },
+  "inserts": [
+    {
+      "table": "references_registry",
+      "keys": {
+        "ref_id": "rolling-provider-review-v1"
+      },
+      "row": {
+        "ref_id": "rolling-provider-review-v1",
+        "ref_type": "web",
+        "title": "Reusable rolling statistics implementation and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/51e0d647/docs/reviews/rolling_provider_semantics.json"
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "9dc67af4-d131-42dc-8bb3-dd3b2e1a7009",
+        "version_id": "8ff9681f-f14e-57dd-9237-c34193cdc3a0",
+        "name": "values"
+      },
+      "row": {
+        "artifact_id": "9dc67af4-d131-42dc-8bb3-dd3b2e1a7009",
+        "version_id": "8ff9681f-f14e-57dd-9237-c34193cdc3a0",
+        "name": "values",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Finite nonempty rank-one float64 numeric series; supported subset of the existing numeric-array implementation.",
+        "dejargonized_description": "Caller supplies values.",
+        "constraints_json": {
+          "parameter_contract": "Finite nonempty rank-one float64 numeric series; supported subset of the existing numeric-array implementation.",
+          "limitations": [
+            "Automated Tier 3 qualification only; no Tier 1 human review or Tier 2 usage qualification.",
+            "Reusable numerical trailing statistics include the current row and partial startup windows; forecasting callers must shift and mask as appropriate. The Future Sales graph binds this exact provider and applies both policies explicitly.",
+            "Supported publication inputs are finite nonempty float64 vectors, positive Python integer widths and nonempty ordered lists of mean/std/min/max/sum. The implementation also accepts empty vectors, boolean widths and positive float widths converted with int; strict supported types are caller responsibilities.",
+            "std uses population variance (ddof=0). NumPy floating-point reduction and overflow behavior remain visible; nonfinite aggregate outputs fail the registered postcondition.",
+            "Witness metadata does not prove concrete numerical execution or statistical validity.",
+            "Installed files match their own RECORD hashes; independent publisher authentication, optional extras, clean deployment and other platforms are not certified.",
+            "Synthetic numerical correctness and pipeline parity do not establish empirical forecast accuracy or generalization.",
+            "This review does not approve canonical publication or the corrected original Future Sales CDG."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "9dc67af4-d131-42dc-8bb3-dd3b2e1a7009",
+        "version_id": "8ff9681f-f14e-57dd-9237-c34193cdc3a0",
+        "name": "window_size"
+      },
+      "row": {
+        "artifact_id": "9dc67af4-d131-42dc-8bb3-dd3b2e1a7009",
+        "version_id": "8ff9681f-f14e-57dd-9237-c34193cdc3a0",
+        "name": "window_size",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "int",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Positive Python integer width; supported subset. The implementation checks positivity then converts with int.",
+        "dejargonized_description": "Caller supplies window size.",
+        "constraints_json": {
+          "parameter_contract": "Positive Python integer width; supported subset. The implementation checks positivity then converts with int.",
+          "limitations": [
+            "Automated Tier 3 qualification only; no Tier 1 human review or Tier 2 usage qualification.",
+            "Reusable numerical trailing statistics include the current row and partial startup windows; forecasting callers must shift and mask as appropriate. The Future Sales graph binds this exact provider and applies both policies explicitly.",
+            "Supported publication inputs are finite nonempty float64 vectors, positive Python integer widths and nonempty ordered lists of mean/std/min/max/sum. The implementation also accepts empty vectors, boolean widths and positive float widths converted with int; strict supported types are caller responsibilities.",
+            "std uses population variance (ddof=0). NumPy floating-point reduction and overflow behavior remain visible; nonfinite aggregate outputs fail the registered postcondition.",
+            "Witness metadata does not prove concrete numerical execution or statistical validity.",
+            "Installed files match their own RECORD hashes; independent publisher authentication, optional extras, clean deployment and other platforms are not certified.",
+            "Synthetic numerical correctness and pipeline parity do not establish empirical forecast accuracy or generalization.",
+            "This review does not approve canonical publication or the corrected original Future Sales CDG."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "9dc67af4-d131-42dc-8bb3-dd3b2e1a7009",
+        "version_id": "8ff9681f-f14e-57dd-9237-c34193cdc3a0",
+        "name": "agg_fns"
+      },
+      "row": {
+        "artifact_id": "9dc67af4-d131-42dc-8bb3-dd3b2e1a7009",
+        "version_id": "8ff9681f-f14e-57dd-9237-c34193cdc3a0",
+        "name": "agg_fns",
+        "position": 2,
+        "kind": "positional_or_keyword",
+        "type_desc": "list",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonempty ordered list of mean, std, min, max or sum. Partial startup windows include the current row.",
+        "dejargonized_description": "Caller supplies agg fns.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty ordered list of mean, std, min, max or sum. Partial startup windows include the current row.",
+          "limitations": [
+            "Automated Tier 3 qualification only; no Tier 1 human review or Tier 2 usage qualification.",
+            "Reusable numerical trailing statistics include the current row and partial startup windows; forecasting callers must shift and mask as appropriate. The Future Sales graph binds this exact provider and applies both policies explicitly.",
+            "Supported publication inputs are finite nonempty float64 vectors, positive Python integer widths and nonempty ordered lists of mean/std/min/max/sum. The implementation also accepts empty vectors, boolean widths and positive float widths converted with int; strict supported types are caller responsibilities.",
+            "std uses population variance (ddof=0). NumPy floating-point reduction and overflow behavior remain visible; nonfinite aggregate outputs fail the registered postcondition.",
+            "Witness metadata does not prove concrete numerical execution or statistical validity.",
+            "Installed files match their own RECORD hashes; independent publisher authentication, optional extras, clean deployment and other platforms are not certified.",
+            "Synthetic numerical correctness and pipeline parity do not establish empirical forecast accuracy or generalization.",
+            "This review does not approve canonical publication or the corrected original Future Sales CDG."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "9dc67af4-d131-42dc-8bb3-dd3b2e1a7009",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "9dc67af4-d131-42dc-8bb3-dd3b2e1a7009",
+        "kind": "technical",
+        "language": "en",
+        "content": "Compute ordered trailing mean, population standard deviation, minimum, maximum and sum with partial startup windows including the current row. Finite nonempty rank-one float64 numeric series; supported subset of the existing numeric-array implementation. Positive Python integer width; supported subset. The implementation checks positivity then converts with int. Nonempty ordered list of mean, std, min, max or sum. Partial startup windows include the current row. Domain-independent numerical sequence statistics; no retail, period-panel, entity or competition-specific input required.",
+        "generated_by": "rolling-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.026667
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "9dc67af4-d131-42dc-8bb3-dd3b2e1a7009",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "9dc67af4-d131-42dc-8bb3-dd3b2e1a7009",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "For each position, summarize the values in the trailing window, including that position. Use the available shorter window at the beginning. Accuracy on new problems must be checked separately.",
+        "generated_by": "rolling-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "artifact_references",
+      "keys": {
+        "artifact_id": "9dc67af4-d131-42dc-8bb3-dd3b2e1a7009",
+        "ref_key": "rolling-provider-review-v1"
+      },
+      "row": {
+        "artifact_id": "9dc67af4-d131-42dc-8bb3-dd3b2e1a7009",
+        "ref_key": "rolling-provider-review-v1",
+        "ref_id": "rolling-provider-review-v1",
+        "title": "Reusable rolling statistics implementation and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/51e0d647/docs/reviews/rolling_provider_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Compute ordered trailing mean, population standard deviation, minimum, maximum and sum with partial startup windows including the current row. Finite nonempty rank-one float64 numeric series; supported subset of the existing numeric-array implementation. Positive Python integer width; supported subset. The implementation checks positivity then converts with int. Nonempty ordered list of mean, std, min, max or sum. Partial startup windows include the current row."
+      }
+    }
+  ],
+  "rollups": [
+    {
+      "table": "artifact_audit_rollups",
+      "key": "artifact_id",
+      "identity": "9dc67af4-d131-42dc-8bb3-dd3b2e1a7009",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 qualification only; no Tier 1 human review or Tier 2 usage qualification.",
+          "Reusable numerical trailing statistics include the current row and partial startup windows; forecasting callers must shift and mask as appropriate. The Future Sales graph binds this exact provider and applies both policies explicitly.",
+          "Supported publication inputs are finite nonempty float64 vectors, positive Python integer widths and nonempty ordered lists of mean/std/min/max/sum. The implementation also accepts empty vectors, boolean widths and positive float widths converted with int; strict supported types are caller responsibilities.",
+          "std uses population variance (ddof=0). NumPy floating-point reduction and overflow behavior remain visible; nonfinite aggregate outputs fail the registered postcondition.",
+          "Witness metadata does not prove concrete numerical execution or statistical validity.",
+          "Installed files match their own RECORD hashes; independent publisher authentication, optional extras, clean deployment and other platforms are not certified.",
+          "Synthetic numerical correctness and pipeline parity do not establish empirical forecast accuracy or generalization.",
+          "This review does not approve canonical publication or the corrected original Future Sales CDG.",
+          "Finite nonempty rank-one float64 numeric series; supported subset of the existing numeric-array implementation. Positive Python integer width; supported subset. The implementation checks positivity then converts with int. Nonempty ordered list of mean, std, min, max or sum. Partial startup windows include the current row."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    }
+  ],
+  "states": {
+    "9dc67af4-d131-42dc-8bb3-dd3b2e1a7009": {
+      "atom": {
+        "status": "approved",
+        "is_publishable": true
+      },
+      "artifact": {
+        "status": "draft",
+        "is_publishable": false
+      }
+    }
+  },
+  "before": {
+    "atoms": "02124c0ec50242c41ea36a76038f69f19d696a8faffe86583dcdd2520f35940b",
+    "artifacts": "77d1735d4cb8c81558bb6edd3a53c9779f7d1fd24976e66afccd2a410c64d3bd",
+    "atom_versions": "ab7d969d7bc78244385a025435e31e50d9fbf58ce41c4b0f4e7ff67ac17434b8",
+    "artifact_versions": "4b9313220dc148e553581bfeca2c916da0266d015579ec0492f29c746f0bb769",
+    "atom_io_specs": "d09df0215bf796c3d9b2f0af514b95a065600a37c1a9e530ac4707d3fd2b5f16",
+    "artifact_io_specs": "c7861bf2c4a73cdd058ba9547532c1ee5334b5d712ae4d0d0d0d3371fa897dc2",
+    "atom_parameters": "eae6916fb4cdae8dd7243e1448a58dd808b88253dd54bef0e6c6311811d56aa9",
+    "artifact_parameters": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_descriptions": "9776327d1a649dc5f03c54d90805662bb79fc8a6c1f1a12ce9a7e2c0cff6a21d",
+    "artifact_descriptions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_references": "0ca13a4811c07997d6bc629323b6c8d223b18b269c611d12c314c5a98af00918",
+    "artifact_references": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_audit_rollups": "d2064d72d7498c86a3ef2064f84b37ccb41ca8c516e776ed671377d0fe8bf806",
+    "artifact_audit_rollups": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_audit_evidence": "9f1bc5a66b3a047faeb0442e59105431ac463201312a1f103918a1a7351e42d0"
+  },
+  "preserved": {
+    "atom_versions": [
+      {
+        "row": {
+          "s3_key": "local-seed/atoms/60db40fb38e90f530117dbbb8447664c6ef77ac6d38514f345f3bc77837abeff.tar.gz",
+          "semver": "0.0.0+local.60db40fb38e9",
+          "atom_id": "9dc67af4-d131-42dc-8bb3-dd3b2e1a7009",
+          "is_latest": true,
+          "created_at": "2026-08-11T23:15:30.956392+00:00",
+          "trust_tier": 3,
+          "version_id": "8ff9681f-f14e-57dd-9237-c34193cdc3a0",
+          "fingerprint": "c74531de1679f6c90e0be6ced9d4e2da871850d1970f9316e838db042eb72ece",
+          "content_hash": "60db40fb38e90f530117dbbb8447664c6ef77ac6d38514f345f3bc77837abeff",
+          "derives_from": null
+        }
+      }
+    ],
+    "atom_parameters": [
+      {
+        "row": {
+          "kind": "positional_or_keyword",
+          "name": "agg_fns",
+          "atom_id": "9dc67af4-d131-42dc-8bb3-dd3b2e1a7009",
+          "position": 2,
+          "required": true,
+          "type_desc": "Sequence[str]",
+          "version_id": null,
+          "parameter_id": "8ba11aac-c27d-4852-8416-e761b7dbd54d",
+          "constraints_json": {},
+          "default_value_repr": "",
+          "technical_description": "",
+          "dejargonized_description": ""
+        }
+      },
+      {
+        "row": {
+          "kind": "positional_or_keyword",
+          "name": "values",
+          "atom_id": "9dc67af4-d131-42dc-8bb3-dd3b2e1a7009",
+          "position": 0,
+          "required": true,
+          "type_desc": "NDArray[np.float64]",
+          "version_id": null,
+          "parameter_id": "269be54b-ad13-481e-bb43-ceb092927801",
+          "constraints_json": {},
+          "default_value_repr": "",
+          "technical_description": "",
+          "dejargonized_description": ""
+        }
+      },
+      {
+        "row": {
+          "kind": "positional_or_keyword",
+          "name": "window_size",
+          "atom_id": "9dc67af4-d131-42dc-8bb3-dd3b2e1a7009",
+          "position": 1,
+          "required": true,
+          "type_desc": "int",
+          "version_id": null,
+          "parameter_id": "4e781549-48e4-4477-8810-ad24c3ca44c0",
+          "constraints_json": {},
+          "default_value_repr": "",
+          "technical_description": "",
+          "dejargonized_description": ""
+        }
+      }
+    ],
+    "atom_references": [
+      {
+        "row": {
+          "doi": null,
+          "url": "https://github.com/numpy/numpy",
+          "year": 2026,
+          "title": "NumPy",
+          "ref_id": "repo_numpy",
+          "source": "manual",
+          "atom_id": "9dc67af4-d131-42dc-8bb3-dd3b2e1a7009",
+          "authors": [
+            "The NumPy developers"
+          ],
+          "ref_key": "repo_numpy",
+          "verified": false,
+          "confidence": "high",
+          "created_at": "2026-08-11T23:13:10.566939+00:00",
+          "reference_id": "30d1391f-953e-491c-a41a-10499b31cb9d",
+          "matched_nodes": [],
+          "relevance_note": "Uses NumPy reduction semantics for rolling tabular feature summaries."
+        }
+      }
+    ],
+    "atom_io_specs": [
+      {
+        "row": {
+          "name": "agg_fns",
+          "atom_id": "9dc67af4-d131-42dc-8bb3-dd3b2e1a7009",
+          "ordinal": 2,
+          "required": true,
+          "direction": "input",
+          "type_desc": "Sequence[str]",
+          "io_spec_id": "917bea41-ecb4-4ed9-9f45-0217209fa38c",
+          "version_id": null,
+          "constraints": "mean|std|min|max|sum",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "result",
+          "atom_id": "9dc67af4-d131-42dc-8bb3-dd3b2e1a7009",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "NDArray[np.float64]",
+          "io_spec_id": "39e47a8a-dab8-4aa8-a260-64469e8b1ef1",
+          "version_id": null,
+          "constraints": "shape (len(values), len(agg_fns))",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "values",
+          "atom_id": "9dc67af4-d131-42dc-8bb3-dd3b2e1a7009",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "NDArray[np.float64]",
+          "io_spec_id": "5bccc57f-2868-48b3-b8cd-c54a35b54a7f",
+          "version_id": null,
+          "constraints": "finite 1D",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "window_size",
+          "atom_id": "9dc67af4-d131-42dc-8bb3-dd3b2e1a7009",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "int",
+          "io_spec_id": "d4aeace5-111e-46be-a3f0-8a83e7a2be40",
+          "version_id": null,
+          "constraints": "positive",
+          "default_value_repr": ""
+        }
+      }
+    ],
+    "artifact_versions": [
+      {
+        "row": {
+          "s3_key": "local-seed/atoms/60db40fb38e90f530117dbbb8447664c6ef77ac6d38514f345f3bc77837abeff.tar.gz",
+          "semver": "0.0.0+local.60db40fb38e9",
+          "is_latest": true,
+          "created_at": "2026-11-06T11:05:27.989244+00:00",
+          "trust_tier": 3,
+          "version_id": "8ff9681f-f14e-57dd-9237-c34193cdc3a0",
+          "artifact_id": "9dc67af4-d131-42dc-8bb3-dd3b2e1a7009",
+          "fingerprint": "c74531de1679f6c90e0be6ced9d4e2da871850d1970f9316e838db042eb72ece",
+          "content_hash": "60db40fb38e90f530117dbbb8447664c6ef77ac6d38514f345f3bc77837abeff",
+          "derives_from": null
+        }
+      }
+    ],
+    "artifact_parameters": [],
+    "artifact_references": [],
+    "artifact_io_specs": [
+      {
+        "row": {
+          "name": "agg_fns",
+          "ordinal": 2,
+          "required": true,
+          "direction": "input",
+          "type_desc": "list",
+          "io_spec_id": "aac1792d-184f-4c72-bed5-dca29543b3e0",
+          "version_id": "8ff9681f-f14e-57dd-9237-c34193cdc3a0",
+          "artifact_id": "9dc67af4-d131-42dc-8bb3-dd3b2e1a7009",
+          "constraints": "Nonempty ordered list of mean, std, min, max or sum. Partial startup windows include the current row.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "result",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "ndarray",
+          "io_spec_id": "422c5c9a-f21a-45f9-ac2b-d08233d9151f",
+          "version_id": "8ff9681f-f14e-57dd-9237-c34193cdc3a0",
+          "artifact_id": "9dc67af4-d131-42dc-8bb3-dd3b2e1a7009",
+          "constraints": "Finite float64 matrix (len(values),len(agg_fns)); trailing current-inclusive windows with partial startup. std uses ddof=0. Nonfinite outputs fail. Temporal shifting and full-window masking are caller policy.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "values",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "49b6e5db-abfd-4f21-8691-29e4f2261222",
+          "version_id": "8ff9681f-f14e-57dd-9237-c34193cdc3a0",
+          "artifact_id": "9dc67af4-d131-42dc-8bb3-dd3b2e1a7009",
+          "constraints": "Finite nonempty rank-one float64 numeric series; supported subset of the existing numeric-array implementation.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "window_size",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "int",
+          "io_spec_id": "1a038d93-af23-4c60-97c6-199b8fb4145c",
+          "version_id": "8ff9681f-f14e-57dd-9237-c34193cdc3a0",
+          "artifact_id": "9dc67af4-d131-42dc-8bb3-dd3b2e1a7009",
+          "constraints": "Positive Python integer width; supported subset. The implementation checks positivity then converts with int.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      }
+    ],
+    "artifact_audit_evidence": [
+      {
+        "row": {
+          "passed": true,
+          "status": "completed",
+          "details": {
+            "scope": "Exact existing identity mirrored as draft with explicit supported interface; not publication approval.",
+            "plan_sha256": "5fd93a856763ed8f2115e997f5ca24c8dc4673713668a5e59bfa71a28b39d7f3",
+            "source_sha256": "fbe13604dc943db6b77b9c2f7da1284cb39da90cc0924566cc36e12a2eb8eb72"
+          },
+          "audit_type": "asset_integrity_check",
+          "created_at": "2026-11-06T11:05:27.989244+00:00",
+          "version_id": "8ff9681f-f14e-57dd-9237-c34193cdc3a0",
+          "artifact_id": "9dc67af4-d131-42dc-8bb3-dd3b2e1a7009",
+          "evidence_id": "a5bffb74-1193-5e7d-9aa7-da39c4c6c756",
+          "source_kind": "automated",
+          "runner_version": "rolling-canonical-intake.v1",
+          "review_basis_at": null,
+          "run_duration_ms": null,
+          "source_revision": "",
+          "upstream_version": ""
+        }
+      }
+    ]
+  },
+  "legacy_sha256": "66bf95ab0dec56cff45deca062ba64d69b830605804fa632b1112b6b0e251264",
+  "publisher_sha256": "4ef962e0c03ebb8b5f24dd06006d17671b9b11c7b5c38d3f2fa04037fde4eb2b",
+  "review_sha256": "2b97c075391ef8c221c5cc6d469030265cabf6e998d214f97e41969fdb9cc3e2"
+}
