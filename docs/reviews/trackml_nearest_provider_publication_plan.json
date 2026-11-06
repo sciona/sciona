@@ -1,0 +1,1632 @@
+{
+  "records": [
+    {
+      "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+      "fqdn": "sciona.atoms.particle_tracking.helix_geometry.helix_nearest_point_distance",
+      "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+      "content_hash": "86aeeb32fed99d0cb8e7837d22728e73366c5efaeb3fa7e821a9a3588666b86c",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "x0",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs."
+        },
+        {
+          "direction": "input",
+          "name": "y0",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs."
+        },
+        {
+          "direction": "input",
+          "name": "z0",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs."
+        },
+        {
+          "direction": "input",
+          "name": "hel_xm",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs."
+        },
+        {
+          "direction": "input",
+          "name": "hel_ym",
+          "ordinal": 4,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs."
+        },
+        {
+          "direction": "input",
+          "name": "hel_r",
+          "ordinal": 5,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs."
+        },
+        {
+          "direction": "input",
+          "name": "hel_pitch",
+          "ordinal": 6,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs."
+        },
+        {
+          "direction": "input",
+          "name": "x",
+          "ordinal": 7,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 target coordinate vector, in a consistent caller-defined length unit. Qualified domain excludes nonfinite intermediate arithmetic and outputs."
+        },
+        {
+          "direction": "input",
+          "name": "y",
+          "ordinal": 8,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 target coordinate vector, in a consistent caller-defined length unit. Qualified domain excludes nonfinite intermediate arithmetic and outputs."
+        },
+        {
+          "direction": "input",
+          "name": "z",
+          "ordinal": 9,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty aligned finite float64 target coordinate vector, in a consistent caller-defined length unit. Qualified domain excludes nonfinite intermediate arithmetic and outputs."
+        },
+        {
+          "direction": "input",
+          "name": "iterations",
+          "ordinal": 10,
+          "type_desc": "int",
+          "required": false,
+          "default_value_repr": "3",
+          "constraints": "Positive integer fixed Newton iteration count; default 3. This approximation does not guarantee a global minimum or convergence. Qualified domain excludes nonfinite intermediate arithmetic and outputs."
+        },
+        {
+          "direction": "output",
+          "name": "x1",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned finite float64 vector in the caller-defined length unit. Fixed-iteration projected point coordinate or Euclidean target distance; distance is nonnegative. No global-optimum guarantee."
+        },
+        {
+          "direction": "output",
+          "name": "y1",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned finite float64 vector in the caller-defined length unit. Fixed-iteration projected point coordinate or Euclidean target distance; distance is nonnegative. No global-optimum guarantee."
+        },
+        {
+          "direction": "output",
+          "name": "z1",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned finite float64 vector in the caller-defined length unit. Fixed-iteration projected point coordinate or Euclidean target distance; distance is nonnegative. No global-optimum guarantee."
+        },
+        {
+          "direction": "output",
+          "name": "dist",
+          "ordinal": 3,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned finite float64 vector in the caller-defined length unit. Fixed-iteration projected point coordinate or Euclidean target distance; distance is nonnegative. No global-optimum guarantee."
+        }
+      ],
+      "operation": "Approximate a nearest point on each helix using a fixed number of Newton steps, then report Euclidean distance.",
+      "plain_description": "Estimate a nearby point on a spiral and its distance from a target point.",
+      "validity_bounds": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Nonempty aligned finite float64 target coordinate vector, in a consistent caller-defined length unit. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Nonempty aligned finite float64 target coordinate vector, in a consistent caller-defined length unit. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Nonempty aligned finite float64 target coordinate vector, in a consistent caller-defined length unit. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Positive integer fixed Newton iteration count; default 3. This approximation does not guarantee a global minimum or convergence. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Aligned finite float64 vector in the caller-defined length unit. Fixed-iteration projected point coordinate or Euclidean target distance; distance is nonnegative. No global-optimum guarantee. Aligned finite float64 vector in the caller-defined length unit. Fixed-iteration projected point coordinate or Euclidean target distance; distance is nonnegative. No global-optimum guarantee. Aligned finite float64 vector in the caller-defined length unit. Fixed-iteration projected point coordinate or Euclidean target distance; distance is nonnegative. No global-optimum guarantee. Aligned finite float64 vector in the caller-defined length unit. Fixed-iteration projected point coordinate or Euclidean target distance; distance is nonnegative. No global-optimum guarantee.",
+      "reuse": "Numeric geometry with caller-defined consistent units; no detector topology, field strength, particle identity or calibration map is hardcoded.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "qualification": {
+    "format": "trackml_nearest-provider-semantics.v1",
+    "passed": true,
+    "approved": false,
+    "proposed_tier": 3,
+    "verdict": "acceptable_with_limits",
+    "catalog_mutations": 0,
+    "synthetic_only": true,
+    "providers": [
+      {
+        "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+        "fqdn": "sciona.atoms.particle_tracking.helix_geometry.helix_nearest_point_distance",
+        "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+        "content_hash": "86aeeb32fed99d0cb8e7837d22728e73366c5efaeb3fa7e821a9a3588666b86c",
+        "interfaces": [
+          {
+            "direction": "input",
+            "name": "x0",
+            "ordinal": 0,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs."
+          },
+          {
+            "direction": "input",
+            "name": "y0",
+            "ordinal": 1,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs."
+          },
+          {
+            "direction": "input",
+            "name": "z0",
+            "ordinal": 2,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs."
+          },
+          {
+            "direction": "input",
+            "name": "hel_xm",
+            "ordinal": 3,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs."
+          },
+          {
+            "direction": "input",
+            "name": "hel_ym",
+            "ordinal": 4,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs."
+          },
+          {
+            "direction": "input",
+            "name": "hel_r",
+            "ordinal": 5,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs."
+          },
+          {
+            "direction": "input",
+            "name": "hel_pitch",
+            "ordinal": 6,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs."
+          },
+          {
+            "direction": "input",
+            "name": "x",
+            "ordinal": 7,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Nonempty aligned finite float64 target coordinate vector, in a consistent caller-defined length unit. Qualified domain excludes nonfinite intermediate arithmetic and outputs."
+          },
+          {
+            "direction": "input",
+            "name": "y",
+            "ordinal": 8,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Nonempty aligned finite float64 target coordinate vector, in a consistent caller-defined length unit. Qualified domain excludes nonfinite intermediate arithmetic and outputs."
+          },
+          {
+            "direction": "input",
+            "name": "z",
+            "ordinal": 9,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Nonempty aligned finite float64 target coordinate vector, in a consistent caller-defined length unit. Qualified domain excludes nonfinite intermediate arithmetic and outputs."
+          },
+          {
+            "direction": "input",
+            "name": "iterations",
+            "ordinal": 10,
+            "type_desc": "int",
+            "required": false,
+            "default_value_repr": "3",
+            "constraints": "Positive integer fixed Newton iteration count; default 3. This approximation does not guarantee a global minimum or convergence. Qualified domain excludes nonfinite intermediate arithmetic and outputs."
+          },
+          {
+            "direction": "output",
+            "name": "x1",
+            "ordinal": 0,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Aligned finite float64 vector in the caller-defined length unit. Fixed-iteration projected point coordinate or Euclidean target distance; distance is nonnegative. No global-optimum guarantee."
+          },
+          {
+            "direction": "output",
+            "name": "y1",
+            "ordinal": 1,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Aligned finite float64 vector in the caller-defined length unit. Fixed-iteration projected point coordinate or Euclidean target distance; distance is nonnegative. No global-optimum guarantee."
+          },
+          {
+            "direction": "output",
+            "name": "z1",
+            "ordinal": 2,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Aligned finite float64 vector in the caller-defined length unit. Fixed-iteration projected point coordinate or Euclidean target distance; distance is nonnegative. No global-optimum guarantee."
+          },
+          {
+            "direction": "output",
+            "name": "dist",
+            "ordinal": 3,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Aligned finite float64 vector in the caller-defined length unit. Fixed-iteration projected point coordinate or Euclidean target distance; distance is nonnegative. No global-optimum guarantee."
+          }
+        ],
+        "operation": "Approximate a nearest point on each helix using a fixed number of Newton steps, then report Euclidean distance.",
+        "plain_description": "Estimate a nearby point on a spiral and its distance from a target point.",
+        "validity_bounds": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Nonempty aligned finite float64 target coordinate vector, in a consistent caller-defined length unit. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Nonempty aligned finite float64 target coordinate vector, in a consistent caller-defined length unit. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Nonempty aligned finite float64 target coordinate vector, in a consistent caller-defined length unit. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Positive integer fixed Newton iteration count; default 3. This approximation does not guarantee a global minimum or convergence. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Aligned finite float64 vector in the caller-defined length unit. Fixed-iteration projected point coordinate or Euclidean target distance; distance is nonnegative. No global-optimum guarantee. Aligned finite float64 vector in the caller-defined length unit. Fixed-iteration projected point coordinate or Euclidean target distance; distance is nonnegative. No global-optimum guarantee. Aligned finite float64 vector in the caller-defined length unit. Fixed-iteration projected point coordinate or Euclidean target distance; distance is nonnegative. No global-optimum guarantee. Aligned finite float64 vector in the caller-defined length unit. Fixed-iteration projected point coordinate or Euclidean target distance; distance is nonnegative. No global-optimum guarantee.",
+        "reuse": "Numeric geometry with caller-defined consistent units; no detector topology, field strength, particle identity or calibration map is hardcoded.",
+        "registered_provider_dependencies": []
+      }
+    ],
+    "tests": {
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exact_source_cases": 216,
+    "analytic_cases": 36,
+    "software_sha256": {
+      "tests/test_trackml_nearest_provider_reuse.py": "ecd54d85bb9f92ede0b1e6c0789abf4f155859fbaf7cb9d0a5b11f44d7f2cc77",
+      "scripts/review_trackml_nearest_provider_semantics.py": "b0c79d388446c7ffd2b415f40ab494563e1684a3628638d9d750162432efea2e",
+      "scripts/review_trackml_geometry_provider_semantics.py": "c1d650e245a181370160d0d859871cdc6fb4d0b3b10a1e82c8f309423bb575b8",
+      "scripts/review_trackml_nearest_reuse.py": "221410f2735bf9c13a3da5c394b155cabed8842a1459640426b8a0373839726b",
+      "scripts/stage_trackml_nearest_canonical_records.py": "feb5b7a5c2a967e1faea0ba1696b4f8ecffd6fc6c47fbe18c9a2528b389d4efb",
+      "scripts/audit_trackml_nearest_intake.py": "d5e816cab8fa9ea5793aead3e10d1e21d3786f3c1fd4ebb52a39761f3450bc26",
+      "sciona/trackml_nearest.py": "28ffa9afe1cc1d65b68423c6423d6ff6ebdc4c4630f92787ef91752657f73773",
+      "sciona/trackml_helix.py": "eb8f4c0895d7ae63618e4f143cc5f04badc4ee98e47622dee0e60fa7db984b05",
+      "sciona/decomposed_trackml_nearest.py": "fe95731f967f5a83d53b4a4ef41db5d35919756d0d7db7aa6900e218f6abdd7d",
+      "sciona/ghost/decorators.py": "9c29d4fd89992fd15e3cd48fc39b4e36e5815201f6cd714ea567c12c5a2deed8",
+      "sciona/ghost/registry.py": "793723a75d07a88eed39f59d8d4dc327c54adbf75db7a03003516a6f74c81b51",
+      "sciona/ghost/dimensions.py": "61be1958aa50725f3c6598d5b5447a806d2549698d5ce3ec243d467816754b7e",
+      "sciona-atoms-physics/src/sciona/atoms/particle_tracking/helix_geometry/atoms.py": "26677db3581b8be023b489ddf956d71328aea5e66631afa4c00b3601914dfd42",
+      "sciona-atoms-physics/src/sciona/atoms/particle_tracking/helix_geometry/expressions.py": "6a929f5e464e2353e4d5b392e247d390e4b82eb5b03e1e95878c5d779133b544",
+      "sciona-atoms-physics/src/sciona/atoms/particle_tracking/helix_geometry/witnesses.py": "3071db17f2046e612dbe5e3c0f58ca8947064380e9941e6c5300a970b6fa0b12",
+      "sciona-atoms-physics/src/sciona/atoms/particle_tracking/helix_geometry/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "installed_packages": {
+      "annotated-types": {
+        "version": "0.7.0",
+        "hashed_files_verified": 7,
+        "active_requirements": []
+      },
+      "asttokens": {
+        "version": "2.4.1",
+        "hashed_files_verified": 13,
+        "active_requirements": [
+          "six>=1.12.0"
+        ]
+      },
+      "icontract": {
+        "version": "2.7.3",
+        "hashed_files_verified": 16,
+        "active_requirements": [
+          "asttokens<3,>=2",
+          "typing_extensions"
+        ]
+      },
+      "mpmath": {
+        "version": "1.3.0",
+        "hashed_files_verified": 92,
+        "active_requirements": []
+      },
+      "numpy": {
+        "version": "2.2.6",
+        "hashed_files_verified": 876,
+        "active_requirements": []
+      },
+      "pydantic": {
+        "version": "2.12.5",
+        "hashed_files_verified": 111,
+        "active_requirements": [
+          "annotated-types>=0.6.0",
+          "pydantic-core==2.41.5",
+          "typing-extensions>=4.14.1",
+          "typing-inspection>=0.4.2"
+        ]
+      },
+      "pydantic-core": {
+        "version": "2.41.5",
+        "hashed_files_verified": 9,
+        "active_requirements": [
+          "typing-extensions>=4.14.1"
+        ]
+      },
+      "six": {
+        "version": "1.17.0",
+        "hashed_files_verified": 6,
+        "active_requirements": []
+      },
+      "sympy": {
+        "version": "1.14.0",
+        "hashed_files_verified": 1571,
+        "active_requirements": [
+          "mpmath<1.4,>=1.1.0"
+        ]
+      },
+      "threadpoolctl": {
+        "version": "3.6.0",
+        "hashed_files_verified": 5,
+        "active_requirements": []
+      },
+      "typing-extensions": {
+        "version": "4.16.0",
+        "hashed_files_verified": 6,
+        "active_requirements": []
+      },
+      "typing-inspection": {
+        "version": "0.4.2",
+        "hashed_files_verified": 9,
+        "active_requirements": [
+          "typing-extensions>=4.12.0"
+        ]
+      }
+    },
+    "intake_plan_sha256": "115d6946262530dbb12d66e9a7958d1177027bf0820711df07c6e8356e79bb1b",
+    "resource_policy": {
+      "serial_tests": true,
+      "native_threads": 1
+    },
+    "limitations": [
+      "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+      "Fixed positive integer Newton iteration count. Arbitrary targets have no convergence or global-optimum guarantee; returned coordinates are an approximation.",
+      "Finite scalar or aligned float64 helix parameters and nonempty aligned finite float64 target vectors, with consistent caller-defined length units, nonnegative radius and nonzero pitch.",
+      "Initial coordinates must lie on the specified helix. Finite intermediate arithmetic and outputs are required; singular Newton steps, overflow and undefined zero-pitch geometry are excluded.",
+      "The provider does not independently validate every input precondition. Qualified callers must enforce domain constraints; synthetic checks are not proof over all rounded inputs.",
+      "The symbolic expression describes Euclidean distance, not global optimality. The ghost witness describes output shapes, not numerical correctness.",
+      "The source-compatible tracking boundary bypasses empty batches; four-output tracking call sites do not require optional phase or arc-length outputs.",
+      "Numeric geometry is reusable with caller-defined consistent units. Detector topology, field strength, calibration maps, candidate ranking and lifecycle policy remain separate.",
+      "Installed RECORD validation does not authenticate publisher wheels, clean deployment or other platforms.",
+      "Canonical publication and original TrackML CDG qualification remain separate actions; legacy history is preserved."
+    ]
+  },
+  "inserts": [
+    {
+      "table": "references_registry",
+      "keys": {
+        "ref_id": "trackml_nearest-provider-review-v1"
+      },
+      "row": {
+        "ref_id": "trackml_nearest-provider-review-v1",
+        "ref_type": "web",
+        "title": "Reusable nearest-helix approximation synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/d6561c9c/docs/reviews/trackml_nearest_provider_semantics.json"
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+        "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+        "name": "x0"
+      },
+      "row": {
+        "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+        "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+        "name": "x0",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs.",
+        "dejargonized_description": "Caller supplies x0.",
+        "constraints_json": {
+          "parameter_contract": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Fixed positive integer Newton iteration count. Arbitrary targets have no convergence or global-optimum guarantee; returned coordinates are an approximation.",
+            "Finite scalar or aligned float64 helix parameters and nonempty aligned finite float64 target vectors, with consistent caller-defined length units, nonnegative radius and nonzero pitch.",
+            "Initial coordinates must lie on the specified helix. Finite intermediate arithmetic and outputs are required; singular Newton steps, overflow and undefined zero-pitch geometry are excluded.",
+            "The provider does not independently validate every input precondition. Qualified callers must enforce domain constraints; synthetic checks are not proof over all rounded inputs.",
+            "The symbolic expression describes Euclidean distance, not global optimality. The ghost witness describes output shapes, not numerical correctness.",
+            "The source-compatible tracking boundary bypasses empty batches; four-output tracking call sites do not require optional phase or arc-length outputs.",
+            "Numeric geometry is reusable with caller-defined consistent units. Detector topology, field strength, calibration maps, candidate ranking and lifecycle policy remain separate.",
+            "Installed RECORD validation does not authenticate publisher wheels, clean deployment or other platforms.",
+            "Canonical publication and original TrackML CDG qualification remain separate actions; legacy history is preserved."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+        "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+        "name": "y0"
+      },
+      "row": {
+        "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+        "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+        "name": "y0",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs.",
+        "dejargonized_description": "Caller supplies y0.",
+        "constraints_json": {
+          "parameter_contract": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Fixed positive integer Newton iteration count. Arbitrary targets have no convergence or global-optimum guarantee; returned coordinates are an approximation.",
+            "Finite scalar or aligned float64 helix parameters and nonempty aligned finite float64 target vectors, with consistent caller-defined length units, nonnegative radius and nonzero pitch.",
+            "Initial coordinates must lie on the specified helix. Finite intermediate arithmetic and outputs are required; singular Newton steps, overflow and undefined zero-pitch geometry are excluded.",
+            "The provider does not independently validate every input precondition. Qualified callers must enforce domain constraints; synthetic checks are not proof over all rounded inputs.",
+            "The symbolic expression describes Euclidean distance, not global optimality. The ghost witness describes output shapes, not numerical correctness.",
+            "The source-compatible tracking boundary bypasses empty batches; four-output tracking call sites do not require optional phase or arc-length outputs.",
+            "Numeric geometry is reusable with caller-defined consistent units. Detector topology, field strength, calibration maps, candidate ranking and lifecycle policy remain separate.",
+            "Installed RECORD validation does not authenticate publisher wheels, clean deployment or other platforms.",
+            "Canonical publication and original TrackML CDG qualification remain separate actions; legacy history is preserved."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+        "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+        "name": "z0"
+      },
+      "row": {
+        "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+        "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+        "name": "z0",
+        "position": 2,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs.",
+        "dejargonized_description": "Caller supplies z0.",
+        "constraints_json": {
+          "parameter_contract": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Fixed positive integer Newton iteration count. Arbitrary targets have no convergence or global-optimum guarantee; returned coordinates are an approximation.",
+            "Finite scalar or aligned float64 helix parameters and nonempty aligned finite float64 target vectors, with consistent caller-defined length units, nonnegative radius and nonzero pitch.",
+            "Initial coordinates must lie on the specified helix. Finite intermediate arithmetic and outputs are required; singular Newton steps, overflow and undefined zero-pitch geometry are excluded.",
+            "The provider does not independently validate every input precondition. Qualified callers must enforce domain constraints; synthetic checks are not proof over all rounded inputs.",
+            "The symbolic expression describes Euclidean distance, not global optimality. The ghost witness describes output shapes, not numerical correctness.",
+            "The source-compatible tracking boundary bypasses empty batches; four-output tracking call sites do not require optional phase or arc-length outputs.",
+            "Numeric geometry is reusable with caller-defined consistent units. Detector topology, field strength, calibration maps, candidate ranking and lifecycle policy remain separate.",
+            "Installed RECORD validation does not authenticate publisher wheels, clean deployment or other platforms.",
+            "Canonical publication and original TrackML CDG qualification remain separate actions; legacy history is preserved."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+        "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+        "name": "hel_xm"
+      },
+      "row": {
+        "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+        "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+        "name": "hel_xm",
+        "position": 3,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs.",
+        "dejargonized_description": "Caller supplies hel xm.",
+        "constraints_json": {
+          "parameter_contract": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Fixed positive integer Newton iteration count. Arbitrary targets have no convergence or global-optimum guarantee; returned coordinates are an approximation.",
+            "Finite scalar or aligned float64 helix parameters and nonempty aligned finite float64 target vectors, with consistent caller-defined length units, nonnegative radius and nonzero pitch.",
+            "Initial coordinates must lie on the specified helix. Finite intermediate arithmetic and outputs are required; singular Newton steps, overflow and undefined zero-pitch geometry are excluded.",
+            "The provider does not independently validate every input precondition. Qualified callers must enforce domain constraints; synthetic checks are not proof over all rounded inputs.",
+            "The symbolic expression describes Euclidean distance, not global optimality. The ghost witness describes output shapes, not numerical correctness.",
+            "The source-compatible tracking boundary bypasses empty batches; four-output tracking call sites do not require optional phase or arc-length outputs.",
+            "Numeric geometry is reusable with caller-defined consistent units. Detector topology, field strength, calibration maps, candidate ranking and lifecycle policy remain separate.",
+            "Installed RECORD validation does not authenticate publisher wheels, clean deployment or other platforms.",
+            "Canonical publication and original TrackML CDG qualification remain separate actions; legacy history is preserved."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+        "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+        "name": "hel_ym"
+      },
+      "row": {
+        "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+        "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+        "name": "hel_ym",
+        "position": 4,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs.",
+        "dejargonized_description": "Caller supplies hel ym.",
+        "constraints_json": {
+          "parameter_contract": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Fixed positive integer Newton iteration count. Arbitrary targets have no convergence or global-optimum guarantee; returned coordinates are an approximation.",
+            "Finite scalar or aligned float64 helix parameters and nonempty aligned finite float64 target vectors, with consistent caller-defined length units, nonnegative radius and nonzero pitch.",
+            "Initial coordinates must lie on the specified helix. Finite intermediate arithmetic and outputs are required; singular Newton steps, overflow and undefined zero-pitch geometry are excluded.",
+            "The provider does not independently validate every input precondition. Qualified callers must enforce domain constraints; synthetic checks are not proof over all rounded inputs.",
+            "The symbolic expression describes Euclidean distance, not global optimality. The ghost witness describes output shapes, not numerical correctness.",
+            "The source-compatible tracking boundary bypasses empty batches; four-output tracking call sites do not require optional phase or arc-length outputs.",
+            "Numeric geometry is reusable with caller-defined consistent units. Detector topology, field strength, calibration maps, candidate ranking and lifecycle policy remain separate.",
+            "Installed RECORD validation does not authenticate publisher wheels, clean deployment or other platforms.",
+            "Canonical publication and original TrackML CDG qualification remain separate actions; legacy history is preserved."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+        "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+        "name": "hel_r"
+      },
+      "row": {
+        "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+        "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+        "name": "hel_r",
+        "position": 5,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs.",
+        "dejargonized_description": "Caller supplies hel r.",
+        "constraints_json": {
+          "parameter_contract": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Fixed positive integer Newton iteration count. Arbitrary targets have no convergence or global-optimum guarantee; returned coordinates are an approximation.",
+            "Finite scalar or aligned float64 helix parameters and nonempty aligned finite float64 target vectors, with consistent caller-defined length units, nonnegative radius and nonzero pitch.",
+            "Initial coordinates must lie on the specified helix. Finite intermediate arithmetic and outputs are required; singular Newton steps, overflow and undefined zero-pitch geometry are excluded.",
+            "The provider does not independently validate every input precondition. Qualified callers must enforce domain constraints; synthetic checks are not proof over all rounded inputs.",
+            "The symbolic expression describes Euclidean distance, not global optimality. The ghost witness describes output shapes, not numerical correctness.",
+            "The source-compatible tracking boundary bypasses empty batches; four-output tracking call sites do not require optional phase or arc-length outputs.",
+            "Numeric geometry is reusable with caller-defined consistent units. Detector topology, field strength, calibration maps, candidate ranking and lifecycle policy remain separate.",
+            "Installed RECORD validation does not authenticate publisher wheels, clean deployment or other platforms.",
+            "Canonical publication and original TrackML CDG qualification remain separate actions; legacy history is preserved."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+        "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+        "name": "hel_pitch"
+      },
+      "row": {
+        "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+        "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+        "name": "hel_pitch",
+        "position": 6,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs.",
+        "dejargonized_description": "Caller supplies hel pitch.",
+        "constraints_json": {
+          "parameter_contract": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Fixed positive integer Newton iteration count. Arbitrary targets have no convergence or global-optimum guarantee; returned coordinates are an approximation.",
+            "Finite scalar or aligned float64 helix parameters and nonempty aligned finite float64 target vectors, with consistent caller-defined length units, nonnegative radius and nonzero pitch.",
+            "Initial coordinates must lie on the specified helix. Finite intermediate arithmetic and outputs are required; singular Newton steps, overflow and undefined zero-pitch geometry are excluded.",
+            "The provider does not independently validate every input precondition. Qualified callers must enforce domain constraints; synthetic checks are not proof over all rounded inputs.",
+            "The symbolic expression describes Euclidean distance, not global optimality. The ghost witness describes output shapes, not numerical correctness.",
+            "The source-compatible tracking boundary bypasses empty batches; four-output tracking call sites do not require optional phase or arc-length outputs.",
+            "Numeric geometry is reusable with caller-defined consistent units. Detector topology, field strength, calibration maps, candidate ranking and lifecycle policy remain separate.",
+            "Installed RECORD validation does not authenticate publisher wheels, clean deployment or other platforms.",
+            "Canonical publication and original TrackML CDG qualification remain separate actions; legacy history is preserved."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+        "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+        "name": "x"
+      },
+      "row": {
+        "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+        "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+        "name": "x",
+        "position": 7,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonempty aligned finite float64 target coordinate vector, in a consistent caller-defined length unit. Qualified domain excludes nonfinite intermediate arithmetic and outputs.",
+        "dejargonized_description": "Caller supplies x.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty aligned finite float64 target coordinate vector, in a consistent caller-defined length unit. Qualified domain excludes nonfinite intermediate arithmetic and outputs.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Fixed positive integer Newton iteration count. Arbitrary targets have no convergence or global-optimum guarantee; returned coordinates are an approximation.",
+            "Finite scalar or aligned float64 helix parameters and nonempty aligned finite float64 target vectors, with consistent caller-defined length units, nonnegative radius and nonzero pitch.",
+            "Initial coordinates must lie on the specified helix. Finite intermediate arithmetic and outputs are required; singular Newton steps, overflow and undefined zero-pitch geometry are excluded.",
+            "The provider does not independently validate every input precondition. Qualified callers must enforce domain constraints; synthetic checks are not proof over all rounded inputs.",
+            "The symbolic expression describes Euclidean distance, not global optimality. The ghost witness describes output shapes, not numerical correctness.",
+            "The source-compatible tracking boundary bypasses empty batches; four-output tracking call sites do not require optional phase or arc-length outputs.",
+            "Numeric geometry is reusable with caller-defined consistent units. Detector topology, field strength, calibration maps, candidate ranking and lifecycle policy remain separate.",
+            "Installed RECORD validation does not authenticate publisher wheels, clean deployment or other platforms.",
+            "Canonical publication and original TrackML CDG qualification remain separate actions; legacy history is preserved."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+        "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+        "name": "y"
+      },
+      "row": {
+        "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+        "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+        "name": "y",
+        "position": 8,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonempty aligned finite float64 target coordinate vector, in a consistent caller-defined length unit. Qualified domain excludes nonfinite intermediate arithmetic and outputs.",
+        "dejargonized_description": "Caller supplies y.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty aligned finite float64 target coordinate vector, in a consistent caller-defined length unit. Qualified domain excludes nonfinite intermediate arithmetic and outputs.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Fixed positive integer Newton iteration count. Arbitrary targets have no convergence or global-optimum guarantee; returned coordinates are an approximation.",
+            "Finite scalar or aligned float64 helix parameters and nonempty aligned finite float64 target vectors, with consistent caller-defined length units, nonnegative radius and nonzero pitch.",
+            "Initial coordinates must lie on the specified helix. Finite intermediate arithmetic and outputs are required; singular Newton steps, overflow and undefined zero-pitch geometry are excluded.",
+            "The provider does not independently validate every input precondition. Qualified callers must enforce domain constraints; synthetic checks are not proof over all rounded inputs.",
+            "The symbolic expression describes Euclidean distance, not global optimality. The ghost witness describes output shapes, not numerical correctness.",
+            "The source-compatible tracking boundary bypasses empty batches; four-output tracking call sites do not require optional phase or arc-length outputs.",
+            "Numeric geometry is reusable with caller-defined consistent units. Detector topology, field strength, calibration maps, candidate ranking and lifecycle policy remain separate.",
+            "Installed RECORD validation does not authenticate publisher wheels, clean deployment or other platforms.",
+            "Canonical publication and original TrackML CDG qualification remain separate actions; legacy history is preserved."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+        "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+        "name": "z"
+      },
+      "row": {
+        "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+        "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+        "name": "z",
+        "position": 9,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonempty aligned finite float64 target coordinate vector, in a consistent caller-defined length unit. Qualified domain excludes nonfinite intermediate arithmetic and outputs.",
+        "dejargonized_description": "Caller supplies z.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty aligned finite float64 target coordinate vector, in a consistent caller-defined length unit. Qualified domain excludes nonfinite intermediate arithmetic and outputs.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Fixed positive integer Newton iteration count. Arbitrary targets have no convergence or global-optimum guarantee; returned coordinates are an approximation.",
+            "Finite scalar or aligned float64 helix parameters and nonempty aligned finite float64 target vectors, with consistent caller-defined length units, nonnegative radius and nonzero pitch.",
+            "Initial coordinates must lie on the specified helix. Finite intermediate arithmetic and outputs are required; singular Newton steps, overflow and undefined zero-pitch geometry are excluded.",
+            "The provider does not independently validate every input precondition. Qualified callers must enforce domain constraints; synthetic checks are not proof over all rounded inputs.",
+            "The symbolic expression describes Euclidean distance, not global optimality. The ghost witness describes output shapes, not numerical correctness.",
+            "The source-compatible tracking boundary bypasses empty batches; four-output tracking call sites do not require optional phase or arc-length outputs.",
+            "Numeric geometry is reusable with caller-defined consistent units. Detector topology, field strength, calibration maps, candidate ranking and lifecycle policy remain separate.",
+            "Installed RECORD validation does not authenticate publisher wheels, clean deployment or other platforms.",
+            "Canonical publication and original TrackML CDG qualification remain separate actions; legacy history is preserved."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+        "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+        "name": "iterations"
+      },
+      "row": {
+        "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+        "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+        "name": "iterations",
+        "position": 10,
+        "kind": "positional_or_keyword",
+        "type_desc": "int",
+        "required": false,
+        "default_value_repr": "3",
+        "technical_description": "Positive integer fixed Newton iteration count; default 3. This approximation does not guarantee a global minimum or convergence. Qualified domain excludes nonfinite intermediate arithmetic and outputs.",
+        "dejargonized_description": "Caller supplies iterations.",
+        "constraints_json": {
+          "parameter_contract": "Positive integer fixed Newton iteration count; default 3. This approximation does not guarantee a global minimum or convergence. Qualified domain excludes nonfinite intermediate arithmetic and outputs.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Fixed positive integer Newton iteration count. Arbitrary targets have no convergence or global-optimum guarantee; returned coordinates are an approximation.",
+            "Finite scalar or aligned float64 helix parameters and nonempty aligned finite float64 target vectors, with consistent caller-defined length units, nonnegative radius and nonzero pitch.",
+            "Initial coordinates must lie on the specified helix. Finite intermediate arithmetic and outputs are required; singular Newton steps, overflow and undefined zero-pitch geometry are excluded.",
+            "The provider does not independently validate every input precondition. Qualified callers must enforce domain constraints; synthetic checks are not proof over all rounded inputs.",
+            "The symbolic expression describes Euclidean distance, not global optimality. The ghost witness describes output shapes, not numerical correctness.",
+            "The source-compatible tracking boundary bypasses empty batches; four-output tracking call sites do not require optional phase or arc-length outputs.",
+            "Numeric geometry is reusable with caller-defined consistent units. Detector topology, field strength, calibration maps, candidate ranking and lifecycle policy remain separate.",
+            "Installed RECORD validation does not authenticate publisher wheels, clean deployment or other platforms.",
+            "Canonical publication and original TrackML CDG qualification remain separate actions; legacy history is preserved."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+        "kind": "technical",
+        "language": "en",
+        "content": "Approximate a nearest point on each helix using a fixed number of Newton steps, then report Euclidean distance. Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Nonempty aligned finite float64 target coordinate vector, in a consistent caller-defined length unit. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Nonempty aligned finite float64 target coordinate vector, in a consistent caller-defined length unit. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Nonempty aligned finite float64 target coordinate vector, in a consistent caller-defined length unit. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Positive integer fixed Newton iteration count; default 3. This approximation does not guarantee a global minimum or convergence. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Aligned finite float64 vector in the caller-defined length unit. Fixed-iteration projected point coordinate or Euclidean target distance; distance is nonnegative. No global-optimum guarantee. Aligned finite float64 vector in the caller-defined length unit. Fixed-iteration projected point coordinate or Euclidean target distance; distance is nonnegative. No global-optimum guarantee. Aligned finite float64 vector in the caller-defined length unit. Fixed-iteration projected point coordinate or Euclidean target distance; distance is nonnegative. No global-optimum guarantee. Aligned finite float64 vector in the caller-defined length unit. Fixed-iteration projected point coordinate or Euclidean target distance; distance is nonnegative. No global-optimum guarantee. Numeric geometry with caller-defined consistent units; no detector topology, field strength, particle identity or calibration map is hardcoded.",
+        "generated_by": "trackml_nearest-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.007246
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Estimate a nearby point on a spiral and its distance from a target point. Accuracy on new problems must be checked separately.",
+        "generated_by": "trackml_nearest-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "artifact_references",
+      "keys": {
+        "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+        "ref_key": "trackml_nearest-provider-review-v1"
+      },
+      "row": {
+        "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+        "ref_key": "trackml_nearest-provider-review-v1",
+        "ref_id": "trackml_nearest-provider-review-v1",
+        "title": "Reusable nearest-helix approximation synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/d6561c9c/docs/reviews/trackml_nearest_provider_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Approximate a nearest point on each helix using a fixed number of Newton steps, then report Euclidean distance. Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Nonempty aligned finite float64 target coordinate vector, in a consistent caller-defined length unit. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Nonempty aligned finite float64 target coordinate vector, in a consistent caller-defined length unit. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Nonempty aligned finite float64 target coordinate vector, in a consistent caller-defined length unit. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Positive integer fixed Newton iteration count; default 3. This approximation does not guarantee a global minimum or convergence. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Aligned finite float64 vector in the caller-defined length unit. Fixed-iteration projected point coordinate or Euclidean target distance; distance is nonnegative. No global-optimum guarantee. Aligned finite float64 vector in the caller-defined length unit. Fixed-iteration projected point coordinate or Euclidean target distance; distance is nonnegative. No global-optimum guarantee. Aligned finite float64 vector in the caller-defined length unit. Fixed-iteration projected point coordinate or Euclidean target distance; distance is nonnegative. No global-optimum guarantee. Aligned finite float64 vector in the caller-defined length unit. Fixed-iteration projected point coordinate or Euclidean target distance; distance is nonnegative. No global-optimum guarantee."
+      }
+    }
+  ],
+  "rollups": [
+    {
+      "table": "artifact_audit_rollups",
+      "key": "artifact_id",
+      "identity": "cffdd925-2337-494c-bd18-ab97d8717156",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+          "Fixed positive integer Newton iteration count. Arbitrary targets have no convergence or global-optimum guarantee; returned coordinates are an approximation.",
+          "Finite scalar or aligned float64 helix parameters and nonempty aligned finite float64 target vectors, with consistent caller-defined length units, nonnegative radius and nonzero pitch.",
+          "Initial coordinates must lie on the specified helix. Finite intermediate arithmetic and outputs are required; singular Newton steps, overflow and undefined zero-pitch geometry are excluded.",
+          "The provider does not independently validate every input precondition. Qualified callers must enforce domain constraints; synthetic checks are not proof over all rounded inputs.",
+          "The symbolic expression describes Euclidean distance, not global optimality. The ghost witness describes output shapes, not numerical correctness.",
+          "The source-compatible tracking boundary bypasses empty batches; four-output tracking call sites do not require optional phase or arc-length outputs.",
+          "Numeric geometry is reusable with caller-defined consistent units. Detector topology, field strength, calibration maps, candidate ranking and lifecycle policy remain separate.",
+          "Installed RECORD validation does not authenticate publisher wheels, clean deployment or other platforms.",
+          "Canonical publication and original TrackML CDG qualification remain separate actions; legacy history is preserved.",
+          "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Nonempty aligned finite float64 target coordinate vector, in a consistent caller-defined length unit. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Nonempty aligned finite float64 target coordinate vector, in a consistent caller-defined length unit. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Nonempty aligned finite float64 target coordinate vector, in a consistent caller-defined length unit. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Positive integer fixed Newton iteration count; default 3. This approximation does not guarantee a global minimum or convergence. Qualified domain excludes nonfinite intermediate arithmetic and outputs. Aligned finite float64 vector in the caller-defined length unit. Fixed-iteration projected point coordinate or Euclidean target distance; distance is nonnegative. No global-optimum guarantee. Aligned finite float64 vector in the caller-defined length unit. Fixed-iteration projected point coordinate or Euclidean target distance; distance is nonnegative. No global-optimum guarantee. Aligned finite float64 vector in the caller-defined length unit. Fixed-iteration projected point coordinate or Euclidean target distance; distance is nonnegative. No global-optimum guarantee. Aligned finite float64 vector in the caller-defined length unit. Fixed-iteration projected point coordinate or Euclidean target distance; distance is nonnegative. No global-optimum guarantee."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    }
+  ],
+  "states": {
+    "cffdd925-2337-494c-bd18-ab97d8717156": {
+      "atom": {
+        "status": "approved",
+        "is_publishable": true
+      },
+      "artifact": {
+        "status": "draft",
+        "is_publishable": false
+      }
+    }
+  },
+  "before": {
+    "atoms": "4f058e250707d98a78dd8fb2fc6c123be580430be2fd6099ad05b7235f19029f",
+    "artifacts": "9765bb225d07bb15c20c35ccd3c9a18abc2c319ebeeae7e24ef5bb196811f8cc",
+    "atom_versions": "88f33e560e5e5b3bb7c6933654a19837bb2734998ae8983e31d368a9ae17fff4",
+    "artifact_versions": "2e79ca670ecbc7c18d36c57886f29ee2f7bdb707a26b2ad7ff30a2183be4775d",
+    "atom_io_specs": "a5b379a75bccebc596bcb187260b058d4197290b67d623ca59a9114ec76b885d",
+    "artifact_io_specs": "43f8e45b0fba430957b10507d22851a04f75ade1868b07d7d26316d6502d4b12",
+    "atom_parameters": "1854c24bc280115e8e2f9befa0241e0daafeb74fc1799be18074a6c52b3df38a",
+    "artifact_parameters": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_descriptions": "c4b19eac07b6c7d4e018397e04fe56ad47d65b13ae7c8a1acc5976e45c6baae0",
+    "artifact_descriptions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_references": "6962e762664f32143e6cd11aa4ab909f7d132abb52efcb8c4d19e47ecf1b2bdc",
+    "artifact_references": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_audit_rollups": "775eabe89be1455ac60b120b503e0c27b65ab2df96a6190964dc4b0ebf399b91",
+    "artifact_audit_rollups": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_audit_evidence": "e93474192b81837fe167fc7f45f0652876fbf1119e8ab745dc48e821b0423915"
+  },
+  "preserved": {
+    "atom_versions": [
+      {
+        "row": {
+          "s3_key": "local-seed/atoms/86aeeb32fed99d0cb8e7837d22728e73366c5efaeb3fa7e821a9a3588666b86c.tar.gz",
+          "semver": "0.0.0+local.86aeeb32fed9",
+          "atom_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "is_latest": true,
+          "created_at": "2026-08-11T23:15:30.956392+00:00",
+          "trust_tier": 3,
+          "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+          "fingerprint": "c30552639df107d762b0a4bf2f870ed12cd040e15c160df2a4ad1ab008937571",
+          "content_hash": "86aeeb32fed99d0cb8e7837d22728e73366c5efaeb3fa7e821a9a3588666b86c",
+          "derives_from": null
+        }
+      }
+    ],
+    "atom_parameters": [
+      {
+        "row": {
+          "kind": "positional_or_keyword",
+          "name": "hel_pitch",
+          "atom_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "position": 6,
+          "required": true,
+          "type_desc": "NDArray[np.float64]",
+          "version_id": null,
+          "parameter_id": "f0025323-6d85-4d7a-aa4a-64dc7dc31f27",
+          "constraints_json": {},
+          "default_value_repr": "",
+          "technical_description": "",
+          "dejargonized_description": ""
+        }
+      },
+      {
+        "row": {
+          "kind": "positional_or_keyword",
+          "name": "hel_r",
+          "atom_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "position": 5,
+          "required": true,
+          "type_desc": "NDArray[np.float64]",
+          "version_id": null,
+          "parameter_id": "bf3202fe-9fc4-4e9b-848d-88b923d01bfe",
+          "constraints_json": {},
+          "default_value_repr": "",
+          "technical_description": "",
+          "dejargonized_description": ""
+        }
+      },
+      {
+        "row": {
+          "kind": "positional_or_keyword",
+          "name": "hel_xm",
+          "atom_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "position": 3,
+          "required": true,
+          "type_desc": "NDArray[np.float64]",
+          "version_id": null,
+          "parameter_id": "6f44c590-d6f0-48c3-bb13-a46289999561",
+          "constraints_json": {},
+          "default_value_repr": "",
+          "technical_description": "",
+          "dejargonized_description": ""
+        }
+      },
+      {
+        "row": {
+          "kind": "positional_or_keyword",
+          "name": "hel_ym",
+          "atom_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "position": 4,
+          "required": true,
+          "type_desc": "NDArray[np.float64]",
+          "version_id": null,
+          "parameter_id": "f4bcbd8c-312b-4909-9a1e-1f786a4a1cea",
+          "constraints_json": {},
+          "default_value_repr": "",
+          "technical_description": "",
+          "dejargonized_description": ""
+        }
+      },
+      {
+        "row": {
+          "kind": "positional_or_keyword",
+          "name": "iterations",
+          "atom_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "position": 10,
+          "required": false,
+          "type_desc": "int",
+          "version_id": null,
+          "parameter_id": "cb1be002-8cc2-4457-aa23-084b7426083f",
+          "constraints_json": {},
+          "default_value_repr": "",
+          "technical_description": "",
+          "dejargonized_description": ""
+        }
+      },
+      {
+        "row": {
+          "kind": "positional_or_keyword",
+          "name": "x0",
+          "atom_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "position": 0,
+          "required": true,
+          "type_desc": "NDArray[np.float64]",
+          "version_id": null,
+          "parameter_id": "dbb31f3d-0726-408d-89ec-20d28effd18b",
+          "constraints_json": {},
+          "default_value_repr": "",
+          "technical_description": "",
+          "dejargonized_description": ""
+        }
+      },
+      {
+        "row": {
+          "kind": "positional_or_keyword",
+          "name": "x",
+          "atom_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "position": 7,
+          "required": true,
+          "type_desc": "NDArray[np.float64]",
+          "version_id": null,
+          "parameter_id": "eb977cc2-8472-4799-9587-29bb1dd71691",
+          "constraints_json": {},
+          "default_value_repr": "",
+          "technical_description": "",
+          "dejargonized_description": ""
+        }
+      },
+      {
+        "row": {
+          "kind": "positional_or_keyword",
+          "name": "y0",
+          "atom_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "position": 1,
+          "required": true,
+          "type_desc": "NDArray[np.float64]",
+          "version_id": null,
+          "parameter_id": "ada79b21-8442-41d4-bc11-ace17af6eacb",
+          "constraints_json": {},
+          "default_value_repr": "",
+          "technical_description": "",
+          "dejargonized_description": ""
+        }
+      },
+      {
+        "row": {
+          "kind": "positional_or_keyword",
+          "name": "y",
+          "atom_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "position": 8,
+          "required": true,
+          "type_desc": "NDArray[np.float64]",
+          "version_id": null,
+          "parameter_id": "6206e601-339f-42da-9b25-cc28b3fd0dce",
+          "constraints_json": {},
+          "default_value_repr": "",
+          "technical_description": "",
+          "dejargonized_description": ""
+        }
+      },
+      {
+        "row": {
+          "kind": "positional_or_keyword",
+          "name": "z0",
+          "atom_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "position": 2,
+          "required": true,
+          "type_desc": "NDArray[np.float64]",
+          "version_id": null,
+          "parameter_id": "bca0229f-c5ff-475d-a492-e2ca5553ce40",
+          "constraints_json": {},
+          "default_value_repr": "",
+          "technical_description": "",
+          "dejargonized_description": ""
+        }
+      },
+      {
+        "row": {
+          "kind": "positional_or_keyword",
+          "name": "z",
+          "atom_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "position": 9,
+          "required": true,
+          "type_desc": "NDArray[np.float64]",
+          "version_id": null,
+          "parameter_id": "23cc8d9b-a184-46a8-88d8-baa94b531177",
+          "constraints_json": {},
+          "default_value_repr": "",
+          "technical_description": "",
+          "dejargonized_description": ""
+        }
+      }
+    ],
+    "atom_references": [
+      {
+        "row": {
+          "doi": "10.1007/978-3-030-29135-8_9",
+          "url": "",
+          "year": 2019,
+          "title": "The Tracking Machine Learning challenge: Accuracy phase",
+          "ref_id": "amrouche2019trackml",
+          "source": "manual",
+          "atom_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "authors": [
+            "Sabrina Amrouche",
+            "Laurent Basara",
+            "Paolo Calafiura",
+            "et al."
+          ],
+          "ref_key": "10.1007/978-3-030-29135-8_9",
+          "verified": false,
+          "confidence": "high",
+          "created_at": "2026-08-11T23:13:10.68778+00:00",
+          "reference_id": "3d9f906b-36f8-484d-b969-2b486cee4b7e",
+          "matched_nodes": [],
+          "relevance_note": "Competition context. The Kepler-equation insight connects helix geometry to orbital mechanics."
+        }
+      },
+      {
+        "row": {
+          "doi": null,
+          "url": "https://github.com/edwinst/trackml_solution",
+          "year": 2018,
+          "title": "TrackML Particle Tracking Challenge Solution (5th place)",
+          "ref_id": "steiner2018trackml",
+          "source": "manual",
+          "atom_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "authors": [
+            "Edwin Steiner"
+          ],
+          "ref_key": "steiner2018trackml",
+          "verified": false,
+          "confidence": "high",
+          "created_at": "2026-08-11T23:13:10.686128+00:00",
+          "reference_id": "2810ee62-4ed0-4274-98af-de22be3103cc",
+          "matched_nodes": [],
+          "relevance_note": "Upstream source: geometry.py:helixNearestPointDistance(). Kepler-equation reduction for helix-point distance via Newton's method."
+        }
+      }
+    ],
+    "atom_io_specs": [
+      {
+        "row": {
+          "name": "hel_pitch",
+          "atom_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "ordinal": 6,
+          "required": true,
+          "direction": "input",
+          "type_desc": "NDArray[np.float64]",
+          "io_spec_id": "63c49ab2-48f1-458b-bdf5-95532e46d74c",
+          "version_id": null,
+          "constraints": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "hel_r",
+          "atom_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "ordinal": 5,
+          "required": true,
+          "direction": "input",
+          "type_desc": "NDArray[np.float64]",
+          "io_spec_id": "fd18a926-4594-497f-b1a3-e321fad8979b",
+          "version_id": null,
+          "constraints": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "hel_xm",
+          "atom_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "ordinal": 3,
+          "required": true,
+          "direction": "input",
+          "type_desc": "NDArray[np.float64]",
+          "io_spec_id": "be8d0171-50a6-4eb6-9cbc-3ceebd55e2f0",
+          "version_id": null,
+          "constraints": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "hel_ym",
+          "atom_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "ordinal": 4,
+          "required": true,
+          "direction": "input",
+          "type_desc": "NDArray[np.float64]",
+          "io_spec_id": "703d4b0d-ba84-4b4f-a253-69809b1bde77",
+          "version_id": null,
+          "constraints": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "iterations",
+          "atom_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "ordinal": 10,
+          "required": true,
+          "direction": "input",
+          "type_desc": "int",
+          "io_spec_id": "e307b047-a265-49c5-8734-f6ef7c9f4cc9",
+          "version_id": null,
+          "constraints": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "result",
+          "atom_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "tuple[NDArray[np.float64], NDArray[np.float64], NDArray[np.float64], NDArray[np.float64]]",
+          "io_spec_id": "ad5b2657-9fe5-4b42-8e24-b199dd0f4393",
+          "version_id": null,
+          "constraints": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "x0",
+          "atom_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "NDArray[np.float64]",
+          "io_spec_id": "34322d8e-b996-4460-a8d5-9ea9a800acfb",
+          "version_id": null,
+          "constraints": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "x",
+          "atom_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "ordinal": 7,
+          "required": true,
+          "direction": "input",
+          "type_desc": "NDArray[np.float64]",
+          "io_spec_id": "caef49ed-5214-428c-bb02-83648b5b7c9c",
+          "version_id": null,
+          "constraints": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "y0",
+          "atom_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "NDArray[np.float64]",
+          "io_spec_id": "32b83059-c4f8-45cb-8842-77153798d7c2",
+          "version_id": null,
+          "constraints": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "y",
+          "atom_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "ordinal": 8,
+          "required": true,
+          "direction": "input",
+          "type_desc": "NDArray[np.float64]",
+          "io_spec_id": "bc3d4e30-bd8a-4df8-8925-d964aeac52c7",
+          "version_id": null,
+          "constraints": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "z0",
+          "atom_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "ordinal": 2,
+          "required": true,
+          "direction": "input",
+          "type_desc": "NDArray[np.float64]",
+          "io_spec_id": "3665e89a-067d-478d-8129-e3a93d49b7d6",
+          "version_id": null,
+          "constraints": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "z",
+          "atom_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "ordinal": 9,
+          "required": true,
+          "direction": "input",
+          "type_desc": "NDArray[np.float64]",
+          "io_spec_id": "c13b9425-823f-43ed-8635-f2e0d0d064d7",
+          "version_id": null,
+          "constraints": "",
+          "default_value_repr": ""
+        }
+      }
+    ],
+    "artifact_versions": [
+      {
+        "row": {
+          "s3_key": "local-seed/atoms/86aeeb32fed99d0cb8e7837d22728e73366c5efaeb3fa7e821a9a3588666b86c.tar.gz",
+          "semver": "0.0.0+local.86aeeb32fed9",
+          "is_latest": true,
+          "created_at": "2026-11-06T13:12:09.114445+00:00",
+          "trust_tier": 3,
+          "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+          "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "fingerprint": "c30552639df107d762b0a4bf2f870ed12cd040e15c160df2a4ad1ab008937571",
+          "content_hash": "86aeeb32fed99d0cb8e7837d22728e73366c5efaeb3fa7e821a9a3588666b86c",
+          "derives_from": null
+        }
+      }
+    ],
+    "artifact_parameters": [],
+    "artifact_references": [],
+    "artifact_io_specs": [
+      {
+        "row": {
+          "name": "dist",
+          "ordinal": 3,
+          "required": true,
+          "direction": "output",
+          "type_desc": "ndarray",
+          "io_spec_id": "f442e7e5-d1e0-4a33-a628-918b8239062c",
+          "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+          "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "constraints": "Aligned finite float64 vector in the caller-defined length unit. Fixed-iteration projected point coordinate or Euclidean target distance; distance is nonnegative. No global-optimum guarantee.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "hel_pitch",
+          "ordinal": 6,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "82f6137a-f9b7-4692-87e1-8ad2ee943332",
+          "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+          "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "constraints": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "hel_r",
+          "ordinal": 5,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "d4dacf24-a391-4591-99ac-15c6e10e66b7",
+          "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+          "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "constraints": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "hel_xm",
+          "ordinal": 3,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "a3e2aff3-ef09-45c7-9419-5d93725cb066",
+          "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+          "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "constraints": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "hel_ym",
+          "ordinal": 4,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "1e9ec8ae-de6a-4bb9-9fd3-c8bdd93718c1",
+          "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+          "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "constraints": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "iterations",
+          "ordinal": 10,
+          "required": false,
+          "direction": "input",
+          "type_desc": "int",
+          "io_spec_id": "d156a696-908a-40e6-ad97-d57745b08f00",
+          "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+          "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "constraints": "Positive integer fixed Newton iteration count; default 3. This approximation does not guarantee a global minimum or convergence. Qualified domain excludes nonfinite intermediate arithmetic and outputs.",
+          "dim_signature": "",
+          "default_value_repr": "3"
+        }
+      },
+      {
+        "row": {
+          "name": "x0",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "b997506e-cbb2-4134-ad6b-17ed7c655a06",
+          "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+          "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "constraints": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "x1",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "ndarray",
+          "io_spec_id": "9bb9dfc1-4cc0-4870-a322-d174304d8a06",
+          "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+          "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "constraints": "Aligned finite float64 vector in the caller-defined length unit. Fixed-iteration projected point coordinate or Euclidean target distance; distance is nonnegative. No global-optimum guarantee.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "x",
+          "ordinal": 7,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "2bf5e815-f863-49da-90ec-952f033f9201",
+          "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+          "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "constraints": "Nonempty aligned finite float64 target coordinate vector, in a consistent caller-defined length unit. Qualified domain excludes nonfinite intermediate arithmetic and outputs.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "y0",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "48df7522-b53d-4e93-9e89-55292753b815",
+          "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+          "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "constraints": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "y1",
+          "ordinal": 1,
+          "required": true,
+          "direction": "output",
+          "type_desc": "ndarray",
+          "io_spec_id": "182507f9-4d1c-4851-bd96-b1ac55b54f41",
+          "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+          "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "constraints": "Aligned finite float64 vector in the caller-defined length unit. Fixed-iteration projected point coordinate or Euclidean target distance; distance is nonnegative. No global-optimum guarantee.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "y",
+          "ordinal": 8,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "66cc41f2-1240-41bb-87cb-b005413b838d",
+          "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+          "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "constraints": "Nonempty aligned finite float64 target coordinate vector, in a consistent caller-defined length unit. Qualified domain excludes nonfinite intermediate arithmetic and outputs.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "z0",
+          "ordinal": 2,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "879b1d96-411f-4d17-80e2-734f4e01d50c",
+          "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+          "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "constraints": "Finite scalar or aligned float64 helix parameter vector, in the same caller-defined length unit as target coordinates. Pitch is axial displacement per full revolution and must be nonzero; radius must be nonnegative. Initial point must lie on the specified helix. Qualified domain excludes nonfinite intermediate arithmetic and outputs.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "z1",
+          "ordinal": 2,
+          "required": true,
+          "direction": "output",
+          "type_desc": "ndarray",
+          "io_spec_id": "0c3b4128-fc04-4374-99d3-4874bca57fd2",
+          "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+          "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "constraints": "Aligned finite float64 vector in the caller-defined length unit. Fixed-iteration projected point coordinate or Euclidean target distance; distance is nonnegative. No global-optimum guarantee.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "z",
+          "ordinal": 9,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "672e86af-1532-4fda-bac6-f5aca8e93894",
+          "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+          "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "constraints": "Nonempty aligned finite float64 target coordinate vector, in a consistent caller-defined length unit. Qualified domain excludes nonfinite intermediate arithmetic and outputs.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      }
+    ],
+    "artifact_audit_evidence": [
+      {
+        "row": {
+          "passed": true,
+          "status": "completed",
+          "details": {
+            "scope": "Exact existing identity mirrored as draft with explicit supported interface; not publication approval.",
+            "plan_sha256": "115d6946262530dbb12d66e9a7958d1177027bf0820711df07c6e8356e79bb1b",
+            "source_sha256": "26677db3581b8be023b489ddf956d71328aea5e66631afa4c00b3601914dfd42"
+          },
+          "audit_type": "asset_integrity_check",
+          "created_at": "2026-11-06T13:12:09.114445+00:00",
+          "version_id": "f66af124-7a32-5a63-a58f-bb3c69cd788a",
+          "artifact_id": "cffdd925-2337-494c-bd18-ab97d8717156",
+          "evidence_id": "1335b445-0818-5c55-ac0f-8e814e91a21b",
+          "source_kind": "automated",
+          "runner_version": "trackml_nearest-canonical-intake.v1",
+          "review_basis_at": null,
+          "run_duration_ms": null,
+          "source_revision": "",
+          "upstream_version": ""
+        }
+      }
+    ]
+  },
+  "legacy_sha256": "2c4131ecc4bda2a8db64c4b8cc428f7b93b564f3f31db12d4d2b6011772a1d37",
+  "publisher_sha256": "41acd2b123d4bbd87e0b1841a3ea7ae71f89aa9a6559952f61adef1b0caabf0e",
+  "review_sha256": "3b2972b196819621a0151fe3365b1a5fd6036525f69bc484a968fdcd77465b5a"
+}
