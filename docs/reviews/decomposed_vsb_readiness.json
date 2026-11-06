@@ -1,0 +1,189 @@
+{
+  "format": "decomposed-vsb-readiness.v1",
+  "read_only": true,
+  "catalog_mutations": 0,
+  "approved": false,
+  "original": {
+    "artifact_id": "905df5de-530b-5394-b8e0-a355c8f1c3ce",
+    "fqdn": "cdg.competition.solution.kaggle.vsb_power_line_1st",
+    "status": "draft",
+    "is_publishable": false,
+    "content_hash": "565e511ee8d20ce0b32adf5c8cc726150f235b1f97d5502d62c96cfe339f5ac1",
+    "is_latest": true
+  },
+  "source_version_id": "d79e40e4-45b0-5e74-a83c-c68c91f12afb",
+  "source_stages": [
+    {
+      "stage_id": "wavelet_denoising",
+      "description": "Apply discrete wavelet transform (DWT) using PyWavelets to filter out high-voltage base noise from the raw power line signal. Threshold wavelet coefficients to remove noise while preserving corona discharge events."
+    },
+    {
+      "stage_id": "peak_detection",
+      "description": "Locate corona discharge peaks in the denoised signal using scipy.signal.find_peaks with tuned height and distance parameters."
+    },
+    {
+      "stage_id": "peak_feature_extraction",
+      "description": "Compute statistical features from detected peaks (height, width, count) plus raw statistical moments (mean, std, skewness, kurtosis) of the denoised signal."
+    },
+    {
+      "stage_id": "signal_to_matrix_transform",
+      "description": "Slice the 1D high-frequency signal into a 2D matrix (spectrogram-like) by reshaping into fixed-width segments, creating a representation suitable for 2D pattern recognition."
+    },
+    {
+      "stage_id": "tabular_model",
+      "description": "Train a LightGBM classifier on the extracted peak features and statistical moments for binary fault classification."
+    },
+    {
+      "stage_id": "dl_model",
+      "description": "Train a 1D CNN + LSTM network on the raw denoised signal for binary fault classification. The CNN extracts local patterns while the LSTM captures temporal dependencies."
+    },
+    {
+      "stage_id": "weighted_blend",
+      "description": "Compute a weighted average of LightGBM and neural network fault probabilities to produce the final prediction."
+    }
+  ],
+  "derivative": {
+    "artifact_id": "9ddba25b-899d-5c65-b35c-525e8730275c",
+    "fqdn": "cdg.competition.solution.kaggle.vsb_power_line_1st.execution",
+    "status": "approved",
+    "is_publishable": true,
+    "content_hash": "33fa3095e0d940b9efc1b5ace745b635c43c2812ad166821490de32295d1050a",
+    "is_latest": true,
+    "trust_tier": 3
+  },
+  "derivative_version_id": "feab5779-925c-5fe0-850b-c865942833ba",
+  "derivative_nodes": [
+    {
+      "node_id": "execute"
+    },
+    {
+      "node_id": "prepare"
+    }
+  ],
+  "derivative_bindings": [
+    {
+      "node_id": "execute",
+      "bound_artifact_fqdn": "sciona.atoms.ml.vsb_execution.vsb_execute",
+      "bound_version_content_hash": "510317ce9990a3c3298f7628daafec52ef4b785fd7bc9355b3c7cfec8956f6e4"
+    },
+    {
+      "node_id": "prepare",
+      "bound_artifact_fqdn": "sciona.atoms.ml.vsb_execution.vsb_prepare",
+      "bound_version_content_hash": "c93daf7d12a3560f981da8b3ad4cca6df70eff48c9442653c54a834d1ff5cd62"
+    }
+  ],
+  "draft_originals_with_approved_derivatives": 18,
+  "retained_evidence_sha256": {
+    "competition_vsb_component_tests.json": "d4fa1677970198fbf4dacd59ca77fec96eedceb7190c90ee8f49cdfaa0824a71",
+    "competition_vsb_descriptor_comparison.json": "0a03c3c835234d186514ef77194adaf5d20d272a95e8cd3e0074592229ce8b72",
+    "competition_vsb_environment.json": "45ba042873362fa8b552e7f4078c593ef299924a54f796e91956a723396a27a3",
+    "competition_vsb_execution_source_review.json": "5517f77133632f61011b1cd1a294b96cb5d4fe47f4a01858d3b76047bd2534d8",
+    "competition_vsb_full_training.json": "7d8fac192eaefba52bf0a77072413c08bfb548f78c7422977d7c19bcd76d5101",
+    "competition_vsb_graph_execution.json": "a5d7a44727e20305dcc5f93d583a7542341bbfd40af653acb40a52a9b1f43f61",
+    "competition_vsb_measurement_comparison.json": "b22e62eaad9cbab2c8bd20851e64bc341996e2f3362c64ae1beb1085f7a13f43",
+    "competition_vsb_notebook_pin.json": "8a5959f100410f26ad365962eac6bf9117b27b1400f67eb3ccba409ffbeec83b",
+    "competition_vsb_peak_comparison.json": "449ec83c727759cd0a34a47e228a2faa31a7ff32056e6e16bef06c906a27f7e3",
+    "competition_vsb_publication_gates.json": "dc6f3afdd98fa8fc24c6368e39d32e6842cdeafb666958ebaba66ef1b86089fb",
+    "competition_vsb_publication_progress.json": "720a9c4d7ebd496797a4cae76596885986c68e55ab62d4d176760cb975c6868e",
+    "competition_vsb_publication_verification.json": "85fed2902dc5d989cf9bfd3428f4de5776b0c935b39b426873cb7ed5c26f8517",
+    "competition_vsb_raw_execution.json": "0d1a756c99cd08be2008e8f02ca5effbcba44b21f3cc790f9098039c9ebca7b3",
+    "competition_vsb_reconstruction.json": "cf4563165742469c44705a687f31381257fe4ede605b2655ca404cec7956c8cc",
+    "competition_vsb_review_gates.json": "3feda0ef90aca691d25d5ce8b5df0fd17a3fd876ad9d4f91263fe1a023e61eca",
+    "competition_vsb_scope_and_license_review.json": "c5a1c550a2eb4b503c4dc3a32ebe6a64790f77da346237222cab2c5142d1413f",
+    "competition_vsb_semantic_review.json": "056f76832b3bc88b55d57ee45b15a61f643e331d5f12927dd7f6842b6465c04a",
+    "competition_vsb_source_discovery.json": "b8d846aae98c8281cfbd35490a8921c15292404398debbcb1509daeb6b447ed6",
+    "competition_vsb_source_numerics.json": "acbc2ea2598a467176cd9740b0995847ddfb28a5407a2586e07dbb2f34d2d441",
+    "competition_vsb_source_review.json": "05ad2298c026fa08333ae708d954bed36f87637a10ffb345c900a55bb42f0ee2",
+    "competition_vsb_threshold_comparison.json": "8cdac22d2bd7227709c540c6593fec270fe14497936de2d0b0acdbc6ccf35eca"
+  },
+  "distinct_file_hash_checks": 10,
+  "implementation_drift": [],
+  "implementation_inventory": {
+    "vsb_baseline.py": {
+      "sha256": "3c38d41b990c15ee5addc94bab28c87f451a146b3b89ebb36c7864cfda5f5f97",
+      "functions": [
+        "subtract_baseline"
+      ]
+    },
+    "vsb_descriptors.py": {
+      "sha256": "381df7f3a2f41d688144d8c292d045e3aeff469b3ae74cead48ecd7ebe2cba4c",
+      "functions": [
+        "peak_descriptors",
+        "process_signal"
+      ]
+    },
+    "vsb_execution.py": {
+      "sha256": "d7c2106eed8516523a45e547424f0fa5d434cca86cc736fa707c8c8b99de7856",
+      "functions": [
+        "Prepared",
+        "fields",
+        "prepare",
+        "execute"
+      ]
+    },
+    "vsb_graph.py": {
+      "sha256": "be60560892b11ab7caec12f8283f28dd321cef52775179340d45308ae5556245",
+      "functions": [
+        "build_vsb_graph"
+      ]
+    },
+    "vsb_measurement.py": {
+      "sha256": "f8607a107d000ec57d770a31604adb52164dbc0365503ee284faf40d931452a6",
+      "functions": [
+        "fundamental",
+        "phase_quadrants",
+        "aggregate",
+        "measurement_features"
+      ]
+    },
+    "vsb_peaks.py": {
+      "sha256": "a7c33f4894401cd80e346eed64b23b34570b9a7d3a41121bc172b15e2985ed41",
+      "functions": [
+        "_signal",
+        "_directional",
+        "window_maxima",
+        "plateau_location",
+        "select_peaks"
+      ]
+    },
+    "vsb_threshold.py": {
+      "sha256": "972523f96b4cbefe62b1b037e389700fe8c4a022b6452d15ff2c8f6598b952b9",
+      "functions": [
+        "binary_labels",
+        "threshold",
+        "repeated_folds"
+      ]
+    },
+    "vsb_training.py": {
+      "sha256": "193a56675d23098abe0175a2aecd45f16e88d401b5990c361292124e8b8b654d",
+      "functions": [
+        "fit"
+      ]
+    }
+  },
+  "current_runtime_versions": {
+    "numpy": "2.2.6",
+    "scipy": "1.17.1",
+    "pandas": "2.3.3",
+    "lightgbm": "4.7.0",
+    "scikit-learn": "1.8.0"
+  },
+  "source_corrections": [
+    "Independent reconstruction replaces unsupported wavelet, image transform, deep network and weighted tree/deep blend with recursive baseline, custom peaks, phase aggregates and equal repeated-tree probabilities.",
+    "Preserve all 25 repetitions and five folds with 10000-round ceiling and 100-round stopping patience; both heldouts influence stopping.",
+    "Threshold is fitted to original signal labels using in-training measurement scores; optimizer >= and final strict > remain distinct.",
+    "Actual-length descriptor clipping and one-cycle FFT are declared generalizations; retain NaN handling and explicit rejection of undefined source cases."
+  ],
+  "reuse_work": [
+    "Inspect registered alternatives before adding generic baseline, directional peak, descriptor, Fourier and threshold operations.",
+    "Expose numeric operation inputs and controls separately from three-signal grouping and fixed nine-feature recipe layout.",
+    "Keep complete ensemble training and threshold fitting; do not substitute fixed probabilities or a reduced model count.",
+    "Qualify original final-output scope and exact reusable bindings before stored graph promotion."
+  ],
+  "limits": [
+    "Readiness only; historical hashes do not establish current numerical execution.",
+    "Source notebook reuse permission remains unresolved; preserve the existing independent implementation and do not copy notebook code.",
+    "Public algorithm-template descriptions only; no runtime signal records or identifying metadata retained."
+  ],
+  "auditor_sha256": "094f6ea51552958e0777a228bbf2dbe85ba5ef3670b678e42dd65141ccf20802"
+}
