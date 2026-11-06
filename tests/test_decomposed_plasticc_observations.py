@@ -12,6 +12,7 @@ from scripts.validate_plasticc_runtime import synthetic_payload
 from sciona.decomposed_plasticc_training import train as train_decomposed
 from sciona.decomposed_plasticc_sampling import balanced_weights, reference_stratified_folds
 from sciona.plasticc_training import fit_lightgbm_classifier
+from sciona.decomposed_plasticc_prediction import predict, predict_scores, normalize_scores
 
 OPERATIONS = dict(amplitude=fitting.initial_amplitude, fit=fitting.fit, kernel=matern_kernel_matrix,
     scale=gp.scale_covariance, noise=gp.observation_variance, condition=gp.condition, predict=gp.predict)
@@ -55,7 +56,7 @@ def test_complete_lifecycle_numeric_bindings(weighting, class_weighting):
         return result
     with patch.object(prepared.augmentor, 'augment_object', side_effect=checked):
         completed = train_decomposed(prepared, reference_stratified_folds, balanced_weights, fit_lightgbm_classifier)
-    actual = predict_runtime(completed)
+    actual = predict(completed, predict_scores, normalize_scores)
     assert all(calls.values()) and augmented
     assert len(completed.classifier.classifiers) == payload['config']['num_folds']
     assert actual['object_ids'] == expected['object_ids'] and actual['classes'] == expected['classes']

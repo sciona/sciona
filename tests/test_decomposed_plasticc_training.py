@@ -9,6 +9,7 @@ from sciona.plasticc_training import fit_lightgbm_classifier
 from sciona.plasticc_runtime import prepare_runtime, train_runtime, predict_runtime
 from sciona.plasticc_weighting import weighted_multi_logloss
 from scripts.validate_plasticc_runtime import synthetic_payload
+from sciona.decomposed_plasticc_prediction import predict, predict_scores, normalize_scores
 
 
 @pytest.mark.parametrize('weighting,class_weighting', [('flat', 'flat'), ('redshift', 'kaggle')])
@@ -34,7 +35,7 @@ def test_complete_training_parity(weighting, class_weighting):
         assert left.booster_.model_to_string() == right.booster_.model_to_string()
     assert set(a.loss_diagnostics) == {'all', 'original'}
     assert a.loss_diagnostics['all'][1] == weighted_multi_logloss(e.train_classes, e.train_predictions, class_weights=e.class_weights)
-    assert predict_runtime(actual) == predict_runtime(expected)
+    assert predict(actual, predict_scores, normalize_scores) == predict_runtime(expected)
     assert payload == original
 
 
