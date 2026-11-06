@@ -1,0 +1,308 @@
+{
+  "approved": false,
+  "graph_digest": "145aa00e66edbc216d37c4abdc41ec63a3705a4c79833f40aa2db113d3c3875c",
+  "review_sha256": "1c5d74621ffe6e20c6b5397479b2351781753986c3f3631a4a7b503a54d0a881",
+  "intake_script_sha256": "340f8601b9b1fb4441beb111d490c874d06a00b454a372273abf0d1ff2ad2db3",
+  "providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_openvaccine_execution.blend_inputs",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_openvaccine_execution.blend_inputs",
+      "version_id": "7250bb37-db4d-5eb7-9500-a68473b724fd",
+      "content_hash": "44614dc55e6b0f0cb9b51ca77f6ccfaf6ff191269e8a832cbe169c4c23e06700",
+      "provider_sha256": "93c313334818e1caff61442acec814df02d90a682522565fbcaa3675ff5680ee",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "forecasted",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "coefficients",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "semantics": {
+        "operation": "Expose the ordered clipped predictions and coefficients for a generic sum.",
+        "plain_limits": "Flatten each member prediction into one row, preserving order, and supply twenty unit coefficients. Keep clipping and mean division as recipe policy.",
+        "validity_bounds": "Require exact dictionary containing clipped_members and both teacher moments; lifecycle metadata may also be present. Require finite float64 clipped_members shaped (20,B,L,5), B positive, L at least two, and every value in [-.5,6]. Both teacher arrays must be aligned finite float32 (B,L,5), with nonnegative standard deviation. Copy and reshape clipped members to (20,B*L*5), preserving C-order. Add positive zero to the first row to preserve the original accumulator signed-zero semantics when the generic reducer starts from its first product. Return fresh float64 ones (20,) as coefficients. Do not sum, normalize, train, reclip or alter caller arrays. Member identity is established upstream; shape checks cannot recover it.",
+        "parameters": {
+          "forecasted": "Complete same-invocation fit_forecast output with ordered clipped member predictions and unclipped teacher moments."
+        },
+        "outputs": "Tuple (values, coefficients): fresh float64 matrix (20,B*L*5) and float64 vector (20,) of ones. The generic ordered_weighted_sum must consume these unchanged.",
+        "dependencies": [
+          "sciona.decomposed_openvaccine_ensemble.blend_inputs",
+          "numpy",
+          "sciona.ghost.registry (registration only)"
+        ],
+        "reuse": "Dense graph-feature training is callable independently of RNA folding. Compatible cross-domain inputs must retain the pinned architecture contract: 55 node features, eight adjacency channels, boundary positions and five output channels. Applicability and feature semantics require caller justification. The ordered numeric sum is domain independent; RNA folding, four-family five-state inventory, reversal, clipping and training policy remain recipe-specific. Intermediate state must come from the same invocation; shape checks do not authenticate provenance. No historical accuracy, independent CV, winning clustered blend or stochastic checkpoint replay is claimed."
+      },
+      "classification": "source_recipe_adapter",
+      "atom_id": "c22910b0-0ba5-59f5-9fd2-fa987dbfed90",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_openvaccine_execution.blend_inputs",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_openvaccine_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_openvaccine_execution",
+        "import_module": "sciona.atoms.ml.decomposed_openvaccine_execution",
+        "source_symbol": "blend_inputs",
+        "description": "Expose ordered clipped predictions and unit sum coefficients.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.44614dc55e6b",
+      "fingerprint": "b1563d2f26cacb9f5930ce922db561aff6d5f52dec5babe16fad17fe7b5f7540"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_openvaccine_execution.features",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_openvaccine_execution.features",
+      "version_id": "a1099774-42e9-55c4-b436-cd042bd17d6f",
+      "content_hash": "f5ff382a8ccb9b28b134fc985b4da75f108a8db91dae24087bea02adc2f1b5dc",
+      "provider_sha256": "93c313334818e1caff61442acec814df02d90a682522565fbcaa3675ff5680ee",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "featured",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "semantics": {
+        "operation": "Fold all three validated RNA populations and expose dense features and explicit training controls.",
+        "plain_limits": "Validate the complete input before folding. Fold labeled, pseudo-label and prediction populations in that order. Return features and controls without fitting a model.",
+        "validity_bounds": "Require exact Prepared type. Deep-copy and revalidate its strict finite JSON payload through the existing _arguments boundary; null targets denote masked values. Require explicit Python initialization seed in [0,2**31), positive integer step counts, all twenty train/validation member splits, nonempty refinement plans and valid rollback/ddof controls. Each raw population is nonempty, contains only ACGU strings of length at least two, and has a common length within that population; lengths may differ between populations. Require configured reviewed model source, folding binary and coefficient paths. The existing folding dispatcher verifies software identities, validates posterior probabilities and structure, and constructs per-record 55-channel nodes and eight-channel adjacency with boundary positions. Preserve all target masks, cluster/proximity weights, split identities and round inputs. Validate dense outputs before returning. No seed reset, model fitting, external checkpoint loading or numeric ensemble sum occurs here.",
+        "parameters": {
+          "prepared": "Same-invocation Prepared from openvaccine_prepare, containing private raw populations and complete explicit training controls."
+        },
+        "outputs": "Dictionary with nodes/adjacency, pseudo_nodes/pseudo_adjacency, prediction_nodes/prediction_adjacency, targets, cluster_ids, proximity_factors, splits, pseudo_rounds, pretraining_steps, initial_supervised_steps, rollback_policy, absolute_tolerance, std_ddof and seed. Raw sequence fields are removed. Feature tensors remain private runtime values.",
+        "dependencies": [
+          "sciona.decomposed_openvaccine_runtime.features",
+          "sciona.openvaccine_contract",
+          "sciona.openvaccine_folding",
+          "sciona.openvaccine_features",
+          "sciona.openvaccine_structure",
+          "numpy",
+          "pandas",
+          "pinned CONTRAfold-SE binary and EternaFold coefficients",
+          "sciona.ghost.registry (registration only)"
+        ],
+        "reuse": "Dense graph-feature training is callable independently of RNA folding. Compatible cross-domain inputs must retain the pinned architecture contract: 55 node features, eight adjacency channels, boundary positions and five output channels. Applicability and feature semantics require caller justification. The ordered numeric sum is domain independent; RNA folding, four-family five-state inventory, reversal, clipping and training policy remain recipe-specific. Intermediate state must come from the same invocation; shape checks do not authenticate provenance. No historical accuracy, independent CV, winning clustered blend or stochastic checkpoint replay is claimed."
+      },
+      "classification": "source_recipe_adapter",
+      "atom_id": "bd152c46-b0f1-57de-b35a-4ef8e5349797",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_openvaccine_execution.features",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_openvaccine_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_openvaccine_execution",
+        "import_module": "sciona.atoms.ml.decomposed_openvaccine_execution",
+        "source_symbol": "features",
+        "description": "Fold the three raw populations and expose validated dense features.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.f5ff382a8ccb",
+      "fingerprint": "8333d6ac627b11db031a48f48a56384bdc31b46c4b5d34f4c361169b7e62261b"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_openvaccine_execution.fit_forecast",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_openvaccine_execution.fit_forecast",
+      "version_id": "54ec32b9-3162-5d51-bcca-c6bb04e77da2",
+      "content_hash": "eb816143e09b6cdb990be74dfcf67abf8b65b5860629c5ddbdf8c9e56645fada",
+      "provider_sha256": "93c313334818e1caff61442acec814df02d90a682522565fbcaa3675ff5680ee",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "featured",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "forecasted",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "semantics": {
+        "operation": "Execute the complete configured model lifecycle from dense graph features.",
+        "plain_limits": "Pretrain a shared autoencoder, fit all twenty split models, run every supervised/pseudo-label refinement round, and collect checkpoint-backed member predictions and teacher moments.",
+        "validity_bounds": "Require exact dense-feature dictionary fields; deep-copy inputs. All three feature populations must be finite float32 node arrays (B,L+2,55) and aligned adjacency (B,L+2,L+2,8), with B positive and L at least two. Labeled targets must be float32 (B,L,5), allow NaN masks but no infinity, and satisfy every split observation/positive-weight constraint. Derive existing cluster/proximity weights; validate all twenty disjoint nonempty train/validation partitions and every round before TensorFlow/model work. Require positive Python integer pretraining and initial supervised step counts, Python seed in [0,2**31), supported rollback policy, finite nonnegative tolerance and Python integer ddof 0 or 1. Every round requires all twenty explicit member recipes with boolean reversal/eligibility arrays, finite float32 perturbations and nonnegative positive-sum float32 pseudo weights, at least one eligible positive-weight target and finite nonnegative uncertainty threshold. Use the hash-verified source architectures and legacy Keras. Reset the global TensorFlow/Python/NumPy initialization seed, so use a dedicated process rather than concurrent seeded executions. Preserve full model widths, caller step counts, all twenty members in sorted initial order and every refinement round. Shared pretraining uses the full labeled feature population, including validation features; teachers share member information, so validation is transductive. Each refinement round uses unchanged checkpoint teacher statistics, supervised training, pseudo-label training and configured validation rollback. Keep checkpoint weights and optimizer state in a private temporary directory; cleanup follows final inference. Load every final member with its manifest/family checks; predict forward and reversed inputs, average in native float32, compute unclipped float64 Welford moments, clip each member to [-.5,6] and retain the twenty-member stack. Model execution is serial; deployment must bound native/TensorFlow thread pools within the shared CPU budget. No raw RNA input or folding call is required by this operation.",
+        "parameters": {
+          "featured": "Validated same-invocation dense features and controls from features, or independently supplied compatible dense features satisfying the exact contract."
+        },
+        "outputs": "Dictionary containing float64 clipped_members (20,Bq,Lq,5), float32 teacher_mean/teacher_std (Bq,Lq,5), members=20, per-round member/supervised/pseudo/rollback counters, pretraining_steps and aggregate initial_supervised_steps. Materializing twenty predictions uses more memory than the original streaming reduction. No final mean prediction is returned yet.",
+        "dependencies": [
+          "sciona.decomposed_openvaccine_runtime.fit_forecast",
+          "sciona.decomposed_openvaccine_ensemble",
+          "sciona.openvaccine_models",
+          "sciona.openvaccine_checkpoints",
+          "sciona.openvaccine_population",
+          "sciona.openvaccine_round",
+          "sciona.openvaccine_round_contract",
+          "sciona.openvaccine_sections",
+          "sciona.openvaccine_splits",
+          "sciona.openvaccine_targets",
+          "sciona.openvaccine_teacher",
+          "sciona.openvaccine_ensemble",
+          "numpy",
+          "tensorflow",
+          "tf-keras",
+          "pinned source model definitions",
+          "sciona.ghost.registry (registration only)"
+        ],
+        "reuse": "Dense graph-feature training is callable independently of RNA folding. Compatible cross-domain inputs must retain the pinned architecture contract: 55 node features, eight adjacency channels, boundary positions and five output channels. Applicability and feature semantics require caller justification. The ordered numeric sum is domain independent; RNA folding, four-family five-state inventory, reversal, clipping and training policy remain recipe-specific. Intermediate state must come from the same invocation; shape checks do not authenticate provenance. No historical accuracy, independent CV, winning clustered blend or stochastic checkpoint replay is claimed."
+      },
+      "classification": "source_recipe_adapter",
+      "atom_id": "c42d49cc-5e70-53fa-a3e1-fc4bd0653a05",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_openvaccine_execution.fit_forecast",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_openvaccine_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_openvaccine_execution",
+        "import_module": "sciona.atoms.ml.decomposed_openvaccine_execution",
+        "source_symbol": "fit_forecast",
+        "description": "Run full pretraining, twenty models, all refinement rounds and inference.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.eb816143e09b",
+      "fingerprint": "ba0d91a17d6ce2f93631b285a11d94bba19ee76e27988403bf3fbd8ee0f4536e"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_openvaccine_execution.result",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_openvaccine_execution.result",
+      "version_id": "2fcbf1c7-79e4-5946-a239-e7ca2a2421be",
+      "content_hash": "7da101b38588c58baa68ac69db71f4908dc2bded3fef88646d3f61b0bd718b31",
+      "provider_sha256": "93c313334818e1caff61442acec814df02d90a682522565fbcaa3675ff5680ee",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "forecasted",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "total",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "semantics": {
+        "operation": "Restore the ensemble mean and package the complete lifecycle result.",
+        "plain_limits": "Divide the external ordered sum by twenty, restore prediction shape, and return predictions, unclipped teacher moments and all lifecycle counters as strict JSON.",
+        "validity_bounds": "Revalidate the clipped members and teacher moments using the same finite/dtype/shape/bounds checks as blend_inputs. Require supplied total convertible to finite float64 vector (B*L*5,) with entries in [-10,120]. Reshape, divide by twenty in float64 and cast to float32. Require exact forecast dictionary fields; Python integer members=20; positive Python integer pretraining and aggregate initial supervised counters, with the latter divisible by twenty; and a nonempty list of exact per-round counter dictionaries. Each round has Python integer members=20, supervised_steps=20, pseudo_label_steps=20 and rollbacks in [0,20]. Convert prediction and teacher arrays to lists, deep-copy round counters and require strict JSON serialization. No model execution, sum or teacher statistics are recomputed. The graph must enforce that the supplied total belongs to this forecast; bounds and counters do not authenticate execution history.",
+        "parameters": {
+          "forecasted": "Complete same-invocation fit_forecast output.",
+          "total": "Same-invocation generic ordered weighted sum of blend_inputs rows with its unit coefficients."
+        },
+        "outputs": "Strict JSON dictionary with predictions, teacher_mean, teacher_std, members, rounds, pretraining_steps and initial_supervised_steps. Private prediction values must not be included in public real-data evidence.",
+        "dependencies": [
+          "sciona.decomposed_openvaccine_runtime.result",
+          "sciona.decomposed_openvaccine_ensemble.finish_prediction",
+          "numpy",
+          "json (Python standard library)",
+          "sciona.ghost.registry (registration only)"
+        ],
+        "reuse": "Dense graph-feature training is callable independently of RNA folding. Compatible cross-domain inputs must retain the pinned architecture contract: 55 node features, eight adjacency channels, boundary positions and five output channels. Applicability and feature semantics require caller justification. The ordered numeric sum is domain independent; RNA folding, four-family five-state inventory, reversal, clipping and training policy remain recipe-specific. Intermediate state must come from the same invocation; shape checks do not authenticate provenance. No historical accuracy, independent CV, winning clustered blend or stochastic checkpoint replay is claimed."
+      },
+      "classification": "source_recipe_adapter",
+      "atom_id": "5a291e1e-aef0-5599-aa35-70271626fb99",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_openvaccine_execution.result",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_openvaccine_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_openvaccine_execution",
+        "import_module": "sciona.atoms.ml.decomposed_openvaccine_execution",
+        "source_symbol": "result",
+        "description": "Restore mean prediction shape and package teacher moments and counters.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.7da101b38588",
+      "fingerprint": "bc98a8ee306b989a48b67546a51c0c2c8853138479d3e81094566186b94636d1"
+    }
+  ],
+  "limitations": [
+    "Draft source/interface intake only; semantic publication and dependency gates remain.",
+    "Four recipe adapters retain all three populations, full shared pretraining, all twenty models, every configured refinement round and checkpoint-backed teacher moments. RNA folding is separate from compatible dense-feature training. The existing generic ordered sum remains independently bound. Both original histories and the shared derivative are preserved; corrected-original source qualification remains pending."
+  ],
+  "owners": {
+    "sciona-atoms": {
+      "owner_id": "33ed07a2-1bea-5b17-8b71-d6d0e590fdd9",
+      "source_repo_id": "3bff5d3b-7b24-45c0-b688-1edb61107107"
+    },
+    "sciona-atoms-ml": {
+      "owner_id": "33ed07a2-1bea-5b17-8b71-d6d0e590fdd9",
+      "source_repo_id": "27b787a0-27ed-4760-92b7-ad8e8b4b815c"
+    }
+  },
+  "preserved_sha256": "a99b0881dacce4a941977e0a005db398b0f5b16566dae490015796c21d8488d8"
+}
