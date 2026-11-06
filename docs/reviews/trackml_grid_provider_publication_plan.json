@@ -1,0 +1,1339 @@
+{
+  "records": [
+    {
+      "artifact_id": "17939969-5346-573b-b04c-2f5e26cb1228",
+      "fqdn": "sciona.atoms.physics.regular_grid.evaluate_linear_grid",
+      "runtime_fqdn": "sciona.atoms.physics.regular_grid.evaluate_linear_grid",
+      "version_id": "24f0550b-c68d-537c-8497-decd99201e8f",
+      "content_hash": "a5f0f251fa77d88591109e20e54c67cde3ccdd591770bce6434eda1dad8b2720",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "points",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 matrix (Q,D) matching fitted axis order and units. Empty queries allowed; no coordinate conversion."
+        },
+        {
+          "direction": "input",
+          "name": "state",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Float64 interpolated values with shape (Q,) plus trailing value dimensions. Linear extrapolation outside the grid; nonfinite results reject. No physical validity or interpolation error bound."
+        }
+      ],
+      "operation": "Evaluate linear rectilinear interpolation state at caller-supplied query coordinates.",
+      "plain_description": "Estimate values at requested coordinates using a prepared grid.",
+      "validity_bounds": "Finite float64 matrix (Q,D) matching fitted axis order and units. Empty queries allowed; no coordinate conversion. Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact. Float64 interpolated values with shape (Q,) plus trailing value dimensions. Linear extrapolation outside the grid; nonfinite results reject. No physical validity or interpolation error bound.",
+      "reuse": "Generic rectilinear interpolation for scalar or component-valued fields; axes, units and values are supplied by the caller, with detector policy retained in the recipe.",
+      "registered_provider_dependencies": []
+    },
+    {
+      "artifact_id": "8a4cc294-6740-5ee7-8350-055c2c4895ad",
+      "fqdn": "sciona.atoms.physics.regular_grid.fit_linear_grid",
+      "runtime_fqdn": "sciona.atoms.physics.regular_grid.fit_linear_grid",
+      "version_id": "3c1ba3ed-e5ed-54f3-868f-5faadbd2a6a6",
+      "content_hash": "b2cf2424254bedefee23ec6ce1b7abc84cb6ec5691ee20e15ee69929d423e678",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "axes",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty tuple/list of finite float64 vectors, each strictly ascending or descending with at least two entries. Caller defines units; no sorting or singleton removal."
+        },
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 values whose leading dimensions match axis lengths; optional trailing component dimensions. Caller storage is copied."
+        },
+        {
+          "direction": "output",
+          "name": "state",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact."
+        }
+      ],
+      "operation": "Copy a rectilinear grid into linear interpolation runtime state with explicit extrapolation.",
+      "plain_description": "Prepare a grid of known values for estimating values between and beyond grid points.",
+      "validity_bounds": "Nonempty tuple/list of finite float64 vectors, each strictly ascending or descending with at least two entries. Caller defines units; no sorting or singleton removal. Finite float64 values whose leading dimensions match axis lengths; optional trailing component dimensions. Caller storage is copied. Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact.",
+      "reuse": "Generic rectilinear interpolation for scalar or component-valued fields; axes, units and values are supplied by the caller, with detector policy retained in the recipe.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "qualification": {
+    "format": "trackml-grid-provider-semantics.v1",
+    "passed": true,
+    "approved": false,
+    "proposed_tier": 3,
+    "verdict": "acceptable_with_limits",
+    "catalog_mutations": 0,
+    "synthetic_only": true,
+    "providers": [
+      {
+        "artifact_id": "17939969-5346-573b-b04c-2f5e26cb1228",
+        "fqdn": "sciona.atoms.physics.regular_grid.evaluate_linear_grid",
+        "runtime_fqdn": "sciona.atoms.physics.regular_grid.evaluate_linear_grid",
+        "version_id": "24f0550b-c68d-537c-8497-decd99201e8f",
+        "content_hash": "a5f0f251fa77d88591109e20e54c67cde3ccdd591770bce6434eda1dad8b2720",
+        "interfaces": [
+          {
+            "direction": "input",
+            "name": "points",
+            "ordinal": 0,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Finite float64 matrix (Q,D) matching fitted axis order and units. Empty queries allowed; no coordinate conversion."
+          },
+          {
+            "direction": "input",
+            "name": "state",
+            "ordinal": 1,
+            "type_desc": "object",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact."
+          },
+          {
+            "direction": "output",
+            "name": "result",
+            "ordinal": 0,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Float64 interpolated values with shape (Q,) plus trailing value dimensions. Linear extrapolation outside the grid; nonfinite results reject. No physical validity or interpolation error bound."
+          }
+        ],
+        "operation": "Evaluate linear rectilinear interpolation state at caller-supplied query coordinates.",
+        "plain_description": "Estimate values at requested coordinates using a prepared grid.",
+        "validity_bounds": "Finite float64 matrix (Q,D) matching fitted axis order and units. Empty queries allowed; no coordinate conversion. Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact. Float64 interpolated values with shape (Q,) plus trailing value dimensions. Linear extrapolation outside the grid; nonfinite results reject. No physical validity or interpolation error bound.",
+        "reuse": "Generic rectilinear interpolation for scalar or component-valued fields; axes, units and values are supplied by the caller, with detector policy retained in the recipe.",
+        "registered_provider_dependencies": []
+      },
+      {
+        "artifact_id": "8a4cc294-6740-5ee7-8350-055c2c4895ad",
+        "fqdn": "sciona.atoms.physics.regular_grid.fit_linear_grid",
+        "runtime_fqdn": "sciona.atoms.physics.regular_grid.fit_linear_grid",
+        "version_id": "3c1ba3ed-e5ed-54f3-868f-5faadbd2a6a6",
+        "content_hash": "b2cf2424254bedefee23ec6ce1b7abc84cb6ec5691ee20e15ee69929d423e678",
+        "interfaces": [
+          {
+            "direction": "input",
+            "name": "axes",
+            "ordinal": 0,
+            "type_desc": "object",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Nonempty tuple/list of finite float64 vectors, each strictly ascending or descending with at least two entries. Caller defines units; no sorting or singleton removal."
+          },
+          {
+            "direction": "input",
+            "name": "values",
+            "ordinal": 1,
+            "type_desc": "ndarray",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Finite float64 values whose leading dimensions match axis lengths; optional trailing component dimensions. Caller storage is copied."
+          },
+          {
+            "direction": "output",
+            "name": "state",
+            "ordinal": 0,
+            "type_desc": "object",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact."
+          }
+        ],
+        "operation": "Copy a rectilinear grid into linear interpolation runtime state with explicit extrapolation.",
+        "plain_description": "Prepare a grid of known values for estimating values between and beyond grid points.",
+        "validity_bounds": "Nonempty tuple/list of finite float64 vectors, each strictly ascending or descending with at least two entries. Caller defines units; no sorting or singleton removal. Finite float64 values whose leading dimensions match axis lengths; optional trailing component dimensions. Caller storage is copied. Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact.",
+        "reuse": "Generic rectilinear interpolation for scalar or component-valued fields; axes, units and values are supplied by the caller, with detector policy retained in the recipe.",
+        "registered_provider_dependencies": []
+      }
+    ],
+    "tests": {
+      "tests": 38,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "exact_backend_cases": 18,
+    "independent_multilinear_cases": 6,
+    "software_sha256": {
+      "tests/test_regular_grid_providers.py": "dfc567d2636755ab23d54bc8f47902185a751dff5cb90cb37e094714b529e902",
+      "scripts/review_trackml_grid_provider_semantics.py": "ed5b56e150e1ce68f1c50b7c5108c428323f5ece70bae1f6434a771484a35f74",
+      "scripts/stage_trackml_grid_providers.py": "42de50b4bfd0b3ff94281f8de55524b976a10f5c0c1869d27c6279acd47d9a1a",
+      "sciona/ghost/registry.py": "793723a75d07a88eed39f59d8d4dc327c54adbf75db7a03003516a6f74c81b51",
+      "sciona/decomposed_trackml_grid_lifecycle.py": "9bb590baa744deca72b43787b3c7c2b21190f8d5c0a8aac4eb99854b07a14e39",
+      "sciona/trackml_layer_functions.py": "b2f1b14b50a5061517c0c33fc0de90f624468ece764e0f5ac0b7c719a00dffa9",
+      "sciona-atoms-physics/src/sciona/atoms/physics/regular_grid.py": "9e697739290fac724de4c0749860c41ec24221d966ea94984c9ad2efce3dea6b"
+    },
+    "installed_packages": {
+      "annotated-types": {
+        "version": "0.7.0",
+        "hashed_files_verified": 7,
+        "active_requirements": []
+      },
+      "asttokens": {
+        "version": "2.4.1",
+        "hashed_files_verified": 13,
+        "active_requirements": [
+          "six>=1.12.0"
+        ]
+      },
+      "icontract": {
+        "version": "2.7.3",
+        "hashed_files_verified": 16,
+        "active_requirements": [
+          "asttokens<3,>=2",
+          "typing_extensions"
+        ]
+      },
+      "mpmath": {
+        "version": "1.3.0",
+        "hashed_files_verified": 92,
+        "active_requirements": []
+      },
+      "numpy": {
+        "version": "2.2.6",
+        "hashed_files_verified": 876,
+        "active_requirements": []
+      },
+      "pydantic": {
+        "version": "2.12.5",
+        "hashed_files_verified": 111,
+        "active_requirements": [
+          "annotated-types>=0.6.0",
+          "pydantic-core==2.41.5",
+          "typing-extensions>=4.14.1",
+          "typing-inspection>=0.4.2"
+        ]
+      },
+      "pydantic-core": {
+        "version": "2.41.5",
+        "hashed_files_verified": 9,
+        "active_requirements": [
+          "typing-extensions>=4.14.1"
+        ]
+      },
+      "scipy": {
+        "version": "1.17.1",
+        "hashed_files_verified": 1423,
+        "active_requirements": [
+          "numpy<2.7,>=1.26.4"
+        ]
+      },
+      "six": {
+        "version": "1.17.0",
+        "hashed_files_verified": 6,
+        "active_requirements": []
+      },
+      "sympy": {
+        "version": "1.14.0",
+        "hashed_files_verified": 1571,
+        "active_requirements": [
+          "mpmath<1.4,>=1.1.0"
+        ]
+      },
+      "threadpoolctl": {
+        "version": "3.6.0",
+        "hashed_files_verified": 5,
+        "active_requirements": []
+      },
+      "typing-extensions": {
+        "version": "4.16.0",
+        "hashed_files_verified": 6,
+        "active_requirements": []
+      },
+      "typing-inspection": {
+        "version": "0.4.2",
+        "hashed_files_verified": 9,
+        "active_requirements": [
+          "typing-extensions>=4.12.0"
+        ]
+      }
+    },
+    "intake_plan_sha256": "d3a51a50f5cf10f6aea6490f036e59580f68490e004e48785f8704f022252474",
+    "resource_policy": {
+      "serial_tests": true,
+      "native_threads": 1
+    },
+    "limitations": [
+      "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+      "Finite float64 rectilinear grids only, with strictly ascending or descending axes of at least two entries.",
+      "Values may have trailing component dimensions. Caller defines axis order and coordinate/component units.",
+      "Fit copies caller storage. Runtime state must remain unmodified and is not a portable serialized artifact.",
+      "Linear interpolation and extrapolation only; no physical validity or interpolation error bound is claimed.",
+      "Empty query batches are supported. Nonfinite results reject; finite rounding error is not exhaustively bounded.",
+      "Detector coordinate dispatch, singleton removal, missing-map and calibration policy remain in the recipe.",
+      "Concrete witness rejects abstract execution; no symbolic proof is claimed.",
+      "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+      "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+      "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate."
+    ]
+  },
+  "inserts": [
+    {
+      "table": "references_registry",
+      "keys": {
+        "ref_id": "trackml_grid-provider-review-v1"
+      },
+      "row": {
+        "ref_id": "trackml_grid-provider-review-v1",
+        "ref_type": "web",
+        "title": "Reusable rectilinear interpolation synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/ff90ca83/docs/reviews/trackml_grid_provider_semantics.json"
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "17939969-5346-573b-b04c-2f5e26cb1228",
+        "version_id": "24f0550b-c68d-537c-8497-decd99201e8f",
+        "name": "points"
+      },
+      "row": {
+        "atom_id": "17939969-5346-573b-b04c-2f5e26cb1228",
+        "version_id": "24f0550b-c68d-537c-8497-decd99201e8f",
+        "name": "points",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Finite float64 matrix (Q,D) matching fitted axis order and units. Empty queries allowed; no coordinate conversion.",
+        "dejargonized_description": "Caller supplies points.",
+        "constraints_json": {
+          "parameter_contract": "Finite float64 matrix (Q,D) matching fitted axis order and units. Empty queries allowed; no coordinate conversion.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Finite float64 rectilinear grids only, with strictly ascending or descending axes of at least two entries.",
+            "Values may have trailing component dimensions. Caller defines axis order and coordinate/component units.",
+            "Fit copies caller storage. Runtime state must remain unmodified and is not a portable serialized artifact.",
+            "Linear interpolation and extrapolation only; no physical validity or interpolation error bound is claimed.",
+            "Empty query batches are supported. Nonfinite results reject; finite rounding error is not exhaustively bounded.",
+            "Detector coordinate dispatch, singleton removal, missing-map and calibration policy remain in the recipe.",
+            "Concrete witness rejects abstract execution; no symbolic proof is claimed.",
+            "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "17939969-5346-573b-b04c-2f5e26cb1228",
+        "version_id": "24f0550b-c68d-537c-8497-decd99201e8f",
+        "name": "state"
+      },
+      "row": {
+        "atom_id": "17939969-5346-573b-b04c-2f5e26cb1228",
+        "version_id": "24f0550b-c68d-537c-8497-decd99201e8f",
+        "name": "state",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "object",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact.",
+        "dejargonized_description": "Caller supplies state.",
+        "constraints_json": {
+          "parameter_contract": "Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Finite float64 rectilinear grids only, with strictly ascending or descending axes of at least two entries.",
+            "Values may have trailing component dimensions. Caller defines axis order and coordinate/component units.",
+            "Fit copies caller storage. Runtime state must remain unmodified and is not a portable serialized artifact.",
+            "Linear interpolation and extrapolation only; no physical validity or interpolation error bound is claimed.",
+            "Empty query batches are supported. Nonfinite results reject; finite rounding error is not exhaustively bounded.",
+            "Detector coordinate dispatch, singleton removal, missing-map and calibration policy remain in the recipe.",
+            "Concrete witness rejects abstract execution; no symbolic proof is claimed.",
+            "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "17939969-5346-573b-b04c-2f5e26cb1228",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "17939969-5346-573b-b04c-2f5e26cb1228",
+        "kind": "technical",
+        "language": "en",
+        "content": "Evaluate linear rectilinear interpolation state at caller-supplied query coordinates. Finite float64 matrix (Q,D) matching fitted axis order and units. Empty queries allowed; no coordinate conversion. Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact. Float64 interpolated values with shape (Q,) plus trailing value dimensions. Linear extrapolation outside the grid; nonfinite results reject. No physical validity or interpolation error bound. Generic rectilinear interpolation for scalar or component-valued fields; axes, units and values are supplied by the caller, with detector policy retained in the recipe.",
+        "generated_by": "trackml_grid-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.052632
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "17939969-5346-573b-b04c-2f5e26cb1228",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "17939969-5346-573b-b04c-2f5e26cb1228",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Estimate values at requested coordinates using a prepared grid. Accuracy on new problems must be checked separately.",
+        "generated_by": "trackml_grid-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "atom_references",
+      "keys": {
+        "atom_id": "17939969-5346-573b-b04c-2f5e26cb1228",
+        "ref_key": "trackml_grid-provider-review-v1"
+      },
+      "row": {
+        "atom_id": "17939969-5346-573b-b04c-2f5e26cb1228",
+        "ref_key": "trackml_grid-provider-review-v1",
+        "ref_id": "trackml_grid-provider-review-v1",
+        "title": "Reusable rectilinear interpolation synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/ff90ca83/docs/reviews/trackml_grid_provider_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Evaluate linear rectilinear interpolation state at caller-supplied query coordinates. Finite float64 matrix (Q,D) matching fitted axis order and units. Empty queries allowed; no coordinate conversion. Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact. Float64 interpolated values with shape (Q,) plus trailing value dimensions. Linear extrapolation outside the grid; nonfinite results reject. No physical validity or interpolation error bound."
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "17939969-5346-573b-b04c-2f5e26cb1228",
+        "version_id": "24f0550b-c68d-537c-8497-decd99201e8f",
+        "name": "points"
+      },
+      "row": {
+        "artifact_id": "17939969-5346-573b-b04c-2f5e26cb1228",
+        "version_id": "24f0550b-c68d-537c-8497-decd99201e8f",
+        "name": "points",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Finite float64 matrix (Q,D) matching fitted axis order and units. Empty queries allowed; no coordinate conversion.",
+        "dejargonized_description": "Caller supplies points.",
+        "constraints_json": {
+          "parameter_contract": "Finite float64 matrix (Q,D) matching fitted axis order and units. Empty queries allowed; no coordinate conversion.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Finite float64 rectilinear grids only, with strictly ascending or descending axes of at least two entries.",
+            "Values may have trailing component dimensions. Caller defines axis order and coordinate/component units.",
+            "Fit copies caller storage. Runtime state must remain unmodified and is not a portable serialized artifact.",
+            "Linear interpolation and extrapolation only; no physical validity or interpolation error bound is claimed.",
+            "Empty query batches are supported. Nonfinite results reject; finite rounding error is not exhaustively bounded.",
+            "Detector coordinate dispatch, singleton removal, missing-map and calibration policy remain in the recipe.",
+            "Concrete witness rejects abstract execution; no symbolic proof is claimed.",
+            "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "17939969-5346-573b-b04c-2f5e26cb1228",
+        "version_id": "24f0550b-c68d-537c-8497-decd99201e8f",
+        "name": "state"
+      },
+      "row": {
+        "artifact_id": "17939969-5346-573b-b04c-2f5e26cb1228",
+        "version_id": "24f0550b-c68d-537c-8497-decd99201e8f",
+        "name": "state",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "object",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact.",
+        "dejargonized_description": "Caller supplies state.",
+        "constraints_json": {
+          "parameter_contract": "Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Finite float64 rectilinear grids only, with strictly ascending or descending axes of at least two entries.",
+            "Values may have trailing component dimensions. Caller defines axis order and coordinate/component units.",
+            "Fit copies caller storage. Runtime state must remain unmodified and is not a portable serialized artifact.",
+            "Linear interpolation and extrapolation only; no physical validity or interpolation error bound is claimed.",
+            "Empty query batches are supported. Nonfinite results reject; finite rounding error is not exhaustively bounded.",
+            "Detector coordinate dispatch, singleton removal, missing-map and calibration policy remain in the recipe.",
+            "Concrete witness rejects abstract execution; no symbolic proof is claimed.",
+            "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "17939969-5346-573b-b04c-2f5e26cb1228",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "17939969-5346-573b-b04c-2f5e26cb1228",
+        "kind": "technical",
+        "language": "en",
+        "content": "Evaluate linear rectilinear interpolation state at caller-supplied query coordinates. Finite float64 matrix (Q,D) matching fitted axis order and units. Empty queries allowed; no coordinate conversion. Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact. Float64 interpolated values with shape (Q,) plus trailing value dimensions. Linear extrapolation outside the grid; nonfinite results reject. No physical validity or interpolation error bound. Generic rectilinear interpolation for scalar or component-valued fields; axes, units and values are supplied by the caller, with detector policy retained in the recipe.",
+        "generated_by": "trackml_grid-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.052632
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "17939969-5346-573b-b04c-2f5e26cb1228",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "17939969-5346-573b-b04c-2f5e26cb1228",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Estimate values at requested coordinates using a prepared grid. Accuracy on new problems must be checked separately.",
+        "generated_by": "trackml_grid-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "artifact_references",
+      "keys": {
+        "artifact_id": "17939969-5346-573b-b04c-2f5e26cb1228",
+        "ref_key": "trackml_grid-provider-review-v1"
+      },
+      "row": {
+        "artifact_id": "17939969-5346-573b-b04c-2f5e26cb1228",
+        "ref_key": "trackml_grid-provider-review-v1",
+        "ref_id": "trackml_grid-provider-review-v1",
+        "title": "Reusable rectilinear interpolation synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/ff90ca83/docs/reviews/trackml_grid_provider_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Evaluate linear rectilinear interpolation state at caller-supplied query coordinates. Finite float64 matrix (Q,D) matching fitted axis order and units. Empty queries allowed; no coordinate conversion. Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact. Float64 interpolated values with shape (Q,) plus trailing value dimensions. Linear extrapolation outside the grid; nonfinite results reject. No physical validity or interpolation error bound."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "8a4cc294-6740-5ee7-8350-055c2c4895ad",
+        "version_id": "3c1ba3ed-e5ed-54f3-868f-5faadbd2a6a6",
+        "name": "axes"
+      },
+      "row": {
+        "atom_id": "8a4cc294-6740-5ee7-8350-055c2c4895ad",
+        "version_id": "3c1ba3ed-e5ed-54f3-868f-5faadbd2a6a6",
+        "name": "axes",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "object",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonempty tuple/list of finite float64 vectors, each strictly ascending or descending with at least two entries. Caller defines units; no sorting or singleton removal.",
+        "dejargonized_description": "Caller supplies axes.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty tuple/list of finite float64 vectors, each strictly ascending or descending with at least two entries. Caller defines units; no sorting or singleton removal.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Finite float64 rectilinear grids only, with strictly ascending or descending axes of at least two entries.",
+            "Values may have trailing component dimensions. Caller defines axis order and coordinate/component units.",
+            "Fit copies caller storage. Runtime state must remain unmodified and is not a portable serialized artifact.",
+            "Linear interpolation and extrapolation only; no physical validity or interpolation error bound is claimed.",
+            "Empty query batches are supported. Nonfinite results reject; finite rounding error is not exhaustively bounded.",
+            "Detector coordinate dispatch, singleton removal, missing-map and calibration policy remain in the recipe.",
+            "Concrete witness rejects abstract execution; no symbolic proof is claimed.",
+            "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "8a4cc294-6740-5ee7-8350-055c2c4895ad",
+        "version_id": "3c1ba3ed-e5ed-54f3-868f-5faadbd2a6a6",
+        "name": "values"
+      },
+      "row": {
+        "atom_id": "8a4cc294-6740-5ee7-8350-055c2c4895ad",
+        "version_id": "3c1ba3ed-e5ed-54f3-868f-5faadbd2a6a6",
+        "name": "values",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Finite float64 values whose leading dimensions match axis lengths; optional trailing component dimensions. Caller storage is copied.",
+        "dejargonized_description": "Caller supplies values.",
+        "constraints_json": {
+          "parameter_contract": "Finite float64 values whose leading dimensions match axis lengths; optional trailing component dimensions. Caller storage is copied.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Finite float64 rectilinear grids only, with strictly ascending or descending axes of at least two entries.",
+            "Values may have trailing component dimensions. Caller defines axis order and coordinate/component units.",
+            "Fit copies caller storage. Runtime state must remain unmodified and is not a portable serialized artifact.",
+            "Linear interpolation and extrapolation only; no physical validity or interpolation error bound is claimed.",
+            "Empty query batches are supported. Nonfinite results reject; finite rounding error is not exhaustively bounded.",
+            "Detector coordinate dispatch, singleton removal, missing-map and calibration policy remain in the recipe.",
+            "Concrete witness rejects abstract execution; no symbolic proof is claimed.",
+            "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "8a4cc294-6740-5ee7-8350-055c2c4895ad",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "8a4cc294-6740-5ee7-8350-055c2c4895ad",
+        "kind": "technical",
+        "language": "en",
+        "content": "Copy a rectilinear grid into linear interpolation runtime state with explicit extrapolation. Nonempty tuple/list of finite float64 vectors, each strictly ascending or descending with at least two entries. Caller defines units; no sorting or singleton removal. Finite float64 values whose leading dimensions match axis lengths; optional trailing component dimensions. Caller storage is copied. Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact. Generic rectilinear interpolation for scalar or component-valued fields; axes, units and values are supplied by the caller, with detector policy retained in the recipe.",
+        "generated_by": "trackml_grid-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.040816
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "8a4cc294-6740-5ee7-8350-055c2c4895ad",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "8a4cc294-6740-5ee7-8350-055c2c4895ad",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Prepare a grid of known values for estimating values between and beyond grid points. Accuracy on new problems must be checked separately.",
+        "generated_by": "trackml_grid-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "atom_references",
+      "keys": {
+        "atom_id": "8a4cc294-6740-5ee7-8350-055c2c4895ad",
+        "ref_key": "trackml_grid-provider-review-v1"
+      },
+      "row": {
+        "atom_id": "8a4cc294-6740-5ee7-8350-055c2c4895ad",
+        "ref_key": "trackml_grid-provider-review-v1",
+        "ref_id": "trackml_grid-provider-review-v1",
+        "title": "Reusable rectilinear interpolation synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/ff90ca83/docs/reviews/trackml_grid_provider_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Copy a rectilinear grid into linear interpolation runtime state with explicit extrapolation. Nonempty tuple/list of finite float64 vectors, each strictly ascending or descending with at least two entries. Caller defines units; no sorting or singleton removal. Finite float64 values whose leading dimensions match axis lengths; optional trailing component dimensions. Caller storage is copied. Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact."
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "8a4cc294-6740-5ee7-8350-055c2c4895ad",
+        "version_id": "3c1ba3ed-e5ed-54f3-868f-5faadbd2a6a6",
+        "name": "axes"
+      },
+      "row": {
+        "artifact_id": "8a4cc294-6740-5ee7-8350-055c2c4895ad",
+        "version_id": "3c1ba3ed-e5ed-54f3-868f-5faadbd2a6a6",
+        "name": "axes",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "object",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonempty tuple/list of finite float64 vectors, each strictly ascending or descending with at least two entries. Caller defines units; no sorting or singleton removal.",
+        "dejargonized_description": "Caller supplies axes.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty tuple/list of finite float64 vectors, each strictly ascending or descending with at least two entries. Caller defines units; no sorting or singleton removal.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Finite float64 rectilinear grids only, with strictly ascending or descending axes of at least two entries.",
+            "Values may have trailing component dimensions. Caller defines axis order and coordinate/component units.",
+            "Fit copies caller storage. Runtime state must remain unmodified and is not a portable serialized artifact.",
+            "Linear interpolation and extrapolation only; no physical validity or interpolation error bound is claimed.",
+            "Empty query batches are supported. Nonfinite results reject; finite rounding error is not exhaustively bounded.",
+            "Detector coordinate dispatch, singleton removal, missing-map and calibration policy remain in the recipe.",
+            "Concrete witness rejects abstract execution; no symbolic proof is claimed.",
+            "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "8a4cc294-6740-5ee7-8350-055c2c4895ad",
+        "version_id": "3c1ba3ed-e5ed-54f3-868f-5faadbd2a6a6",
+        "name": "values"
+      },
+      "row": {
+        "artifact_id": "8a4cc294-6740-5ee7-8350-055c2c4895ad",
+        "version_id": "3c1ba3ed-e5ed-54f3-868f-5faadbd2a6a6",
+        "name": "values",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "ndarray",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Finite float64 values whose leading dimensions match axis lengths; optional trailing component dimensions. Caller storage is copied.",
+        "dejargonized_description": "Caller supplies values.",
+        "constraints_json": {
+          "parameter_contract": "Finite float64 values whose leading dimensions match axis lengths; optional trailing component dimensions. Caller storage is copied.",
+          "limitations": [
+            "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+            "Finite float64 rectilinear grids only, with strictly ascending or descending axes of at least two entries.",
+            "Values may have trailing component dimensions. Caller defines axis order and coordinate/component units.",
+            "Fit copies caller storage. Runtime state must remain unmodified and is not a portable serialized artifact.",
+            "Linear interpolation and extrapolation only; no physical validity or interpolation error bound is claimed.",
+            "Empty query batches are supported. Nonfinite results reject; finite rounding error is not exhaustively bounded.",
+            "Detector coordinate dispatch, singleton removal, missing-map and calibration policy remain in the recipe.",
+            "Concrete witness rejects abstract execution; no symbolic proof is claimed.",
+            "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+            "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+            "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "8a4cc294-6740-5ee7-8350-055c2c4895ad",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "8a4cc294-6740-5ee7-8350-055c2c4895ad",
+        "kind": "technical",
+        "language": "en",
+        "content": "Copy a rectilinear grid into linear interpolation runtime state with explicit extrapolation. Nonempty tuple/list of finite float64 vectors, each strictly ascending or descending with at least two entries. Caller defines units; no sorting or singleton removal. Finite float64 values whose leading dimensions match axis lengths; optional trailing component dimensions. Caller storage is copied. Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact. Generic rectilinear interpolation for scalar or component-valued fields; axes, units and values are supplied by the caller, with detector policy retained in the recipe.",
+        "generated_by": "trackml_grid-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.040816
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "8a4cc294-6740-5ee7-8350-055c2c4895ad",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "8a4cc294-6740-5ee7-8350-055c2c4895ad",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Prepare a grid of known values for estimating values between and beyond grid points. Accuracy on new problems must be checked separately.",
+        "generated_by": "trackml_grid-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "artifact_references",
+      "keys": {
+        "artifact_id": "8a4cc294-6740-5ee7-8350-055c2c4895ad",
+        "ref_key": "trackml_grid-provider-review-v1"
+      },
+      "row": {
+        "artifact_id": "8a4cc294-6740-5ee7-8350-055c2c4895ad",
+        "ref_key": "trackml_grid-provider-review-v1",
+        "ref_id": "trackml_grid-provider-review-v1",
+        "title": "Reusable rectilinear interpolation synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/ff90ca83/docs/reviews/trackml_grid_provider_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Copy a rectilinear grid into linear interpolation runtime state with explicit extrapolation. Nonempty tuple/list of finite float64 vectors, each strictly ascending or descending with at least two entries. Caller defines units; no sorting or singleton removal. Finite float64 values whose leading dimensions match axis lengths; optional trailing component dimensions. Caller storage is copied. Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact."
+      }
+    }
+  ],
+  "rollups": [
+    {
+      "table": "atom_audit_rollups",
+      "key": "atom_id",
+      "identity": "17939969-5346-573b-b04c-2f5e26cb1228",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+          "Finite float64 rectilinear grids only, with strictly ascending or descending axes of at least two entries.",
+          "Values may have trailing component dimensions. Caller defines axis order and coordinate/component units.",
+          "Fit copies caller storage. Runtime state must remain unmodified and is not a portable serialized artifact.",
+          "Linear interpolation and extrapolation only; no physical validity or interpolation error bound is claimed.",
+          "Empty query batches are supported. Nonfinite results reject; finite rounding error is not exhaustively bounded.",
+          "Detector coordinate dispatch, singleton removal, missing-map and calibration policy remain in the recipe.",
+          "Concrete witness rejects abstract execution; no symbolic proof is claimed.",
+          "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+          "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+          "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate.",
+          "Finite float64 matrix (Q,D) matching fitted axis order and units. Empty queries allowed; no coordinate conversion. Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact. Float64 interpolated values with shape (Q,) plus trailing value dimensions. Linear extrapolation outside the grid; nonfinite results reject. No physical validity or interpolation error bound."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "artifact_audit_rollups",
+      "key": "artifact_id",
+      "identity": "17939969-5346-573b-b04c-2f5e26cb1228",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+          "Finite float64 rectilinear grids only, with strictly ascending or descending axes of at least two entries.",
+          "Values may have trailing component dimensions. Caller defines axis order and coordinate/component units.",
+          "Fit copies caller storage. Runtime state must remain unmodified and is not a portable serialized artifact.",
+          "Linear interpolation and extrapolation only; no physical validity or interpolation error bound is claimed.",
+          "Empty query batches are supported. Nonfinite results reject; finite rounding error is not exhaustively bounded.",
+          "Detector coordinate dispatch, singleton removal, missing-map and calibration policy remain in the recipe.",
+          "Concrete witness rejects abstract execution; no symbolic proof is claimed.",
+          "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+          "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+          "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate.",
+          "Finite float64 matrix (Q,D) matching fitted axis order and units. Empty queries allowed; no coordinate conversion. Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact. Float64 interpolated values with shape (Q,) plus trailing value dimensions. Linear extrapolation outside the grid; nonfinite results reject. No physical validity or interpolation error bound."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "atom_audit_rollups",
+      "key": "atom_id",
+      "identity": "8a4cc294-6740-5ee7-8350-055c2c4895ad",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+          "Finite float64 rectilinear grids only, with strictly ascending or descending axes of at least two entries.",
+          "Values may have trailing component dimensions. Caller defines axis order and coordinate/component units.",
+          "Fit copies caller storage. Runtime state must remain unmodified and is not a portable serialized artifact.",
+          "Linear interpolation and extrapolation only; no physical validity or interpolation error bound is claimed.",
+          "Empty query batches are supported. Nonfinite results reject; finite rounding error is not exhaustively bounded.",
+          "Detector coordinate dispatch, singleton removal, missing-map and calibration policy remain in the recipe.",
+          "Concrete witness rejects abstract execution; no symbolic proof is claimed.",
+          "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+          "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+          "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate.",
+          "Nonempty tuple/list of finite float64 vectors, each strictly ascending or descending with at least two entries. Caller defines units; no sorting or singleton removal. Finite float64 values whose leading dimensions match axis lengths; optional trailing component dimensions. Caller storage is copied. Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "artifact_audit_rollups",
+      "key": "artifact_id",
+      "identity": "8a4cc294-6740-5ee7-8350-055c2c4895ad",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+          "Finite float64 rectilinear grids only, with strictly ascending or descending axes of at least two entries.",
+          "Values may have trailing component dimensions. Caller defines axis order and coordinate/component units.",
+          "Fit copies caller storage. Runtime state must remain unmodified and is not a portable serialized artifact.",
+          "Linear interpolation and extrapolation only; no physical validity or interpolation error bound is claimed.",
+          "Empty query batches are supported. Nonfinite results reject; finite rounding error is not exhaustively bounded.",
+          "Detector coordinate dispatch, singleton removal, missing-map and calibration policy remain in the recipe.",
+          "Concrete witness rejects abstract execution; no symbolic proof is claimed.",
+          "Qualification runs serially with native threads bounded to one; callers own aggregate concurrency.",
+          "Installed RECORD checks validate current dependency files, not publisher authentication or clean deployment on other platforms.",
+          "Synthetic numerical and lifecycle evidence does not establish historical competition accuracy. Original CDG publication remains separate.",
+          "Nonempty tuple/list of finite float64 vectors, each strictly ascending or descending with at least two entries. Caller defines units; no sorting or singleton removal. Finite float64 values whose leading dimensions match axis lengths; optional trailing component dimensions. Caller storage is copied. Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    }
+  ],
+  "states": {
+    "17939969-5346-573b-b04c-2f5e26cb1228": {
+      "atom": {
+        "status": "flagged",
+        "is_publishable": false
+      },
+      "artifact": {
+        "status": "draft",
+        "is_publishable": false
+      }
+    },
+    "8a4cc294-6740-5ee7-8350-055c2c4895ad": {
+      "atom": {
+        "status": "flagged",
+        "is_publishable": false
+      },
+      "artifact": {
+        "status": "draft",
+        "is_publishable": false
+      }
+    }
+  },
+  "before": {
+    "atoms": "4908b55913b921944c224829758a2ead360a811ae6bca3b491a40693b5eb0b36",
+    "artifacts": "b65be565aa2babd5bd4443e1a2ac74166ab6a40da6ee36497054d4c808f80667",
+    "atom_versions": "ae47675487e6172219c612f23320eee3571d49f2d6d2300d78fb64f543bb5d1d",
+    "artifact_versions": "543ebf701e48dfcc70bb214254682adb14e61c835c09e83363383bc28f6782d1",
+    "atom_io_specs": "18683185dc087e4a8c4c70387814058ba6e8a3f216b9ca410650ab5bb4eebc81",
+    "artifact_io_specs": "849682ff6639b422b1447977395791f9d9d9d5968747f7e4758e3586255c1f67",
+    "atom_parameters": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_parameters": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_descriptions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_descriptions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_references": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_references": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_audit_rollups": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_audit_rollups": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_audit_evidence": "f47081d33eb29728c40d0386e2b38944b754d67caf7dd8a5b78916544dd93c62"
+  },
+  "preserved": {
+    "atom_versions": [
+      {
+        "row": {
+          "s3_key": "",
+          "semver": "0.0.0+local.a5f0f251fa77",
+          "atom_id": "17939969-5346-573b-b04c-2f5e26cb1228",
+          "is_latest": true,
+          "created_at": "2026-11-06T14:38:23.323597+00:00",
+          "trust_tier": 3,
+          "version_id": "24f0550b-c68d-537c-8497-decd99201e8f",
+          "fingerprint": "550fc9f059a35be8c56e61034da9caf408386ca813461daa1f5fb1863ad6fb33",
+          "content_hash": "a5f0f251fa77d88591109e20e54c67cde3ccdd591770bce6434eda1dad8b2720",
+          "derives_from": null
+        }
+      },
+      {
+        "row": {
+          "s3_key": "",
+          "semver": "0.0.0+local.b2cf2424254b",
+          "atom_id": "8a4cc294-6740-5ee7-8350-055c2c4895ad",
+          "is_latest": true,
+          "created_at": "2026-11-06T14:38:23.323597+00:00",
+          "trust_tier": 3,
+          "version_id": "3c1ba3ed-e5ed-54f3-868f-5faadbd2a6a6",
+          "fingerprint": "63190cd0d61e4147ed62a7bf64bd04ef06de587c3cdb0af84e70dd923e6ad647",
+          "content_hash": "b2cf2424254bedefee23ec6ce1b7abc84cb6ec5691ee20e15ee69929d423e678",
+          "derives_from": null
+        }
+      }
+    ],
+    "atom_parameters": [],
+    "atom_references": [],
+    "atom_io_specs": [
+      {
+        "row": {
+          "name": "axes",
+          "atom_id": "8a4cc294-6740-5ee7-8350-055c2c4895ad",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "object",
+          "io_spec_id": "81918755-ecc7-4f8c-b33b-11bd9d640f3f",
+          "version_id": "3c1ba3ed-e5ed-54f3-868f-5faadbd2a6a6",
+          "constraints": "Nonempty tuple/list of finite float64 vectors, each strictly ascending or descending with at least two entries. Caller defines units; no sorting or singleton removal.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "points",
+          "atom_id": "17939969-5346-573b-b04c-2f5e26cb1228",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "abe23c8c-2042-45af-bcc2-6a91b0813496",
+          "version_id": "24f0550b-c68d-537c-8497-decd99201e8f",
+          "constraints": "Finite float64 matrix (Q,D) matching fitted axis order and units. Empty queries allowed; no coordinate conversion.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "result",
+          "atom_id": "17939969-5346-573b-b04c-2f5e26cb1228",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "ndarray",
+          "io_spec_id": "5be8592d-1bde-4be3-9e73-b82bd4e11649",
+          "version_id": "24f0550b-c68d-537c-8497-decd99201e8f",
+          "constraints": "Float64 interpolated values with shape (Q,) plus trailing value dimensions. Linear extrapolation outside the grid; nonfinite results reject. No physical validity or interpolation error bound.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "state",
+          "atom_id": "17939969-5346-573b-b04c-2f5e26cb1228",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "object",
+          "io_spec_id": "c117a77a-45d6-4d69-acf1-690829dbaa08",
+          "version_id": "24f0550b-c68d-537c-8497-decd99201e8f",
+          "constraints": "Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "state",
+          "atom_id": "8a4cc294-6740-5ee7-8350-055c2c4895ad",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "object",
+          "io_spec_id": "b43644ae-5e17-46dd-a52f-29dd94410e6e",
+          "version_id": "3c1ba3ed-e5ed-54f3-868f-5faadbd2a6a6",
+          "constraints": "Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "values",
+          "atom_id": "8a4cc294-6740-5ee7-8350-055c2c4895ad",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "1d9bce66-4caf-4b47-8e93-84a56c1f3685",
+          "version_id": "3c1ba3ed-e5ed-54f3-868f-5faadbd2a6a6",
+          "constraints": "Finite float64 values whose leading dimensions match axis lengths; optional trailing component dimensions. Caller storage is copied.",
+          "default_value_repr": ""
+        }
+      }
+    ],
+    "artifact_versions": [
+      {
+        "row": {
+          "s3_key": "",
+          "semver": "0.0.0+local.a5f0f251fa77",
+          "is_latest": true,
+          "created_at": "2026-11-06T14:38:23.323597+00:00",
+          "trust_tier": 3,
+          "version_id": "24f0550b-c68d-537c-8497-decd99201e8f",
+          "artifact_id": "17939969-5346-573b-b04c-2f5e26cb1228",
+          "fingerprint": "550fc9f059a35be8c56e61034da9caf408386ca813461daa1f5fb1863ad6fb33",
+          "content_hash": "a5f0f251fa77d88591109e20e54c67cde3ccdd591770bce6434eda1dad8b2720",
+          "derives_from": null
+        }
+      },
+      {
+        "row": {
+          "s3_key": "",
+          "semver": "0.0.0+local.b2cf2424254b",
+          "is_latest": true,
+          "created_at": "2026-11-06T14:38:23.323597+00:00",
+          "trust_tier": 3,
+          "version_id": "3c1ba3ed-e5ed-54f3-868f-5faadbd2a6a6",
+          "artifact_id": "8a4cc294-6740-5ee7-8350-055c2c4895ad",
+          "fingerprint": "63190cd0d61e4147ed62a7bf64bd04ef06de587c3cdb0af84e70dd923e6ad647",
+          "content_hash": "b2cf2424254bedefee23ec6ce1b7abc84cb6ec5691ee20e15ee69929d423e678",
+          "derives_from": null
+        }
+      }
+    ],
+    "artifact_parameters": [],
+    "artifact_references": [],
+    "artifact_io_specs": [
+      {
+        "row": {
+          "name": "axes",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "object",
+          "io_spec_id": "7a1578c1-3412-44de-86cf-95ffb0852af7",
+          "version_id": "3c1ba3ed-e5ed-54f3-868f-5faadbd2a6a6",
+          "artifact_id": "8a4cc294-6740-5ee7-8350-055c2c4895ad",
+          "constraints": "Nonempty tuple/list of finite float64 vectors, each strictly ascending or descending with at least two entries. Caller defines units; no sorting or singleton removal.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "points",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "3e2b1ef9-7b32-4f6d-8ca5-e991d44c2e7a",
+          "version_id": "24f0550b-c68d-537c-8497-decd99201e8f",
+          "artifact_id": "17939969-5346-573b-b04c-2f5e26cb1228",
+          "constraints": "Finite float64 matrix (Q,D) matching fitted axis order and units. Empty queries allowed; no coordinate conversion.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "result",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "ndarray",
+          "io_spec_id": "95afcd72-3d70-4037-b143-c7fcc789bfe3",
+          "version_id": "24f0550b-c68d-537c-8497-decd99201e8f",
+          "artifact_id": "17939969-5346-573b-b04c-2f5e26cb1228",
+          "constraints": "Float64 interpolated values with shape (Q,) plus trailing value dimensions. Linear extrapolation outside the grid; nonfinite results reject. No physical validity or interpolation error bound.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "state",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "object",
+          "io_spec_id": "aa94395a-fb23-46ac-8950-8dc3c6995ecd",
+          "version_id": "3c1ba3ed-e5ed-54f3-868f-5faadbd2a6a6",
+          "artifact_id": "8a4cc294-6740-5ee7-8350-055c2c4895ad",
+          "constraints": "Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "state",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "object",
+          "io_spec_id": "470315eb-80e9-4a36-920a-d777f051c7ab",
+          "version_id": "24f0550b-c68d-537c-8497-decd99201e8f",
+          "artifact_id": "17939969-5346-573b-b04c-2f5e26cb1228",
+          "constraints": "Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "values",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "ndarray",
+          "io_spec_id": "590ebeac-77a9-4cb7-976d-3a449af0ad49",
+          "version_id": "3c1ba3ed-e5ed-54f3-868f-5faadbd2a6a6",
+          "artifact_id": "8a4cc294-6740-5ee7-8350-055c2c4895ad",
+          "constraints": "Finite float64 values whose leading dimensions match axis lengths; optional trailing component dimensions. Caller storage is copied.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      }
+    ],
+    "artifact_audit_evidence": [
+      {
+        "row": {
+          "passed": true,
+          "status": "completed",
+          "details": {
+            "scope": "Exact source/interface draft intake only; no publication approval.",
+            "interfaces": [
+              {
+                "name": "axes",
+                "ordinal": 0,
+                "required": true,
+                "direction": "input",
+                "type_desc": "object",
+                "constraints": "Nonempty tuple/list of finite float64 vectors, each strictly ascending or descending with at least two entries. Caller defines units; no sorting or singleton removal.",
+                "default_value_repr": ""
+              },
+              {
+                "name": "values",
+                "ordinal": 1,
+                "required": true,
+                "direction": "input",
+                "type_desc": "ndarray",
+                "constraints": "Finite float64 values whose leading dimensions match axis lengths; optional trailing component dimensions. Caller storage is copied.",
+                "default_value_repr": ""
+              },
+              {
+                "name": "state",
+                "ordinal": 0,
+                "required": true,
+                "direction": "output",
+                "type_desc": "object",
+                "constraints": "Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact.",
+                "default_value_repr": ""
+              }
+            ],
+            "plan_sha256": "d3a51a50f5cf10f6aea6490f036e59580f68490e004e48785f8704f022252474",
+            "review_sha256": "5aa381691ed131e6ddebb0eca927f0cefa6354acf457ee377fafd62e04153cc2",
+            "source_sha256": "9e697739290fac724de4c0749860c41ec24221d966ea94984c9ad2efce3dea6b"
+          },
+          "audit_type": "asset_integrity_check",
+          "created_at": "2026-11-06T14:38:23.323597+00:00",
+          "version_id": "3c1ba3ed-e5ed-54f3-868f-5faadbd2a6a6",
+          "artifact_id": "8a4cc294-6740-5ee7-8350-055c2c4895ad",
+          "evidence_id": "0dcf2018-cdf4-5284-99ab-9d0ffaf5235a",
+          "source_kind": "automated",
+          "runner_version": "trackml-grid-provider-intake.v1",
+          "review_basis_at": null,
+          "run_duration_ms": null,
+          "source_revision": "",
+          "upstream_version": ""
+        }
+      },
+      {
+        "row": {
+          "passed": true,
+          "status": "completed",
+          "details": {
+            "scope": "Exact source/interface draft intake only; no publication approval.",
+            "interfaces": [
+              {
+                "name": "points",
+                "ordinal": 0,
+                "required": true,
+                "direction": "input",
+                "type_desc": "ndarray",
+                "constraints": "Finite float64 matrix (Q,D) matching fitted axis order and units. Empty queries allowed; no coordinate conversion.",
+                "default_value_repr": ""
+              },
+              {
+                "name": "state",
+                "ordinal": 1,
+                "required": true,
+                "direction": "input",
+                "type_desc": "object",
+                "constraints": "Opaque RegularGridInterpolator runtime state with linear method, bounds_error=False and fill_value=None. Must remain unmodified; not a portable serialized artifact.",
+                "default_value_repr": ""
+              },
+              {
+                "name": "result",
+                "ordinal": 0,
+                "required": true,
+                "direction": "output",
+                "type_desc": "ndarray",
+                "constraints": "Float64 interpolated values with shape (Q,) plus trailing value dimensions. Linear extrapolation outside the grid; nonfinite results reject. No physical validity or interpolation error bound.",
+                "default_value_repr": ""
+              }
+            ],
+            "plan_sha256": "d3a51a50f5cf10f6aea6490f036e59580f68490e004e48785f8704f022252474",
+            "review_sha256": "5aa381691ed131e6ddebb0eca927f0cefa6354acf457ee377fafd62e04153cc2",
+            "source_sha256": "9e697739290fac724de4c0749860c41ec24221d966ea94984c9ad2efce3dea6b"
+          },
+          "audit_type": "asset_integrity_check",
+          "created_at": "2026-11-06T14:38:23.323597+00:00",
+          "version_id": "24f0550b-c68d-537c-8497-decd99201e8f",
+          "artifact_id": "17939969-5346-573b-b04c-2f5e26cb1228",
+          "evidence_id": "1e3ffb7e-7ff0-55c9-890c-181709c6c7b8",
+          "source_kind": "automated",
+          "runner_version": "trackml-grid-provider-intake.v1",
+          "review_basis_at": null,
+          "run_duration_ms": null,
+          "source_revision": "",
+          "upstream_version": ""
+        }
+      }
+    ]
+  },
+  "originals_sha256": "f839940aa40edfe5734827698947ed1a426a79c16bb215d49820714ff632db50",
+  "publisher_sha256": "c21b07a45e3c0b5212babe70de7f668f33c28fa70b33d4c98a03a10606fabd82",
+  "review_sha256": "04e6a880a3b9e40f33784ad12ceb491e4e328718d4775ef07801b874bb0c0963"
+}
