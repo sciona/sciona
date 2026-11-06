@@ -30,8 +30,15 @@ def build_decomposed_plasticc_graph():
         inputs = [IOSpec(name=p.name, type_desc=typename(p.annotation), required=p.default is inspect.Parameter.empty,
                     default_value_repr='' if p.default is inspect.Parameter.empty else repr(p.default))
                   for p in signature.parameters.values()]
+        # Match the already-published canonical kernel interface, rather than
+        # exposing its postponed Python annotation aliases as catalog types.
+        if fn is matern_kernel_matrix:
+            for port, kind in zip(inputs, ('ndarray', 'object', 'object', 'float'), strict=True):
+                port.type_desc = kind
         returned = signature.return_annotation
         types = returned.__args__ if getattr(returned, '__origin__', None) is tuple else (returned,)
+        if fn is matern_kernel_matrix:
+            types = ('ndarray',)
         if len(types) != len(outputs):
             raise ValueError('Output annotation count differs')
         nodes.append(AlgorithmicNode(node_id=name, name=name, description=inspect.getdoc(fn) or name,
