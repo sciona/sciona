@@ -1,0 +1,221 @@
+{
+  "format": "classical-tabular-readiness.v1",
+  "read_only": true,
+  "catalog_mutations": 0,
+  "approved": false,
+  "original": {
+    "artifact_id": "11c51eb5-8c27-5df3-b820-dc67a4aff974",
+    "fqdn": "cdg.competition.solution.kaggle.classical_tabular_ensemble_topology",
+    "status": "draft",
+    "is_publishable": false,
+    "content_hash": "3cc5a5fdfab302b5c1a37abe86916ac996f577d11b733cba0bbf7b7d4438b2cd"
+  },
+  "source_version_id": "9f3c8c4f-ce85-5e9d-b169-8b055562ce65",
+  "reference": {
+    "artifact_id": "34df1e41-3522-5e4f-8db2-dee898f1c403",
+    "fqdn": "cdg.competition.solution.kaggle.classical_tabular_ensemble_topology.execution",
+    "status": "approved",
+    "is_publishable": true,
+    "version_id": "eeeb26c3-2d96-5053-b6d8-9de4b23b7dec",
+    "content_hash": "20ad0ed48457be92c61f27dbb7f21cf151eeb1151050134b1feda74b9c696772",
+    "trust_tier": 3,
+    "served": true
+  },
+  "source_stages": [
+    {
+      "stage_id": "table_audit_cleaning",
+      "description": "Normalize schema and types, impute missing values, remove constant/quasi-constant or duplicate columns, clip outliers, and define leakage-safe train/validation folds.",
+      "guarantees": [
+        "Feature transforms can be fit without validation leakage."
+      ]
+    },
+    {
+      "stage_id": "split_aware_feature_engineering",
+      "description": "Create target/count/frequency encodings, category interactions, entity embeddings, LDA topic features from text-like fields, group/session/user aggregations, log transforms, outlier or feature clipping, RFE or permutation-selected features, and sparse or dense feature matrices inside folds.",
+      "guarantees": [
+        "Feature rows align with labels and prediction rows."
+      ]
+    },
+    {
+      "stage_id": "tabular_model_zoo",
+      "description": "Train XGBoost, LightGBM, CatBoost with categorical support, ExtraTrees, RandomForest, sparse linear models, MLP/entity-embedding networks, TabNet, or TabPFN-style models with early stopping, class weights or SMOTE where appropriate, and metric-aware objectives.",
+      "guarantees": [
+        "Every stacked model has out-of-fold predictions."
+      ]
+    },
+    {
+      "stage_id": "ensemble_stacking_blending",
+      "description": "Blend, rank-average, or train a second-level stacker over out-of-fold predictions, optionally adding validation-safe pseudo-labeling or model selection by fold stability.",
+      "guarantees": [
+        "Blended predictions are fold-safe."
+      ]
+    },
+    {
+      "stage_id": "metric_calibration",
+      "description": "Apply QWK threshold search, multi-class probability calibration, class-imbalance handling, rank normalization, regression clipping, inverse transforms, or benchmark-specific formatting.",
+      "guarantees": [
+        "Predictions are calibrated and formatted."
+      ]
+    }
+  ],
+  "tests": {
+    "tests": 40,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "synthetic_only": true,
+  "software_sha256": {
+    "sciona/tabular_ensemble_features.py": "a21c9a05d159cea22cb6d46cd19ce7822ae260e33f081a8784a275a342864e95",
+    "sciona/tabular_ensemble_training.py": "5404123c59e394e7e35f62a5261f60d9a87ce8864017cc9a15723121cc3be272",
+    "sciona/tabular_ensemble_calibration.py": "4a04c21466734845754b8f6c86f326b851944a1cc19aeaf02a6c3a1b2e3a7244",
+    "sciona/tabular_ensemble_contract.py": "bd9b02b20cf40744bbd6d8cf183b0ba1f973f199c622dac784117cc9d866bec1",
+    "sciona/tabular_ensemble_graph.py": "3303fc529db2389f3210b30fd16aa6adad6779e00b0488dfd17c1a01fd156c5b",
+    "tests/test_tabular_ensemble_features.py": "284ae8ca51039dbb6fe92280e349f765c4ef9e003986c2ad408596e46abc65a9",
+    "tests/test_tabular_ensemble_training.py": "de380524f870bf7927482f2168110097b8a7be7b21a1977d04a01d47d616b291",
+    "tests/test_tabular_ensemble_calibration.py": "0597e06efd081e61aa89d0c204417f8b2abaf3d06906851be44fcd09ee2d1c99",
+    "tests/test_tabular_ensemble_contract.py": "7fadfdfd8eaadecc13175fd7ca0895854867f3b69c813df1cbfc4494d6fdf07f",
+    "scripts/audit_classical_tabular_readiness.py": "7c5c604db38d8f322f146182c42674b464315d1ec04da73b3e9ad8ed1769e48b"
+  },
+  "current_dependency_versions": {
+    "joblib": "1.5.3",
+    "numpy": "2.2.6",
+    "scikit-learn": "1.8.0",
+    "scipy": "1.17.1",
+    "threadpoolctl": "3.6.0"
+  },
+  "historical_dependency_drift": {
+    "numpy": {
+      "qualified": "2.4.2",
+      "current": "2.2.6"
+    }
+  },
+  "reuse_candidates": {
+    "atom": [
+      {
+        "fqdn": "sciona.atoms.ml.sklearn.calibration.sigmoid_calibration_fit",
+        "status": "approved",
+        "is_publishable": true,
+        "version_id": "41cba2bf-ce59-5b54-9cfd-b5c0a9e7ddf5",
+        "content_hash": "70e225fddbec4e9d7a39378f6dffdf55fdcfa63dafa7c5ad9e2c73a977421738",
+        "trust_tier": 3,
+        "native_eligible": true
+      },
+      {
+        "fqdn": "sciona.atoms.ml.sklearn.calibration.sigmoid_calibration_predict",
+        "status": "approved",
+        "is_publishable": true,
+        "version_id": "e54f2ea7-9cc7-5f35-93b3-1956f480ed00",
+        "content_hash": "c4e3c6a65aec1ec5db26067637ca0972d77484ee32fcf03798f32cad600ceff8",
+        "trust_tier": 3,
+        "native_eligible": true
+      },
+      {
+        "fqdn": "sciona.atoms.ml.sklearn.impute.simple_imputer_fit",
+        "status": "approved",
+        "is_publishable": true,
+        "version_id": "a2b3a338-3f95-5315-a491-601c74464d40",
+        "content_hash": "ee35bb3028813c1ceb157047d5f7a3128316ded8a61cf1751924ff973b1ed5e8",
+        "trust_tier": 3,
+        "native_eligible": true
+      },
+      {
+        "fqdn": "sciona.atoms.ml.sklearn.variance_threshold.variance_threshold_fit",
+        "status": "approved",
+        "is_publishable": false,
+        "version_id": "ebd967e2-bcf8-5848-9017-25fc0274d866",
+        "content_hash": "5c598673f51bc03b3e84fd77948c5a0761cabbe5b17353dbb26cce3d29ffcd29",
+        "trust_tier": 3,
+        "native_eligible": false
+      },
+      {
+        "fqdn": "sciona.atoms.ml.sklearn.variance_threshold.variance_threshold_support_mask",
+        "status": "approved",
+        "is_publishable": true,
+        "version_id": "feb02367-812c-5f95-a7a7-d2adbbbc5087",
+        "content_hash": "61a878b8ff31a8024c73accee0bee1a43db495eee93a543d9ac1a9e890310875",
+        "trust_tier": 3,
+        "native_eligible": true
+      },
+      {
+        "fqdn": "sciona.atoms.ml.sklearn.variance_threshold.variance_threshold_transform",
+        "status": "approved",
+        "is_publishable": false,
+        "version_id": "c729dd4a-62be-5b4f-8c91-ea583869ae34",
+        "content_hash": "c799396918f091d83353b0464545a66a537835b27abcd4b53283ac067ab0eecd",
+        "trust_tier": 3,
+        "native_eligible": false
+      },
+      {
+        "fqdn": "sciona.atoms.ml.tabular.gradient_boosting.frequency_encode",
+        "status": "approved",
+        "is_publishable": true,
+        "version_id": "5d8cdcf0-f130-59fe-b181-fdb6ac72a3dc",
+        "content_hash": "2fae00a5be5aaeaa58b600e603f8ca7f8adf2088205a6b266cb62ceb79c47e99",
+        "trust_tier": 3,
+        "native_eligible": true
+      },
+      {
+        "fqdn": "sciona.atoms.ml.tabular.gradient_boosting.frequency_encode_fit",
+        "status": "approved",
+        "is_publishable": true,
+        "version_id": "1dc41334-d77c-56f3-b884-f47771d77de6",
+        "content_hash": "de2199ac1748fa4cdaa5cf809924013fe85ac18d166d3fdcdeaf06bdcddd3924",
+        "trust_tier": 3,
+        "native_eligible": true
+      },
+      {
+        "fqdn": "sciona.atoms.ml.tabular.gradient_boosting.target_encode",
+        "status": "approved",
+        "is_publishable": true,
+        "version_id": "5096342c-9cd1-578f-a093-6de7dc863a31",
+        "content_hash": "32a0c276f90f3d597a271c25f32694aefbea1648f60f5b362afde930b54d1395",
+        "trust_tier": 3,
+        "native_eligible": true
+      }
+    ],
+    "artifact": [
+      {
+        "fqdn": "sciona.atoms.ml.sklearn.calibration.sigmoid_calibration_fit",
+        "status": "approved",
+        "is_publishable": true,
+        "version_id": "41cba2bf-ce59-5b54-9cfd-b5c0a9e7ddf5",
+        "content_hash": "70e225fddbec4e9d7a39378f6dffdf55fdcfa63dafa7c5ad9e2c73a977421738",
+        "trust_tier": 3,
+        "native_eligible": true
+      },
+      {
+        "fqdn": "sciona.atoms.ml.sklearn.calibration.sigmoid_calibration_predict",
+        "status": "approved",
+        "is_publishable": true,
+        "version_id": "e54f2ea7-9cc7-5f35-93b3-1956f480ed00",
+        "content_hash": "c4e3c6a65aec1ec5db26067637ca0972d77484ee32fcf03798f32cad600ceff8",
+        "trust_tier": 3,
+        "native_eligible": true
+      }
+    ]
+  },
+  "resource_policy": {
+    "serial": true,
+    "native_threads": 1
+  },
+  "findings": [
+    "Cleaning removes exact constant and duplicate numeric columns after imputation/clipping, but no explicit quasi-constant policy exists. Categorical columns are not deduplicated or screened.",
+    "Features implement one-hot and frequency encoding only. Original target/count encodings, interactions, entity embeddings, text topics, group aggregates, log transforms and feature selection need explicit source-scope resolution and implementation where required; derivative approval does not waive them.",
+    "The model-zoo source explicitly permits alternatives. Logistic regression and ExtraTrees form a valid declared branch; every base model has fold-local features and one out-of-fold score per training row.",
+    "The OOF logistic stacker and full-training base refit are implemented. Caller group identifiers enforce fold and population isolation; duplicate/entity discovery and chronological split policy are not inferred.",
+    "The binary held-out sigmoid procedure and fixed cutoff require an explicit realization of the original metric/output alternatives. Generic probability arrays are not a named competition submission format.",
+    "Numerical clipping/logit conversion, frequency fitting/application and feature screening are reuse candidates. Inspect source contracts and both legacy/canonical identities before adding providers or replacing arithmetic.",
+    "Current-runtime tests establish the retained derivative behavior only. Complete original scope, exact provider bindings and stored original graph publication remain unqualified."
+  ],
+  "next_actions": [
+    "Resolve complete feature-stage scope and explicit applicability policy without silently dropping named requirements.",
+    "Qualify reusable operations and keep table schema, folds, model selection and output policy in the recipe.",
+    "Implement and test the missing original capabilities, then qualify the complete stored original graph."
+  ],
+  "limits": [
+    "Generic algorithm-template and software metadata only; all executed inputs are synthetic.",
+    "Dependency versions are recorded, not a full installed-package integrity or clean-install qualification.",
+    "Name-pattern inventory is a starting point, not evidence that equivalent reusable providers are absent."
+  ]
+}
