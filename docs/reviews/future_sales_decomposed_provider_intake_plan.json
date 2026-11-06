@@ -1,0 +1,776 @@
+{
+  "approved": false,
+  "graph_digest": "782d6284440b7502758d526f2099e9224e1c76e7ba1ea78a5f52312c23bd510b",
+  "review_sha256": "2cd340cf913fab700849b196c2d7d72456e077eace25e6ed122fee0724e9fa91",
+  "intake_script_sha256": "d159b9244f40f6df5e18d57a45d90dbe7d4f8b19bf90d0cd52c62a1ad4214ebb",
+  "providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_future_sales_execution.aggregate",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_future_sales_execution.aggregate",
+      "version_id": "d08a5b96-26f6-5262-a069-da9dc4e0e27f",
+      "content_hash": "1944ddd249508c217e8251e73969bd74a87a6181be88a8c166e5723088c72c3c",
+      "provider_sha256": "076a09b48cfd714494df771e82e90871fe250ad15296ead7fc77b01385f3449a",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "transactions",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "entities",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "boundaries",
+          "ordinal": 2,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "totals",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "groups",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Compensated signed transaction summation within caller-defined periods and entity slots.",
+      "parameters": {
+        "transactions": "List of exact day/store/item/quantity dictionaries; integer positions and finite Python numeric quantities excluding bool.",
+        "entities": "Nonempty list of exact store/item/category dictionaries with Python integer slots in [0,2**31), unique store/item pairs and one category per item.",
+        "boundaries": "At least four strictly increasing Python integer boundaries excluding bool; the last interval is the unobserved forecast period."
+      },
+      "validity_bounds": "Transactions must lie inside observed periods and the explicit entity universe. Missing observed-period transactions mean zero. Group all quantities before math.fsum; preserve negative returns and reject nonfinite sums. No clipping occurs. Caller declares every entity active in every period. Entity order is preserved.",
+      "outputs": "Tuple: finite float64 observed totals (observed periods,entities), int64 grouping slots (entities,3).",
+      "plain_limits": "Add signed quantities within each period and entity before applying any bounds.",
+      "reuse": "Explicit time bins and grouped events transfer to other domains when fixed-population zero-absence semantics hold; store/item/category labels retain recipe roles.",
+      "atom_id": "ad3556d9-8105-576f-b0ae-912f8b362d35",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_future_sales_execution.aggregate",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_future_sales_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_future_sales_execution",
+        "import_module": "sciona.atoms.ml.decomposed_future_sales_execution",
+        "source_symbol": "aggregate",
+        "description": "Compensated net transaction sums within explicit periods and entities.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.1944ddd24950",
+      "fingerprint": "952b73ff9ea89220842169b02b71677948d4a20d25f6557e94fb4b87b1481534"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_future_sales_execution.assemble",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_future_sales_execution.assemble",
+      "version_id": "de4f8acb-eb9a-5631-a4fc-8e04d5740cc6",
+      "content_hash": "31d865280a5fa31d28586fe3b27a8d872596035260f543e22804f55c39a984d4",
+      "provider_sha256": "076a09b48cfd714494df771e82e90871fe250ad15296ead7fc77b01385f3449a",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "targets",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "lagged",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "encoded",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "lags",
+          "ordinal": 3,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "rolling_windows",
+          "ordinal": 4,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "panel",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Apply the retained three-category recipe layout to separately computed feature blocks.",
+      "parameters": {
+        "targets": "Float64 observed/future panel with one unknown last row.",
+        "lagged": "Aligned float64 lag and rolling block; NaN is allowed, infinity rejected.",
+        "encoded": "Aligned finite float64 block of exactly eleven columns from the three-group encoding recipe.",
+        "lags": "Configured lag labels in the same order as the supplied block.",
+        "rolling_windows": "Configured rolling labels in the same order as the supplied block."
+      },
+      "validity_bounds": "Validate block shapes, arrange the first six encoding columns before lags/rolling and the final five means after them, and attach period ids and feature labels. Does not authenticate same-invocation feature provenance or independently recompute means. This stage is the explicit three-category recipe boundary.",
+      "outputs": "Panel object with numeric features, copied flattened targets, complete period-major ids, entity count and ordered feature labels.",
+      "plain_limits": "Join the feature blocks in the exact order required by this recipe.",
+      "reuse": "Recipe-specific assembly; generic numeric training can accept other feature widths and categorical positions independently.",
+      "atom_id": "0a81aa6e-eb09-54ba-a573-414be833b05e",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_future_sales_execution.assemble",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_future_sales_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_future_sales_execution",
+        "import_module": "sciona.atoms.ml.decomposed_future_sales_execution",
+        "source_symbol": "assemble",
+        "description": "Apply the retained recipe layout to separate numeric feature blocks.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.31d865280a5f",
+      "fingerprint": "71d8e8c973848de792e944930cf1cf2a9c262944bd7efa4aa40c7f7fd9964232"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_future_sales_execution.bounded_targets",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_future_sales_execution.bounded_targets",
+      "version_id": "96ca90d8-78b3-558d-85b9-4bd95446daf4",
+      "content_hash": "673a1e3cd36eea6714732f9a099e20fd573f33162558a080b4deb3b6c952d538",
+      "provider_sha256": "076a09b48cfd714494df771e82e90871fe250ad15296ead7fc77b01385f3449a",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "totals",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "lower",
+          "ordinal": 1,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "upper",
+          "ordinal": 2,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "targets",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Clip observed numeric totals and append one unknown future row.",
+      "parameters": {
+        "totals": "Nonempty finite rank-two float64 observed panel.",
+        "lower": "Finite Python int/float lower bound excluding bool.",
+        "upper": "Finite Python int/float upper bound greater than lower, excluding bool."
+      },
+      "validity_bounds": "Return a fresh array using np.clip without truncation, rounding or imputation; append exactly one all-NaN row. The lower and upper bounds are independent inputs. No aggregation or model fitting occurs.",
+      "outputs": "Float64 panel with all observed rows clipped and one future row unknown.",
+      "plain_limits": "Bound observed totals and mark the future period as unknown.",
+      "reuse": "Domain-independent numeric panel operation; [0,20] is selected only by the root recipe.",
+      "atom_id": "f906e43c-9fd5-583b-89d4-3bba81f9ab0f",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_future_sales_execution.bounded_targets",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_future_sales_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_future_sales_execution",
+        "import_module": "sciona.atoms.ml.decomposed_future_sales_execution",
+        "source_symbol": "bounded_targets",
+        "description": "Clip numeric observed totals and append one unknown future row.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.673a1e3cd36e",
+      "fingerprint": "70ee422d1202ae61caee1bf6c08ef3ee1f91a43b12a1fd3391c49cd6e366aa62"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_future_sales_execution.encoding_features",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_future_sales_execution.encoding_features",
+      "version_id": "13eef8b1-994a-5a05-92bf-1fb02ab1e123",
+      "content_hash": "a6d81e3e87e146fc42408ccbc7c718909171abe544df9a8aa1352cbcddafd992",
+      "provider_sha256": "076a09b48cfd714494df771e82e90871fe250ad15296ead7fc77b01385f3449a",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "targets",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "groups",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "calendar_cycle",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "cold_start",
+          "ordinal": 3,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "encoded",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Build prior-only expanding numeric group means and explicit cyclic period features.",
+      "parameters": {
+        "targets": "Finite observed float64 numeric panel with exactly one final unknown row.",
+        "groups": "Aligned nonnegative int64 entity-by-group-column matrix; any positive number of grouping columns.",
+        "calendar_cycle": "Positive Python integer cycle length excluding bool.",
+        "cold_start": "Finite Python int/float initial mean excluding bool."
+      },
+      "validity_bounds": "For each period use only earlier observed rows. Preserve entity mean, one mean for each group partition, and global mean using the retained NumPy reduction order. At the first period use the explicit cold-start mean. Include grouping values, period index and sine/cosine. Reject nonfinite output. Group codes are converted to float64 features and integers above exact float64 precision are not guaranteed distinct.",
+      "outputs": "Finite float64 matrix in period-major/entity-minor order: group columns, period, sine, cosine, entity mean, partition means, global mean.",
+      "plain_limits": "Build numeric group summaries from prior periods and add the chosen cycle position.",
+      "reuse": "Grouping count and numeric targets are domain-independent; no learned embeddings, inferred events or calendar parsing are claimed.",
+      "atom_id": "245bf757-daf7-5240-bed6-e73d64abdcbf",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_future_sales_execution.encoding_features",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_future_sales_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_future_sales_execution",
+        "import_module": "sciona.atoms.ml.decomposed_future_sales_execution",
+        "source_symbol": "encoding_features",
+        "description": "Prior-only numeric group means and explicit cyclic period features.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.a6d81e3e87e1",
+      "fingerprint": "1c28b9b3dc4d6478ba0ff8a86e7bd05fa25712d9fbd013e754ee1348d41ddda8"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_future_sales_execution.lag_features",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_future_sales_execution.lag_features",
+      "version_id": "91390c78-4d1e-5558-bf73-333d1a323ffd",
+      "content_hash": "e3464208cf70a5564e6cf38df41aab4fcda6778d790d73353ba20d489a6ef573",
+      "provider_sha256": "076a09b48cfd714494df771e82e90871fe250ad15296ead7fc77b01385f3449a",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "targets",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "lags",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "rolling_windows",
+          "ordinal": 2,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "rolling_function",
+          "ordinal": 3,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "lagged",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Construct prior-only lags and full-width rolling means through an external rolling callable.",
+      "parameters": {
+        "targets": "Rank-two float64 panel with at least one finite observed row and exactly one final all-NaN row.",
+        "lags": "Nonempty list of unique positive Python integer offsets excluding bool.",
+        "rolling_windows": "Nonempty list of unique positive Python integer widths excluding bool.",
+        "rolling_function": "Externally bound rolling_statistics(values,window_size,agg_fns); must return aligned finite float64 (observed rows,1) means."
+      },
+      "validity_bounds": "Invoke the supplied rolling provider on a copy of each observed entity series for every requested width, with agg_fns=[mean]. Shift its current-inclusive results by one period and mask incomplete initial windows. Preserve configured order and NaN missing offsets. Output validation cannot authenticate an arbitrary callable; qualified graph binds the exact reviewed rolling atom.",
+      "outputs": "Float64 matrix in period-major/entity-minor order with lag columns then rolling columns.",
+      "plain_limits": "Use past observations only; leave incomplete windows unknown and call the separate rolling operation.",
+      "reuse": "Numeric panel lags and rolling features are independent of domain labels; one forecast row and fixed entity alignment remain explicit assumptions.",
+      "atom_id": "5f003f8e-5587-534a-8dc9-481155e200b6",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_future_sales_execution.lag_features",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_future_sales_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_future_sales_execution",
+        "import_module": "sciona.atoms.ml.decomposed_future_sales_execution",
+        "source_symbol": "lag_features",
+        "description": "Prior-only lags and full windows using the externally bound rolling atom.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.e3464208cf70",
+      "fingerprint": "aa5e985544ba072ae9bf8fb387a0290496a6352ed11a860ab19c2283a3127534"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_future_sales_execution.refit",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_future_sales_execution.refit",
+      "version_id": "f115922a-8c68-5b9c-94ce-0a564006cfb0",
+      "content_hash": "52968353bfce9f4908c9faac479ee5ef5fd40a1b75536a630892118e7f067e8c",
+      "provider_sha256": "076a09b48cfd714494df771e82e90871fe250ad15296ead7fc77b01385f3449a",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "panel",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "config",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "categorical_columns",
+          "ordinal": 2,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "lower",
+          "ordinal": 3,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "upper",
+          "ordinal": 4,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "selection",
+          "ordinal": 5,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "One isolated final fit with the selected parameters and boosting rounds, then forecast the final period.",
+      "parameters": {
+        "panel": "Same compatible numeric panel used for selection.",
+        "config": "Same explicit complete training configuration used for selection.",
+        "categorical_columns": "Same explicit categorical positions used for selection.",
+        "lower": "Same finite prediction lower bound used for selection.",
+        "upper": "Same finite prediction upper bound used for selection.",
+        "selection": "Exact search result with bounded selected parameters, ordered complete trial history, best recorded trial/rounds and matching population counts."
+      },
+      "validity_bounds": "Repeat numerical input validation and verify selection structure, search bounds, first-minimum trial and matching row counts. Fit exactly once using all observed rows from train_start, at selected_rounds; no new search. Forecast exactly the last period, preserve entity order and clip to the supplied bounds. Use fresh worker and finite JSON transport as search. Structural checks do not authenticate that parameters, scores and features originated from the same invocation; caller provenance remains required.",
+      "outputs": "Strict finite JSON predictions plus complete trial history, selected trial/rounds and training/validation/refit/forecast counts. No fitted model object is returned.",
+      "plain_limits": "Fit the selected model once on all eligible observed rows and predict the final period.",
+      "reuse": "Generic numeric fitting and bounded forecasting with explicit category policy; no original weights or historical accuracy guarantee.",
+      "atom_id": "60982f4c-5d28-5e1d-bad1-31c38cb09c33",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_future_sales_execution.refit",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_future_sales_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_future_sales_execution",
+        "import_module": "sciona.atoms.ml.decomposed_future_sales_execution",
+        "source_symbol": "refit",
+        "description": "One isolated selected-round refit over observed rows and bounded forecast.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.52968353bfce",
+      "fingerprint": "e5f01be004c4882850894de81c23e588072ca6da26919eaa1bf1a716a8d49d57"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_future_sales_execution.search",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_future_sales_execution.search",
+      "version_id": "36c55665-c61c-5a6a-affc-903f083f8e3c",
+      "content_hash": "57c58f9bc5c4eaf5f78c9501523805313f324e0e9a8fff22644b8608ead33ce2",
+      "provider_sha256": "076a09b48cfd714494df771e82e90871fe250ad15296ead7fc77b01385f3449a",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "panel",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "config",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "categorical_columns",
+          "ordinal": 2,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "lower",
+          "ordinal": 3,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "upper",
+          "ordinal": 4,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "selection",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Complete isolated numeric TPE search with early stopping and explicit category and prediction-bound policy.",
+      "parameters": {
+        "panel": "Panel of nonempty float64 features without infinity, finite observed targets, final unknown targets, complete rectangular int64 period ids and unique feature labels.",
+        "config": "Exact train_start, validation_start, trials, startup_trials, max_rounds, stopping_rounds, seed and bounded search_space for num_leaves/min_data_in_leaf/learning_rate.",
+        "categorical_columns": "Distinct in-range integer column positions; selected values must be finite nonnegative int32-compatible integers. Empty list is allowed.",
+        "lower": "Finite Python numeric prediction lower bound excluding bool.",
+        "upper": "Finite Python numeric prediction upper bound greater than lower, excluding bool."
+      },
+      "validity_bounds": "Fresh same-interpreter worker through strict finite JSON pipes, with unknown numeric values encoded as null. Enforce one-thread native pools, one-thread LightGBM and one Optuna job. Require ordered nonempty train/validation/final periods, at least two training and validation rows, model-based trials beyond startup, valid early stopping, seed in [0,2**32), and finite nondegenerate positive search ranges. Train every requested trial using deterministic squared-error LightGBM and clipped-prediction RMSE. Do not refit on the combined observed population here. Timeout is positive finite SCIONA_FUTURE_SALES_TIMEOUT_SECONDS, default 3600 seconds. Failures and captured diagnostics are reported generically. No payload files are used.",
+      "outputs": "Finite JSON dictionary: selected parameters, complete ordered trial history, selected trial/rounds and all population counts. Trial metrics are private runtime outputs.",
+      "plain_limits": "Try every configured parameter choice in an isolated worker and select the best recorded validation trial.",
+      "reuse": "Numeric feature widths, categorical positions and bounds are explicit. Rectangular periods, rolling one-step observation availability and clipped-RMSE selection remain declared assumptions; selection scores are not unbiased accuracy estimates.",
+      "atom_id": "245d4b2a-10dd-54cd-bdec-127914927d3d",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_future_sales_execution.search",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_future_sales_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_future_sales_execution",
+        "import_module": "sciona.atoms.ml.decomposed_future_sales_execution",
+        "source_symbol": "search",
+        "description": "Complete isolated TPE search with early stopping and explicit numeric policy.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.57c58f9bc5c4",
+      "fingerprint": "0d14cc16d6ab8909960fa9155d19f50de4de9bcf5e1cd0c8f57f783d380601c6"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_future_sales_execution.unpack",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_future_sales_execution.unpack",
+      "version_id": "8c145136-8a0f-5789-b9ee-2c34ec689ff0",
+      "content_hash": "81fe4790de9bc5d11b0abcb6bf8590c27d51b592ec536d42a8815c50677ff54b",
+      "provider_sha256": "076a09b48cfd714494df771e82e90871fe250ad15296ead7fc77b01385f3449a",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "payload",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "transactions",
+          "ordinal": 0,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "entities",
+          "ordinal": 1,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "boundaries",
+          "ordinal": 2,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "lags",
+          "ordinal": 3,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "rolling_windows",
+          "ordinal": 4,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "calendar_cycle",
+          "ordinal": 5,
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "cold_start",
+          "ordinal": 6,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "config",
+          "ordinal": 7,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "lower",
+          "ordinal": 8,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "upper",
+          "ordinal": 9,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "categorical_columns",
+          "ordinal": 10,
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "operation": "Validate the finite JSON root and expose independent populations and recipe controls.",
+      "parameters": {
+        "payload": "Exact version/transactions/entities/boundaries/feature_controls/training_controls dictionary. Version is Python integer one excluding bool. Feature controls have exactly lags, rolling_windows, calendar_cycle and cold_start; training controls are a dictionary."
+      },
+      "validity_bounds": "Require strict finite JSON serialization, deep-copy input, and finite Python int/float cold_start in [0,20] excluding bool. Detailed population, offset, chronology and training validation occurs downstream. No hidden feature construction or training occurs in this stage.",
+      "outputs": "Ordered tuple: transactions, entities, boundaries, lags, rolling_windows, calendar_cycle, float cold_start, training config, lower=0., upper=20., categorical_columns=[0,1,2].",
+      "plain_limits": "Copy the input groups and settings and expose the chosen recipe controls.",
+      "reuse": "Root recipe policy remains explicit; downstream numeric operations accept their controls independently.",
+      "atom_id": "d082bc26-ba83-5dd8-8dc6-356fff84e538",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.decomposed_future_sales_execution.unpack",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.decomposed_future_sales_execution",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.decomposed_future_sales_execution",
+        "import_module": "sciona.atoms.ml.decomposed_future_sales_execution",
+        "source_symbol": "unpack",
+        "description": "Expose private root populations and explicit recipe controls.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "semver": "0.0.0+local.81fe4790de9b",
+      "fingerprint": "46460ac737c5a51350d46903f4b99a3f22a85bbfad7e9b71bd2eb3dc847b4000"
+    }
+  ],
+  "limitations": [
+    "Draft source/interface intake only; semantic publication and dependency gates remain.",
+    "Eight providers expose complete period aggregation, bounds, prior-only features, recipe assembly, TPE search and final refit. Existing rolling statistics is bound separately. Numeric widths, categories and bounds are explicit; original, derivative and provider histories are preserved."
+  ],
+  "owners": {
+    "sciona-atoms": {
+      "owner_id": "33ed07a2-1bea-5b17-8b71-d6d0e590fdd9",
+      "source_repo_id": "3bff5d3b-7b24-45c0-b688-1edb61107107"
+    },
+    "sciona-atoms-ml": {
+      "owner_id": "33ed07a2-1bea-5b17-8b71-d6d0e590fdd9",
+      "source_repo_id": "27b787a0-27ed-4760-92b7-ad8e8b4b815c"
+    }
+  },
+  "preserved_sha256": "427e3fddc59d1a81336e998c044ceffd91b76560116c1ef82ea8b090cabac81f"
+}
