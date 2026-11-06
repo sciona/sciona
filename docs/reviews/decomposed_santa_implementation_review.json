@@ -1,0 +1,267 @@
+{
+  "format": "decomposed-santa-implementation-review.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "source_qualification_complete": false,
+  "graph_nodes": 6,
+  "graph_edges": 10,
+  "graph_digest": "4f9f38649f504b19596863697bfa53faf3310634cfa8b67b51c44d56d3539ebb",
+  "providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.santa_execution.santa_prepare",
+      "catalog_fqdn": "sciona.atoms.ml.santa_execution.santa_prepare",
+      "version_id": "df0104e1-a776-579f-91c9-51934c313fd5",
+      "content_hash": "e019cee768aee0955747b447c79085a83205ed55bf417195220e5b6e2d2e3a0e",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "payload",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "9515cd9fd5848c3cd550e4f8a2af5a3b397840b62c6e4a97bac5596a504292e0",
+      "classification": "source_recipe_adapter"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_santa_execution.fit",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_santa_execution.fit",
+      "version_id": "b184b090-01ea-5043-a0f3-c01a4135bbf0",
+      "content_hash": "9b28a90c78f91b3613445bd33df34e7363475963adcc90d3c3970ab0ce03bfc1",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "models",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "3ab57f6a872287da9bdbe982438609e859d17d6d6af02bd6330e4e50bda8e2c8",
+      "classification": "source_recipe_adapter"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_santa_execution.predictions",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_santa_execution.predictions",
+      "version_id": "4639ea4e-a6db-5203-80aa-5aeac3766594",
+      "content_hash": "84841ba079661fe620e2a9c8086f47e3e00720f9e53f10f4a7edc61d87499e9a",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "models",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "predicted",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "3ab57f6a872287da9bdbe982438609e859d17d6d6af02bd6330e4e50bda8e2c8",
+      "classification": "source_recipe_adapter"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_santa_execution.blend_inputs",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_santa_execution.blend_inputs",
+      "version_id": "43a12b91-8bdb-559b-a158-1f4fd134725f",
+      "content_hash": "8834c097b03d079896a5f6b3385c326d680eb4f939d2c5e4b621fe8609e9c048",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "predicted",
+          "ordinal": 1,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "coefficients",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "3ab57f6a872287da9bdbe982438609e859d17d6d6af02bd6330e4e50bda8e2c8",
+      "classification": "source_recipe_adapter"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.numerical.statistics.ordered_sum.ordered_weighted_sum",
+      "catalog_fqdn": "sciona.atoms.numerical.statistics.ordered_sum.ordered_weighted_sum",
+      "version_id": "5fb9c91f-ff5f-590c-b376-88e2a7360440",
+      "content_hash": "814d0ff20f33820537741e1f116c32dfa69262d56dc16d872f3a055f77bd6968",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "coefficients",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "initial",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "893e4fb0c884d1732d9bba0ae2e203b72170bba11fbc89443306e6fd1b6ea359",
+      "classification": "generic_operation"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.decomposed_santa_execution.result",
+      "catalog_fqdn": "sciona.atoms.ml.decomposed_santa_execution.result",
+      "version_id": "810cef48-3585-5b2d-8b8b-ef673f5d3226",
+      "content_hash": "57a8c764e029cf1d19d6e31607cde26bb9420eb573811a6a4ab24d8f8ed9856e",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "models",
+          "ordinal": 1,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "input",
+          "name": "initial",
+          "ordinal": 2,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "provider_sha256": "3ab57f6a872287da9bdbe982438609e859d17d6d6af02bd6330e4e50bda8e2c8",
+      "classification": "source_recipe_adapter"
+    }
+  ],
+  "execution_evidence_commit": "e09a1d710cd90cd2bcf2f21451a018ecb199c83a",
+  "root_inputs": [
+    "payload"
+  ],
+  "root_outputs": [
+    "result"
+  ],
+  "runtime": {
+    "joblib": "1.5.3",
+    "lightgbm": "4.7.0",
+    "narwhals": "2.26.0",
+    "numpy": "2.2.6",
+    "pandas": "2.3.3",
+    "python-dateutil": "2.9.0.post0",
+    "pytz": "2026.1.post1",
+    "scikit-learn": "1.8.0",
+    "scipy": "1.17.1",
+    "six": "1.17.0",
+    "threadpoolctl": "3.6.0",
+    "tzdata": "2025.3"
+  },
+  "evidence_sha256": {
+    "docs/reviews/decomposed_santa_graph_execution.json": "1064ef9f1b28bc95e22c95c635689f9c59f69776b80708ad730afe4da4564837",
+    "docs/reviews/decomposed_santa_runtime_tests.json": "57ea3cd33c0410c81722175bcc8ca5c15dc1128263f3080913906c407260b628",
+    "docs/reviews/decomposed_santa_package_files.json": "a5600cb498fe87d600ed87ca0b0f2a0ce7ad598b9b33c2cdf043686b5a87fcb8"
+  },
+  "reviewer_sha256": "7fd50b982c44cc3d586a22e150e855af48f60ffcbbea40b973aad95cce16458e",
+  "limitations": [
+    "This review establishes current implementation parity and interfaces, not publication eligibility.",
+    "Exact source correction and provider semantic contracts still require review before promotion.",
+    "Generic ordered combination supports negative and non-unit-sum coefficients; recipe controls remain separate.",
+    "Intermediate shape checks do not authenticate provenance; inputs must come from one graph invocation."
+  ]
+}
