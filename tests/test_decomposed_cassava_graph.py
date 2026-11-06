@@ -138,3 +138,11 @@ def test_actual_runner_routes_both_generic_sums(monkeypatch, tmp_path):
         np.testing.assert_array_equal(actual['predictions'][field], expected[field])
     assert captured['pair_sum', 'out_paired'].shape == (15,)
     assert captured['final_sum', 'out_scores'].shape == (15,)
+    # Exercise the same guarded runner entry point used by full qualification.
+    from scripts.decomposed_cassava_graph_execution import execute_through_graph
+    returned = execute_through_graph(plan, **controls)
+    assert calls == [True, True]
+    for field in ('scores', 'labels'):
+        np.testing.assert_array_equal(returned[0][field], expected[field])
+    assert returned[1:] == tuple(trained[k] for k in
+                                ('family_outputs', 'histories', 'evaluations', 'checkpoints'))
