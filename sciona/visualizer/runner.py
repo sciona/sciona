@@ -13,7 +13,7 @@ from typing import Any, Callable, Dict, List, Optional, Tuple
 import numpy as np
 import pandas as pd
 
-from sciona.architect.models import AlgorithmicNode, DependencyEdge, NodeStatus
+from sciona.architect.models import AlgorithmicNode, DependencyEdge, EdgeKind, NodeStatus
 from sciona.ghost.registry import REGISTRY
 from sciona.synthesizer.ghost_sim import _ensure_atoms_imported
 
@@ -92,6 +92,7 @@ async def load_cdg_from_memgraph(driver, repo: str) -> Tuple[List[AlgorithmicNod
             RETURN s.node_id AS source_id, t.node_id AS target_id,
                    r.output_name AS output_name, r.input_name AS input_name,
                    r.source_type AS source_type, r.target_type AS target_type,
+                   r.edge_kind AS edge_kind,
                    r.requires_glue AS requires_glue
             """,
             parameters={"repo": repo},
@@ -157,6 +158,7 @@ async def load_cdg_from_memgraph(driver, repo: str) -> Tuple[List[AlgorithmicNod
                 input_name=rec["input_name"] or "",
                 source_type=rec["source_type"] or "",
                 target_type=rec["target_type"] or "",
+                edge_kind=rec.get("edge_kind") or EdgeKind.DATA_FLOW,
                 requires_glue=bool(rec["requires_glue"]),
             )
         )
@@ -498,6 +500,20 @@ class CDGExecutionSession:
             
         # 3. Sort nodes
         exec_nodes = get_topo_sorted_leaves(nodes, edges, target_node_id)
+        executable_by_id = {n.node_id: n for n in exec_nodes}
+        callable_edges = [e for e in edges if e.edge_kind == EdgeKind.CALLABLE_INJECTION
+                          and e.target_id in executable_by_id]
+        callable_only = set()
+        for edge in callable_edges:
+            if edge.source_id not in executable_by_id:
+                raise ValueError('Callable injection requires a grounded executable source')
+            outgoing = [e for e in edges if e.source_id == edge.source_id
+                        and e.target_id in executable_by_id]
+            if all(e.edge_kind == EdgeKind.CALLABLE_INJECTION for e in outgoing):
+                callable_only.add(edge.source_id)
+        for source in callable_only:
+            if any(e.target_id == source for e in edges):
+                raise ValueError('Callable-only sources must be pure functions, not bound closures')
         
         # Build mapping target_id -> list of incoming edges
         incoming_edges: Dict[str, List[DependencyEdge]] = {n.node_id: [] for n in exec_nodes}
@@ -539,12 +555,22 @@ class CDGExecutionSession:
                 node_id=node_id,
                 payload=event_payload,
             )
+            if node_id in callable_only:
+                # Preserve the registered function itself. Its required inputs
+                # are supplied by the caller on each invocation, not root inputs.
+                trace.append({"node_id": node_id, "name": node.name,
+                              "cached": False, "callable_reference": True})
+                log_event("executor", "node_execution", "CDG_NODE_COMPLETED",
+                          run_id=self.run_id, stage="execute_cdg", node_id=node_id,
+                          duration_ms=(time.perf_counter() - node_started_at) * 1000.0,
+                          payload={**event_payload, "callable_reference": True})
+                continue
             
             # Check caching: can we reuse computed outputs?
             # A supplied graph is an editable evolution snapshot. Node IDs may be
             # stable while implementations or wiring change between versions, so
             # the run-level cache is not valid for these executions.
-            cached_outputs = None if cdg is not None else load_cached_outputs(self.run_dir, node_id)
+            cached_outputs = None if cdg is not None or callable_edges else load_cached_outputs(self.run_dir, node_id)
             if cached_outputs is not None:
                 logger.info(f"Reusing cached outputs for node: {node.name}")
                 for name, val in cached_outputs.items():
@@ -576,6 +602,11 @@ class CDGExecutionSession:
                 edge_found = False
                 for edge in node_in_edges:
                     if edge.input_name == param_name:
+                        if edge.edge_kind == EdgeKind.CALLABLE_INJECTION:
+                            source = executable_by_id[edge.source_id]
+                            args[param_name] = REGISTRY[source.matched_primitive]["impl"]
+                            edge_found = True
+                            break
                         src_key = f"{edge.source_id}/{edge.output_name}"
                         if src_key in state:
                             args[param_name] = state[src_key]
