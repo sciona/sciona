@@ -1,0 +1,229 @@
+{
+  "format": "trackml-commit-provider-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "providers": [
+    {
+      "artifact_id": "8f90d8d6-1269-42fe-8f16-2079a27856ad",
+      "fqdn": "sciona.atoms.particle_tracking.track_matching.greedy_track_commit",
+      "runtime_fqdn": "sciona.atoms.particle_tracking.track_matching.atoms.greedy_track_commit",
+      "version_id": "77bf56ac-878c-59d1-85c1-58f8cb32513e",
+      "content_hash": "ad31550260f5d966615a319c2b5c13c63c34dbf08cf46cf07af7dbc195c05a36",
+      "interfaces": [
+        {
+          "direction": "input",
+          "name": "hit_matrix",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Integer resource matrix (N,M) with nonnegative int64 IDs strictly below the nonempty boolean used-mask length. Zero is an empty-slot sentinel. Counts are integers: min_nhits >= 1, max_nloss >= 0, max_nrows >= 0; max_loss_fraction is finite in [0,1]. Rows are processed in supplied order. Duplicate IDs within a row count as repeated positions, not unique resources. Provider copies inputs; caller owns ordering and any mutation or reservation of skipped rows."
+        },
+        {
+          "direction": "input",
+          "name": "used",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Integer resource matrix (N,M) with nonnegative int64 IDs strictly below the nonempty boolean used-mask length. Zero is an empty-slot sentinel. Counts are integers: min_nhits >= 1, max_nloss >= 0, max_nrows >= 0; max_loss_fraction is finite in [0,1]. Rows are processed in supplied order. Duplicate IDs within a row count as repeated positions, not unique resources. Provider copies inputs; caller owns ordering and any mutation or reservation of skipped rows."
+        },
+        {
+          "direction": "input",
+          "name": "min_nhits",
+          "ordinal": 2,
+          "type_desc": "int",
+          "required": false,
+          "default_value_repr": "3",
+          "constraints": "Integer resource matrix (N,M) with nonnegative int64 IDs strictly below the nonempty boolean used-mask length. Zero is an empty-slot sentinel. Counts are integers: min_nhits >= 1, max_nloss >= 0, max_nrows >= 0; max_loss_fraction is finite in [0,1]. Rows are processed in supplied order. Duplicate IDs within a row count as repeated positions, not unique resources. Provider copies inputs; caller owns ordering and any mutation or reservation of skipped rows."
+        },
+        {
+          "direction": "input",
+          "name": "max_nloss",
+          "ordinal": 3,
+          "type_desc": "int",
+          "required": false,
+          "default_value_repr": "100",
+          "constraints": "Integer resource matrix (N,M) with nonnegative int64 IDs strictly below the nonempty boolean used-mask length. Zero is an empty-slot sentinel. Counts are integers: min_nhits >= 1, max_nloss >= 0, max_nrows >= 0; max_loss_fraction is finite in [0,1]. Rows are processed in supplied order. Duplicate IDs within a row count as repeated positions, not unique resources. Provider copies inputs; caller owns ordering and any mutation or reservation of skipped rows."
+        },
+        {
+          "direction": "input",
+          "name": "max_loss_fraction",
+          "ordinal": 4,
+          "type_desc": "float",
+          "required": false,
+          "default_value_repr": "1.0",
+          "constraints": "Integer resource matrix (N,M) with nonnegative int64 IDs strictly below the nonempty boolean used-mask length. Zero is an empty-slot sentinel. Counts are integers: min_nhits >= 1, max_nloss >= 0, max_nrows >= 0; max_loss_fraction is finite in [0,1]. Rows are processed in supplied order. Duplicate IDs within a row count as repeated positions, not unique resources. Provider copies inputs; caller owns ordering and any mutation or reservation of skipped rows."
+        },
+        {
+          "direction": "input",
+          "name": "max_nrows",
+          "ordinal": 5,
+          "type_desc": "int",
+          "required": false,
+          "default_value_repr": "100000",
+          "constraints": "Integer resource matrix (N,M) with nonnegative int64 IDs strictly below the nonempty boolean used-mask length. Zero is an empty-slot sentinel. Counts are integers: min_nhits >= 1, max_nloss >= 0, max_nrows >= 0; max_loss_fraction is finite in [0,1]. Rows are processed in supplied order. Duplicate IDs within a row count as repeated positions, not unique resources. Provider copies inputs; caller owns ordering and any mutation or reservation of skipped rows."
+        },
+        {
+          "direction": "output",
+          "name": "selected",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Returns a copied int64 selection matrix and boolean claimed mask with the input shapes. Rejected rows and already-claimed positions are zeroed. Accepted rows claim their resource IDs; rejected rows claim nothing. The sentinel mask entry is always true. Ordered greedy selection is not a globally optimal allocation. Empty matrices and all-zero rows are accepted by this atom, unlike the stricter source recipe."
+        },
+        {
+          "direction": "output",
+          "name": "claimed",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Returns a copied int64 selection matrix and boolean claimed mask with the input shapes. Rejected rows and already-claimed positions are zeroed. Accepted rows claim their resource IDs; rejected rows claim nothing. The sentinel mask entry is always true. Ordered greedy selection is not a globally optimal allocation. Empty matrices and all-zero rows are accepted by this atom, unlike the stricter source recipe."
+        }
+      ],
+      "operation": "Select ordered rows of resource IDs subject to a minimum retained position count, maximum already-claimed count and fraction, and accepted-row budget; return copied selections and updated claims.",
+      "plain_description": "Choose rows in their supplied order while removing resources already taken by earlier choices, subject to supplied count and loss limits.",
+      "validity_bounds": "Integer resource matrix (N,M) with nonnegative int64 IDs strictly below the nonempty boolean used-mask length. Zero is an empty-slot sentinel. Counts are integers: min_nhits >= 1, max_nloss >= 0, max_nrows >= 0; max_loss_fraction is finite in [0,1]. Rows are processed in supplied order. Duplicate IDs within a row count as repeated positions, not unique resources. Provider copies inputs; caller owns ordering and any mutation or reservation of skipped rows. Returns a copied int64 selection matrix and boolean claimed mask with the input shapes. Rejected rows and already-claimed positions are zeroed. Accepted rows claim their resource IDs; rejected rows claim nothing. The sentinel mask entry is always true. Ordered greedy selection is not a globally optimal allocation. Empty matrices and all-zero rows are accepted by this atom, unlike the stricter source recipe.",
+      "reuse": "Pure ordered resource allocation over integer IDs and explicit count/fraction controls; no event, detector, row-ranking or output-format policy.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "tests": {
+    "tests": 36,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "exact_source_cases": {
+    "batches": 144
+  },
+  "source_comparison_sha256": {
+    "source": "d74daba0b006d2c5f2a515820c0e096b2bf3206527ad69ef856a6610fa0d6a23",
+    "retained": "985fedbd7ad1905b0b3ed0e9118674b1257293ee03a5d34d5e46ea23bfa3faa8",
+    "reviewer": "fc9a6de6ac243249bf9a85820cba7f88413d1efa338914ec82489e303c5fe0a4",
+    "provider": "dda1f5a1d363efbd45d0357edea25ce1000a6e9df9de29e73d653ee116a2edd4"
+  },
+  "source_differences": {
+    "reservation": true,
+    "empty_rows": true
+  },
+  "software_sha256": {
+    "tests/test_commit_provider_semantics.py": "f647fef528d057fa5a895705df6f3dbc0da9d2c70948a79e33d8d330d951983d",
+    "tests/test_decomposed_trackml_commit.py": "11c399bd70011d443a1a96b0bae56c46deaa3b38938735073e8df04a3966904e",
+    "scripts/review_trackml_commit_provider_semantics.py": "bcfe012f04b396ad6a9ca3fdedea35d54336ebf6b8c29e82400313eb5367478e",
+    "scripts/review_trackml_commit_reuse.py": "fc9a6de6ac243249bf9a85820cba7f88413d1efa338914ec82489e303c5fe0a4",
+    "scripts/review_trackml_geometry_provider_semantics.py": "c1d650e245a181370160d0d859871cdc6fb4d0b3b10a1e82c8f309423bb575b8",
+    "scripts/stage_trackml_commit_providers.py": "faeed9e1dd43d6dc3cee284385f5dcab01de3e41a51a299517b37741be2d4f4e",
+    "sciona/trackml_candidates.py": "985fedbd7ad1905b0b3ed0e9118674b1257293ee03a5d34d5e46ea23bfa3faa8",
+    "sciona/decomposed_trackml_commit_lifecycle.py": "bfb44674467277911daf910e1d925547acc4487a0042972365ac055e95506778",
+    "sciona/ghost/registry.py": "793723a75d07a88eed39f59d8d4dc327c54adbf75db7a03003516a6f74c81b51",
+    "sciona-atoms-physics/src/sciona/atoms/particle_tracking/track_matching/atoms.py": "dda1f5a1d363efbd45d0357edea25ce1000a6e9df9de29e73d653ee116a2edd4",
+    "sciona-atoms-physics/src/sciona/atoms/particle_tracking/track_matching/expressions.py": "9692e1ddc0911dfb96ac48d7ab6529b0265376bf4bdc190ee0c3bc9bd3f88a89",
+    "sciona-atoms-physics/src/sciona/atoms/particle_tracking/track_matching/witnesses.py": "a8976f7975ca099bddcbc1fd4e2a81e878a315eb980ff6d0181e47e44a93a962",
+    "sciona-atoms-physics/src/sciona/atoms/particle_tracking/source_tracking/solution_LICENSE.source": "00404581925abc4b8435bb7813eee07ac1df8b834326a33ee969d8315e9471fe"
+  },
+  "installed_packages": {
+    "annotated-types": {
+      "version": "0.7.0",
+      "hashed_files_verified": 7,
+      "active_requirements": []
+    },
+    "asttokens": {
+      "version": "2.4.1",
+      "hashed_files_verified": 13,
+      "active_requirements": [
+        "six>=1.12.0"
+      ]
+    },
+    "icontract": {
+      "version": "2.7.3",
+      "hashed_files_verified": 16,
+      "active_requirements": [
+        "asttokens<3,>=2",
+        "typing_extensions"
+      ]
+    },
+    "mpmath": {
+      "version": "1.3.0",
+      "hashed_files_verified": 92,
+      "active_requirements": []
+    },
+    "numpy": {
+      "version": "2.2.6",
+      "hashed_files_verified": 876,
+      "active_requirements": []
+    },
+    "pydantic": {
+      "version": "2.12.5",
+      "hashed_files_verified": 111,
+      "active_requirements": [
+        "annotated-types>=0.6.0",
+        "pydantic-core==2.41.5",
+        "typing-extensions>=4.14.1",
+        "typing-inspection>=0.4.2"
+      ]
+    },
+    "pydantic-core": {
+      "version": "2.41.5",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.14.1"
+      ]
+    },
+    "six": {
+      "version": "1.17.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "sympy": {
+      "version": "1.14.0",
+      "hashed_files_verified": 1571,
+      "active_requirements": [
+        "mpmath<1.4,>=1.1.0"
+      ]
+    },
+    "threadpoolctl": {
+      "version": "3.6.0",
+      "hashed_files_verified": 5,
+      "active_requirements": []
+    },
+    "typing-extensions": {
+      "version": "4.16.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "typing-inspection": {
+      "version": "0.4.2",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.12.0"
+      ]
+    }
+  },
+  "intake_plan_sha256": "3b19ee9402f1620a203ee443fd528aa732179110742d213ac3bcf3c068f12331",
+  "resource_policy": {
+    "serial_tests": true,
+    "native_threads": 1
+  },
+  "limitations": [
+    "Automated Tier3 qualification only; no human Tier1 or usage-qualified Tier2 designation.",
+    "Caller supplies an int64 matrix of nonnegative resource IDs and a nonempty one-dimensional boolean used mask. Every ID must index the mask. Zero is an empty-slot sentinel and claimed[0] is always true.",
+    "Counts must be integers with min_nhits >= 1, max_nloss >= 0 and max_nrows >= 0. The loss fraction must be finite in [0,1]. Existing preconditions do not enforce the full domain; caller boundaries must do so.",
+    "Rows are processed in caller-supplied order. Greedy selection is order-dependent and is not a globally optimal allocation. Resource IDs carry no particle-specific meaning.",
+    "Duplicate IDs within one row count as repeated positions, not unique resources. Qualification does not promise within-row deduplication.",
+    "The minimum retained count and maximum loss count/fraction are inclusive. The accepted-row budget is strict: after max_nrows acceptances no more rows are accepted. Zero budget accepts no rows.",
+    "Provider copies both inputs and returns selected rows and the updated claimed mask. Rejected rows claim no resources. Reserving skipped rows and in-place mutation are separate recipe policies.",
+    "Empty matrices and all-zero rows are accepted by the provider. Pinned source asserts on all-zero rows, so source parity only applies to nonempty rows.",
+    "Provider defaults max_nloss=100 and max_nrows=100000 differ from source None, which resolves to matrix width and row count. Translate source defaults explicitly.",
+    "Symbolic metadata describes only loss_fraction=nloss/nhits, not the ordered selection algorithm. Its positive max_nrows bound excludes zero even though concrete execution supports zero. Witnesses report output shapes and dtypes only.",
+    "Candidate ordering, identifier assignment, submission formatting and fill policy remain caller operations. No historical competition accuracy or global optimization guarantee is claimed.",
+    "Installed RECORD validation checks current package files, not publisher authentication or clean deployment on another platform.",
+    "Provider publication and original TrackML CDG qualification remain separate actions."
+  ]
+}
