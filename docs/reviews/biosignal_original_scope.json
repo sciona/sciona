@@ -1,0 +1,182 @@
+{
+  "format": "biosignal-original-scope.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "catalog_state_checked": false,
+  "source_snapshot_reconstructed": true,
+  "source_version_id": "1587d081-d47c-5595-8bed-d3d3aa6465af",
+  "source_content_hash": "2ab7a80c92296d3fffeb6187655e52443caf311086b4cdc3ed1efde5fe4406c8",
+  "artifact_id": "9b4ce7ba-b074-5d44-8be0-32363376c748",
+  "fqdn": "cdg.competition.solution.kaggle.biosignal_spectrogram_sequence_classification_topology",
+  "provider_semantics_sha256": "48ee7504826fa58b1d13621742782ffe93c15c1b75bbe612b4560ece0d26d92f",
+  "reviewer_sha256": "684dfaed0baad7de46dd7798dbc8c5d4528181ab18c729cbc90490b4c5e72164",
+  "source_stage_review": [
+    {
+      "source_stage": {
+        "stage_id": "subject_safe_windowing",
+        "description": "Group by subject, patient, recording, or session; split signals into fixed or event-centered windows; and preserve sampling-rate and channel metadata.",
+        "guarantees": [
+          "Windows preserve group-safe validation metadata."
+        ]
+      },
+      "realization": "Require aligned signal channels and explicit shared sample rate, then enforce disjoint caller-supplied subject keys across training/calibration/query. Form fixed windows strictly within each recording, preserving recording membership and window counts.",
+      "limits": "Caller supplies meaningful subject IDs and common channel meaning/order/units. No automatic montage or metadata discovery. Incomplete trailing windows are omitted; grouping is subject-disjoint across populations, not an automatic cross-validation scheme.",
+      "source_anchors": [
+        {
+          "file": "sciona/biosignal_sequence_contract.py",
+          "symbol": "prepare",
+          "line": 26,
+          "file_sha256": "17d7abf7e31b8d1da580c8ed7e80fef66e6fc1f5f9e5855e7ad208b077b8495f"
+        },
+        {
+          "file": "sciona/biosignal_sequence_features.py",
+          "symbol": "window_signal",
+          "line": 24,
+          "file_sha256": "1c451d7b85429df17c686baa134df0dcb46ac3c00c09d192779fc5217d43d070"
+        },
+        {
+          "file": "sciona/biosignal_complete_stages.py",
+          "symbol": "prepare",
+          "line": 32,
+          "file_sha256": "bf496fa8012a83e5364b26868bc34bfbeb6a819ebdce089881869f41424d458b"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "spectral_signal_features",
+        "description": "Compute STFT, CWT/scalogram, log-mel or PSD spectrograms, bipolar montage channels, bandpower, log-power, entropy, statistics, subject-specific centering, and subject-specific scaling.",
+        "guarantees": [
+          "Representations are fold-local and channel-aware."
+        ]
+      },
+      "realization": "Select one-sided density PSD spectrograms with periodic Hann, segment-mean detrending and log1p. Fit recording-balanced per-channel scaling on training windows only, preserving spectral frequency positions and raw waveform branch.",
+      "limits": "Shared training-population channel scaling is explicit; no subject-adaptive centering or fitting on calibration/query signals. No CWT, log-mel, bipolar montage or arbitrary handcrafted-feature branch. Constant scales become one. Overlapping windows repeat samples in scaling statistics.",
+      "source_anchors": [
+        {
+          "file": "sciona/biosignal_sequence_features.py",
+          "symbol": "psd_spectrogram",
+          "line": 33,
+          "file_sha256": "1c451d7b85429df17c686baa134df0dcb46ac3c00c09d192779fc5217d43d070"
+        },
+        {
+          "file": "sciona/biosignal_sequence_training.py",
+          "symbol": "Scaling.fit",
+          "line": 35,
+          "file_sha256": "c2796713460a1cfc36c6f3ed821b45aeece87edcfa772835880c14d1e470827d"
+        },
+        {
+          "file": "sciona/biosignal_sequence_training.py",
+          "symbol": "Scaling.transform",
+          "line": 46,
+          "file_sha256": "c2796713460a1cfc36c6f3ed821b45aeece87edcfa772835880c14d1e470827d"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "deep_signal_backbones",
+        "description": "Train 2D CNN, Swin-v2, EfficientNet, timm image backbones on spectrograms plus 1D CNN, bidirectional LSTM/GRU, transformer, or tree branches on sequences and handcrafted features.",
+        "guarantees": [
+          "Every window receives a model score."
+        ]
+      },
+      "realization": "Select a joint 1D waveform CNN and 2D spectrogram CNN. Pool waveform time and spectrogram time while retaining frequency position, concatenate branches, and train one binary recording-supervised window score with CPU float64 Adam.",
+      "limits": "Independent small CNN architecture, not a pretrained Swin/EfficientNet or sequence-attention branch. Each recording label supervises its windows. Fixed epoch training without early stopping. Features are fully materialized; no large-scale memory or clinical accuracy claim.",
+      "source_anchors": [
+        {
+          "file": "sciona/biosignal_sequence_network.py",
+          "symbol": "DualSignalHead",
+          "line": 6,
+          "file_sha256": "9bd7439b77f3bc96556da67b3b7a846073e328eb3ee2cb6e01c1b8320a5867d7"
+        },
+        {
+          "file": "sciona/biosignal_sequence_training.py",
+          "symbol": "fit",
+          "line": 75,
+          "file_sha256": "c2796713460a1cfc36c6f3ed821b45aeece87edcfa772835880c14d1e470827d"
+        },
+        {
+          "file": "sciona/biosignal_complete_stages.py",
+          "symbol": "fit",
+          "line": 43,
+          "file_sha256": "bf496fa8012a83e5364b26868bc34bfbeb6a819ebdce089881869f41424d458b"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "augmentation_and_loss",
+        "description": "Apply XYMasking, time/frequency masking, mixup, noisy-to-clean two-stage training, class weighting, focal loss, entmax, or metric-aware objectives for imbalanced or ambiguous biosignal labels.",
+        "guarantees": [
+          "Scores reflect class imbalance and label uncertainty."
+        ]
+      },
+      "realization": "Select seeded time/frequency masking of normalized spectrograms and class/recording-balanced BCE. Accumulate globally weighted gradients across batches and update once per complete epoch; waveform branch remains unmasked.",
+      "limits": "Equal recording weight within each class, not equal subject weight. Zero is normalized spectral center, not physical signal absence. No mixup, focal, entmax or noisy-to-clean branch. Class weighting does not establish calibrated probabilities or learned label uncertainty.",
+      "source_anchors": [
+        {
+          "file": "sciona/biosignal_sequence_network.py",
+          "symbol": "mask_spectrogram",
+          "line": 25,
+          "file_sha256": "9bd7439b77f3bc96556da67b3b7a846073e328eb3ee2cb6e01c1b8320a5867d7"
+        },
+        {
+          "file": "sciona/biosignal_sequence_training.py",
+          "symbol": "window_weights",
+          "line": 21,
+          "file_sha256": "c2796713460a1cfc36c6f3ed821b45aeece87edcfa772835880c14d1e470827d"
+        },
+        {
+          "file": "sciona/biosignal_sequence_training.py",
+          "symbol": "fit",
+          "line": 75,
+          "file_sha256": "c2796713460a1cfc36c6f3ed821b45aeece87edcfa772835880c14d1e470827d"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "window_aggregation_calibration",
+        "description": "Aggregate windows to recording or patient predictions with max/mean/attention pooling, fold ensembling, rank averaging, threshold tuning, or metric-specific probability calibration.",
+        "guarantees": [
+          "Outputs are grouped and calibrated for submission."
+        ]
+      },
+      "realization": "Select mean window probability per recording and separate empirical-F1 threshold tuning through existing domain-independent providers. Apply inclusive threshold with highest-threshold tie policy to ordered query recordings and return scores, classes and counts.",
+      "limits": "Decision-threshold calibration only; no probability-calibration guarantee or independent final accuracy claim. Generic binary recording output, not a named benchmark submission or patient diagnosis. No attention pooling, fold ensemble or rank-averaging branch.",
+      "source_anchors": [
+        {
+          "file": "sciona/biosignal_sequence_training.py",
+          "symbol": "SignalModel.predict",
+          "line": 61,
+          "file_sha256": "c2796713460a1cfc36c6f3ed821b45aeece87edcfa772835880c14d1e470827d"
+        },
+        {
+          "file": "sciona/biosignal_complete_stages.py",
+          "symbol": "calibrate",
+          "line": 49,
+          "file_sha256": "bf496fa8012a83e5364b26868bc34bfbeb6a819ebdce089881869f41424d458b"
+        },
+        {
+          "file": "sciona/biosignal_complete_stages.py",
+          "symbol": "predict",
+          "line": 59,
+          "file_sha256": "bf496fa8012a83e5364b26868bc34bfbeb6a819ebdce089881869f41424d458b"
+        }
+      ]
+    }
+  ],
+  "reuse_decision": "Reuse two existing empirical-F1 providers without changing their catalog identities or contracts. Four recipe adapters expose preparation, fitting, calibration and query prediction. Units, channel meaning, subject separation, windowing, CNN and recording aggregation remain explicit recipe policy.",
+  "remaining_requirements": [
+    "Recheck original snapshot and preserved derivative against live catalog state.",
+    "Reconcile and approve exact provider versions with metadata, dependency and rollback checks.",
+    "Bind, store and execute the corrected original, then verify Tier 3 publication and served retrieval."
+  ],
+  "limits": [
+    "Source reconstruction proves exact intake content identity, not current database status or approval.",
+    "All five source stages mapped to the selected binary waveform/PSD realization. Generic threshold selection is not calibrated probability, clinical utility or independent accuracy.",
+    "Automated synthetic Tier 3 candidate evidence only; no human Tier 1 designation or empirical deployment guarantee."
+  ]
+}
