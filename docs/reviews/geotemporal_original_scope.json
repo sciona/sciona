@@ -1,0 +1,176 @@
+{
+  "format": "geotemporal-original-scope.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "catalog_state_checked": false,
+  "source_snapshot_reconstructed": true,
+  "source_version_id": "9bb6428c-0529-56c8-b51d-96e1b4d6990c",
+  "source_content_hash": "b22878a5b3fa77fcf721b4343515a4284b9dd7777758bd9e86b1ed56e5c6790e",
+  "artifact_id": "8fd737be-1d14-55d1-a896-d946f86545fd",
+  "fqdn": "cdg.competition.solution.kaggle.geospatial_spatiotemporal_fusion_topology",
+  "provider_semantics_sha256": "ca1993315c8ac523d2e3a8b46b5ae2da6d3d79e0fd92497b8b42ab71f4a98491",
+  "reviewer_sha256": "4ca54e1da7ead88b952e746c2b37a53bcafb3ac0af454c5b1e13b7dfc21169c2",
+  "source_stage_review": [
+    {
+      "source_stage": {
+        "stage_id": "geo_temporal_join",
+        "description": "Join coordinates, timestamps, tracks, rasters, weather, road networks, census, soil, bioclim, or other external geographic context.",
+        "guarantees": [
+          "Each example has aligned geographic context."
+        ]
+      },
+      "realization": "Select explicit shared planar metric coordinates and seconds clock. Validate finite aligned records and unique site/time identities. Join latest context per site available at or before the feature time, within lookback and radius. Keep query row order.",
+      "limits": "Caller supplies a common coordinate system and clock. Context time is interpreted as availability time; late publication or revised historical values require caller preprocessing. No automatic projection, raster resampling, track alignment, road or external-source ingestion.",
+      "source_anchors": [
+        {
+          "file": "sciona/geotemporal_contract.py",
+          "symbol": "prepare",
+          "line": 26,
+          "file_sha256": "23c7519f74c86094f7baff6d12cda49a4ff4411f67c91cf02719aefb328ea061"
+        },
+        {
+          "file": "sciona/geotemporal_features.py",
+          "symbol": "feature_matrix",
+          "line": 23,
+          "file_sha256": "56c192e429b985ec6bfaa82c4a9fbdf1a7d060ff315560ee1bbf4179681e5348"
+        },
+        {
+          "file": "sciona/geotemporal_stages.py",
+          "symbol": "prepare",
+          "line": 41,
+          "file_sha256": "3bd489b1a2907b0f43de6474f8debb3ab7b897883123a6adca297bcdf6d4a9b7"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "spatial_temporal_features",
+        "description": "Create distance, tile, rolling window, lag, seasonal, raster, road-network, or neighborhood aggregate features.",
+        "guarantees": [
+          "Features preserve location/time grouping metadata."
+        ]
+      },
+      "realization": "Select coordinates, seasonal sine/cosine, nearest-context mean/distance/age, strict-past target mean/count and availability indicators. Preserve row identities and create separate training/validation feature matrices for each forward fold, plus full-training and query matrices.",
+      "limits": "Nearest-site ties use coordinate order. Missing aggregates use zero plus explicit indicators; zero is not an observed value claim. No raster, tile embedding, road network or arbitrary rolling-statistic branch. Dense in-memory joins have no large-population qualification.",
+      "source_anchors": [
+        {
+          "file": "sciona/geotemporal_features.py",
+          "symbol": "feature_matrix",
+          "line": 23,
+          "file_sha256": "56c192e429b985ec6bfaa82c4a9fbdf1a7d060ff315560ee1bbf4179681e5348"
+        },
+        {
+          "file": "sciona/geotemporal_stages.py",
+          "symbol": "features",
+          "line": 51,
+          "file_sha256": "3bd489b1a2907b0f43de6474f8debb3ab7b897883123a6adca297bcdf6d4a9b7"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "leakage_safe_geo_validation",
+        "description": "Use spatial, temporal, grouped, rolling-window, or tile-based cross-validation to avoid geographic leakage.",
+        "guarantees": [
+          "Validation respects spatial and temporal leakage boundaries."
+        ]
+      },
+      "realization": "Select strictly ordered expanding time blocks with an explicit exclusion gap. Each fold builds target-history features from its training rows only. Earlier warmup rows fit models but receive no out-of-fold predictions. Score only held-out rows; smoothing sees only co-timed held-out predictions, never their labels.",
+      "limits": "This establishes the selected forward-time boundary, not spatial holdout independence. Locations may repeat across folds. Context availability is caller asserted. Hyperparameter tuning on these metrics would require additional evaluation; no unseen-location accuracy or independent final accuracy claim.",
+      "source_anchors": [
+        {
+          "file": "sciona/geotemporal_validation.py",
+          "symbol": "forward_splits",
+          "line": 6,
+          "file_sha256": "82256afe9d38ad5570acbb77c0e91d630e2730fd7500e35d7fcbca551fdfa208"
+        },
+        {
+          "file": "sciona/geotemporal_stages.py",
+          "symbol": "features",
+          "line": 51,
+          "file_sha256": "3bd489b1a2907b0f43de6474f8debb3ab7b897883123a6adca297bcdf6d4a9b7"
+        },
+        {
+          "file": "sciona/geotemporal_stages.py",
+          "symbol": "fit",
+          "line": 71,
+          "file_sha256": "3bd489b1a2907b0f43de6474f8debb3ab7b897883123a6adca297bcdf6d4a9b7"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "fusion_model",
+        "description": "Train a tree, neural, image, sequence, or hybrid fusion model over spatial, temporal, sensor, and external features.",
+        "guarantees": [
+          "Predictions align to the requested locations/times."
+        ]
+      },
+      "realization": "Select ExtraTrees regression on eleven joined spatial/temporal features, with explicit seeded tree controls and one worker. Fit separate forward-fold models and a final model on all observations. Predict query features without refitting, preserving requested row order.",
+      "limits": "Tree regression is one source-permitted family. No neural, image, sequence or multimodal hybrid branch is implemented. Trusted in-process model and feature state; no portable persistence, arbitrary schema or historical winning-model reproduction.",
+      "source_anchors": [
+        {
+          "file": "sciona/geotemporal_training.py",
+          "symbol": "model",
+          "line": 28,
+          "file_sha256": "1315c166505f11f2bb1f23c5780d7c91d6121806bce99ed98072373ed6700edb"
+        },
+        {
+          "file": "sciona/geotemporal_stages.py",
+          "symbol": "fit",
+          "line": 71,
+          "file_sha256": "3bd489b1a2907b0f43de6474f8debb3ab7b897883123a6adca297bcdf6d4a9b7"
+        },
+        {
+          "file": "sciona/geotemporal_stages.py",
+          "symbol": "predict",
+          "line": 88,
+          "file_sha256": "3bd489b1a2907b0f43de6474f8debb3ab7b897883123a6adca297bcdf6d4a9b7"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "geographic_postprocessing",
+        "description": "Apply map matching, smoothing, zero-sum correction, clipping, neighborhood consistency, or constraint-aware aggregation.",
+        "guarantees": [
+          "Outputs are formatted and geographically consistent."
+        ]
+      },
+      "realization": "Select nonnegative clipping then convex neighbor-mean blending. Recipe constructs same-time, within-radius, non-self adjacency; the registered generic numeric operation accepts that mask and an explicit strength. Return ordered predictions and forward-validation/population/model summaries.",
+      "limits": "Generic numeric blending permits signed values and arbitrary directed masks; geography and clipping remain recipe policy. Empty neighborhoods retain the clipped value. Query population affects smoothing; no general sum conservation, map matching, zero-sum correction or named submission-format claim.",
+      "source_anchors": [
+        {
+          "file": "sciona/geotemporal_stages.py",
+          "symbol": "postprocess",
+          "line": 64,
+          "file_sha256": "3bd489b1a2907b0f43de6474f8debb3ab7b897883123a6adca297bcdf6d4a9b7"
+        },
+        {
+          "file": "sciona/neighborhood_ops.py",
+          "symbol": "blend_neighbor_means",
+          "line": 5,
+          "file_sha256": "e60143f0104f1e501da6f4b117ecf7844f35f8348ebcd8f7cce4ce0dbf343866"
+        },
+        {
+          "file": "sciona/geotemporal_stages.py",
+          "symbol": "finish",
+          "line": 96,
+          "file_sha256": "3bd489b1a2907b0f43de6474f8debb3ab7b897883123a6adca297bcdf6d4a9b7"
+        }
+      ]
+    }
+  ],
+  "reuse_decision": "One independently reusable numeric neighborhood operation with five recipe adapters. Coordinate/clock units, adjacency, forward validation, model family and clipping remain explicit recipe policy.",
+  "remaining_requirements": [
+    "Recheck original snapshot and preserved derivative against live catalog state.",
+    "Reconcile and approve exact provider versions with metadata, dependency and rollback checks.",
+    "Bind, store and execute the corrected original, then verify Tier 3 publication and served retrieval."
+  ],
+  "limits": [
+    "Source reconstruction proves exact intake content identity, not current database status or approval.",
+    "All five source stages covered for the explicit causal planar regression realization; forward-time validation does not imply spatial holdout independence.",
+    "Automated synthetic Tier 3 candidate evidence only; no human Tier 1 designation or empirical deployment guarantee."
+  ]
+}
