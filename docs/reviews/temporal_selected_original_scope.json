@@ -1,0 +1,201 @@
+{
+  "format": "temporal_selected-original-scope.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "catalog_state_checked": false,
+  "source_snapshot_reconstructed": true,
+  "source_version_id": "ad8e992f-1e5d-530c-9475-c9caf4a08bad",
+  "source_content_hash": "5ee3659042611115b7a83dbf165f7b44355a0f09ff346514ce4dd2a15e66340b",
+  "artifact_id": "5acf5fba-a858-5d4a-9832-77b99bea6714",
+  "fqdn": "cdg.competition.solution.kaggle.large_scale_temporal_tabular_ensemble_topology",
+  "provider_semantics_sha256": "9ba75c5c75e68f18bb142a2ce1783a45558e5e989d927a1ed7ba6b6573848047",
+  "reviewer_sha256": "bf2a63a71669041e77c75b41832d76471c8686ab12984c8ccccda94a0850f2d5",
+  "source_stage_review": [
+    {
+      "source_stage": {
+        "stage_id": "efficient_table_loading",
+        "description": "Load high-volume tabular, event, or transaction data with chunked reads, HDF5/Parquet, memory maps, sparse matrices, categorical compression, or cached feature stores.",
+        "guarantees": [
+          "Rows, time keys, groups, and categorical columns are preserved."
+        ]
+      },
+      "realization": "Select bounded chunked JSONL event streams. Inspect labels, order and limits, then verify immutable disk snapshots of all populations before fitting. Replay snapshots without copying full populations into RAM.",
+      "limits": "Caller supplies the exact runtime event interface and private paths. No HDF5, Parquet, arbitrary table schema or measured high-volume throughput claim. Snapshot disk space is bounded by configured source sizes; three snapshots coexist.",
+      "source_anchors": [
+        {
+          "file": "sciona/temporal_sparse_source.py",
+          "symbol": "inspect_source",
+          "line": 62,
+          "file_sha256": "98b540b7fba296fa7ae27f286fe848daf3fabab440f25e923f47b3611577e3bc"
+        },
+        {
+          "file": "sciona/temporal_sparse_source.py",
+          "symbol": "snapshot",
+          "line": 78,
+          "file_sha256": "98b540b7fba296fa7ae27f286fe848daf3fabab440f25e923f47b3611577e3bc"
+        },
+        {
+          "file": "sciona/temporal_sparse_selected_execution.py",
+          "symbol": "verified_streams",
+          "line": 46,
+          "file_sha256": "10b066f1e340a2cbe9ae036702b13056174f580f3371856f36c74195d85fdf93"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "temporal_feature_engineering",
+        "description": "Create lag features, rolling-window statistics, revealed-target history, time-of-day/day-of-week/month embeddings, market indicators, demand statistics, and grouped aggregations.",
+        "guarantees": [
+          "Feature rows align to prediction rows."
+        ]
+      },
+      "realization": "Compute value, periodic sine/cosine, per-entity rolling and latest-time target means, history age/count and presence. Defer same-time targets across chunk boundaries. Rebuild encoder from empty history each epoch and preserve row order.",
+      "limits": "Targets are available immediately after observation time; delayed availability unsupported. Caller specifies units, period and window. Retained entity keys and pending/history capacities fail closed on exhaustion. No arbitrary calendar or market-specific features.",
+      "source_anchors": [
+        {
+          "file": "sciona/temporal_sparse_features.py",
+          "symbol": "TemporalSparseEncoder._advance",
+          "line": 38,
+          "file_sha256": "4dc40b7909d9fb8b4516a7256da1ad4c15022c0e7a939286c4cfd4d224f5b450"
+        },
+        {
+          "file": "sciona/temporal_sparse_features.py",
+          "symbol": "TemporalSparseEncoder.encode",
+          "line": 57,
+          "file_sha256": "4dc40b7909d9fb8b4516a7256da1ad4c15022c0e7a939286c4cfd4d224f5b450"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "categorical_sparse_encoding",
+        "description": "Encode high-cardinality categoricals with CatBoost native categorical handling, target encoding, hashing, one-hot sparse matrices, capped vocabularies, feature clipping, or outlier clipping.",
+        "guarantees": [
+          "Encodings are fit without validation leakage."
+        ]
+      },
+      "realization": "Select fixed-width unsigned entity/category hashing and eight numeric features, assembled as CSR chunks and clipped using an explicit fixed bound. No target statistics are fit from validation rows.",
+      "limits": "Hash collisions are intentional. No native CatBoost categoricals, learned target encoding or vocabulary branch. No dense population conversion; per-chunk memory still depends on explicit hash width and chunk size.",
+      "source_anchors": [
+        {
+          "file": "sciona/temporal_sparse_features.py",
+          "symbol": "TemporalSparseEncoder._matrix",
+          "line": 79,
+          "file_sha256": "4dc40b7909d9fb8b4516a7256da1ad4c15022c0e7a939286c4cfd4d224f5b450"
+        },
+        {
+          "file": "sciona/temporal_sparse_training.py",
+          "symbol": "clipped",
+          "line": 16,
+          "file_sha256": "f6261de8467916fc4835fda2be98671e30370120752c6e53ac665562f3637625"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "leakage_safe_validation",
+        "description": "Define time-series, streaming, grouped, or rolling validation splits before target encodings, online refits, and model selection.",
+        "guarantees": [
+          "Model selection uses leakage-safe splits."
+        ]
+      },
+      "realization": "Require strict chronological train-validation-query separation with explicit gaps before fitting. Validation/query labels never update history or model coefficients. Use validation RMSLE only for epoch selection.",
+      "limits": "Entities may repeat; this is temporal rather than entity-disjoint validation. Reusing validation for stopping is selection, not independent final evaluation. No rolling refits, group holdout or validation-label history updates.",
+      "source_anchors": [
+        {
+          "file": "sciona/temporal_sparse_source.py",
+          "symbol": "validate_time_splits",
+          "line": 88,
+          "file_sha256": "98b540b7fba296fa7ae27f286fe848daf3fabab440f25e923f47b3611577e3bc"
+        },
+        {
+          "file": "sciona/temporal_sparse_selected_execution.py",
+          "symbol": "verified_streams",
+          "line": 46,
+          "file_sha256": "10b066f1e340a2cbe9ae036702b13056174f580f3371856f36c74195d85fdf93"
+        },
+        {
+          "file": "sciona/temporal_sparse_training.py",
+          "symbol": "StreamEnsemble.predict_batches",
+          "line": 40,
+          "file_sha256": "f6261de8467916fc4835fda2be98671e30370120752c6e53ac665562f3637625"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "boosted_sparse_ensemble",
+        "description": "Train LightGBM with large leaf nodes, XGBoost, CatBoost with categorical support, ExtraTrees, sparse linear/FTRL, or blended models with MAE/RMSLE/R2/logloss metric-aligned objectives and early stopping.",
+        "guarantees": [
+          "Predictions are produced for each target row."
+        ]
+      },
+      "realization": "Select the permitted sparse linear ensemble branch: squared-error and Huber SGD on log1p targets with equal log-score averaging. Train successive causal stream passes, evaluate each epoch, and restore the earliest sufficiently improved checkpoint using registered generic stopping providers and explicit patience, threshold and epoch budget.",
+      "limits": "Model controls and training chunk size affect results. Validation selects epoch only; no hyperparameter search, boosted-tree branch or refit on validation labels. No historical winner reproduction or empirical accuracy guarantee.",
+      "source_anchors": [
+        {
+          "file": "sciona/temporal_sparse_training.py",
+          "symbol": "fit",
+          "line": 67,
+          "file_sha256": "f6261de8467916fc4835fda2be98671e30370120752c6e53ac665562f3637625"
+        },
+        {
+          "file": "sciona/temporal_sparse_selection.py",
+          "symbol": "fit_selected",
+          "line": 24,
+          "file_sha256": "2a52caef1a1a0d4b51ad6c3787f52fa8dff921a4c2e344ef69af4cbed5ba2227"
+        },
+        {
+          "file": "sciona/validation_stopping.py",
+          "symbol": "ValidationStopping.observe",
+          "line": 50,
+          "file_sha256": "29b64edd64f39301df9779474c4ae1cac2396615d8ca7c94ff28b59568069cd2"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "metric_postprocessing",
+        "description": "Apply target inverse transforms, feature/target clipping, rank or threshold tuning, zero-sum constraints, online refitting, smoothing, MAE/RMSLE/R2 metric calibration, or domain-specific corrections.",
+        "guarantees": [
+          "Predictions are formatted and metric-calibrated."
+        ]
+      },
+      "realization": "Clip averaged log scores between zero and log1p(max_prediction), invert with expm1, and return ordered finite nonnegative capped predictions plus explicitly labeled selection diagnostics. Bound query output rows before fitting and during prediction.",
+      "limits": "Generic structured output under the explicit recipe, not a named submission file. No rounding, zero-sum, calibration, classification threshold or online refit branch. Private source paths, digests and records are excluded from results.",
+      "source_anchors": [
+        {
+          "file": "sciona/temporal_sparse_training.py",
+          "symbol": "StreamEnsemble.predict_batches",
+          "line": 40,
+          "file_sha256": "f6261de8467916fc4835fda2be98671e30370120752c6e53ac665562f3637625"
+        },
+        {
+          "file": "sciona/temporal_sparse_training.py",
+          "symbol": "StreamEnsemble.evaluate",
+          "line": 58,
+          "file_sha256": "f6261de8467916fc4835fda2be98671e30370120752c6e53ac665562f3637625"
+        },
+        {
+          "file": "sciona/temporal_sparse_selected_execution.py",
+          "symbol": "execute",
+          "line": 89,
+          "file_sha256": "10b066f1e340a2cbe9ae036702b13056174f580f3371856f36c74195d85fdf93"
+        }
+      ]
+    }
+  ],
+  "reuse_decision": "Two independently reusable immutable stopping providers with two bounded-stream recipe adapters. Six source stages are realized inside one verified snapshot lifetime to avoid full-population materialization. Metric, hashing, capacities, time semantics and model choices remain explicit recipe policy.",
+  "remaining_requirements": [
+    "Recheck original snapshot and preserved derivative against live catalog state.",
+    "Reconcile and approve exact provider versions with metadata, dependency and rollback checks.",
+    "Bind, store and execute the corrected original, then verify Tier 3 publication and served retrieval."
+  ],
+  "limits": [
+    "Source reconstruction proves exact intake content identity, not current database status or approval.",
+    "All six source stages covered for the selected sparse temporal realization, including early stopping; temporal separation does not imply entity-disjoint or independent final evaluation.",
+    "Automated synthetic Tier 3 candidate evidence only; no human Tier 1 designation or empirical deployment guarantee."
+  ]
+}

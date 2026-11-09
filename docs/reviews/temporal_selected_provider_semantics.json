@@ -1,0 +1,188 @@
+{
+  "format": "temporal_selected-provider-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "proposed_tier": 3,
+  "catalog_mutations": 0,
+  "catalog_state_checked": false,
+  "review_source": "automated",
+  "runtime_evidence_commit": "76b98767",
+  "runtime_evidence_sha256": "a8a9308120aee57041746d95bb2d9324c667f2f1ba0c7b9d0b8539243e00bf06",
+  "reviewer_sha256": "7190d716aba7908f9a644d7a033c775ab9b4e94b1b11073ecea7391ad0855d06",
+  "providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.temporal_sparse_selected_execution.execute",
+      "catalog_fqdn": "sciona.atoms.ml.temporal_sparse_selected_execution.execute",
+      "version_id": "ab1d7306-7fd2-5585-b6f9-e98e55aa7f96",
+      "content_hash": "71332af0ee36f1cac5c23d73fe8b6439a22c44c3714073622bdbd79b2ed9cafb",
+      "source_file": "../sciona-atoms-ml/src/sciona/atoms/ml/temporal_sparse_selected_execution.py",
+      "provider_sha256": "9139d6bb3ffae309e6ae92ea8090c6c6356649ac231f894655183e22c7c17123",
+      "role": "recipe_adapter",
+      "plain_description": "Train from verified snapshots, select a validation checkpoint, and predict future rows.",
+      "validity_bounds": "Trusted Prepared state from the selected recipe. Revalidate configuration, descriptors, all three immutable disk snapshots, row summaries, gaps and output limit before fitting. Replay training snapshots with fresh causal history each epoch; strict-past labels only, same-time targets deferred. Eight numeric features plus fixed-width unsigned hashed categories in bounded CSR chunks. Squared-error and Huber SGD on log1p targets, equal log-score mean, nonnegative capped inverse transform. Validation labels select epochs through reusable initialize/observe providers but never update training history or estimators. Retain earliest sufficiently improved checkpoint under absolute threshold and patience, bounded by max_epochs. Return ordered bounded query predictions, counts, selected epoch, scores and selection flag; exclude private paths/digests. Scores are selection evidence, not independent accuracy. No full-population feature materialization, portable model persistence, throughput guarantee or historical winner claim.",
+      "ports": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "prepared",
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Trusted Prepared state from the selected recipe. Revalidate configuration, descriptors, all three immutable disk snapshots, row summaries, gaps and output limit before fitting. Replay training snapshots with fresh causal history each epoch; strict-past labels only, same-time targets deferred. Eight numeric features plus fixed-width unsigned hashed categories in bounded CSR chunks. Squared-error and Huber SGD on log1p targets, equal log-score mean, nonnegative capped inverse transform. Validation labels select epochs through reusable initialize/observe providers but never update training history or estimators. Retain earliest sufficiently improved checkpoint under absolute threshold and patience, bounded by max_epochs. Return ordered bounded query predictions, counts, selected epoch, scores and selection flag; exclude private paths/digests. Scores are selection evidence, not independent accuracy. No full-population feature materialization, portable model persistence, throughput guarantee or historical winner claim."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Trusted Prepared state from the selected recipe. Revalidate configuration, descriptors, all three immutable disk snapshots, row summaries, gaps and output limit before fitting. Replay training snapshots with fresh causal history each epoch; strict-past labels only, same-time targets deferred. Eight numeric features plus fixed-width unsigned hashed categories in bounded CSR chunks. Squared-error and Huber SGD on log1p targets, equal log-score mean, nonnegative capped inverse transform. Validation labels select epochs through reusable initialize/observe providers but never update training history or estimators. Retain earliest sufficiently improved checkpoint under absolute threshold and patience, bounded by max_epochs. Return ordered bounded query predictions, counts, selected epoch, scores and selection flag; exclude private paths/digests. Scores are selection evidence, not independent accuracy. No full-population feature materialization, portable model persistence, throughput guarantee or historical winner claim."
+        }
+      ],
+      "dependencies": [
+        {
+          "runtime_fqdn": "sciona.atoms.ml.validation_stopping.initialize",
+          "catalog_fqdn": "sciona.atoms.ml.validation_stopping.initialize",
+          "version_id": "d89a5340-e1bd-5a03-a208-82087e5d67b5",
+          "content_hash": "3ad721a0a94be62458706f215a7060abab3dd302e8a437cbe2f43a57ef467548"
+        },
+        {
+          "runtime_fqdn": "sciona.atoms.ml.validation_stopping.observe",
+          "catalog_fqdn": "sciona.atoms.ml.validation_stopping.observe",
+          "version_id": "e938dc7a-3e72-5b00-b47a-7913536c1c16",
+          "content_hash": "15353dd7203f3993582584055ecca8fc8085e57164ebc890b343398bcd9883db"
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.validation_stopping.initialize",
+      "catalog_fqdn": "sciona.atoms.ml.validation_stopping.initialize",
+      "version_id": "d89a5340-e1bd-5a03-a208-82087e5d67b5",
+      "content_hash": "3ad721a0a94be62458706f215a7060abab3dd302e8a437cbe2f43a57ef467548",
+      "source_file": "../sciona-atoms-ml/src/sciona/atoms/ml/validation_stopping.py",
+      "provider_sha256": "90739c802df66071aa2a26de11d2473e238332ce32736fa765757835c0747439",
+      "role": "numeric",
+      "plain_description": "Start a metric-independent policy for selecting checkpoints and deciding when to stop.",
+      "validity_bounds": "Positive Python integer patience, finite nonnegative absolute min_delta and mode min or max. Return fresh immutable state with no best score and zero evaluations. Strict improvements larger than min_delta reset patience; ties retain earlier checkpoint. Metric computation, model storage, evaluation cadence and independent assessment remain caller responsibilities.",
+      "ports": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "patience",
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Positive Python integer patience, finite nonnegative absolute min_delta and mode min or max. Return fresh immutable state with no best score and zero evaluations. Strict improvements larger than min_delta reset patience; ties retain earlier checkpoint. Metric computation, model storage, evaluation cadence and independent assessment remain caller responsibilities."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "min_delta",
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Positive Python integer patience, finite nonnegative absolute min_delta and mode min or max. Return fresh immutable state with no best score and zero evaluations. Strict improvements larger than min_delta reset patience; ties retain earlier checkpoint. Metric computation, model storage, evaluation cadence and independent assessment remain caller responsibilities."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "mode",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Positive Python integer patience, finite nonnegative absolute min_delta and mode min or max. Return fresh immutable state with no best score and zero evaluations. Strict improvements larger than min_delta reset patience; ties retain earlier checkpoint. Metric computation, model storage, evaluation cadence and independent assessment remain caller responsibilities."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Positive Python integer patience, finite nonnegative absolute min_delta and mode min or max. Return fresh immutable state with no best score and zero evaluations. Strict improvements larger than min_delta reset patience; ties retain earlier checkpoint. Metric computation, model storage, evaluation cadence and independent assessment remain caller responsibilities."
+        }
+      ],
+      "dependencies": []
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.validation_stopping.observe",
+      "catalog_fqdn": "sciona.atoms.ml.validation_stopping.observe",
+      "version_id": "e938dc7a-3e72-5b00-b47a-7913536c1c16",
+      "content_hash": "15353dd7203f3993582584055ecca8fc8085e57164ebc890b343398bcd9883db",
+      "source_file": "../sciona-atoms-ml/src/sciona/atoms/ml/validation_stopping.py",
+      "provider_sha256": "90739c802df66071aa2a26de11d2473e238332ce32736fa765757835c0747439",
+      "role": "numeric",
+      "plain_description": "Record one finite metric and return a new checkpoint decision state.",
+      "validity_bounds": "Trusted immutable ValidationStopping state and finite Python numeric metric excluding bool. Return new state with zero-based best_index, best score, evaluation count and consecutive nonimprovement count. Reject observations after patience exhaustion. Validate constructor counters and checkpoint consistency. No model mutation, automatic checkpoint saving, relative improvement or accuracy guarantee. Finite floating-point arithmetic and strict threshold comparisons apply.",
+      "ports": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "state",
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Trusted immutable ValidationStopping state and finite Python numeric metric excluding bool. Return new state with zero-based best_index, best score, evaluation count and consecutive nonimprovement count. Reject observations after patience exhaustion. Validate constructor counters and checkpoint consistency. No model mutation, automatic checkpoint saving, relative improvement or accuracy guarantee. Finite floating-point arithmetic and strict threshold comparisons apply."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "value",
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Trusted immutable ValidationStopping state and finite Python numeric metric excluding bool. Return new state with zero-based best_index, best score, evaluation count and consecutive nonimprovement count. Reject observations after patience exhaustion. Validate constructor counters and checkpoint consistency. No model mutation, automatic checkpoint saving, relative improvement or accuracy guarantee. Finite floating-point arithmetic and strict threshold comparisons apply."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Trusted immutable ValidationStopping state and finite Python numeric metric excluding bool. Return new state with zero-based best_index, best score, evaluation count and consecutive nonimprovement count. Reject observations after patience exhaustion. Validate constructor counters and checkpoint consistency. No model mutation, automatic checkpoint saving, relative improvement or accuracy guarantee. Finite floating-point arithmetic and strict threshold comparisons apply."
+        }
+      ],
+      "dependencies": []
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.temporal_sparse_selected_execution.prepare",
+      "catalog_fqdn": "sciona.atoms.ml.temporal_sparse_selected_execution.prepare",
+      "version_id": "345517d0-30ad-55c4-bbd0-5ac2efed2321",
+      "content_hash": "ea3bd6aaa133207d87e618e4cafbfc16a991e4be2fbd2f300206f571ff9f92cd",
+      "source_file": "../sciona-atoms-ml/src/sciona/atoms/ml/temporal_sparse_selected_execution.py",
+      "provider_sha256": "9139d6bb3ffae309e6ae92ea8090c6c6356649ac231f894655183e22c7c17123",
+      "role": "recipe_adapter",
+      "plain_description": "Inspect private ordered streams and check resource limits, temporal separation and stopping controls.",
+      "validity_bounds": "Exact version-1 sparse stream recipe plus explicit max_epochs, patience and min_delta. Private JSONL training, validation and unlabeled query roles, finite records, globally nondecreasing time, positive line/source/output limits and bounded entity/history/pending capacities. Nonnegative targets. Strict train-validation-query temporal gaps. Hash width, history window, period, chunk size, seed, learning rate, penalty, feature clip and maximum prediction are explicit. Inspect descriptors without fitting; prepared paths and digests must remain private. Time units and target availability semantics are caller policy.",
+      "ports": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "payload",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact version-1 sparse stream recipe plus explicit max_epochs, patience and min_delta. Private JSONL training, validation and unlabeled query roles, finite records, globally nondecreasing time, positive line/source/output limits and bounded entity/history/pending capacities. Nonnegative targets. Strict train-validation-query temporal gaps. Hash width, history window, period, chunk size, seed, learning rate, penalty, feature clip and maximum prediction are explicit. Inspect descriptors without fitting; prepared paths and digests must remain private. Time units and target availability semantics are caller policy."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact version-1 sparse stream recipe plus explicit max_epochs, patience and min_delta. Private JSONL training, validation and unlabeled query roles, finite records, globally nondecreasing time, positive line/source/output limits and bounded entity/history/pending capacities. Nonnegative targets. Strict train-validation-query temporal gaps. Hash width, history window, period, chunk size, seed, learning rate, penalty, feature clip and maximum prediction are explicit. Inspect descriptors without fitting; prepared paths and digests must remain private. Time units and target availability semantics are caller policy."
+        }
+      ],
+      "dependencies": []
+    }
+  ],
+  "limits": [
+    "Offline semantic candidate review, not catalog approval or a human Tier 1 designation.",
+    "Two generic stopping operations remain independently reusable; metric, model, time semantics, hashing and clipping remain recipe policy.",
+    "76 synthetic tests include stopping transitions, native execution, immutable snapshot replay, causal isolation and checkpoint restoration; no empirical deployment guarantee.",
+    "Live catalog reconciliation, original source-scope review, transaction checks and served selection remain required."
+  ]
+}
