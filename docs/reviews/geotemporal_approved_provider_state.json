@@ -1,0 +1,379 @@
+{
+  "passed": true,
+  "catalog_mutations": 0,
+  "records": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.geotemporal_complete_execution.features",
+      "artifact_id": "232b2bc0-5b44-5c83-99af-fe2cf15a3e56",
+      "version_id": "29b44e7a-281e-5d26-8eaf-85a6bde8ca06",
+      "content_hash": "4e784cb9c0d8cb553d7fc9fa645e1f000a53322ad28180b90fb6f54b2d99d84d",
+      "catalog_fqdn": "sciona.atoms.ml.geotemporal_complete_execution.features",
+      "recipe_adapter": true,
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Prepared configuration from qualified prepare, revalidated. For each site, choose latest context within lookback at or before each feature time; take nearest sites within metric radius with deterministic coordinate tie-breaking. Strict-past target lags use only the corresponding fold training history. Eleven features: coordinates, seasonal sine/cosine, context mean/distance/age/presence, historical target mean/presence/count. Missing aggregates are zero with presence flags. Build final training and query features using full observed history. Context timestamps are treated as availability times; caller must ensure this is valid. Raw coordinates remain features; no unseen-location or spatial-holdout claim."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Prepared configuration from qualified prepare, revalidated. For each site, choose latest context within lookback at or before each feature time; take nearest sites within metric radius with deterministic coordinate tie-breaking. Strict-past target lags use only the corresponding fold training history. Eleven features: coordinates, seasonal sine/cosine, context mean/distance/age/presence, historical target mean/presence/count. Missing aggregates are zero with presence flags. Build final training and query features using full observed history. Context timestamps are treated as availability times; caller must ensure this is valid. Raw coordinates remain features; no unseen-location or spatial-holdout claim."
+        }
+      ],
+      "ports": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Prepared configuration from qualified prepare, revalidated. For each site, choose latest context within lookback at or before each feature time; take nearest sites within metric radius with deterministic coordinate tie-breaking. Strict-past target lags use only the corresponding fold training history. Eleven features: coordinates, seasonal sine/cosine, context mean/distance/age/presence, historical target mean/presence/count. Missing aggregates are zero with presence flags. Build final training and query features using full observed history. Context timestamps are treated as availability times; caller must ensure this is valid. Raw coordinates remain features; no unseen-location or spatial-holdout claim."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Prepared configuration from qualified prepare, revalidated. For each site, choose latest context within lookback at or before each feature time; take nearest sites within metric radius with deterministic coordinate tie-breaking. Strict-past target lags use only the corresponding fold training history. Eleven features: coordinates, seasonal sine/cosine, context mean/distance/age/presence, historical target mean/presence/count. Missing aggregates are zero with presence flags. Build final training and query features using full observed history. Context timestamps are treated as availability times; caller must ensure this is valid. Raw coordinates remain features; no unseen-location or spatial-holdout claim."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.geotemporal_complete_execution.finish",
+      "artifact_id": "11b3a7e4-41af-52bc-b68e-bb4c8a35fa7a",
+      "version_id": "66f7ee29-4476-592d-ace4-54cfefee08a2",
+      "content_hash": "3a347f6fbd5a8220467e1988398819dff8ebe2df6a190555dfb924ca0a209c21",
+      "catalog_fqdn": "sciona.atoms.ml.geotemporal_complete_execution.finish",
+      "recipe_adapter": true,
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "predicted",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Predicted state from qualified predict. Clip to nonnegative values, construct a boolean mask excluding self and selecting exact same-time queries within the explicit planar radius, and call generic neighborhood blending with configured strength. Return finite JSON predictions, training/query/validated/warmup row counts, fold/tree counts, feature count and forward-validation MSE. Query population affects smoothing. No conservation, map matching, named submission format, independent final accuracy or unseen-location accuracy guarantee."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Predicted state from qualified predict. Clip to nonnegative values, construct a boolean mask excluding self and selecting exact same-time queries within the explicit planar radius, and call generic neighborhood blending with configured strength. Return finite JSON predictions, training/query/validated/warmup row counts, fold/tree counts, feature count and forward-validation MSE. Query population affects smoothing. No conservation, map matching, named submission format, independent final accuracy or unseen-location accuracy guarantee."
+        }
+      ],
+      "ports": [
+        {
+          "direction": "input",
+          "name": "predicted",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Predicted state from qualified predict. Clip to nonnegative values, construct a boolean mask excluding self and selecting exact same-time queries within the explicit planar radius, and call generic neighborhood blending with configured strength. Return finite JSON predictions, training/query/validated/warmup row counts, fold/tree counts, feature count and forward-validation MSE. Query population affects smoothing. No conservation, map matching, named submission format, independent final accuracy or unseen-location accuracy guarantee."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Predicted state from qualified predict. Clip to nonnegative values, construct a boolean mask excluding self and selecting exact same-time queries within the explicit planar radius, and call generic neighborhood blending with configured strength. Return finite JSON predictions, training/query/validated/warmup row counts, fold/tree counts, feature count and forward-validation MSE. Query population affects smoothing. No conservation, map matching, named submission format, independent final accuracy or unseen-location accuracy guarantee."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.geotemporal_complete_execution.fit",
+      "artifact_id": "ea143d96-9264-558f-b5d7-3974e5cf6049",
+      "version_id": "bb58a14f-a288-53a2-a0df-0f68611ea520",
+      "content_hash": "bc458faa70b000aeb399a79eec7ab4727fc410101c38cc6c26ea3f856591de9e",
+      "catalog_fqdn": "sciona.atoms.ml.geotemporal_complete_execution.fit",
+      "recipe_adapter": true,
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "featured",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Featured state from qualified features. ExtraTreesRegressor with explicit seeded controls and n_jobs=1. Each expanding fold trains only its training targets; held-out predictions are clipped then blended only among same-time held-out neighbors using the generic numeric provider. Warmup block has no held-out predictions; report MSE on validated rows only. Final model refits all observed training rows. Query rows and labels do not train or select the model. Forward validation permits repeated locations and does not prove spatial independence. Trusted in-process arrays and estimators; forged or concurrent mutation excluded."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Featured state from qualified features. ExtraTreesRegressor with explicit seeded controls and n_jobs=1. Each expanding fold trains only its training targets; held-out predictions are clipped then blended only among same-time held-out neighbors using the generic numeric provider. Warmup block has no held-out predictions; report MSE on validated rows only. Final model refits all observed training rows. Query rows and labels do not train or select the model. Forward validation permits repeated locations and does not prove spatial independence. Trusted in-process arrays and estimators; forged or concurrent mutation excluded."
+        }
+      ],
+      "ports": [
+        {
+          "direction": "input",
+          "name": "featured",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Featured state from qualified features. ExtraTreesRegressor with explicit seeded controls and n_jobs=1. Each expanding fold trains only its training targets; held-out predictions are clipped then blended only among same-time held-out neighbors using the generic numeric provider. Warmup block has no held-out predictions; report MSE on validated rows only. Final model refits all observed training rows. Query rows and labels do not train or select the model. Forward validation permits repeated locations and does not prove spatial independence. Trusted in-process arrays and estimators; forged or concurrent mutation excluded."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Featured state from qualified features. ExtraTreesRegressor with explicit seeded controls and n_jobs=1. Each expanding fold trains only its training targets; held-out predictions are clipped then blended only among same-time held-out neighbors using the generic numeric provider. Warmup block has no held-out predictions; report MSE on validated rows only. Final model refits all observed training rows. Query rows and labels do not train or select the model. Forward validation permits repeated locations and does not prove spatial independence. Trusted in-process arrays and estimators; forged or concurrent mutation excluded."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.geotemporal_complete_execution.predict",
+      "artifact_id": "d85f6736-e6ae-5553-9fff-9688024f8177",
+      "version_id": "44ae3bef-a909-519c-9571-71706b13413c",
+      "content_hash": "0f46819f7003dcef87460709befbf858e6238cb6ac9aa8be3cc41062f824bf66",
+      "catalog_fqdn": "sciona.atoms.ml.geotemporal_complete_execution.predict",
+      "recipe_adapter": true,
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "fitted",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Fitted state from qualified fit. Apply the full-training estimator to the already built causal query features; require finite aligned predictions. Preserve query input order. Return immutable prediction tuple with fitted context. No refitting or estimator mutation. Coordinate/clock and future-query gap policy remain those of preparation; arbitrary new query schemas and portable state persistence are not qualified."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Fitted state from qualified fit. Apply the full-training estimator to the already built causal query features; require finite aligned predictions. Preserve query input order. Return immutable prediction tuple with fitted context. No refitting or estimator mutation. Coordinate/clock and future-query gap policy remain those of preparation; arbitrary new query schemas and portable state persistence are not qualified."
+        }
+      ],
+      "ports": [
+        {
+          "direction": "input",
+          "name": "fitted",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Fitted state from qualified fit. Apply the full-training estimator to the already built causal query features; require finite aligned predictions. Preserve query input order. Return immutable prediction tuple with fitted context. No refitting or estimator mutation. Coordinate/clock and future-query gap policy remain those of preparation; arbitrary new query schemas and portable state persistence are not qualified."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Fitted state from qualified fit. Apply the full-training estimator to the already built causal query features; require finite aligned predictions. Preserve query input order. Return immutable prediction tuple with fitted context. No refitting or estimator mutation. Coordinate/clock and future-query gap policy remain those of preparation; arbitrary new query schemas and portable state persistence are not qualified."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.geotemporal_complete_execution.prepare",
+      "artifact_id": "76138fe9-58a0-5916-8230-ba1a2029ebd2",
+      "version_id": "02adfc28-1e52-5b78-9067-0f1bc7a4093e",
+      "content_hash": "957306b1f70fc0358345bdf543fe4de1324064169429d1ec7e3835688449634e",
+      "catalog_fqdn": "sciona.atoms.ml.geotemporal_complete_execution.prepare",
+      "recipe_adapter": true,
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "payload",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact finite version-1 JSON recipe with observations, context, contiguous forward blocks, query and controls. Caller declares shared planar coordinates in metres and seconds clock with shared origin; no coordinate transformation. Nonnegative observed targets; query labels rejected; unique site/time per population. Strictly ordered blocks, explicit gap and future query times. Radius, lookback, period, neighbor count, seed, trees, depth, leaf size and smoothing are explicit. Returns detached immutable JSON configuration."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact finite version-1 JSON recipe with observations, context, contiguous forward blocks, query and controls. Caller declares shared planar coordinates in metres and seconds clock with shared origin; no coordinate transformation. Nonnegative observed targets; query labels rejected; unique site/time per population. Strictly ordered blocks, explicit gap and future query times. Radius, lookback, period, neighbor count, seed, trees, depth, leaf size and smoothing are explicit. Returns detached immutable JSON configuration."
+        }
+      ],
+      "ports": [
+        {
+          "direction": "input",
+          "name": "payload",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact finite version-1 JSON recipe with observations, context, contiguous forward blocks, query and controls. Caller declares shared planar coordinates in metres and seconds clock with shared origin; no coordinate transformation. Nonnegative observed targets; query labels rejected; unique site/time per population. Strictly ordered blocks, explicit gap and future query times. Radius, lookback, period, neighbor count, seed, trees, depth, leaf size and smoothing are explicit. Returns detached immutable JSON configuration."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact finite version-1 JSON recipe with observations, context, contiguous forward blocks, query and controls. Caller declares shared planar coordinates in metres and seconds clock with shared origin; no coordinate transformation. Nonnegative observed targets; query labels rejected; unique site/time per population. Strictly ordered blocks, explicit gap and future query times. Radius, lookback, period, neighbor count, seed, trees, depth, leaf size and smoothing are explicit. Returns detached immutable JSON configuration."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.neighborhoods.blend_neighbor_means",
+      "artifact_id": "466b344f-18de-5e8c-8760-5225340dbaea",
+      "version_id": "5b9c8032-1edc-5c1f-b575-b86cba289fa7",
+      "content_hash": "c4b7c15f5303986cc3aa0c857cfe9e3a425d5e7e5ec470ff32ab7377a4163942",
+      "catalog_fqdn": "sciona.atoms.ml.neighborhoods.blend_neighbor_means",
+      "recipe_adapter": false,
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite real vector, aligned square boolean neighbor mask and Python scalar strength in [0,1], excluding bool. Rows select neighbors; self-selection allowed. Empty rows retain their original values. Fresh finite float64 vector, signed values allowed. Adjacency, units, clipping and domain meaning are caller policy. Directed or unequal-degree masks need not conserve the global sum. Dense quadratic mask memory; no large-scale qualification. Reject unrepresentable arithmetic."
+        },
+        {
+          "direction": "input",
+          "name": "neighbors",
+          "ordinal": 1,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite real vector, aligned square boolean neighbor mask and Python scalar strength in [0,1], excluding bool. Rows select neighbors; self-selection allowed. Empty rows retain their original values. Fresh finite float64 vector, signed values allowed. Adjacency, units, clipping and domain meaning are caller policy. Directed or unequal-degree masks need not conserve the global sum. Dense quadratic mask memory; no large-scale qualification. Reject unrepresentable arithmetic."
+        },
+        {
+          "direction": "input",
+          "name": "strength",
+          "ordinal": 2,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite real vector, aligned square boolean neighbor mask and Python scalar strength in [0,1], excluding bool. Rows select neighbors; self-selection allowed. Empty rows retain their original values. Fresh finite float64 vector, signed values allowed. Adjacency, units, clipping and domain meaning are caller policy. Directed or unequal-degree masks need not conserve the global sum. Dense quadratic mask memory; no large-scale qualification. Reject unrepresentable arithmetic."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite real vector, aligned square boolean neighbor mask and Python scalar strength in [0,1], excluding bool. Rows select neighbors; self-selection allowed. Empty rows retain their original values. Fresh finite float64 vector, signed values allowed. Adjacency, units, clipping and domain meaning are caller policy. Directed or unequal-degree masks need not conserve the global sum. Dense quadratic mask memory; no large-scale qualification. Reject unrepresentable arithmetic."
+        }
+      ],
+      "ports": [
+        {
+          "direction": "input",
+          "name": "values",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite real vector, aligned square boolean neighbor mask and Python scalar strength in [0,1], excluding bool. Rows select neighbors; self-selection allowed. Empty rows retain their original values. Fresh finite float64 vector, signed values allowed. Adjacency, units, clipping and domain meaning are caller policy. Directed or unequal-degree masks need not conserve the global sum. Dense quadratic mask memory; no large-scale qualification. Reject unrepresentable arithmetic."
+        },
+        {
+          "direction": "input",
+          "name": "neighbors",
+          "ordinal": 1,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite real vector, aligned square boolean neighbor mask and Python scalar strength in [0,1], excluding bool. Rows select neighbors; self-selection allowed. Empty rows retain their original values. Fresh finite float64 vector, signed values allowed. Adjacency, units, clipping and domain meaning are caller policy. Directed or unequal-degree masks need not conserve the global sum. Dense quadratic mask memory; no large-scale qualification. Reject unrepresentable arithmetic."
+        },
+        {
+          "direction": "input",
+          "name": "strength",
+          "ordinal": 2,
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite real vector, aligned square boolean neighbor mask and Python scalar strength in [0,1], excluding bool. Rows select neighbors; self-selection allowed. Empty rows retain their original values. Fresh finite float64 vector, signed values allowed. Adjacency, units, clipping and domain meaning are caller policy. Directed or unequal-degree masks need not conserve the global sum. Dense quadratic mask memory; no large-scale qualification. Reject unrepresentable arithmetic."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite real vector, aligned square boolean neighbor mask and Python scalar strength in [0,1], excluding bool. Rows select neighbors; self-selection allowed. Empty rows retain their original values. Fresh finite float64 vector, signed values allowed. Adjacency, units, clipping and domain meaning are caller policy. Directed or unequal-degree masks need not conserve the global sum. Dense quadratic mask memory; no large-scale qualification. Reject unrepresentable arithmetic."
+        }
+      ]
+    }
+  ],
+  "checker_sha256": "601910a80571dfa6cfd0576de66687065271599d2df5611e89a31f38f4d58d1e",
+  "evidence_sha256": {
+    "docs/reviews/geotemporal_complete_runtime.json": "aceb979e243555de32bad119e21347c614858b91b25017f835965be142601b16",
+    "docs/reviews/geotemporal_provider_semantics.json": "ca1993315c8ac523d2e3a8b46b5ae2da6d3d79e0fd92497b8b42ab71f4a98491",
+    "docs/reviews/complete_geotemporal_provider_publication_plan.json": "769fc71694638c589fceb0c3731a61c40f14d55b6c4b4af071aef9a41ae6edd3"
+  },
+  "catalog_snapshot": {
+    "atoms": "3ad87ed65084b33e230b7c93be0cbabaae871fd9a2b358df53d1c6c65affddf4",
+    "artifacts": "10681965f550ccaf9adf003c5ad7b935f826c1e2f70243af215afe6f3e314b6c",
+    "atom_versions": "9bb49609482802efac3bfc3a773cdae5f7816cd6b201bbc3ead16892075c8030",
+    "artifact_versions": "8c2276a2c621858f658e0e31d4dfdc958d95956cd272e392cb6e915c1f83b226",
+    "atom_io_specs": "4147a5302f3a245a50253cd81076da58d55a71514d4c6d369a15433072e1ff5e",
+    "artifact_io_specs": "2bf42b4ddf71f642013466061b6996556d10abb628ac00d93707c0ade7f895c4",
+    "atom_parameters": "c6f93eab1bf8cfcc68f6e04bc50a4686631d675a4a3f7da86468562c13eca325",
+    "artifact_parameters": "c3a2f176d33cbd215089b6a22ffd61bb9aaa1f807bde95ef14e1fb1f128522af",
+    "atom_descriptions": "65b919b6e82f5ed2b95e788e65830bc2030f641ce82e8aeb2defea8eb8230181",
+    "artifact_descriptions": "2c6e0378a69f99cfbdeb48e3b87245490ac006a16d95b020fe6ec5f6b5236a99",
+    "atom_references": "0a93542fe0b0937573073a64009aa1b8542cca17e3464e1d9f8da427bcf34785",
+    "artifact_references": "c7a7eae9328c48c3eb4d14c6b4f06e7a4ef9eeac7ee2535f5bc561b92b7fc262",
+    "atom_audit_rollups": "a530de578d0004235b06b2068f6d942c65326f59be0f2de5341d1f4cb85fa4ce",
+    "artifact_audit_rollups": "74a535cc34a8830ef016579c5f2b4a67c51d8192437c2b70ecf16db04c5949f7",
+    "artifact_audit_evidence": "1e4f8705c6a0859177a15724efacc0db13cfa27218b0b604aaa9587cfd779de2"
+  },
+  "dependencies": [
+    {
+      "dependent_version_id": "66f7ee29-4476-592d-ace4-54cfefee08a2",
+      "dependency_artifact_fqdn": "sciona.atoms.ml.neighborhoods.blend_neighbor_means",
+      "dependency_content_hash": "c4b7c15f5303986cc3aa0c857cfe9e3a425d5e7e5ec470ff32ab7377a4163942",
+      "port_name": "",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "binding_metadata": {
+        "dependency_version_id": "5b9c8032-1edc-5c1f-b575-b86cba289fa7",
+        "dependency_artifact_id": "466b344f-18de-5e8c-8760-5225340dbaea"
+      }
+    },
+    {
+      "dependent_version_id": "bb58a14f-a288-53a2-a0df-0f68611ea520",
+      "dependency_artifact_fqdn": "sciona.atoms.ml.neighborhoods.blend_neighbor_means",
+      "dependency_content_hash": "c4b7c15f5303986cc3aa0c857cfe9e3a425d5e7e5ec470ff32ab7377a4163942",
+      "port_name": "",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "binding_metadata": {
+        "dependency_version_id": "5b9c8032-1edc-5c1f-b575-b86cba289fa7",
+        "dependency_artifact_id": "466b344f-18de-5e8c-8760-5225340dbaea"
+      }
+    }
+  ]
+}
