@@ -28,3 +28,11 @@ def test_invalid_metric_does_not_advance(value):
 def test_invalid_policy(kwargs):
     with pytest.raises(ValueError):
         ValidationStopping(**kwargs)
+
+
+@pytest.mark.parametrize('kwargs', [dict(best=1.), dict(evaluations=True), dict(stale=1),
+    dict(evaluations=1, best=1., best_index=2), dict(evaluations=1, best=float('nan'), best_index=0),
+    dict(min_delta=10**1000)])
+def test_inconsistent_state_and_unrepresentable_threshold(kwargs):
+    with pytest.raises(ValueError):
+        ValidationStopping(patience=2, **kwargs)

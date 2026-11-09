@@ -10,7 +10,7 @@ from dataclasses import dataclass
 import numpy as np
 from sciona.temporal_sparse_features import TemporalSparseEncoder, validate_event
 from sciona.temporal_sparse_training import fit, clipped
-from sciona.validation_stopping import ValidationStopping
+from sciona.atoms.ml.validation_stopping import initialize, observe
 
 
 @dataclass
@@ -25,7 +25,7 @@ def fit_selected(training_factory, validation_factory, *, encoder_controls,
                  controls, max_epochs, patience, min_delta):
     if type(max_epochs) is not int or max_epochs < 1:
         raise ValueError('Positive integer epoch budget required')
-    policy = ValidationStopping(patience, min_delta)
+    policy = initialize(patience, min_delta, 'min')
     current = fit(training_factory(), encoder_controls=encoder_controls, controls=controls)
     best = None
     scores = []
@@ -55,7 +55,7 @@ def fit_selected(training_factory, validation_factory, *, encoder_controls,
             current.updates_per_model += updates
         score = current.evaluate(validation_factory())['rmsle']
         scores.append(score)
-        policy = policy.observe(score)
+        policy = observe(policy, score)
         if policy.best_index == epoch:
             best = deepcopy(current)
         if policy.stopped:
