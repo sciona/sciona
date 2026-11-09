@@ -1,0 +1,79 @@
+{
+  "passed": true,
+  "catalog_mutations": 0,
+  "rejected_faults": [
+    "candidate_hash",
+    "candidate_tier",
+    "candidate_lineage",
+    "original_latest",
+    "original_history",
+    "parent_history",
+    "parent_latest",
+    "parent_publication",
+    "binding_hash",
+    "binding_missing",
+    "dependency_optional",
+    "root_input_type",
+    "result_output_missing",
+    "failed_staging_audit",
+    "serialized_node",
+    "serialized_edge",
+    "provider_tier"
+  ],
+  "dry_run": {
+    "applied": false,
+    "already_approved": false,
+    "rows_created": 7,
+    "rows_updated": 3,
+    "trust_tier": 3,
+    "original_artifact_id": "9b4ce7ba-b074-5d44-8be0-32363376c748",
+    "version_id": "77788bab-f116-5ef7-b8dc-aa85e49101f2",
+    "graph_sha256": "c33ba84876c1250fce684ccdbfdfc1cd3b1323c5e978445177473cb84a55d01e",
+    "served_cdgs": 1,
+    "reused_providers": 4,
+    "source_histories_preserved": true,
+    "plan_sha256": "36c1d44b842bb3c7d9341da04f8c80f8d41116bbbdb96e5795f7defcacaf6089"
+  },
+  "execution_evidence_tests": {
+    "passed": true,
+    "count": 10,
+    "sha256": "8482979a561d4d863034f029bdc6ac1ad6e6c7585b3454b4b98a6ea8ac41fd4d"
+  },
+  "all_rollbacks_complete": true,
+  "injected_failure_points": [
+    "metadata",
+    "activation"
+  ],
+  "publisher_sha256": "777de68c8056312eb1cbda693bc00867c4904c8744600206a67c02fa615eba7a",
+  "validator_sha256": "7674774bf3c82d7d11319a12eb0f99ac9d919cac370493fa01a11adbd8bd479d",
+  "execution_sha256": "06f6bca7e1067e3b7bdfa2ebc05beb2808a2c520e089c7084629ea0375b590df",
+  "qualification": {
+    "review_source": "automated",
+    "proposed_tier": 3,
+    "verdict": "acceptable_with_limits",
+    "evidence_commit": "777adb545f614baf094149ffbddbd6a1e9595610",
+    "execution_sha256": "06f6bca7e1067e3b7bdfa2ebc05beb2808a2c520e089c7084629ea0375b590df",
+    "source_review_sha256": "93a876addea14a3f683e3af97a526732c5cafd14191fb778e045a8dc51bebd23",
+    "limitations": [
+      "Caller supplies meaningful subject IDs and common channel meaning/order/units. No automatic montage or metadata discovery. Incomplete trailing windows are omitted; grouping is subject-disjoint across populations, not an automatic cross-validation scheme.",
+      "Shared training-population channel scaling is explicit; no subject-adaptive centering or fitting on calibration/query signals. No CWT, log-mel, bipolar montage or arbitrary handcrafted-feature branch. Constant scales become one. Overlapping windows repeat samples in scaling statistics.",
+      "Independent small CNN architecture, not a pretrained Swin/EfficientNet or sequence-attention branch. Each recording label supervises its windows. Fixed epoch training without early stopping. Features are fully materialized; no large-scale memory or clinical accuracy claim.",
+      "Equal recording weight within each class, not equal subject weight. Zero is normalized spectral center, not physical signal absence. No mixup, focal, entmax or noisy-to-clean branch. Class weighting does not establish calibrated probabilities or learned label uncertainty.",
+      "Decision-threshold calibration only; no probability-calibration guarantee or independent final accuracy claim. Generic binary recording output, not a named benchmark submission or patient diagnosis. No attention pooling, fold ensemble or rank-averaging branch.",
+      "Only the explicitly selected source alternatives are implemented.",
+      "Automated synthetic Tier 3 evidence only; no historical accuracy, generalization or human Tier 1 claim."
+    ],
+    "resolved_source_corrections": {
+      "subject_safe_windowing": "Require aligned signal channels and explicit shared sample rate, then enforce disjoint caller-supplied subject keys across training/calibration/query. Form fixed windows strictly within each recording, preserving recording membership and window counts. Caller supplies meaningful subject IDs and common channel meaning/order/units. No automatic montage or metadata discovery. Incomplete trailing windows are omitted; grouping is subject-disjoint across populations, not an automatic cross-validation scheme.",
+      "spectral_signal_features": "Select one-sided density PSD spectrograms with periodic Hann, segment-mean detrending and log1p. Fit recording-balanced per-channel scaling on training windows only, preserving spectral frequency positions and raw waveform branch. Shared training-population channel scaling is explicit; no subject-adaptive centering or fitting on calibration/query signals. No CWT, log-mel, bipolar montage or arbitrary handcrafted-feature branch. Constant scales become one. Overlapping windows repeat samples in scaling statistics.",
+      "deep_signal_backbones": "Select a joint 1D waveform CNN and 2D spectrogram CNN. Pool waveform time and spectrogram time while retaining frequency position, concatenate branches, and train one binary recording-supervised window score with CPU float64 Adam. Independent small CNN architecture, not a pretrained Swin/EfficientNet or sequence-attention branch. Each recording label supervises its windows. Fixed epoch training without early stopping. Features are fully materialized; no large-scale memory or clinical accuracy claim.",
+      "augmentation_and_loss": "Select seeded time/frequency masking of normalized spectrograms and class/recording-balanced BCE. Accumulate globally weighted gradients across batches and update once per complete epoch; waveform branch remains unmasked. Equal recording weight within each class, not equal subject weight. Zero is normalized spectral center, not physical signal absence. No mixup, focal, entmax or noisy-to-clean branch. Class weighting does not establish calibrated probabilities or learned label uncertainty.",
+      "window_aggregation_calibration": "Select mean window probability per recording and separate empirical-F1 threshold tuning through existing domain-independent providers. Apply inclusive threshold with highest-threshold tie policy to ordered query recordings and return scores, classes and counts. Decision-threshold calibration only; no probability-calibration guarantee or independent final accuracy claim. Generic binary recording output, not a named benchmark submission or patient diagnosis. No attention pooling, fold ensemble or rank-averaging branch."
+    },
+    "output_scope_decision": "Execute subject-separated binary waveform/PSD classification with explicit shared sample rate and channel policy, within-recording windows, training-only recording-balanced scaling, dual CNN branches, spectral masking and class/recording-balanced BCE. Fit an empirical-F1 threshold on separate calibration recordings using an existing reusable numeric provider, then apply the existing threshold provider to ordered query scores without refitting. Four recipe adapters expose the lifecycle. Synthetic Tier 3 evidence only; no clinical utility, independent accuracy, probability calibration, named submission format or human Tier 1 claim.",
+    "plan_sha256": "36c1d44b842bb3c7d9341da04f8c80f8d41116bbbdb96e5795f7defcacaf6089",
+    "parameter_contract": "Exact finite version-1 signal recipe with aligned channel/time lists, shared sample rate, subject-disjoint training/calibration/query, both binary classes in labeled populations and unlabeled queries. Explicit window, stride, FFT, hop, seed, CNN width, epochs, batch size, learning rate and spectral-mask controls. Caller guarantees channel meaning, units and meaningful subject identities.",
+    "output_contract": "Finite ordered recording scores and binary decisions, fitted empirical-F1 threshold, population/window counts, omitted query samples, epochs and initial/final training loss. Mean window aggregation with inclusive threshold. Selection threshold is not probability calibration, independent accuracy, a clinical decision or named submission format.",
+    "evidence_checker_sha256": "448a35a47057b58ef4832b45f71838d5d595bc5f0683ebee2ac5b4b0a438f5b3"
+  }
+}
