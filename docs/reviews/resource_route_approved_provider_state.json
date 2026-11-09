@@ -1,0 +1,365 @@
+{
+  "passed": true,
+  "catalog_mutations": 0,
+  "records": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.resource_route_execution.resource_route_encode",
+      "artifact_id": "5a501d9a-066d-5aa9-add9-c57ff882bcec",
+      "version_id": "f7e6e029-1437-55df-b405-f41239bfc08c",
+      "content_hash": "c6e61f015b417c8bb77fa62d35d33723c08f7eb95ff248d0ea2222f9b95085c2",
+      "catalog_fqdn": "sciona.atoms.ml.resource_route_execution.resource_route_encode",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "payload",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "state",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "payload",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "state",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "usage_ports": [
+        {
+          "direction": "input",
+          "name": "payload",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact dict keys nodes, edges, start, goal, budgets, blocked_nodes, blocked_edges, max_expansions. Nodes and closure lists contain unique nonempty strings; endpoints refer to known nodes. Edges are dicts with exactly id, source, target, cost, resources; edge IDs unique, cost and resource entries nonnegative Python integers excluding bool. Budgets are a nonempty nonnegative integer list, aligned with every resource vector; max_expansions is a positive integer. Closures reference existing identities. Cost and resources are additive. Input is detached into immutable state."
+        },
+        {
+          "direction": "output",
+          "name": "state",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Trusted immutable State produced by encode_state: unique nonempty node/edge identities, known endpoints, nonnegative integer costs and resource vectors aligned to nonempty finite budgets, explicit closures and positive expansion limit. Caller supplies cost, resource and closure meaning; no intrinsic physical units or domain schema."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.resource_route_execution.resource_route_generate",
+      "artifact_id": "87e9353a-bd76-5ffb-81da-66c0a5321112",
+      "version_id": "59c94dd5-eee9-5dd4-899a-42fc13566fbb",
+      "content_hash": "1d62a0173af12af999502b248edc274eaf2ad2c337e8177fe05752f326535fb4",
+      "catalog_fqdn": "sciona.atoms.ml.resource_route_execution.resource_route_generate",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "state",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "candidates",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "state",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "candidates",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "usage_ports": [
+        {
+          "direction": "input",
+          "name": "state",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Trusted immutable State produced by encode_state: unique nonempty node/edge identities, known endpoints, nonnegative integer costs and resource vectors aligned to nonempty finite budgets, explicit closures and positive expansion limit. Caller supplies cost, resource and closure meaning; no intrinsic physical units or domain schema."
+        },
+        {
+          "direction": "output",
+          "name": "candidates",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Trusted Candidates produced by generate_candidates, retaining original State and all directed edges not blocked and individually within budgets. Cumulative resource feasibility is determined during search; candidates are transitions, not complete routes."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.resource_route_execution.resource_route_search",
+      "artifact_id": "2d394303-5378-556e-b23a-c1b1d38579f2",
+      "version_id": "4eb5f17b-f0a5-56be-b232-802a06a49853",
+      "content_hash": "03645322ab941043126f8a895fb5be81e656f17a367098190ee9e6efc3087613",
+      "catalog_fqdn": "sciona.atoms.ml.resource_route_execution.resource_route_search",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "candidates",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "searched",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "candidates",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "searched",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "usage_ports": [
+        {
+          "direction": "input",
+          "name": "candidates",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Trusted Candidates produced by generate_candidates, retaining original State and all directed edges not blocked and individually within budgets. Cumulative resource feasibility is determined during search; candidates are transitions, not complete routes."
+        },
+        {
+          "direction": "output",
+          "name": "searched",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Trusted SearchResult produced by search_routes. Status optimal, infeasible or search_limit; original Candidates retained. Optimal contains ordered edge identities, integer cost, consumed-resource tuple and expansion count. Infeasible means queue exhaustion or blocked boundary. Search_limit makes no feasibility claim. Intermediate non-success cost/resource placeholders must not be interpreted as a feasible zero-cost route."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.resource_route_execution.resource_route_select",
+      "artifact_id": "da204d5a-3b4d-5ff9-88f4-6ea8e46accd2",
+      "version_id": "3e6ce3dd-75c0-56c0-95ae-4e58da599e56",
+      "content_hash": "660753515ee2cf6f98eb7d0488ee653b21298481ad15299000b02921d0b1b03d",
+      "catalog_fqdn": "sciona.atoms.ml.resource_route_execution.resource_route_select",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "validated",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "validated",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "usage_ports": [
+        {
+          "direction": "input",
+          "name": "validated",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Trusted SearchResult produced by search_routes. Status optimal, infeasible or search_limit; original Candidates retained. Optimal contains ordered edge identities, integer cost, consumed-resource tuple and expansion count. Infeasible means queue exhaustion or blocked boundary. Search_limit makes no feasibility claim. Intermediate non-success cost/resource placeholders must not be interpreted as a feasible zero-cost route. Optimal paths have independently checked continuity, closures, goal, totals and budgets against the original State. This checks feasibility, not independent optimality; optimality relies on nonnegative-cost expanded-state search."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Strict JSON dict with status, edge_ids, cost, resources, expansions. Optimal returns ordered edges and exact integer totals; start equals goal permits an empty route unless blocked. Other statuses return empty edge_ids and null cost/resources. Equal-cost ties follow transition/insertion order; no secondary resource optimum. No named competition submission format."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.resource_route_execution.resource_route_validate",
+      "artifact_id": "fd63eda4-5244-5082-88e8-f0e363d70845",
+      "version_id": "86c86424-b7ae-51ee-8697-26bccc8bfc38",
+      "content_hash": "f26ed161ae6e73d4a172502fd8357ab9d77202f625cec710f93e30cc6386a0d1",
+      "catalog_fqdn": "sciona.atoms.ml.resource_route_execution.resource_route_validate",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "searched",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "validated",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "searched",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        },
+        {
+          "direction": "output",
+          "name": "validated",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": ""
+        }
+      ],
+      "usage_ports": [
+        {
+          "direction": "input",
+          "name": "searched",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Trusted SearchResult produced by search_routes. Status optimal, infeasible or search_limit; original Candidates retained. Optimal contains ordered edge identities, integer cost, consumed-resource tuple and expansion count. Infeasible means queue exhaustion or blocked boundary. Search_limit makes no feasibility claim. Intermediate non-success cost/resource placeholders must not be interpreted as a feasible zero-cost route."
+        },
+        {
+          "direction": "output",
+          "name": "validated",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Trusted SearchResult produced by search_routes. Status optimal, infeasible or search_limit; original Candidates retained. Optimal contains ordered edge identities, integer cost, consumed-resource tuple and expansion count. Infeasible means queue exhaustion or blocked boundary. Search_limit makes no feasibility claim. Intermediate non-success cost/resource placeholders must not be interpreted as a feasible zero-cost route. Optimal paths have independently checked continuity, closures, goal, totals and budgets against the original State. This checks feasibility, not independent optimality; optimality relies on nonnegative-cost expanded-state search."
+        }
+      ]
+    }
+  ],
+  "checker_sha256": "2173c6c910565acf5dec0aa4882b99af7714bae6959f900593a2b3e54e8cb6fa",
+  "evidence_sha256": {
+    "docs/reviews/resource_route_current_runtime.json": "39c7ffe90d64ad13ad74fb5954bb8e67b08bcf64fa95eed55d0978cec6d4c936",
+    "docs/reviews/resource_route_provider_semantics.json": "e1b925816b5cdf84c91ebdb32f9dd966127c20cf018501182fa2d086a625354c",
+    "docs/reviews/resource_route_provider_metadata_plan.json": "51f5bab63c264cd65c574dcdbc352b8a1f8dc143a4cfefe7a8f1bad32e4b3fc7"
+  },
+  "catalog_snapshot": {
+    "atoms": "e0b7483a600e702d86bed71560fdce3866d0dd21e27cfd641fb6fb78842ecef6",
+    "artifacts": "57a9d8271efa379c7296482488e0a814cb6af2870c8bc8353b30e060f7d3e1ff",
+    "atom_versions": "91d4adb5e35ea6fa1936fc16a5f1f2a35e551b1239b90420df370847d10566cb",
+    "artifact_versions": "8e471f8a1c5ec7601317896206cc4daadbcd5dd727b9cec2df25635132510bc8",
+    "atom_io_specs": "fadd706d5300d3cc0e6bc4e6820338a05436337d63b3613fc5ccca71237c4361",
+    "artifact_io_specs": "bb7399d83acfff86eac2635d32b2622e6bbe8e6795f7478c23b5c0e82d9fe155",
+    "atom_parameters": "9a8277b50115aac0f9439b4d6fdffd8f0817eff501f50f487c06ecd05d59dc22",
+    "artifact_parameters": "a3bf30b3e4dd33e168becd334b456cbe62021862111473da2845c21da6c5ca6c",
+    "atom_descriptions": "2cc115411ebf8c1b00fe0eadec15b4ad27125bf0d08bf9d8cd09351e1574da30",
+    "artifact_descriptions": "1ff303119ef7e056a7ba2456bf99d00ad6f6da26a827b12d9a07ac1c2e5f9498",
+    "atom_references": "3d229a35db4321581b347ef56498b0f3bfac624d9a0607deb2ecbb1042e29637",
+    "artifact_references": "6a639f7e9d7e13ac35792781628f833e5608db61adab362590a1075e8dea143b",
+    "atom_audit_rollups": "93aa6433255b03b55461d9837ef91c72d6d087d4fa5b75173504af52a461d0cb",
+    "artifact_audit_rollups": "19a2dc9bdbe391c1d06e5e424af89118b2ebcd2fe7cae9f0e2fa8e75a855c322",
+    "artifact_audit_evidence": "bd315dcbc73cccc8929e9150b39e3408d1c18845c5dda1f3ad00db8168b3b2ba"
+  },
+  "dependencies": []
+}
