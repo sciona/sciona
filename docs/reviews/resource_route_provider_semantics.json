@@ -1,0 +1,214 @@
+{
+  "format": "resource-route-provider-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "proposed_tier": 3,
+  "review_source": "automated",
+  "catalog_mutations": 0,
+  "catalog_state_checked": false,
+  "runtime_sha256": "39c7ffe90d64ad13ad74fb5954bb8e67b08bcf64fa95eed55d0978cec6d4c936",
+  "reviewer_sha256": "c3b90a9c68ce5de428c699addb7aae2fc60c0dca67aefd5951a10c471a1f8619",
+  "providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.resource_route_execution.resource_route_encode",
+      "catalog_fqdn": "sciona.atoms.ml.resource_route_execution.resource_route_encode",
+      "version_id": "f7e6e029-1437-55df-b405-f41239bfc08c",
+      "content_hash": "c6e61f015b417c8bb77fa62d35d33723c08f7eb95ff248d0ea2222f9b95085c2",
+      "source_file": "../sciona-atoms-ml/src/sciona/atoms/ml/resource_route_execution.py",
+      "provider_sha256": "177d5adfa135191a5b7def34b85c2bd43393182704d57b341cab1caf177fa2fb",
+      "role": "generic_route_stage",
+      "node_id": "encode",
+      "plain_description": "Turn an explicit graph, budgets and closures into a checked immutable planning state.",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "payload",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact dict keys nodes, edges, start, goal, budgets, blocked_nodes, blocked_edges, max_expansions. Nodes and closure lists contain unique nonempty strings; endpoints refer to known nodes. Edges are dicts with exactly id, source, target, cost, resources; edge IDs unique, cost and resource entries nonnegative Python integers excluding bool. Budgets are a nonempty nonnegative integer list, aligned with every resource vector; max_expansions is a positive integer. Closures reference existing identities. Cost and resources are additive. Input is detached into immutable state."
+        },
+        {
+          "direction": "output",
+          "name": "state",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Trusted immutable State produced by encode_state: unique nonempty node/edge identities, known endpoints, nonnegative integer costs and resource vectors aligned to nonempty finite budgets, explicit closures and positive expansion limit. Caller supplies cost, resource and closure meaning; no intrinsic physical units or domain schema."
+        }
+      ],
+      "dependencies": [],
+      "validity_bounds": [
+        "Finite directed graph with nonnegative integer additive costs and nonnegative integer resource consumption only.",
+        "Budget-state products may be large. Expansion limits do not bound peak queue memory or wall-clock latency.",
+        "Trusted in-process stage objects only. Arbitrary manually forged states and portable intermediate interchange are not qualified.",
+        "Node labels, costs, units and closures are caller policy. No automatic domain ingestion or arbitrary simulation.",
+        "Synthetic automated Tier 3 evidence; no historical competition accuracy, human Tier 1 review or production scale claim."
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.resource_route_execution.resource_route_generate",
+      "catalog_fqdn": "sciona.atoms.ml.resource_route_execution.resource_route_generate",
+      "version_id": "59c94dd5-eee9-5dd4-899a-42fc13566fbb",
+      "content_hash": "1d62a0173af12af999502b248edc274eaf2ad2c337e8177fe05752f326535fb4",
+      "source_file": "../sciona-atoms-ml/src/sciona/atoms/ml/resource_route_execution.py",
+      "provider_sha256": "177d5adfa135191a5b7def34b85c2bd43393182704d57b341cab1caf177fa2fb",
+      "role": "generic_route_stage",
+      "node_id": "generate",
+      "plain_description": "Keep graph transitions allowed by closures and individual resource budgets.",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "state",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Trusted immutable State produced by encode_state: unique nonempty node/edge identities, known endpoints, nonnegative integer costs and resource vectors aligned to nonempty finite budgets, explicit closures and positive expansion limit. Caller supplies cost, resource and closure meaning; no intrinsic physical units or domain schema."
+        },
+        {
+          "direction": "output",
+          "name": "candidates",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Trusted Candidates produced by generate_candidates, retaining original State and all directed edges not blocked and individually within budgets. Cumulative resource feasibility is determined during search; candidates are transitions, not complete routes."
+        }
+      ],
+      "dependencies": [],
+      "validity_bounds": [
+        "Finite directed graph with nonnegative integer additive costs and nonnegative integer resource consumption only.",
+        "Budget-state products may be large. Expansion limits do not bound peak queue memory or wall-clock latency.",
+        "Trusted in-process stage objects only. Arbitrary manually forged states and portable intermediate interchange are not qualified.",
+        "Node labels, costs, units and closures are caller policy. No automatic domain ingestion or arbitrary simulation.",
+        "Synthetic automated Tier 3 evidence; no historical competition accuracy, human Tier 1 review or production scale claim."
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.resource_route_execution.resource_route_search",
+      "catalog_fqdn": "sciona.atoms.ml.resource_route_execution.resource_route_search",
+      "version_id": "4eb5f17b-f0a5-56be-b232-802a06a49853",
+      "content_hash": "03645322ab941043126f8a895fb5be81e656f17a367098190ee9e6efc3087613",
+      "source_file": "../sciona-atoms-ml/src/sciona/atoms/ml/resource_route_execution.py",
+      "provider_sha256": "177d5adfa135191a5b7def34b85c2bd43393182704d57b341cab1caf177fa2fb",
+      "role": "generic_route_stage",
+      "node_id": "search",
+      "plain_description": "Find a least-cost feasible route, prove none exists by exhausting the queue, or report that the search limit was reached.",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "candidates",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Trusted Candidates produced by generate_candidates, retaining original State and all directed edges not blocked and individually within budgets. Cumulative resource feasibility is determined during search; candidates are transitions, not complete routes."
+        },
+        {
+          "direction": "output",
+          "name": "searched",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Trusted SearchResult produced by search_routes. Status optimal, infeasible or search_limit; original Candidates retained. Optimal contains ordered edge identities, integer cost, consumed-resource tuple and expansion count. Infeasible means queue exhaustion or blocked boundary. Search_limit makes no feasibility claim. Intermediate non-success cost/resource placeholders must not be interpreted as a feasible zero-cost route."
+        }
+      ],
+      "dependencies": [],
+      "validity_bounds": [
+        "Finite directed graph with nonnegative integer additive costs and nonnegative integer resource consumption only.",
+        "Budget-state products may be large. Expansion limits do not bound peak queue memory or wall-clock latency.",
+        "Trusted in-process stage objects only. Arbitrary manually forged states and portable intermediate interchange are not qualified.",
+        "Node labels, costs, units and closures are caller policy. No automatic domain ingestion or arbitrary simulation.",
+        "Synthetic automated Tier 3 evidence; no historical competition accuracy, human Tier 1 review or production scale claim."
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.resource_route_execution.resource_route_validate",
+      "catalog_fqdn": "sciona.atoms.ml.resource_route_execution.resource_route_validate",
+      "version_id": "86c86424-b7ae-51ee-8697-26bccc8bfc38",
+      "content_hash": "f26ed161ae6e73d4a172502fd8357ab9d77202f625cec710f93e30cc6386a0d1",
+      "source_file": "../sciona-atoms-ml/src/sciona/atoms/ml/resource_route_execution.py",
+      "provider_sha256": "177d5adfa135191a5b7def34b85c2bd43393182704d57b341cab1caf177fa2fb",
+      "role": "generic_route_stage",
+      "node_id": "validate",
+      "plain_description": "Check the selected route against original edges, closures, resource limits and reported totals.",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "searched",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Trusted SearchResult produced by search_routes. Status optimal, infeasible or search_limit; original Candidates retained. Optimal contains ordered edge identities, integer cost, consumed-resource tuple and expansion count. Infeasible means queue exhaustion or blocked boundary. Search_limit makes no feasibility claim. Intermediate non-success cost/resource placeholders must not be interpreted as a feasible zero-cost route."
+        },
+        {
+          "direction": "output",
+          "name": "validated",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Trusted SearchResult produced by search_routes. Status optimal, infeasible or search_limit; original Candidates retained. Optimal contains ordered edge identities, integer cost, consumed-resource tuple and expansion count. Infeasible means queue exhaustion or blocked boundary. Search_limit makes no feasibility claim. Intermediate non-success cost/resource placeholders must not be interpreted as a feasible zero-cost route. Optimal paths have independently checked continuity, closures, goal, totals and budgets against the original State. This checks feasibility, not independent optimality; optimality relies on nonnegative-cost expanded-state search."
+        }
+      ],
+      "dependencies": [],
+      "validity_bounds": [
+        "Finite directed graph with nonnegative integer additive costs and nonnegative integer resource consumption only.",
+        "Budget-state products may be large. Expansion limits do not bound peak queue memory or wall-clock latency.",
+        "Trusted in-process stage objects only. Arbitrary manually forged states and portable intermediate interchange are not qualified.",
+        "Node labels, costs, units and closures are caller policy. No automatic domain ingestion or arbitrary simulation.",
+        "Synthetic automated Tier 3 evidence; no historical competition accuracy, human Tier 1 review or production scale claim."
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.resource_route_execution.resource_route_select",
+      "catalog_fqdn": "sciona.atoms.ml.resource_route_execution.resource_route_select",
+      "version_id": "3e6ce3dd-75c0-56c0-95ae-4e58da599e56",
+      "content_hash": "660753515ee2cf6f98eb7d0488ee653b21298481ad15299000b02921d0b1b03d",
+      "source_file": "../sciona-atoms-ml/src/sciona/atoms/ml/resource_route_execution.py",
+      "provider_sha256": "177d5adfa135191a5b7def34b85c2bd43393182704d57b341cab1caf177fa2fb",
+      "role": "generic_route_stage",
+      "node_id": "select",
+      "plain_description": "Return the route and totals, or an explicit non-success status without a proposed route.",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "validated",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Trusted SearchResult produced by search_routes. Status optimal, infeasible or search_limit; original Candidates retained. Optimal contains ordered edge identities, integer cost, consumed-resource tuple and expansion count. Infeasible means queue exhaustion or blocked boundary. Search_limit makes no feasibility claim. Intermediate non-success cost/resource placeholders must not be interpreted as a feasible zero-cost route. Optimal paths have independently checked continuity, closures, goal, totals and budgets against the original State. This checks feasibility, not independent optimality; optimality relies on nonnegative-cost expanded-state search."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Strict JSON dict with status, edge_ids, cost, resources, expansions. Optimal returns ordered edges and exact integer totals; start equals goal permits an empty route unless blocked. Other statuses return empty edge_ids and null cost/resources. Equal-cost ties follow transition/insertion order; no secondary resource optimum. No named competition submission format."
+        }
+      ],
+      "dependencies": [],
+      "validity_bounds": [
+        "Finite directed graph with nonnegative integer additive costs and nonnegative integer resource consumption only.",
+        "Budget-state products may be large. Expansion limits do not bound peak queue memory or wall-clock latency.",
+        "Trusted in-process stage objects only. Arbitrary manually forged states and portable intermediate interchange are not qualified.",
+        "Node labels, costs, units and closures are caller policy. No automatic domain ingestion or arbitrary simulation.",
+        "Synthetic automated Tier 3 evidence; no historical competition accuracy, human Tier 1 review or production scale claim."
+      ]
+    }
+  ],
+  "reuse_decision": "All five stages are generic constrained-route operations with explicit caller policy; no task-specific data or units.",
+  "remaining_requirements": [
+    "Reconcile richer contracts with exact versions in both catalogs without rewriting retained qualification history.",
+    "Verify rollback and native publication eligibility for metadata changes.",
+    "Execute and publish the corrected original under the qualified contracts."
+  ]
+}
