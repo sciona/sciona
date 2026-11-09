@@ -1,0 +1,79 @@
+{
+  "passed": true,
+  "catalog_mutations": 0,
+  "rejected_faults": [
+    "candidate_hash",
+    "candidate_tier",
+    "candidate_lineage",
+    "original_latest",
+    "original_history",
+    "parent_history",
+    "parent_latest",
+    "parent_publication",
+    "binding_hash",
+    "binding_missing",
+    "dependency_optional",
+    "root_input_type",
+    "result_output_missing",
+    "failed_staging_audit",
+    "serialized_node",
+    "serialized_edge",
+    "provider_tier"
+  ],
+  "dry_run": {
+    "applied": false,
+    "already_approved": false,
+    "rows_created": 7,
+    "rows_updated": 3,
+    "trust_tier": 3,
+    "original_artifact_id": "da422553-55e1-580c-b5a0-0e85f5b8ae12",
+    "version_id": "ecc3eb56-0d19-57e2-ba40-096bf90f86b4",
+    "graph_sha256": "a55634b1ae7f6807ae998599888d9c27e850db93ae8b68441effe0be74f88f4e",
+    "served_cdgs": 1,
+    "reused_providers": 5,
+    "source_histories_preserved": true,
+    "plan_sha256": "9d0ba383ca5a55a76f5852c1cf04e5d9a77d86b1a6095689628eef29aa9f4881"
+  },
+  "execution_evidence_tests": {
+    "passed": true,
+    "count": 10,
+    "sha256": "62ff29bba3d3755431927c49cb9ffe71dc3673ff56499c2501c386544204177b"
+  },
+  "all_rollbacks_complete": true,
+  "injected_failure_points": [
+    "metadata",
+    "activation"
+  ],
+  "publisher_sha256": "26c97c37e65680bddc3ecfdf970c7713935eb7bbb249a709962219c943e261be",
+  "validator_sha256": "b04a165a1f2d563b83fcdf0df0757bedd5415da7a16aebc4e843f24eab6ffa8d",
+  "execution_sha256": "f309d3fcf3c60c0ba472c089dcdc224f70ebace65aa16c5c4e439e34d78cab3c",
+  "qualification": {
+    "review_source": "automated",
+    "proposed_tier": 3,
+    "verdict": "acceptable_with_limits",
+    "evidence_commit": "d0077b7813204ec5a019b5b9a8150e21697f2406",
+    "execution_sha256": "f309d3fcf3c60c0ba472c089dcdc224f70ebace65aa16c5c4e439e34d78cab3c",
+    "source_review_sha256": "2d0fdc99896e20885cd30e277d226339226fb35afb5e580844ba05e3b6d6a408",
+    "limitations": [
+      "Caller supplies graph construction, cost meaning, resource units and closure policy. No map, game, scheduling or robot input adapter is implied. Intermediate objects are trusted in-process values.",
+      "Candidates are directed transitions, not whole routes. Feasibility is checked cumulatively during search. No learned policy proposal, spatial control feature or domain heuristic is required or claimed.",
+      "This selects deterministic finite resource-constrained search. No stochastic simulator, MCTS, PPO, self-play, continuous dynamics, path merging or parallel C++ execution is claimed. State-space size grows with the product of budgets; expansion limits do not bound peak queue memory.",
+      "Validation establishes feasibility and reported totals of an optimal-status route, not independent optimality. Search establishes optimality under the declared cost model. Non-success statuses carry no selected route; forged intermediate objects are outside the input boundary.",
+      "Generic route result only; a named competition submission format requires a separate adapter. Equal-cost ties follow input transition order and queue insertion order, with no unique-route or secondary-resource optimum guarantee. Search-limit status makes no feasibility or infeasibility claim.",
+      "Only the explicitly selected source alternatives are implemented.",
+      "Automated synthetic Tier 3 evidence only; no historical accuracy, generalization or human Tier 1 claim."
+    ],
+    "resolved_source_corrections": {
+      "state_encoder": "Encode a finite directed graph with explicit node and edge identities, start and goal, nonnegative integer costs, nonnegative integer resource vectors, finite budgets, closures and an expansion limit. Detach the input into immutable tuples and frozen state objects. Caller supplies graph construction, cost meaning, resource units and closure policy. No map, game, scheduling or robot input adapter is implied. Intermediate objects are trusted in-process values.",
+      "candidate_generator": "Retain every edge not excluded by an explicit closure or by individual resource consumption exceeding a budget. Nonnegative resource increments make this pruning sound for the chosen additive model. Candidates are directed transitions, not whole routes. Feasibility is checked cumulatively during search. No learned policy proposal, spatial control feature or domain heuristic is required or claimed.",
+      "search_or_rollout": "Run exact shortest-path search on node plus consumed-resource labels with nonnegative integer costs. Retain distinct resource states and strictly improving costs. Return the first popped goal, queue-exhaustion infeasibility, or explicit search_limit. Zero-cost zero-resource cycles terminate through strict label improvement. This selects deterministic finite resource-constrained search. No stochastic simulator, MCTS, PPO, self-play, continuous dynamics, path merging or parallel C++ execution is claimed. State-space size grows with the product of budgets; expansion limits do not bound peak queue memory.",
+      "constraint_repair": "Select the source-permitted constraint-checking branch. Independently check returned edge identities, continuity, closures, goal, accumulated costs, resources and budgets against the original encoded graph. Reject invalid paths without inventing repairs or relaxing constraints. Validation establishes feasibility and reported totals of an optimal-status route, not independent optimality. Search establishes optimality under the declared cost model. Non-success statuses carry no selected route; forged intermediate objects are outside the input boundary.",
+      "plan_selection": "Return strict JSON status, ordered edge identities, total cost, resource totals and expansion count. Successful routes include the zero-edge start-equals-goal plan. Infeasible and limited searches return empty edge lists and null costs/resources. Generic route result only; a named competition submission format requires a separate adapter. Equal-cost ties follow input transition order and queue insertion order, with no unique-route or secondary-resource optimum guarantee. Search-limit status makes no feasibility or infeasibility claim."
+    },
+    "output_scope_decision": "Execute finite directed resource-constrained route planning with nonnegative integer additive costs and resource use: encode immutable state, filter candidates, search exact resource labels, independently validate selected paths and emit explicit optimal, infeasible or search_limit results. Five generic stages retain caller-defined graph, costs, resource units and closures. Synthetic Tier 3 evidence only; no arbitrary simulator, historical winning solution, named submission format or human Tier 1 claim.",
+    "plan_sha256": "9d0ba383ca5a55a76f5852c1cf04e5d9a77d86b1a6095689628eef29aa9f4881",
+    "parameter_contract": "Exact dict keys nodes, edges, start, goal, budgets, blocked_nodes, blocked_edges, max_expansions. Nodes and closure lists contain unique nonempty strings; endpoints refer to known nodes. Edges are dicts with exactly id, source, target, cost, resources; edge IDs unique, cost and resource entries nonnegative Python integers excluding bool. Budgets are a nonempty nonnegative integer list, aligned with every resource vector; max_expansions is a positive integer. Closures reference existing identities. Cost and resources are additive. Input is detached into immutable state.",
+    "output_contract": "Strict JSON dict with status, edge_ids, cost, resources, expansions. Optimal returns ordered edges and exact integer totals; start equals goal permits an empty route unless blocked. Other statuses return empty edge_ids and null cost/resources. Equal-cost ties follow transition/insertion order; no secondary resource optimum. No named competition submission format.",
+    "evidence_checker_sha256": "7957785f41d0dbb97df405d119c63e2a7b00453e4317ad055fc0ca6bf93bdca9"
+  }
+}
