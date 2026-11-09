@@ -1,0 +1,186 @@
+{
+  "format": "arc-provider-contract-review.v1",
+  "passed": true,
+  "approved": false,
+  "review_source": "automated",
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "catalog_mutations": 0,
+  "providers": [
+    {
+      "artifact_id": "5ff50347-4bbf-5b8d-8ab2-1884b2b992c2",
+      "runtime_fqdn": "sciona.atoms.ml.arc_execution.arc_prepare",
+      "version_id": "753c0bc5-0619-515e-bb97-3d91d69fed37",
+      "content_hash": "b2aa442984cafb53f1811da2a95461a0a6bcb1babe490e0870fa6e63fde23676",
+      "plain_description": "Check example grids and search limits, then keep an immutable copy for the solver.",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "payload",
+          "type_desc": "dict",
+          "ordinal": 0,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact version-1 dict with task and budget only. Task has train and test lists, 1..20 input/output training pairs and 1..20 unlabeled test inputs. Grids are rectangular 1..30 by 1..30 lists of non-boolean integers 0..9. Budget has seconds and memory_mib, finite positive non-boolean numbers at most 30780 seconds and 15564.8 MiB. No caller paths, test answers, arbitrary executable or alternate search plan."
+        },
+        {
+          "direction": "output",
+          "name": "prepared",
+          "type_desc": "object",
+          "ordinal": 0,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Trusted immutable sciona.arc_runtime.Prepared returned by arc_prepare, containing tuple-backed validated task and explicit budgets. In-process use only; execute checks the exact Prepared type and budgets but does not revalidate a manually forged Task. Do not construct or deserialize arbitrary state objects."
+        }
+      ],
+      "source_anchors": [
+        {
+          "file": "sciona/arc_contract.py",
+          "symbol": "_grid",
+          "line": 19,
+          "file_sha256": "e9a8aed638f6be671ce76126017390d805992adc0159e99685ac7c8e681566f6"
+        },
+        {
+          "file": "sciona/arc_contract.py",
+          "symbol": "validate_task",
+          "line": 58,
+          "file_sha256": "e9a8aed638f6be671ce76126017390d805992adc0159e99685ac7c8e681566f6"
+        },
+        {
+          "file": "sciona/arc_runtime.py",
+          "symbol": "prepare",
+          "line": 37,
+          "file_sha256": "716811f34f4c629d990eaad25061532fc11846fc9179c360aad09afc360c7e37"
+        }
+      ],
+      "role": "recipe_adapter",
+      "reuse": "Use for discrete grid transformation tasks in other disciplines only when callers explicitly encode their examples as 0..9 categorical grids and the pinned DSL expresses the desired rules. Preparation is separately selectable. The execution provider is a source-specific search recipe, not a generic numerical primitive. C++ image operations, search state and scoring are coupled inside the reviewed binary; exposing them as independent Python atoms would require new interfaces and independent qualification. Do not claim that existing opaque wrappers provide that decomposition.",
+      "validity_bounds": [
+        "Automated Tier 3 synthetic evidence only; no human Tier 1 review or historical competition accuracy.",
+        "Caller supplies a faithful categorical-grid encoding. No numeric units, spatial resolution, physical laws or domain meaning are inferred.",
+        "Search is restricted to the pinned image DSL, cost rules, composition and candidate scoring. No universal program synthesis or cross-domain accuracy guarantee.",
+        "The exact reviewed macOS arm64 bundle must be provisioned through deployment configuration. No runtime download or automatic build.",
+        "Adaptive phases use up to four solver children, then two in the last phase. Callers must reserve the total allocation before invoking; two-input validation uses at most two children.",
+        "Process RSS is sampled and excludes parent memory. Global monotonic deadline and explicit kill/reap differ from the original monitor; budgets are not instantaneous operating-system limits.",
+        "Timing-dependent baseline estimates and resource contention can affect the search. A successful invocation may still report incomplete runs."
+      ]
+    },
+    {
+      "artifact_id": "2d681c27-5b0e-5fd6-a6cb-722b89196d3e",
+      "runtime_fqdn": "sciona.atoms.ml.arc_execution.arc_execute",
+      "version_id": "8b6c23f8-458b-56ed-b99e-f31c3ff6d85d",
+      "content_hash": "da0720ef32c373b5d15da9e3f85fd1ffc4a6fe82e2c9cfd23db7b31ec8d0fe35",
+      "plain_description": "Search for grid transformations that explain the examples. Return ranked guesses and report unfinished searches.",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "type_desc": "object",
+          "ordinal": 0,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Trusted immutable sciona.arc_runtime.Prepared returned by arc_prepare, containing tuple-backed validated task and explicit budgets. In-process use only; execute checks the exact Prepared type and budgets but does not revalidate a manually forged Task. Do not construct or deserialize arbitrary state objects."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "type_desc": "dict",
+          "ordinal": 0,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Version-1 dict with ordered per-test ranked candidate grids and scores, four search arguments 3/23/33/4, explicit time/memory budget, per-attempt status/time/peak sampled RSS, missing test indices, completion flag and reviewed build identity. Up to three unique grids per test, descending score then serialized-grid order. Partial training agreement may be accepted. Scores are heuristic and are not probabilities; predictions are not saved executable programs. Limited runs may return incomplete predictions; missing runs never imply successful zero-grid output."
+        }
+      ],
+      "source_anchors": [
+        {
+          "file": "sciona/arc_runtime.py",
+          "symbol": "execute",
+          "line": 70,
+          "file_sha256": "716811f34f4c629d990eaad25061532fc11846fc9179c360aad09afc360c7e37"
+        },
+        {
+          "file": "sciona/arc_runtime.py",
+          "symbol": "reviewed_binary",
+          "line": 47,
+          "file_sha256": "716811f34f4c629d990eaad25061532fc11846fc9179c360aad09afc360c7e37"
+        },
+        {
+          "file": "sciona/arc_schedule.py",
+          "symbol": "run_schedule",
+          "line": 53,
+          "file_sha256": "60acb4670481e4fa98235e5fb236665e7d7508074a565292a0f8ddab62af4356"
+        },
+        {
+          "file": "sciona/arc_schedule.py",
+          "symbol": "commands_for_phase",
+          "line": 40,
+          "file_sha256": "60acb4670481e4fa98235e5fb236665e7d7508074a565292a0f8ddab62af4356"
+        },
+        {
+          "file": "sciona/arc_process.py",
+          "symbol": "run_once",
+          "line": 69,
+          "file_sha256": "49fbc91bd70b8a6ae29a71e3fb5251c92b97fa11e97e5ced414890d7b311606f"
+        },
+        {
+          "file": "sciona/arc_contract.py",
+          "symbol": "merge_answers",
+          "line": 106,
+          "file_sha256": "e9a8aed638f6be671ce76126017390d805992adc0159e99685ac7c8e681566f6"
+        }
+      ],
+      "role": "recipe_adapter",
+      "reuse": "Use for discrete grid transformation tasks in other disciplines only when callers explicitly encode their examples as 0..9 categorical grids and the pinned DSL expresses the desired rules. Preparation is separately selectable. The execution provider is a source-specific search recipe, not a generic numerical primitive. C++ image operations, search state and scoring are coupled inside the reviewed binary; exposing them as independent Python atoms would require new interfaces and independent qualification. Do not claim that existing opaque wrappers provide that decomposition.",
+      "validity_bounds": [
+        "Automated Tier 3 synthetic evidence only; no human Tier 1 review or historical competition accuracy.",
+        "Caller supplies a faithful categorical-grid encoding. No numeric units, spatial resolution, physical laws or domain meaning are inferred.",
+        "Search is restricted to the pinned image DSL, cost rules, composition and candidate scoring. No universal program synthesis or cross-domain accuracy guarantee.",
+        "The exact reviewed macOS arm64 bundle must be provisioned through deployment configuration. No runtime download or automatic build.",
+        "Adaptive phases use up to four solver children, then two in the last phase. Callers must reserve the total allocation before invoking; two-input validation uses at most two children.",
+        "Process RSS is sampled and excludes parent memory. Global monotonic deadline and explicit kill/reap differ from the original monitor; budgets are not instantaneous operating-system limits.",
+        "Timing-dependent baseline estimates and resource contention can affect the search. A successful invocation may still report incomplete runs."
+      ]
+    }
+  ],
+  "reuse_decision": "Use for discrete grid transformation tasks in other disciplines only when callers explicitly encode their examples as 0..9 categorical grids and the pinned DSL expresses the desired rules. Preparation is separately selectable. The execution provider is a source-specific search recipe, not a generic numerical primitive. C++ image operations, search state and scoring are coupled inside the reviewed binary; exposing them as independent Python atoms would require new interfaces and independent qualification. Do not claim that existing opaque wrappers provide that decomposition.",
+  "limitations": [
+    "Automated Tier 3 synthetic evidence only; no human Tier 1 review or historical competition accuracy.",
+    "Caller supplies a faithful categorical-grid encoding. No numeric units, spatial resolution, physical laws or domain meaning are inferred.",
+    "Search is restricted to the pinned image DSL, cost rules, composition and candidate scoring. No universal program synthesis or cross-domain accuracy guarantee.",
+    "The exact reviewed macOS arm64 bundle must be provisioned through deployment configuration. No runtime download or automatic build.",
+    "Adaptive phases use up to four solver children, then two in the last phase. Callers must reserve the total allocation before invoking; two-input validation uses at most two children.",
+    "Process RSS is sampled and excludes parent memory. Global monotonic deadline and explicit kill/reap differ from the original monitor; budgets are not instantaneous operating-system limits.",
+    "Timing-dependent baseline estimates and resource contention can affect the search. A successful invocation may still report incomplete runs."
+  ],
+  "derivative": {
+    "plain_description": "Use example grid pairs to search for transformations, then return ranked guesses for new grids with explicit search limits and completion status.",
+    "ports": [
+      {
+        "direction": "input",
+        "name": "payload",
+        "type_desc": "dict",
+        "ordinal": 0,
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Exact version-1 dict with task and budget only. Task has train and test lists, 1..20 input/output training pairs and 1..20 unlabeled test inputs. Grids are rectangular 1..30 by 1..30 lists of non-boolean integers 0..9. Budget has seconds and memory_mib, finite positive non-boolean numbers at most 30780 seconds and 15564.8 MiB. No caller paths, test answers, arbitrary executable or alternate search plan."
+      },
+      {
+        "direction": "output",
+        "name": "result",
+        "type_desc": "dict",
+        "ordinal": 0,
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Version-1 dict with ordered per-test ranked candidate grids and scores, four search arguments 3/23/33/4, explicit time/memory budget, per-attempt status/time/peak sampled RSS, missing test indices, completion flag and reviewed build identity. Up to three unique grids per test, descending score then serialized-grid order. Partial training agreement may be accepted. Scores are heuristic and are not probabilities; predictions are not saved executable programs. Limited runs may return incomplete predictions; missing runs never imply successful zero-grid output."
+      }
+    ]
+  },
+  "evidence_commit": "1953ff38",
+  "readiness_sha256": "1893039cedc83b08075e85c70c0df2df30f05774e23e68963fb7f9299caa5bfd",
+  "execution_sha256": "9f3bfcfb4cb6ab039b68d7306e9a7ad2081bb8e7fc451445eefefee2a2e1c457",
+  "reviewer_sha256": "b8cd7f59135f62940dffc04323cc13046a1769cd7889e4a66d78cc52e11015e5",
+  "remaining": [
+    "Transactional metadata reconciliation and both native eligibility checks.",
+    "Original source-scope review, corrected stored execution, publication and served selection."
+  ]
+}
