@@ -1,0 +1,170 @@
+{
+  "format": "physical-operator-original-scope.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "catalog_state_checked": false,
+  "source_snapshot_reconstructed": true,
+  "source_version_id": "49c645b7-3659-5cfa-a386-78f7a51f7358",
+  "source_content_hash": "185e7d6e033ad27cfcf8c655d4da84ae680d6c9ec33795095b816e28e052055b",
+  "artifact_id": "0b32be5f-4143-5346-97e0-75f05052add9",
+  "fqdn": "cdg.competition.solution.kaggle.physics_informed_operator_surrogate_topology",
+  "provider_semantics_sha256": "f3f6db737ce203c127c16b235720aa3dba310f8028b12a7fe117cbef7a971f5f",
+  "reviewer_sha256": "cecac3ad79277107610e1b8d70331ee2d328fb7bbc7ea81f4e85ef294dcdeb18",
+  "source_stage_review": [
+    {
+      "source_stage": {
+        "stage_id": "physical_state_assembly",
+        "description": "Load gridded, sequence, graph, spectral, hyperspectral, telescope time-series, focal-plane image, light-curve, or tabular physical observations with chunked/HDF5 access and construct state tensors with coordinates, units, wavelengths, transit timing, and exogenous variables.",
+        "guarantees": [
+          "State tensors have consistent axes and units."
+        ]
+      },
+      "realization": "Select a gridded periodic scalar-field realization with explicit SI length, time and diffusivity and dimensionless state. Validate uniform endpoint-excluded coordinates, finite aligned arrays, nonnegative states, supplied target mass and caller-defined separated populations. Serialize detached configuration; form nondimensional diffusivity*time/length^2.",
+      "limits": "Caller supplies physical meaning and meaningful group identities. No automatic coordinate, unit or identity discovery. In-memory finite arrays only; chunked/HDF5 resource scaling is not qualified. Spectral, graph, telescope, ocean and other scientific input modalities are alternatives, not implemented by this realization.",
+      "source_anchors": [
+        {
+          "file": "sciona/physical_operator_state.py",
+          "symbol": "prepare",
+          "line": 30,
+          "file_sha256": "281c5e3358c3357e0c32c1af37678271cb13be326a9a2e6d70f98625bf35160a"
+        },
+        {
+          "file": "sciona/physical_operator_state.py",
+          "symbol": "tensors",
+          "line": 70,
+          "file_sha256": "281c5e3358c3357e0c32c1af37678271cb13be326a9a2e6d70f98625bf35160a"
+        },
+        {
+          "file": "sciona/physical_operator_stages.py",
+          "symbol": "prepare",
+          "line": 41,
+          "file_sha256": "ea22af3c8a45cb7e41f842022b26db25a09c72d519fb3c5bed1a99574a186a93"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "spectral_or_graph_features",
+        "description": "Compute vertical differences, coordinate/geospatial features, satellite-to-sensor fusion features, Fourier features, wavelet detrending, synthetic transit or signal injection, 2D-CNN cosmic-ray denoising residuals, Gaussian-process noise residuals, graph neighborhoods, chemistry descriptors, or spectral basis features.",
+        "guarantees": [
+          "Features preserve physical indexing."
+        ]
+      },
+      "realization": "Select the Fourier-feature branch: real FFT along the periodic grid, retain explicit low modes, apply learned complex channel multipliers, zero unretained modes and invert with the original grid length. Broadcast nondimensional diffusion time as the second input channel; preserve sample indexing.",
+      "limits": "Feature computation is inside each learned spectral block rather than a separately cached preprocessing artifact. No wavelet, graph, transit injection, cosmic-ray denoising, Gaussian-process noise or satellite-fusion branch is claimed. Physical indexing requires the validated uniform periodic ordering.",
+      "source_anchors": [
+        {
+          "file": "sciona/physical_operator_network.py",
+          "symbol": "SpectralConv1d.forward",
+          "line": 22,
+          "file_sha256": "1ec25a6498b57a468a377e878c39f5759fa05544a151e18f5b983105fbf8156b"
+        },
+        {
+          "file": "sciona/physical_operator_network.py",
+          "symbol": "FourierOperator1d.forward",
+          "line": 48,
+          "file_sha256": "1ec25a6498b57a468a377e878c39f5759fa05544a151e18f5b983105fbf8156b"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "operator_surrogate",
+        "description": "Train an FNO, transformer spectral regressor, LSTM seasonal chemistry forecaster, graph neural network, PINN/PIGNN, hyperspectral fusion model, 2D-CNN denoiser plus regressor, or uncertainty-quantified spectral regression model to map state features to targets.",
+        "guarantees": [
+          "Predictions have the required target shape."
+        ]
+      },
+      "realization": "Select an independently implemented one-dimensional Fourier/local neural operator. Fit CPU float64 full-batch Adam on training targets with explicit architecture, optimization and seed controls. Select and restore the earliest minimum validation-MSE checkpoint including epoch zero. Predict finite query rows in original order without refitting.",
+      "limits": "Training-regime coverage and physical applicability remain caller responsibilities. Validation labels select the checkpoint and do not provide independent final accuracy. No historical benchmark reproduction, arbitrary PDE accuracy, uncertainty head, resolution transfer, GPU or large-grid qualification. Transformer, graph, PINN/PIGNN and other model families remain alternatives.",
+      "source_anchors": [
+        {
+          "file": "sciona/physical_operator_network.py",
+          "symbol": "FourierOperator1d",
+          "line": 34,
+          "file_sha256": "1ec25a6498b57a468a377e878c39f5759fa05544a151e18f5b983105fbf8156b"
+        },
+        {
+          "file": "sciona/physical_operator_training.py",
+          "symbol": "fit",
+          "line": 15,
+          "file_sha256": "120ef52d9cdc1013f3a15585cd3e8e5759aa451de1d7609f692dcc73246f2842"
+        },
+        {
+          "file": "sciona/physical_operator_stages.py",
+          "symbol": "fit",
+          "line": 52,
+          "file_sha256": "ea22af3c8a45cb7e41f842022b26db25a09c72d519fb3c5bed1a99574a186a93"
+        },
+        {
+          "file": "sciona/physical_operator_stages.py",
+          "symbol": "predict",
+          "line": 58,
+          "file_sha256": "ea22af3c8a45cb7e41f842022b26db25a09c72d519fb3c5bed1a99574a186a93"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "constraint_projection",
+        "description": "Apply conservation, smoothness, positivity, boundary, spectral-consistency, or biogeochemical constraint layers to raw predictions.",
+        "guarantees": [
+          "Predictions satisfy explicit constraints or expose violations."
+        ]
+      },
+      "realization": "Select nonnegativity and initial-mass conservation: supply initial-state row totals to an independently reusable Euclidean fixed-sum projection. The operation returns nonnegative rows with explicit sum tolerance; unrepresentable arithmetic fails. Unchanged uniform grid spacing makes row-sum conservation correspond to integral conservation.",
+      "limits": "This enforces the selected discrete constraints, not the full PDE residual or arbitrary boundary/biogeochemical laws. The numeric provider takes explicit totals and has no intrinsic diffusion, unit or initial-state meaning.",
+      "source_anchors": [
+        {
+          "file": "sciona/physical_operator_stages.py",
+          "symbol": "project",
+          "line": 71,
+          "file_sha256": "ea22af3c8a45cb7e41f842022b26db25a09c72d519fb3c5bed1a99574a186a93"
+        },
+        {
+          "file": "sciona/constrained_array_ops.py",
+          "symbol": "project_nonnegative_fixed_sum",
+          "line": 19,
+          "file_sha256": "2c3754ccf9d53b5045948014371ae9f3b567da080a293e58fb10bff0383df9a7"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "metric_postprocessing",
+        "description": "Apply weighted least squares, detrending, smoothing, uncertainty aggregation, or target-specific clipping before submission.",
+        "guarantees": [
+          "Predictions are formatted for submission."
+        ]
+      },
+      "realization": "Select convex nearest-neighbor circular smoothing with explicit weight in [0,0.5]. Preserve nonnegativity and row sums to rounding tolerance. Return finite JSON predictions in query order, preserving duplicates, with population counts, checkpoint/training summaries and measured mean-conservation error.",
+      "limits": "The generic scientific output is a prediction array with summaries, not a named competition file format. No weighted least-squares, uncertainty aggregation or other optional postprocessing branch is claimed. Smoothing is not an exact diffusion integrator. Final training MSE refers to the final epoch rather than necessarily the restored checkpoint.",
+      "source_anchors": [
+        {
+          "file": "sciona/constrained_array_ops.py",
+          "symbol": "smooth_periodic_rows",
+          "line": 51,
+          "file_sha256": "2c3754ccf9d53b5045948014371ae9f3b567da080a293e58fb10bff0383df9a7"
+        },
+        {
+          "file": "sciona/physical_operator_stages.py",
+          "symbol": "finish",
+          "line": 83,
+          "file_sha256": "ea22af3c8a45cb7e41f842022b26db25a09c72d519fb3c5bed1a99574a186a93"
+        }
+      ]
+    }
+  ],
+  "reuse_decision": "Two independent numeric operations with five explicit recipe adapters. Physical units, population identity, model family and conservation choices remain recipe policy.",
+  "remaining_requirements": [
+    "Recheck original snapshot and preserved derivative against live catalog state.",
+    "Reconcile and approve exact provider versions with metadata, dependency and rollback checks.",
+    "Bind, store and execute the corrected original, then verify Tier 3 publication and served retrieval."
+  ],
+  "limits": [
+    "Source reconstruction proves exact intake content identity, not current database status or approval.",
+    "All five source stages covered for the explicit periodic scalar-diffusion realization; optional model and modality branches are not universally implemented.",
+    "Automated synthetic Tier 3 candidate evidence only; no human Tier 1 designation or empirical deployment guarantee."
+  ]
+}
