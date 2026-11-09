@@ -1,0 +1,81 @@
+{
+  "passed": true,
+  "catalog_mutations": 0,
+  "rejected_faults": [
+    "candidate_hash",
+    "candidate_tier",
+    "candidate_lineage",
+    "original_latest",
+    "original_history",
+    "parent_history",
+    "parent_latest",
+    "parent_publication",
+    "binding_hash",
+    "binding_missing",
+    "dependency_optional",
+    "root_input_type",
+    "result_output_missing",
+    "failed_staging_audit",
+    "serialized_node",
+    "serialized_edge",
+    "provider_tier"
+  ],
+  "dry_run": {
+    "applied": false,
+    "already_approved": false,
+    "rows_created": 7,
+    "rows_updated": 3,
+    "trust_tier": 3,
+    "original_artifact_id": "5acf5fba-a858-5d4a-9832-77b99bea6714",
+    "version_id": "bf4cf4bb-4f0b-5b46-accd-ae326b5f2a1c",
+    "graph_sha256": "270a974428aa91dc174162fa6936c1ad140a90deb9f1d1ff1dd1186503e4aa3d",
+    "served_cdgs": 1,
+    "reused_providers": 2,
+    "source_histories_preserved": true,
+    "plan_sha256": "cc6caff13535a9a0e7091e4925e0cc6743edc00d832d217c78c50823a60e4f88"
+  },
+  "execution_evidence_tests": {
+    "passed": true,
+    "count": 10,
+    "sha256": "84fcfd2a9f9e44efd06a0b8d8e45c82818b80c5d25a4b3a83759c26ac37b5741"
+  },
+  "all_rollbacks_complete": true,
+  "injected_failure_points": [
+    "metadata",
+    "activation"
+  ],
+  "publisher_sha256": "14fd691ecbfe27e3dc00dad47cb6e5a19152ac04ab94a01e0346f3abdf1cd64f",
+  "validator_sha256": "43e0958929714b2b7802c8c2d7e2f760f5fdbe47d36439526a6e71d1c2d575a3",
+  "execution_sha256": "b28f3afe8b090abb85b27887285c677b9a15a87848d92a3783db01c614818311",
+  "qualification": {
+    "review_source": "automated",
+    "proposed_tier": 3,
+    "verdict": "acceptable_with_limits",
+    "evidence_commit": "9e5525f72d88ba17a3f2059ff0cd055ae904de90",
+    "execution_sha256": "b28f3afe8b090abb85b27887285c677b9a15a87848d92a3783db01c614818311",
+    "source_review_sha256": "7bff18765923cd28b2415c9e0c297b98e0d0d5b46b7c9f1be440527a35b41036",
+    "limitations": [
+      "Caller supplies the exact runtime event interface and private paths. No HDF5, Parquet, arbitrary table schema or measured high-volume throughput claim. Snapshot disk space is bounded by configured source sizes; three snapshots coexist.",
+      "Targets are available immediately after observation time; delayed availability unsupported. Caller specifies units, period and window. Retained entity keys and pending/history capacities fail closed on exhaustion. No arbitrary calendar or market-specific features.",
+      "Hash collisions are intentional. No native CatBoost categoricals, learned target encoding or vocabulary branch. No dense population conversion; per-chunk memory still depends on explicit hash width and chunk size.",
+      "Entities may repeat; this is temporal rather than entity-disjoint validation. Reusing validation for stopping is selection, not independent final evaluation. No rolling refits, group holdout or validation-label history updates.",
+      "Model controls and training chunk size affect results. Validation selects epoch only; no hyperparameter search, boosted-tree branch or refit on validation labels. No historical winner reproduction or empirical accuracy guarantee.",
+      "Generic structured output under the explicit recipe, not a named submission file. No rounding, zero-sum, calibration, classification threshold or online refit branch. Private source paths, digests and records are excluded from results.",
+      "Only the explicitly selected source alternatives are implemented.",
+      "Automated synthetic Tier 3 evidence only; no historical accuracy, generalization or human Tier 1 claim."
+    ],
+    "resolved_source_corrections": {
+      "efficient_table_loading": "Select bounded chunked JSONL event streams. Inspect labels, order and limits, then verify immutable disk snapshots of all populations before fitting. Replay snapshots without copying full populations into RAM. Caller supplies the exact runtime event interface and private paths. No HDF5, Parquet, arbitrary table schema or measured high-volume throughput claim. Snapshot disk space is bounded by configured source sizes; three snapshots coexist.",
+      "temporal_feature_engineering": "Compute value, periodic sine/cosine, per-entity rolling and latest-time target means, history age/count and presence. Defer same-time targets across chunk boundaries. Rebuild encoder from empty history each epoch and preserve row order. Targets are available immediately after observation time; delayed availability unsupported. Caller specifies units, period and window. Retained entity keys and pending/history capacities fail closed on exhaustion. No arbitrary calendar or market-specific features.",
+      "categorical_sparse_encoding": "Select fixed-width unsigned entity/category hashing and eight numeric features, assembled as CSR chunks and clipped using an explicit fixed bound. No target statistics are fit from validation rows. Hash collisions are intentional. No native CatBoost categoricals, learned target encoding or vocabulary branch. No dense population conversion; per-chunk memory still depends on explicit hash width and chunk size.",
+      "leakage_safe_validation": "Require strict chronological train-validation-query separation with explicit gaps before fitting. Validation/query labels never update history or model coefficients. Use validation RMSLE only for epoch selection. Entities may repeat; this is temporal rather than entity-disjoint validation. Reusing validation for stopping is selection, not independent final evaluation. No rolling refits, group holdout or validation-label history updates.",
+      "boosted_sparse_ensemble": "Select the permitted sparse linear ensemble branch: squared-error and Huber SGD on log1p targets with equal log-score averaging. Train successive causal stream passes, evaluate each epoch, and restore the earliest sufficiently improved checkpoint using registered generic stopping providers and explicit patience, threshold and epoch budget. Model controls and training chunk size affect results. Validation selects epoch only; no hyperparameter search, boosted-tree branch or refit on validation labels. No historical winner reproduction or empirical accuracy guarantee.",
+      "metric_postprocessing": "Clip averaged log scores between zero and log1p(max_prediction), invert with expm1, and return ordered finite nonnegative capped predictions plus explicitly labeled selection diagnostics. Bound query output rows before fitting and during prediction. Generic structured output under the explicit recipe, not a named submission file. No rounding, zero-sum, calibration, classification threshold or online refit branch. Private source paths, digests and records are excluded from results."
+    },
+    "output_scope_decision": "Execute bounded causal temporal sparse regression from verified private snapshots, strict-past features and hashed CSR chunks. Select squared-error and Huber log-target SGD with validation-based early stopping through reusable generic stopping providers; restore the selected checkpoint and return ordered clipped inverse-transform predictions with labeled selection diagnostics. Two recipe adapters preserve one snapshot lifetime across six source stages. Caller controls time semantics, capacities, model settings and metric policy. Synthetic Tier 3 evidence only; no independent final accuracy, entity-disjoint holdout, measured high-volume throughput, named submission format or human Tier 1 claim.",
+    "plan_sha256": "cc6caff13535a9a0e7091e4925e0cc6743edc00d832d217c78c50823a60e4f88",
+    "parameter_contract": "Exact version-1 private bounded stream recipe with explicit max_epochs, patience and min_delta. Nonnegative training/validation targets, unlabeled future queries, finite ordered events and strict chronological gaps. Caller controls history capacities, period, lookback, hash width, chunk size, seed, learning rate, penalty, clipping and prediction cap. Private source descriptors are runtime-only.",
+    "output_contract": "Finite ordered nonnegative capped query predictions from the selected checkpoint, training/query/model/feature counts, selected and evaluated epochs, stop flag and selected update count. Validation score history and selected RMSLE are explicitly selection diagnostics. No independent accuracy, throughput, named submission format or model persistence claim.",
+    "evidence_checker_sha256": "99309a15c54291c232d6e28c66893d9de7045957ba6bd0c339d408da27250fbb"
+  }
+}
