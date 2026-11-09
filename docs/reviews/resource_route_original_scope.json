@@ -1,0 +1,123 @@
+{
+  "format": "resource-route-original-scope.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "catalog_state_checked": true,
+  "source_snapshot_reconstructed": true,
+  "source_version_id": "65947cba-17e3-5a60-ac2b-7a3545885a39",
+  "source_content_hash": "d07d9ca3d6cf5dc01c2b487384d68cc218797da1504dc97483cbeb69b0f0ee1f",
+  "artifact_id": "da422553-55e1-580c-b5a0-0e85f5b8ae12",
+  "fqdn": "cdg.competition.solution.kaggle.agent_simulation_search_planning_topology",
+  "parent_version_id": "3c10fde8-db29-5c97-bdbe-d173e7468201",
+  "parent_content_hash": "641f783f01a3e5b5247a0e6fd86969663f48ad0b9c2fae2f037395d84fba191e",
+  "reviewer_sha256": "85a0c8992a215665da4eb99143d73871927c24acb3aae20017f1d587941315d1",
+  "source_stage_review": [
+    {
+      "source_stage": {
+        "stage_id": "state_encoder",
+        "description": "Encode board, route, graph, robot, schedule, or environment state with all constraints and resources.",
+        "guarantees": [
+          "Encoded state preserves feasibility constraints."
+        ]
+      },
+      "realization": "Encode a finite directed graph with explicit node and edge identities, start and goal, nonnegative integer costs, nonnegative integer resource vectors, finite budgets, closures and an expansion limit. Detach the input into immutable tuples and frozen state objects.",
+      "limits": "Caller supplies graph construction, cost meaning, resource units and closure policy. No map, game, scheduling or robot input adapter is implied. Intermediate objects are trusted in-process values.",
+      "source_anchors": [
+        {
+          "file": "sciona/resource_route_planning.py",
+          "symbol": "encode_state",
+          "line": 59,
+          "file_sha256": "0e665377e805cd5e592c4692b2093b02be6c598ab9fc5aa0092deeebf13d6aea"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "candidate_generator",
+        "description": "Generate candidate moves, routes, schedules, questions, guesses, resource assignments, logistics plans, strategic scripts, Voronoi-controlled regions, A* paths, or control actions from the encoded state.",
+        "guarantees": [
+          "Candidate actions can be scored or simulated."
+        ]
+      },
+      "realization": "Retain every edge not excluded by an explicit closure or by individual resource consumption exceeding a budget. Nonnegative resource increments make this pruning sound for the chosen additive model.",
+      "limits": "Candidates are directed transitions, not whole routes. Feasibility is checked cumulatively during search. No learned policy proposal, spatial control feature or domain heuristic is required or claimed.",
+      "source_anchors": [
+        {
+          "file": "sciona/resource_route_planning.py",
+          "symbol": "generate_candidates",
+          "line": 85,
+          "file_sha256": "0e665377e805cd5e592c4692b2093b02be6c598ab9fc5aa0092deeebf13d6aea"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "search_or_rollout",
+        "description": "Run local search, simulated annealing, IDA*, beam search, dynamic programming, MCTS, backtracking MCTS, PPO policy rollout, self-play policy/value evaluation, parallelized C++ path optimization, path merging, or simulator evaluation.",
+        "guarantees": [
+          "Candidates are ranked by expected objective value or feasibility."
+        ]
+      },
+      "realization": "Run exact shortest-path search on node plus consumed-resource labels with nonnegative integer costs. Retain distinct resource states and strictly improving costs. Return the first popped goal, queue-exhaustion infeasibility, or explicit search_limit. Zero-cost zero-resource cycles terminate through strict label improvement.",
+      "limits": "This selects deterministic finite resource-constrained search. No stochastic simulator, MCTS, PPO, self-play, continuous dynamics, path merging or parallel C++ execution is claimed. State-space size grows with the product of budgets; expansion limits do not bound peak queue memory.",
+      "source_anchors": [
+        {
+          "file": "sciona/resource_route_planning.py",
+          "symbol": "search_routes",
+          "line": 92,
+          "file_sha256": "0e665377e805cd5e592c4692b2093b02be6c598ab9fc5aa0092deeebf13d6aea"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "constraint_repair",
+        "description": "Repair infeasible actions, enforce path or resource constraints, and remove invalid candidates.",
+        "guarantees": [
+          "Remaining candidates satisfy hard constraints."
+        ]
+      },
+      "realization": "Select the source-permitted constraint-checking branch. Independently check returned edge identities, continuity, closures, goal, accumulated costs, resources and budgets against the original encoded graph. Reject invalid paths without inventing repairs or relaxing constraints.",
+      "limits": "Validation establishes feasibility and reported totals of an optimal-status route, not independent optimality. Search establishes optimality under the declared cost model. Non-success statuses carry no selected route; forged intermediate objects are outside the input boundary.",
+      "source_anchors": [
+        {
+          "file": "sciona/resource_route_planning.py",
+          "symbol": "validate_route",
+          "line": 121,
+          "file_sha256": "0e665377e805cd5e592c4692b2093b02be6c598ab9fc5aa0092deeebf13d6aea"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "plan_selection",
+        "description": "Choose the best valid action, route, schedule, or plan and format it for submission.",
+        "guarantees": [
+          "Final output satisfies the benchmark format."
+        ]
+      },
+      "realization": "Return strict JSON status, ordered edge identities, total cost, resource totals and expansion count. Successful routes include the zero-edge start-equals-goal plan. Infeasible and limited searches return empty edge lists and null costs/resources.",
+      "limits": "Generic route result only; a named competition submission format requires a separate adapter. Equal-cost ties follow input transition order and queue insertion order, with no unique-route or secondary-resource optimum guarantee. Search-limit status makes no feasibility or infeasibility claim.",
+      "source_anchors": [
+        {
+          "file": "sciona/resource_route_planning.py",
+          "symbol": "select_plan",
+          "line": 140,
+          "file_sha256": "0e665377e805cd5e592c4692b2093b02be6c598ab9fc5aa0092deeebf13d6aea"
+        }
+      ]
+    }
+  ],
+  "reuse_decision": "Five generic route stages share explicit immutable state. Graph labels, costs, resource meanings and closures are caller policy; no competition-specific units, schema adapter or embedded task data. Reuse requires the same finite nonnegative additive model.",
+  "remaining_requirements": [
+    "Qualify current runtime and independent numerical/reuse tests.",
+    "Verify exact approved provider contracts and dependencies in both catalogs.",
+    "Bind and execute the corrected stored original; test publication rollback and served selection."
+  ],
+  "limits": [
+    "Source-stage review and current catalog identity only; this report does not confer publication approval.",
+    "Selected deterministic route realization covers all five stages; optional search families remain alternatives.",
+    "Automated Tier 3 candidate only. No human Tier 1 review or empirical deployment qualification."
+  ]
+}
