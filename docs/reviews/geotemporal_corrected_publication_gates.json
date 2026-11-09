@@ -1,0 +1,79 @@
+{
+  "passed": true,
+  "catalog_mutations": 0,
+  "rejected_faults": [
+    "candidate_hash",
+    "candidate_tier",
+    "candidate_lineage",
+    "original_latest",
+    "original_history",
+    "parent_history",
+    "parent_latest",
+    "parent_publication",
+    "binding_hash",
+    "binding_missing",
+    "dependency_optional",
+    "root_input_type",
+    "result_output_missing",
+    "failed_staging_audit",
+    "serialized_node",
+    "serialized_edge",
+    "provider_tier"
+  ],
+  "dry_run": {
+    "applied": false,
+    "already_approved": false,
+    "rows_created": 7,
+    "rows_updated": 3,
+    "trust_tier": 3,
+    "original_artifact_id": "8fd737be-1d14-55d1-a896-d946f86545fd",
+    "version_id": "4efdb168-4aeb-5a57-9ba8-e660f4821712",
+    "graph_sha256": "8305adce2336ad2f8cc8c0dfec2d72265a24f730aae96509efbc0c647fa1538c",
+    "served_cdgs": 1,
+    "reused_providers": 5,
+    "source_histories_preserved": true,
+    "plan_sha256": "8dd631d3251fc59f26400273535b5d09d68b916072e4fc8ef5c0d8b3051f0f71"
+  },
+  "execution_evidence_tests": {
+    "passed": true,
+    "count": 10,
+    "sha256": "c0962d186a59628573b00282b77c42315b94a9c715651680d4a65b01c08485db"
+  },
+  "all_rollbacks_complete": true,
+  "injected_failure_points": [
+    "metadata",
+    "activation"
+  ],
+  "publisher_sha256": "1464fd10bbf484d6225aca4e35a2d56369c11aa96615c2a49dc1dc3536b0cfad",
+  "validator_sha256": "76a80fc2a3f8fee580666971686e2201bf39c2fde65ce5c92917c6f51155aa32",
+  "execution_sha256": "2fdfc629d3c9f62cfafb4b3c2fd55b1a0166813682c3bcbf90facc5432b53597",
+  "qualification": {
+    "review_source": "automated",
+    "proposed_tier": 3,
+    "verdict": "acceptable_with_limits",
+    "evidence_commit": "d27426e251c6f9b2741a2323845644e47c1f1d71",
+    "execution_sha256": "2fdfc629d3c9f62cfafb4b3c2fd55b1a0166813682c3bcbf90facc5432b53597",
+    "source_review_sha256": "f06389f00eb5867f73e3de8a510d13b1badf652141797787f26bc2bac0955a20",
+    "limitations": [
+      "Caller supplies a common coordinate system and clock. Context time is interpreted as availability time; late publication or revised historical values require caller preprocessing. No automatic projection, raster resampling, track alignment, road or external-source ingestion.",
+      "Nearest-site ties use coordinate order. Missing aggregates use zero plus explicit indicators; zero is not an observed value claim. No raster, tile embedding, road network or arbitrary rolling-statistic branch. Dense in-memory joins have no large-population qualification.",
+      "This establishes the selected forward-time boundary, not spatial holdout independence. Locations may repeat across folds. Context availability is caller asserted. Hyperparameter tuning on these metrics would require additional evaluation; no unseen-location accuracy or independent final accuracy claim.",
+      "Tree regression is one source-permitted family. No neural, image, sequence or multimodal hybrid branch is implemented. Trusted in-process model and feature state; no portable persistence, arbitrary schema or historical winning-model reproduction.",
+      "Generic numeric blending permits signed values and arbitrary directed masks; geography and clipping remain recipe policy. Empty neighborhoods retain the clipped value. Query population affects smoothing; no general sum conservation, map matching, zero-sum correction or named submission-format claim.",
+      "Only the explicitly selected source alternatives are implemented.",
+      "Automated synthetic Tier 3 evidence only; no historical accuracy, generalization or human Tier 1 claim."
+    ],
+    "resolved_source_corrections": {
+      "geo_temporal_join": "Select explicit shared planar metric coordinates and seconds clock. Validate finite aligned records and unique site/time identities. Join latest context per site available at or before the feature time, within lookback and radius. Keep query row order. Caller supplies a common coordinate system and clock. Context time is interpreted as availability time; late publication or revised historical values require caller preprocessing. No automatic projection, raster resampling, track alignment, road or external-source ingestion.",
+      "spatial_temporal_features": "Select coordinates, seasonal sine/cosine, nearest-context mean/distance/age, strict-past target mean/count and availability indicators. Preserve row identities and create separate training/validation feature matrices for each forward fold, plus full-training and query matrices. Nearest-site ties use coordinate order. Missing aggregates use zero plus explicit indicators; zero is not an observed value claim. No raster, tile embedding, road network or arbitrary rolling-statistic branch. Dense in-memory joins have no large-population qualification.",
+      "leakage_safe_geo_validation": "Select strictly ordered expanding time blocks with an explicit exclusion gap. Each fold builds target-history features from its training rows only. Earlier warmup rows fit models but receive no out-of-fold predictions. Score only held-out rows; smoothing sees only co-timed held-out predictions, never their labels. This establishes the selected forward-time boundary, not spatial holdout independence. Locations may repeat across folds. Context availability is caller asserted. Hyperparameter tuning on these metrics would require additional evaluation; no unseen-location accuracy or independent final accuracy claim.",
+      "fusion_model": "Select ExtraTrees regression on eleven joined spatial/temporal features, with explicit seeded tree controls and one worker. Fit separate forward-fold models and a final model on all observations. Predict query features without refitting, preserving requested row order. Tree regression is one source-permitted family. No neural, image, sequence or multimodal hybrid branch is implemented. Trusted in-process model and feature state; no portable persistence, arbitrary schema or historical winning-model reproduction.",
+      "geographic_postprocessing": "Select nonnegative clipping then convex neighbor-mean blending. Recipe constructs same-time, within-radius, non-self adjacency; the registered generic numeric operation accepts that mask and an explicit strength. Return ordered predictions and forward-validation/population/model summaries. Generic numeric blending permits signed values and arbitrary directed masks; geography and clipping remain recipe policy. Empty neighborhoods retain the clipped value. Query population affects smoothing; no general sum conservation, map matching, zero-sum correction or named submission-format claim."
+    },
+    "output_scope_decision": "Execute causal planar geotemporal regression with explicit metric coordinates and seconds clock, available-context joins, strict-past target features, expanding forward validation, ExtraTrees full-training refit, ordered query prediction and same-time neighbor blending after nonnegative clipping. Five recipe adapters use an independently reusable numeric neighborhood provider. Caller controls context availability, units, validation policy and adjacency. Synthetic Tier 3 evidence only; no spatial holdout independence, unseen-location accuracy, named submission format or human Tier 1 claim.",
+    "plan_sha256": "8dd631d3251fc59f26400273535b5d09d68b916072e4fc8ef5c0d8b3051f0f71",
+    "parameter_contract": "Exact finite version-1 recipe with caller-declared shared planar metre coordinates and seconds clock, nonnegative observed targets, context, contiguous forward blocks, future unlabeled query rows and explicit controls. Context time is treated as availability time. Unique site/time records per population. Positive spatial/temporal feature scales and tree controls; explicit gap, seed and smoothing strength. Five recipe adapters use one independently reusable numeric neighborhood atom.",
+    "output_contract": "Finite nonnegative query predictions in input order after clipping and optional exact same-time within-radius blending. Include training/query/validation/warmup counts, fold/tree/feature counts and forward-validation MSE. Warmup rows are excluded from validation MSE. Query population affects smoothing; no general sum conservation, named submission format, spatial holdout independence or unseen-location accuracy claim.",
+    "evidence_checker_sha256": "5692b8b0d06c7c2556db3894bf85785168ac8836a821b0f6a8192fac37ee8bc7"
+  }
+}
