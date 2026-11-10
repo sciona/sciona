@@ -1,0 +1,62 @@
+{
+  "format": "osic-image-state.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "full_training_schedule_complete": false,
+  "execution": {
+    "intermediate_optimizer_updates": 96,
+    "weight_arrays": 738,
+    "parameters": 28514709,
+    "fresh_process_replay": {
+      "passed": true,
+      "queries": 3,
+      "exact_predictions": true,
+      "fitting_disabled": true,
+      "hdf5_loading_disabled": true,
+      "optimizer_state_absent": true
+    },
+    "corruption_cases_rejected": [
+      "unknown_format",
+      "executable_field",
+      "architecture",
+      "image_coordinate",
+      "metadata_coordinate",
+      "response_coordinate",
+      "code_identity",
+      "archive_identity",
+      "graph_identity",
+      "weight_inventory"
+    ],
+    "private_artifacts_unchanged": true,
+    "runtime": {
+      "legacy_keras": "2.20.1",
+      "numpy": "2.2.6"
+    },
+    "resource_policy": {
+      "native_threads": 1,
+      "dataset_workers": 1,
+      "export_and_replay_sequential": true
+    }
+  },
+  "dependency_archive_sha256": {
+    "efficientnet-1.1.0-py3-none-any.whl": "4f8a56d15e9c44e9a62dae35404079724c4a1d9e9bfbcfd2a18077e5eda58bf7",
+    "Keras_Applications-1.0.8-py3-none-any.whl": "df4323692b8c1174af821bf906f1e442e63fa7589bf0f1230a0b6bdc5a810c95",
+    "keras-applications-source.zip": "ff87b242e5de063242132c7c8a1155679c084123b857d25adec626d1374a54b4"
+  },
+  "software_sha256": {
+    "sciona/osic_image_state.py": "876b5328b675634e0a18e42589aee8d444cf50eb1a5824cab8d01bc663817a54",
+    "sciona/osic_image_model.py": "403ff9e7f6f3a2ba362c599abc68910c527a831366cff8a2563b2828db7618df",
+    "sciona/osic_image_predictor.py": "337f73be79f20d9472c490d9efbe539d42f0c70581ae6e44dca16fbf748d077d",
+    "sciona/keras_bounded_prediction.py": "fe36ca313054cd1b6c3882f59139a6228d306fd92d06e469c1abc1ac3e570d55",
+    "scripts/validate_osic_image_state.py": "f37279187dc05185f4d2b86b69552f15143bf46f463368136b84a38462b39ddc"
+  },
+  "limitations": [
+    "Intermediate synthetic training checkpoint only; complete 30-epoch training is still pending.",
+    "Numeric inference state excludes optimizer/callback/random state and cannot resume training.",
+    "Coordinate labels are caller declarations; authenticity requires external artifact provenance.",
+    "Restore invokes only the fixed local model constructor and numeric weight loading; no serialized model graph is executed.",
+    "This does not complete raw-input trained inference, the final two-branch graph or publication gates."
+  ]
+}
