@@ -1,0 +1,1744 @@
+{
+  "records": [
+    {
+      "artifact_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+      "fqdn": "sciona.atoms.ml.fitted_sparse_clipping.fit_sparse_clip",
+      "version_id": "95db48f6-67d1-52e5-9c33-7105943e1c38",
+      "content_hash": "2c14dcf033e1bd08770b8a4cf202364e4a7095f2dcaf171b59fbccf486f7f2d6",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "training",
+          "type_desc": "csr_matrix",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Canonical real numeric CSR matrix with at least one row and one feature. Float32 conversion precedes fitting. Maximum uses stored entries only, excludes implicit zeros and ignores NaNs. Empty or all-NaN stored data, infinities and negative fitted maxima are rejected. Caller supplies training-only data in comparable normalized numeric feature coordinates."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "feature_columns",
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "feature_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Portable JSON dictionary with exactly format, feature_columns, feature_coordinate and upper. Format sciona.fitted_sparse_clip.v1; finite nonnegative upper at most float32 maximum. No stored observations or executable deserialization."
+        }
+      ],
+      "operation": "Fit a global nonnegative maximum from stored float32 training feature entries, returning portable numeric state.",
+      "plain_description": "Learn an upper limit from training examples for later use.",
+      "validity_bounds": "Canonical real numeric CSR matrix with at least one row and one feature. Float32 conversion precedes fitting. Maximum uses stored entries only, excludes implicit zeros and ignores NaNs. Empty or all-NaN stored data, infinities and negative fitted maxima are rejected. Caller supplies training-only data in comparable normalized numeric feature coordinates. Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient. Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state. Portable JSON dictionary with exactly format, feature_columns, feature_coordinate and upper. Format sciona.fitted_sparse_clip.v1; finite nonnegative upper at most float32 maximum. No stored observations or executable deserialization.",
+      "reuse": "Domain-independent sparse feature preprocessing with explicit feature identity and common normalized coordinate. No competition fields, fixed vocabulary or source observations are required.",
+      "registered_provider_dependencies": []
+    },
+    {
+      "artifact_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+      "fqdn": "sciona.atoms.ml.fitted_sparse_clipping.apply_sparse_clip",
+      "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+      "content_hash": "b388f5cd5a715c7124d6b1ad9346cdaa6d39b8cbf376cfcd0f7874d512a04593",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "values",
+          "type_desc": "csr_matrix",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Canonical real numeric CSR matrix matching fitted feature width, identity, ordering and normalized coordinate. Converted to float32 without densification; NaNs become zero and infinities clip to the frozen [0, upper] interval. Empty query rows supported. Duplicate entries and unsorted CSR indices must be handled explicitly upstream."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "feature_columns",
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "feature_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state."
+        },
+        {
+          "direction": "input",
+          "ordinal": 3,
+          "name": "state",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Portable JSON dictionary with exactly format, feature_columns, feature_coordinate and upper. Format sciona.fitted_sparse_clip.v1; finite nonnegative upper at most float32 maximum. No stored observations or executable deserialization."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "csr_matrix",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Independent canonical float32 CSR matrix with unchanged shape and stored-entry topology, clipped to [0, fitted upper]. Input matrix is not mutated. Explicit zeros are retained; NaNs become zero and infinities are clipped."
+        }
+      ],
+      "operation": "Clip canonical sparse features to a frozen training bound, enforcing feature-column and coordinate identity.",
+      "plain_description": "Keep values between zero and a previously learned upper limit.",
+      "validity_bounds": "Canonical real numeric CSR matrix matching fitted feature width, identity, ordering and normalized coordinate. Converted to float32 without densification; NaNs become zero and infinities clip to the frozen [0, upper] interval. Empty query rows supported. Duplicate entries and unsorted CSR indices must be handled explicitly upstream. Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient. Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state. Portable JSON dictionary with exactly format, feature_columns, feature_coordinate and upper. Format sciona.fitted_sparse_clip.v1; finite nonnegative upper at most float32 maximum. No stored observations or executable deserialization. Independent canonical float32 CSR matrix with unchanged shape and stored-entry topology, clipped to [0, fitted upper]. Input matrix is not mutated. Explicit zeros are retained; NaNs become zero and infinities are clipped.",
+      "reuse": "Domain-independent sparse feature preprocessing with explicit feature identity and common normalized coordinate. No competition fields, fixed vocabulary or source observations are required.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "qualification": {
+    "format": "sparse-clip-semantics.v1",
+    "passed": true,
+    "approved": false,
+    "proposed_tier": 3,
+    "verdict": "acceptable_with_limits",
+    "catalog_mutations": 0,
+    "synthetic_only": true,
+    "providers": [
+      {
+        "artifact_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+        "fqdn": "sciona.atoms.ml.fitted_sparse_clipping.fit_sparse_clip",
+        "version_id": "95db48f6-67d1-52e5-9c33-7105943e1c38",
+        "content_hash": "2c14dcf033e1bd08770b8a4cf202364e4a7095f2dcaf171b59fbccf486f7f2d6",
+        "interfaces": [
+          {
+            "direction": "input",
+            "ordinal": 0,
+            "name": "training",
+            "type_desc": "csr_matrix",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Canonical real numeric CSR matrix with at least one row and one feature. Float32 conversion precedes fitting. Maximum uses stored entries only, excludes implicit zeros and ignores NaNs. Empty or all-NaN stored data, infinities and negative fitted maxima are rejected. Caller supplies training-only data in comparable normalized numeric feature coordinates."
+          },
+          {
+            "direction": "input",
+            "ordinal": 1,
+            "name": "feature_columns",
+            "type_desc": "list",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient."
+          },
+          {
+            "direction": "input",
+            "ordinal": 2,
+            "name": "feature_coordinate",
+            "type_desc": "str",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state."
+          },
+          {
+            "direction": "output",
+            "ordinal": 0,
+            "name": "result",
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Portable JSON dictionary with exactly format, feature_columns, feature_coordinate and upper. Format sciona.fitted_sparse_clip.v1; finite nonnegative upper at most float32 maximum. No stored observations or executable deserialization."
+          }
+        ],
+        "operation": "Fit a global nonnegative maximum from stored float32 training feature entries, returning portable numeric state.",
+        "plain_description": "Learn an upper limit from training examples for later use.",
+        "validity_bounds": "Canonical real numeric CSR matrix with at least one row and one feature. Float32 conversion precedes fitting. Maximum uses stored entries only, excludes implicit zeros and ignores NaNs. Empty or all-NaN stored data, infinities and negative fitted maxima are rejected. Caller supplies training-only data in comparable normalized numeric feature coordinates. Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient. Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state. Portable JSON dictionary with exactly format, feature_columns, feature_coordinate and upper. Format sciona.fitted_sparse_clip.v1; finite nonnegative upper at most float32 maximum. No stored observations or executable deserialization.",
+        "reuse": "Domain-independent sparse feature preprocessing with explicit feature identity and common normalized coordinate. No competition fields, fixed vocabulary or source observations are required.",
+        "registered_provider_dependencies": []
+      },
+      {
+        "artifact_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "fqdn": "sciona.atoms.ml.fitted_sparse_clipping.apply_sparse_clip",
+        "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+        "content_hash": "b388f5cd5a715c7124d6b1ad9346cdaa6d39b8cbf376cfcd0f7874d512a04593",
+        "interfaces": [
+          {
+            "direction": "input",
+            "ordinal": 0,
+            "name": "values",
+            "type_desc": "csr_matrix",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Canonical real numeric CSR matrix matching fitted feature width, identity, ordering and normalized coordinate. Converted to float32 without densification; NaNs become zero and infinities clip to the frozen [0, upper] interval. Empty query rows supported. Duplicate entries and unsorted CSR indices must be handled explicitly upstream."
+          },
+          {
+            "direction": "input",
+            "ordinal": 1,
+            "name": "feature_columns",
+            "type_desc": "list",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient."
+          },
+          {
+            "direction": "input",
+            "ordinal": 2,
+            "name": "feature_coordinate",
+            "type_desc": "str",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state."
+          },
+          {
+            "direction": "input",
+            "ordinal": 3,
+            "name": "state",
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Portable JSON dictionary with exactly format, feature_columns, feature_coordinate and upper. Format sciona.fitted_sparse_clip.v1; finite nonnegative upper at most float32 maximum. No stored observations or executable deserialization."
+          },
+          {
+            "direction": "output",
+            "ordinal": 0,
+            "name": "result",
+            "type_desc": "csr_matrix",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Independent canonical float32 CSR matrix with unchanged shape and stored-entry topology, clipped to [0, fitted upper]. Input matrix is not mutated. Explicit zeros are retained; NaNs become zero and infinities are clipped."
+          }
+        ],
+        "operation": "Clip canonical sparse features to a frozen training bound, enforcing feature-column and coordinate identity.",
+        "plain_description": "Keep values between zero and a previously learned upper limit.",
+        "validity_bounds": "Canonical real numeric CSR matrix matching fitted feature width, identity, ordering and normalized coordinate. Converted to float32 without densification; NaNs become zero and infinities clip to the frozen [0, upper] interval. Empty query rows supported. Duplicate entries and unsorted CSR indices must be handled explicitly upstream. Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient. Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state. Portable JSON dictionary with exactly format, feature_columns, feature_coordinate and upper. Format sciona.fitted_sparse_clip.v1; finite nonnegative upper at most float32 maximum. No stored observations or executable deserialization. Independent canonical float32 CSR matrix with unchanged shape and stored-entry topology, clipped to [0, fitted upper]. Input matrix is not mutated. Explicit zeros are retained; NaNs become zero and infinities are clipped.",
+        "reuse": "Domain-independent sparse feature preprocessing with explicit feature identity and common normalized coordinate. No competition fields, fixed vocabulary or source observations are required.",
+        "registered_provider_dependencies": []
+      }
+    ],
+    "tests": {
+      "tests": 29,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "software_sha256": {
+      "tests/test_fitted_sparse_clip.py": "464b2895fd0f7f277cea2a2871f674f24fb34221eb526ee5dcb5053d258075ff",
+      "provider/test_fitted_sparse_clipping_provider.py": "13f3c04146e658fe9539d1d08dc2eeb2d1599f50ddc6fc149b409107ac91b458",
+      "sciona/fitted_sparse_clip.py": "f2791503b2dbd9ded3f2c5f468c2c0785cea4a1b93132dcda1d569d3a67c9ca2",
+      "scripts/review_sparse_clip_semantics.py": "7892777e411ed1830cba2f2580cdc61543a83fa0347f84bd34cd621088086cf9",
+      "scripts/import_sparse_clip_drafts.py": "fe340fa006520edb122edce0845fb42e032ceb4e75e3f5c5a60bc878e27ca84b",
+      "scripts/plan_sparse_clip_intake.py": "a82b7e8d62dcb3edd6316188cbe62ac244aaf324e13f3306f40098cbc63e3ce0",
+      "docs/licenses/mercari-solution-LICENSE.txt": "ebd4587bd7c8d16ffb12e88219f6930a505962abb85a72c58ebf597c59d5abe2",
+      "sciona.atoms.ml.fitted_sparse_clipping": "f322798a4d198b6d6aa95c87eef122134a344de341edcdb39407763fcf4e055b",
+      "sciona.ghost.registry": "793723a75d07a88eed39f59d8d4dc327c54adbf75db7a03003516a6f74c81b51",
+      "sciona.ghost.abstract": "9574bed61c8292b2eaf6ff054bcf46504b07e679c521a19d2440396c3ea63670",
+      "sciona.ghost.dimensions": "61be1958aa50725f3c6598d5b5447a806d2549698d5ce3ec243d467816754b7e"
+    },
+    "installed_packages": {
+      "annotated-types": {
+        "version": "0.7.0",
+        "hashed_files_verified": 7,
+        "active_requirements": []
+      },
+      "numpy": {
+        "version": "2.2.6",
+        "hashed_files_verified": 876,
+        "active_requirements": []
+      },
+      "pydantic": {
+        "version": "2.12.5",
+        "hashed_files_verified": 111,
+        "active_requirements": [
+          "annotated-types>=0.6.0",
+          "pydantic-core==2.41.5",
+          "typing-extensions>=4.14.1",
+          "typing-inspection>=0.4.2"
+        ]
+      },
+      "pydantic-core": {
+        "version": "2.41.5",
+        "hashed_files_verified": 9,
+        "active_requirements": [
+          "typing-extensions>=4.14.1"
+        ]
+      },
+      "scipy": {
+        "version": "1.17.1",
+        "hashed_files_verified": 1423,
+        "active_requirements": [
+          "numpy<2.7,>=1.26.4"
+        ]
+      },
+      "typing-extensions": {
+        "version": "4.16.0",
+        "hashed_files_verified": 6,
+        "active_requirements": []
+      },
+      "typing-inspection": {
+        "version": "0.4.2",
+        "hashed_files_verified": 9,
+        "active_requirements": [
+          "typing-extensions>=4.12.0"
+        ]
+      }
+    },
+    "intake_plan_sha256": "4722edf859bb9bed457dfdf42c0a5301d00a7f9e33fa7cb3b29b90f658e618d2",
+    "connected_execution_commit": "46ae528a",
+    "connected_execution_sha256": "d6a4ef583d34245dd79c30a380850974ae032d9960117a0dd3a2509a0b1b5dde",
+    "resource_policy": {
+      "native_threads": 1,
+      "test_workers": 1
+    },
+    "limitations": [
+      "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+      "Synthetic source parity and coordinate-scaling tests do not establish accuracy or generalization on new applications.",
+      "Caller owns training-only fitting, frozen vocabulary and comparable normalized feature coordinates; labels do not authenticate semantics or independence.",
+      "Float32 conversion precedes fitting. Stored entries determine the global maximum; implicit zeros are excluded. NaNs are ignored during fitting and become zero during inference.",
+      "Infinite training entries, undefined or negative maxima, duplicate or unsorted CSR entries are rejected. Inference infinities and negative values clip to the frozen bound; explicit zeros remain stored.",
+      "Abstract witnesses validate shape, dtype and identity metadata, not sparse storage canonicality or numerical bounds. Unknown dimensions are allowed; known physical dimensions require upstream normalization.",
+      "Feature integration explicitly sorts CSR indices before this provider. Canonical matrices match, but downstream floating-point reduction order is not certified by that feature-only check.",
+      "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment and other platforms are not certified.",
+      "This review qualifies only the two clipping atoms, not the original competition CDG or complete feature/model pipeline."
+    ]
+  },
+  "inserts": [
+    {
+      "table": "references_registry",
+      "keys": {
+        "ref_id": "sparse_clip-provider-review-v1"
+      },
+      "row": {
+        "ref_id": "sparse_clip-provider-review-v1",
+        "ref_type": "web",
+        "title": "Generic fitted sparse clipping implementation and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/3ffa5cad/docs/reviews/sparse_clip_semantics.json"
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+        "version_id": "95db48f6-67d1-52e5-9c33-7105943e1c38",
+        "direction": "input",
+        "name": "training"
+      },
+      "row": {
+        "atom_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+        "version_id": "95db48f6-67d1-52e5-9c33-7105943e1c38",
+        "direction": "input",
+        "ordinal": 0,
+        "name": "training",
+        "type_desc": "csr_matrix",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Canonical real numeric CSR matrix with at least one row and one feature. Float32 conversion precedes fitting. Maximum uses stored entries only, excludes implicit zeros and ignores NaNs. Empty or all-NaN stored data, infinities and negative fitted maxima are rejected. Caller supplies training-only data in comparable normalized numeric feature coordinates."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+        "version_id": "95db48f6-67d1-52e5-9c33-7105943e1c38",
+        "name": "training"
+      },
+      "row": {
+        "atom_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+        "version_id": "95db48f6-67d1-52e5-9c33-7105943e1c38",
+        "name": "training",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "csr_matrix",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Canonical real numeric CSR matrix with at least one row and one feature. Float32 conversion precedes fitting. Maximum uses stored entries only, excludes implicit zeros and ignores NaNs. Empty or all-NaN stored data, infinities and negative fitted maxima are rejected. Caller supplies training-only data in comparable normalized numeric feature coordinates.",
+        "dejargonized_description": "Caller supplies training.",
+        "constraints_json": {
+          "parameter_contract": "Canonical real numeric CSR matrix with at least one row and one feature. Float32 conversion precedes fitting. Maximum uses stored entries only, excludes implicit zeros and ignores NaNs. Empty or all-NaN stored data, infinities and negative fitted maxima are rejected. Caller supplies training-only data in comparable normalized numeric feature coordinates.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Synthetic source parity and coordinate-scaling tests do not establish accuracy or generalization on new applications.",
+            "Caller owns training-only fitting, frozen vocabulary and comparable normalized feature coordinates; labels do not authenticate semantics or independence.",
+            "Float32 conversion precedes fitting. Stored entries determine the global maximum; implicit zeros are excluded. NaNs are ignored during fitting and become zero during inference.",
+            "Infinite training entries, undefined or negative maxima, duplicate or unsorted CSR entries are rejected. Inference infinities and negative values clip to the frozen bound; explicit zeros remain stored.",
+            "Abstract witnesses validate shape, dtype and identity metadata, not sparse storage canonicality or numerical bounds. Unknown dimensions are allowed; known physical dimensions require upstream normalization.",
+            "Feature integration explicitly sorts CSR indices before this provider. Canonical matrices match, but downstream floating-point reduction order is not certified by that feature-only check.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment and other platforms are not certified.",
+            "This review qualifies only the two clipping atoms, not the original competition CDG or complete feature/model pipeline."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+        "version_id": "95db48f6-67d1-52e5-9c33-7105943e1c38",
+        "direction": "input",
+        "name": "feature_columns"
+      },
+      "row": {
+        "atom_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+        "version_id": "95db48f6-67d1-52e5-9c33-7105943e1c38",
+        "direction": "input",
+        "ordinal": 1,
+        "name": "feature_columns",
+        "type_desc": "list",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+        "version_id": "95db48f6-67d1-52e5-9c33-7105943e1c38",
+        "name": "feature_columns"
+      },
+      "row": {
+        "atom_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+        "version_id": "95db48f6-67d1-52e5-9c33-7105943e1c38",
+        "name": "feature_columns",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "list",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient.",
+        "dejargonized_description": "Caller supplies feature columns.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Synthetic source parity and coordinate-scaling tests do not establish accuracy or generalization on new applications.",
+            "Caller owns training-only fitting, frozen vocabulary and comparable normalized feature coordinates; labels do not authenticate semantics or independence.",
+            "Float32 conversion precedes fitting. Stored entries determine the global maximum; implicit zeros are excluded. NaNs are ignored during fitting and become zero during inference.",
+            "Infinite training entries, undefined or negative maxima, duplicate or unsorted CSR entries are rejected. Inference infinities and negative values clip to the frozen bound; explicit zeros remain stored.",
+            "Abstract witnesses validate shape, dtype and identity metadata, not sparse storage canonicality or numerical bounds. Unknown dimensions are allowed; known physical dimensions require upstream normalization.",
+            "Feature integration explicitly sorts CSR indices before this provider. Canonical matrices match, but downstream floating-point reduction order is not certified by that feature-only check.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment and other platforms are not certified.",
+            "This review qualifies only the two clipping atoms, not the original competition CDG or complete feature/model pipeline."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+        "version_id": "95db48f6-67d1-52e5-9c33-7105943e1c38",
+        "direction": "input",
+        "name": "feature_coordinate"
+      },
+      "row": {
+        "atom_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+        "version_id": "95db48f6-67d1-52e5-9c33-7105943e1c38",
+        "direction": "input",
+        "ordinal": 2,
+        "name": "feature_coordinate",
+        "type_desc": "str",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+        "version_id": "95db48f6-67d1-52e5-9c33-7105943e1c38",
+        "name": "feature_coordinate"
+      },
+      "row": {
+        "atom_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+        "version_id": "95db48f6-67d1-52e5-9c33-7105943e1c38",
+        "name": "feature_coordinate",
+        "position": 2,
+        "kind": "positional_or_keyword",
+        "type_desc": "str",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state.",
+        "dejargonized_description": "Caller supplies feature coordinate.",
+        "constraints_json": {
+          "parameter_contract": "Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Synthetic source parity and coordinate-scaling tests do not establish accuracy or generalization on new applications.",
+            "Caller owns training-only fitting, frozen vocabulary and comparable normalized feature coordinates; labels do not authenticate semantics or independence.",
+            "Float32 conversion precedes fitting. Stored entries determine the global maximum; implicit zeros are excluded. NaNs are ignored during fitting and become zero during inference.",
+            "Infinite training entries, undefined or negative maxima, duplicate or unsorted CSR entries are rejected. Inference infinities and negative values clip to the frozen bound; explicit zeros remain stored.",
+            "Abstract witnesses validate shape, dtype and identity metadata, not sparse storage canonicality or numerical bounds. Unknown dimensions are allowed; known physical dimensions require upstream normalization.",
+            "Feature integration explicitly sorts CSR indices before this provider. Canonical matrices match, but downstream floating-point reduction order is not certified by that feature-only check.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment and other platforms are not certified.",
+            "This review qualifies only the two clipping atoms, not the original competition CDG or complete feature/model pipeline."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+        "version_id": "95db48f6-67d1-52e5-9c33-7105943e1c38",
+        "direction": "output",
+        "name": "result"
+      },
+      "row": {
+        "atom_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+        "version_id": "95db48f6-67d1-52e5-9c33-7105943e1c38",
+        "direction": "output",
+        "ordinal": 0,
+        "name": "result",
+        "type_desc": "dict",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Portable JSON dictionary with exactly format, feature_columns, feature_coordinate and upper. Format sciona.fitted_sparse_clip.v1; finite nonnegative upper at most float32 maximum. No stored observations or executable deserialization."
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+        "kind": "technical",
+        "language": "en",
+        "content": "Fit a global nonnegative maximum from stored float32 training feature entries, returning portable numeric state. Canonical real numeric CSR matrix with at least one row and one feature. Float32 conversion precedes fitting. Maximum uses stored entries only, excludes implicit zeros and ignores NaNs. Empty or all-NaN stored data, infinities and negative fitted maxima are rejected. Caller supplies training-only data in comparable normalized numeric feature coordinates. Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient. Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state. Portable JSON dictionary with exactly format, feature_columns, feature_coordinate and upper. Format sciona.fitted_sparse_clip.v1; finite nonnegative upper at most float32 maximum. No stored observations or executable deserialization. Domain-independent sparse feature preprocessing with explicit feature identity and common normalized coordinate. No competition fields, fixed vocabulary or source observations are required.",
+        "generated_by": "sparse_clip-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.045455
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Learn an upper limit from training examples for later use. Accuracy on new problems must be checked separately.",
+        "generated_by": "sparse_clip-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "atom_references",
+      "keys": {
+        "atom_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+        "ref_key": "sparse_clip-provider-review-v1"
+      },
+      "row": {
+        "atom_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+        "ref_key": "sparse_clip-provider-review-v1",
+        "ref_id": "sparse_clip-provider-review-v1",
+        "title": "Generic fitted sparse clipping implementation and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/3ffa5cad/docs/reviews/sparse_clip_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Fit a global nonnegative maximum from stored float32 training feature entries, returning portable numeric state. Canonical real numeric CSR matrix with at least one row and one feature. Float32 conversion precedes fitting. Maximum uses stored entries only, excludes implicit zeros and ignores NaNs. Empty or all-NaN stored data, infinities and negative fitted maxima are rejected. Caller supplies training-only data in comparable normalized numeric feature coordinates. Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient. Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state. Portable JSON dictionary with exactly format, feature_columns, feature_coordinate and upper. Format sciona.fitted_sparse_clip.v1; finite nonnegative upper at most float32 maximum. No stored observations or executable deserialization."
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+        "version_id": "95db48f6-67d1-52e5-9c33-7105943e1c38",
+        "name": "training"
+      },
+      "row": {
+        "artifact_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+        "version_id": "95db48f6-67d1-52e5-9c33-7105943e1c38",
+        "name": "training",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "csr_matrix",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Canonical real numeric CSR matrix with at least one row and one feature. Float32 conversion precedes fitting. Maximum uses stored entries only, excludes implicit zeros and ignores NaNs. Empty or all-NaN stored data, infinities and negative fitted maxima are rejected. Caller supplies training-only data in comparable normalized numeric feature coordinates.",
+        "dejargonized_description": "Caller supplies training.",
+        "constraints_json": {
+          "parameter_contract": "Canonical real numeric CSR matrix with at least one row and one feature. Float32 conversion precedes fitting. Maximum uses stored entries only, excludes implicit zeros and ignores NaNs. Empty or all-NaN stored data, infinities and negative fitted maxima are rejected. Caller supplies training-only data in comparable normalized numeric feature coordinates.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Synthetic source parity and coordinate-scaling tests do not establish accuracy or generalization on new applications.",
+            "Caller owns training-only fitting, frozen vocabulary and comparable normalized feature coordinates; labels do not authenticate semantics or independence.",
+            "Float32 conversion precedes fitting. Stored entries determine the global maximum; implicit zeros are excluded. NaNs are ignored during fitting and become zero during inference.",
+            "Infinite training entries, undefined or negative maxima, duplicate or unsorted CSR entries are rejected. Inference infinities and negative values clip to the frozen bound; explicit zeros remain stored.",
+            "Abstract witnesses validate shape, dtype and identity metadata, not sparse storage canonicality or numerical bounds. Unknown dimensions are allowed; known physical dimensions require upstream normalization.",
+            "Feature integration explicitly sorts CSR indices before this provider. Canonical matrices match, but downstream floating-point reduction order is not certified by that feature-only check.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment and other platforms are not certified.",
+            "This review qualifies only the two clipping atoms, not the original competition CDG or complete feature/model pipeline."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+        "version_id": "95db48f6-67d1-52e5-9c33-7105943e1c38",
+        "name": "feature_columns"
+      },
+      "row": {
+        "artifact_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+        "version_id": "95db48f6-67d1-52e5-9c33-7105943e1c38",
+        "name": "feature_columns",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "list",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient.",
+        "dejargonized_description": "Caller supplies feature columns.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Synthetic source parity and coordinate-scaling tests do not establish accuracy or generalization on new applications.",
+            "Caller owns training-only fitting, frozen vocabulary and comparable normalized feature coordinates; labels do not authenticate semantics or independence.",
+            "Float32 conversion precedes fitting. Stored entries determine the global maximum; implicit zeros are excluded. NaNs are ignored during fitting and become zero during inference.",
+            "Infinite training entries, undefined or negative maxima, duplicate or unsorted CSR entries are rejected. Inference infinities and negative values clip to the frozen bound; explicit zeros remain stored.",
+            "Abstract witnesses validate shape, dtype and identity metadata, not sparse storage canonicality or numerical bounds. Unknown dimensions are allowed; known physical dimensions require upstream normalization.",
+            "Feature integration explicitly sorts CSR indices before this provider. Canonical matrices match, but downstream floating-point reduction order is not certified by that feature-only check.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment and other platforms are not certified.",
+            "This review qualifies only the two clipping atoms, not the original competition CDG or complete feature/model pipeline."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+        "version_id": "95db48f6-67d1-52e5-9c33-7105943e1c38",
+        "name": "feature_coordinate"
+      },
+      "row": {
+        "artifact_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+        "version_id": "95db48f6-67d1-52e5-9c33-7105943e1c38",
+        "name": "feature_coordinate",
+        "position": 2,
+        "kind": "positional_or_keyword",
+        "type_desc": "str",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state.",
+        "dejargonized_description": "Caller supplies feature coordinate.",
+        "constraints_json": {
+          "parameter_contract": "Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Synthetic source parity and coordinate-scaling tests do not establish accuracy or generalization on new applications.",
+            "Caller owns training-only fitting, frozen vocabulary and comparable normalized feature coordinates; labels do not authenticate semantics or independence.",
+            "Float32 conversion precedes fitting. Stored entries determine the global maximum; implicit zeros are excluded. NaNs are ignored during fitting and become zero during inference.",
+            "Infinite training entries, undefined or negative maxima, duplicate or unsorted CSR entries are rejected. Inference infinities and negative values clip to the frozen bound; explicit zeros remain stored.",
+            "Abstract witnesses validate shape, dtype and identity metadata, not sparse storage canonicality or numerical bounds. Unknown dimensions are allowed; known physical dimensions require upstream normalization.",
+            "Feature integration explicitly sorts CSR indices before this provider. Canonical matrices match, but downstream floating-point reduction order is not certified by that feature-only check.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment and other platforms are not certified.",
+            "This review qualifies only the two clipping atoms, not the original competition CDG or complete feature/model pipeline."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+        "kind": "technical",
+        "language": "en",
+        "content": "Fit a global nonnegative maximum from stored float32 training feature entries, returning portable numeric state. Canonical real numeric CSR matrix with at least one row and one feature. Float32 conversion precedes fitting. Maximum uses stored entries only, excludes implicit zeros and ignores NaNs. Empty or all-NaN stored data, infinities and negative fitted maxima are rejected. Caller supplies training-only data in comparable normalized numeric feature coordinates. Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient. Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state. Portable JSON dictionary with exactly format, feature_columns, feature_coordinate and upper. Format sciona.fitted_sparse_clip.v1; finite nonnegative upper at most float32 maximum. No stored observations or executable deserialization. Domain-independent sparse feature preprocessing with explicit feature identity and common normalized coordinate. No competition fields, fixed vocabulary or source observations are required.",
+        "generated_by": "sparse_clip-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.045455
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Learn an upper limit from training examples for later use. Accuracy on new problems must be checked separately.",
+        "generated_by": "sparse_clip-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "artifact_references",
+      "keys": {
+        "artifact_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+        "ref_key": "sparse_clip-provider-review-v1"
+      },
+      "row": {
+        "artifact_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+        "ref_key": "sparse_clip-provider-review-v1",
+        "ref_id": "sparse_clip-provider-review-v1",
+        "title": "Generic fitted sparse clipping implementation and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/3ffa5cad/docs/reviews/sparse_clip_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Fit a global nonnegative maximum from stored float32 training feature entries, returning portable numeric state. Canonical real numeric CSR matrix with at least one row and one feature. Float32 conversion precedes fitting. Maximum uses stored entries only, excludes implicit zeros and ignores NaNs. Empty or all-NaN stored data, infinities and negative fitted maxima are rejected. Caller supplies training-only data in comparable normalized numeric feature coordinates. Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient. Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state. Portable JSON dictionary with exactly format, feature_columns, feature_coordinate and upper. Format sciona.fitted_sparse_clip.v1; finite nonnegative upper at most float32 maximum. No stored observations or executable deserialization."
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+        "direction": "input",
+        "name": "values"
+      },
+      "row": {
+        "atom_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+        "direction": "input",
+        "ordinal": 0,
+        "name": "values",
+        "type_desc": "csr_matrix",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Canonical real numeric CSR matrix matching fitted feature width, identity, ordering and normalized coordinate. Converted to float32 without densification; NaNs become zero and infinities clip to the frozen [0, upper] interval. Empty query rows supported. Duplicate entries and unsorted CSR indices must be handled explicitly upstream."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+        "name": "values"
+      },
+      "row": {
+        "atom_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+        "name": "values",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "csr_matrix",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Canonical real numeric CSR matrix matching fitted feature width, identity, ordering and normalized coordinate. Converted to float32 without densification; NaNs become zero and infinities clip to the frozen [0, upper] interval. Empty query rows supported. Duplicate entries and unsorted CSR indices must be handled explicitly upstream.",
+        "dejargonized_description": "Caller supplies values.",
+        "constraints_json": {
+          "parameter_contract": "Canonical real numeric CSR matrix matching fitted feature width, identity, ordering and normalized coordinate. Converted to float32 without densification; NaNs become zero and infinities clip to the frozen [0, upper] interval. Empty query rows supported. Duplicate entries and unsorted CSR indices must be handled explicitly upstream.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Synthetic source parity and coordinate-scaling tests do not establish accuracy or generalization on new applications.",
+            "Caller owns training-only fitting, frozen vocabulary and comparable normalized feature coordinates; labels do not authenticate semantics or independence.",
+            "Float32 conversion precedes fitting. Stored entries determine the global maximum; implicit zeros are excluded. NaNs are ignored during fitting and become zero during inference.",
+            "Infinite training entries, undefined or negative maxima, duplicate or unsorted CSR entries are rejected. Inference infinities and negative values clip to the frozen bound; explicit zeros remain stored.",
+            "Abstract witnesses validate shape, dtype and identity metadata, not sparse storage canonicality or numerical bounds. Unknown dimensions are allowed; known physical dimensions require upstream normalization.",
+            "Feature integration explicitly sorts CSR indices before this provider. Canonical matrices match, but downstream floating-point reduction order is not certified by that feature-only check.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment and other platforms are not certified.",
+            "This review qualifies only the two clipping atoms, not the original competition CDG or complete feature/model pipeline."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+        "direction": "input",
+        "name": "feature_columns"
+      },
+      "row": {
+        "atom_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+        "direction": "input",
+        "ordinal": 1,
+        "name": "feature_columns",
+        "type_desc": "list",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+        "name": "feature_columns"
+      },
+      "row": {
+        "atom_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+        "name": "feature_columns",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "list",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient.",
+        "dejargonized_description": "Caller supplies feature columns.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Synthetic source parity and coordinate-scaling tests do not establish accuracy or generalization on new applications.",
+            "Caller owns training-only fitting, frozen vocabulary and comparable normalized feature coordinates; labels do not authenticate semantics or independence.",
+            "Float32 conversion precedes fitting. Stored entries determine the global maximum; implicit zeros are excluded. NaNs are ignored during fitting and become zero during inference.",
+            "Infinite training entries, undefined or negative maxima, duplicate or unsorted CSR entries are rejected. Inference infinities and negative values clip to the frozen bound; explicit zeros remain stored.",
+            "Abstract witnesses validate shape, dtype and identity metadata, not sparse storage canonicality or numerical bounds. Unknown dimensions are allowed; known physical dimensions require upstream normalization.",
+            "Feature integration explicitly sorts CSR indices before this provider. Canonical matrices match, but downstream floating-point reduction order is not certified by that feature-only check.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment and other platforms are not certified.",
+            "This review qualifies only the two clipping atoms, not the original competition CDG or complete feature/model pipeline."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+        "direction": "input",
+        "name": "feature_coordinate"
+      },
+      "row": {
+        "atom_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+        "direction": "input",
+        "ordinal": 2,
+        "name": "feature_coordinate",
+        "type_desc": "str",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+        "name": "feature_coordinate"
+      },
+      "row": {
+        "atom_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+        "name": "feature_coordinate",
+        "position": 2,
+        "kind": "positional_or_keyword",
+        "type_desc": "str",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state.",
+        "dejargonized_description": "Caller supplies feature coordinate.",
+        "constraints_json": {
+          "parameter_contract": "Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Synthetic source parity and coordinate-scaling tests do not establish accuracy or generalization on new applications.",
+            "Caller owns training-only fitting, frozen vocabulary and comparable normalized feature coordinates; labels do not authenticate semantics or independence.",
+            "Float32 conversion precedes fitting. Stored entries determine the global maximum; implicit zeros are excluded. NaNs are ignored during fitting and become zero during inference.",
+            "Infinite training entries, undefined or negative maxima, duplicate or unsorted CSR entries are rejected. Inference infinities and negative values clip to the frozen bound; explicit zeros remain stored.",
+            "Abstract witnesses validate shape, dtype and identity metadata, not sparse storage canonicality or numerical bounds. Unknown dimensions are allowed; known physical dimensions require upstream normalization.",
+            "Feature integration explicitly sorts CSR indices before this provider. Canonical matrices match, but downstream floating-point reduction order is not certified by that feature-only check.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment and other platforms are not certified.",
+            "This review qualifies only the two clipping atoms, not the original competition CDG or complete feature/model pipeline."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+        "direction": "input",
+        "name": "state"
+      },
+      "row": {
+        "atom_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+        "direction": "input",
+        "ordinal": 3,
+        "name": "state",
+        "type_desc": "dict",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Portable JSON dictionary with exactly format, feature_columns, feature_coordinate and upper. Format sciona.fitted_sparse_clip.v1; finite nonnegative upper at most float32 maximum. No stored observations or executable deserialization."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+        "name": "state"
+      },
+      "row": {
+        "atom_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+        "name": "state",
+        "position": 3,
+        "kind": "positional_or_keyword",
+        "type_desc": "dict",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Portable JSON dictionary with exactly format, feature_columns, feature_coordinate and upper. Format sciona.fitted_sparse_clip.v1; finite nonnegative upper at most float32 maximum. No stored observations or executable deserialization.",
+        "dejargonized_description": "Caller supplies state.",
+        "constraints_json": {
+          "parameter_contract": "Portable JSON dictionary with exactly format, feature_columns, feature_coordinate and upper. Format sciona.fitted_sparse_clip.v1; finite nonnegative upper at most float32 maximum. No stored observations or executable deserialization.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Synthetic source parity and coordinate-scaling tests do not establish accuracy or generalization on new applications.",
+            "Caller owns training-only fitting, frozen vocabulary and comparable normalized feature coordinates; labels do not authenticate semantics or independence.",
+            "Float32 conversion precedes fitting. Stored entries determine the global maximum; implicit zeros are excluded. NaNs are ignored during fitting and become zero during inference.",
+            "Infinite training entries, undefined or negative maxima, duplicate or unsorted CSR entries are rejected. Inference infinities and negative values clip to the frozen bound; explicit zeros remain stored.",
+            "Abstract witnesses validate shape, dtype and identity metadata, not sparse storage canonicality or numerical bounds. Unknown dimensions are allowed; known physical dimensions require upstream normalization.",
+            "Feature integration explicitly sorts CSR indices before this provider. Canonical matrices match, but downstream floating-point reduction order is not certified by that feature-only check.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment and other platforms are not certified.",
+            "This review qualifies only the two clipping atoms, not the original competition CDG or complete feature/model pipeline."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+        "direction": "output",
+        "name": "result"
+      },
+      "row": {
+        "atom_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+        "direction": "output",
+        "ordinal": 0,
+        "name": "result",
+        "type_desc": "csr_matrix",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Independent canonical float32 CSR matrix with unchanged shape and stored-entry topology, clipped to [0, fitted upper]. Input matrix is not mutated. Explicit zeros are retained; NaNs become zero and infinities are clipped."
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "kind": "technical",
+        "language": "en",
+        "content": "Clip canonical sparse features to a frozen training bound, enforcing feature-column and coordinate identity. Canonical real numeric CSR matrix matching fitted feature width, identity, ordering and normalized coordinate. Converted to float32 without densification; NaNs become zero and infinities clip to the frozen [0, upper] interval. Empty query rows supported. Duplicate entries and unsorted CSR indices must be handled explicitly upstream. Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient. Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state. Portable JSON dictionary with exactly format, feature_columns, feature_coordinate and upper. Format sciona.fitted_sparse_clip.v1; finite nonnegative upper at most float32 maximum. No stored observations or executable deserialization. Independent canonical float32 CSR matrix with unchanged shape and stored-entry topology, clipped to [0, fitted upper]. Input matrix is not mutated. Explicit zeros are retained; NaNs become zero and infinities are clipped. Domain-independent sparse feature preprocessing with explicit feature identity and common normalized coordinate. No competition fields, fixed vocabulary or source observations are required.",
+        "generated_by": "sparse_clip-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.039801
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Keep values between zero and a previously learned upper limit. Accuracy on new problems must be checked separately.",
+        "generated_by": "sparse_clip-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "atom_references",
+      "keys": {
+        "atom_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "ref_key": "sparse_clip-provider-review-v1"
+      },
+      "row": {
+        "atom_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "ref_key": "sparse_clip-provider-review-v1",
+        "ref_id": "sparse_clip-provider-review-v1",
+        "title": "Generic fitted sparse clipping implementation and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/3ffa5cad/docs/reviews/sparse_clip_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Clip canonical sparse features to a frozen training bound, enforcing feature-column and coordinate identity. Canonical real numeric CSR matrix matching fitted feature width, identity, ordering and normalized coordinate. Converted to float32 without densification; NaNs become zero and infinities clip to the frozen [0, upper] interval. Empty query rows supported. Duplicate entries and unsorted CSR indices must be handled explicitly upstream. Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient. Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state. Portable JSON dictionary with exactly format, feature_columns, feature_coordinate and upper. Format sciona.fitted_sparse_clip.v1; finite nonnegative upper at most float32 maximum. No stored observations or executable deserialization. Independent canonical float32 CSR matrix with unchanged shape and stored-entry topology, clipped to [0, fitted upper]. Input matrix is not mutated. Explicit zeros are retained; NaNs become zero and infinities are clipped."
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+        "name": "values"
+      },
+      "row": {
+        "artifact_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+        "name": "values",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "csr_matrix",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Canonical real numeric CSR matrix matching fitted feature width, identity, ordering and normalized coordinate. Converted to float32 without densification; NaNs become zero and infinities clip to the frozen [0, upper] interval. Empty query rows supported. Duplicate entries and unsorted CSR indices must be handled explicitly upstream.",
+        "dejargonized_description": "Caller supplies values.",
+        "constraints_json": {
+          "parameter_contract": "Canonical real numeric CSR matrix matching fitted feature width, identity, ordering and normalized coordinate. Converted to float32 without densification; NaNs become zero and infinities clip to the frozen [0, upper] interval. Empty query rows supported. Duplicate entries and unsorted CSR indices must be handled explicitly upstream.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Synthetic source parity and coordinate-scaling tests do not establish accuracy or generalization on new applications.",
+            "Caller owns training-only fitting, frozen vocabulary and comparable normalized feature coordinates; labels do not authenticate semantics or independence.",
+            "Float32 conversion precedes fitting. Stored entries determine the global maximum; implicit zeros are excluded. NaNs are ignored during fitting and become zero during inference.",
+            "Infinite training entries, undefined or negative maxima, duplicate or unsorted CSR entries are rejected. Inference infinities and negative values clip to the frozen bound; explicit zeros remain stored.",
+            "Abstract witnesses validate shape, dtype and identity metadata, not sparse storage canonicality or numerical bounds. Unknown dimensions are allowed; known physical dimensions require upstream normalization.",
+            "Feature integration explicitly sorts CSR indices before this provider. Canonical matrices match, but downstream floating-point reduction order is not certified by that feature-only check.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment and other platforms are not certified.",
+            "This review qualifies only the two clipping atoms, not the original competition CDG or complete feature/model pipeline."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+        "name": "feature_columns"
+      },
+      "row": {
+        "artifact_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+        "name": "feature_columns",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "list",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient.",
+        "dejargonized_description": "Caller supplies feature columns.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Synthetic source parity and coordinate-scaling tests do not establish accuracy or generalization on new applications.",
+            "Caller owns training-only fitting, frozen vocabulary and comparable normalized feature coordinates; labels do not authenticate semantics or independence.",
+            "Float32 conversion precedes fitting. Stored entries determine the global maximum; implicit zeros are excluded. NaNs are ignored during fitting and become zero during inference.",
+            "Infinite training entries, undefined or negative maxima, duplicate or unsorted CSR entries are rejected. Inference infinities and negative values clip to the frozen bound; explicit zeros remain stored.",
+            "Abstract witnesses validate shape, dtype and identity metadata, not sparse storage canonicality or numerical bounds. Unknown dimensions are allowed; known physical dimensions require upstream normalization.",
+            "Feature integration explicitly sorts CSR indices before this provider. Canonical matrices match, but downstream floating-point reduction order is not certified by that feature-only check.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment and other platforms are not certified.",
+            "This review qualifies only the two clipping atoms, not the original competition CDG or complete feature/model pipeline."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+        "name": "feature_coordinate"
+      },
+      "row": {
+        "artifact_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+        "name": "feature_coordinate",
+        "position": 2,
+        "kind": "positional_or_keyword",
+        "type_desc": "str",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state.",
+        "dejargonized_description": "Caller supplies feature coordinate.",
+        "constraints_json": {
+          "parameter_contract": "Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Synthetic source parity and coordinate-scaling tests do not establish accuracy or generalization on new applications.",
+            "Caller owns training-only fitting, frozen vocabulary and comparable normalized feature coordinates; labels do not authenticate semantics or independence.",
+            "Float32 conversion precedes fitting. Stored entries determine the global maximum; implicit zeros are excluded. NaNs are ignored during fitting and become zero during inference.",
+            "Infinite training entries, undefined or negative maxima, duplicate or unsorted CSR entries are rejected. Inference infinities and negative values clip to the frozen bound; explicit zeros remain stored.",
+            "Abstract witnesses validate shape, dtype and identity metadata, not sparse storage canonicality or numerical bounds. Unknown dimensions are allowed; known physical dimensions require upstream normalization.",
+            "Feature integration explicitly sorts CSR indices before this provider. Canonical matrices match, but downstream floating-point reduction order is not certified by that feature-only check.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment and other platforms are not certified.",
+            "This review qualifies only the two clipping atoms, not the original competition CDG or complete feature/model pipeline."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+        "name": "state"
+      },
+      "row": {
+        "artifact_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+        "name": "state",
+        "position": 3,
+        "kind": "positional_or_keyword",
+        "type_desc": "dict",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Portable JSON dictionary with exactly format, feature_columns, feature_coordinate and upper. Format sciona.fitted_sparse_clip.v1; finite nonnegative upper at most float32 maximum. No stored observations or executable deserialization.",
+        "dejargonized_description": "Caller supplies state.",
+        "constraints_json": {
+          "parameter_contract": "Portable JSON dictionary with exactly format, feature_columns, feature_coordinate and upper. Format sciona.fitted_sparse_clip.v1; finite nonnegative upper at most float32 maximum. No stored observations or executable deserialization.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Synthetic source parity and coordinate-scaling tests do not establish accuracy or generalization on new applications.",
+            "Caller owns training-only fitting, frozen vocabulary and comparable normalized feature coordinates; labels do not authenticate semantics or independence.",
+            "Float32 conversion precedes fitting. Stored entries determine the global maximum; implicit zeros are excluded. NaNs are ignored during fitting and become zero during inference.",
+            "Infinite training entries, undefined or negative maxima, duplicate or unsorted CSR entries are rejected. Inference infinities and negative values clip to the frozen bound; explicit zeros remain stored.",
+            "Abstract witnesses validate shape, dtype and identity metadata, not sparse storage canonicality or numerical bounds. Unknown dimensions are allowed; known physical dimensions require upstream normalization.",
+            "Feature integration explicitly sorts CSR indices before this provider. Canonical matrices match, but downstream floating-point reduction order is not certified by that feature-only check.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment and other platforms are not certified.",
+            "This review qualifies only the two clipping atoms, not the original competition CDG or complete feature/model pipeline."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "kind": "technical",
+        "language": "en",
+        "content": "Clip canonical sparse features to a frozen training bound, enforcing feature-column and coordinate identity. Canonical real numeric CSR matrix matching fitted feature width, identity, ordering and normalized coordinate. Converted to float32 without densification; NaNs become zero and infinities clip to the frozen [0, upper] interval. Empty query rows supported. Duplicate entries and unsorted CSR indices must be handled explicitly upstream. Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient. Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state. Portable JSON dictionary with exactly format, feature_columns, feature_coordinate and upper. Format sciona.fitted_sparse_clip.v1; finite nonnegative upper at most float32 maximum. No stored observations or executable deserialization. Independent canonical float32 CSR matrix with unchanged shape and stored-entry topology, clipped to [0, fitted upper]. Input matrix is not mutated. Explicit zeros are retained; NaNs become zero and infinities are clipped. Domain-independent sparse feature preprocessing with explicit feature identity and common normalized coordinate. No competition fields, fixed vocabulary or source observations are required.",
+        "generated_by": "sparse_clip-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.039801
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Keep values between zero and a previously learned upper limit. Accuracy on new problems must be checked separately.",
+        "generated_by": "sparse_clip-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "artifact_references",
+      "keys": {
+        "artifact_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "ref_key": "sparse_clip-provider-review-v1"
+      },
+      "row": {
+        "artifact_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+        "ref_key": "sparse_clip-provider-review-v1",
+        "ref_id": "sparse_clip-provider-review-v1",
+        "title": "Generic fitted sparse clipping implementation and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/3ffa5cad/docs/reviews/sparse_clip_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Clip canonical sparse features to a frozen training bound, enforcing feature-column and coordinate identity. Canonical real numeric CSR matrix matching fitted feature width, identity, ordering and normalized coordinate. Converted to float32 without densification; NaNs become zero and infinities clip to the frozen [0, upper] interval. Empty query rows supported. Duplicate entries and unsorted CSR indices must be handled explicitly upstream. Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient. Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state. Portable JSON dictionary with exactly format, feature_columns, feature_coordinate and upper. Format sciona.fitted_sparse_clip.v1; finite nonnegative upper at most float32 maximum. No stored observations or executable deserialization. Independent canonical float32 CSR matrix with unchanged shape and stored-entry topology, clipped to [0, fitted upper]. Input matrix is not mutated. Explicit zeros are retained; NaNs become zero and infinities are clipped."
+      }
+    }
+  ],
+  "rollups": [
+    {
+      "table": "atom_audit_rollups",
+      "key": "atom_id",
+      "identity": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+          "Synthetic source parity and coordinate-scaling tests do not establish accuracy or generalization on new applications.",
+          "Caller owns training-only fitting, frozen vocabulary and comparable normalized feature coordinates; labels do not authenticate semantics or independence.",
+          "Float32 conversion precedes fitting. Stored entries determine the global maximum; implicit zeros are excluded. NaNs are ignored during fitting and become zero during inference.",
+          "Infinite training entries, undefined or negative maxima, duplicate or unsorted CSR entries are rejected. Inference infinities and negative values clip to the frozen bound; explicit zeros remain stored.",
+          "Abstract witnesses validate shape, dtype and identity metadata, not sparse storage canonicality or numerical bounds. Unknown dimensions are allowed; known physical dimensions require upstream normalization.",
+          "Feature integration explicitly sorts CSR indices before this provider. Canonical matrices match, but downstream floating-point reduction order is not certified by that feature-only check.",
+          "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment and other platforms are not certified.",
+          "This review qualifies only the two clipping atoms, not the original competition CDG or complete feature/model pipeline.",
+          "Canonical real numeric CSR matrix with at least one row and one feature. Float32 conversion precedes fitting. Maximum uses stored entries only, excludes implicit zeros and ignores NaNs. Empty or all-NaN stored data, infinities and negative fitted maxima are rejected. Caller supplies training-only data in comparable normalized numeric feature coordinates. Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient. Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state. Portable JSON dictionary with exactly format, feature_columns, feature_coordinate and upper. Format sciona.fitted_sparse_clip.v1; finite nonnegative upper at most float32 maximum. No stored observations or executable deserialization."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "artifact_audit_rollups",
+      "key": "artifact_id",
+      "identity": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+          "Synthetic source parity and coordinate-scaling tests do not establish accuracy or generalization on new applications.",
+          "Caller owns training-only fitting, frozen vocabulary and comparable normalized feature coordinates; labels do not authenticate semantics or independence.",
+          "Float32 conversion precedes fitting. Stored entries determine the global maximum; implicit zeros are excluded. NaNs are ignored during fitting and become zero during inference.",
+          "Infinite training entries, undefined or negative maxima, duplicate or unsorted CSR entries are rejected. Inference infinities and negative values clip to the frozen bound; explicit zeros remain stored.",
+          "Abstract witnesses validate shape, dtype and identity metadata, not sparse storage canonicality or numerical bounds. Unknown dimensions are allowed; known physical dimensions require upstream normalization.",
+          "Feature integration explicitly sorts CSR indices before this provider. Canonical matrices match, but downstream floating-point reduction order is not certified by that feature-only check.",
+          "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment and other platforms are not certified.",
+          "This review qualifies only the two clipping atoms, not the original competition CDG or complete feature/model pipeline.",
+          "Canonical real numeric CSR matrix with at least one row and one feature. Float32 conversion precedes fitting. Maximum uses stored entries only, excludes implicit zeros and ignores NaNs. Empty or all-NaN stored data, infinities and negative fitted maxima are rejected. Caller supplies training-only data in comparable normalized numeric feature coordinates. Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient. Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state. Portable JSON dictionary with exactly format, feature_columns, feature_coordinate and upper. Format sciona.fitted_sparse_clip.v1; finite nonnegative upper at most float32 maximum. No stored observations or executable deserialization."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "atom_audit_rollups",
+      "key": "atom_id",
+      "identity": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+          "Synthetic source parity and coordinate-scaling tests do not establish accuracy or generalization on new applications.",
+          "Caller owns training-only fitting, frozen vocabulary and comparable normalized feature coordinates; labels do not authenticate semantics or independence.",
+          "Float32 conversion precedes fitting. Stored entries determine the global maximum; implicit zeros are excluded. NaNs are ignored during fitting and become zero during inference.",
+          "Infinite training entries, undefined or negative maxima, duplicate or unsorted CSR entries are rejected. Inference infinities and negative values clip to the frozen bound; explicit zeros remain stored.",
+          "Abstract witnesses validate shape, dtype and identity metadata, not sparse storage canonicality or numerical bounds. Unknown dimensions are allowed; known physical dimensions require upstream normalization.",
+          "Feature integration explicitly sorts CSR indices before this provider. Canonical matrices match, but downstream floating-point reduction order is not certified by that feature-only check.",
+          "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment and other platforms are not certified.",
+          "This review qualifies only the two clipping atoms, not the original competition CDG or complete feature/model pipeline.",
+          "Canonical real numeric CSR matrix matching fitted feature width, identity, ordering and normalized coordinate. Converted to float32 without densification; NaNs become zero and infinities clip to the frozen [0, upper] interval. Empty query rows supported. Duplicate entries and unsorted CSR indices must be handled explicitly upstream. Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient. Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state. Portable JSON dictionary with exactly format, feature_columns, feature_coordinate and upper. Format sciona.fitted_sparse_clip.v1; finite nonnegative upper at most float32 maximum. No stored observations or executable deserialization. Independent canonical float32 CSR matrix with unchanged shape and stored-entry topology, clipped to [0, fitted upper]. Input matrix is not mutated. Explicit zeros are retained; NaNs become zero and infinities are clipped."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "artifact_audit_rollups",
+      "key": "artifact_id",
+      "identity": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+          "Synthetic source parity and coordinate-scaling tests do not establish accuracy or generalization on new applications.",
+          "Caller owns training-only fitting, frozen vocabulary and comparable normalized feature coordinates; labels do not authenticate semantics or independence.",
+          "Float32 conversion precedes fitting. Stored entries determine the global maximum; implicit zeros are excluded. NaNs are ignored during fitting and become zero during inference.",
+          "Infinite training entries, undefined or negative maxima, duplicate or unsorted CSR entries are rejected. Inference infinities and negative values clip to the frozen bound; explicit zeros remain stored.",
+          "Abstract witnesses validate shape, dtype and identity metadata, not sparse storage canonicality or numerical bounds. Unknown dimensions are allowed; known physical dimensions require upstream normalization.",
+          "Feature integration explicitly sorts CSR indices before this provider. Canonical matrices match, but downstream floating-point reduction order is not certified by that feature-only check.",
+          "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment and other platforms are not certified.",
+          "This review qualifies only the two clipping atoms, not the original competition CDG or complete feature/model pipeline.",
+          "Canonical real numeric CSR matrix matching fitted feature width, identity, ordering and normalized coordinate. Converted to float32 without densification; NaNs become zero and infinities clip to the frozen [0, upper] interval. Empty query rows supported. Duplicate entries and unsorted CSR indices must be handled explicitly upstream. Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient. Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state. Portable JSON dictionary with exactly format, feature_columns, feature_coordinate and upper. Format sciona.fitted_sparse_clip.v1; finite nonnegative upper at most float32 maximum. No stored observations or executable deserialization. Independent canonical float32 CSR matrix with unchanged shape and stored-entry topology, clipped to [0, fitted upper]. Input matrix is not mutated. Explicit zeros are retained; NaNs become zero and infinities are clipped."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    }
+  ],
+  "states": {
+    "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce": {
+      "atom": {
+        "status": "flagged",
+        "is_publishable": false
+      },
+      "artifact": {
+        "status": "draft",
+        "is_publishable": false
+      }
+    },
+    "25ebc485-c102-51f4-870b-ac49ab95ec1f": {
+      "atom": {
+        "status": "flagged",
+        "is_publishable": false
+      },
+      "artifact": {
+        "status": "draft",
+        "is_publishable": false
+      }
+    }
+  },
+  "before": {
+    "atoms": "0b16acda6c641d826517d20d2906b3e5c89143c96969895ff06496b0c3cbabeb",
+    "artifacts": "4da9ac041e38b4de2c80eeaf0c3d09955971d297b608e32140f9dd647e5f4303",
+    "atom_versions": "ff0cde2285a10e03bb79c2433349251fd4a7185190a9eea4b38c6362203bbbbb",
+    "artifact_versions": "7c00ad83c87557c67068e065252cdac9197ad387677c7c73648263897a5fe4b8",
+    "atom_io_specs": "16aea37eb2c7008e0acc2e6e3e2603f3545b71cc4c37a91735731f533a028966",
+    "artifact_io_specs": "a3ac277a893b664aa8eee854e0dc1a399f97bcd4cb83e69615076f7ee8f5df93",
+    "atom_parameters": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_parameters": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_descriptions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_descriptions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_references": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_references": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_audit_rollups": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_audit_rollups": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_audit_evidence": "760bf6a78fe5bea2af7911a3defb9a90ed6bfa515932d7d17bdc1b2fa24fab65"
+  },
+  "preserved": {
+    "atom_versions": [
+      {
+        "row": {
+          "s3_key": "",
+          "semver": "0.0.0+local.2c14dcf033e1",
+          "atom_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+          "is_latest": true,
+          "created_at": "2026-11-10T19:04:39.450926+00:00",
+          "trust_tier": 3,
+          "version_id": "95db48f6-67d1-52e5-9c33-7105943e1c38",
+          "fingerprint": "e88bb188198c0b7a207cab70ed4c9a7a444b016aa3c80b1fb346257d1891068a",
+          "content_hash": "2c14dcf033e1bd08770b8a4cf202364e4a7095f2dcaf171b59fbccf486f7f2d6",
+          "derives_from": null
+        }
+      },
+      {
+        "row": {
+          "s3_key": "",
+          "semver": "0.0.0+local.b388f5cd5a71",
+          "atom_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+          "is_latest": true,
+          "created_at": "2026-11-10T19:04:39.450926+00:00",
+          "trust_tier": 3,
+          "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+          "fingerprint": "bc74765042f0a3e4b34302bb279db67fb4c0069707025b39b42485f6b4504fe5",
+          "content_hash": "b388f5cd5a715c7124d6b1ad9346cdaa6d39b8cbf376cfcd0f7874d512a04593",
+          "derives_from": null
+        }
+      }
+    ],
+    "atom_parameters": [],
+    "atom_references": [],
+    "atom_io_specs": [
+      {
+        "row": {
+          "name": "feature_columns",
+          "atom_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "list",
+          "io_spec_id": "72e4e680-7120-4ae4-9194-e4e8edb7a1c0",
+          "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+          "constraints": "Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "feature_columns",
+          "atom_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "list",
+          "io_spec_id": "e74f8b2c-3e13-41e5-9958-edabd3629cc7",
+          "version_id": "95db48f6-67d1-52e5-9c33-7105943e1c38",
+          "constraints": "Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "feature_coordinate",
+          "atom_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+          "ordinal": 2,
+          "required": true,
+          "direction": "input",
+          "type_desc": "str",
+          "io_spec_id": "27053b5c-0d6d-4d33-9ba3-b90575c680d7",
+          "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+          "constraints": "Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "feature_coordinate",
+          "atom_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+          "ordinal": 2,
+          "required": true,
+          "direction": "input",
+          "type_desc": "str",
+          "io_spec_id": "323c49cf-95fd-495d-84b4-489fe7f43784",
+          "version_id": "95db48f6-67d1-52e5-9c33-7105943e1c38",
+          "constraints": "Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "result",
+          "atom_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "csr_matrix",
+          "io_spec_id": "8e4e363b-09fc-4538-8be8-25e5229bb575",
+          "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+          "constraints": "Independent canonical float32 CSR matrix with unchanged shape and stored-entry topology, clipped to [0, fitted upper]. Input matrix is not mutated. Explicit zeros are retained; NaNs become zero and infinities are clipped.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "result",
+          "atom_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "dict",
+          "io_spec_id": "8565d1fb-54e8-476e-8a8e-5f3d3333714f",
+          "version_id": "95db48f6-67d1-52e5-9c33-7105943e1c38",
+          "constraints": "Portable JSON dictionary with exactly format, feature_columns, feature_coordinate and upper. Format sciona.fitted_sparse_clip.v1; finite nonnegative upper at most float32 maximum. No stored observations or executable deserialization.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "state",
+          "atom_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+          "ordinal": 3,
+          "required": true,
+          "direction": "input",
+          "type_desc": "dict",
+          "io_spec_id": "9cb4c55e-69f6-46fa-aa4f-21498e2a232d",
+          "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+          "constraints": "Portable JSON dictionary with exactly format, feature_columns, feature_coordinate and upper. Format sciona.fitted_sparse_clip.v1; finite nonnegative upper at most float32 maximum. No stored observations or executable deserialization.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "training",
+          "atom_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "csr_matrix",
+          "io_spec_id": "5f144b1d-d757-409c-a32e-8df486c4b909",
+          "version_id": "95db48f6-67d1-52e5-9c33-7105943e1c38",
+          "constraints": "Canonical real numeric CSR matrix with at least one row and one feature. Float32 conversion precedes fitting. Maximum uses stored entries only, excludes implicit zeros and ignores NaNs. Empty or all-NaN stored data, infinities and negative fitted maxima are rejected. Caller supplies training-only data in comparable normalized numeric feature coordinates.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "values",
+          "atom_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "csr_matrix",
+          "io_spec_id": "d63e189b-c0c6-460a-8e11-7317a830db1e",
+          "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+          "constraints": "Canonical real numeric CSR matrix matching fitted feature width, identity, ordering and normalized coordinate. Converted to float32 without densification; NaNs become zero and infinities clip to the frozen [0, upper] interval. Empty query rows supported. Duplicate entries and unsorted CSR indices must be handled explicitly upstream.",
+          "default_value_repr": ""
+        }
+      }
+    ],
+    "artifact_versions": [
+      {
+        "row": {
+          "s3_key": "",
+          "semver": "0.0.0+local.2c14dcf033e1",
+          "is_latest": true,
+          "created_at": "2026-11-10T19:04:39.450926+00:00",
+          "trust_tier": 3,
+          "version_id": "95db48f6-67d1-52e5-9c33-7105943e1c38",
+          "artifact_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+          "fingerprint": "e88bb188198c0b7a207cab70ed4c9a7a444b016aa3c80b1fb346257d1891068a",
+          "content_hash": "2c14dcf033e1bd08770b8a4cf202364e4a7095f2dcaf171b59fbccf486f7f2d6",
+          "derives_from": null
+        }
+      },
+      {
+        "row": {
+          "s3_key": "",
+          "semver": "0.0.0+local.b388f5cd5a71",
+          "is_latest": true,
+          "created_at": "2026-11-10T19:04:39.450926+00:00",
+          "trust_tier": 3,
+          "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+          "artifact_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+          "fingerprint": "bc74765042f0a3e4b34302bb279db67fb4c0069707025b39b42485f6b4504fe5",
+          "content_hash": "b388f5cd5a715c7124d6b1ad9346cdaa6d39b8cbf376cfcd0f7874d512a04593",
+          "derives_from": null
+        }
+      }
+    ],
+    "artifact_parameters": [],
+    "artifact_references": [],
+    "artifact_io_specs": [
+      {
+        "row": {
+          "name": "feature_columns",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "list",
+          "io_spec_id": "2831dd0d-557d-481f-96b1-1f34064556f7",
+          "version_id": "95db48f6-67d1-52e5-9c33-7105943e1c38",
+          "artifact_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+          "constraints": "Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "feature_columns",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "list",
+          "io_spec_id": "a5d37dbb-e36a-463b-a956-d1fb06391141",
+          "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+          "artifact_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+          "constraints": "Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "feature_coordinate",
+          "ordinal": 2,
+          "required": true,
+          "direction": "input",
+          "type_desc": "str",
+          "io_spec_id": "72ebdeb4-8d82-4b79-8768-5a7836c87419",
+          "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+          "artifact_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+          "constraints": "Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "feature_coordinate",
+          "ordinal": 2,
+          "required": true,
+          "direction": "input",
+          "type_desc": "str",
+          "io_spec_id": "832abaa6-8740-4ccd-96be-bfc0272d4b98",
+          "version_id": "95db48f6-67d1-52e5-9c33-7105943e1c38",
+          "artifact_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+          "constraints": "Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "result",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "csr_matrix",
+          "io_spec_id": "0ebb63b8-5042-4570-8e2e-ac7fa5c3ae4f",
+          "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+          "artifact_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+          "constraints": "Independent canonical float32 CSR matrix with unchanged shape and stored-entry topology, clipped to [0, fitted upper]. Input matrix is not mutated. Explicit zeros are retained; NaNs become zero and infinities are clipped.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "result",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "dict",
+          "io_spec_id": "acf6e5e5-0fbd-43c3-a91c-1dcb1fabf505",
+          "version_id": "95db48f6-67d1-52e5-9c33-7105943e1c38",
+          "artifact_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+          "constraints": "Portable JSON dictionary with exactly format, feature_columns, feature_coordinate and upper. Format sciona.fitted_sparse_clip.v1; finite nonnegative upper at most float32 maximum. No stored observations or executable deserialization.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "state",
+          "ordinal": 3,
+          "required": true,
+          "direction": "input",
+          "type_desc": "dict",
+          "io_spec_id": "a3178659-4d2b-4cee-80fd-3ef73a175ed2",
+          "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+          "artifact_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+          "constraints": "Portable JSON dictionary with exactly format, feature_columns, feature_coordinate and upper. Format sciona.fitted_sparse_clip.v1; finite nonnegative upper at most float32 maximum. No stored observations or executable deserialization.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "training",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "csr_matrix",
+          "io_spec_id": "4dae9452-2d64-4b34-9d2f-5f8b22ca573d",
+          "version_id": "95db48f6-67d1-52e5-9c33-7105943e1c38",
+          "artifact_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+          "constraints": "Canonical real numeric CSR matrix with at least one row and one feature. Float32 conversion precedes fitting. Maximum uses stored entries only, excludes implicit zeros and ignores NaNs. Empty or all-NaN stored data, infinities and negative fitted maxima are rejected. Caller supplies training-only data in comparable normalized numeric feature coordinates.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "values",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "csr_matrix",
+          "io_spec_id": "97a7793a-481d-4251-9089-9c45223bc74e",
+          "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+          "artifact_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+          "constraints": "Canonical real numeric CSR matrix matching fitted feature width, identity, ordering and normalized coordinate. Converted to float32 without densification; NaNs become zero and infinities clip to the frozen [0, upper] interval. Empty query rows supported. Duplicate entries and unsorted CSR indices must be handled explicitly upstream.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      }
+    ],
+    "artifact_audit_evidence": [
+      {
+        "row": {
+          "passed": true,
+          "status": "completed",
+          "details": {
+            "scope": "Exact source/version/interface draft import only. Dependency qualification, full metadata and semantic publication gates remain pending.",
+            "plan_commit": "0d2bc2a2",
+            "plan_sha256": "4722edf859bb9bed457dfdf42c0a5301d00a7f9e33fa7cb3b29b90f658e618d2",
+            "provider_sha256": "f322798a4d198b6d6aa95c87eef122134a344de341edcdb39407763fcf4e055b",
+            "execution_evidence_sha256": "d6a4ef583d34245dd79c30a380850974ae032d9960117a0dd3a2509a0b1b5dde"
+          },
+          "audit_type": "asset_integrity_check",
+          "created_at": "2026-11-10T19:04:39.450926+00:00",
+          "version_id": "95db48f6-67d1-52e5-9c33-7105943e1c38",
+          "artifact_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+          "evidence_id": "76ccc6fd-8f7c-5218-a941-12d3aaa08dbe",
+          "source_kind": "automated",
+          "runner_version": "sparse-clip-draft-intake.v1",
+          "review_basis_at": null,
+          "run_duration_ms": null,
+          "source_revision": "",
+          "upstream_version": ""
+        }
+      },
+      {
+        "row": {
+          "passed": true,
+          "status": "completed",
+          "details": {
+            "scope": "Exact source/version/interface draft import only. Dependency qualification, full metadata and semantic publication gates remain pending.",
+            "plan_commit": "0d2bc2a2",
+            "plan_sha256": "4722edf859bb9bed457dfdf42c0a5301d00a7f9e33fa7cb3b29b90f658e618d2",
+            "provider_sha256": "f322798a4d198b6d6aa95c87eef122134a344de341edcdb39407763fcf4e055b",
+            "execution_evidence_sha256": "d6a4ef583d34245dd79c30a380850974ae032d9960117a0dd3a2509a0b1b5dde"
+          },
+          "audit_type": "asset_integrity_check",
+          "created_at": "2026-11-10T19:04:39.450926+00:00",
+          "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+          "artifact_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+          "evidence_id": "93b22143-bf5d-51de-a9a3-086ddb9f2fd8",
+          "source_kind": "automated",
+          "runner_version": "sparse-clip-draft-intake.v1",
+          "review_basis_at": null,
+          "run_duration_ms": null,
+          "source_revision": "",
+          "upstream_version": ""
+        }
+      }
+    ]
+  },
+  "publisher_sha256": "10f3304b6418eae47e7d44b23057cc74a6fea92b30263d391ec9b956d4ba8db7",
+  "review_sha256": "e17cf816b5d48a657b7f6222a4453ae38d4a288876870b3736661f150ad5f79e"
+}
