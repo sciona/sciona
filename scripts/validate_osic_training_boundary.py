@@ -51,6 +51,12 @@ def validate():
     np.testing.assert_array_equal(numeric['oof_predictions'],actual['oof_predictions'])
     output=candidate.quantile_predictions(numeric['fold_predictions'],actual['observed_mask'],actual['observed_values'])
     np.testing.assert_array_equal(output,actual['predictions'])
+    with patch.object(candidate,'prepare_features',forbidden), \
+         patch.object(candidate,'train_quantile_branch',forbidden), \
+         patch.object(candidate,'train_prepared_quantile_folds',forbidden):
+        replay=candidate.replay_prepared_quantile_folds(numeric['fold_states'],q,columns,
+            kwargs['feature_coordinate'],kwargs['response_coordinate'])
+    np.testing.assert_array_equal(replay,numeric['fold_predictions'])
     rejected=[]
     invalid=[('dtype',x.astype(np.float64),y,q,columns),
              ('target_rank',x,y[:,0],q,columns),('rows',x,y[:-1],q,columns),
@@ -72,6 +78,7 @@ def validate():
         frozen_lifecycle_commit=PREVIOUS,frozen_lifecycle_sha256=hashlib.sha256(previous).hexdigest(),
         training_sha256=digest,validator_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         lifecycle_outputs_exact=True,private_fold_states_exact=True,numeric_boundary_without_preparation=True,
+        raw_fold_replay_exact=True,replay_training_and_preparation_disabled=True,
         full_schedule_fits=6,epochs_per_fit=600,rejected_before_model_construction=rejected,
         limitations=['The prepared trainer retains the fixed OSIC architecture and schedule; this is decomposition, not a general model trainer.',
                     'Synthetic regression against the preceding qualified lifecycle only; no empirical accuracy or full original CDG approval.'])

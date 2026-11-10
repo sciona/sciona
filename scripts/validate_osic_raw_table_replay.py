@@ -50,6 +50,7 @@ def child(directory):
     feature_state.joint_population_features = forbidden
     training.prepare_features = forbidden
     training.train_quantile_branch = forbidden
+    training.train_prepared_quantile_folds = forbidden
     bundle = json.loads((directory/'state.json').read_text())
     queries = pd.DataFrame(json.loads((directory/'queries.json').read_text()))
     prepared = transform_queries(bundle['preparation'], queries, feature_coordinate=FEATURE, response_coordinate=RESPONSE)

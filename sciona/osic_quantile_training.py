@@ -36,13 +36,31 @@ def replay_quantile_branch(states, features, columns, feature_coordinate, respon
 No scaler fitting or training occurs. Feature preparation and the complete
 transductive query population remain separate explicit inputs/provenance.
 """
+    predictions = replay_prepared_quantile_folds(states, features, columns,
+        feature_coordinate, response_coordinate)
+    return quantile_predictions(predictions, observed_mask, observed_values)
+
+
+def replay_prepared_quantile_folds(states, features, columns, feature_coordinate, response_coordinate):
+    """Restore two fixed models and return raw predictions shaped (2,M,3).
+
+Features are a nonempty finite float32 matrix aligned to the explicit ordered
+columns and saved feature coordinate. Response units follow the saved response
+coordinate. No preparation, training, fold reduction or baseline override occurs.
+Saved state is inference-only; authenticity is the caller's responsibility.
+"""
     if type(states) is not list or len(states) != 2:
         raise ValueError('Both source fold states required')
+    if (not isinstance(features, np.ndarray) or features.dtype != np.float32
+            or features.ndim != 2 or min(features.shape) < 1
+            or type(columns) is not list or features.shape[1] != len(columns)
+            or not np.isfinite(features).all()):
+        raise ValueError('Finite float32 query matrix aligned to saved feature columns required')
     predictions = []
     for state in states:
         model = restore_prediction_state(state, columns, feature_coordinate, response_coordinate)
         predictions.append(predict_in_batches(model, features))
-    return quantile_predictions(np.stack(predictions), observed_mask, observed_values)
+    return np.stack(predictions)
 
 
 def train_quantile_branch(training, baseline, queries, *, feature_coordinate, response_coordinate,
