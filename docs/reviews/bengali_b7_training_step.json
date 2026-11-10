@@ -1,0 +1,100 @@
+{
+  "format": "bengali-b7-training-step.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "branches": [
+    {
+      "branch": "ood",
+      "updates": [
+        {
+          "loss": 0.7164385318756104,
+          "learning_rate": 0.0005,
+          "schedule_index": 1,
+          "examples": 1,
+          "branch": "ood"
+        },
+        {
+          "loss": 0.7073919177055359,
+          "learning_rate": 0.001,
+          "schedule_index": 2,
+          "examples": 1,
+          "branch": "ood"
+        }
+      ],
+      "maximum_parameter_changes": {
+        "stem": 0.0015039891004562378,
+        "head": 0.001501627266407013
+      },
+      "trainable_parameters": 69669575,
+      "optimizer_parameter_tensors": 713,
+      "unused_parameter_tensors": [
+        "backbone._fc.weight",
+        "backbone._fc.bias"
+      ],
+      "batch_norm_updates": 2,
+      "finite_parameters_and_gradients": true,
+      "backbone_frozen": false
+    },
+    {
+      "branch": "seen",
+      "updates": [
+        {
+          "loss": 10.13090705871582,
+          "learning_rate": 0.0005,
+          "schedule_index": 1,
+          "examples": 1,
+          "branch": "seen"
+        },
+        {
+          "loss": 8.036959648132324,
+          "learning_rate": 0.001,
+          "schedule_index": 2,
+          "examples": 1,
+          "branch": "seen"
+        }
+      ],
+      "maximum_parameter_changes": {
+        "stem": 0.0015041977167129517,
+        "head": 0.0015016160905361176
+      },
+      "trainable_parameters": 104214904,
+      "optimizer_parameter_tensors": 713,
+      "unused_parameter_tensors": [
+        "backbone._fc.weight",
+        "backbone._fc.bias"
+      ],
+      "batch_norm_updates": 2,
+      "finite_parameters_and_gradients": true,
+      "backbone_frozen": false
+    }
+  ],
+  "implementation_sha256": {
+    "scripts/validate_bengali_b7_training_step.py": "79169c9018c78c560d997d11b35db88b225c231e057f7dbb6cd8c6588d69f517",
+    "sciona/grapheme_b7_head.py": "0fb0f04df66cb56394d611dd2bf3e636e5709e144e1131b58d2e8409102d0ba5",
+    "sciona/grapheme_b7_training.py": "a3fa801c7f89b0b32a00ae091c580d306612b253eb2c3411bb3e7628f8604893",
+    "sciona/grapheme_b7_schedule.py": "7a82e2f87419ca5cf60703ab510c9ec7c52778727816e8a84d881e876e1f6c88",
+    "sciona/bengali_ood_loss.py": "ca3963b6f66ea4e5aa7a41432a9b22205bf3c727c799e0a1981431eaf0808814"
+  },
+  "installed_backbone_module_sha256": "a3ace3559651b33be3901be3f37a485f81b9767623fb0a329a69ae17d551316d",
+  "versions": {
+    "torch": "2.11.0",
+    "efficientnet-pytorch": "0.7.1"
+  },
+  "resources": {
+    "torch_threads": 1,
+    "torch_interop_threads": 1,
+    "native_pool_threads": [
+      1
+    ],
+    "data_loader_workers": 0,
+    "branches_serial": true
+  },
+  "limits": [
+    "Two updates per branch with random initialization and synthetic input; not full training or accuracy evidence.",
+    "Caller-selected schedule indices and input distribution do not establish historical warmup, scheduler ordering or normalization.",
+    "Installed B7 implementation is exercised; historical dependency and pretrained checkpoint fidelity are not established.",
+    "CycleGAN integration, threshold calibration and complete workflow qualification remain separate requirements."
+  ]
+}
