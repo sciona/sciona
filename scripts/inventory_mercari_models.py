@@ -100,7 +100,7 @@ def inventory(directory):
     return dict(format='mercari-declared-model-inventory.v2', approved=False, catalog_mutations=0,
         source_commit=triage['source_commit'], source_sha256={n: pins[n] for n in names},
         variants=variants, group_execution_order=[1, 3, 2], refit_blend_after_each_group=True,
-        declared_models_per_backend=12, full_input_epochs_per_model=3, reduced_input_epochs_per_model=1,
+        declared_models_per_backend=12, epochs_when_test_size_equals_one=3, epochs_when_test_size_differs_from_one=1,
         scope='Static inventory of constructor overrides, inherited initializer defaults and launch seeds; not runtime parity or the full winning model inventory.',
         limitations=['Select and qualify a backend; TensorFlow and MXNet models are not assumed equivalent.',
             'Additional four best-submission models noted by MXNet source lack exact pinned seed/configuration evidence.',
