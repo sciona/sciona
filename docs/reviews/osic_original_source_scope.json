@@ -1,0 +1,91 @@
+{
+  "format": "osic-original-source-scope.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "fqdn": "cdg.competition.solution.kaggle.osic_pulmonary_1st",
+  "source_version_id": "0a53a43f-b312-5b74-952d-496366e623ad",
+  "source_content_hash": "cdc68a172f66f95775d6263c4ba8563174f7b652fc84d961105a49518a6c78c7",
+  "primary_source": {
+    "repository": "https://github.com/artkulak/osic-pulmonary-fibrosis-progression",
+    "revision": "cd6dfa56c012e3c0eb81ed15534f436b3ba16d19",
+    "software_paths": [
+      "effnet_b5_training_30_epochs.ipynb",
+      "inference-45-55-600-epochs-tuned-effnet-b5-30-ep.ipynb"
+    ],
+    "normalized_function_sha256": {
+      "get_efficientnet": "4d5bc39e4283b05f54fa1851d080a1043a2a58a1f63b23afe3aa8ef77bd9f974",
+      "build_model": "29a0d3d7730e3f91f5bbc92e4d483892e95dee1b4b7458f9fc30403cd016db69",
+      "score": "a7846c4cccd5c6260345fa89b88a1b1589d3f9a0186898cfc41bec91c9623434",
+      "qloss": "eb775c738637dac1b91f6bbca81aa72ce4db212a06a8adffb366b4b53aab5542",
+      "mloss": "23f320fc7f033713d72d674c7db3073be2f67eb7695f7db61cf5964e608ec001",
+      "make_model": "620c9a7a197f003d81a5914e45e9703faaa24bb00bc79df225c4fae6428558b0"
+    },
+    "readme_sha256": "e3650e83eb8d2be425873869f291bbc365e8123f0aa9cdfd5bf21023963f5694",
+    "license_sha256": "6b0382b16279f26ff69014300541967a356a666eb0b91b422f6862f6b7dad17e",
+    "checked_schedule_constants": {
+      "image.cell11": {
+        "EPOCHS": 30,
+        "BATCH_SIZE": 8
+      },
+      "quantile.cell35": {
+        "NFOLD": 2
+      },
+      "quantile.cell36": {
+        "EPOCHS": 600
+      }
+    },
+    "declared_license": "Unlicense",
+    "permission_scope": "Repository declaration only; external dependencies and model artifacts require separate review."
+  },
+  "stage_review": [
+    {
+      "stage_id": "image_feature_extraction",
+      "correction": "The source trains an EfficientNet-B5 slope predictor from random weights with a tabular side input, noise and dropout. It is not a frozen pretrained feature extractor for the quantile branch."
+    },
+    {
+      "stage_id": "tabular_feature_engineering",
+      "correction": "Keep branch-specific feature preparation, longitudinal response construction, population selection and preprocessing state explicit. The source removes a previously used covariate; generic baseline/delta descriptions do not specify the full preparation."
+    },
+    {
+      "stage_id": "feature_concatenation",
+      "correction": "Concatenation occurs inside the image predictor. The final solution blends two separate predictors; the intake incorrectly routes extracted image features into the quantile model."
+    },
+    {
+      "stage_id": "quantile_regression_training",
+      "correction": "The source uses TensorFlow/Keras, two hidden dense layers, a mixed quantile and clipped likelihood loss, two folds and 600 epochs. An unconstrained base head plus cumulative nonnegative increments does not guarantee ordered predictions."
+    },
+    {
+      "stage_id": "confidence_interval_postprocessing",
+      "correction": "Qualify both branches and the final prediction/confidence blend. A single quantile-spread conversion does not cover the complete source computation; spread is also not proof of calibrated coverage."
+    }
+  ],
+  "synthetic_head_check": {
+    "source_expression_executed": true,
+    "cases": 2,
+    "crossing_counterexample_confirmed": true,
+    "ordered_control_confirmed": true,
+    "inputs_unchanged": true,
+    "backend": "NumPy evaluation of pinned cumulative-sum expression; not TensorFlow training qualification"
+  },
+  "reuse_requirements": [
+    "Separate image preprocessing, tabular preparation, slope fitting, trajectory extrapolation, quantile fitting, uncertainty calculation and final blending.",
+    "Expose coordinates, time units, prediction availability, image geometry, random state, fitted transforms and blend coefficients.",
+    "Preserve source output behavior, including possible crossings; do not silently sort predictions or claim guaranteed interval coverage.",
+    "Keep clinical response construction and cohort policies in adapters; demonstrate numerical reuse on distinct synthetic applications."
+  ],
+  "remaining": [
+    "Pin and inspect every executable cell needed for training and inference, including branch-specific preprocessing and final blending.",
+    "Resolve historical dependency semantics, especially optimizer decay, image library behavior and random initialization.",
+    "Preserve the complete 30-epoch image schedule and two-fold 600-epoch quantile schedule with bounded resources.",
+    "Qualify reusable operations and domain adapters, then execute the complete corrected graph with synthetic inputs.",
+    "Pass dependency, metadata, rollback and served-selection gates under the original intake identity."
+  ],
+  "limitations": [
+    "Source review and synthetic head counterexample only; no complete workflow, clinical validity or historical accuracy claim.",
+    "No source notebook outputs or real records are included in this report.",
+    "Quantile-head arithmetic is checked with NumPy; TensorFlow numerical and gradient parity remain unqualified."
+  ],
+  "reviewer_sha256": "9bd37a84969deaea629fd6fbffd7eea667ab4f6c365980a4279a63cc0b0954f8"
+}
