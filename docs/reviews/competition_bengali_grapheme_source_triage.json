@@ -960,5 +960,31 @@
       "Concrete threshold calibration mixture and fitted threshold."
     ],
     "catalog_mutations": 0
+  },
+  "b7_training_step_progress": {
+    "status": "both_full_backbone_update_paths_verified_full_lifecycle_pending",
+    "report": "docs/reviews/bengali_b7_training_step.json",
+    "report_sha256": "a0d812a6d09d3f9737716ba2b55a06aaa9641b561c34b8d7d2b27f0a6372db03",
+    "evidence_commit": "6c8b9ec8",
+    "verified": [
+      "Both classifier branches complete two synthetic updates with all backbone parameters trainable.",
+      "Backbone stem and classifier head receive nonzero finite gradients and change parameters; BatchNorm buffers advance.",
+      "AdamW state advances for all 713 used parameter tensors; the unused ImageNet classifier remains outside the feature path.",
+      "Branches execute serially with one native compute thread and no data-loader workers."
+    ],
+    "approved": false,
+    "catalog_mutations": 0,
+    "remaining": [
+      "Connect explicit preprocessing and augmentation to the complete 200-epoch classifier lifecycle and validation/checkpoint policy.",
+      "Qualify pretrained initialization and declare unresolved historical normalization, warmup and scheduler ordering.",
+      "Complete both font-classifier and generator branches, inference handoffs, class mapping and explicit weighted threshold calibration.",
+      "Execute the complete stored graph before publication, rollback, idempotency and served-selection qualification."
+    ],
+    "limits": [
+      "Two updates per branch with random initialization and synthetic input; not full training or accuracy evidence.",
+      "Caller-selected schedule indices and input distribution do not establish historical warmup, scheduler ordering or normalization.",
+      "Installed B7 implementation is exercised; historical dependency and pretrained checkpoint fidelity are not established.",
+      "CycleGAN integration, threshold calibration and complete workflow qualification remain separate requirements."
+    ]
   }
 }
