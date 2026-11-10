@@ -25,6 +25,7 @@ import numpy as np
 import pandas as pd
 from sklearn.linear_model import Lasso
 from joblib.externals import cloudpickle
+from sciona.positive_log_blend import fit_positive_log_blend
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -120,16 +121,24 @@ def run(directory, runtime):
         qp = np.hstack([query_predictions[g] for g in available]).clip(bounds['MIN_PRICE_PRED'], bounds['MAX_PRICE_PRED'])
         calibrated, predicted = blend_ns['merge_predictions'](cp, calibration_targets, qp, verbose=False)
         estimator = estimators[-1]
+        reusable_blend = fit_positive_log_blend(cp, calibration_targets,
+            clip_bounds=(bounds['MIN_PRICE_PRED'], bounds['MAX_PRICE_PRED']))
+        np.testing.assert_allclose(reusable_blend.predict(qp), predicted, rtol=1e-12, atol=1e-12)
+        np.testing.assert_allclose(reusable_blend.coefficients, estimator.coef_, rtol=1e-12, atol=1e-12)
+        np.testing.assert_allclose(reusable_blend.intercept, estimator.intercept_, rtol=1e-12, atol=1e-12)
         oracle = np.expm1(estimator.intercept_ + np.sum(np.log1p(qp) * estimator.coef_, axis=1))
         np.testing.assert_allclose(predicted, oracle, rtol=1e-12, atol=1e-12)
         assert predicted.shape == (32,) and np.isfinite(predicted).all()
         assert np.isfinite(calibrated).all() and (estimator.coef_ >= 0).all()
         rounds.append(dict(after_group=group, blend_group_order=available, blend_columns=cp.shape[1],
-                           query_count=32, finite_predictions=True, independent_affine_oracle_passed=True))
+                           query_count=32, finite_predictions=True, independent_affine_oracle_passed=True,
+                           reusable_blend_source_parity=True))
         print(json.dumps(dict(completed_fits=len(fits), completed_blends=len(rounds))), flush=True)
     assert len(fits) == 12 and sum(f['optimizer_updates'] for f in fits) == 72
     with (runtime/'blend.pkl').open('wb') as stream:
         pickle.dump(estimators[-1], stream)
+    with (runtime/'reusable-blend.pkl').open('wb') as stream:
+        pickle.dump(reusable_blend, stream)
     np.save(runtime/'expected.npy', predicted, allow_pickle=False)
     manifest = dict(format='mercari-private-synthetic-replay.v1',
                     files={str(p.relative_to(runtime)): hashlib.sha256(p.read_bytes()).hexdigest()
@@ -146,11 +155,12 @@ def run(directory, runtime):
     if child.returncode:
         raise RuntimeError('Fresh-process replay failed: '+child.stderr[-2000:])
     replay_summary = json.loads(child.stdout.strip().splitlines()[-1])
-    assert replay_summary == dict(passed=True, restored_models=12, restored_features=3, restored_blends=1,
+    assert replay_summary == dict(passed=True, restored_models=12, restored_features=3, restored_blends=2,
                                   exact_query_predictions=True, training_executed=False)
     files = ['scripts/run_mercari_tensorflow_synthetic_graph.py', 'scripts/probe_mercari_tensorflow_runtime.py',
              'scripts/probe_mercari_feature_runtime.py', 'scripts/inventory_mercari_models.py', 'scripts/inventory_mercari_features.py',
-             'scripts/mercari_checkpoint_probe.py', 'scripts/replay_mercari_synthetic_graph.py']
+             'scripts/mercari_checkpoint_probe.py', 'scripts/replay_mercari_synthetic_graph.py',
+             'sciona/positive_log_blend.py', 'tests/test_positive_log_blend.py']
     return dict(format='mercari-declared-tensorflow-synthetic-graph.v1', passed=True, approved=False,
         catalog_mutations=0, synthetic_only=True, role_counts=dict(training=8192, calibration=256, query=32),
         fits=fits, blend_rounds=rounds, optimizer_updates=72, checkpoint_replays=12,

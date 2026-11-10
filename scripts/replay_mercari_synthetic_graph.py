@@ -46,7 +46,10 @@ def replay(directory, runtime, expected_manifest_sha):
     actual = np.expm1(blend.predict(np.log1p(matrix)))
     expected = np.load(runtime/'expected.npy', allow_pickle=False)
     np.testing.assert_array_equal(actual, expected)
-    return dict(passed=True, restored_models=12, restored_features=3, restored_blends=1,
+    with (runtime/'reusable-blend.pkl').open('rb') as stream:
+        reusable_blend = pickle.load(stream)
+    np.testing.assert_array_equal(reusable_blend.predict(matrix), expected)
+    return dict(passed=True, restored_models=12, restored_features=3, restored_blends=2,
                 exact_query_predictions=True, training_executed=False)
 
 
