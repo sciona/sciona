@@ -1,0 +1,64 @@
+{
+  "format": "lanl-original-source-scope.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "review_source": "automated primary-source inspection",
+  "source_version_id": "bfba9df2-591c-538b-9810-7c8511921ea4",
+  "source_content_hash": "f99854e020974328e9c5f25ad66beb3e210a83a67c6ae64f36aec52ddab95840",
+  "fqdn": "cdg.competition.solution.kaggle.lanl_earthquake_1st",
+  "primary_writeup": "https://www.kaggle.com/c/LANL-earthquake-Prediction/discussion/94390",
+  "source_stage_review": [
+    {
+      "stage_id": "signal_chunking",
+      "correction": "Keep fixed windows; add Gaussian noise before subtracting each window median. The intake omits this preprocessing."
+    },
+    {
+      "stage_id": "time_domain_features",
+      "correction": "Resolve peak-count support and rolling-standard-deviation quantiles from code; generic means and quantiles do not establish coverage."
+    },
+    {
+      "stage_id": "frequency_domain_features",
+      "correction": "The winner identifies MFCC means. Welch band extraction in the intake is not established by this writeup."
+    },
+    {
+      "stage_id": "adversarial_validation",
+      "correction": "The writeup uses KS feature screening. Do not equate the reported drift diagnosis with a mandatory classifier-filter implementation."
+    },
+    {
+      "stage_id": "model_training",
+      "correction": "Cover LightGBM, SVR and a multitask neural model, including binary near-failure and time-since-failure losses. Kernel Ridge lacks source support here."
+    },
+    {
+      "stage_id": "stacking",
+      "correction": "Recover the hill-climbing blend. Neither plain averaging nor the intake floor/ceiling is established; a smaller public demonstration cannot stand for all submitted models."
+    }
+  ],
+  "code_leads": [
+    {
+      "url": "https://www.kaggle.com/code/ilu000/1-private-lb-kernel-lanl-lgbm",
+      "license_declaration": "Apache-2.0",
+      "source_bytes_pinned": false,
+      "scope": "Public LightGBM demonstration; insufficient for full original-CDG coverage."
+    }
+  ],
+  "reuse_requirements": [
+    "Separate windowing, explicit noise injection, median centering, feature extraction, distribution comparison, model fitting and blending.",
+    "Expose physical units, sample rate, window geometry, randomness and feature coordinate ordering as contracts.",
+    "Treat target-population distribution screening as an explicit transductive policy; it is unsuitable when future query populations are unavailable.",
+    "Keep event definitions and auxiliary response construction in application adapters; never infer universal failure thresholds.",
+    "Compare each operation with pinned source on independent synthetic signals, then execute the full graph."
+  ],
+  "remaining": [
+    "Obtain and pin executable sources and separate permissions for all three model families and the final blend.",
+    "Recover exact feature settings, training populations, validation folds, schedules and ensemble selection.",
+    "Implement and qualify reusable providers without omitting source stages or substituting public demonstration scope.",
+    "Execute the corrected stored original and pass metadata, dependency, transaction and served-selection gates."
+  ],
+  "limitations": [
+    "Source-scope corrections only; no numerical execution or historical-performance claim.",
+    "Notebook page license declaration does not establish permissions for every external dependency or the complete submission.",
+    "No real runtime signals, labels, dataset metadata or model artifacts were accessed."
+  ],
+  "reviewer_sha256": "496b5215e203a4b74b867cfe181afdd01b5b281261929b111aa53529f54c2256"
+}
