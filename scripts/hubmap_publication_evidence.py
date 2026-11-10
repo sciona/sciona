@@ -6,7 +6,7 @@ from scripts.audit_hubmap_original_readiness import ROOT,sha
 from scripts import hubmap_execution_evidence as lifecycle
 from scripts.plasticc_publication_evidence import strict_equal
 
-EVIDENCE_COMMIT=None
+EVIDENCE_COMMIT='37453651d411153f960750aeeb2e11519375600c'
 EXECUTION='docs/reviews/hubmap_corrected_execution.json'
 SOURCE='docs/reviews/hubmap_original_scope.json'
 REQUIRED_SOFTWARE=lifecycle.REQUIRED_SOFTWARE|{
