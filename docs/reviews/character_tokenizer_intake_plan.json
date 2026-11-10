@@ -1,0 +1,86 @@
+{
+  "format": "character-tokenizer-intake-plan.v1",
+  "passed": true,
+  "applied": false,
+  "approved": false,
+  "catalog_mutations": 0,
+  "owner": {
+    "owner_id": "33ed07a2-1bea-5b17-8b71-d6d0e590fdd9",
+    "source_repo_id": "27b787a0-27ed-4760-92b7-ad8e8b4b815c"
+  },
+  "new_providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.character_run_tokenization.tokenize_character_runs",
+      "atom_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+      "version_id": "9a2049c1-d7c6-5b7d-98f1-9bf174ba8aef",
+      "content_hash": "d5420073c514539d6612d077d2030775a57118282f78c8553639f6ee951d6528",
+      "provider_sha256": "1606cd9cfbd3f3232e10f710d43e2646c0824150f56556d997320713c0d26418",
+      "semver": "0.0.0+local.d5420073c514",
+      "fingerprint": "1de5b4989688daac3918a56d1d59dee73c5412378890d9d5ab73f60a1a1ddd0d",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.character_run_tokenization.tokenize_character_runs",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.character_run_tokenization",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.character_run_tokenization",
+        "import_module": "sciona.atoms.ml.character_run_tokenization",
+        "source_symbol": "tokenize_character_runs",
+        "description": "Split text into word runs, whitespace runs and individual other code points. Alphabets are explicit disjoint strings; repeated alphabet characters do not affect membership. Empty alphabets and empty input are supported. Joining output tokens exactly recovers input. Punctuation is never merged unless included in a run alphabet. No case folding, Unicode normalization, stemming, transliteration or whitespace deletion occurs. Combining marks and emoji are code points, not grapheme clusters. Runs are local to a whole input string; independent chunk tokenization need not preserve boundaries. Caller selects domain policy and maintains it across training/inference. Executes serially with no fitted state or worker processes.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "text",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unicode Python string; empty input allowed. No coercion of missing values, case folding, normalization, transliteration, stemming or deletion. Caller resolves table missing-value policies before this operation."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "word_characters",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit string whose code points form the word-run alphabet. Empty and repeated characters allowed; membership only matters. Must be disjoint from whitespace_characters. Caller preserves the same policy across training and inference and chooses it for the intended domain."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "whitespace_characters",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit string whose code points form the whitespace-run alphabet. Empty and repeated characters allowed. No automatic Unicode whitespace expansion. Must be disjoint from word_characters; characters outside both alphabets become individual tokens."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Ordered list of nonempty string tokens; empty input returns an empty list. Consecutive word or whitespace code points form runs; all other code points are individual tokens. Joining tokens exactly reproduces the input. Code-point semantics are not grapheme or linguistic segmentation. Independent chunk tokenization may change run boundaries. Witness metadata gives bounds only, not an exact token-array shape."
+        }
+      ]
+    }
+  ],
+  "execution_evidence_commit": "df784132",
+  "execution_evidence_sha256": "fc517f3b61acca3ca236f9f154c29612ec5578582d39a42f6eb49aa25fc98ec4",
+  "provider_revision": "79eaaa3",
+  "planner_sha256": "7fb8e2d6780e616e7480749aeabc52c23cc697ab71a3757004b53c5547b1b176",
+  "limitations": [
+    "Draft identities only; canonical draft and legacy flagged, both unpublished, until separate publication qualification.",
+    "Witness describes token-count bounds and lossless code-point preservation only. Caller chooses domain-appropriate alphabets and preserves policy between training and inference.",
+    "Requires the installed sciona tokenizer core and registry. Runs serially without worker processes. Dependency qualification remains pending.",
+    "Complete metadata, dependency qualification, transaction rollback tests and served-selection verification remain required.",
+    "No original competition CDG approval or historical winning-ensemble completeness is implied."
+  ]
+}
