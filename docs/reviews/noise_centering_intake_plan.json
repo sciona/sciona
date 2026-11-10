@@ -1,0 +1,84 @@
+{
+  "format": "noise-centering-intake-plan.v1",
+  "passed": true,
+  "applied": false,
+  "approved": false,
+  "catalog_mutations": 0,
+  "owner": {
+    "owner_id": "33ed07a2-1bea-5b17-8b71-d6d0e590fdd9",
+    "source_repo_id": "27b787a0-27ed-4760-92b7-ad8e8b4b815c"
+  },
+  "new_providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.noise_median_centering.add_noise_median_center",
+      "atom_id": "4a11a797-8b08-5968-8ba8-36e049926b01",
+      "version_id": "15aa26a3-9ffa-5b9a-92e9-5c3414c800f9",
+      "content_hash": "129424b49baf4cd55745d01150dc0569c8b817beaa7ad1d6e87169854dc9eb2c",
+      "provider_sha256": "69bf58a8edceef7c189d4c327b9850ca6bb8b77dba0ec8038e3aea668300b25f",
+      "semver": "0.0.0+local.129424b49baf",
+      "fingerprint": "73a31ad33d6e9a02717df4552f62121a5650cccbc2097f1c7215f0add386ce14",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.noise_median_centering.add_noise_median_center",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.noise_median_centering",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.noise_median_centering",
+        "import_module": "sciona.atoms.ml.noise_median_centering",
+        "source_symbol": "add_noise_median_center",
+        "description": "Add caller-supplied noise, then subtract each row's perturbed median. Inputs are matching nonempty real arrays with axes (windows, samples), in the same explicitly named amplitude coordinate and scale. No broadcasting, unit conversion, windowing, sampling-rate inference or random generation occurs. Caller owns noise distribution, amplitude, seed and alignment; Gaussian noise is an application choice, not a universal denoising rule. Both inputs are converted to float64 before addition. Inputs and outputs must be finite; overflow rejects. Integer values beyond float64 precision may round. Returns independent float64 storage without changing inputs. Window length and overlap are caller policy; splitting a window generally changes its centered values. Median centering loses the absolute baseline and adds perturbations, so this operation is neither lossless nor guaranteed to improve downstream predictions. Executes serially without workers.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "windows",
+          "type_desc": "np.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty real NumPy array with axes (windows,samples); no complex, boolean or object values. Values must remain finite after float64 conversion and arithmetic. Caller supplies window boundaries, sample-rate context and amplitude units. Integer precision beyond float64 may be lost."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "additive_noise",
+          "type_desc": "np.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Real finite NumPy array with exactly the same shape, sample alignment, amplitude coordinate and scale as windows. No broadcasting. Caller supplies distribution, magnitude, seed and reuse policy; no randomness is generated here."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "amplitude_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit nonblank string naming the common amplitude representation and scale of both arrays. No unit conversion or runtime inference of physical dimensions. Witness rejects unequal dimensions, including one known and one unknown."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "np.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Independent float64 array with input shape. Add supplied noise before subtracting each row median; input arrays unchanged. Baseline information is lost and noise is added. No denoising or predictive-benefit guarantee. Empty windows and nonfinite or overflowing arithmetic reject. Rows may be batched independently; splitting sample windows changes results. Witness preserves shape and matching dimension, without claiming numeric bounds."
+        }
+      ]
+    }
+  ],
+  "execution_evidence_commit": "305854c6",
+  "execution_evidence_sha256": "0b9bbffba5cd44e2f29a59768378c71e7c60aafe835565ee1aa53e2306e3197a",
+  "provider_revision": "52ee6d0",
+  "planner_sha256": "3ed5d7d5b5457d5e8c105e344da963ea3187b6543bd72225366de63532926d3e",
+  "limitations": [
+    "Non-serving draft only; metadata, dependencies, semantic review and transactional publication gates remain required.",
+    "Prose-equation qualification, not recovered historical source-code execution.",
+    "Independent arithmetic operation with explicit application adapters; no original LANL CDG approval."
+  ]
+}
