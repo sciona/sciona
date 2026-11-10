@@ -1,0 +1,75 @@
+{
+  "format": "osic-quantile-model-validation.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "source_revision": "cd6dfa56c012e3c0eb81ed15534f436b3ba16d19",
+  "source_function_sha256": {
+    "score": "a7846c4cccd5c6260345fa89b88a1b1589d3f9a0186898cfc41bec91c9623434",
+    "qloss": "eb775c738637dac1b91f6bbca81aa72ce4db212a06a8adffb366b4b53aab5542",
+    "mloss": "23f320fc7f033713d72d674c7db3073be2f67eb7695f7db61cf5964e608ec001",
+    "make_model": "620c9a7a197f003d81a5914e45e9703faaa24bb00bc79df225c4fae6428558b0"
+  },
+  "folds": [
+    {
+      "fold": 0,
+      "epochs": 600,
+      "candidate_updates": 600,
+      "oracle_updates": 600,
+      "training_rows": 16,
+      "validation_rows": 16,
+      "validation_checks": 600,
+      "query_rows": 9,
+      "parameter_count": 11506,
+      "maximum_loss_error": 0.0,
+      "maximum_weight_error": 0.0,
+      "maximum_validation_prediction_error": 0.0,
+      "numeric_weight_reload_exact": true
+    },
+    {
+      "fold": 1,
+      "epochs": 600,
+      "candidate_updates": 600,
+      "oracle_updates": 600,
+      "training_rows": 16,
+      "validation_rows": 16,
+      "validation_checks": 600,
+      "query_rows": 9,
+      "parameter_count": 11506,
+      "maximum_loss_error": 0.0,
+      "maximum_weight_error": 0.0,
+      "maximum_validation_prediction_error": 0.0,
+      "numeric_weight_reload_exact": true
+    }
+  ],
+  "software_sha256": {
+    "scripts/validate_osic_quantile_model.py": "daf8518a86a8effdda5139c4817fd343920a2b39ac156a92cd9f0cb51aa84d5c",
+    "sciona/osic_quantile_model.py": "80bb8d8e135c96be73c046cd05882d48c5fa5779d39a2a01b5f6284f7708d8e8",
+    "sciona/osic_quantile_objective.py": "b1726979feb3375c7193764c8de69fd9dafdc203ce99b2c41c41ab8fd9459804",
+    "sciona/tensorflow_distribution_losses.py": "fc0396a88c5c4ebd81f91eb0169be40e00418d02b7ff15529489804924db4975"
+  },
+  "runtime": {
+    "tensorflow": "2.20.0",
+    "tf_keras": "2.20.1",
+    "numpy": "2.2.6"
+  },
+  "resource_policy": {
+    "native_threads": 1,
+    "tensorflow_intraop_threads": 1,
+    "tensorflow_interop_threads": 1,
+    "serial_models": true,
+    "data_loader_workers": 0
+  },
+  "compatibility": [
+    "Pinned source Adam constructor is explicitly mapped to tf_keras.optimizers.legacy.Adam.",
+    "Both models receive identical initial weights and batch permutations; historical initialization and shuffle sequences are not reproduced.",
+    "Explicit GradientTape steps avoid a parallel data loader; no regularizers, batch-normalization updates or dropout exist in this source quantile model."
+  ],
+  "limitations": [
+    "Two full 600-epoch schedules on synthetic prepared features only; the source population and full preprocessing are not reproduced.",
+    "One batch per synthetic fold exercises the full epoch count but not historical population size or update count.",
+    "Numeric weight reload only; optimizer-state persistence and independent-process replay remain unqualified.",
+    "The image training branch, complete graph, package provenance and catalog publication remain pending."
+  ]
+}
