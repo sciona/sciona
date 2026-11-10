@@ -1,0 +1,182 @@
+{
+  "format": "image_tabular-provider-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "proposed_tier": 3,
+  "catalog_mutations": 0,
+  "catalog_state_checked": false,
+  "review_source": "automated",
+  "runtime_evidence_commit": "a03ab602",
+  "runtime_evidence_sha256": "c24f2fed757aa76d67b9f96a56949b16af3029e9edf7363133c92b422b12f703",
+  "reviewer_sha256": "af78b3a43d449509a0e1cc39c4b60fe684af6812e1b0c35407c983eaa6e1c86d",
+  "providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.image_tabular_complete_execution.calibrate",
+      "catalog_fqdn": "sciona.atoms.ml.image_tabular_complete_execution.calibrate",
+      "version_id": "dada4c0f-bba4-51c2-9ec8-bf22d8f58fae",
+      "content_hash": "89443d87f2dc961a2ba3b82c251ca98c69fdd195d861822da1d46d9b4b5bb1e1",
+      "source_file": "../sciona-atoms-ml/src/sciona/atoms/ml/image_tabular_complete_execution.py",
+      "provider_sha256": "8a6ca3b5e86248a7ba576a90fb289f7ae418df0b474f23e3e2540296058f7625",
+      "role": "recipe_adapter",
+      "plain_description": "Choose an F1 decision threshold using separate calibration groups.",
+      "validity_bounds": "Unmodified Fitted ensemble and revalidated source configuration. Predict calibration probabilities without refitting any feature transform or neural model. Existing generic float64 empirical-F1 provider consumes one score column and int64 binary labels; both classes required. Inclusive threshold comparison, highest observed threshold among equal computed F1 values. Return threshold and calibration count while retaining the fitted ensemble. Decision selection is not probability calibration or independent accuracy; caller owns meaningful group separation.",
+      "ports": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "fitted",
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Fitted ensemble and revalidated source configuration. Predict calibration probabilities without refitting any feature transform or neural model. Existing generic float64 empirical-F1 provider consumes one score column and int64 binary labels; both classes required. Inclusive threshold comparison, highest observed threshold among equal computed F1 values. Return threshold and calibration count while retaining the fitted ensemble. Decision selection is not probability calibration or independent accuracy; caller owns meaningful group separation."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Fitted ensemble and revalidated source configuration. Predict calibration probabilities without refitting any feature transform or neural model. Existing generic float64 empirical-F1 provider consumes one score column and int64 binary labels; both classes required. Inclusive threshold comparison, highest observed threshold among equal computed F1 values. Return threshold and calibration count while retaining the fitted ensemble. Decision selection is not probability calibration or independent accuracy; caller owns meaningful group separation."
+        }
+      ],
+      "dependencies": [
+        {
+          "runtime_fqdn": "sciona.atoms.ml.calibration.empirical_f1.fit_empirical_f1_thresholds",
+          "catalog_fqdn": "sciona.atoms.ml.calibration.empirical_f1.fit_empirical_f1_thresholds",
+          "version_id": "83608ee9-c047-53da-acb5-209901f7b245",
+          "content_hash": "a0c822126d1cfe7c14c4a451a0a8ae1070ffb50a0959a56776c2d3127c4e7c96"
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.image_tabular_complete_execution.fit",
+      "catalog_fqdn": "sciona.atoms.ml.image_tabular_complete_execution.fit",
+      "version_id": "22a4e393-5e8e-5ff9-b000-30d256353b5d",
+      "content_hash": "7bc75a930c611f5956f3a6be09bb5ec74bdcc755fe6a1ba1feee35665062a352",
+      "source_file": "../sciona-atoms-ml/src/sciona/atoms/ml/image_tabular_complete_execution.py",
+      "provider_sha256": "8a6ca3b5e86248a7ba576a90fb289f7ae418df0b474f23e3e2540296058f7625",
+      "role": "recipe_adapter",
+      "plain_description": "Train fold-local image and metadata features with a retained neural ensemble.",
+      "validity_bounds": "Revalidated Prepared configuration. Extract 31 fixed RGB moments, histograms, gradients and aspect descriptors. Each fitting fold learns numeric medians, categorical vocabulary and fused standardization only from its training rows. All-missing numeric columns use zero; unknown categories have zero indicator vectors. Train CPU float64 MLPs with seeded dropout, smoothed binary cross entropy, Adam and every configured epoch. Complete out-of-fold predictions and equal mean of retained fold probabilities. No learned image backbone, early stopping, OOF stacking or full-data refit. Dense features and full-batch training; trusted in-process models, no portable persistence or large-scale resource claim.",
+      "ports": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "prepared",
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Revalidated Prepared configuration. Extract 31 fixed RGB moments, histograms, gradients and aspect descriptors. Each fitting fold learns numeric medians, categorical vocabulary and fused standardization only from its training rows. All-missing numeric columns use zero; unknown categories have zero indicator vectors. Train CPU float64 MLPs with seeded dropout, smoothed binary cross entropy, Adam and every configured epoch. Complete out-of-fold predictions and equal mean of retained fold probabilities. No learned image backbone, early stopping, OOF stacking or full-data refit. Dense features and full-batch training; trusted in-process models, no portable persistence or large-scale resource claim."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Revalidated Prepared configuration. Extract 31 fixed RGB moments, histograms, gradients and aspect descriptors. Each fitting fold learns numeric medians, categorical vocabulary and fused standardization only from its training rows. All-missing numeric columns use zero; unknown categories have zero indicator vectors. Train CPU float64 MLPs with seeded dropout, smoothed binary cross entropy, Adam and every configured epoch. Complete out-of-fold predictions and equal mean of retained fold probabilities. No learned image backbone, early stopping, OOF stacking or full-data refit. Dense features and full-batch training; trusted in-process models, no portable persistence or large-scale resource claim."
+        }
+      ],
+      "dependencies": []
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.image_tabular_complete_execution.predict",
+      "catalog_fqdn": "sciona.atoms.ml.image_tabular_complete_execution.predict",
+      "version_id": "68567bf5-4bf8-5c24-bf5a-b35bd040cc4b",
+      "content_hash": "4f1d428639f7fc721148116453ee0d6d340ecb62a5e142b5b87d0625f856382b",
+      "source_file": "../sciona-atoms-ml/src/sciona/atoms/ml/image_tabular_complete_execution.py",
+      "provider_sha256": "8a6ca3b5e86248a7ba576a90fb289f7ae418df0b474f23e3e2540296058f7625",
+      "role": "recipe_adapter",
+      "plain_description": "Predict query images with metadata and apply the selected threshold without retraining.",
+      "validity_bounds": "Unmodified Calibrated state and revalidated configuration. Equal mean of retained fold probabilities in query order, then existing generic inclusive column-threshold provider. Return finite JSON scores, classes, threshold, population counts, fold and OOF counts, visual feature count, epochs and mean initial/final training loss. Query labels prohibited; no refit. Generic binary output, no named submission format, predictive utility guarantee or portable fitted state.",
+      "ports": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "calibrated",
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Calibrated state and revalidated configuration. Equal mean of retained fold probabilities in query order, then existing generic inclusive column-threshold provider. Return finite JSON scores, classes, threshold, population counts, fold and OOF counts, visual feature count, epochs and mean initial/final training loss. Query labels prohibited; no refit. Generic binary output, no named submission format, predictive utility guarantee or portable fitted state."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Calibrated state and revalidated configuration. Equal mean of retained fold probabilities in query order, then existing generic inclusive column-threshold provider. Return finite JSON scores, classes, threshold, population counts, fold and OOF counts, visual feature count, epochs and mean initial/final training loss. Query labels prohibited; no refit. Generic binary output, no named submission format, predictive utility guarantee or portable fitted state."
+        }
+      ],
+      "dependencies": [
+        {
+          "runtime_fqdn": "sciona.atoms.ml.calibration.empirical_f1.apply_column_thresholds",
+          "catalog_fqdn": "sciona.atoms.ml.calibration.empirical_f1.apply_column_thresholds",
+          "version_id": "2c4add48-5699-5485-865c-da509201fc45",
+          "content_hash": "b1df674cf843553cef39c8fefb23c21a23cad31671503a6104e64aa954aebe8f"
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.image_tabular_complete_execution.prepare",
+      "catalog_fqdn": "sciona.atoms.ml.image_tabular_complete_execution.prepare",
+      "version_id": "f831672b-74a3-522c-b912-baddfe3014a9",
+      "content_hash": "c55181edbde09b37260d54f71c1b787c020642a6c4015e19a5e053fc366602bc",
+      "source_file": "../sciona-atoms-ml/src/sciona/atoms/ml/image_tabular_complete_execution.py",
+      "provider_sha256": "8a6ca3b5e86248a7ba576a90fb289f7ae418df0b474f23e3e2540296058f7625",
+      "role": "recipe_adapter",
+      "plain_description": "Validate images, metadata and separate training, calibration and query groups.",
+      "validity_bounds": "Exact finite version-1 JSON. Normalized RGB images in [0,1], aligned rectangular numeric and categorical metadata, binary labels on training/calibration only. Both labeled populations contain both classes. Nonempty caller-supplied groups are disjoint across populations and consistent within contiguous training folds; every fitting partition contains both classes. Explicit valid seed, hidden size, epochs, learning rate, dropout and label smoothing. Return detached immutable JSON configuration. Caller owns image meaning, units and group identity; no file decoding or duplicate discovery.",
+      "ports": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "payload",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact finite version-1 JSON. Normalized RGB images in [0,1], aligned rectangular numeric and categorical metadata, binary labels on training/calibration only. Both labeled populations contain both classes. Nonempty caller-supplied groups are disjoint across populations and consistent within contiguous training folds; every fitting partition contains both classes. Explicit valid seed, hidden size, epochs, learning rate, dropout and label smoothing. Return detached immutable JSON configuration. Caller owns image meaning, units and group identity; no file decoding or duplicate discovery."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact finite version-1 JSON. Normalized RGB images in [0,1], aligned rectangular numeric and categorical metadata, binary labels on training/calibration only. Both labeled populations contain both classes. Nonempty caller-supplied groups are disjoint across populations and consistent within contiguous training folds; every fitting partition contains both classes. Explicit valid seed, hidden size, epochs, learning rate, dropout and label smoothing. Return detached immutable JSON configuration. Caller owns image meaning, units and group identity; no file decoding or duplicate discovery."
+        }
+      ],
+      "dependencies": []
+    }
+  ],
+  "reused_numeric_providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.calibration.empirical_f1.apply_column_thresholds",
+      "catalog_fqdn": "sciona.atoms.ml.calibration.empirical_f1.apply_column_thresholds",
+      "version_id": "2c4add48-5699-5485-865c-da509201fc45",
+      "content_hash": "b1df674cf843553cef39c8fefb23c21a23cad31671503a6104e64aa954aebe8f",
+      "source_file": "../sciona-atoms-ml/src/sciona/atoms/ml/calibration/empirical_f1.py",
+      "provider_sha256": "a365fa3f2aec6136e9eb26c1947f402c5aae92e174e58bdaed1f3477f38a26e0",
+      "role": "numeric"
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.calibration.empirical_f1.fit_empirical_f1_thresholds",
+      "catalog_fqdn": "sciona.atoms.ml.calibration.empirical_f1.fit_empirical_f1_thresholds",
+      "version_id": "83608ee9-c047-53da-acb5-209901f7b245",
+      "content_hash": "a0c822126d1cfe7c14c4a451a0a8ae1070ffb50a0959a56776c2d3127c4e7c96",
+      "source_file": "../sciona-atoms-ml/src/sciona/atoms/ml/calibration/empirical_f1.py",
+      "provider_sha256": "a365fa3f2aec6136e9eb26c1947f402c5aae92e174e58bdaed1f3477f38a26e0",
+      "role": "numeric"
+    }
+  ],
+  "limits": [
+    "Offline semantic candidate review, not catalog approval or a human Tier 1 designation.",
+    "Two existing generic F1 providers are reused unchanged. Image meaning, units, grouping, descriptors, metadata transforms, models and ensemble policy remain explicit recipe choices.",
+    "63 synthetic tests cover visual features, fold isolation, neural loss and dropout, native execution, F1 oracles and no-refit parity; no empirical deployment guarantee.",
+    "Live catalog reconciliation, original source-scope review, transaction checks and served selection remain required."
+  ]
+}

@@ -1,0 +1,164 @@
+{
+  "format": "image_tabular-original-scope.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "catalog_state_checked": false,
+  "source_snapshot_reconstructed": true,
+  "source_version_id": "4d7b7da1-6568-56b0-aa5e-7e2e7a275556",
+  "source_content_hash": "41907e416953f825b93f7b409d3fb36f16fce58303147e7540566f90bdcc622f",
+  "artifact_id": "ea5352da-5061-5537-a723-9c27095e43ca",
+  "fqdn": "cdg.competition.solution.kaggle.image_tabular_hybrid_classification_topology",
+  "provider_semantics_sha256": "bff40363cb8b17c059a224522cabce81fefd852e583e20a1d577fbefe340e738",
+  "reviewer_sha256": "1dd2ed33dfcb524d2fc58be96ecb9ea1e236ed6549ccacfd5ca5f351463e0400",
+  "source_stage_review": [
+    {
+      "source_stage": {
+        "stage_id": "image_feature_extraction",
+        "description": "Extract visual embeddings from images with a CNN, EfficientNet, ResNet, SENet, ViT, or handcrafted shape, texture, and color descriptors.",
+        "guarantees": [
+          "Visual features preserve record alignment."
+        ]
+      },
+      "realization": "Select the explicitly allowed handcrafted image descriptor branch: 31 RGB moments, four-bin histograms, horizontal/vertical absolute differences and aspect ratio, preserving input order.",
+      "limits": "Caller supplies normalized RGB arrays with consistent channel meaning. No learned CNN/ViT, image decoding, resizing or color conversion. Handcrafted descriptors instantiate the source alternative; they do not reproduce a historical neural image backbone.",
+      "source_anchors": [
+        {
+          "file": "sciona/image_tabular_features.py",
+          "symbol": "image_features",
+          "line": 8,
+          "file_sha256": "5a7b74054d4d8bd0dfb5335a81bad6408b9935a9d874357599b099024dcd763c"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "tabular_feature_preparation",
+        "description": "Prepare metadata or handcrafted numeric features with imputation, StandardScaler, categorical encoding, shape descriptors, texture statistics, color histograms, or PCA.",
+        "guarantees": [
+          "Feature rows align to image rows without validation leakage."
+        ]
+      },
+      "realization": "Validate row-aligned numeric and categorical metadata; each fitting fold learns numeric median imputation and categorical vocabulary from its own training rows.",
+      "limits": "All-missing numeric columns become zero; unseen categories become zero indicator vectors. Caller guarantees semantic alignment and consistent units. No automatic record join, PCA or missingness feature branch.",
+      "source_anchors": [
+        {
+          "file": "sciona/image_tabular_features.py",
+          "symbol": "metadata",
+          "line": 34,
+          "file_sha256": "5a7b74054d4d8bd0dfb5335a81bad6408b9935a9d874357599b099024dcd763c"
+        },
+        {
+          "file": "sciona/image_tabular_features.py",
+          "symbol": "FusedFeatures.fit",
+          "line": 53,
+          "file_sha256": "5a7b74054d4d8bd0dfb5335a81bad6408b9935a9d874357599b099024dcd763c"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "feature_fusion",
+        "description": "Concatenate, gate, blend, or jointly normalize image embeddings and tabular feature vectors before the final classifier.",
+        "guarantees": [
+          "Combined features contain both modalities for each record."
+        ]
+      },
+      "realization": "Concatenate fixed visual descriptors, imputed numeric values and categorical indicators, then standardize the fused vector using the fitting fold only.",
+      "limits": "Positional alignment is validated by equal row counts; caller owns correct image/metadata pairing. No attention fusion or independently weighted branch blending.",
+      "source_anchors": [
+        {
+          "file": "sciona/image_tabular_features.py",
+          "symbol": "FusedFeatures._joined",
+          "line": 61,
+          "file_sha256": "5a7b74054d4d8bd0dfb5335a81bad6408b9935a9d874357599b099024dcd763c"
+        },
+        {
+          "file": "sciona/image_tabular_features.py",
+          "symbol": "FusedFeatures.transform",
+          "line": 68,
+          "file_sha256": "5a7b74054d4d8bd0dfb5335a81bad6408b9935a9d874357599b099024dcd763c"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "hybrid_head_training",
+        "description": "Train a CNN-MLP hybrid, MLP over fused features, gradient-boosting blend, or class-probability ensemble with heavy dropout, label smoothing, and logloss-aware objectives.",
+        "guarantees": [
+          "Predictions are produced for each record."
+        ]
+      },
+      "realization": "Train the selected fused MLP branch with explicit hidden width, seeded dropout, binary label smoothing, CPU float64 Adam and every configured full-batch epoch.",
+      "limits": "Binary classification only, fixed epochs and no early stopping, boosting, pretrained model or checkpoint search. Feature materialization and full-batch optimization have no large-data resource qualification.",
+      "source_anchors": [
+        {
+          "file": "sciona/image_tabular_network.py",
+          "symbol": "HybridHead",
+          "line": 7,
+          "file_sha256": "32fb579e5d6f2ac0c42079e89e31fdcb9c2fb2336b2a26714359decf6732b09f"
+        },
+        {
+          "file": "sciona/image_tabular_network.py",
+          "symbol": "smoothed_loss",
+          "line": 19,
+          "file_sha256": "32fb579e5d6f2ac0c42079e89e31fdcb9c2fb2336b2a26714359decf6732b09f"
+        },
+        {
+          "file": "sciona/image_tabular_training.py",
+          "symbol": "fit",
+          "line": 57,
+          "file_sha256": "3d0a1797390fdfb19d162f26816aa83f1fbd70d015520a2ce033415a4fa26567"
+        }
+      ]
+    },
+    {
+      "source_stage": {
+        "stage_id": "fold_ensemble_calibration",
+        "description": "Use stratified K-fold, GroupKFold by patient or entity ID, fold ensembling, threshold tuning, class weighting, or label smoothing calibration against the benchmark metric.",
+        "guarantees": [
+          "Outputs are calibrated and formatted for submission."
+        ]
+      },
+      "realization": "Validate caller-supplied group-consistent folds with both fitting classes; retain every fold model and complete OOF coverage. Average fold query/calibration probabilities equally, then select a held-out empirical-F1 threshold and apply inclusive decisions using the existing reusable numeric providers.",
+      "limits": "Groups are disjoint across training/calibration/query. Fold generation and meaningful entity identity remain caller responsibilities. No full-data refit, OOF stacking or probability-calibration guarantee. Output is ordered generic binary scores/classes and counts; a named competition submission requires an explicit external formatting adapter.",
+      "source_anchors": [
+        {
+          "file": "sciona/image_tabular_training.py",
+          "symbol": "validate_split",
+          "line": 9,
+          "file_sha256": "3d0a1797390fdfb19d162f26816aa83f1fbd70d015520a2ce033415a4fa26567"
+        },
+        {
+          "file": "sciona/image_tabular_training.py",
+          "symbol": "HybridEnsemble.predict",
+          "line": 53,
+          "file_sha256": "3d0a1797390fdfb19d162f26816aa83f1fbd70d015520a2ce033415a4fa26567"
+        },
+        {
+          "file": "sciona/image_tabular_complete_stages.py",
+          "symbol": "calibrate",
+          "line": 46,
+          "file_sha256": "801051166557970ac97db4b6337de802b868bfab1404fdbaf11f33605af1b58f"
+        },
+        {
+          "file": "sciona/image_tabular_complete_stages.py",
+          "symbol": "predict",
+          "line": 54,
+          "file_sha256": "801051166557970ac97db4b6337de802b868bfab1404fdbaf11f33605af1b58f"
+        }
+      ]
+    }
+  ],
+  "reuse_decision": "Reuse two existing empirical-F1 providers without changing their catalog identities or contracts. Four recipe adapters expose preparation, fitting, calibration and query prediction. Image meaning, units, group separation, descriptors, metadata transforms, neural models and fold averaging remain explicit recipe policy.",
+  "remaining_requirements": [
+    "Recheck original snapshot and preserved derivative against live catalog state.",
+    "Reconcile and approve exact provider versions with metadata, dependency and rollback checks.",
+    "Bind, store and execute the corrected original, then verify Tier 3 publication and served retrieval."
+  ],
+  "limits": [
+    "Source reconstruction proves exact intake content identity, not current database status or approval.",
+    "All five source stages map to the permitted handcrafted-image and fused binary MLP realization. Decision thresholds do not establish calibrated probabilities, cross-domain predictive utility or independent accuracy.",
+    "Automated synthetic Tier 3 candidate evidence only; no human Tier 1 designation or empirical deployment guarantee."
+  ]
+}
