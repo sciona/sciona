@@ -1,0 +1,149 @@
+{
+  "format": "dfdc-reuse-boundaries.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "review_source": "automated",
+  "scope": "Static implementation-bound reuse review; full execution and publication remain separate.",
+  "boundaries": [
+    {
+      "name": "media_and_targets",
+      "contract": "Decoded uint8 RGB clips, explicit original/altered pair relationships and positional part groups. Labels derive from whether a clip references itself as its original. Both classes must occur in each selected training and validation population.",
+      "limitation": "This is a face-focused alteration recipe, not a generic video classifier. Caller must justify RGB encoding, frame order, paired target meaning and valid face geometry; matching array shapes is insufficient.",
+      "source_anchors": [
+        {
+          "file": "sciona/dfdc_runtime.py",
+          "symbol": "prepare",
+          "line": 42,
+          "file_sha256": "cd142617329b81fe11840df183453f9e385dfe13117933a816d6b3f76517229e"
+        },
+        {
+          "file": "sciona/dfdc_runtime.py",
+          "symbol": "_frames",
+          "line": 34,
+          "file_sha256": "cd142617329b81fe11840df183453f9e385dfe13117933a816d6b3f76517229e"
+        }
+      ]
+    },
+    {
+      "name": "population_independence",
+      "contract": "Fold assignment partitions fifty positional groups and keeps each original and its alterations in the same fold. Originals must reference themselves directly.",
+      "limitation": "Positional group numbers and pair-fold agreement do not prove independence of people, recording sessions or acquisition sources. Caller must supply a grouping justified for the new task.",
+      "source_anchors": [
+        {
+          "file": "sciona/dfdc_folds.py",
+          "symbol": "assign_folds",
+          "line": 10,
+          "file_sha256": "19a906285411ca326ec162fe47c17368d7804d9bcda271be209d594758d551fd"
+        },
+        {
+          "file": "sciona/dfdc_runtime.py",
+          "symbol": "prepare",
+          "line": 42,
+          "file_sha256": "cd142617329b81fe11840df183453f9e385dfe13117933a816d6b3f76517229e"
+        }
+      ]
+    },
+    {
+      "name": "detectors_and_landmarks",
+      "contract": "Neural face detection and five-point preprocessing landmarks are separate from a native predictor with the source sixty-eight-point convention used for polygon occlusion. The predictor is caller-supplied at runtime; no automatic download.",
+      "limitation": "A sixty-eight-point count does not establish the semantic ordering or quality of landmarks. Native predictor deserialization is a trusted-file boundary. The operation named convex hull uses an ordered landmark polygon, and source failures silently leave the image unchanged.",
+      "source_anchors": [
+        {
+          "file": "sciona/dfdc_hull_backend.py",
+          "symbol": "load_hull_backend",
+          "line": 8,
+          "file_sha256": "8391c6d94aee1a4f5f3a362e25bc9f40b88845f3d0356168d865afdd8d4692e1"
+        },
+        {
+          "file": "sciona/dfdc_convex_hull.py",
+          "symbol": "blackout_convex_hull",
+          "line": 15,
+          "file_sha256": "d3453cb21d8097764ddd2d698f5a67db76741a4cf4418fc1530e5ba7e805b0ec"
+        },
+        {
+          "file": "sciona/dfdc_landmark_removal.py",
+          "symbol": "remove_landmark",
+          "line": 54,
+          "file_sha256": "f83fbc5da58c730cf711d0ed533799f15af12513cd02a48b9cd81a9038357ae3"
+        }
+      ]
+    },
+    {
+      "name": "training_and_checkpoints",
+      "contract": "Full EfficientNet-B7 classifier with explicit random, encoder or complete state initialization. Runs specify seed, fold and epoch count; requests specify zero-based checkpoint epochs. Every requested run must be configured.",
+      "limitation": "Source default forty-epoch runs cannot supply a request for zero-based epoch forty. An explicit executable adaptation is required; do not silently extend runs or relabel checkpoints. Tensor shape checks and seed labels do not authenticate historical weights or predictive parity.",
+      "source_anchors": [
+        {
+          "file": "sciona/dfdc_classifier.py",
+          "symbol": "build_classifier",
+          "line": 34,
+          "file_sha256": "42ca019c485a64bb652ff19ddda160ff7c342800ad6ede712bd7ebe854d10c56"
+        },
+        {
+          "file": "sciona/dfdc_selection.py",
+          "symbol": "selection_plan",
+          "line": 27,
+          "file_sha256": "c7accd53093451760b2371cbbab3d58e204a0ef8d41833e500bf47ddc161501a"
+        },
+        {
+          "file": "sciona/dfdc_selection.py",
+          "symbol": "select_snapshots",
+          "line": 50,
+          "file_sha256": "c7accd53093451760b2371cbbab3d58e204a0ef8d41833e500bf47ddc161501a"
+        }
+      ]
+    },
+    {
+      "name": "geometry_and_aggregation",
+      "contract": "Source aspect-preserving resize and central padding feed the classifier at size380. Per-model confident face aggregation precedes ensemble averaging. Strict confidence thresholds and count conditions are retained.",
+      "limitation": "Face detection, augmentation invariance and confidence thresholds are source assumptions requiring justification in another application. Scores are not calibrated cross-domain probabilities. Generic resize or aggregation would need independently qualified provider contracts before separate selection.",
+      "source_anchors": [
+        {
+          "file": "sciona/dfdc_transforms.py",
+          "symbol": "create_train_transforms",
+          "line": 48,
+          "file_sha256": "5b1cee757b9ceac53c18e61c5aba489fad629f81dbd78f298945ebb452889f6f"
+        },
+        {
+          "file": "sciona/dfdc_inference_primitives.py",
+          "symbol": "confident_strategy",
+          "line": 12,
+          "file_sha256": "034e91c430f0ace51acff217d76086514aedbc669165fb52872ad4736d4dbbaa"
+        },
+        {
+          "file": "sciona/dfdc_prediction.py",
+          "symbol": "predict_video",
+          "line": 20,
+          "file_sha256": "cc5e6f6e4592d5fb493e7ef37174b3c3977341bb4d3e6da947764aabe21251c8"
+        }
+      ]
+    },
+    {
+      "name": "fallback_and_prepared_state",
+      "contract": "Prediction returns a score plus explicit predicted/source_fallback status and reason. Empty input, missing faces and caught execution failures can return0.5. Execution accepts only trusted prepared state and returns summaries and predictions, not reusable trained models.",
+      "limitation": "A fallback0.5 is not a successful neutral prediction; downstream consumers must inspect status. Prepared mappings are mutable and execute_prepared does not repeat envelope validation. One-face scalar behavior can cause the source execution-error fallback.",
+      "source_anchors": [
+        {
+          "file": "sciona/dfdc_prediction.py",
+          "symbol": "predict_video",
+          "line": 20,
+          "file_sha256": "cc5e6f6e4592d5fb493e7ef37174b3c3977341bb4d3e6da947764aabe21251c8"
+        },
+        {
+          "file": "sciona/dfdc_runtime.py",
+          "symbol": "execute_prepared",
+          "line": 118,
+          "file_sha256": "cd142617329b81fe11840df183453f9e385dfe13117933a816d6b3f76517229e"
+        }
+      ]
+    }
+  ],
+  "reuse_decision": "Other paired face-video alteration tasks may reuse this recipe only with justified target meanings, population grouping, detector and landmark conventions, augmentation invariances and checkpoint plans. Preparation and execution remain recipe adapters. General image geometry, sampling and aggregation require independent contracts before standalone selection.",
+  "remaining": [
+    "Qualify full detector, augmentation and native-predictor dependencies and execution.",
+    "Review all original source stages and exact provider interfaces.",
+    "Execute complete current and corrected stored ensembles with explicit bounded resources before publication."
+  ],
+  "reviewer_sha256": "719fcfa98cbc5745de6e54d6336dccbe120328530287fd31f4fc8c6710b07586"
+}
