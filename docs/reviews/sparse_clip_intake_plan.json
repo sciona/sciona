@@ -1,0 +1,156 @@
+{
+  "format": "sparse-clip-intake-plan.v1",
+  "passed": true,
+  "applied": false,
+  "approved": false,
+  "catalog_mutations": 0,
+  "owner": {
+    "owner_id": "33ed07a2-1bea-5b17-8b71-d6d0e590fdd9",
+    "source_repo_id": "27b787a0-27ed-4760-92b7-ad8e8b4b815c"
+  },
+  "new_providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.fitted_sparse_clipping.fit_sparse_clip",
+      "atom_id": "aaa2faeb-1c66-547f-a2a9-f4fe1a3ff0ce",
+      "version_id": "95db48f6-67d1-52e5-9c33-7105943e1c38",
+      "content_hash": "2c14dcf033e1bd08770b8a4cf202364e4a7095f2dcaf171b59fbccf486f7f2d6",
+      "provider_sha256": "f322798a4d198b6d6aa95c87eef122134a344de341edcdb39407763fcf4e055b",
+      "semver": "0.0.0+local.2c14dcf033e1",
+      "fingerprint": "e88bb188198c0b7a207cab70ed4c9a7a444b016aa3c80b1fb346257d1891068a",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.fitted_sparse_clipping.fit_sparse_clip",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.fitted_sparse_clipping",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.fitted_sparse_clipping",
+        "import_module": "sciona.atoms.ml.fitted_sparse_clipping",
+        "source_symbol": "fit_sparse_clip",
+        "description": "Learn one nonnegative maximum from stored float32 training entries. Caller owns feature semantics, comparable normalized coordinates and training-only fitting. Implicit zeros are excluded; explicit zeros count. Empty/all-NaN stored populations, infinities and negative maxima fail. Returns JSON numeric state without retaining training rows.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "training",
+          "type_desc": "csr_matrix",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Canonical real numeric CSR matrix with at least one row and one feature. Float32 conversion precedes fitting. Maximum uses stored entries only, excludes implicit zeros and ignores NaNs. Empty or all-NaN stored data, infinities and negative fitted maxima are rejected. Caller supplies training-only data in comparable normalized numeric feature coordinates."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "feature_columns",
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "feature_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Portable JSON dictionary with exactly format, feature_columns, feature_coordinate and upper. Format sciona.fitted_sparse_clip.v1; finite nonnegative upper at most float32 maximum. No stored observations or executable deserialization."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.fitted_sparse_clipping.apply_sparse_clip",
+      "atom_id": "25ebc485-c102-51f4-870b-ac49ab95ec1f",
+      "version_id": "becd43aa-d949-59bf-8d11-abd1e2bab8bf",
+      "content_hash": "b388f5cd5a715c7124d6b1ad9346cdaa6d39b8cbf376cfcd0f7874d512a04593",
+      "provider_sha256": "f322798a4d198b6d6aa95c87eef122134a344de341edcdb39407763fcf4e055b",
+      "semver": "0.0.0+local.b388f5cd5a71",
+      "fingerprint": "bc74765042f0a3e4b34302bb279db67fb4c0069707025b39b42485f6b4504fe5",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.fitted_sparse_clipping.apply_sparse_clip",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.fitted_sparse_clipping",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.fitted_sparse_clipping",
+        "import_module": "sciona.atoms.ml.fitted_sparse_clipping",
+        "source_symbol": "apply_sparse_clip",
+        "description": "Return independent float32 CSR clipped to the frozen training maximum. Exact feature order and coordinate identity must match fitted state. NaNs become zero, negative values and negative infinity clip to zero, positive infinity clips to the bound. Empty query matrices are supported. No refit, densification or executable deserialization occurs.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "values",
+          "type_desc": "csr_matrix",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Canonical real numeric CSR matrix matching fitted feature width, identity, ordering and normalized coordinate. Converted to float32 without densification; NaNs become zero and infinities clip to the frozen [0, upper] interval. Empty query rows supported. Duplicate entries and unsorted CSR indices must be handled explicitly upstream."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "feature_columns",
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty ordered list of unique nonblank feature identifiers matching matrix width. Identifiers bind feature semantics and order, not data rows. Caller must preserve fitted vocabulary and preprocessing semantics; equal width alone is insufficient."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "feature_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonblank identifier of common comparable normalized numeric feature coordinates. A global maximum across unlike physical units is not meaningful; caller must normalize upstream. Exact identifier must match fitted state."
+        },
+        {
+          "direction": "input",
+          "ordinal": 3,
+          "name": "state",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Portable JSON dictionary with exactly format, feature_columns, feature_coordinate and upper. Format sciona.fitted_sparse_clip.v1; finite nonnegative upper at most float32 maximum. No stored observations or executable deserialization."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "csr_matrix",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Independent canonical float32 CSR matrix with unchanged shape and stored-entry topology, clipped to [0, fitted upper]. Input matrix is not mutated. Explicit zeros are retained; NaNs become zero and infinities are clipped."
+        }
+      ]
+    }
+  ],
+  "execution_evidence_commit": "46ae528a",
+  "execution_evidence_sha256": "d6a4ef583d34245dd79c30a380850974ae032d9960117a0dd3a2509a0b1b5dde",
+  "provider_revision": "398cc29",
+  "planner_sha256": "a82b7e8d62dcb3edd6316188cbe62ac244aaf324e13f3306f40098cbc63e3ce0",
+  "limitations": [
+    "Draft identities only; canonical draft and legacy flagged, both unpublished, until separate publication qualification.",
+    "Witnesses establish shape and coordinate compatibility only; caller owns training-only fitting, feature vocabulary and semantic correctness of coordinate labels.",
+    "Complete metadata, dependency qualification, transaction rollback tests and served-selection verification remain required.",
+    "No original competition CDG approval or historical winning-ensemble completeness is implied."
+  ]
+}
