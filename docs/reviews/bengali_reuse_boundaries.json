@@ -1,0 +1,103 @@
+{
+  "format": "bengali-reuse-boundaries.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "scope": "Implementation-bound reuse review and synthetic core/adapter tests; not full workflow or publication qualification.",
+  "boundaries": [
+    {
+      "name": "confidence_routing",
+      "role": "reusable_core",
+      "files": [
+        "sciona/confidence_routing.py"
+      ],
+      "contract": "Aligned finite numeric vectors, confidence in [0,1], boolean alternate eligibility, common higher-is-better utility scale, nonnegative weights with positive total, explicit finite threshold grid in [0,1]. Numeric inputs become float64. Equality retains the primary route; utility ties choose the smallest threshold.",
+      "transfer": "Constructed manufacturing classification utility and energy-dispatch negative-cost utility exercise the same implementation with an independent scalar score oracle.",
+      "limitation": "The domain adapter supplies eligibility, utility units, validation independence and deployment mixture. Optimality covers only the supplied grid. Calibration utility is not an unbiased performance estimate; lower-precision boundary comparisons require separate qualification."
+    },
+    {
+      "name": "component_metric",
+      "role": "reusable_core_with_domain_adapter",
+      "files": [
+        "sciona/component_recall.py",
+        "sciona/grapheme_routing_calibration.py"
+      ],
+      "contract": "Generic aligned integer component labels and explicit sample/component weights produce additive macro-recall utilities. The grapheme adapter owns 168/11/8 decoding, consonant 7-to-2 correction, canonical 168/11/7 truth bounds and 2:1:1 metric weights.",
+      "transfer": "Component recall can apply to other discrete multi-component outputs under an explicit ontology and weighting policy; the fixed grapheme decoder must be replaced for a different vocabulary.",
+      "limitation": "Per-row utilities already include the metric sample weights; calibration must not apply those weights twice. Metric equivalence is tested with independent route-then-score calculations, not real application quality."
+    },
+    {
+      "name": "population_and_class_membership",
+      "role": "domain_adapter",
+      "files": [
+        "sciona/bengali_population.py",
+        "sciona/grapheme_workflow_runtime.py",
+        "sciona/grapheme_b7_preprocessing.py",
+        "sciona/bengali_preprocessing.py"
+      ],
+      "contract": "Validated grayscale uint8 populations and aligned joint-class labels; B7 images remain 137 by 236 and are replicated into RGB with caller-supplied channel normalization. The separate font/GAN path crops six columns from each side, resizes to 224 by 224 and uses sequential divide-by-255, subtract-0.5, divide-by-0.5 normalization. Seen membership is an explicit 14784-entry boolean mask; OOD training uses a caller mapping into 1295 classes.",
+      "transfer": "Image-to-symbol applications need their own label ontology, class-membership provenance, image geometry and acquisition normalization. No general image modality or arbitrary class-count support is inferred.",
+      "limitation": "Separating calibration and query graph inputs does not prove population independence. Callers must prevent training/calibration/query leakage and justify unseen-class membership. Font-only synthetic classes test routing structure, not zero-shot accuracy."
+    },
+    {
+      "name": "training_and_checkpoint_state",
+      "role": "recipe_adapter",
+      "files": [
+        "sciona/grapheme_workflow_runtime.py",
+        "sciona/grapheme_b7_fit.py",
+        "sciona/bengali_classifier_fit.py",
+        "sciona/bengali_fit.py"
+      ],
+      "contract": "Separate B7 OOD/seen fits, two font-classifier fits and two guided CycleGAN fits expose model-state handoffs. Checkpoint digests are verified before fresh tensor-only restoration; frozen classifiers remain fixed while generator gradients flow through them.",
+      "transfer": "The directed combination of classification, domain translation and confidence routing is a reusable recipe when font-like target domains, label preservation and valid confidence semantics are independently justified.",
+      "limitation": "Current adapters have fixed architectures and class widths. Checkpoint paths require a provisioned trusted local filesystem; model-only checkpoints do not resume optimizer/RNG history. Explicit training policies and candidate pretrained initialization do not authenticate exact historical winner choices."
+    },
+    {
+      "name": "score_and_ensemble_semantics",
+      "role": "domain_adapter",
+      "files": [
+        "sciona/grapheme_classifier_inference.py",
+        "sciona/bengali_unseen_ensemble.py",
+        "sciona/bengali_routing.py"
+      ],
+      "contract": "Finite aligned CPU float32 logits use 1295 OOD and 14784 seen/unseen classes. OOD confidence is maximum sigmoid; seen selection applies softmax then joint argmax. Two font branches separately softmax and marginalize before component selection; low-confidence alternate predictions fall back to seen when alternate class membership is known.",
+      "transfer": "Class confidence, ontology-preserving marginalization and fallback rules must be supplied and evaluated for each application. The generic confidence core does not infer these meanings.",
+      "limitation": "Maximum sigmoid is not calibrated uncertainty. Independent component maxima may form a joint class neither model selected directly. Seen decoding is an explicit reconstruction choice, and float32 softmax tie behavior is retained."
+    },
+    {
+      "name": "graph_and_selection",
+      "role": "composition_boundary",
+      "files": [
+        "sciona/grapheme_execution.py",
+        "../sciona-atoms-dl/src/sciona/atoms/dl/grapheme_execution.py"
+      ],
+      "contract": "Twenty-two nodes separate all six fits, calibration/query inference, score extraction, two-font ensemble, threshold fitting, routing and output conversion. Fourteen provider callables use trusted object boundaries and lightweight kind witnesses.",
+      "transfer": "Selection must use computational applicability and declared adapter assumptions independently of competition provenance. Generic routing reuse does not qualify every recipe stage for standalone cross-disciplinary selection.",
+      "limitation": "Object ports and kind witnesses alone do not establish shapes, population alignment, resource safety or catalog eligibility. Full execution, source/license review, complete catalog port constraints and transactional publication remain separate requirements."
+    }
+  ],
+  "synthetic_tests_passed": 33,
+  "implementation_sha256": {
+    "../sciona-atoms-dl/src/sciona/atoms/dl/grapheme_execution.py": "64a541d87b6216f294cac67eaa7492e021e15fdaf9bb83fa07a732f081e02743",
+    "sciona/bengali_classifier_fit.py": "1f8b45b4d06f0f395dbbdd75353d7b26cb3820da1b3d35ecea3cb759c0faa2b9",
+    "sciona/bengali_fit.py": "3b760dbdca7c0332199f2e2ddb8a5afae523d3bdd871a4886911ab56dbeb64b8",
+    "sciona/bengali_population.py": "d72ac2ba1dac1f2ff3b0289779f4497f84931808ca5602e562630fb336b62889",
+    "sciona/bengali_preprocessing.py": "1a2cdb8f791a1a78d055ddca1f99b0a66b20e0f5d9c1e44dd556c92d9033e5b8",
+    "sciona/bengali_routing.py": "5ef0f7003112b5bbd80a173e4461387546b3c44e4f4838b75a1e8026c9be3421",
+    "sciona/bengali_unseen_ensemble.py": "cbbfbb59467c19a8e303cecc4380689ccece340cf0bc5ab9160620aa1c56bff5",
+    "sciona/component_recall.py": "4c29e8e6cf1dbd3c4b82f928dcc597035d0828668505042cf1a25fa9fc062601",
+    "sciona/confidence_routing.py": "dfe1043b3719cf293bab7c069c2434426611f7987c3b5a89d79d4880ef387347",
+    "sciona/grapheme_b7_fit.py": "c1d04aadfe9c9ac4e40b45cc89f406ca78ed7499cd4cdf7c458622d2df61d2cd",
+    "sciona/grapheme_b7_preprocessing.py": "bf1708b09b575ee452cac872c6ba09a7be24897f4ae4994cab81ded33ce4e7e4",
+    "sciona/grapheme_classifier_inference.py": "00c4fd39275dc733c94e1a86af570c67aeb0d747940da5b537a4131f21ab25d2",
+    "sciona/grapheme_execution.py": "6b83c8c27b50c008da69386dd4617977e35127d895a86554c0a78652898e4728",
+    "sciona/grapheme_routing_calibration.py": "f560ee305152f4250fdb628c565da09fc6336f1cd6d4be88e5e082d4a4ec490e",
+    "sciona/grapheme_workflow_runtime.py": "7923726b01d1d6cfd974465d06b883f7a5b7196fa00e0684a7141e7f5d7636b3",
+    "scripts/review_bengali_reuse_boundaries.py": "b2dbc7f8b52685764a7e70f6fc1ab45b21c5f8720d1daa11350bc24b9cb5cd8b",
+    "tests/test_confidence_routing.py": "bbe6a3395134ad19eba379b3c8400b5f4703fa9274e23fce80356b43a062b0a0",
+    "tests/test_grapheme_classifier_inference.py": "0f2396b6ea0019e1e2bb98bcdd6b4b271fe2bdee210cd9dbbba2d3aa6de9be28",
+    "tests/test_grapheme_routing_calibration.py": "e4e91401e42e249bbe14851cd71699acc8f31d9d4a910ddd4322c73348b1d1b1"
+  },
+  "empirical_cross_domain_validation": false,
+  "reuse_decision": "Expose confidence routing and component-recall computation separately from fixed grapheme ontologies and font-model adapters. Transfer of the complete recipe remains conditional on target-domain semantics, label preservation, confidence behavior and independent population evaluation."
+}
