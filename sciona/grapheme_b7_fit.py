@@ -67,7 +67,8 @@ def fit_classifier(model, *, branch, epochs, steps_per_epoch, batches_for_epoch,
         history.append(dict(epoch=epoch, examples=examples, steps=steps_per_epoch,
                             training_loss=total_loss/examples, validation_score=score,
                             last_learning_rate=update['learning_rate']))
-        if checkpoint_policy == 'last' or score > best_score:
+        if ((checkpoint_policy == 'last' and epoch == epochs - 1)
+                or (checkpoint_policy == 'max_validation' and score > best_score)):
             partial = directory/'selected.pt.partial'
             torch.save({key: value.detach().cpu().clone() for key, value in model.state_dict().items()}, partial)
             partial.replace(directory/'selected.pt')
