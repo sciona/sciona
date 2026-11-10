@@ -1,0 +1,468 @@
+{
+  "format": "bengali-provider-contracts.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "execution_qualification": {
+    "passed": true,
+    "approved": false,
+    "catalog_mutations": 0,
+    "evidence_commit": "6fb098a30429ccde1c4beb39daed250a90d1157a",
+    "report_sha256": "082f2f173988e1f8c114dc1c7456a9c1d7f00817e004db44e2b3d70a648a7694",
+    "graph_sha256": "6d2e3c63a9c1d3005dc137bb390973b53eb5cf2284cae4d57a827c72ba232ec6",
+    "limits": [
+      "Constructed geometric symbols only; execution is not glyph-recognition, zero-shot accuracy or empirical transfer evidence.",
+      "Published epoch counts with batch 2 and small synthetic populations; original training update counts are not reproduced.",
+      "Explicit B7 normalization, warmup, shuffle, final checkpoint and seen decoding policies do not establish exact historical choices.",
+      "Calibration weights and 21-point threshold grid are caller choices; calibration score is not an unbiased test score.",
+      "Provisioned local filesystem and installed runtime only; source/reuse/provider/catalog publication reviews remain pending."
+    ],
+    "scope": "Complete local synthetic execution only; source, reuse, provider and catalog reviews remain separate."
+  },
+  "providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.dl.grapheme_execution.inference_inputs",
+      "inputs": [
+        {
+          "name": "validation_images",
+          "type_desc": "object",
+          "required": true,
+          "constraints": "Ordered grayscale uint8 images with shape (N,137,236). Preserve row order across all branches. Caller establishes training/calibration/query independence. This port does not validate that independence or support arbitrary image geometry."
+        },
+        {
+          "name": "query_images",
+          "type_desc": "object",
+          "required": true,
+          "constraints": "Ordered grayscale uint8 images with shape (N,137,236). Preserve row order across all branches. Caller establishes training/calibration/query independence. This port does not validate that independence or support arbitrary image geometry."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "validation_images",
+          "type_desc": "object",
+          "constraints": "Ordered grayscale uint8 images with shape (N,137,236). Preserve row order across all branches. Caller establishes training/calibration/query independence. This port does not validate that independence or support arbitrary image geometry."
+        },
+        {
+          "name": "query_images",
+          "type_desc": "object",
+          "constraints": "Ordered grayscale uint8 images with shape (N,137,236). Preserve row order across all branches. Caller establishes training/calibration/query independence. This port does not validate that independence or support arbitrary image geometry."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.grapheme_execution.train_ood",
+      "inputs": [
+        {
+          "name": "ood_spec",
+          "type_desc": "object",
+          "required": true,
+          "constraints": "Mapping with population, targets, validation, validation_targets, branch, options, initialization_path and output_directory. Populations are validated ImagePopulation objects; targets are aligned integer class indices. Training length must divide batch size. Options contain exactly epochs, batch_size, seed, mean, std, warmup_steps, first_schedule_index and checkpoint_policy. Initialization is an explicit trusted local standard B7 checkpoint. Normalization, schedule and selected checkpoint are caller policies, not authenticated winner settings. Branch must be ood; targets are in [0,1295)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "state",
+          "type_desc": "object",
+          "constraints": "Trusted local checkpoint state with kind, path, training-time SHA256, metrics and policy. B7 adds branch and normalization; generator adds its associated font-classifier state. Inference verifies checkpoint bytes before fresh tensor-only loading. Paths require a provisioned private filesystem; model checkpoints do not resume optimizer/RNG history."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.grapheme_execution.train_seen",
+      "inputs": [
+        {
+          "name": "seen_spec",
+          "type_desc": "object",
+          "required": true,
+          "constraints": "Mapping with population, targets, validation, validation_targets, branch, options, initialization_path and output_directory. Populations are validated ImagePopulation objects; targets are aligned integer class indices. Training length must divide batch size. Options contain exactly epochs, batch_size, seed, mean, std, warmup_steps, first_schedule_index and checkpoint_policy. Initialization is an explicit trusted local standard B7 checkpoint. Normalization, schedule and selected checkpoint are caller policies, not authenticated winner settings. Branch must be seen; targets are in [0,14784)."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "state",
+          "type_desc": "object",
+          "constraints": "Trusted local checkpoint state with kind, path, training-time SHA256, metrics and policy. B7 adds branch and normalization; generator adds its associated font-classifier state. Inference verifies checkpoint bytes before fresh tensor-only loading. Paths require a provisioned private filesystem; model checkpoints do not resume optimizer/RNG history."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.grapheme_execution.train_font_a",
+      "inputs": [
+        {
+          "name": "font_a_spec",
+          "type_desc": "object",
+          "required": true,
+          "constraints": "Mapping with validated ImagePopulation, options and output_directory. Options contain exactly epochs, batch_size, seed and backend. Population uses the fixed 14784-class joint ontology; font training uses B0, source augmentation and a best validation checkpoint. Caller supplies licensed images and prevents validation leakage."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "state",
+          "type_desc": "object",
+          "constraints": "Trusted local checkpoint state with kind, path, training-time SHA256, metrics and policy. B7 adds branch and normalization; generator adds its associated font-classifier state. Inference verifies checkpoint bytes before fresh tensor-only loading. Paths require a provisioned private filesystem; model checkpoints do not resume optimizer/RNG history."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.grapheme_execution.train_font_b",
+      "inputs": [
+        {
+          "name": "font_b_spec",
+          "type_desc": "object",
+          "required": true,
+          "constraints": "Mapping with validated ImagePopulation, options and output_directory. Options contain exactly epochs, batch_size, seed and backend. Population uses the fixed 14784-class joint ontology; font training uses B0, source augmentation and a best validation checkpoint. Caller supplies licensed images and prevents validation leakage."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "state",
+          "type_desc": "object",
+          "constraints": "Trusted local checkpoint state with kind, path, training-time SHA256, metrics and policy. B7 adds branch and normalization; generator adds its associated font-classifier state. Inference verifies checkpoint bytes before fresh tensor-only loading. Paths require a provisioned private filesystem; model checkpoints do not resume optimizer/RNG history."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.grapheme_execution.train_generator_a",
+      "inputs": [
+        {
+          "name": "gan_a_spec",
+          "type_desc": "object",
+          "required": true,
+          "constraints": "Mapping with hand and font ImagePopulation objects, options and output_directory; classifier_state arrives on a separate graph edge. Options contain exactly epochs, batch_size, seed, backend and classifier_weight. Two generators and two discriminators train while the associated font classifier stays frozen. Label-preserving translation is an application assumption, not a consequence of the loss."
+        },
+        {
+          "name": "classifier_state",
+          "type_desc": "object",
+          "required": true,
+          "constraints": "Trusted local checkpoint state with kind, path, training-time SHA256, metrics and policy. B7 adds branch and normalization; generator adds its associated font-classifier state. Inference verifies checkpoint bytes before fresh tensor-only loading. Paths require a provisioned private filesystem; model checkpoints do not resume optimizer/RNG history. Kind must be font."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "state",
+          "type_desc": "object",
+          "constraints": "Trusted local checkpoint state with kind, path, training-time SHA256, metrics and policy. B7 adds branch and normalization; generator adds its associated font-classifier state. Inference verifies checkpoint bytes before fresh tensor-only loading. Paths require a provisioned private filesystem; model checkpoints do not resume optimizer/RNG history."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.grapheme_execution.train_generator_b",
+      "inputs": [
+        {
+          "name": "gan_b_spec",
+          "type_desc": "object",
+          "required": true,
+          "constraints": "Mapping with hand and font ImagePopulation objects, options and output_directory; classifier_state arrives on a separate graph edge. Options contain exactly epochs, batch_size, seed, backend and classifier_weight. Two generators and two discriminators train while the associated font classifier stays frozen. Label-preserving translation is an application assumption, not a consequence of the loss."
+        },
+        {
+          "name": "classifier_state",
+          "type_desc": "object",
+          "required": true,
+          "constraints": "Trusted local checkpoint state with kind, path, training-time SHA256, metrics and policy. B7 adds branch and normalization; generator adds its associated font-classifier state. Inference verifies checkpoint bytes before fresh tensor-only loading. Paths require a provisioned private filesystem; model checkpoints do not resume optimizer/RNG history. Kind must be font."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "state",
+          "type_desc": "object",
+          "constraints": "Trusted local checkpoint state with kind, path, training-time SHA256, metrics and policy. B7 adds branch and normalization; generator adds its associated font-classifier state. Inference verifies checkpoint bytes before fresh tensor-only loading. Paths require a provisioned private filesystem; model checkpoints do not resume optimizer/RNG history."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.grapheme_execution.predict_b7",
+      "inputs": [
+        {
+          "name": "state",
+          "type_desc": "object",
+          "required": true,
+          "constraints": "Trusted local checkpoint state with kind, path, training-time SHA256, metrics and policy. B7 adds branch and normalization; generator adds its associated font-classifier state. Inference verifies checkpoint bytes before fresh tensor-only loading. Paths require a provisioned private filesystem; model checkpoints do not resume optimizer/RNG history."
+        },
+        {
+          "name": "images",
+          "type_desc": "object",
+          "required": true,
+          "constraints": "Ordered grayscale uint8 images with shape (N,137,236). Preserve row order across all branches. Caller establishes training/calibration/query independence. This port does not validate that independence or support arbitrary image geometry."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "logits",
+          "type_desc": "object",
+          "constraints": "Finite CPU float32 logits in input row order;1295 classes for OOD,14784 for seen/font. Not probabilities."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.grapheme_execution.predict_generated",
+      "inputs": [
+        {
+          "name": "state",
+          "type_desc": "object",
+          "required": true,
+          "constraints": "Trusted local checkpoint state with kind, path, training-time SHA256, metrics and policy. B7 adds branch and normalization; generator adds its associated font-classifier state. Inference verifies checkpoint bytes before fresh tensor-only loading. Paths require a provisioned private filesystem; model checkpoints do not resume optimizer/RNG history."
+        },
+        {
+          "name": "images",
+          "type_desc": "object",
+          "required": true,
+          "constraints": "Ordered grayscale uint8 images with shape (N,137,236). Preserve row order across all branches. Caller establishes training/calibration/query independence. This port does not validate that independence or support arbitrary image geometry."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "logits",
+          "type_desc": "object",
+          "constraints": "Finite CPU float32 logits in input row order;1295 classes for OOD,14784 for seen/font. Not probabilities."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.grapheme_execution.classifier_scores",
+      "inputs": [
+        {
+          "name": "ood_logits",
+          "type_desc": "object",
+          "required": true,
+          "constraints": "Finite CPU float32 matrix (N,1295), aligned with seen logits."
+        },
+        {
+          "name": "seen_logits",
+          "type_desc": "object",
+          "required": true,
+          "constraints": "Finite CPU float32 matrix (N,14784), aligned with OOD logits."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "scores",
+          "type_desc": "object",
+          "constraints": "Aligned mapping containing ood_confidence and seen_joint_classes. Confidence is maximum sigmoid over1295 OOD logits; seen selection is float32 softmax then argmax over14784 classes. Maximum sigmoid is not calibrated uncertainty."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.grapheme_execution.font_ensemble",
+      "inputs": [
+        {
+          "name": "logits_a",
+          "type_desc": "object",
+          "required": true,
+          "constraints": "Finite CPU float32 matrix (N,14784), aligned with the other font branch."
+        },
+        {
+          "name": "logits_b",
+          "type_desc": "object",
+          "required": true,
+          "constraints": "Finite CPU float32 matrix (N,14784), aligned with the other font branch."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "predictions",
+          "type_desc": "object",
+          "constraints": "Two-font ensemble mapping including CPU joint_classes tensor. Each branch separately softmaxes14784 logits and marginalizes components before ensemble component selection. Independent component maxima can produce a joint class neither branch selected directly."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.grapheme_execution.fit_router",
+      "inputs": [
+        {
+          "name": "classifier_scores",
+          "type_desc": "object",
+          "required": true,
+          "constraints": "Aligned mapping containing ood_confidence and seen_joint_classes. Confidence is maximum sigmoid over1295 OOD logits; seen selection is float32 softmax then argmax over14784 classes. Maximum sigmoid is not calibrated uncertainty."
+        },
+        {
+          "name": "unseen_predictions",
+          "type_desc": "object",
+          "required": true,
+          "constraints": "Two-font ensemble mapping including CPU joint_classes tensor. Each branch separately softmaxes14784 logits and marginalizes components before ensemble component selection. Independent component maxima can produce a joint class neither branch selected directly."
+        },
+        {
+          "name": "truth_components",
+          "type_desc": "object",
+          "required": true,
+          "constraints": "Aligned integer calibration labels (N,3) in canonical168/11/7 component ranges."
+        },
+        {
+          "name": "known_class_mask",
+          "type_desc": "object",
+          "required": true,
+          "constraints": "Boolean vector of length14784 identifying known joint classes, aligned with the fixed ontology. Use identical membership for calibration and query routing. Membership and unseen-class claims require caller provenance."
+        },
+        {
+          "name": "sample_weight",
+          "type_desc": "object",
+          "required": true,
+          "constraints": "Aligned finite nonnegative calibration weights with positive total; caller justifies target mixture."
+        },
+        {
+          "name": "thresholds",
+          "type_desc": "object",
+          "required": true,
+          "constraints": "Nonempty finite candidate threshold vector in [0,1]; calibration searches only this grid."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "calibration",
+          "type_desc": "object",
+          "constraints": "Fitted finite threshold and grid scores from independent calibration rows. Weighted component macro recall uses explicit sample weights and2:1:1 component weights. Ties choose the smallest supplied threshold. Grid optimality is not unbiased application performance."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.grapheme_execution.route_predictions",
+      "inputs": [
+        {
+          "name": "classifier_scores",
+          "type_desc": "object",
+          "required": true,
+          "constraints": "Aligned mapping containing ood_confidence and seen_joint_classes. Confidence is maximum sigmoid over1295 OOD logits; seen selection is float32 softmax then argmax over14784 classes. Maximum sigmoid is not calibrated uncertainty."
+        },
+        {
+          "name": "unseen_predictions",
+          "type_desc": "object",
+          "required": true,
+          "constraints": "Two-font ensemble mapping including CPU joint_classes tensor. Each branch separately softmaxes14784 logits and marginalizes components before ensemble component selection. Independent component maxima can produce a joint class neither branch selected directly."
+        },
+        {
+          "name": "calibration",
+          "type_desc": "object",
+          "required": true,
+          "constraints": "Fitted finite threshold and grid scores from independent calibration rows. Weighted component macro recall uses explicit sample weights and2:1:1 component weights. Ties choose the smallest supplied threshold. Grid optimality is not unbiased application performance."
+        },
+        {
+          "name": "known_class_mask",
+          "type_desc": "object",
+          "required": true,
+          "constraints": "Boolean vector of length14784 identifying known joint classes, aligned with the fixed ontology. Use identical membership for calibration and query routing. Membership and unseen-class claims require caller provenance."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "joint_classes",
+          "type_desc": "object",
+          "constraints": "Aligned integer joint predictions in [0,14784); fixed168/11/8 mixed-radix ontology. Confidence below threshold selects alternate only when alternate is unknown; equality retains seen."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.dl.grapheme_execution.submission_components",
+      "inputs": [
+        {
+          "name": "joint_classes",
+          "type_desc": "object",
+          "required": true,
+          "constraints": "Aligned integer joint predictions in [0,14784); fixed168/11/8 mixed-radix ontology."
+        }
+      ],
+      "outputs": [
+        {
+          "name": "components",
+          "type_desc": "object",
+          "constraints": "Integer canonical component predictions (N,3). Decode168/11/8 then correct consonant7 to2; output has168/11/7 bounds."
+        }
+      ]
+    }
+  ],
+  "root_inputs": [
+    {
+      "name": "validation_images",
+      "type_desc": "object",
+      "required": true,
+      "constraints": "Ordered grayscale uint8 images with shape (N,137,236). Preserve row order across all branches. Caller establishes training/calibration/query independence. This port does not validate that independence or support arbitrary image geometry."
+    },
+    {
+      "name": "query_images",
+      "type_desc": "object",
+      "required": true,
+      "constraints": "Ordered grayscale uint8 images with shape (N,137,236). Preserve row order across all branches. Caller establishes training/calibration/query independence. This port does not validate that independence or support arbitrary image geometry."
+    },
+    {
+      "name": "ood_spec",
+      "type_desc": "object",
+      "required": true,
+      "constraints": "Mapping with population, targets, validation, validation_targets, branch, options, initialization_path and output_directory. Populations are validated ImagePopulation objects; targets are aligned integer class indices. Training length must divide batch size. Options contain exactly epochs, batch_size, seed, mean, std, warmup_steps, first_schedule_index and checkpoint_policy. Initialization is an explicit trusted local standard B7 checkpoint. Normalization, schedule and selected checkpoint are caller policies, not authenticated winner settings. Branch must be ood; targets are in [0,1295)."
+    },
+    {
+      "name": "seen_spec",
+      "type_desc": "object",
+      "required": true,
+      "constraints": "Mapping with population, targets, validation, validation_targets, branch, options, initialization_path and output_directory. Populations are validated ImagePopulation objects; targets are aligned integer class indices. Training length must divide batch size. Options contain exactly epochs, batch_size, seed, mean, std, warmup_steps, first_schedule_index and checkpoint_policy. Initialization is an explicit trusted local standard B7 checkpoint. Normalization, schedule and selected checkpoint are caller policies, not authenticated winner settings. Branch must be seen; targets are in [0,14784)."
+    },
+    {
+      "name": "font_a_spec",
+      "type_desc": "object",
+      "required": true,
+      "constraints": "Mapping with validated ImagePopulation, options and output_directory. Options contain exactly epochs, batch_size, seed and backend. Population uses the fixed 14784-class joint ontology; font training uses B0, source augmentation and a best validation checkpoint. Caller supplies licensed images and prevents validation leakage."
+    },
+    {
+      "name": "font_b_spec",
+      "type_desc": "object",
+      "required": true,
+      "constraints": "Mapping with validated ImagePopulation, options and output_directory. Options contain exactly epochs, batch_size, seed and backend. Population uses the fixed 14784-class joint ontology; font training uses B0, source augmentation and a best validation checkpoint. Caller supplies licensed images and prevents validation leakage."
+    },
+    {
+      "name": "gan_a_spec",
+      "type_desc": "object",
+      "required": true,
+      "constraints": "Mapping with hand and font ImagePopulation objects, options and output_directory; classifier_state arrives on a separate graph edge. Options contain exactly epochs, batch_size, seed, backend and classifier_weight. Two generators and two discriminators train while the associated font classifier stays frozen. Label-preserving translation is an application assumption, not a consequence of the loss."
+    },
+    {
+      "name": "gan_b_spec",
+      "type_desc": "object",
+      "required": true,
+      "constraints": "Mapping with hand and font ImagePopulation objects, options and output_directory; classifier_state arrives on a separate graph edge. Options contain exactly epochs, batch_size, seed, backend and classifier_weight. Two generators and two discriminators train while the associated font classifier stays frozen. Label-preserving translation is an application assumption, not a consequence of the loss."
+    },
+    {
+      "name": "truth_components",
+      "type_desc": "object",
+      "required": true,
+      "constraints": "Aligned integer calibration labels (N,3) in canonical168/11/7 component ranges."
+    },
+    {
+      "name": "known_class_mask",
+      "type_desc": "object",
+      "required": true,
+      "constraints": "Boolean vector of length14784 identifying known joint classes, aligned with the fixed ontology. Use identical membership for calibration and query routing. Membership and unseen-class claims require caller provenance."
+    },
+    {
+      "name": "sample_weight",
+      "type_desc": "object",
+      "required": true,
+      "constraints": "Aligned finite nonnegative calibration weights with positive total; caller justifies target mixture."
+    },
+    {
+      "name": "thresholds",
+      "type_desc": "object",
+      "required": true,
+      "constraints": "Nonempty finite candidate threshold vector in [0,1]; calibration searches only this grid."
+    }
+  ],
+  "root_outputs": [
+    {
+      "node_id": "submission",
+      "name": "components",
+      "type_desc": "object",
+      "constraints": "Integer canonical component predictions (N,3). Decode168/11/8 then correct consonant7 to2; output has168/11/7 bounds."
+    }
+  ],
+  "implementation_sha256": {
+    "../sciona-atoms-dl/src/sciona/atoms/dl/grapheme_execution.py": "64a541d87b6216f294cac67eaa7492e021e15fdaf9bb83fa07a732f081e02743",
+    "sciona/grapheme_execution.py": "6b83c8c27b50c008da69386dd4617977e35127d895a86554c0a78652898e4728",
+    "sciona/grapheme_workflow_runtime.py": "7923726b01d1d6cfd974465d06b883f7a5b7196fa00e0684a7141e7f5d7636b3",
+    "scripts/bengali_complete_evidence.py": "240a8ee4fe3e58ef7d745d904e30469e907ae182718e45a35ba436be10632868",
+    "scripts/review_bengali_provider_contracts.py": "f5ed15615d6ebe3a1ea2c03fab83e32e62974438adb992b9f4ba6a3a1160c143",
+    "docs/reviews/bengali_reuse_boundaries.json": "7562c8070ee155dd6c38ba2e7949a2c240fb46811bafd4b05c57725c4b1042b6"
+  },
+  "limitations": [
+    "Read-only implementation-bound contract review. No provider/catalog approval or source-license clearance.",
+    "Fixed grapheme ontology, geometry and architectures require explicit adapters for other domains. Generic routing reuse is qualified separately.",
+    "Kind witnesses are symbolic summaries; they do not enforce full shape, alignment, provenance or memory contracts.",
+    "Caller must provision distinct trusted output directories and bound native threads, loaders and memory across all stages.",
+    "Source licensing, upstream attribution, candidate initialization permissions, corrected stored execution and transactional publication remain outstanding."
+  ]
+}
