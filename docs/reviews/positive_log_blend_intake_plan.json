@@ -1,0 +1,183 @@
+{
+  "format": "positive-log-blend-intake-plan.v1",
+  "passed": true,
+  "applied": false,
+  "approved": false,
+  "catalog_mutations": 0,
+  "owner": {
+    "owner_id": "33ed07a2-1bea-5b17-8b71-d6d0e590fdd9",
+    "source_repo_id": "27b787a0-27ed-4760-92b7-ad8e8b4b815c"
+  },
+  "new_providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.positive_log_blending.fit_positive_log_blend",
+      "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+      "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+      "content_hash": "7a7d239bd1c418aaeaa8879505ab470dbd55e2e675a5d4ab7cf2c7598508f600",
+      "provider_sha256": "a82dbd49f55df1414b8713d92216a0bd552756f2ee717db3543a51dc1a34b61a",
+      "semver": "0.0.0+local.7a7d239bd1c4",
+      "fingerprint": "bdac90a0b11e6a0402318194ea957bea03a2eadd2398846f643d7e936a5212ad",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.positive_log_blending.fit_positive_log_blend",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.positive_log_blending",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.positive_log_blending",
+        "import_module": "sciona.atoms.ml.positive_log_blending",
+        "source_symbol": "fit_positive_log_blend",
+        "description": "Fit positive Lasso on clipped log1p calibration scores and nonnegative targets. Caller supplies held-out or out-of-fold scores in a common normalized response coordinate and owns population independence. Column IDs identify model outputs, not data rows. Bounds and solver controls are explicit. Returns portable numeric state; coefficients need not sum to one.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "predictions",
+          "type_desc": "NDArray[np.float64]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "targets",
+          "type_desc": "NDArray[np.float64]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned finite nonnegative float64 vector from the calibration population. Caller must ensure calibration scores are held-out or out-of-fold and have the same normalized response coordinate as targets."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "model_columns",
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows."
+        },
+        {
+          "direction": "input",
+          "ordinal": 3,
+          "name": "response_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state."
+        },
+        {
+          "direction": "input",
+          "ordinal": 4,
+          "name": "clip_bounds",
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Two finite numeric bounds with 0 <= lower < upper, expressed in the declared response coordinate; only model predictions are clipped, not calibration targets."
+        },
+        {
+          "direction": "input",
+          "ordinal": 5,
+          "name": "controls",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Dictionary with exactly alpha, max_iter, tolerance, seed. Positive finite alpha and tolerance, positive integer max_iter, integer 0 <= seed < 2**32. Positive Lasso with intercept, precomputed Gram matrix and random coordinate selection. Nonconvergence is rejected."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Portable JSON dictionary with exactly format, model_columns, response_coordinate, coefficients, intercept, clip_bounds. Format sciona.positive_log_blend.v1; finite nonnegative coefficients, finite intercept, valid bounds, exact model and coordinate identities. No pickle."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.positive_log_blending.apply_positive_log_blend",
+      "atom_id": "9eb66967-271f-585b-aa88-492bc3973930",
+      "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+      "content_hash": "d31746fc0fd65c7ea988b6dbd4dca65d05a136f8319ef2b1cc2d12f71409d6b6",
+      "provider_sha256": "a82dbd49f55df1414b8713d92216a0bd552756f2ee717db3543a51dc1a34b61a",
+      "semver": "0.0.0+local.d31746fc0fd6",
+      "fingerprint": "6355e50f973037a3b1b4edbafabdc31ffce7411a81a18a00742d3113931234fb",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.positive_log_blending.apply_positive_log_blend",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.positive_log_blending",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.positive_log_blending",
+        "import_module": "sciona.atoms.ml.positive_log_blending",
+        "source_symbol": "apply_positive_log_blend",
+        "description": "Apply portable blend state without fitting; enforce column and coordinate identity. Output is in the declared numeric response coordinate. A free intercept can yield negative outputs; this atom does not silently add a final clamp. Empty query matrices are supported. No executable deserialization occurs.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "predictions",
+          "type_desc": "NDArray[np.float64]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "model_columns",
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "response_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state."
+        },
+        {
+          "direction": "input",
+          "ordinal": 3,
+          "name": "state",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Portable JSON dictionary with exactly format, model_columns, response_coordinate, coefficients, intercept, clip_bounds. Format sciona.positive_log_blend.v1; finite nonnegative coefficients, finite intercept, valid bounds, exact model and coordinate identities. No pickle."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "NDArray[np.float64]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 vector aligned with input rows, in the declared normalized response coordinate. Intercept is unconstrained: outputs may be negative; there is no silent final clamp. Inverse-transform overflow is rejected."
+        }
+      ]
+    }
+  ],
+  "execution_evidence_commit": "33eb355b",
+  "execution_evidence_sha256": "a61009f92aefacf6679f0fc49edb6703696340d8cc11c453287384a993c25bfb",
+  "provider_revision": "099eef56ea1889aaa4734dd4be304dbbada4f7d2",
+  "planner_sha256": "8b9bed014e472cb905ad8bfe760586453c5c87c9bc07b56eff2e3bf4039f5357",
+  "limitations": [
+    "Draft identities only; canonical draft and legacy flagged, both unpublished, until separate publication qualification.",
+    "Witnesses establish shape and coordinate compatibility only; caller owns population independence and semantic correctness of coordinate labels.",
+    "Complete metadata, dependency qualification, transaction rollback tests and served-selection verification remain required.",
+    "No original competition CDG approval or historical winning-ensemble completeness is implied."
+  ]
+}
