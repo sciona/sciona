@@ -15,3 +15,14 @@ def test_missing_or_ambiguous_policy_rejected(source):
 
 def test_policy_expression_is_not_executed():
     with pytest.raises(ValueError):extract_config("config={'FOLD_LIST':unknown()}",['FOLD_LIST'])
+
+
+def test_source_checkpoint_selection_is_exact():
+    from scripts.review_hubmap_source_policy import extract_checkpoint_role
+    source="""for seed in config['split_seed_list']:
+    for fold in config['FOLD_LIST']:
+        selected.append(f'model_seed{seed}_fold{fold}_bestscore.pth')
+"""
+    assert extract_checkpoint_role(source)=='best_score'
+    with pytest.raises(ValueError):extract_checkpoint_role(source.replace('bestscore','bestloss'))
+    with pytest.raises(ValueError):extract_checkpoint_role(source.replace("config['FOLD_LIST']","[0]"))

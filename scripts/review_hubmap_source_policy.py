@@ -25,27 +25,8 @@ def extract_config(source,keys):
     return json.loads(json.dumps(matches[0]))
 
 
-def review(source_root):
-    pins={}
-    pin_hashes={}
-    for suffix in ['source','pseudo']:
-        path=ROOT/('docs/reviews/competition_hubmap_'+suffix+'_pins.json')
-        record=json.loads(path.read_text())
-        if record['commit']!='615444e86f4fb5ab916c0b66d311a307f4e4dd27':raise ValueError('Pinned source commit differs')
-        pins.update(record['files']);pin_hashes[str(path.relative_to(ROOT))]=sha(path)
-    paths=TRAINING+[PSEUDO_CONFIG,PSEUDO_SCRIPT]
-    for name in paths:
-        if sha(source_root/name)!=pins[name]:raise ValueError('Pinned public software changed')
-    training=[extract_config((source_root/name).read_text(),TRAIN_KEYS) for name in TRAINING]
-    expected=dict(split_seed_list=[0],FOLD_LIST=[0,1,2,3],input_resolution=[320,320],resolution=[1024,1024],
-                  clf_threshold=None,tta=1,trn_batch_size=16,test_batch_size=16,num_epochs=20,early_stopping=True,patience=50)
-    if any(not strict_equal(r,expected) for r in training):raise ValueError('Source training policy differs')
-    pseudo=extract_config((source_root/PSEUDO_CONFIG).read_text(),PSEUDO_KEYS)
-    wanted=dict(split_seed_list=[0],FOLD_LIST=[0,1,2,3],input_resolution=320,resolution=1024,
-                clf_threshold=.5,tta=4,pad_size=256,test_batch_size=12)
-    if not strict_equal(pseudo,wanted):raise ValueError('Source pseudo-label policy differs')
-    tree=ast.parse((source_root/PSEUDO_SCRIPT).read_text())
-    # Inspect the actual nested selection loop, without running source IO code.
+def extract_checkpoint_role(source):
+    tree=ast.parse(source)
     loops=[n for n in ast.walk(tree) if isinstance(n,ast.For) and ast.unparse(n.target)=='seed'
            and ast.unparse(n.iter)=="config['split_seed_list']"]
     selections=[]
@@ -55,9 +36,36 @@ def review(source_root):
                 selections.extend(ast.unparse(x) for x in ast.walk(node) if isinstance(x,ast.JoinedStr))
     if selections!=["f'model_seed{seed}_fold{fold}_bestscore.pth'"]:
         raise ValueError('Source checkpoint selection differs')
-    return dict(format='hubmap-source-policy.v1',passed=True,approved=False,catalog_mutations=0,
+    return 'best_score'
+
+
+def review(source_root):
+    pins={}
+    pin_hashes={}
+    for suffix in ['source','pseudo']:
+        path=ROOT/('docs/reviews/competition_hubmap_'+suffix+'_pins.json')
+        record=json.loads(path.read_text())
+        if record['commit']!='615444e86f4fb5ab916c0b66d311a307f4e4dd27':raise ValueError('Pinned source commit differs')
+        pins.update(record['files']);pin_hashes[str(path.relative_to(ROOT))]=sha(path)
+    configs=sorted(n for n in pins if '/03_generate_pseudo_labels/' in n and n.endswith('/get_config.py'))
+    scripts=sorted(n for n in pins if '/03_generate_pseudo_labels/' in n and '/pseudo_label_' in n)
+    if len(configs)!=3 or len(scripts)!=3:raise ValueError('Three source pseudo branches required')
+    paths=TRAINING+configs+scripts
+    for name in paths:
+        if sha(source_root/name)!=pins[name]:raise ValueError('Pinned public software changed')
+    training=[extract_config((source_root/name).read_text(),TRAIN_KEYS) for name in TRAINING]
+    expected=dict(split_seed_list=[0],FOLD_LIST=[0,1,2,3],input_resolution=[320,320],resolution=[1024,1024],
+                  clf_threshold=None,tta=1,trn_batch_size=16,test_batch_size=16,num_epochs=20,early_stopping=True,patience=50)
+    if any(not strict_equal(r,expected) for r in training):raise ValueError('Source training policy differs')
+    policies=[extract_config((source_root/name).read_text(),PSEUDO_KEYS) for name in configs]
+    wanted=dict(split_seed_list=[0],FOLD_LIST=[0,1,2,3],input_resolution=320,resolution=1024,
+                clf_threshold=.5,tta=4,pad_size=256,test_batch_size=12)
+    if any(not strict_equal(p,wanted) for p in policies):raise ValueError('Source pseudo-label policy differs')
+    roles=[extract_checkpoint_role((source_root/name).read_text()) for name in scripts]
+    return dict(format='hubmap-source-policy.v2',passed=True,approved=False,catalog_mutations=0,
         source_commit='615444e86f4fb5ab916c0b66d311a307f4e4dd27',
-        initial_training=training[0],retraining=training[1],pseudo_inference=pseudo,pseudo_checkpoint_role='best_score',
+        initial_training=training[0],retraining=training[1],pseudo_inference=policies[0],pseudo_checkpoint_role=roles[0],
+        pseudo_branches_verified=3,all_pseudo_branch_policies_equal=True,
         source_software_sha256={name:pins[name] for name in paths},pin_manifest_sha256=pin_hashes,
         reviewer_sha256=sha(Path(__file__)),
         limits=['Static extraction of model policy only; no runtime execution, historical weight authentication or predictive-quality claim.',
