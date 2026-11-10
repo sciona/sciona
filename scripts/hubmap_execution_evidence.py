@@ -28,10 +28,10 @@ def validate_report(report):
         raise ValueError('Eight fold executions required')
     for row,(stage,fold) in zip(folds,wanted):
         if not isinstance(row,dict):raise ValueError('Fold evidence must be a mapping')
-        for key,value in dict(stage=stage,fold=fold,epoch=18,selected_checkpoint='best_loss').items():
+        for key,value in dict(stage=stage,fold=fold,epochs=[1,2],selected_checkpoint='best_loss').items():
             if not strict_equal(row.get(key),value):raise ValueError('Exact ordered fold/epoch/checkpoint required')
         for key in ('optimizer_updates','validation_examples'):
-            if type(row.get(key)) is not int or row[key]<1:raise ValueError('Connected training and validation required')
+            if type(row.get(key)) is not int or row[key]<2:raise ValueError('Connected training and validation required')
     for key,minimum in [('pseudo_foreground_pixels',1),('final_foreground_pixels',0)]:
         if type(report.get(key)) is not int or not minimum<=report[key]<=600*600:
             raise ValueError('Valid aggregate synthetic mask counts required')

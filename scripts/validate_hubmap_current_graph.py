@@ -57,7 +57,7 @@ def main():
             slides.append((image,mask));groups.append('synthetic-group-'+str(fold))
     def stages(offset):
         return [FoldStage(state,offset+fold,['synthetic-group-'+str(fold)],
-            dict(start_epoch=18,end_epoch=18,maximum_bin=4,training_batch_size=2,
+            dict(start_epoch=1,end_epoch=2,maximum_bin=4,training_batch_size=2,
                  validation_batch_size=2,input_side=320,python_rng=random.Random(offset+fold),
                  numpy_rng=np.random.RandomState(offset+fold+1),
                  torch_generator=torch.Generator().manual_seed(offset+fold+2))) for fold in range(4)]
@@ -80,6 +80,7 @@ def main():
         if (node,name)==('pseudo_labels','out_pseudo_labeled_sources'):
             routing['pseudo']=value
             counts['pseudo_foreground_pixels']=sum(int(mask.sum()) for source in value for _,mask in source)
+            print('Generated pseudo foreground pixels: '+str(counts['pseudo_foreground_pixels']),flush=True)
         if (node,name)==('retraining','in_pseudo_labeled_sources'):
             if value is not routing['pseudo']:raise ValueError('Pseudo handoff identity differs')
             routing['verified']=True
@@ -93,18 +94,19 @@ def main():
             result=asyncio.run(runner.CDGExecutionSession(None,'synthetic-hubmap','current').execute(inputs,cdg=decoded))
     if result['status']!='completed':raise ValueError('Complete lifecycle execution required')
     if len(result['trace'])!=6 or any(r['cached'] for r in result['trace']):raise ValueError('All six nodes must execute uncached')
-    if not routing.get('verified') or counts.get('pseudo_foreground_pixels',0)<=0:raise ValueError('Nonempty generated pseudo handoff required')
+    if not routing.get('verified'):raise ValueError('Exact pseudo handoff routing required')
+    if counts.get('pseudo_foreground_pixels',0)<=0:raise ValueError('Nonempty generated pseudo masks required')
     for node in ('initial_training','initial_models','retraining','final_models'):
         if counts.get(node)!=4:raise ValueError('Every configured fold checkpoint/model required')
     summaries=[]
     for stage in ('initial_training','retraining'):
         if len(metrics[stage])!=4:raise ValueError('Four trained folds required')
         for fold,epochs in enumerate(metrics[stage]):
-            if len(epochs)!=1 or epochs[0]['epoch']!=18:raise ValueError('Explicit epoch adaptation differs')
-            e=epochs[0]
-            if e['training']['examples']<2 or e['validation']['examples']<1:raise ValueError('Connected training and validation required')
-            summaries.append(dict(stage=stage,fold=fold,epoch=18,optimizer_updates=e['training']['examples']//2,
-                                  validation_examples=e['validation']['examples'],selected_checkpoint='best_loss'))
+            if [e['epoch'] for e in epochs]!=[1,2]:raise ValueError('Two consecutive initial epochs required')
+            if any(e['training']['examples']<2 or e['validation']['examples']<1 for e in epochs):raise ValueError('Connected training and validation required')
+            summaries.append(dict(stage=stage,fold=fold,epochs=[1,2],
+                                  optimizer_updates=sum(e['training']['examples']//2 for e in epochs),
+                                  validation_examples=sum(e['validation']['examples'] for e in epochs),selected_checkpoint='best_loss'))
     routing.clear();gc.collect()
     if prerequisites()!=baseline or hashes!={p:sha(ROOT/p) for p in hashes}:raise ValueError('Execution software changed')
     report=dict(format='hubmap-current-graph.v1',passed=True,approved=False,catalog_mutations=0,synthetic_only=True,
@@ -115,7 +117,7 @@ def main():
         resource_policy=dict(serial_training=True,torch_threads=1,interop_threads=1,native_threads=1,
                              opencv_threads=1,opencv_opencl=False,data_loader_workers=0),
         software_sha256=hashes,prerequisite_sha256=sha(ROOT/'docs/reviews/hubmap_current_contracts.json'),
-        limits=['Synthetic random encoder state, four initial and four fresh retraining folds, one executed epoch18 per fold with batch2; skipped earlier epochs advance the scheduler only. No full historical schedule or predictive accuracy claim.',
+        limits=['Synthetic random encoder state, four initial and four fresh retraining folds, two consecutive epochs from epoch1 per fold with batch2. No full historical schedule or predictive accuracy claim.',
                 'Source-sized network and tile geometry with synthetic rasters; no whole-slide codec, GPU or unbounded-memory qualification.',
                 'Four best-loss checkpoints per stage are an explicit executable selection; historical final notebook checkpoint provenance remains unverified in this current run.',
                 'Existing source-comparison evidence is retained separately; this run is not a fresh independent-source parity comparison.',
