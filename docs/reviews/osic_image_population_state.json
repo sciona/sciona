@@ -1,0 +1,64 @@
+{
+  "format": "osic-image-population.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "shared_environment_mutations": 0,
+  "execution": {
+    "source_training_batches": 3,
+    "source_training_samples": 24,
+    "training_arrays_and_rng_exact": true,
+    "source_entity_order_preserved": true,
+    "excluded_corrupt_payload_not_decoded": true,
+    "actual_b5_inference_queries": 4,
+    "source_inference_exact": true,
+    "unselected_corrupt_payloads_not_decoded": 4,
+    "numeric_state_restored": true,
+    "intermediate_optimizer_updates": 96,
+    "fitting_disabled": true,
+    "private_artifacts_unchanged": true,
+    "runtime": {
+      "tensorflow": "2.20.0",
+      "legacy_keras": "2.20.1",
+      "pydicom": "3.0.1",
+      "numpy": "2.2.6",
+      "opencv": "5.0.0"
+    },
+    "resource_policy": {
+      "native_threads": 1,
+      "dataset_workers": 1
+    }
+  },
+  "dependency_archive_sha256": {
+    "efficientnet-1.1.0-py3-none-any.whl": "4f8a56d15e9c44e9a62dae35404079724c4a1d9e9bfbcfd2a18077e5eda58bf7",
+    "Keras_Applications-1.0.8-py3-none-any.whl": "df4323692b8c1174af821bf906f1e442e63fa7589bf0f1230a0b6bdc5a810c95",
+    "keras-applications-source.zip": "ff87b242e5de063242132c7c8a1155679c084123b857d25adec626d1374a54b4",
+    "pydicom-3.0.1-py3-none-any.whl": "db32f78b2641bd7972096b8289111ddab01fb221610de8d7afa835eb938adb41"
+  },
+  "software_sha256": {
+    "sciona/osic_image_population.py": "0d52dfc07b87d9dcf68e8eee2e66c2b2bf77dbd3133601412f5ea54a172e135a",
+    "sciona/osic_image_inference.py": "922db5d71d6b265f3818ffd7618c68edcd879895bb76c47f4780af6379943939",
+    "sciona/dicom_planes.py": "c0edf39544f67d5fbe7860bf3fa0d709f7b20ad87329ef59d0c9ed3230335a0c",
+    "sciona/osic_dicom.py": "598e2e736fc9b2222aeb104e5f6f610012139fca0a4f94f63f52de5ef36468c7",
+    "sciona/osic_image_metadata.py": "7c36c3eeff029f0a32f044589b386ea9c53da99ebb4ebf087e89d6833a2c605d",
+    "sciona/affine_trajectory_fit.py": "e72a8a2b39812845d3fd9508acf2971c3bb8efbf30bf9eea52f28f671ff9a343",
+    "sciona/osic_image_batches.py": "164306fb3ff8ff616f55d331d385d5cd9e39347ffd127bc66a30ad82b4c913a4",
+    "sciona/group_member_sampling.py": "0aa10a2ad8feea1ac979e4f2a522214b27b515a131ac1340f11f541e42f51466",
+    "sciona/osic_image_preprocessing.py": "9c46a4977dae5a5967da24b432db836130c27af29f1cdca69552557face7757e",
+    "sciona/osic_image_model.py": "403ff9e7f6f3a2ba362c599abc68910c527a831366cff8a2563b2828db7618df",
+    "sciona/osic_image_predictor.py": "337f73be79f20d9472c490d9efbe539d42f0c70581ae6e44dca16fbf748d077d",
+    "sciona/keras_bounded_prediction.py": "fe36ca313054cd1b6c3882f59139a6228d306fd92d06e469c1abc1ac3e570d55",
+    "sciona/osic_predictions.py": "6e3dbca24d78302ae74ea525fe8d2f380cda9308dc76a4a3f225c4cd863ebace",
+    "scripts/validate_osic_image_population.py": "0d777afe6e824f57d47901666eb93c4107cda0e6a5ae57ed870730da23855f1f",
+    "sciona/osic_image_state.py": "876b5328b675634e0a18e42589aee8d444cf50eb1a5824cab8d01bc663817a54",
+    "scripts/validate_osic_image_state.py": "f37279187dc05185f4d2b86b69552f15143bf46f463368136b84a38462b39ddc"
+  },
+  "limitations": [
+    "Raw synthetic inference restores numeric weights from an intermediate checkpoint; complete 30-epoch training remains pending.",
+    "The source exclusion values are replaced with an explicit synthetic policy; source filtering code and order are preserved.",
+    "Training requires valid eligible images and does not reproduce silently shortened batches after decoder errors.",
+    "The historical least-squares default is reconstructed with explicit rcond=-1 in the current runtime.",
+    "This does not complete the quantile/image blend, graph publication or empirical validation."
+  ]
+}

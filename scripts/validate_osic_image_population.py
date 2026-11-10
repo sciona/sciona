@@ -22,7 +22,7 @@ def sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
-def worker(source_directory,overlay):
+def worker(source_directory,overlay,state_directory=None):
     import tensorflow as tf
     tf.config.threading.set_intra_op_parallelism_threads(1)
     tf.config.threading.set_inter_op_parallelism_threads(1)
@@ -112,25 +112,55 @@ def worker(source_directory,overlay):
                                                 category_a='Sex',category_b='SmokingStatus',uncertainty='Percent'))
     query_source=pd.DataFrame(dict(Patient_Week=query['key'],FVC=np.zeros(4),Confidence=np.zeros(4)))
     keras.utils.set_random_seed(617)
-    model=build_model()
+    private_paths=[]
+    if state_directory is None:
+        model=build_model()
+    else:
+        import efficientnet.tfkeras  # Register the pinned source custom layers.
+        from scripts.validate_osic_image_state import COORDINATES
+        from sciona.osic_image_state import restore_prediction_state
+        directory=Path(state_directory)
+        private_paths=[directory/'source.h5',directory/'state/manifest.json',directory/'state/weights.npz']
+        private_before=[sha(path) for path in private_paths]
+        snapshot=json.loads((directory/'snapshot.json').read_text())
+        assert snapshot['stable_copy'] is True and sha(directory/'source.h5')==snapshot['source_sha256']
+        model=keras.models.load_model(directory/'source.h5')
+        updates=int(model.optimizer.iterations)
+        assert 0<updates<960
+        def forbidden(*args,**kwargs):
+            raise AssertionError('Fitting and further serialized model loading forbidden')
+        keras.Model.fit=forbidden
+        keras.Model.train_step=forbidden
+        keras.Model.train_on_batch=forbidden
+        keras.optimizers.legacy.Adam.apply_gradients=forbidden
+        keras.models.load_model=forbidden
+        restored=restore_prediction_state(directory/'state',**COORDINATES)
+        assert getattr(restored,'optimizer',None) is None
     predictor=make_slice_predictor(model)
     scope=dict(np=np,cv2=cv2,pydicom=storage,models=[SimpleNamespace(predict=predictor)],
         pd=SimpleNamespace(read_csv=lambda path:query_source.copy() if 'sample_submission' in path else baseline_source.copy()),
         os=SimpleNamespace(listdir=lambda path:[name for name,_ in inference_images[path.rstrip('/').split('/')[-1]]]))
     for cell in (6,9,15,17):
         exec(source(INFERENCE,cell,INFERENCE_PINS[cell]),scope)
-    result=predict_from_encoded(baseline,query,inference_images,predictor)
+    candidate_predictor=predictor if state_directory is None else make_slice_predictor(restored)
+    result=predict_from_encoded(baseline,query,inference_images,candidate_predictor)
     assert result['keys']==scope['sub']['Patient_Week'].tolist()
     np.testing.assert_array_equal(result['values'],scope['sub'][['FVC','Confidence']].to_numpy())
+    if private_paths:
+        assert private_before==[sha(path) for path in private_paths]
     return dict(source_training_batches=3,source_training_samples=24,training_arrays_and_rng_exact=True,
         source_entity_order_preserved=True,excluded_corrupt_payload_not_decoded=True,
         actual_b5_inference_queries=4,source_inference_exact=True,unselected_corrupt_payloads_not_decoded=4,
+        numeric_state_restored=state_directory is not None,
+        intermediate_optimizer_updates=None if state_directory is None else updates,
+        fitting_disabled=state_directory is not None,
+        private_artifacts_unchanged=True if private_paths else None,
         runtime=dict(tensorflow=tf.__version__,legacy_keras=keras.__version__,pydicom=pydicom.__version__,
                      numpy=np.__version__,opencv=cv2.__version__),
         resource_policy=dict(native_threads=1,dataset_workers=1))
 
 
-def validate(dependencies,source_directory):
+def validate(dependencies,source_directory,state_directory=None):
     from scripts.validate_osic_image_model import PINS
     from scripts.validate_osic_dicom import WHEEL,WHEEL_SHA
     from scripts.audit_osic_opencv_isolation import audit_distribution,digest
@@ -165,8 +195,11 @@ def validate(dependencies,source_directory):
         for key in ('OMP_NUM_THREADS','OPENBLAS_NUM_THREADS','MKL_NUM_THREADS','VECLIB_MAXIMUM_THREADS',
                     'NUMEXPR_NUM_THREADS','TF_NUM_INTRAOP_THREADS','TF_NUM_INTEROP_THREADS'):
             env[key]='1'
-        process=subprocess.run([sys.executable,'-B',str(Path(__file__).resolve()),'--worker',
-            '--dependencies',str(overlay),'--source-directory',str(source_directory)],
+        command=[sys.executable,'-B',str(Path(__file__).resolve()),'--worker',
+            '--dependencies',str(overlay),'--source-directory',str(source_directory)]
+        if state_directory is not None:
+            command.extend(['--state-directory',str(state_directory)])
+        process=subprocess.run(command,
             env=env,capture_output=True,text=True)
         if process.returncode:
             raise RuntimeError('Synthetic population qualification failed:\n'+process.stderr)
@@ -178,14 +211,18 @@ def validate(dependencies,source_directory):
         'sciona/osic_image_batches.py','sciona/group_member_sampling.py','sciona/osic_image_preprocessing.py',
         'sciona/osic_image_model.py','sciona/osic_image_predictor.py','sciona/keras_bounded_prediction.py',
         'sciona/osic_predictions.py','scripts/validate_osic_image_population.py']
+    if state_directory is not None:
+        files.extend(['sciona/osic_image_state.py','scripts/validate_osic_image_state.py'])
     return dict(format='osic-image-population.v1',passed=True,approved=False,catalog_mutations=0,
         synthetic_only=True,shared_environment_mutations=0,execution=result,dependency_archive_sha256=pins,
         software_sha256={name:sha(ROOT/name) for name in files},
-        limitations=['Actual B5 inference uses seeded random weights; complete training and trained-checkpoint composition remain pending.',
+        limitations=[('Actual B5 inference uses seeded random weights; complete training and trained-checkpoint composition remain pending.'
+            if state_directory is None else
+            'Raw synthetic inference restores numeric weights from an intermediate checkpoint; complete 30-epoch training remains pending.'),
             'The source exclusion values are replaced with an explicit synthetic policy; source filtering code and order are preserved.',
             'Training requires valid eligible images and does not reproduce silently shortened batches after decoder errors.',
             'The historical least-squares default is reconstructed with explicit rcond=-1 in the current runtime.',
-            'This does not complete the quantile/image blend, portable trained state, graph publication or empirical validation.'])
+            'This does not complete the quantile/image blend, graph publication or empirical validation.'])
 
 
 if __name__=='__main__':
@@ -193,10 +230,12 @@ if __name__=='__main__':
     parser.add_argument('--dependencies',required=True)
     parser.add_argument('--source-directory',required=True)
     parser.add_argument('--worker',action='store_true')
+    parser.add_argument('--state-directory',type=Path)
     args=parser.parse_args()
     if args.worker:
-        print(json.dumps(worker(args.source_directory,args.dependencies)))
+        print(json.dumps(worker(args.source_directory,args.dependencies,args.state_directory)))
     else:
-        report=validate(args.dependencies,args.source_directory)
-        (ROOT/'docs/reviews/osic_image_population.json').write_text(json.dumps(report,indent=2)+'\n')
+        report=validate(args.dependencies,args.source_directory,args.state_directory)
+        name='osic_image_population.json' if args.state_directory is None else 'osic_image_population_state.json'
+        (ROOT/'docs/reviews'/name).write_text(json.dumps(report,indent=2)+'\n')
         print(json.dumps(report['execution']))
