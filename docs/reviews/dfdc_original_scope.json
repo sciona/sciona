@@ -1,0 +1,158 @@
+{
+  "format": "dfdc-original-scope.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "review_source": "automated",
+  "scope": "Source-scope review only; full-model execution and publication remain separate requirements.",
+  "artifact_id": "7c70d1b5-a969-5998-ad78-4de714d1fbfc",
+  "fqdn": "cdg.competition.solution.kaggle.dfdc_deepfake_detection",
+  "source_version_id": "95e3414b-c0ed-5816-b944-4466d697d9fc",
+  "source_content_hash": "66f965f75d83ba4ec2daf15afcfa7a657589938dc98c00722b9ccea7eec92679",
+  "source_snapshot_reconstructed": true,
+  "source_commit": "89c6290490bac96b29193a4061b3db9dd3933e36",
+  "source_stage_review": [
+    {
+      "stage_id": "frame_extraction",
+      "realization": "Accept decoded uint8 RGB clips with explicit order, then retain source frame selection and empty-input fallback semantics.",
+      "correction": "Media decoding is a caller responsibility. This implementation does not infer frame timing or authenticate historical media membership.",
+      "source_anchors": [
+        {
+          "file": "sciona/dfdc_runtime.py",
+          "symbol": "_frames",
+          "line": 34,
+          "file_sha256": "cd142617329b81fe11840df183453f9e385dfe13117933a816d6b3f76517229e"
+        },
+        {
+          "file": "sciona/dfdc_frame_sampling.py",
+          "symbol": "select_frames",
+          "line": 13,
+          "file_sha256": "565d4b2d5d4fd6712f4061be03b3dfa57e6c4b0d34fe22c141c0d7aeda807191"
+        }
+      ]
+    },
+    {
+      "stage_id": "face_detection",
+      "realization": "Use the actual three-network MTCNN cascade with explicit detector state policy and stage-specific training/inference preparation.",
+      "correction": "Select the source MTCNN realization rather than RetinaFace. Constructed synthetic states qualify execution, not pretrained face detection quality.",
+      "source_anchors": [
+        {
+          "file": "sciona/dfdc_detector.py",
+          "symbol": "build_detector",
+          "line": 10,
+          "file_sha256": "b44391c23d79d6c6724360e49e34450a9d073facba491075879f9bba0d2336a6"
+        },
+        {
+          "file": "sciona/dfdc_training_crops.py",
+          "symbol": "build_preprocessing_detector",
+          "line": 13,
+          "file_sha256": "ab190178ec5f5f8e20b097e6bba00aaee132fc26b525e77c3d5f0893124765f2"
+        },
+        {
+          "file": "sciona/dfdc_faces.py",
+          "symbol": "extract_faces",
+          "line": 40,
+          "file_sha256": "8852942a6a366dd0b8adb5af038cd6f42cc414c013fad24f265f21d954041a68"
+        }
+      ]
+    },
+    {
+      "stage_id": "face_alignment_cropping",
+      "realization": "Apply source margin crops without inference landmark alignment; use five-point preprocessing and a separate native sixty-eight-point predictor for training occlusion.",
+      "correction": "Do not claim inference alignment. Landmark count does not prove semantic order. Ordered polygon occlusion is not a generic geometric convex-hull construction.",
+      "source_anchors": [
+        {
+          "file": "sciona/dfdc_faces.py",
+          "symbol": "expanded_crop",
+          "line": 23,
+          "file_sha256": "8852942a6a366dd0b8adb5af038cd6f42cc414c013fad24f265f21d954041a68"
+        },
+        {
+          "file": "sciona/dfdc_crop_annotations.py",
+          "symbol": "annotate_pair",
+          "line": 25,
+          "file_sha256": "366a3251cc6c80919f680685fda36c4d725d4a4c519a24e5dafce8bd76b96b80"
+        },
+        {
+          "file": "sciona/dfdc_hull_backend.py",
+          "symbol": "load_hull_backend",
+          "line": 8,
+          "file_sha256": "8391c6d94aee1a4f5f3a362e25bc9f40b88845f3d0356168d865afdd8d4692e1"
+        }
+      ]
+    },
+    {
+      "stage_id": "deep_fake_classification",
+      "realization": "Execute full EfficientNet-B7 paired-record training, source population balancing, smoothed balanced loss, SGD, scheduling and numbered checkpoint collection with an explicit run/request plan.",
+      "correction": "Select B7 rather than an interchangeable Se-ResNeXt. Source forty-epoch runs cannot supply zero-based checkpoint forty; require an explicit executable adaptation without extension or relabeling. Synthetic shortened training does not establish historical accuracy.",
+      "source_anchors": [
+        {
+          "file": "sciona/dfdc_classifier.py",
+          "symbol": "build_classifier",
+          "line": 34,
+          "file_sha256": "42ca019c485a64bb652ff19ddda160ff7c342800ad6ede712bd7ebe854d10c56"
+        },
+        {
+          "file": "sciona/dfdc_ensemble_training.py",
+          "symbol": "train_ensemble",
+          "line": 54,
+          "file_sha256": "1ffdfa2bffa859c025820ea4681c7ceeed8599eddfa2afefeb7124df579e166c"
+        },
+        {
+          "file": "sciona/dfdc_training.py",
+          "symbol": "train",
+          "line": 19,
+          "file_sha256": "8112e22c58d88ecc8d0fabf7fa77d1e793974a7a8ed2f7252bf3b54575d6d3ce"
+        },
+        {
+          "file": "sciona/dfdc_selection.py",
+          "symbol": "selection_plan",
+          "line": 27,
+          "file_sha256": "c7accd53093451760b2371cbbab3d58e204a0ef8d41833e500bf47ddc161501a"
+        }
+      ]
+    },
+    {
+      "stage_id": "temporal_aggregation",
+      "realization": "Apply confidence heuristics to face predictions separately per selected checkpoint, then average checkpoint scores, preserving source count thresholds and explicit fallback status.",
+      "correction": "This is not generic temporal averaging. A fallback score0.5 can denote missing faces or execution failure; consumers must inspect status. Scores are not calibrated for other domains.",
+      "source_anchors": [
+        {
+          "file": "sciona/dfdc_inference_primitives.py",
+          "symbol": "confident_strategy",
+          "line": 12,
+          "file_sha256": "034e91c430f0ace51acff217d76086514aedbc669165fb52872ad4736d4dbbaa"
+        },
+        {
+          "file": "sciona/dfdc_prediction.py",
+          "symbol": "predict_video",
+          "line": 20,
+          "file_sha256": "cc5e6f6e4592d5fb493e7ef37174b3c3977341bb4d3e6da947764aabe21251c8"
+        },
+        {
+          "file": "sciona/dfdc_ensemble_prediction.py",
+          "symbol": "predict_selected",
+          "line": 41,
+          "file_sha256": "f5a4100c9c65d0f65e1e0b952e1204622be28794754ecaeaee0396389647a268"
+        }
+      ]
+    }
+  ],
+  "reuse_decision": "Other paired face-video alteration tasks may reuse this recipe only with justified target meanings, population grouping, detector and landmark conventions, augmentation invariances and checkpoint plans. Preparation and execution remain recipe adapters. General image geometry, sampling and aggregation require independent contracts before standalone selection.",
+  "limitations": [
+    "This is a face-focused alteration recipe, not a generic video classifier. Caller must justify RGB encoding, frame order, paired target meaning and valid face geometry; matching array shapes is insufficient.",
+    "Positional group numbers and pair-fold agreement do not prove independence of people, recording sessions or acquisition sources. Caller must supply a grouping justified for the new task.",
+    "A sixty-eight-point count does not establish the semantic ordering or quality of landmarks. Native predictor deserialization is a trusted-file boundary. The operation named convex hull uses an ordered landmark polygon, and source failures silently leave the image unchanged.",
+    "Source default forty-epoch runs cannot supply a request for zero-based epoch forty. An explicit executable adaptation is required; do not silently extend runs or relabel checkpoints. Tensor shape checks and seed labels do not authenticate historical weights or predictive parity.",
+    "Face detection, augmentation invariance and confidence thresholds are source assumptions requiring justification in another application. Scores are not calibrated cross-domain probabilities. Generic resize or aggregation would need independently qualified provider contracts before separate selection.",
+    "A fallback0.5 is not a successful neutral prediction; downstream consumers must inspect status. Prepared mappings are mutable and execute_prepared does not repeat envelope validation. One-face scalar behavior can cause the source execution-error fallback."
+  ],
+  "historical_source_review_sha256": "044458c173a19de5cd59cfef11ed96b93ac39735c2b83b1aa9df748a4bc4e451",
+  "reuse_reviewer_sha256": "719fcfa98cbc5745de6e54d6336dccbe120328530287fd31f4fc8c6710b07586",
+  "reviewer_sha256": "1d473b920ddc26d21c2d71e3ad9968c0d5241ddabe5e81e086a6f06edd7286f2",
+  "remaining": [
+    "Complete the full five-run/seven-checkpoint graph with bounded resources and dependency integrity.",
+    "Review provider contracts and reconcile metadata with rollback gates.",
+    "Stage and execute the corrected stored original; qualify publication and served selection."
+  ]
+}
