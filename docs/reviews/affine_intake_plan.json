@@ -1,0 +1,85 @@
+{
+  "format": "affine-intake-plan.v1",
+  "passed": true,
+  "applied": false,
+  "approved": false,
+  "catalog_mutations": 0,
+  "owner": {
+    "owner_id": "33ed07a2-1bea-5b17-8b71-d6d0e590fdd9",
+    "source_repo_id": "3bff5d3b-7b24-45c0-b688-1edb61107107"
+  },
+  "new_providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.numerical.statistics.affine_fit.affine_least_squares",
+      "atom_id": "c5a57e38-9d64-526e-8f6c-953fb10545f1",
+      "version_id": "a9cae503-875f-5dec-b82b-a113c8aec6cf",
+      "content_hash": "115433af2fa42aa4454253a18682acef7c1447142261590539cbef9da6da5896",
+      "provider_sha256": "39856bac33e0fe22e02a0c4d11ca83585d989f68775ddced57bfeb4de8ef84af",
+      "semver": "0.0.0+local.115433af2fa4",
+      "fingerprint": "6fae506d86131dcd6ca1eb3a3f9a2eea1b04de06e645e3f8718266047de97fa4",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.numerical.statistics.affine_fit.affine_least_squares",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "numerical.statistics.affine_fit",
+        "repo_name": "sciona-atoms",
+        "source_module_path": "numerical.statistics.affine_fit",
+        "import_module": "sciona.atoms.numerical.statistics.affine_fit",
+        "source_symbol": "affine_least_squares",
+        "description": "Fit value = slope * coordinate + intercept, returning rank diagnostics. Inputs are aligned finite real vectors in caller-owned units. Rank-deficient and single-observation systems retain NumPy's minimum-norm solution; rank two is required to identify both coefficients uniquely. No sorting, centering, weighting, regularization or observation-availability inference is performed. Return float64 coefficients [slope, intercept], integer rank, singular values, and the residual-sum-of-squares array. Empty residuals do not imply zero error: NumPy returns them for underdetermined or rank-deficient systems. Coordinates and values must have at most 64-bit elements; large integers may lose precision. Slope units are value units per coordinate unit. Alignment and units are caller policy. Inputs remain unchanged. Explicit rcond=None uses the installed NumPy size-dependent cutoff, -1 uses machine precision, and [0,1) supplies a relative singular-value cutoff. LAPACK behavior is runtime-dependent. Abstract execution is unsupported; this operation requires concrete numerical validation.",
+        "domain_tags": [
+          "numerical"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "coordinates",
+          "type_desc": "np.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite real vector, at most 64-bit elements, aligned row-for-row with values. No sorting or centering. Caller establishes coordinate units and observation availability. Converted through an uncentered float64 [coordinate,1] design; large integers may lose precision."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "values",
+          "type_desc": "np.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite real vector with exactly the coordinate shape, at most 64-bit elements. Caller establishes value units and row alignment. No weighting, imputation or availability inference."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "rcond",
+          "type_desc": "float | None",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Required explicit None, -1 or finite ratio in [0,1); booleans rejected. None uses installed NumPy size-dependent cutoff, -1 machine precision, otherwise relative singular-value threshold. Changes rank and minimum-norm coefficients; not regularization."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Dictionary with float64 coefficients of shape (2,) ordered slope/intercept, integer rank, float64 singular_values of shape (min(N,2),), and float64 residual_sums_of_squares shape (1,) only when N>2 and rank=2, otherwise (0,). Empty residuals do not imply zero error. Rank below two means coefficients are not uniquely identifiable; the minimum-norm solution is retained. Slope units are value/coordinate; intercept uses value units. Inputs unchanged. Runtime LAPACK dependent. Concrete provisioned execution only; abstract witness intentionally rejects."
+        }
+      ]
+    }
+  ],
+  "registered_provider_dependencies": [],
+  "execution_evidence_commit": "8a663cbe",
+  "execution_evidence_sha256": "dd4cb20ec0a12a2344319e372b1290618fc8b13af82be4b1d7dcbb3d8ea53d2e",
+  "provider_revision": "73557bd",
+  "planner_sha256": "b5b2faf89b4d5666d12bce589437b2a7f6118132e7849003bc369568a8276f7d",
+  "limitations": [
+    "Draft intake only; metadata, runtime dependency review, rollback and served publication gates remain required.",
+    "NumPy/LAPACK is a software dependency, not a registered atom dependency.",
+    "This reusable numerical provider does not approve the original OSIC workflow."
+  ]
+}
