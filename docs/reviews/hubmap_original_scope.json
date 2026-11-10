@@ -1,0 +1,228 @@
+{
+  "format": "hubmap-original-scope.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "review_source": "automated",
+  "scope": "Source-scope review only; full-model execution and publication remain separate requirements.",
+  "artifact_id": "be47041d-30f6-565b-97f0-3708f5190323",
+  "fqdn": "cdg.competition.solution.kaggle.hubmap_kidney_1st",
+  "source_version_id": "325c30ff-ea2a-515c-8d40-110a5fd6991d",
+  "source_content_hash": "6f290e9ea9794b85f83ff3e52034a41a1c400f84d2f3f5182beb65d837664468",
+  "source_snapshot_reconstructed": true,
+  "source_commit": "615444e86f4fb5ab916c0b66d311a307f4e4dd27",
+  "source_stage_review": [
+    {
+      "stage_id": "tiling",
+      "realization": "Prepare decoded RGB/binary raster pairs using source unshifted and half-shifted grids, mask-area ordering, JPEG roundtrip and selected tile populations.",
+      "correction": "Raster decoding is a caller boundary. Grid padding, source ordering and lossy preprocessing remain explicit; no arbitrary interchangeable tiler is claimed.",
+      "source_anchors": [
+        {
+          "file": "sciona/hubmap_tiling.py",
+          "symbol": "RawTiles",
+          "line": 5,
+          "file_sha256": "514df1fdf3a50f97ff409bac085241345a9fb738c387d6bc319e4f7c9c540f8d"
+        },
+        {
+          "file": "sciona/hubmap_raw_population.py",
+          "symbol": "prepare_population",
+          "line": 7,
+          "file_sha256": "a32bacc34b571bd0452e2eebef41c73d6bfd84ec3f541302a441883c9c96752b"
+        },
+        {
+          "file": "sciona/hubmap_preparation.py",
+          "symbol": "prepare_tile",
+          "line": 6,
+          "file_sha256": "6d879b22aafa81cbbc091727a1d35078a4a8f885160e8cd258f8050a0406122c"
+        }
+      ]
+    },
+    {
+      "stage_id": "stain_normalization",
+      "realization": "Use source RGB/BGR conversion, JPEG preprocessing and fixed channel normalization in augmentation and inference.",
+      "correction": "The intake stain-normalization claim is unsupported by the qualified source. Do not represent fixed channel normalization as stain normalization. This correction must be explicit in the corrected graph.",
+      "source_anchors": [
+        {
+          "file": "sciona/hubmap_preparation.py",
+          "symbol": "prepare_tile",
+          "line": 6,
+          "file_sha256": "6d879b22aafa81cbbc091727a1d35078a4a8f885160e8cd258f8050a0406122c"
+        },
+        {
+          "file": "sciona/hubmap_augmentation.py",
+          "symbol": "augment",
+          "line": 8,
+          "file_sha256": "370f2ca831a8e8e4888802eeb60da5ac7781c4c45fe6068382744ead1db4e851"
+        },
+        {
+          "file": "sciona/hubmap_inference_tiles.py",
+          "symbol": "InferenceTiles",
+          "line": 8,
+          "file_sha256": "8d1558a118885d6e9f636b4f85258a924a8e2d411a51e53bb5434ae352879909"
+        }
+      ]
+    },
+    {
+      "stage_id": "segmentation_architecture",
+      "realization": "Use full SE-ResNeXt101 encoder with custom decoder, attention and hypercolumns; execute initial folds, model restoration, generated pseudo masks and fresh retraining folds.",
+      "correction": "Replace the intake DeepLabV3+/ResNeSt50 description with the source architecture. Initial training and pseudo-label retraining are required lifecycle stages omitted by the intake. Explicit encoder states are required; no automatic pretrained download.",
+      "source_anchors": [
+        {
+          "file": "sciona/hubmap_network.py",
+          "symbol": "UNET_SERESNEXT101",
+          "line": 111,
+          "file_sha256": "32a82b4af15101d4882909038a58c2708b5867b9cebc3f1295b5b1c8adda1e74"
+        },
+        {
+          "file": "sciona/hubmap_encoder.py",
+          "symbol": "build_encoder",
+          "line": 166,
+          "file_sha256": "936d55db5a927992ec3d50eca2f9433d4e33610d8e810854b915fb4b2da46363"
+        },
+        {
+          "file": "sciona/hubmap_lifecycle.py",
+          "symbol": "train_fold",
+          "line": 20,
+          "file_sha256": "76c746915a89e79446104dacf47fddd69d244a67cef021aff370245bf8182649"
+        },
+        {
+          "file": "sciona/hubmap_graph_runtime.py",
+          "symbol": "retraining",
+          "line": 29,
+          "file_sha256": "abe37489c453f23e7c668cdb2ba8be9c2a6ec61557fd1875b0abe0dbeb417d4a"
+        }
+      ]
+    },
+    {
+      "stage_id": "lovasz_bce_loss",
+      "realization": "Train with binary BCE and per-image Lovasz hinge plus four nonempty-only deep supervision terms weighted0.1 and image-classification BCE.",
+      "correction": "This is binary Lovasz hinge, not multiclass Lovasz-Softmax. Preserve auxiliary losses and their empty-mask gradient behavior.",
+      "source_anchors": [
+        {
+          "file": "sciona/hubmap_losses.py",
+          "symbol": "binary_lovasz_hinge",
+          "line": 22,
+          "file_sha256": "46604b0f2221897bc9f146c5f0e6286637d0e2e250cfa3107b37ba9946fef03f"
+        },
+        {
+          "file": "sciona/hubmap_losses.py",
+          "symbol": "training_loss",
+          "line": 44,
+          "file_sha256": "46604b0f2221897bc9f146c5f0e6286637d0e2e250cfa3107b37ba9946fef03f"
+        },
+        {
+          "file": "sciona/hubmap_training.py",
+          "symbol": "train_batch",
+          "line": 6,
+          "file_sha256": "8bf03836ca9e1246ee03a9b4288504c619ad4a9ee1ead50446d480b4360a6e04"
+        }
+      ]
+    },
+    {
+      "stage_id": "tta_on_tiles",
+      "realization": "Use four flip views for pseudo labels and three for final prediction; average models and views before resize and strict binary thresholding.",
+      "correction": "Pseudo and final inference policies differ. Batch-wide classification shortcut and ensemble order remain source assumptions; binary masks are not calibrated probabilities.",
+      "source_anchors": [
+        {
+          "file": "sciona/hubmap_graph_runtime.py",
+          "symbol": "pseudo_labels",
+          "line": 23,
+          "file_sha256": "abe37489c453f23e7c668cdb2ba8be9c2a6ec61557fd1875b0abe0dbeb417d4a"
+        },
+        {
+          "file": "sciona/hubmap_graph_runtime.py",
+          "symbol": "final_prediction",
+          "line": 33,
+          "file_sha256": "abe37489c453f23e7c668cdb2ba8be9c2a6ec61557fd1875b0abe0dbeb417d4a"
+        },
+        {
+          "file": "sciona/hubmap_inference.py",
+          "symbol": "predict_batch",
+          "line": 7,
+          "file_sha256": "c30e4eb325b47bc4eeecfafaf858104d98fab1c4fecbdd10aeb82028ff0a4c9b"
+        },
+        {
+          "file": "sciona/hubmap_network.py",
+          "symbol": "UNET_SERESNEXT101.forward",
+          "line": 154,
+          "file_sha256": "32a82b4af15101d4882909038a58c2708b5867b9cebc3f1295b5b1c8adda1e74"
+        }
+      ]
+    },
+    {
+      "stage_id": "gigapixel_stitching",
+      "realization": "Prepare padded inference grids in bounded batches and write predicted interiors into a full-size binary output mask.",
+      "correction": "Full decoded source and output arrays remain resident. No TIFF streaming, unbounded-size memory guarantee or source-codec qualification is implied.",
+      "source_anchors": [
+        {
+          "file": "sciona/hubmap_raw_inference.py",
+          "symbol": "predict_slide",
+          "line": 16,
+          "file_sha256": "8f8670ef857263815caa8e92a4942603ef5a31b2baaf34220d0b67cf6e464179"
+        },
+        {
+          "file": "sciona/hubmap_inference_tiles.py",
+          "symbol": "InferenceTiles",
+          "line": 8,
+          "file_sha256": "8d1558a118885d6e9f636b4f85258a924a8e2d411a51e53bb5434ae352879909"
+        }
+      ]
+    }
+  ],
+  "reuse_decision": "The recipe may transfer to other binary raster-segmentation tasks with justified foreground semantics, physical scale, color and augmentation assumptions, independent grouped populations and pseudo-source isolation. Keep explicit stage and inference policies. Generic image or sampling operations require independent qualification before standalone selection.",
+  "limitations": [
+    "Binary foreground semantics, physical scale, color statistics and lossy preprocessing must be justified for each application. A nonempty mask can enter the background sampling population. TIFF decoding and stain normalization are not implemented by this graph.",
+    "Group labels do not establish independence of subjects, acquisition sessions or sources. The caller must exclude validation overlap from pseudo sources; the implementation does not detect that overlap.",
+    "Encoder-state shape compatibility and deterministic seeds do not authenticate pretrained weights or prove accuracy. Explicit stage schedules and checkpoint roles must be executable. The graph stage functions use _train_stages directly and do not inherit all run_lifecycle selector validation.",
+    "Pseudo masks are model outputs, not independent ground truth. Positive-only filtering, area bins and augmentation invariance are recipe assumptions; application transfer requires justification and independent evaluation.",
+    "Batch composition, tile scale, padding, normalization and thresholds affect meaning and output. An empty final mask can result from the classifier shortcut; it is not evidence of absent foreground. Binary outputs are not calibrated uncertainty estimates.",
+    "These provider interfaces are recipe stages and trusted runtime-object boundaries, not a generic JSON service. Image tiling, balanced sampling and aggregation need independently qualified contracts before standalone cross-domain selection."
+  ],
+  "historical_source_review_sha256": "2b7eec855657bed19151651463c134e9b2c5f32dfd31fed50a799f4893fbbefb",
+  "historical_evidence_sha256": {
+    "competition_hubmap_serialized.json": "20bcd801399c17532974197872f5dbe4beff18fcc43c028dc6c5a989271adc81",
+    "competition_hubmap_lifecycle_source.json": "7486394fff074aa9bc5af2332a18f91d918bf5e7c4f27a9e2bffca354c291bd3",
+    "competition_hubmap_final_inference.json": "22fabd2055cec1d6745ac3bd9344fe27ac82b27b7ba68eb700d313de830bc4d7",
+    "competition_hubmap_final_network.json": "f1636a14fe2c8cbbb99eed831f6bee2651ccda6e0d3fa220a2363f45efbca1c8",
+    "competition_hubmap_raw_inference.json": "ca53c2d41e2eb36f2c15ca94752a482f8f31ace98f2e3ac19ccf08ad3a413196",
+    "competition_hubmap_inference_network.json": "d1fd18aebdb3f7bd02a487ca8a5f90403c3c99bd8f63ba6b4a7464d7318bd127",
+    "competition_hubmap_inference_tiles.json": "d7362a103ea47b86e2eaeb795dc40a119710b1aedeb32cfe0a3206529448f54d",
+    "competition_hubmap_inference.json": "b81887b7569acc2deb176914fa553382733f8cedfbff943de824738d1d523fc2",
+    "competition_hubmap_retraining_range.json": "722ee5e7d4cdf4774b76ae2189a89903cc16dbbe5de3a3fbbf754382a8500158",
+    "competition_hubmap_retraining.json": "f762977ef7e0b9a2d03fb46f0d9ca462a7e4f3b0bda277124387db5bf15d1b30",
+    "competition_hubmap_pseudo_orchestration.json": "4b586118b221b91408a8ac54369724e0c93df382794ce3369109d702002bcee5",
+    "competition_hubmap_raw_training.json": "74e489eae9b24f5c4889e55cd2d33607858bea6f68b45afc430a4ee36861b7f4",
+    "competition_hubmap_raw_population.json": "14cec30284fef5d40a436d72b76e516bb37c5ee01f2a667072ee28e11fbfe3c0",
+    "competition_hubmap_partition.json": "83a37ba7fb5abd5f652cf50a50ef7f0bb29be7ac037019952ad47e820aeabccd",
+    "competition_hubmap_preparation.json": "72c704c3948041789b52119447dae27487ac3fba5f3bc6b48faf731529a2169f",
+    "competition_hubmap_tiling.json": "53ab677ea0e9c01d492ebb9ee8dcf13951bd13c42b4bfbd0627179a116252af4",
+    "competition_hubmap_range.json": "6be448ed1d80381b3bddc8e53fa9ef68bc841a93a860e2286233fc010f40c290",
+    "competition_hubmap_epoch.json": "aaa66a9c244f60aedd1144e4e9876337a4aa3e6b2b8d26ed9c2e923153abc1eb",
+    "competition_hubmap_training.json": "49a5722306b011799f80ef4330249b083a41166907ccaaa54a7cfdfcd20e8f76",
+    "competition_hubmap_validation.json": "d6a11e5b640c5e1064ee937436d3a53ede996b52d8c89f45e63eab24044ec74a",
+    "competition_hubmap_losses.json": "6322457bf04b9fc4c08a26733d6319f86689c51d53d5a065afcb2bb127009cc7",
+    "competition_hubmap_augmentation.json": "6bf50fcf4224127b3a239db2a7081e2bac7828399b205b1fd04b7d490c5018fd",
+    "competition_hubmap_loader.json": "b9577b6d313f75cf1980f610a238f119148e04b17bd2cc004b71bcce592ddd11",
+    "competition_hubmap_batches.json": "3077847b642afd32e30e1e48002642b6bd9d074153121e81d70fd6e31228c8d6",
+    "competition_hubmap_sampling_schedule.json": "4d938bcf683e55a3844a35d10ab872929d133621b8fcf90eb383bbbfa3cef0b7",
+    "competition_hubmap_checkpoint_policy.json": "7665f43d860603cfc7deea6b05b37dd59fd71a0379d9fb9dc861789e12f58198",
+    "competition_hubmap_network_eval_heads_320.json": "1863e924ee228978f56175aaa4b6f3cd825a28c352d223e77ec9ab276e017e90",
+    "competition_hubmap_network_train_heads_32.json": "51c805df9127ca5045c3fb319852671a0a6dbb90ca4c19394a0f65c52d1db0e5",
+    "competition_hubmap_network_eval_heads_32.json": "f3f7aa397432fa3d1dd15886082479d90a5351bd0b26cff394521ee7565100c0",
+    "competition_hubmap_network_eval_plain_32.json": "7890740640f5c8a484b3237c452e36ec8c88e81d5beb53bdc701f359312c625f",
+    "competition_hubmap_pseudo_pins.json": "e4aa409b4f7e53f69646dd49bee490ddedb65984e1d5c4e27df9e5c7e43942a9",
+    "competition_hubmap_augmentation_pins.json": "44977ff6956885588f3c30521110e5d038080551f3cf337fd5ec8a73ab9b23c0",
+    "competition_hubmap_partition_pins.json": "aa23c467e433ca8f9cc7a75e45d2acd888ee213e4486b35ee223e004da609288",
+    "competition_hubmap_final_notebook_pins.json": "f5db4bcde5ffee7fd603d3c54c21c688e011a76400bcb6839ef38f83041dbbea",
+    "competition_hubmap_source_pins.json": "604ac6413b3fe8cc9c446c39521b4368d17b9d8d7532c7ab51b7853b1fdfdced",
+    "competition_hubmap_loader_pins.json": "8d899b3a997ae1f937c91999f912cc8e7f127d8d013750732ac8cd97bc31abd5",
+    "competition_hubmap_publication_tests.json": "797ca9f1be69138c0cd029ed033388d2ecfda13a9adcb3d4513db1df94e239d7"
+  },
+  "reuse_reviewer_sha256": "16cc2496d402b7f113eb151ddf7adde1db2d6976e4e773f4878810ac22a6819d",
+  "reviewer_sha256": "b4963d6573ad439dc042f8ede3075432c791ce2a2f34cb4c9b24e368c4acee94",
+  "remaining": [
+    "Execute full initial and retraining networks, pseudo handoff and final prediction with explicit fold coverage, source-sized geometry and bounded resources.",
+    "Review provider contracts and reconcile metadata with rollback gates.",
+    "Stage and execute the corrected stored original; qualify publication and served selection."
+  ]
+}
