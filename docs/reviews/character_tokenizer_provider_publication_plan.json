@@ -1,0 +1,856 @@
+{
+  "records": [
+    {
+      "artifact_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+      "fqdn": "sciona.atoms.ml.character_run_tokenization.tokenize_character_runs",
+      "version_id": "9a2049c1-d7c6-5b7d-98f1-9bf174ba8aef",
+      "content_hash": "d5420073c514539d6612d077d2030775a57118282f78c8553639f6ee951d6528",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "text",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unicode Python string; empty input allowed. No coercion of missing values, case folding, normalization, transliteration, stemming or deletion. Caller resolves table missing-value policies before this operation."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "word_characters",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit string whose code points form the word-run alphabet. Empty and repeated characters allowed; membership only matters. Must be disjoint from whitespace_characters. Caller preserves the same policy across training and inference and chooses it for the intended domain."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "whitespace_characters",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit string whose code points form the whitespace-run alphabet. Empty and repeated characters allowed. No automatic Unicode whitespace expansion. Must be disjoint from word_characters; characters outside both alphabets become individual tokens."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Ordered list of nonempty string tokens; empty input returns an empty list. Consecutive word or whitespace code points form runs; all other code points are individual tokens. Joining tokens exactly reproduces the input. Code-point semantics are not grapheme or linguistic segmentation. Independent chunk tokenization may change run boundaries. Witness metadata gives bounds only, not an exact token-array shape."
+        }
+      ],
+      "operation": "Split text into maximal caller-defined word and whitespace runs and individual remaining code points without changing text.",
+      "plain_description": "Split text into pieces using caller-chosen character groups, preserving every character.",
+      "validity_bounds": "Unicode Python string; empty input allowed. No coercion of missing values, case folding, normalization, transliteration, stemming or deletion. Caller resolves table missing-value policies before this operation. Explicit string whose code points form the word-run alphabet. Empty and repeated characters allowed; membership only matters. Must be disjoint from whitespace_characters. Caller preserves the same policy across training and inference and chooses it for the intended domain. Explicit string whose code points form the whitespace-run alphabet. Empty and repeated characters allowed. No automatic Unicode whitespace expansion. Must be disjoint from word_characters; characters outside both alphabets become individual tokens. Ordered list of nonempty string tokens; empty input returns an empty list. Consecutive word or whitespace code points form runs; all other code points are individual tokens. Joining tokens exactly reproduces the input. Code-point semantics are not grapheme or linguistic segmentation. Independent chunk tokenization may change run boundaries. Witness metadata gives bounds only, not an exact token-array shape.",
+      "reuse": "Reusable across textual measurements, symbolic expressions and biological sequence strings through explicit character alphabets. No competition fields, learned vocabulary, language-specific normalization or fixed application schema are required.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "qualification": {
+    "format": "character-tokenizer-semantics.v1",
+    "passed": true,
+    "approved": false,
+    "proposed_tier": 3,
+    "verdict": "acceptable_with_limits",
+    "catalog_mutations": 0,
+    "synthetic_only": true,
+    "providers": [
+      {
+        "artifact_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+        "fqdn": "sciona.atoms.ml.character_run_tokenization.tokenize_character_runs",
+        "version_id": "9a2049c1-d7c6-5b7d-98f1-9bf174ba8aef",
+        "content_hash": "d5420073c514539d6612d077d2030775a57118282f78c8553639f6ee951d6528",
+        "interfaces": [
+          {
+            "direction": "input",
+            "ordinal": 0,
+            "name": "text",
+            "type_desc": "str",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Unicode Python string; empty input allowed. No coercion of missing values, case folding, normalization, transliteration, stemming or deletion. Caller resolves table missing-value policies before this operation."
+          },
+          {
+            "direction": "input",
+            "ordinal": 1,
+            "name": "word_characters",
+            "type_desc": "str",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Explicit string whose code points form the word-run alphabet. Empty and repeated characters allowed; membership only matters. Must be disjoint from whitespace_characters. Caller preserves the same policy across training and inference and chooses it for the intended domain."
+          },
+          {
+            "direction": "input",
+            "ordinal": 2,
+            "name": "whitespace_characters",
+            "type_desc": "str",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Explicit string whose code points form the whitespace-run alphabet. Empty and repeated characters allowed. No automatic Unicode whitespace expansion. Must be disjoint from word_characters; characters outside both alphabets become individual tokens."
+          },
+          {
+            "direction": "output",
+            "ordinal": 0,
+            "name": "result",
+            "type_desc": "list",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Ordered list of nonempty string tokens; empty input returns an empty list. Consecutive word or whitespace code points form runs; all other code points are individual tokens. Joining tokens exactly reproduces the input. Code-point semantics are not grapheme or linguistic segmentation. Independent chunk tokenization may change run boundaries. Witness metadata gives bounds only, not an exact token-array shape."
+          }
+        ],
+        "operation": "Split text into maximal caller-defined word and whitespace runs and individual remaining code points without changing text.",
+        "plain_description": "Split text into pieces using caller-chosen character groups, preserving every character.",
+        "validity_bounds": "Unicode Python string; empty input allowed. No coercion of missing values, case folding, normalization, transliteration, stemming or deletion. Caller resolves table missing-value policies before this operation. Explicit string whose code points form the word-run alphabet. Empty and repeated characters allowed; membership only matters. Must be disjoint from whitespace_characters. Caller preserves the same policy across training and inference and chooses it for the intended domain. Explicit string whose code points form the whitespace-run alphabet. Empty and repeated characters allowed. No automatic Unicode whitespace expansion. Must be disjoint from word_characters; characters outside both alphabets become individual tokens. Ordered list of nonempty string tokens; empty input returns an empty list. Consecutive word or whitespace code points form runs; all other code points are individual tokens. Joining tokens exactly reproduces the input. Code-point semantics are not grapheme or linguistic segmentation. Independent chunk tokenization may change run boundaries. Witness metadata gives bounds only, not an exact token-array shape.",
+        "reuse": "Reusable across textual measurements, symbolic expressions and biological sequence strings through explicit character alphabets. No competition fields, learned vocabulary, language-specific normalization or fixed application schema are required.",
+        "registered_provider_dependencies": []
+      }
+    ],
+    "tests": {
+      "tests": 19,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "software_sha256": {
+      "tests/test_character_run_tokenizer.py": "6aeefadf3bcc41c962aae592845ad8354bba2d441d0fed7a094582a0d1c62ffb",
+      "provider/test_character_run_tokenization_provider.py": "84c73521a7aae3bb15da7c0f75d8c0e795a59d74a18b0573a0f9268a1c9a98a9",
+      "sciona/character_run_tokenizer.py": "ff7e9401252a5a8958322054737de8269d33eb1f5f0a79ad09cbf8ec5dd4a708",
+      "scripts/review_character_tokenizer_semantics.py": "e6492635cbc0d4839159495848b2d1e9661e6d4617418c28efc11dc924eab39f",
+      "scripts/import_character_tokenizer_drafts.py": "ba88b53eca8976bf685b481925c9e2c35d901c020439c78b83011fdc810f6310",
+      "scripts/plan_character_tokenizer_intake.py": "7fb8e2d6780e616e7480749aeabc52c23cc697ab71a3757004b53c5547b1b176",
+      "docs/licenses/mercari-solution-LICENSE.txt": "ebd4587bd7c8d16ffb12e88219f6930a505962abb85a72c58ebf597c59d5abe2",
+      "sciona.atoms.ml.character_run_tokenization": "1606cd9cfbd3f3232e10f710d43e2646c0824150f56556d997320713c0d26418",
+      "sciona.ghost.registry": "793723a75d07a88eed39f59d8d4dc327c54adbf75db7a03003516a6f74c81b51",
+      "sciona.ghost.abstract": "9574bed61c8292b2eaf6ff054bcf46504b07e679c521a19d2440396c3ea63670",
+      "sciona.ghost.dimensions": "61be1958aa50725f3c6598d5b5447a806d2549698d5ce3ec243d467816754b7e"
+    },
+    "installed_packages": {
+      "annotated-types": {
+        "version": "0.7.0",
+        "hashed_files_verified": 7,
+        "active_requirements": []
+      },
+      "numpy": {
+        "version": "2.2.6",
+        "hashed_files_verified": 876,
+        "active_requirements": []
+      },
+      "pydantic": {
+        "version": "2.12.5",
+        "hashed_files_verified": 111,
+        "active_requirements": [
+          "annotated-types>=0.6.0",
+          "pydantic-core==2.41.5",
+          "typing-extensions>=4.14.1",
+          "typing-inspection>=0.4.2"
+        ]
+      },
+      "pydantic-core": {
+        "version": "2.41.5",
+        "hashed_files_verified": 9,
+        "active_requirements": [
+          "typing-extensions>=4.14.1"
+        ]
+      },
+      "typing-extensions": {
+        "version": "4.16.0",
+        "hashed_files_verified": 6,
+        "active_requirements": []
+      },
+      "typing-inspection": {
+        "version": "0.4.2",
+        "hashed_files_verified": 9,
+        "active_requirements": [
+          "typing-extensions>=4.12.0"
+        ]
+      }
+    },
+    "intake_plan_sha256": "960bb6b20ddfbf2eb5c687b187cb8f9225f2a0e3824b7a844cb03b4ac0727b21",
+    "connected_execution_commit": "df784132",
+    "connected_execution_sha256": "fc517f3b61acca3ca236f9f154c29612ec5578582d39a42f6eb49aa25fc98ec4",
+    "resource_policy": {
+      "native_threads": 1,
+      "test_workers": 1
+    },
+    "limitations": [
+      "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+      "Caller supplies disjoint word and whitespace alphabets and preserves policy across training and inference. Domain-specific language and sequence semantics are not inferred.",
+      "Lossless code-point segmentation only; no Unicode normalization, grapheme handling, stemming, transliteration, whitespace deletion or linguistic word detection. Independent chunks can change run boundaries.",
+      "Witness output contains token-count bounds, not exact token shape or observed text. Downstream witnesses must handle variable-length sequences explicitly.",
+      "Connected feature parity uses an explicit source character-policy adapter, diagnostic source feature loaders and synthetic inputs. It does not certify new-domain predictive accuracy or historical-runtime equivalence.",
+      "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment and other platforms are not certified.",
+      "This review qualifies one generic tokenizer atom, not the application-specific text-cleaning policy, full feature pipeline or original competition CDG."
+    ]
+  },
+  "inserts": [
+    {
+      "table": "references_registry",
+      "keys": {
+        "ref_id": "character_tokenizer-provider-review-v1"
+      },
+      "row": {
+        "ref_id": "character_tokenizer-provider-review-v1",
+        "ref_type": "web",
+        "title": "Generic lossless character-run tokenization implementation and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/128b69ef/docs/reviews/character_tokenizer_semantics.json"
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+        "version_id": "9a2049c1-d7c6-5b7d-98f1-9bf174ba8aef",
+        "direction": "input",
+        "name": "text"
+      },
+      "row": {
+        "atom_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+        "version_id": "9a2049c1-d7c6-5b7d-98f1-9bf174ba8aef",
+        "direction": "input",
+        "ordinal": 0,
+        "name": "text",
+        "type_desc": "str",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Unicode Python string; empty input allowed. No coercion of missing values, case folding, normalization, transliteration, stemming or deletion. Caller resolves table missing-value policies before this operation."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+        "version_id": "9a2049c1-d7c6-5b7d-98f1-9bf174ba8aef",
+        "name": "text"
+      },
+      "row": {
+        "atom_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+        "version_id": "9a2049c1-d7c6-5b7d-98f1-9bf174ba8aef",
+        "name": "text",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "str",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Unicode Python string; empty input allowed. No coercion of missing values, case folding, normalization, transliteration, stemming or deletion. Caller resolves table missing-value policies before this operation.",
+        "dejargonized_description": "Caller supplies text.",
+        "constraints_json": {
+          "parameter_contract": "Unicode Python string; empty input allowed. No coercion of missing values, case folding, normalization, transliteration, stemming or deletion. Caller resolves table missing-value policies before this operation.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Caller supplies disjoint word and whitespace alphabets and preserves policy across training and inference. Domain-specific language and sequence semantics are not inferred.",
+            "Lossless code-point segmentation only; no Unicode normalization, grapheme handling, stemming, transliteration, whitespace deletion or linguistic word detection. Independent chunks can change run boundaries.",
+            "Witness output contains token-count bounds, not exact token shape or observed text. Downstream witnesses must handle variable-length sequences explicitly.",
+            "Connected feature parity uses an explicit source character-policy adapter, diagnostic source feature loaders and synthetic inputs. It does not certify new-domain predictive accuracy or historical-runtime equivalence.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment and other platforms are not certified.",
+            "This review qualifies one generic tokenizer atom, not the application-specific text-cleaning policy, full feature pipeline or original competition CDG."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+        "version_id": "9a2049c1-d7c6-5b7d-98f1-9bf174ba8aef",
+        "direction": "input",
+        "name": "word_characters"
+      },
+      "row": {
+        "atom_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+        "version_id": "9a2049c1-d7c6-5b7d-98f1-9bf174ba8aef",
+        "direction": "input",
+        "ordinal": 1,
+        "name": "word_characters",
+        "type_desc": "str",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Explicit string whose code points form the word-run alphabet. Empty and repeated characters allowed; membership only matters. Must be disjoint from whitespace_characters. Caller preserves the same policy across training and inference and chooses it for the intended domain."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+        "version_id": "9a2049c1-d7c6-5b7d-98f1-9bf174ba8aef",
+        "name": "word_characters"
+      },
+      "row": {
+        "atom_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+        "version_id": "9a2049c1-d7c6-5b7d-98f1-9bf174ba8aef",
+        "name": "word_characters",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "str",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Explicit string whose code points form the word-run alphabet. Empty and repeated characters allowed; membership only matters. Must be disjoint from whitespace_characters. Caller preserves the same policy across training and inference and chooses it for the intended domain.",
+        "dejargonized_description": "Caller supplies word characters.",
+        "constraints_json": {
+          "parameter_contract": "Explicit string whose code points form the word-run alphabet. Empty and repeated characters allowed; membership only matters. Must be disjoint from whitespace_characters. Caller preserves the same policy across training and inference and chooses it for the intended domain.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Caller supplies disjoint word and whitespace alphabets and preserves policy across training and inference. Domain-specific language and sequence semantics are not inferred.",
+            "Lossless code-point segmentation only; no Unicode normalization, grapheme handling, stemming, transliteration, whitespace deletion or linguistic word detection. Independent chunks can change run boundaries.",
+            "Witness output contains token-count bounds, not exact token shape or observed text. Downstream witnesses must handle variable-length sequences explicitly.",
+            "Connected feature parity uses an explicit source character-policy adapter, diagnostic source feature loaders and synthetic inputs. It does not certify new-domain predictive accuracy or historical-runtime equivalence.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment and other platforms are not certified.",
+            "This review qualifies one generic tokenizer atom, not the application-specific text-cleaning policy, full feature pipeline or original competition CDG."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+        "version_id": "9a2049c1-d7c6-5b7d-98f1-9bf174ba8aef",
+        "direction": "input",
+        "name": "whitespace_characters"
+      },
+      "row": {
+        "atom_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+        "version_id": "9a2049c1-d7c6-5b7d-98f1-9bf174ba8aef",
+        "direction": "input",
+        "ordinal": 2,
+        "name": "whitespace_characters",
+        "type_desc": "str",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Explicit string whose code points form the whitespace-run alphabet. Empty and repeated characters allowed. No automatic Unicode whitespace expansion. Must be disjoint from word_characters; characters outside both alphabets become individual tokens."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+        "version_id": "9a2049c1-d7c6-5b7d-98f1-9bf174ba8aef",
+        "name": "whitespace_characters"
+      },
+      "row": {
+        "atom_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+        "version_id": "9a2049c1-d7c6-5b7d-98f1-9bf174ba8aef",
+        "name": "whitespace_characters",
+        "position": 2,
+        "kind": "positional_or_keyword",
+        "type_desc": "str",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Explicit string whose code points form the whitespace-run alphabet. Empty and repeated characters allowed. No automatic Unicode whitespace expansion. Must be disjoint from word_characters; characters outside both alphabets become individual tokens.",
+        "dejargonized_description": "Caller supplies whitespace characters.",
+        "constraints_json": {
+          "parameter_contract": "Explicit string whose code points form the whitespace-run alphabet. Empty and repeated characters allowed. No automatic Unicode whitespace expansion. Must be disjoint from word_characters; characters outside both alphabets become individual tokens.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Caller supplies disjoint word and whitespace alphabets and preserves policy across training and inference. Domain-specific language and sequence semantics are not inferred.",
+            "Lossless code-point segmentation only; no Unicode normalization, grapheme handling, stemming, transliteration, whitespace deletion or linguistic word detection. Independent chunks can change run boundaries.",
+            "Witness output contains token-count bounds, not exact token shape or observed text. Downstream witnesses must handle variable-length sequences explicitly.",
+            "Connected feature parity uses an explicit source character-policy adapter, diagnostic source feature loaders and synthetic inputs. It does not certify new-domain predictive accuracy or historical-runtime equivalence.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment and other platforms are not certified.",
+            "This review qualifies one generic tokenizer atom, not the application-specific text-cleaning policy, full feature pipeline or original competition CDG."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+        "version_id": "9a2049c1-d7c6-5b7d-98f1-9bf174ba8aef",
+        "direction": "output",
+        "name": "result"
+      },
+      "row": {
+        "atom_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+        "version_id": "9a2049c1-d7c6-5b7d-98f1-9bf174ba8aef",
+        "direction": "output",
+        "ordinal": 0,
+        "name": "result",
+        "type_desc": "list",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Ordered list of nonempty string tokens; empty input returns an empty list. Consecutive word or whitespace code points form runs; all other code points are individual tokens. Joining tokens exactly reproduces the input. Code-point semantics are not grapheme or linguistic segmentation. Independent chunk tokenization may change run boundaries. Witness metadata gives bounds only, not an exact token-array shape."
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+        "kind": "technical",
+        "language": "en",
+        "content": "Split text into maximal caller-defined word and whitespace runs and individual remaining code points without changing text. Unicode Python string; empty input allowed. No coercion of missing values, case folding, normalization, transliteration, stemming or deletion. Caller resolves table missing-value policies before this operation. Explicit string whose code points form the word-run alphabet. Empty and repeated characters allowed; membership only matters. Must be disjoint from whitespace_characters. Caller preserves the same policy across training and inference and chooses it for the intended domain. Explicit string whose code points form the whitespace-run alphabet. Empty and repeated characters allowed. No automatic Unicode whitespace expansion. Must be disjoint from word_characters; characters outside both alphabets become individual tokens. Ordered list of nonempty string tokens; empty input returns an empty list. Consecutive word or whitespace code points form runs; all other code points are individual tokens. Joining tokens exactly reproduces the input. Code-point semantics are not grapheme or linguistic segmentation. Independent chunk tokenization may change run boundaries. Witness metadata gives bounds only, not an exact token-array shape. Reusable across textual measurements, symbolic expressions and biological sequence strings through explicit character alphabets. No competition fields, learned vocabulary, language-specific normalization or fixed application schema are required.",
+        "generated_by": "character_tokenizer-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.027919
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Split text into pieces using caller-chosen character groups, preserving every character. Accuracy on new problems must be checked separately.",
+        "generated_by": "character_tokenizer-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "atom_references",
+      "keys": {
+        "atom_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+        "ref_key": "character_tokenizer-provider-review-v1"
+      },
+      "row": {
+        "atom_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+        "ref_key": "character_tokenizer-provider-review-v1",
+        "ref_id": "character_tokenizer-provider-review-v1",
+        "title": "Generic lossless character-run tokenization implementation and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/128b69ef/docs/reviews/character_tokenizer_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Split text into maximal caller-defined word and whitespace runs and individual remaining code points without changing text. Unicode Python string; empty input allowed. No coercion of missing values, case folding, normalization, transliteration, stemming or deletion. Caller resolves table missing-value policies before this operation. Explicit string whose code points form the word-run alphabet. Empty and repeated characters allowed; membership only matters. Must be disjoint from whitespace_characters. Caller preserves the same policy across training and inference and chooses it for the intended domain. Explicit string whose code points form the whitespace-run alphabet. Empty and repeated characters allowed. No automatic Unicode whitespace expansion. Must be disjoint from word_characters; characters outside both alphabets become individual tokens. Ordered list of nonempty string tokens; empty input returns an empty list. Consecutive word or whitespace code points form runs; all other code points are individual tokens. Joining tokens exactly reproduces the input. Code-point semantics are not grapheme or linguistic segmentation. Independent chunk tokenization may change run boundaries. Witness metadata gives bounds only, not an exact token-array shape."
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+        "version_id": "9a2049c1-d7c6-5b7d-98f1-9bf174ba8aef",
+        "name": "text"
+      },
+      "row": {
+        "artifact_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+        "version_id": "9a2049c1-d7c6-5b7d-98f1-9bf174ba8aef",
+        "name": "text",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "str",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Unicode Python string; empty input allowed. No coercion of missing values, case folding, normalization, transliteration, stemming or deletion. Caller resolves table missing-value policies before this operation.",
+        "dejargonized_description": "Caller supplies text.",
+        "constraints_json": {
+          "parameter_contract": "Unicode Python string; empty input allowed. No coercion of missing values, case folding, normalization, transliteration, stemming or deletion. Caller resolves table missing-value policies before this operation.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Caller supplies disjoint word and whitespace alphabets and preserves policy across training and inference. Domain-specific language and sequence semantics are not inferred.",
+            "Lossless code-point segmentation only; no Unicode normalization, grapheme handling, stemming, transliteration, whitespace deletion or linguistic word detection. Independent chunks can change run boundaries.",
+            "Witness output contains token-count bounds, not exact token shape or observed text. Downstream witnesses must handle variable-length sequences explicitly.",
+            "Connected feature parity uses an explicit source character-policy adapter, diagnostic source feature loaders and synthetic inputs. It does not certify new-domain predictive accuracy or historical-runtime equivalence.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment and other platforms are not certified.",
+            "This review qualifies one generic tokenizer atom, not the application-specific text-cleaning policy, full feature pipeline or original competition CDG."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+        "version_id": "9a2049c1-d7c6-5b7d-98f1-9bf174ba8aef",
+        "name": "word_characters"
+      },
+      "row": {
+        "artifact_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+        "version_id": "9a2049c1-d7c6-5b7d-98f1-9bf174ba8aef",
+        "name": "word_characters",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "str",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Explicit string whose code points form the word-run alphabet. Empty and repeated characters allowed; membership only matters. Must be disjoint from whitespace_characters. Caller preserves the same policy across training and inference and chooses it for the intended domain.",
+        "dejargonized_description": "Caller supplies word characters.",
+        "constraints_json": {
+          "parameter_contract": "Explicit string whose code points form the word-run alphabet. Empty and repeated characters allowed; membership only matters. Must be disjoint from whitespace_characters. Caller preserves the same policy across training and inference and chooses it for the intended domain.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Caller supplies disjoint word and whitespace alphabets and preserves policy across training and inference. Domain-specific language and sequence semantics are not inferred.",
+            "Lossless code-point segmentation only; no Unicode normalization, grapheme handling, stemming, transliteration, whitespace deletion or linguistic word detection. Independent chunks can change run boundaries.",
+            "Witness output contains token-count bounds, not exact token shape or observed text. Downstream witnesses must handle variable-length sequences explicitly.",
+            "Connected feature parity uses an explicit source character-policy adapter, diagnostic source feature loaders and synthetic inputs. It does not certify new-domain predictive accuracy or historical-runtime equivalence.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment and other platforms are not certified.",
+            "This review qualifies one generic tokenizer atom, not the application-specific text-cleaning policy, full feature pipeline or original competition CDG."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+        "version_id": "9a2049c1-d7c6-5b7d-98f1-9bf174ba8aef",
+        "name": "whitespace_characters"
+      },
+      "row": {
+        "artifact_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+        "version_id": "9a2049c1-d7c6-5b7d-98f1-9bf174ba8aef",
+        "name": "whitespace_characters",
+        "position": 2,
+        "kind": "positional_or_keyword",
+        "type_desc": "str",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Explicit string whose code points form the whitespace-run alphabet. Empty and repeated characters allowed. No automatic Unicode whitespace expansion. Must be disjoint from word_characters; characters outside both alphabets become individual tokens.",
+        "dejargonized_description": "Caller supplies whitespace characters.",
+        "constraints_json": {
+          "parameter_contract": "Explicit string whose code points form the whitespace-run alphabet. Empty and repeated characters allowed. No automatic Unicode whitespace expansion. Must be disjoint from word_characters; characters outside both alphabets become individual tokens.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Caller supplies disjoint word and whitespace alphabets and preserves policy across training and inference. Domain-specific language and sequence semantics are not inferred.",
+            "Lossless code-point segmentation only; no Unicode normalization, grapheme handling, stemming, transliteration, whitespace deletion or linguistic word detection. Independent chunks can change run boundaries.",
+            "Witness output contains token-count bounds, not exact token shape or observed text. Downstream witnesses must handle variable-length sequences explicitly.",
+            "Connected feature parity uses an explicit source character-policy adapter, diagnostic source feature loaders and synthetic inputs. It does not certify new-domain predictive accuracy or historical-runtime equivalence.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment and other platforms are not certified.",
+            "This review qualifies one generic tokenizer atom, not the application-specific text-cleaning policy, full feature pipeline or original competition CDG."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+        "kind": "technical",
+        "language": "en",
+        "content": "Split text into maximal caller-defined word and whitespace runs and individual remaining code points without changing text. Unicode Python string; empty input allowed. No coercion of missing values, case folding, normalization, transliteration, stemming or deletion. Caller resolves table missing-value policies before this operation. Explicit string whose code points form the word-run alphabet. Empty and repeated characters allowed; membership only matters. Must be disjoint from whitespace_characters. Caller preserves the same policy across training and inference and chooses it for the intended domain. Explicit string whose code points form the whitespace-run alphabet. Empty and repeated characters allowed. No automatic Unicode whitespace expansion. Must be disjoint from word_characters; characters outside both alphabets become individual tokens. Ordered list of nonempty string tokens; empty input returns an empty list. Consecutive word or whitespace code points form runs; all other code points are individual tokens. Joining tokens exactly reproduces the input. Code-point semantics are not grapheme or linguistic segmentation. Independent chunk tokenization may change run boundaries. Witness metadata gives bounds only, not an exact token-array shape. Reusable across textual measurements, symbolic expressions and biological sequence strings through explicit character alphabets. No competition fields, learned vocabulary, language-specific normalization or fixed application schema are required.",
+        "generated_by": "character_tokenizer-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.027919
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Split text into pieces using caller-chosen character groups, preserving every character. Accuracy on new problems must be checked separately.",
+        "generated_by": "character_tokenizer-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "artifact_references",
+      "keys": {
+        "artifact_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+        "ref_key": "character_tokenizer-provider-review-v1"
+      },
+      "row": {
+        "artifact_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+        "ref_key": "character_tokenizer-provider-review-v1",
+        "ref_id": "character_tokenizer-provider-review-v1",
+        "title": "Generic lossless character-run tokenization implementation and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/128b69ef/docs/reviews/character_tokenizer_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Split text into maximal caller-defined word and whitespace runs and individual remaining code points without changing text. Unicode Python string; empty input allowed. No coercion of missing values, case folding, normalization, transliteration, stemming or deletion. Caller resolves table missing-value policies before this operation. Explicit string whose code points form the word-run alphabet. Empty and repeated characters allowed; membership only matters. Must be disjoint from whitespace_characters. Caller preserves the same policy across training and inference and chooses it for the intended domain. Explicit string whose code points form the whitespace-run alphabet. Empty and repeated characters allowed. No automatic Unicode whitespace expansion. Must be disjoint from word_characters; characters outside both alphabets become individual tokens. Ordered list of nonempty string tokens; empty input returns an empty list. Consecutive word or whitespace code points form runs; all other code points are individual tokens. Joining tokens exactly reproduces the input. Code-point semantics are not grapheme or linguistic segmentation. Independent chunk tokenization may change run boundaries. Witness metadata gives bounds only, not an exact token-array shape."
+      }
+    }
+  ],
+  "rollups": [
+    {
+      "table": "atom_audit_rollups",
+      "key": "atom_id",
+      "identity": "7e883bb5-d5c0-5040-8971-80546e651ada",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+          "Caller supplies disjoint word and whitespace alphabets and preserves policy across training and inference. Domain-specific language and sequence semantics are not inferred.",
+          "Lossless code-point segmentation only; no Unicode normalization, grapheme handling, stemming, transliteration, whitespace deletion or linguistic word detection. Independent chunks can change run boundaries.",
+          "Witness output contains token-count bounds, not exact token shape or observed text. Downstream witnesses must handle variable-length sequences explicitly.",
+          "Connected feature parity uses an explicit source character-policy adapter, diagnostic source feature loaders and synthetic inputs. It does not certify new-domain predictive accuracy or historical-runtime equivalence.",
+          "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment and other platforms are not certified.",
+          "This review qualifies one generic tokenizer atom, not the application-specific text-cleaning policy, full feature pipeline or original competition CDG.",
+          "Unicode Python string; empty input allowed. No coercion of missing values, case folding, normalization, transliteration, stemming or deletion. Caller resolves table missing-value policies before this operation. Explicit string whose code points form the word-run alphabet. Empty and repeated characters allowed; membership only matters. Must be disjoint from whitespace_characters. Caller preserves the same policy across training and inference and chooses it for the intended domain. Explicit string whose code points form the whitespace-run alphabet. Empty and repeated characters allowed. No automatic Unicode whitespace expansion. Must be disjoint from word_characters; characters outside both alphabets become individual tokens. Ordered list of nonempty string tokens; empty input returns an empty list. Consecutive word or whitespace code points form runs; all other code points are individual tokens. Joining tokens exactly reproduces the input. Code-point semantics are not grapheme or linguistic segmentation. Independent chunk tokenization may change run boundaries. Witness metadata gives bounds only, not an exact token-array shape."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "artifact_audit_rollups",
+      "key": "artifact_id",
+      "identity": "7e883bb5-d5c0-5040-8971-80546e651ada",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+          "Caller supplies disjoint word and whitespace alphabets and preserves policy across training and inference. Domain-specific language and sequence semantics are not inferred.",
+          "Lossless code-point segmentation only; no Unicode normalization, grapheme handling, stemming, transliteration, whitespace deletion or linguistic word detection. Independent chunks can change run boundaries.",
+          "Witness output contains token-count bounds, not exact token shape or observed text. Downstream witnesses must handle variable-length sequences explicitly.",
+          "Connected feature parity uses an explicit source character-policy adapter, diagnostic source feature loaders and synthetic inputs. It does not certify new-domain predictive accuracy or historical-runtime equivalence.",
+          "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment and other platforms are not certified.",
+          "This review qualifies one generic tokenizer atom, not the application-specific text-cleaning policy, full feature pipeline or original competition CDG.",
+          "Unicode Python string; empty input allowed. No coercion of missing values, case folding, normalization, transliteration, stemming or deletion. Caller resolves table missing-value policies before this operation. Explicit string whose code points form the word-run alphabet. Empty and repeated characters allowed; membership only matters. Must be disjoint from whitespace_characters. Caller preserves the same policy across training and inference and chooses it for the intended domain. Explicit string whose code points form the whitespace-run alphabet. Empty and repeated characters allowed. No automatic Unicode whitespace expansion. Must be disjoint from word_characters; characters outside both alphabets become individual tokens. Ordered list of nonempty string tokens; empty input returns an empty list. Consecutive word or whitespace code points form runs; all other code points are individual tokens. Joining tokens exactly reproduces the input. Code-point semantics are not grapheme or linguistic segmentation. Independent chunk tokenization may change run boundaries. Witness metadata gives bounds only, not an exact token-array shape."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    }
+  ],
+  "states": {
+    "7e883bb5-d5c0-5040-8971-80546e651ada": {
+      "atom": {
+        "status": "flagged",
+        "is_publishable": false
+      },
+      "artifact": {
+        "status": "draft",
+        "is_publishable": false
+      }
+    }
+  },
+  "before": {
+    "atoms": "f39413b29700ba930fe46eb75e379f2ec3fae98908cd7378a6e72780687ff687",
+    "artifacts": "6a04249f065bf64ca81df4c795af29a1c82ab0cf59df6b730d7ad776e5094878",
+    "atom_versions": "7f1c36a7e9add5d98dbaf479a927bfbf68e56b54e19c82b58befce7be579a2f9",
+    "artifact_versions": "f77797d019a58aed381b9d982e924b14358027b54abfcac49587227450d8da56",
+    "atom_io_specs": "2f5a3ce0f5622f7f721421ced87ed47a2a51001852458d4d47cacc7357d39438",
+    "artifact_io_specs": "c54ef1ede79daee19540f3645812885cf952c47891d6c5ff9106d2cfe3a1bc90",
+    "atom_parameters": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_parameters": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_descriptions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_descriptions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_references": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_references": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_audit_rollups": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_audit_rollups": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_audit_evidence": "a124ecfb2a889ab2fc06e5dd53b58ddf9877889a9bee57408235194cd96ac917"
+  },
+  "preserved": {
+    "atom_versions": [
+      {
+        "row": {
+          "s3_key": "",
+          "semver": "0.0.0+local.d5420073c514",
+          "atom_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+          "is_latest": true,
+          "created_at": "2026-11-10T19:54:35.252604+00:00",
+          "trust_tier": 3,
+          "version_id": "9a2049c1-d7c6-5b7d-98f1-9bf174ba8aef",
+          "fingerprint": "1de5b4989688daac3918a56d1d59dee73c5412378890d9d5ab73f60a1a1ddd0d",
+          "content_hash": "d5420073c514539d6612d077d2030775a57118282f78c8553639f6ee951d6528",
+          "derives_from": null
+        }
+      }
+    ],
+    "atom_parameters": [],
+    "atom_references": [],
+    "atom_io_specs": [
+      {
+        "row": {
+          "name": "result",
+          "atom_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "list",
+          "io_spec_id": "db278533-8749-4867-8cd8-96083ac58fb5",
+          "version_id": "9a2049c1-d7c6-5b7d-98f1-9bf174ba8aef",
+          "constraints": "Ordered list of nonempty string tokens; empty input returns an empty list. Consecutive word or whitespace code points form runs; all other code points are individual tokens. Joining tokens exactly reproduces the input. Code-point semantics are not grapheme or linguistic segmentation. Independent chunk tokenization may change run boundaries. Witness metadata gives bounds only, not an exact token-array shape.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "text",
+          "atom_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "str",
+          "io_spec_id": "bcb09f75-68c2-473c-98d5-d60f4242d646",
+          "version_id": "9a2049c1-d7c6-5b7d-98f1-9bf174ba8aef",
+          "constraints": "Unicode Python string; empty input allowed. No coercion of missing values, case folding, normalization, transliteration, stemming or deletion. Caller resolves table missing-value policies before this operation.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "whitespace_characters",
+          "atom_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+          "ordinal": 2,
+          "required": true,
+          "direction": "input",
+          "type_desc": "str",
+          "io_spec_id": "bb96b4b8-c9e6-487f-b02f-f14493c2f439",
+          "version_id": "9a2049c1-d7c6-5b7d-98f1-9bf174ba8aef",
+          "constraints": "Explicit string whose code points form the whitespace-run alphabet. Empty and repeated characters allowed. No automatic Unicode whitespace expansion. Must be disjoint from word_characters; characters outside both alphabets become individual tokens.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "word_characters",
+          "atom_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "str",
+          "io_spec_id": "36b9ccfc-22f5-4661-be40-f28f304777fc",
+          "version_id": "9a2049c1-d7c6-5b7d-98f1-9bf174ba8aef",
+          "constraints": "Explicit string whose code points form the word-run alphabet. Empty and repeated characters allowed; membership only matters. Must be disjoint from whitespace_characters. Caller preserves the same policy across training and inference and chooses it for the intended domain.",
+          "default_value_repr": ""
+        }
+      }
+    ],
+    "artifact_versions": [
+      {
+        "row": {
+          "s3_key": "",
+          "semver": "0.0.0+local.d5420073c514",
+          "is_latest": true,
+          "created_at": "2026-11-10T19:54:35.252604+00:00",
+          "trust_tier": 3,
+          "version_id": "9a2049c1-d7c6-5b7d-98f1-9bf174ba8aef",
+          "artifact_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+          "fingerprint": "1de5b4989688daac3918a56d1d59dee73c5412378890d9d5ab73f60a1a1ddd0d",
+          "content_hash": "d5420073c514539d6612d077d2030775a57118282f78c8553639f6ee951d6528",
+          "derives_from": null
+        }
+      }
+    ],
+    "artifact_parameters": [],
+    "artifact_references": [],
+    "artifact_io_specs": [
+      {
+        "row": {
+          "name": "result",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "list",
+          "io_spec_id": "213a52cb-46ae-4c73-bd98-dede5b5a98de",
+          "version_id": "9a2049c1-d7c6-5b7d-98f1-9bf174ba8aef",
+          "artifact_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+          "constraints": "Ordered list of nonempty string tokens; empty input returns an empty list. Consecutive word or whitespace code points form runs; all other code points are individual tokens. Joining tokens exactly reproduces the input. Code-point semantics are not grapheme or linguistic segmentation. Independent chunk tokenization may change run boundaries. Witness metadata gives bounds only, not an exact token-array shape.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "text",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "str",
+          "io_spec_id": "837ac3f2-dd9e-4046-b175-3c4d3fcf2823",
+          "version_id": "9a2049c1-d7c6-5b7d-98f1-9bf174ba8aef",
+          "artifact_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+          "constraints": "Unicode Python string; empty input allowed. No coercion of missing values, case folding, normalization, transliteration, stemming or deletion. Caller resolves table missing-value policies before this operation.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "whitespace_characters",
+          "ordinal": 2,
+          "required": true,
+          "direction": "input",
+          "type_desc": "str",
+          "io_spec_id": "85193434-a560-4488-a6cd-f0831e77675e",
+          "version_id": "9a2049c1-d7c6-5b7d-98f1-9bf174ba8aef",
+          "artifact_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+          "constraints": "Explicit string whose code points form the whitespace-run alphabet. Empty and repeated characters allowed. No automatic Unicode whitespace expansion. Must be disjoint from word_characters; characters outside both alphabets become individual tokens.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "word_characters",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "str",
+          "io_spec_id": "1940131f-9d9c-4dc3-b844-86d0a4ee30e4",
+          "version_id": "9a2049c1-d7c6-5b7d-98f1-9bf174ba8aef",
+          "artifact_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+          "constraints": "Explicit string whose code points form the word-run alphabet. Empty and repeated characters allowed; membership only matters. Must be disjoint from whitespace_characters. Caller preserves the same policy across training and inference and chooses it for the intended domain.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      }
+    ],
+    "artifact_audit_evidence": [
+      {
+        "row": {
+          "passed": true,
+          "status": "completed",
+          "details": {
+            "scope": "Exact source/version/interface draft import only. Dependency qualification, full metadata and semantic publication gates remain pending.",
+            "plan_commit": "19f6cbda",
+            "plan_sha256": "960bb6b20ddfbf2eb5c687b187cb8f9225f2a0e3824b7a844cb03b4ac0727b21",
+            "provider_sha256": "1606cd9cfbd3f3232e10f710d43e2646c0824150f56556d997320713c0d26418",
+            "execution_evidence_sha256": "fc517f3b61acca3ca236f9f154c29612ec5578582d39a42f6eb49aa25fc98ec4"
+          },
+          "audit_type": "asset_integrity_check",
+          "created_at": "2026-11-10T19:54:35.252604+00:00",
+          "version_id": "9a2049c1-d7c6-5b7d-98f1-9bf174ba8aef",
+          "artifact_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+          "evidence_id": "97315b3b-d955-57f3-95e7-8c5ba420c6de",
+          "source_kind": "automated",
+          "runner_version": "character-tokenizer-draft-intake.v1",
+          "review_basis_at": null,
+          "run_duration_ms": null,
+          "source_revision": "",
+          "upstream_version": ""
+        }
+      }
+    ]
+  },
+  "publisher_sha256": "03d7fccfd02970c17545a0db7f7784caaa3a9f2b98d65a7acd8a69531bf03602",
+  "review_sha256": "323ea2aecb4f4e6d7121be8639d0623f5da5391be57b781aba4c514d4d290ef0"
+}
