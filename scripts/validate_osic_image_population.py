@@ -33,7 +33,8 @@ def worker(source_directory,overlay,state_directory=None,compose=False):
     import cv2
     from pydicom.dataset import Dataset,FileMetaDataset
     from pydicom.uid import ExplicitVRLittleEndian,SecondaryCaptureImageStorage,generate_uid
-    from sciona.osic_image_population import prepare_training_population,predict_from_encoded
+    from sciona.osic_image_population import predict_from_encoded
+    from sciona.atoms.ml.domain_adapters import osic_image as provider
     from sciona.osic_image_batches import sample_batch
     from sciona.osic_image_model import build_model
     from sciona.osic_image_predictor import make_slice_predictor
@@ -88,7 +89,7 @@ def worker(source_directory,overlay,state_directory=None,compose=False):
     exec(source(TRAIN,19,GENERATOR_PIN),scope)
     scope['IGenerator'].BAD_ID=['excluded']
     generator=scope['IGenerator'](scope['P'],scope['A'],scope['TAB'])
-    actual=prepare_training_population(table,images,excluded_entities=['excluded'],
+    actual=provider.prepare_image_training_population(table,images,excluded_entities=['excluded'],
         time_coordinate='synthetic_time',response_coordinate='synthetic_response')
     assert actual['entities']==generator.keys==['b','a']
     candidate_rng=np.random.RandomState(42)
@@ -116,7 +117,7 @@ def worker(source_directory,overlay,state_directory=None,compose=False):
         from sciona.osic_quantile_training import train_quantile_branch
         from sciona.osic_quantile_features import FIELDS
         from sciona.osic_quantile_inference import predict_from_state
-        from sciona.osic_predictions import blend_predictions
+        blend_predictions=provider.blend_keyed_predictions
         feature_coordinate='synthetic-joint-features.v1'
         response_coordinate='synthetic-response.v1'
         raw_queries=query[['entity','time']]
@@ -163,6 +164,17 @@ def worker(source_directory,overlay,state_directory=None,compose=False):
     result=predict_from_encoded(baseline,query,inference_images,candidate_predictor)
     assert result['keys']==scope['sub']['Patient_Week'].tolist()
     np.testing.assert_array_equal(result['values'],scope['sub'][['FVC','Confidence']].to_numpy())
+    # Execute the separately selectable preparation and reduction interfaces.
+    # Keep model inputs per entity instead of retaining a whole decoded population.
+    slopes=[]
+    for row in baseline.itertuples():
+        inputs=provider.prepare_image_slice_inputs(inference_images[row.entity],row.numeric,row.category_a,row.category_b)
+        slopes.append(candidate_predictor([inputs['images'],inputs['metadata']]))
+    entity_positions={entity:i for i,entity in enumerate(baseline['entity'])}
+    reduced=provider.reduce_image_predictions(slopes,baseline['time'].to_numpy(),baseline['target'].to_numpy(),
+        baseline['uncertainty'].to_numpy(),np.array([entity_positions[e] for e in query['entity']],dtype=np.int64),
+        query['time'].to_numpy())
+    np.testing.assert_array_equal(reduced,result['values'])
     if private_paths:
         assert private_before==[sha(path) for path in private_paths]
     composition=None
@@ -212,6 +224,9 @@ def worker(source_directory,overlay,state_directory=None,compose=False):
         fitting_disabled=state_directory is not None,
         private_artifacts_unchanged=True if private_paths else None,
         composition=composition,
+        provider_interfaces_executed=['prepare_image_training_population','prepare_image_slice_inputs',
+            'reduce_image_predictions']+(['blend_keyed_predictions'] if compose else []),
+        separate_image_preparation_and_reduction_exact=True,
         runtime=dict(tensorflow=tf.__version__,legacy_keras=keras.__version__,pydicom=pydicom.__version__,
                      numpy=np.__version__,opencv=cv2.__version__),
         resource_policy=dict(native_threads=1,dataset_workers=1))
@@ -279,6 +294,7 @@ def validate(dependencies,source_directory,state_directory=None,compose=False):
             'sciona/osic_quantile_objective.py','sciona/tensorflow_distribution_losses.py'])
     return dict(format='osic-image-population.v1',passed=True,approved=False,catalog_mutations=0,
         synthetic_only=True,shared_environment_mutations=0,execution=result,dependency_archive_sha256=pins,
+        image_provider_sha256=sha(ROOT.parent/'sciona-atoms-ml/src/sciona/atoms/ml/domain_adapters/osic_image.py'),
         affine_provider_sha256=sha(ROOT.parent/'sciona-atoms/src/sciona/atoms/numerical/statistics/affine_fit.py'),
         software_sha256={name:sha(ROOT/name) for name in files},
         numeric_provider_sha256=dict(
