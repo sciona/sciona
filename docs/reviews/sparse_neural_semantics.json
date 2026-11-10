@@ -1,0 +1,526 @@
+{
+  "format": "sparse-neural-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "providers": [
+    {
+      "artifact_id": "3d8d6c71-56d6-5a54-b0d7-f23686b97374",
+      "fqdn": "sciona.atoms.ml.sparse_neural_prediction.fit_sparse_neural",
+      "version_id": "f729fd12-e064-5000-a966-932521a4fcb2",
+      "content_hash": "2547004b91f2b8057604fd92a8e1342c92068ba951673407a45b774efbb30649",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "features",
+          "type_desc": "csr_matrix",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite canonical float32 CSR matrix with positive feature width; training requires at least one row, prediction supports empty rows. Explicit zeros count as present in binary mode. Caller normalizes units and preserves fitted preprocessing, vocabulary and feature ordering. No application-specific preprocessing is implicit."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "targets",
+          "type_desc": "np.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite aligned nonempty float32 or float64 training response vector in the declared normalized response coordinate. Training-only inputs; calibration and query labels must be excluded. No implicit logarithm, inverse transform or output clamp."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "feature_columns",
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty ordered unique nonblank feature identifiers exactly matching CSR width. Must identify the same fitted feature semantics and order at prediction; equal width alone is insufficient."
+        },
+        {
+          "direction": "input",
+          "ordinal": 3,
+          "name": "feature_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonblank identity of caller-defined normalized feature coordinates, matching fitted state exactly. Different domains require explicit compatible feature adapters; labels alone do not prove semantic equivalence."
+        },
+        {
+          "direction": "input",
+          "ordinal": 4,
+          "name": "response_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonblank identity of normalized response coordinates, matching fitted state exactly. Caller owns physical units, transformations and any inverse transformation. Predictions retain this coordinate."
+        },
+        {
+          "direction": "input",
+          "ordinal": 5,
+          "name": "mode",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exactly mse or quantile. MSE minimizes squared error; quantile fits soft quantile probabilities and decodes their expectation. No Huber objective is implied."
+        },
+        {
+          "direction": "input",
+          "ordinal": 6,
+          "name": "controls",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact dictionary: n_hidden (two or three positive integer widths), activation (relu/prelu), learning_rate and lr_decay (positive finite), n_epoch and batch_size and bs_decay and n_bins (positive integers), decay_epochs (nonnegative integer), reg_l1 and reg_l2 (finite nonnegative first-layer weight penalties), seed (unsigned 32-bit integer), binary_X and use_target_scaling (booleans), quantile_precision and classification_loss_multiplier (positive finite). Quantile requires use_target_scaling. Precision depends on response-coordinate squared scale. Partial batches are retained; learning-rate and batch schedules are verified. One synchronous CPU worker; caller must reserve its core in shared budget."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Numeric JSON prediction state with exact format sciona.sparse_neural_prediction.v1, mode, feature_columns, feature_coordinate, response_coordinate, n_hidden, activation, binary_X, use_target_scaling, n_bins, decoder and weights. Validated finite graph weights and fitted decoder only; no executable deserialization or optimizer state. Prediction-only restoration, no training resumption. Learned state is private runtime material."
+        }
+      ],
+      "operation": "Fit a sparse neural MSE or quantile predictor under explicit training controls, returning numeric prediction state.",
+      "plain_description": "Learn a numeric response from sparse training features.",
+      "validity_bounds": "Finite canonical float32 CSR matrix with positive feature width; training requires at least one row, prediction supports empty rows. Explicit zeros count as present in binary mode. Caller normalizes units and preserves fitted preprocessing, vocabulary and feature ordering. No application-specific preprocessing is implicit. Finite aligned nonempty float32 or float64 training response vector in the declared normalized response coordinate. Training-only inputs; calibration and query labels must be excluded. No implicit logarithm, inverse transform or output clamp. Nonempty ordered unique nonblank feature identifiers exactly matching CSR width. Must identify the same fitted feature semantics and order at prediction; equal width alone is insufficient. Nonblank identity of caller-defined normalized feature coordinates, matching fitted state exactly. Different domains require explicit compatible feature adapters; labels alone do not prove semantic equivalence. Nonblank identity of normalized response coordinates, matching fitted state exactly. Caller owns physical units, transformations and any inverse transformation. Predictions retain this coordinate. Exactly mse or quantile. MSE minimizes squared error; quantile fits soft quantile probabilities and decodes their expectation. No Huber objective is implied. Exact dictionary: n_hidden (two or three positive integer widths), activation (relu/prelu), learning_rate and lr_decay (positive finite), n_epoch and batch_size and bs_decay and n_bins (positive integers), decay_epochs (nonnegative integer), reg_l1 and reg_l2 (finite nonnegative first-layer weight penalties), seed (unsigned 32-bit integer), binary_X and use_target_scaling (booleans), quantile_precision and classification_loss_multiplier (positive finite). Quantile requires use_target_scaling. Precision depends on response-coordinate squared scale. Partial batches are retained; learning-rate and batch schedules are verified. One synchronous CPU worker; caller must reserve its core in shared budget. Numeric JSON prediction state with exact format sciona.sparse_neural_prediction.v1, mode, feature_columns, feature_coordinate, response_coordinate, n_hidden, activation, binary_X, use_target_scaling, n_bins, decoder and weights. Validated finite graph weights and fitted decoder only; no executable deserialization or optimizer state. Prediction-only restoration, no training resumption. Learned state is private runtime material.",
+      "reuse": "Domain-independent sparse supervised regression with explicit ordered feature identities, normalized feature and response coordinates, and training controls. Cross-disciplinary use requires compatible caller-owned feature adapters; no competition schema or fixed response transform is required.",
+      "registered_provider_dependencies": []
+    },
+    {
+      "artifact_id": "32dd12c7-9840-54b6-abae-c7003fb836dd",
+      "fqdn": "sciona.atoms.ml.sparse_neural_prediction.predict_sparse_neural",
+      "version_id": "ffa37b90-6efd-5fa6-8bc7-8f759b644239",
+      "content_hash": "97b4fa707d685d9fb037924c490a16b16991e8c9b2774ef1f5eff71f7355e93d",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "features",
+          "type_desc": "csr_matrix",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite canonical float32 CSR matrix with positive feature width; training requires at least one row, prediction supports empty rows. Explicit zeros count as present in binary mode. Caller normalizes units and preserves fitted preprocessing, vocabulary and feature ordering. No application-specific preprocessing is implicit."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "feature_columns",
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty ordered unique nonblank feature identifiers exactly matching CSR width. Must identify the same fitted feature semantics and order at prediction; equal width alone is insufficient."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "feature_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonblank identity of caller-defined normalized feature coordinates, matching fitted state exactly. Different domains require explicit compatible feature adapters; labels alone do not prove semantic equivalence."
+        },
+        {
+          "direction": "input",
+          "ordinal": 3,
+          "name": "response_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonblank identity of normalized response coordinates, matching fitted state exactly. Caller owns physical units, transformations and any inverse transformation. Predictions retain this coordinate."
+        },
+        {
+          "direction": "input",
+          "ordinal": 4,
+          "name": "state",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Numeric JSON prediction state with exact format sciona.sparse_neural_prediction.v1, mode, feature_columns, feature_coordinate, response_coordinate, n_hidden, activation, binary_X, use_target_scaling, n_bins, decoder and weights. Validated finite graph weights and fitted decoder only; no executable deserialization or optimizer state. Prediction-only restoration, no training resumption. Learned state is private runtime material."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "np.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite response vector aligned to input rows: float32 for MSE, float64 for quantile, including empty queries. Declared response coordinate is preserved. No inverse transform or clipping. Model restoration performs no training."
+        }
+      ],
+      "operation": "Restore a known sparse neural graph from validated numeric state and predict without training.",
+      "plain_description": "Predict a numeric response using a previously fitted sparse neural model.",
+      "validity_bounds": "Finite canonical float32 CSR matrix with positive feature width; training requires at least one row, prediction supports empty rows. Explicit zeros count as present in binary mode. Caller normalizes units and preserves fitted preprocessing, vocabulary and feature ordering. No application-specific preprocessing is implicit. Nonempty ordered unique nonblank feature identifiers exactly matching CSR width. Must identify the same fitted feature semantics and order at prediction; equal width alone is insufficient. Nonblank identity of caller-defined normalized feature coordinates, matching fitted state exactly. Different domains require explicit compatible feature adapters; labels alone do not prove semantic equivalence. Nonblank identity of normalized response coordinates, matching fitted state exactly. Caller owns physical units, transformations and any inverse transformation. Predictions retain this coordinate. Numeric JSON prediction state with exact format sciona.sparse_neural_prediction.v1, mode, feature_columns, feature_coordinate, response_coordinate, n_hidden, activation, binary_X, use_target_scaling, n_bins, decoder and weights. Validated finite graph weights and fitted decoder only; no executable deserialization or optimizer state. Prediction-only restoration, no training resumption. Learned state is private runtime material. Finite response vector aligned to input rows: float32 for MSE, float64 for quantile, including empty queries. Declared response coordinate is preserved. No inverse transform or clipping. Model restoration performs no training.",
+      "reuse": "Domain-independent sparse supervised regression with explicit ordered feature identities, normalized feature and response coordinates, and training controls. Cross-disciplinary use requires compatible caller-owned feature adapters; no competition schema or fixed response transform is required.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "tests": {
+    "tests": 29,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "software_sha256": {
+    "tests/test_sparse_neural_regression.py": "6b57a3702069aafd8709f584f3055dd8a14dffd6cf4eb75f0a081b02be64c8ff",
+    "tests/test_sparse_neural_state.py": "1376a97675eb98118e1cfa33ff088b58219425e4a9a315df1e774c2a20e9931d",
+    "provider/test_sparse_neural_prediction_provider.py": "4c39179ab82d447355bd7ede246e4f2af91a5d7a1af459642814cb1c539d67d5",
+    "sciona/sparse_neural_regression.py": "6027cca4d0e3d23f812c17d731e9303cd5e68f224df9461c489a389133a4c9cb",
+    "sciona/sparse_neural_state.py": "64d71564b7ccbcdaa02ae09ef697b759c3b5842e6f97afd69b7fef13e1c21215",
+    "sciona/sparse_neural_process.py": "ae3bf273e3fb1d7f7af8276e2247493bbc37f9abf21f3f7ae6bed43996af2f35",
+    "sciona/sparse_neural_worker.py": "5a54d7f6c375d24909b1c73650a02e3c44879317da05ef559c559613d46bbccc",
+    "sciona/quantile_target_encoding.py": "9b877c348baf77db5db291c375bdffb217c3eebc6df8309c900a447675ebe492",
+    "scripts/review_sparse_neural_semantics.py": "0cc8fa4c0dd91890c53971b9e9df2bbd970715d9062f3f436e8fc51583a137f5",
+    "scripts/import_sparse_neural_drafts.py": "a0ce3a22e0839ea8ec8af19bbc558c969c74884cabf1a73934c75c48997458f9",
+    "scripts/plan_sparse_neural_intake.py": "29c8b7f16baa11dc1ce53e9b60d4fb7ac36ac8d70b6c1d9078cf6f9f3d2024d9",
+    "docs/licenses/mercari-solution-LICENSE.txt": "ebd4587bd7c8d16ffb12e88219f6930a505962abb85a72c58ebf597c59d5abe2",
+    "sciona.atoms.ml.sparse_neural_prediction": "025a14daac2c47d9fa25b6810b29e960399ef716a031fcc6a92780ead9f7c65a",
+    "sciona.ghost.registry": "793723a75d07a88eed39f59d8d4dc327c54adbf75db7a03003516a6f74c81b51",
+    "sciona.ghost.abstract": "9574bed61c8292b2eaf6ff054bcf46504b07e679c521a19d2440396c3ea63670",
+    "sciona.ghost.dimensions": "61be1958aa50725f3c6598d5b5447a806d2549698d5ce3ec243d467816754b7e"
+  },
+  "installed_packages": {
+    "absl-py": {
+      "version": "2.5.0",
+      "hashed_files_verified": 31,
+      "active_requirements": []
+    },
+    "annotated-types": {
+      "version": "0.7.0",
+      "hashed_files_verified": 7,
+      "active_requirements": []
+    },
+    "astunparse": {
+      "version": "1.6.3",
+      "hashed_files_verified": 11,
+      "active_requirements": [
+        "six<2.0,>=1.6.1",
+        "wheel<1.0,>=0.23.0"
+      ]
+    },
+    "certifi": {
+      "version": "2026.7.22",
+      "hashed_files_verified": 13,
+      "active_requirements": []
+    },
+    "charset-normalizer": {
+      "version": "3.5.1",
+      "hashed_files_verified": 23,
+      "active_requirements": []
+    },
+    "flatbuffers": {
+      "version": "25.12.19",
+      "hashed_files_verified": 14,
+      "active_requirements": []
+    },
+    "gast": {
+      "version": "0.7.0",
+      "hashed_files_verified": 13,
+      "active_requirements": []
+    },
+    "google-pasta": {
+      "version": "0.2.0",
+      "hashed_files_verified": 30,
+      "active_requirements": [
+        "six"
+      ]
+    },
+    "grpcio": {
+      "version": "1.83.1",
+      "hashed_files_verified": 67,
+      "active_requirements": [
+        "typing-extensions~=4.12"
+      ]
+    },
+    "h5py": {
+      "version": "3.16.0",
+      "hashed_files_verified": 103,
+      "active_requirements": [
+        "numpy>=1.21.2"
+      ]
+    },
+    "idna": {
+      "version": "3.19",
+      "hashed_files_verified": 18,
+      "active_requirements": []
+    },
+    "joblib": {
+      "version": "1.5.3",
+      "hashed_files_verified": 143,
+      "active_requirements": []
+    },
+    "keras": {
+      "version": "3.15.1",
+      "hashed_files_verified": 910,
+      "active_requirements": [
+        "absl-py",
+        "h5py",
+        "ml-dtypes",
+        "namex",
+        "numpy",
+        "optree",
+        "packaging",
+        "rich"
+      ]
+    },
+    "libclang": {
+      "version": "18.1.1",
+      "hashed_files_verified": 11,
+      "active_requirements": []
+    },
+    "markdown": {
+      "version": "3.10.3",
+      "hashed_files_verified": 41,
+      "active_requirements": []
+    },
+    "markdown-it-py": {
+      "version": "4.2.0",
+      "hashed_files_verified": 76,
+      "active_requirements": [
+        "mdurl~=0.1"
+      ]
+    },
+    "markupsafe": {
+      "version": "3.0.3",
+      "hashed_files_verified": 11,
+      "active_requirements": []
+    },
+    "mdurl": {
+      "version": "0.1.2",
+      "hashed_files_verified": 11,
+      "active_requirements": []
+    },
+    "ml-dtypes": {
+      "version": "0.6.0",
+      "hashed_files_verified": 11,
+      "active_requirements": [
+        "numpy>=2.0.0",
+        "numpy>=2.1.0; python_version >= \"3.13\""
+      ]
+    },
+    "namex": {
+      "version": "0.1.0",
+      "hashed_files_verified": 10,
+      "active_requirements": []
+    },
+    "numpy": {
+      "version": "2.2.6",
+      "hashed_files_verified": 876,
+      "active_requirements": []
+    },
+    "opt-einsum": {
+      "version": "3.4.0",
+      "hashed_files_verified": 32,
+      "active_requirements": []
+    },
+    "optree": {
+      "version": "0.20.0",
+      "hashed_files_verified": 25,
+      "active_requirements": [
+        "typing-extensions>=4.10.0",
+        "typing-extensions>=4.12.0; python_version >= \"3.13\""
+      ]
+    },
+    "packaging": {
+      "version": "26.3",
+      "hashed_files_verified": 30,
+      "active_requirements": []
+    },
+    "pillow": {
+      "version": "12.3.0",
+      "hashed_files_verified": 140,
+      "active_requirements": []
+    },
+    "protobuf": {
+      "version": "6.33.5",
+      "hashed_files_verified": 60,
+      "active_requirements": []
+    },
+    "pydantic": {
+      "version": "2.12.5",
+      "hashed_files_verified": 111,
+      "active_requirements": [
+        "annotated-types>=0.6.0",
+        "pydantic-core==2.41.5",
+        "typing-extensions>=4.14.1",
+        "typing-inspection>=0.4.2"
+      ]
+    },
+    "pydantic-core": {
+      "version": "2.41.5",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.14.1"
+      ]
+    },
+    "pygments": {
+      "version": "2.21.0",
+      "hashed_files_verified": 351,
+      "active_requirements": []
+    },
+    "requests": {
+      "version": "2.34.2",
+      "hashed_files_verified": 27,
+      "active_requirements": [
+        "certifi>=2023.5.7",
+        "charset_normalizer<4,>=2",
+        "idna<4,>=2.5",
+        "urllib3<3,>=1.26"
+      ]
+    },
+    "rich": {
+      "version": "15.0.0",
+      "hashed_files_verified": 106,
+      "active_requirements": [
+        "markdown-it-py>=2.2.0",
+        "pygments<3.0.0,>=2.13.0"
+      ]
+    },
+    "scikit-learn": {
+      "version": "1.8.0",
+      "hashed_files_verified": 960,
+      "active_requirements": [
+        "joblib>=1.3.0",
+        "numpy>=1.24.1",
+        "scipy>=1.10.0",
+        "threadpoolctl>=3.2.0"
+      ]
+    },
+    "scipy": {
+      "version": "1.17.1",
+      "hashed_files_verified": 1423,
+      "active_requirements": [
+        "numpy<2.7,>=1.26.4"
+      ]
+    },
+    "setuptools": {
+      "version": "80.9.0",
+      "hashed_files_verified": 513,
+      "active_requirements": []
+    },
+    "six": {
+      "version": "1.17.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "tensorboard": {
+      "version": "2.20.0",
+      "hashed_files_verified": 273,
+      "active_requirements": [
+        "absl-py>=0.4",
+        "grpcio>=1.48.2",
+        "markdown>=2.6.8",
+        "numpy>=1.12.0",
+        "packaging",
+        "pillow",
+        "protobuf!=4.24.0,>=3.19.6",
+        "setuptools>=41.0.0",
+        "tensorboard-data-server<0.8.0,>=0.7.0",
+        "werkzeug>=1.0.1"
+      ]
+    },
+    "tensorboard-data-server": {
+      "version": "0.7.2",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "tensorflow": {
+      "version": "2.20.0",
+      "hashed_files_verified": 11548,
+      "active_requirements": [
+        "absl-py>=1.0.0",
+        "astunparse>=1.6.0",
+        "flatbuffers>=24.3.25",
+        "gast!=0.5.0,!=0.5.1,!=0.5.2,>=0.2.1",
+        "google_pasta>=0.1.1",
+        "grpcio<2.0,>=1.24.3",
+        "h5py>=3.11.0",
+        "keras>=3.10.0",
+        "libclang>=13.0.0",
+        "ml_dtypes<1.0.0,>=0.5.1",
+        "numpy>=1.26.0",
+        "opt_einsum>=2.3.2",
+        "packaging",
+        "protobuf>=5.28.0",
+        "requests<3,>=2.21.0",
+        "setuptools",
+        "six>=1.12.0",
+        "tensorboard~=2.20.0",
+        "termcolor>=1.1.0",
+        "typing_extensions>=3.6.6",
+        "wrapt>=1.11.0"
+      ]
+    },
+    "termcolor": {
+      "version": "3.3.0",
+      "hashed_files_verified": 9,
+      "active_requirements": []
+    },
+    "threadpoolctl": {
+      "version": "3.6.0",
+      "hashed_files_verified": 5,
+      "active_requirements": []
+    },
+    "typing-extensions": {
+      "version": "4.16.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "typing-inspection": {
+      "version": "0.4.2",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.12.0"
+      ]
+    },
+    "urllib3": {
+      "version": "2.7.0",
+      "hashed_files_verified": 43,
+      "active_requirements": []
+    },
+    "werkzeug": {
+      "version": "3.1.8",
+      "hashed_files_verified": 64,
+      "active_requirements": [
+        "markupsafe>=2.1.1"
+      ]
+    },
+    "wheel": {
+      "version": "0.48.0",
+      "hashed_files_verified": 22,
+      "active_requirements": [
+        "packaging>=24.0"
+      ]
+    },
+    "wrapt": {
+      "version": "2.4.1",
+      "hashed_files_verified": 22,
+      "active_requirements": []
+    }
+  },
+  "intake_plan_sha256": "68558f67aae12a8ea21bdf117ecbdcaea20750279867abe08b8566ed17d43f59",
+  "connected_execution_commit": "c372ca09",
+  "connected_execution_sha256": "d074ccfd4e343c102c00e00d54a0e51ab3e920ea74599f5faf98d6ddd36724e6",
+  "resource_policy": {
+    "native_threads": 1,
+    "test_workers": 1,
+    "synchronous_model_workers": 1,
+    "test_suites_run_serially": true
+  },
+  "limitations": [
+    "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+    "Synthetic source parity does not establish accuracy or generalization on new domains. Caller owns training-only fitting, feature adapters, frozen vocabulary and normalized feature/response coordinates.",
+    "Exact feature identities and coordinate labels are required but do not authenticate semantics. No implicit log transform, inverse transform or clipping is performed.",
+    "MSE and quantile classification are distinct objectives. First-layer regularization, stored-entry binary semantics, partial batches and explicit learning-rate/batch schedules follow the declared implementation.",
+    "Numeric JSON state restores known prediction graphs only. Optimizer state and training resumption are excluded. Learned weights and fitted decoder state are private runtime material.",
+    "Abstract witnesses validate metadata, not numerical values or sparse storage. Known physical dimensions require upstream normalization; unknown dimensions are allowed.",
+    "Each call uses a fresh synchronous single-core CPU worker; callers must include it in the shared resource budget. TensorFlow initializes before other numeric frameworks inside that worker.",
+    "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment and other platforms are not certified.",
+    "The connected source feature loaders remain diagnostic. This review qualifies two neural atoms, not the original competition CDG or completeness of the winning ensemble."
+  ]
+}
