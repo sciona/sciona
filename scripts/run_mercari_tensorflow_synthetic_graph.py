@@ -6,6 +6,7 @@ claim to reproduce the complete historical winning ensemble.
 # This import must precede sklearn/pandas/Arrow initialization on this host.
 from probe_mercari_tensorflow_runtime import load_model_namespace
 from probe_mercari_feature_runtime import load_feature_namespace
+from mercari_checkpoint_probe import save_and_replay
 
 import argparse
 import ast
@@ -35,7 +36,10 @@ def population(count, seed):
     return frames, targets
 
 
-def run(directory):
+def run(directory, runtime):
+    runtime.mkdir(parents=True, exist_ok=True)
+    if any(runtime.iterdir()):
+        raise ValueError('Use an empty private runtime directory; existing checkpoints will not be replaced')
     model_ns, models, quantile_sha = load_model_namespace(directory)
     feature_ns, topology = load_feature_namespace(directory, modernize=True)
     tree = ast.parse((directory/'mercari/datasets_tf.py').read_text())
@@ -83,9 +87,15 @@ def run(directory):
                 expected_updates = sum((len(training) + controls['batch_size'] * 2 ** min(i, 2) - 1)
                                        // (controls['batch_size'] * 2 ** min(i, 2)) for i in range(3))
                 assert model.update_count_ == expected_updates
+                replay_c, replay_q = save_and_replay(model, model_ns[declared['model_class']], controls,
+                    model_ns['tf'], runtime/f"model-{declared['seed']}", [C, Q])
+                np.testing.assert_array_equal(replay_c, c)
+                np.testing.assert_array_equal(replay_q, q)
+                c, q = replay_c, replay_q
                 group_c.append(c)
                 group_q.append(q)
-                fits.append(dict(group=group, seed=declared['seed'], epochs=3, optimizer_updates=model.update_count_))
+                fits.append(dict(group=group, seed=declared['seed'], epochs=3, optimizer_updates=model.update_count_,
+                                 fresh_graph_checkpoint_replay_exact=True))
             finally:
                 faulthandler.cancel_dump_traceback_later()
                 if hasattr(model, '_session'):
@@ -108,10 +118,11 @@ def run(directory):
         print(json.dumps(dict(completed_fits=len(fits), completed_blends=len(rounds))), flush=True)
     assert len(fits) == 12 and sum(f['optimizer_updates'] for f in fits) == 72
     files = ['scripts/run_mercari_tensorflow_synthetic_graph.py', 'scripts/probe_mercari_tensorflow_runtime.py',
-             'scripts/probe_mercari_feature_runtime.py', 'scripts/inventory_mercari_models.py', 'scripts/inventory_mercari_features.py']
+             'scripts/probe_mercari_feature_runtime.py', 'scripts/inventory_mercari_models.py', 'scripts/inventory_mercari_features.py',
+             'scripts/mercari_checkpoint_probe.py']
     return dict(format='mercari-declared-tensorflow-synthetic-graph.v1', passed=True, approved=False,
         catalog_mutations=0, synthetic_only=True, role_counts=dict(training=8192, calibration=256, query=32),
-        fits=fits, blend_rounds=rounds, optimizer_updates=72,
+        fits=fits, blend_rounds=rounds, optimizer_updates=72, checkpoint_replays=12,
         source_commit=models['source_commit'],
         source_sha256={**models['source_sha256'], **topology['source_sha256'],
             'mercari/regression_clf.py': quantile_sha, 'mercari/main_helpers.py': pins['mercari/main_helpers.py'],
@@ -123,14 +134,17 @@ def run(directory):
             'Current TensorFlow compatibility API and documented serial feature shims, not historical runtime numerical equivalence.',
             'Distinct synthetic training/calibration/query populations; no real-data accuracy or held-out model selection claim.',
             'Source MSE dispatch, feature recipes, clip bounds and learned positive Lasso blend retained, including group execution order 1,3,2.',
-            'This executes source via diagnostic loaders; reusable production providers, persisted checkpoint replay, dependency publication review, stored corrected CDG and promotion remain outstanding.'])
+            'Model checkpoints and target-inversion state replayed in fresh graphs/sessions in the same process; full feature and blend serialization and fresh-process replay remain outstanding.',
+            'This executes source via diagnostic loaders; reusable production providers, dependency publication review, stored corrected CDG and promotion remain outstanding.'])
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--source-directory', type=Path, required=True)
+    parser.add_argument('--runtime-directory', type=Path, required=True)
     with warnings.catch_warnings():
         warnings.simplefilter('ignore')
-        result = run(parser.parse_args().source_directory)
+        args = parser.parse_args()
+        result = run(args.source_directory, args.runtime_directory)
     (ROOT/'docs/reviews/competition_mercari_tensorflow_synthetic_graph.json').write_text(json.dumps(result, indent=2)+'\n')
     print(json.dumps(dict(passed=True, fits=len(result['fits']), optimizer_updates=result['optimizer_updates'], approved=False)))
