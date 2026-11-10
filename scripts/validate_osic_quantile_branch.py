@@ -28,7 +28,7 @@ EVIDENCE = {
     'osic_quantile_features_validation.json': 'bc56e3e4',
     'osic_quantile_model_validation.json': '1745b3a9',
     'osic_quantile_state_validation.json': '3a0c8bc0',
-    'osic_prediction_validation.json': '00d8de5e',
+    'osic_prediction_validation.json': '7449dbae',
 }
 
 
