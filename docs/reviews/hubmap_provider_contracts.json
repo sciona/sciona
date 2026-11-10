@@ -1,0 +1,635 @@
+{
+  "format": "hubmap-provider-contract-review.v1",
+  "passed": true,
+  "approved": false,
+  "review_source": "automated",
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "catalog_mutations": 0,
+  "providers": [
+    {
+      "artifact_id": "78c8a5ab-dfb8-5af6-a98f-38805f07cf4d",
+      "runtime_fqdn": "sciona.atoms.dl.segmentation.hubmap_execution.hubmap_final_prediction",
+      "version_id": "c692df68-7521-516f-acab-1de573c0274d",
+      "content_hash": "4422196cc42c4ea9effdb53b9cc14a2d085ef00dd6bfd37462c836a1851f90b4",
+      "plain_description": "Combine three image views and ordered model predictions into binary raster masks.",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "models",
+          "type_desc": "object",
+          "ordinal": 0,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty ordered evaluation-only full inference model ensemble with source classifier threshold0.5. Batch-wide classifier shortcut may produce zero logits and hence empty binary predictions. Model ordering and batch composition can affect results."
+        },
+        {
+          "direction": "input",
+          "name": "final_images",
+          "type_desc": "object",
+          "ordinal": 1,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Ordered decoded nonempty RGB uint8 rasters for final prediction. Foreground semantics, color/normalization, physical scale and augmentation invariance must be justified for the new application."
+        },
+        {
+          "direction": "input",
+          "name": "final_rng",
+          "type_desc": "object",
+          "ordinal": 2,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Mapping with python_rng as Python Random and torch_generator as CPU Torch Generator, consumed during final inference. These are mutable trusted runtime objects, not JSON values."
+        },
+        {
+          "direction": "input",
+          "name": "inference_geometry",
+          "type_desc": "object",
+          "ordinal": 3,
+          "required": false,
+          "default_value_repr": "None",
+          "constraints": "None or a mapping containing only resolution, input_resolution, pad_size and batch_size. Defaults are1024,320,256,12. Positive integer sizes and batch size are required; padding must satisfy0<=pad_size<resolution/2. Model and inference input resolution must agree; whole decoded input and output rasters remain resident."
+        },
+        {
+          "direction": "output",
+          "name": "predictions",
+          "type_desc": "object",
+          "ordinal": 0,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Ordered full-raster uint8 binary masks using three flip views, model averaging, resize, strict threshold0.5 and interior stitching. Empty masks may reflect the batch classifier shortcut. Outputs are not calibrated uncertainty estimates."
+        }
+      ],
+      "source_anchors": [
+        {
+          "file": "sciona/hubmap_graph_runtime.py",
+          "symbol": "final_prediction",
+          "line": 33,
+          "file_sha256": "abe37489c453f23e7c668cdb2ba8be9c2a6ec61557fd1875b0abe0dbeb417d4a"
+        }
+      ],
+      "role": "recipe_adapter",
+      "reuse": "The recipe may transfer to other binary raster-segmentation tasks with justified foreground semantics, physical scale, color and augmentation assumptions, independent grouped populations and pseudo-source isolation. Keep explicit stage and inference policies. Generic image or sampling operations require independent qualification before standalone selection.",
+      "validity_bounds": [
+        "Binary foreground semantics, physical scale, color statistics and lossy preprocessing must be justified for each application. A nonempty mask can enter the background sampling population. TIFF decoding and stain normalization are not implemented by this graph.",
+        "Group labels do not establish independence of subjects, acquisition sessions or sources. The caller must exclude validation overlap from pseudo sources; the implementation does not detect that overlap.",
+        "Encoder-state shape compatibility and deterministic seeds do not authenticate pretrained weights or prove accuracy. Explicit stage schedules and checkpoint roles must be executable. The graph stage functions use _train_stages directly and do not inherit all run_lifecycle selector validation.",
+        "Pseudo masks are model outputs, not independent ground truth. Positive-only filtering, area bins and augmentation invariance are recipe assumptions; application transfer requires justification and independent evaluation.",
+        "Batch composition, tile scale, padding, normalization and thresholds affect meaning and output. An empty final mask can result from the classifier shortcut; it is not evidence of absent foreground. Binary outputs are not calibrated uncertainty estimates.",
+        "These provider interfaces are recipe stages and trusted runtime-object boundaries, not a generic JSON service. Image tiling, balanced sampling and aggregation need independently qualified contracts before standalone cross-domain selection.",
+        "Automated Tier 3 qualification only; no human Tier 1 designation.",
+        "Current qualification uses synthetic random encoder state and the source epoch schedule with resource-adapted batch size. No historical final checkpoint policy/provenance, predictive accuracy or clean-install claim.",
+        "Caller must bound CPU threads and memory. Model ensembles, checkpoint bytes, full decoded inputs and output masks remain resident; zero loader workers is not a memory limit.",
+        "Synthetic random encoder state, four initial and four fresh retraining folds, twenty consecutive epochs from epoch1 per fold with source patience50 and resource-adapted batch2. No historical trained-weight or predictive accuracy claim.",
+        "Source-sized network and tile geometry with synthetic rasters; no whole-slide codec, GPU or unbounded-memory qualification.",
+        "Four initial best-score checkpoints follow the pinned pseudo policy. Four final best-loss checkpoints are an explicit caller selection; historical final notebook checkpoint policy and provenance remain unverified.",
+        "Synthetic circular foreground is encoded by raster intensity; no real data or application accuracy evaluation is involved.",
+        "Existing source-comparison evidence is retained separately; this run is not a fresh independent-source parity comparison.",
+        "Corrected stored original execution and publication remain separate requirements."
+      ]
+    },
+    {
+      "artifact_id": "a3293440-a4ea-5f0b-a7c0-6a5e4187e9be",
+      "runtime_fqdn": "sciona.atoms.dl.segmentation.hubmap_execution.hubmap_initial_training",
+      "version_id": "f18ac9ca-b2e6-5952-8750-1130041cbd75",
+      "content_hash": "dcb39a84d2123c806c77dc628b57db9625e618fdaddca2f56386bdbc48ed6fad",
+      "plain_description": "Prepare independent labeled groups and train full models using explicit model states and schedules.",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "slides",
+          "type_desc": "object",
+          "ordinal": 0,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Ordered decoded RGB uint8 raster and aligned binary uint8 mask pairs. Caller defines foreground meaning and physical scale. Source preparation uses unshifted and half-shifted grids, JPEG roundtrip, std>10 filtering and rounded-area bins. Both foreground-bin and background-bin training populations must remain."
+        },
+        {
+          "direction": "input",
+          "name": "groups",
+          "type_desc": "object",
+          "ordinal": 1,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "One string or integer group label per labeled raster. Validation groups hold out whole rasters before tiling; both partitions must retain tiles. Caller must establish subject/acquisition independence and exclude validation overlap from pseudo sources."
+        },
+        {
+          "direction": "input",
+          "name": "initial_stages",
+          "type_desc": "object",
+          "ordinal": 2,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty ordered FoldStage objects with explicit full encoder tensor state, integer model seed, validation group labels and training options. Options include positive ordered start/end epochs, maximum_bin, batch sizes, input_side, explicit Python Random, NumPy RandomState and CPU Torch Generator. Training batch size is at least2 and model input dimensions are multiples of32. Every fold constructs a fresh decoder, Adam optimizer and scheduler."
+        },
+        {
+          "direction": "input",
+          "name": "initial_selectors",
+          "type_desc": "object",
+          "ordinal": 3,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty ordered pairs of configured fold index and actually produced checkpoint role. Roles are best_loss, best_score or snapshot_<epoch>. These stage adapters do not perform the separate run_lifecycle selector precheck. Invalid selectors must not be supplied; tensor-compatible checkpoints do not establish pretrained provenance."
+        },
+        {
+          "direction": "input",
+          "name": "tile_size",
+          "type_desc": "int",
+          "ordinal": 4,
+          "required": false,
+          "default_value_repr": "1024",
+          "constraints": "Integer tile side at least2; source default1024. Both source grid offsets must produce a nonempty grid for each raster. Tile scale changes target meaning and sampling, so application transfer requires justification."
+        },
+        {
+          "direction": "output",
+          "name": "initial_checkpoints",
+          "type_desc": "object",
+          "ordinal": 0,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Ordered selected model-state byte payloads from the requested initial fold/checkpoint roles. These contain model tensors only and do not resume optimizer or RNG state."
+        },
+        {
+          "direction": "output",
+          "name": "initial_metrics",
+          "type_desc": "object",
+          "ordinal": 1,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Ordered per-fold epoch records with training and validation aggregates plus checkpoint/early-stop decisions. These are training diagnostics, not independent predictive-quality evidence."
+        }
+      ],
+      "source_anchors": [
+        {
+          "file": "sciona/hubmap_graph_runtime.py",
+          "symbol": "initial_training",
+          "line": 6,
+          "file_sha256": "abe37489c453f23e7c668cdb2ba8be9c2a6ec61557fd1875b0abe0dbeb417d4a"
+        }
+      ],
+      "role": "recipe_adapter",
+      "reuse": "The recipe may transfer to other binary raster-segmentation tasks with justified foreground semantics, physical scale, color and augmentation assumptions, independent grouped populations and pseudo-source isolation. Keep explicit stage and inference policies. Generic image or sampling operations require independent qualification before standalone selection.",
+      "validity_bounds": [
+        "Binary foreground semantics, physical scale, color statistics and lossy preprocessing must be justified for each application. A nonempty mask can enter the background sampling population. TIFF decoding and stain normalization are not implemented by this graph.",
+        "Group labels do not establish independence of subjects, acquisition sessions or sources. The caller must exclude validation overlap from pseudo sources; the implementation does not detect that overlap.",
+        "Encoder-state shape compatibility and deterministic seeds do not authenticate pretrained weights or prove accuracy. Explicit stage schedules and checkpoint roles must be executable. The graph stage functions use _train_stages directly and do not inherit all run_lifecycle selector validation.",
+        "Pseudo masks are model outputs, not independent ground truth. Positive-only filtering, area bins and augmentation invariance are recipe assumptions; application transfer requires justification and independent evaluation.",
+        "Batch composition, tile scale, padding, normalization and thresholds affect meaning and output. An empty final mask can result from the classifier shortcut; it is not evidence of absent foreground. Binary outputs are not calibrated uncertainty estimates.",
+        "These provider interfaces are recipe stages and trusted runtime-object boundaries, not a generic JSON service. Image tiling, balanced sampling and aggregation need independently qualified contracts before standalone cross-domain selection.",
+        "Automated Tier 3 qualification only; no human Tier 1 designation.",
+        "Current qualification uses synthetic random encoder state and the source epoch schedule with resource-adapted batch size. No historical final checkpoint policy/provenance, predictive accuracy or clean-install claim.",
+        "Caller must bound CPU threads and memory. Model ensembles, checkpoint bytes, full decoded inputs and output masks remain resident; zero loader workers is not a memory limit.",
+        "Synthetic random encoder state, four initial and four fresh retraining folds, twenty consecutive epochs from epoch1 per fold with source patience50 and resource-adapted batch2. No historical trained-weight or predictive accuracy claim.",
+        "Source-sized network and tile geometry with synthetic rasters; no whole-slide codec, GPU or unbounded-memory qualification.",
+        "Four initial best-score checkpoints follow the pinned pseudo policy. Four final best-loss checkpoints are an explicit caller selection; historical final notebook checkpoint policy and provenance remain unverified.",
+        "Synthetic circular foreground is encoded by raster intensity; no real data or application accuracy evaluation is involved.",
+        "Existing source-comparison evidence is retained separately; this run is not a fresh independent-source parity comparison.",
+        "Corrected stored original execution and publication remain separate requirements."
+      ]
+    },
+    {
+      "artifact_id": "7e74c834-c78b-5027-b70b-6c95f3c65cce",
+      "runtime_fqdn": "sciona.atoms.dl.segmentation.hubmap_execution.hubmap_pseudo_labels",
+      "version_id": "bdc9ad25-131e-5d2f-8233-f1fdfcad94c4",
+      "content_hash": "5bc271219ef5dcb550bdc827359c604b8a2185b264442bd5f4fbd4531277260c",
+      "plain_description": "Generate binary pseudo masks from an ordered model ensemble using four image views.",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "models",
+          "type_desc": "object",
+          "ordinal": 0,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty ordered evaluation-only full inference model ensemble with source classifier threshold0.5. Batch-wide classifier shortcut may produce zero logits and hence empty binary predictions. Model ordering and batch composition can affect results."
+        },
+        {
+          "direction": "input",
+          "name": "pseudo_sources",
+          "type_desc": "object",
+          "ordinal": 1,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Ordered collections of decoded RGB uint8 rasters from caller-approved pseudo populations. Caller must prevent validation overlap. Four-view predictions become binary masks; only rounded-bin-positive pseudo tiles are later appended to training."
+        },
+        {
+          "direction": "input",
+          "name": "pseudo_rng",
+          "type_desc": "object",
+          "ordinal": 2,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Mapping with python_rng as Python Random and torch_generator as CPU Torch Generator. Streams are consumed by inference; callers control and preserve their lifecycle. No hidden global seed or device scheduling equivalence is promised."
+        },
+        {
+          "direction": "input",
+          "name": "inference_geometry",
+          "type_desc": "object",
+          "ordinal": 3,
+          "required": false,
+          "default_value_repr": "None",
+          "constraints": "None or a mapping containing only resolution, input_resolution, pad_size and batch_size. Defaults are1024,320,256,12. Positive integer sizes and batch size are required; padding must satisfy0<=pad_size<resolution/2. Model and inference input resolution must agree; whole decoded input and output rasters remain resident."
+        },
+        {
+          "direction": "output",
+          "name": "pseudo_labeled_sources",
+          "type_desc": "object",
+          "ordinal": 0,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Ordered collections of decoded RGB uint8 rasters paired with generated binary masks. Pseudo masks are not ground truth. Retraining prepares source grids and appends only rounded-bin-positive tiles; labeled validation receives no pseudo tiles."
+        }
+      ],
+      "source_anchors": [
+        {
+          "file": "sciona/hubmap_graph_runtime.py",
+          "symbol": "pseudo_labels",
+          "line": 23,
+          "file_sha256": "abe37489c453f23e7c668cdb2ba8be9c2a6ec61557fd1875b0abe0dbeb417d4a"
+        }
+      ],
+      "role": "recipe_adapter",
+      "reuse": "The recipe may transfer to other binary raster-segmentation tasks with justified foreground semantics, physical scale, color and augmentation assumptions, independent grouped populations and pseudo-source isolation. Keep explicit stage and inference policies. Generic image or sampling operations require independent qualification before standalone selection.",
+      "validity_bounds": [
+        "Binary foreground semantics, physical scale, color statistics and lossy preprocessing must be justified for each application. A nonempty mask can enter the background sampling population. TIFF decoding and stain normalization are not implemented by this graph.",
+        "Group labels do not establish independence of subjects, acquisition sessions or sources. The caller must exclude validation overlap from pseudo sources; the implementation does not detect that overlap.",
+        "Encoder-state shape compatibility and deterministic seeds do not authenticate pretrained weights or prove accuracy. Explicit stage schedules and checkpoint roles must be executable. The graph stage functions use _train_stages directly and do not inherit all run_lifecycle selector validation.",
+        "Pseudo masks are model outputs, not independent ground truth. Positive-only filtering, area bins and augmentation invariance are recipe assumptions; application transfer requires justification and independent evaluation.",
+        "Batch composition, tile scale, padding, normalization and thresholds affect meaning and output. An empty final mask can result from the classifier shortcut; it is not evidence of absent foreground. Binary outputs are not calibrated uncertainty estimates.",
+        "These provider interfaces are recipe stages and trusted runtime-object boundaries, not a generic JSON service. Image tiling, balanced sampling and aggregation need independently qualified contracts before standalone cross-domain selection.",
+        "Automated Tier 3 qualification only; no human Tier 1 designation.",
+        "Current qualification uses synthetic random encoder state and the source epoch schedule with resource-adapted batch size. No historical final checkpoint policy/provenance, predictive accuracy or clean-install claim.",
+        "Caller must bound CPU threads and memory. Model ensembles, checkpoint bytes, full decoded inputs and output masks remain resident; zero loader workers is not a memory limit.",
+        "Synthetic random encoder state, four initial and four fresh retraining folds, twenty consecutive epochs from epoch1 per fold with source patience50 and resource-adapted batch2. No historical trained-weight or predictive accuracy claim.",
+        "Source-sized network and tile geometry with synthetic rasters; no whole-slide codec, GPU or unbounded-memory qualification.",
+        "Four initial best-score checkpoints follow the pinned pseudo policy. Four final best-loss checkpoints are an explicit caller selection; historical final notebook checkpoint policy and provenance remain unverified.",
+        "Synthetic circular foreground is encoded by raster intensity; no real data or application accuracy evaluation is involved.",
+        "Existing source-comparison evidence is retained separately; this run is not a fresh independent-source parity comparison.",
+        "Corrected stored original execution and publication remain separate requirements."
+      ]
+    },
+    {
+      "artifact_id": "62f4e16d-39ff-5758-a74b-9f96e25adcbb",
+      "runtime_fqdn": "sciona.atoms.dl.segmentation.hubmap_execution.hubmap_restore_models",
+      "version_id": "8f037008-6a58-57d7-ad14-a9f5f2159c21",
+      "content_hash": "9c716fbdd04fc16267bc853f43b2c985724c82298dc2a7ddc48c63049ca6a8fd",
+      "plain_description": "Restore an ordered group of inference models from compatible model-only checkpoints.",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "checkpoints",
+          "type_desc": "object",
+          "ordinal": 0,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty ordered tensor-only model checkpoint byte payloads. Restoration uses weights_only=True on CPU and requires exact state keys, shapes, dtypes, strided layout and finite tensors. No optimizer or training RNG state is restored."
+        },
+        {
+          "direction": "input",
+          "name": "input_resolution",
+          "type_desc": "int",
+          "ordinal": 1,
+          "required": false,
+          "default_value_repr": "320",
+          "constraints": "Positive integer model input side compatible with the network, normally320 and a multiple of32. It must agree with inference_geometry.input_resolution. This interface does not check that agreement before model execution."
+        },
+        {
+          "direction": "output",
+          "name": "models",
+          "type_desc": "object",
+          "ordinal": 0,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty ordered evaluation-only full inference model ensemble with source classifier threshold0.5. Batch-wide classifier shortcut may produce zero logits and hence empty binary predictions. Model ordering and batch composition can affect results."
+        }
+      ],
+      "source_anchors": [
+        {
+          "file": "sciona/hubmap_graph_runtime.py",
+          "symbol": "restore_models",
+          "line": 10,
+          "file_sha256": "abe37489c453f23e7c668cdb2ba8be9c2a6ec61557fd1875b0abe0dbeb417d4a"
+        }
+      ],
+      "role": "recipe_adapter",
+      "reuse": "The recipe may transfer to other binary raster-segmentation tasks with justified foreground semantics, physical scale, color and augmentation assumptions, independent grouped populations and pseudo-source isolation. Keep explicit stage and inference policies. Generic image or sampling operations require independent qualification before standalone selection.",
+      "validity_bounds": [
+        "Binary foreground semantics, physical scale, color statistics and lossy preprocessing must be justified for each application. A nonempty mask can enter the background sampling population. TIFF decoding and stain normalization are not implemented by this graph.",
+        "Group labels do not establish independence of subjects, acquisition sessions or sources. The caller must exclude validation overlap from pseudo sources; the implementation does not detect that overlap.",
+        "Encoder-state shape compatibility and deterministic seeds do not authenticate pretrained weights or prove accuracy. Explicit stage schedules and checkpoint roles must be executable. The graph stage functions use _train_stages directly and do not inherit all run_lifecycle selector validation.",
+        "Pseudo masks are model outputs, not independent ground truth. Positive-only filtering, area bins and augmentation invariance are recipe assumptions; application transfer requires justification and independent evaluation.",
+        "Batch composition, tile scale, padding, normalization and thresholds affect meaning and output. An empty final mask can result from the classifier shortcut; it is not evidence of absent foreground. Binary outputs are not calibrated uncertainty estimates.",
+        "These provider interfaces are recipe stages and trusted runtime-object boundaries, not a generic JSON service. Image tiling, balanced sampling and aggregation need independently qualified contracts before standalone cross-domain selection.",
+        "Automated Tier 3 qualification only; no human Tier 1 designation.",
+        "Current qualification uses synthetic random encoder state and the source epoch schedule with resource-adapted batch size. No historical final checkpoint policy/provenance, predictive accuracy or clean-install claim.",
+        "Caller must bound CPU threads and memory. Model ensembles, checkpoint bytes, full decoded inputs and output masks remain resident; zero loader workers is not a memory limit.",
+        "Synthetic random encoder state, four initial and four fresh retraining folds, twenty consecutive epochs from epoch1 per fold with source patience50 and resource-adapted batch2. No historical trained-weight or predictive accuracy claim.",
+        "Source-sized network and tile geometry with synthetic rasters; no whole-slide codec, GPU or unbounded-memory qualification.",
+        "Four initial best-score checkpoints follow the pinned pseudo policy. Four final best-loss checkpoints are an explicit caller selection; historical final notebook checkpoint policy and provenance remain unverified.",
+        "Synthetic circular foreground is encoded by raster intensity; no real data or application accuracy evaluation is involved.",
+        "Existing source-comparison evidence is retained separately; this run is not a fresh independent-source parity comparison.",
+        "Corrected stored original execution and publication remain separate requirements."
+      ]
+    },
+    {
+      "artifact_id": "448cef2e-4481-5a0c-bfa3-297b5c198082",
+      "runtime_fqdn": "sciona.atoms.dl.segmentation.hubmap_execution.hubmap_retraining",
+      "version_id": "37d5b46a-0128-5e96-bbf2-03618c194e29",
+      "content_hash": "3e8be25c350b7a114e3ee9f2109d15a0a2fd159b04686f4113cb228c3f46d640",
+      "plain_description": "Append positive pseudo tiles and train fresh models with explicit independent validation groups.",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "slides",
+          "type_desc": "object",
+          "ordinal": 0,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Ordered decoded RGB uint8 raster and aligned binary uint8 mask pairs. Caller defines foreground meaning and physical scale. Source preparation uses unshifted and half-shifted grids, JPEG roundtrip, std>10 filtering and rounded-area bins. Both foreground-bin and background-bin training populations must remain."
+        },
+        {
+          "direction": "input",
+          "name": "groups",
+          "type_desc": "object",
+          "ordinal": 1,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "One string or integer group label per labeled raster. Validation groups hold out whole rasters before tiling; both partitions must retain tiles. Caller must establish subject/acquisition independence and exclude validation overlap from pseudo sources."
+        },
+        {
+          "direction": "input",
+          "name": "retraining_stages",
+          "type_desc": "object",
+          "ordinal": 2,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty ordered FoldStage objects with the same explicit encoder, grouping, schedule and RNG contract as initial stages. Retraining constructs fresh model/optimizer state and appends positive pseudo tiles; it does not continue the initially trained segmentation model."
+        },
+        {
+          "direction": "input",
+          "name": "final_selectors",
+          "type_desc": "object",
+          "ordinal": 3,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty ordered pairs of retraining fold index and actually produced checkpoint role, preserving ensemble order. Callers must select checkpoints produced by their explicit schedule. Historical notebook checkpoint selection is not authenticated by shape compatibility."
+        },
+        {
+          "direction": "input",
+          "name": "pseudo_labeled_sources",
+          "type_desc": "object",
+          "ordinal": 4,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Ordered collections of decoded RGB uint8 rasters paired with generated binary masks. Pseudo masks are not ground truth. Retraining prepares source grids and appends only rounded-bin-positive tiles; labeled validation receives no pseudo tiles."
+        },
+        {
+          "direction": "input",
+          "name": "tile_size",
+          "type_desc": "int",
+          "ordinal": 5,
+          "required": false,
+          "default_value_repr": "1024",
+          "constraints": "Integer tile side at least2; source default1024. Both source grid offsets must produce a nonempty grid for each raster. Tile scale changes target meaning and sampling, so application transfer requires justification."
+        },
+        {
+          "direction": "output",
+          "name": "final_checkpoints",
+          "type_desc": "object",
+          "ordinal": 0,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Ordered selected model-state byte payloads from fresh retraining folds. Their shapes do not establish historical weight provenance or predictive quality."
+        },
+        {
+          "direction": "output",
+          "name": "retraining_metrics",
+          "type_desc": "object",
+          "ordinal": 1,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Ordered per-fold epoch records after fresh training with positive pseudo tiles. Validation metrics do not prove independence of caller-supplied populations."
+        }
+      ],
+      "source_anchors": [
+        {
+          "file": "sciona/hubmap_graph_runtime.py",
+          "symbol": "retraining",
+          "line": 29,
+          "file_sha256": "abe37489c453f23e7c668cdb2ba8be9c2a6ec61557fd1875b0abe0dbeb417d4a"
+        }
+      ],
+      "role": "recipe_adapter",
+      "reuse": "The recipe may transfer to other binary raster-segmentation tasks with justified foreground semantics, physical scale, color and augmentation assumptions, independent grouped populations and pseudo-source isolation. Keep explicit stage and inference policies. Generic image or sampling operations require independent qualification before standalone selection.",
+      "validity_bounds": [
+        "Binary foreground semantics, physical scale, color statistics and lossy preprocessing must be justified for each application. A nonempty mask can enter the background sampling population. TIFF decoding and stain normalization are not implemented by this graph.",
+        "Group labels do not establish independence of subjects, acquisition sessions or sources. The caller must exclude validation overlap from pseudo sources; the implementation does not detect that overlap.",
+        "Encoder-state shape compatibility and deterministic seeds do not authenticate pretrained weights or prove accuracy. Explicit stage schedules and checkpoint roles must be executable. The graph stage functions use _train_stages directly and do not inherit all run_lifecycle selector validation.",
+        "Pseudo masks are model outputs, not independent ground truth. Positive-only filtering, area bins and augmentation invariance are recipe assumptions; application transfer requires justification and independent evaluation.",
+        "Batch composition, tile scale, padding, normalization and thresholds affect meaning and output. An empty final mask can result from the classifier shortcut; it is not evidence of absent foreground. Binary outputs are not calibrated uncertainty estimates.",
+        "These provider interfaces are recipe stages and trusted runtime-object boundaries, not a generic JSON service. Image tiling, balanced sampling and aggregation need independently qualified contracts before standalone cross-domain selection.",
+        "Automated Tier 3 qualification only; no human Tier 1 designation.",
+        "Current qualification uses synthetic random encoder state and the source epoch schedule with resource-adapted batch size. No historical final checkpoint policy/provenance, predictive accuracy or clean-install claim.",
+        "Caller must bound CPU threads and memory. Model ensembles, checkpoint bytes, full decoded inputs and output masks remain resident; zero loader workers is not a memory limit.",
+        "Synthetic random encoder state, four initial and four fresh retraining folds, twenty consecutive epochs from epoch1 per fold with source patience50 and resource-adapted batch2. No historical trained-weight or predictive accuracy claim.",
+        "Source-sized network and tile geometry with synthetic rasters; no whole-slide codec, GPU or unbounded-memory qualification.",
+        "Four initial best-score checkpoints follow the pinned pseudo policy. Four final best-loss checkpoints are an explicit caller selection; historical final notebook checkpoint policy and provenance remain unverified.",
+        "Synthetic circular foreground is encoded by raster intensity; no real data or application accuracy evaluation is involved.",
+        "Existing source-comparison evidence is retained separately; this run is not a fresh independent-source parity comparison.",
+        "Corrected stored original execution and publication remain separate requirements."
+      ]
+    }
+  ],
+  "derivative": {
+    "plain_description": "Train grouped raster models, generate pseudo masks, retrain fresh models and combine predictions with explicit geometry and target assumptions.",
+    "ports": [
+      {
+        "direction": "input",
+        "name": "slides",
+        "type_desc": "object",
+        "ordinal": 0,
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Ordered decoded RGB uint8 raster and aligned binary uint8 mask pairs. Caller defines foreground meaning and physical scale. Source preparation uses unshifted and half-shifted grids, JPEG roundtrip, std>10 filtering and rounded-area bins. Both foreground-bin and background-bin training populations must remain."
+      },
+      {
+        "direction": "input",
+        "name": "groups",
+        "type_desc": "object",
+        "ordinal": 1,
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "One string or integer group label per labeled raster. Validation groups hold out whole rasters before tiling; both partitions must retain tiles. Caller must establish subject/acquisition independence and exclude validation overlap from pseudo sources."
+      },
+      {
+        "direction": "input",
+        "name": "initial_stages",
+        "type_desc": "object",
+        "ordinal": 2,
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Nonempty ordered FoldStage objects with explicit full encoder tensor state, integer model seed, validation group labels and training options. Options include positive ordered start/end epochs, maximum_bin, batch sizes, input_side, explicit Python Random, NumPy RandomState and CPU Torch Generator. Training batch size is at least2 and model input dimensions are multiples of32. Every fold constructs a fresh decoder, Adam optimizer and scheduler."
+      },
+      {
+        "direction": "input",
+        "name": "initial_selectors",
+        "type_desc": "object",
+        "ordinal": 3,
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Nonempty ordered pairs of configured fold index and actually produced checkpoint role. Roles are best_loss, best_score or snapshot_<epoch>. These stage adapters do not perform the separate run_lifecycle selector precheck. Invalid selectors must not be supplied; tensor-compatible checkpoints do not establish pretrained provenance."
+      },
+      {
+        "direction": "input",
+        "name": "tile_size",
+        "type_desc": "int",
+        "ordinal": 4,
+        "required": false,
+        "default_value_repr": "1024",
+        "constraints": "Integer tile side at least2; source default1024. Both source grid offsets must produce a nonempty grid for each raster. Tile scale changes target meaning and sampling, so application transfer requires justification."
+      },
+      {
+        "direction": "input",
+        "name": "input_resolution",
+        "type_desc": "int",
+        "ordinal": 5,
+        "required": false,
+        "default_value_repr": "320",
+        "constraints": "Positive integer model input side compatible with the network, normally320 and a multiple of32. It must agree with inference_geometry.input_resolution. This interface does not check that agreement before model execution."
+      },
+      {
+        "direction": "input",
+        "name": "pseudo_sources",
+        "type_desc": "object",
+        "ordinal": 6,
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Ordered collections of decoded RGB uint8 rasters from caller-approved pseudo populations. Caller must prevent validation overlap. Four-view predictions become binary masks; only rounded-bin-positive pseudo tiles are later appended to training."
+      },
+      {
+        "direction": "input",
+        "name": "pseudo_rng",
+        "type_desc": "object",
+        "ordinal": 7,
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Mapping with python_rng as Python Random and torch_generator as CPU Torch Generator. Streams are consumed by inference; callers control and preserve their lifecycle. No hidden global seed or device scheduling equivalence is promised."
+      },
+      {
+        "direction": "input",
+        "name": "inference_geometry",
+        "type_desc": "object",
+        "ordinal": 8,
+        "required": false,
+        "default_value_repr": "None",
+        "constraints": "None or a mapping containing only resolution, input_resolution, pad_size and batch_size. Defaults are1024,320,256,12. Positive integer sizes and batch size are required; padding must satisfy0<=pad_size<resolution/2. Model and inference input resolution must agree; whole decoded input and output rasters remain resident."
+      },
+      {
+        "direction": "input",
+        "name": "retraining_stages",
+        "type_desc": "object",
+        "ordinal": 9,
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Nonempty ordered FoldStage objects with the same explicit encoder, grouping, schedule and RNG contract as initial stages. Retraining constructs fresh model/optimizer state and appends positive pseudo tiles; it does not continue the initially trained segmentation model."
+      },
+      {
+        "direction": "input",
+        "name": "final_selectors",
+        "type_desc": "object",
+        "ordinal": 10,
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Nonempty ordered pairs of retraining fold index and actually produced checkpoint role, preserving ensemble order. Callers must select checkpoints produced by their explicit schedule. Historical notebook checkpoint selection is not authenticated by shape compatibility."
+      },
+      {
+        "direction": "input",
+        "name": "final_images",
+        "type_desc": "object",
+        "ordinal": 11,
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Ordered decoded nonempty RGB uint8 rasters for final prediction. Foreground semantics, color/normalization, physical scale and augmentation invariance must be justified for the new application."
+      },
+      {
+        "direction": "input",
+        "name": "final_rng",
+        "type_desc": "object",
+        "ordinal": 12,
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Mapping with python_rng as Python Random and torch_generator as CPU Torch Generator, consumed during final inference. These are mutable trusted runtime objects, not JSON values."
+      },
+      {
+        "direction": "output",
+        "name": "initial_metrics",
+        "type_desc": "object",
+        "ordinal": 0,
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Ordered per-fold epoch records with training and validation aggregates plus checkpoint/early-stop decisions. These are training diagnostics, not independent predictive-quality evidence."
+      },
+      {
+        "direction": "output",
+        "name": "retraining_metrics",
+        "type_desc": "object",
+        "ordinal": 1,
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Ordered per-fold epoch records after fresh training with positive pseudo tiles. Validation metrics do not prove independence of caller-supplied populations."
+      },
+      {
+        "direction": "output",
+        "name": "predictions",
+        "type_desc": "object",
+        "ordinal": 2,
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Ordered full-raster uint8 binary masks using three flip views, model averaging, resize, strict threshold0.5 and interior stitching. Empty masks may reflect the batch classifier shortcut. Outputs are not calibrated uncertainty estimates."
+      }
+    ]
+  },
+  "reuse_decision": "The recipe may transfer to other binary raster-segmentation tasks with justified foreground semantics, physical scale, color and augmentation assumptions, independent grouped populations and pseudo-source isolation. Keep explicit stage and inference policies. Generic image or sampling operations require independent qualification before standalone selection.",
+  "limitations": [
+    "Binary foreground semantics, physical scale, color statistics and lossy preprocessing must be justified for each application. A nonempty mask can enter the background sampling population. TIFF decoding and stain normalization are not implemented by this graph.",
+    "Group labels do not establish independence of subjects, acquisition sessions or sources. The caller must exclude validation overlap from pseudo sources; the implementation does not detect that overlap.",
+    "Encoder-state shape compatibility and deterministic seeds do not authenticate pretrained weights or prove accuracy. Explicit stage schedules and checkpoint roles must be executable. The graph stage functions use _train_stages directly and do not inherit all run_lifecycle selector validation.",
+    "Pseudo masks are model outputs, not independent ground truth. Positive-only filtering, area bins and augmentation invariance are recipe assumptions; application transfer requires justification and independent evaluation.",
+    "Batch composition, tile scale, padding, normalization and thresholds affect meaning and output. An empty final mask can result from the classifier shortcut; it is not evidence of absent foreground. Binary outputs are not calibrated uncertainty estimates.",
+    "These provider interfaces are recipe stages and trusted runtime-object boundaries, not a generic JSON service. Image tiling, balanced sampling and aggregation need independently qualified contracts before standalone cross-domain selection.",
+    "Automated Tier 3 qualification only; no human Tier 1 designation.",
+    "Current qualification uses synthetic random encoder state and the source epoch schedule with resource-adapted batch size. No historical final checkpoint policy/provenance, predictive accuracy or clean-install claim.",
+    "Caller must bound CPU threads and memory. Model ensembles, checkpoint bytes, full decoded inputs and output masks remain resident; zero loader workers is not a memory limit.",
+    "Synthetic random encoder state, four initial and four fresh retraining folds, twenty consecutive epochs from epoch1 per fold with source patience50 and resource-adapted batch2. No historical trained-weight or predictive accuracy claim.",
+    "Source-sized network and tile geometry with synthetic rasters; no whole-slide codec, GPU or unbounded-memory qualification.",
+    "Four initial best-score checkpoints follow the pinned pseudo policy. Four final best-loss checkpoints are an explicit caller selection; historical final notebook checkpoint policy and provenance remain unverified.",
+    "Synthetic circular foreground is encoded by raster intensity; no real data or application accuracy evaluation is involved.",
+    "Existing source-comparison evidence is retained separately; this run is not a fresh independent-source parity comparison.",
+    "Corrected stored original execution and publication remain separate requirements."
+  ],
+  "evidence_commit": "6534c0a0ac54259e4986c4baabfbb46478587054",
+  "execution": {
+    "passed": true,
+    "approved": false,
+    "catalog_mutations": 0,
+    "evidence_commit": "6534c0a0ac54259e4986c4baabfbb46478587054",
+    "report_sha256": "524b634fbd18df2d393d078a359e7c94444dd2b167000a377d122ef5456475a1",
+    "graph_sha256": "126471f8fb4d6ba85909bccc37199376f369d369874bd910c405501b7fb89387",
+    "limits": [
+      "Synthetic random encoder state, four initial and four fresh retraining folds, twenty consecutive epochs from epoch1 per fold with source patience50 and resource-adapted batch2. No historical trained-weight or predictive accuracy claim.",
+      "Source-sized network and tile geometry with synthetic rasters; no whole-slide codec, GPU or unbounded-memory qualification.",
+      "Four initial best-score checkpoints follow the pinned pseudo policy. Four final best-loss checkpoints are an explicit caller selection; historical final notebook checkpoint policy and provenance remain unverified.",
+      "Synthetic circular foreground is encoded by raster intensity; no real data or application accuracy evaluation is involved.",
+      "Existing source-comparison evidence is retained separately; this run is not a fresh independent-source parity comparison.",
+      "Corrected stored original execution and publication remain separate requirements."
+    ],
+    "scope": "Current four-fold local lifecycle only; historical final checkpoint selection, corrected stored execution and publication remain separate."
+  },
+  "readiness_sha256": "10e7add1d5e479acbd412eb3f2aa57fbf3f571beec3ad9ab049db980d6e7eac4",
+  "reuse_sha256": "0481578d9b20169fb8611104ba32e95d2bf20263d44c8dd9a9a78bf88972e11d",
+  "reviewer_sha256": "7b2eaa9d6031ca2ffd318fbbb26a55e9ab014e994140462c6d01611240df4466",
+  "remaining": [
+    "Transactional metadata repair and both native eligibility predicates.",
+    "Resolve historical final-selection coverage, execute corrected stored original and verify publication."
+  ]
+}
