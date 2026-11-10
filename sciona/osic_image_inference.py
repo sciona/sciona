@@ -22,10 +22,12 @@ names and their mapping to decoded planes remain private runtime material.
     return np.array([i for i,n in enumerate(ordinals) if -.1 < n/len(names) < 1.1],dtype=np.int64)
 
 
-def predict(baselines,queries,planes,predict_slices):
+def predict(baselines,queries,planes,predict_slices,*,decode_selected=None):
     """Prepare selected slices, predict slopes, and restore explicit query order.
 
 ``planes[entity]`` is an ordered list of (name, decoded integer 2D plane).
+With an explicit ``decode_selected`` callable, payloads may instead be encoded;
+only selected positions are decoded, preserving source handling of unused files.
 The caller supplies a fitted predictor accepting [images,metadata] and returning
 float32/64 scalar slopes of shape (slices,1). Its batching policy must preserve
 the source inference batch size of 32. No fitting occurs in this adapter.
@@ -33,6 +35,8 @@ Baselines use one row per entity and int64/float64 numerical coordinates;
 queries use explicit unique keys and integer times. Full coverage is required.
 """
     baseline_columns={'entity','time','target','numeric','category_a','category_b','uncertainty'}
+    if decode_selected is not None and not callable(decode_selected):
+        raise ValueError('A callable selected-plane decoder is required')
     for frame,columns in ((baselines,baseline_columns),(queries,{'key','entity','time'})):
         if (not isinstance(frame,pd.DataFrame) or frame.empty or not frame.columns.is_unique
                 or set(frame.columns)!=columns):
@@ -64,7 +68,9 @@ queries use explicit unique keys and integer times. Full coverage is required.
             raise ValueError('Source cannot produce complete predictions with fewer than two selected slices')
         row=baselines.loc[baselines['entity']==entity].iloc[0]
         vector=encode(row['numeric'],row['category_a'],row['category_b'],branch='inference')
-        images=np.expand_dims(np.stack([inference_plane(records[i][1]) for i in positions]),axis=-1)
+        pixels=[decode_selected(records[i][1]) if decode_selected is not None else records[i][1]
+                for i in positions]
+        images=np.expand_dims(np.stack([inference_plane(plane) for plane in pixels]),axis=-1)
         metadata=np.stack([vector for _ in positions])
         prediction=predict_slices([images,metadata])
         if (not isinstance(prediction,np.ndarray) or prediction.shape!=(len(positions),1)
