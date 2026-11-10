@@ -37,7 +37,7 @@ def validate_report(report, variant):
 
 
 # Pin only after both stored execution reports have completed and been committed.
-EVIDENCE_COMMIT = None
+EVIDENCE_COMMIT = '8296526db0eae19576bfd20a864e5c06c777e2f0'
 SOURCE = 'docs/reviews/contrails_original_scope.json'
 
 

@@ -14,7 +14,7 @@ from scripts.backfill_dejargonized_descriptions import estimate_jargon_score
 ROOT=intake.ROOT
 RUNNER='contrails-corrected-intake-community.v1'
 REFERENCE='contrails-corrected-intake-execution-v1'
-EVIDENCE_COMMIT=None
+EVIDENCE_COMMIT='8296526db0eae19576bfd20a864e5c06c777e2f0'
 from scripts import contrails_publication_evidence as evidence
 CONTRACTS=json.loads((ROOT/'docs/reviews/contrails_provider_contracts.json').read_text())
 PARAMETER_CONTRACT=next(p['constraints'] for p in CONTRACTS['derivative']['ports'] if p['direction']=='input')
