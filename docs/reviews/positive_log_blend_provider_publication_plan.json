@@ -1,0 +1,2144 @@
+{
+  "records": [
+    {
+      "artifact_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+      "fqdn": "sciona.atoms.ml.positive_log_blending.fit_positive_log_blend",
+      "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+      "content_hash": "7a7d239bd1c418aaeaa8879505ab470dbd55e2e675a5d4ab7cf2c7598508f600",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "predictions",
+          "type_desc": "NDArray[np.float64]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "targets",
+          "type_desc": "NDArray[np.float64]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Aligned finite nonnegative float64 vector from the calibration population. Caller must ensure calibration scores are held-out or out-of-fold and have the same normalized response coordinate as targets."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "model_columns",
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows."
+        },
+        {
+          "direction": "input",
+          "ordinal": 3,
+          "name": "response_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state."
+        },
+        {
+          "direction": "input",
+          "ordinal": 4,
+          "name": "clip_bounds",
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Two finite numeric bounds with 0 <= lower < upper, expressed in the declared response coordinate; only model predictions are clipped, not calibration targets."
+        },
+        {
+          "direction": "input",
+          "ordinal": 5,
+          "name": "controls",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Dictionary with exactly alpha, max_iter, tolerance, seed. Positive finite alpha and tolerance, positive integer max_iter, integer 0 <= seed < 2**32. Positive Lasso with intercept, precomputed Gram matrix and random coordinate selection. Nonconvergence is rejected."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Portable JSON dictionary with exactly format, model_columns, response_coordinate, coefficients, intercept, clip_bounds. Format sciona.positive_log_blend.v1; finite nonnegative coefficients, finite intercept, valid bounds, exact model and coordinate identities. No pickle."
+        }
+      ],
+      "operation": "Fit positive-coefficient Lasso to clipped log1p calibration scores and log1p targets, returning portable numeric state.",
+      "plain_description": "Learn how to combine several model estimates using separate examples with known answers.",
+      "validity_bounds": "Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p. Aligned finite nonnegative float64 vector from the calibration population. Caller must ensure calibration scores are held-out or out-of-fold and have the same normalized response coordinate as targets. Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows. Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state. Two finite numeric bounds with 0 <= lower < upper, expressed in the declared response coordinate; only model predictions are clipped, not calibration targets. Dictionary with exactly alpha, max_iter, tolerance, seed. Positive finite alpha and tolerance, positive integer max_iter, integer 0 <= seed < 2**32. Positive Lasso with intercept, precomputed Gram matrix and random coordinate selection. Nonconvergence is rejected. Portable JSON dictionary with exactly format, model_columns, response_coordinate, coefficients, intercept, clip_bounds. Format sciona.positive_log_blend.v1; finite nonnegative coefficients, finite intercept, valid bounds, exact model and coordinate identities. No pickle.",
+      "reuse": "Domain-independent numeric blending with caller-selected normalized response coordinate, clipping bounds and model identities. No competition field names, fixed model count, or original data required.",
+      "registered_provider_dependencies": []
+    },
+    {
+      "artifact_id": "9eb66967-271f-585b-aa88-492bc3973930",
+      "fqdn": "sciona.atoms.ml.positive_log_blending.apply_positive_log_blend",
+      "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+      "content_hash": "d31746fc0fd65c7ea988b6dbd4dca65d05a136f8319ef2b1cc2d12f71409d6b6",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "predictions",
+          "type_desc": "NDArray[np.float64]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "model_columns",
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "response_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state."
+        },
+        {
+          "direction": "input",
+          "ordinal": 3,
+          "name": "state",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Portable JSON dictionary with exactly format, model_columns, response_coordinate, coefficients, intercept, clip_bounds. Format sciona.positive_log_blend.v1; finite nonnegative coefficients, finite intercept, valid bounds, exact model and coordinate identities. No pickle."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "NDArray[np.float64]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 vector aligned with input rows, in the declared normalized response coordinate. Intercept is unconstrained: outputs may be negative; there is no silent final clamp. Inverse-transform overflow is rejected."
+        }
+      ],
+      "operation": "Apply stored positive-coefficient log1p blend and expm1 inverse with exact model-column and response-coordinate identity.",
+      "plain_description": "Combine model estimates using previously learned weights and the same response scale.",
+      "validity_bounds": "Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p. Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows. Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state. Portable JSON dictionary with exactly format, model_columns, response_coordinate, coefficients, intercept, clip_bounds. Format sciona.positive_log_blend.v1; finite nonnegative coefficients, finite intercept, valid bounds, exact model and coordinate identities. No pickle. Finite float64 vector aligned with input rows, in the declared normalized response coordinate. Intercept is unconstrained: outputs may be negative; there is no silent final clamp. Inverse-transform overflow is rejected.",
+      "reuse": "Domain-independent numeric blending with caller-selected normalized response coordinate, clipping bounds and model identities. No competition field names, fixed model count, or original data required.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "qualification": {
+    "format": "positive-log-blend-semantics.v1",
+    "passed": true,
+    "approved": false,
+    "proposed_tier": 3,
+    "verdict": "acceptable_with_limits",
+    "catalog_mutations": 0,
+    "synthetic_only": true,
+    "providers": [
+      {
+        "artifact_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "fqdn": "sciona.atoms.ml.positive_log_blending.fit_positive_log_blend",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "content_hash": "7a7d239bd1c418aaeaa8879505ab470dbd55e2e675a5d4ab7cf2c7598508f600",
+        "interfaces": [
+          {
+            "direction": "input",
+            "ordinal": 0,
+            "name": "predictions",
+            "type_desc": "NDArray[np.float64]",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p."
+          },
+          {
+            "direction": "input",
+            "ordinal": 1,
+            "name": "targets",
+            "type_desc": "NDArray[np.float64]",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Aligned finite nonnegative float64 vector from the calibration population. Caller must ensure calibration scores are held-out or out-of-fold and have the same normalized response coordinate as targets."
+          },
+          {
+            "direction": "input",
+            "ordinal": 2,
+            "name": "model_columns",
+            "type_desc": "list",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows."
+          },
+          {
+            "direction": "input",
+            "ordinal": 3,
+            "name": "response_coordinate",
+            "type_desc": "str",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state."
+          },
+          {
+            "direction": "input",
+            "ordinal": 4,
+            "name": "clip_bounds",
+            "type_desc": "list",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Two finite numeric bounds with 0 <= lower < upper, expressed in the declared response coordinate; only model predictions are clipped, not calibration targets."
+          },
+          {
+            "direction": "input",
+            "ordinal": 5,
+            "name": "controls",
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Dictionary with exactly alpha, max_iter, tolerance, seed. Positive finite alpha and tolerance, positive integer max_iter, integer 0 <= seed < 2**32. Positive Lasso with intercept, precomputed Gram matrix and random coordinate selection. Nonconvergence is rejected."
+          },
+          {
+            "direction": "output",
+            "ordinal": 0,
+            "name": "result",
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Portable JSON dictionary with exactly format, model_columns, response_coordinate, coefficients, intercept, clip_bounds. Format sciona.positive_log_blend.v1; finite nonnegative coefficients, finite intercept, valid bounds, exact model and coordinate identities. No pickle."
+          }
+        ],
+        "operation": "Fit positive-coefficient Lasso to clipped log1p calibration scores and log1p targets, returning portable numeric state.",
+        "plain_description": "Learn how to combine several model estimates using separate examples with known answers.",
+        "validity_bounds": "Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p. Aligned finite nonnegative float64 vector from the calibration population. Caller must ensure calibration scores are held-out or out-of-fold and have the same normalized response coordinate as targets. Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows. Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state. Two finite numeric bounds with 0 <= lower < upper, expressed in the declared response coordinate; only model predictions are clipped, not calibration targets. Dictionary with exactly alpha, max_iter, tolerance, seed. Positive finite alpha and tolerance, positive integer max_iter, integer 0 <= seed < 2**32. Positive Lasso with intercept, precomputed Gram matrix and random coordinate selection. Nonconvergence is rejected. Portable JSON dictionary with exactly format, model_columns, response_coordinate, coefficients, intercept, clip_bounds. Format sciona.positive_log_blend.v1; finite nonnegative coefficients, finite intercept, valid bounds, exact model and coordinate identities. No pickle.",
+        "reuse": "Domain-independent numeric blending with caller-selected normalized response coordinate, clipping bounds and model identities. No competition field names, fixed model count, or original data required.",
+        "registered_provider_dependencies": []
+      },
+      {
+        "artifact_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "fqdn": "sciona.atoms.ml.positive_log_blending.apply_positive_log_blend",
+        "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+        "content_hash": "d31746fc0fd65c7ea988b6dbd4dca65d05a136f8319ef2b1cc2d12f71409d6b6",
+        "interfaces": [
+          {
+            "direction": "input",
+            "ordinal": 0,
+            "name": "predictions",
+            "type_desc": "NDArray[np.float64]",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p."
+          },
+          {
+            "direction": "input",
+            "ordinal": 1,
+            "name": "model_columns",
+            "type_desc": "list",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows."
+          },
+          {
+            "direction": "input",
+            "ordinal": 2,
+            "name": "response_coordinate",
+            "type_desc": "str",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state."
+          },
+          {
+            "direction": "input",
+            "ordinal": 3,
+            "name": "state",
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Portable JSON dictionary with exactly format, model_columns, response_coordinate, coefficients, intercept, clip_bounds. Format sciona.positive_log_blend.v1; finite nonnegative coefficients, finite intercept, valid bounds, exact model and coordinate identities. No pickle."
+          },
+          {
+            "direction": "output",
+            "ordinal": 0,
+            "name": "result",
+            "type_desc": "NDArray[np.float64]",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Finite float64 vector aligned with input rows, in the declared normalized response coordinate. Intercept is unconstrained: outputs may be negative; there is no silent final clamp. Inverse-transform overflow is rejected."
+          }
+        ],
+        "operation": "Apply stored positive-coefficient log1p blend and expm1 inverse with exact model-column and response-coordinate identity.",
+        "plain_description": "Combine model estimates using previously learned weights and the same response scale.",
+        "validity_bounds": "Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p. Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows. Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state. Portable JSON dictionary with exactly format, model_columns, response_coordinate, coefficients, intercept, clip_bounds. Format sciona.positive_log_blend.v1; finite nonnegative coefficients, finite intercept, valid bounds, exact model and coordinate identities. No pickle. Finite float64 vector aligned with input rows, in the declared normalized response coordinate. Intercept is unconstrained: outputs may be negative; there is no silent final clamp. Inverse-transform overflow is rejected.",
+        "reuse": "Domain-independent numeric blending with caller-selected normalized response coordinate, clipping bounds and model identities. No competition field names, fixed model count, or original data required.",
+        "registered_provider_dependencies": []
+      }
+    ],
+    "tests": {
+      "tests": 15,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "software_sha256": {
+      "tests/test_positive_log_blend.py": "45541bd22d9a4872f6e72f91c089d059f621e6b7221d9b487d74f053f1d85b1b",
+      "provider/test_positive_log_blending_provider.py": "8c43a731cb0ca179d9a14d6bfa69a8f7dc049241e6e97b0e640705da368c1e5b",
+      "sciona/positive_log_blend.py": "38735fe368eb56dfd58d09870b6b3a2996e907837941d047f0b4d28f8d0ed47a",
+      "scripts/review_positive_log_blend_semantics.py": "8f4c273b0ba7d09935e543554ffd5e5361b862da28e358d048590edc289bb83a",
+      "scripts/import_positive_log_blend_drafts.py": "1079eb6af61a767f34f50d2009f0adc44d0f1716a05814d9a58355e4f6c04203",
+      "scripts/plan_positive_log_blend_intake.py": "8b9bed014e472cb905ad8bfe760586453c5c87c9bc07b56eff2e3bf4039f5357",
+      "docs/licenses/mercari-solution-LICENSE.txt": "ebd4587bd7c8d16ffb12e88219f6930a505962abb85a72c58ebf597c59d5abe2",
+      "sciona.atoms.ml.positive_log_blending": "a82dbd49f55df1414b8713d92216a0bd552756f2ee717db3543a51dc1a34b61a",
+      "sciona.ghost.registry": "793723a75d07a88eed39f59d8d4dc327c54adbf75db7a03003516a6f74c81b51",
+      "sciona.ghost.abstract": "9574bed61c8292b2eaf6ff054bcf46504b07e679c521a19d2440396c3ea63670",
+      "sciona.ghost.dimensions": "61be1958aa50725f3c6598d5b5447a806d2549698d5ce3ec243d467816754b7e"
+    },
+    "installed_packages": {
+      "annotated-types": {
+        "version": "0.7.0",
+        "hashed_files_verified": 7,
+        "active_requirements": []
+      },
+      "joblib": {
+        "version": "1.5.3",
+        "hashed_files_verified": 143,
+        "active_requirements": []
+      },
+      "numpy": {
+        "version": "2.2.6",
+        "hashed_files_verified": 876,
+        "active_requirements": []
+      },
+      "pydantic": {
+        "version": "2.12.5",
+        "hashed_files_verified": 111,
+        "active_requirements": [
+          "annotated-types>=0.6.0",
+          "pydantic-core==2.41.5",
+          "typing-extensions>=4.14.1",
+          "typing-inspection>=0.4.2"
+        ]
+      },
+      "pydantic-core": {
+        "version": "2.41.5",
+        "hashed_files_verified": 9,
+        "active_requirements": [
+          "typing-extensions>=4.14.1"
+        ]
+      },
+      "scikit-learn": {
+        "version": "1.8.0",
+        "hashed_files_verified": 960,
+        "active_requirements": [
+          "joblib>=1.3.0",
+          "numpy>=1.24.1",
+          "scipy>=1.10.0",
+          "threadpoolctl>=3.2.0"
+        ]
+      },
+      "scipy": {
+        "version": "1.17.1",
+        "hashed_files_verified": 1423,
+        "active_requirements": [
+          "numpy<2.7,>=1.26.4"
+        ]
+      },
+      "threadpoolctl": {
+        "version": "3.6.0",
+        "hashed_files_verified": 5,
+        "active_requirements": []
+      },
+      "typing-extensions": {
+        "version": "4.16.0",
+        "hashed_files_verified": 6,
+        "active_requirements": []
+      },
+      "typing-inspection": {
+        "version": "0.4.2",
+        "hashed_files_verified": 9,
+        "active_requirements": [
+          "typing-extensions>=4.12.0"
+        ]
+      }
+    },
+    "intake_plan_sha256": "f7fa0d96de43d64b4e1cf2fafe9ad822e81bb74e84c20559d76958343ff67504",
+    "connected_execution_commit": "33eb355b",
+    "connected_execution_sha256": "a61009f92aefacf6679f0fc49edb6703696340d8cc11c453287384a993c25bfb",
+    "resource_policy": {
+      "native_threads": 1,
+      "test_workers": 1
+    },
+    "limitations": [
+      "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+      "Synthetic source parity and cross-coordinate examples do not establish accuracy or generalization on a new application.",
+      "Caller supplies held-out or out-of-fold calibration scores in a declared common normalized numeric response coordinate; coordinate labels do not authenticate physical meaning or population independence.",
+      "Positive coefficients need not sum to one; the free intercept can yield negative predictions. No hidden final clamp is applied.",
+      "Finite input and output, consistent model ordering, nonnegative targets, valid clipping bounds and solver convergence are enforced concretely. Abstract witnesses validate metadata, not fitted numerical correctness.",
+      "Unknown dimensional metadata is allowed; known physical units must be normalized before the logarithmic transform.",
+      "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment, other platforms and optional extras are not certified.",
+      "This review qualifies only the two blend atoms, not the original competition CDG or the complete historical ensemble."
+    ]
+  },
+  "inserts": [
+    {
+      "table": "references_registry",
+      "keys": {
+        "ref_id": "positive_log_blend-provider-review-v1"
+      },
+      "row": {
+        "ref_id": "positive_log_blend-provider-review-v1",
+        "ref_type": "web",
+        "title": "Generic positive log blend implementation and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/51510207/docs/reviews/positive_log_blend_semantics.json"
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "direction": "input",
+        "name": "predictions"
+      },
+      "row": {
+        "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "direction": "input",
+        "ordinal": 0,
+        "name": "predictions",
+        "type_desc": "NDArray[np.float64]",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "name": "predictions"
+      },
+      "row": {
+        "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "name": "predictions",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "NDArray[np.float64]",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p.",
+        "dejargonized_description": "Caller supplies predictions.",
+        "constraints_json": {
+          "parameter_contract": "Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Synthetic source parity and cross-coordinate examples do not establish accuracy or generalization on a new application.",
+            "Caller supplies held-out or out-of-fold calibration scores in a declared common normalized numeric response coordinate; coordinate labels do not authenticate physical meaning or population independence.",
+            "Positive coefficients need not sum to one; the free intercept can yield negative predictions. No hidden final clamp is applied.",
+            "Finite input and output, consistent model ordering, nonnegative targets, valid clipping bounds and solver convergence are enforced concretely. Abstract witnesses validate metadata, not fitted numerical correctness.",
+            "Unknown dimensional metadata is allowed; known physical units must be normalized before the logarithmic transform.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment, other platforms and optional extras are not certified.",
+            "This review qualifies only the two blend atoms, not the original competition CDG or the complete historical ensemble."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "direction": "input",
+        "name": "targets"
+      },
+      "row": {
+        "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "direction": "input",
+        "ordinal": 1,
+        "name": "targets",
+        "type_desc": "NDArray[np.float64]",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Aligned finite nonnegative float64 vector from the calibration population. Caller must ensure calibration scores are held-out or out-of-fold and have the same normalized response coordinate as targets."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "name": "targets"
+      },
+      "row": {
+        "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "name": "targets",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "NDArray[np.float64]",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Aligned finite nonnegative float64 vector from the calibration population. Caller must ensure calibration scores are held-out or out-of-fold and have the same normalized response coordinate as targets.",
+        "dejargonized_description": "Caller supplies targets.",
+        "constraints_json": {
+          "parameter_contract": "Aligned finite nonnegative float64 vector from the calibration population. Caller must ensure calibration scores are held-out or out-of-fold and have the same normalized response coordinate as targets.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Synthetic source parity and cross-coordinate examples do not establish accuracy or generalization on a new application.",
+            "Caller supplies held-out or out-of-fold calibration scores in a declared common normalized numeric response coordinate; coordinate labels do not authenticate physical meaning or population independence.",
+            "Positive coefficients need not sum to one; the free intercept can yield negative predictions. No hidden final clamp is applied.",
+            "Finite input and output, consistent model ordering, nonnegative targets, valid clipping bounds and solver convergence are enforced concretely. Abstract witnesses validate metadata, not fitted numerical correctness.",
+            "Unknown dimensional metadata is allowed; known physical units must be normalized before the logarithmic transform.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment, other platforms and optional extras are not certified.",
+            "This review qualifies only the two blend atoms, not the original competition CDG or the complete historical ensemble."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "direction": "input",
+        "name": "model_columns"
+      },
+      "row": {
+        "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "direction": "input",
+        "ordinal": 2,
+        "name": "model_columns",
+        "type_desc": "list",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "name": "model_columns"
+      },
+      "row": {
+        "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "name": "model_columns",
+        "position": 2,
+        "kind": "positional_or_keyword",
+        "type_desc": "list",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows.",
+        "dejargonized_description": "Caller supplies model columns.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Synthetic source parity and cross-coordinate examples do not establish accuracy or generalization on a new application.",
+            "Caller supplies held-out or out-of-fold calibration scores in a declared common normalized numeric response coordinate; coordinate labels do not authenticate physical meaning or population independence.",
+            "Positive coefficients need not sum to one; the free intercept can yield negative predictions. No hidden final clamp is applied.",
+            "Finite input and output, consistent model ordering, nonnegative targets, valid clipping bounds and solver convergence are enforced concretely. Abstract witnesses validate metadata, not fitted numerical correctness.",
+            "Unknown dimensional metadata is allowed; known physical units must be normalized before the logarithmic transform.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment, other platforms and optional extras are not certified.",
+            "This review qualifies only the two blend atoms, not the original competition CDG or the complete historical ensemble."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "direction": "input",
+        "name": "response_coordinate"
+      },
+      "row": {
+        "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "direction": "input",
+        "ordinal": 3,
+        "name": "response_coordinate",
+        "type_desc": "str",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "name": "response_coordinate"
+      },
+      "row": {
+        "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "name": "response_coordinate",
+        "position": 3,
+        "kind": "positional_or_keyword",
+        "type_desc": "str",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state.",
+        "dejargonized_description": "Caller supplies response coordinate.",
+        "constraints_json": {
+          "parameter_contract": "Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Synthetic source parity and cross-coordinate examples do not establish accuracy or generalization on a new application.",
+            "Caller supplies held-out or out-of-fold calibration scores in a declared common normalized numeric response coordinate; coordinate labels do not authenticate physical meaning or population independence.",
+            "Positive coefficients need not sum to one; the free intercept can yield negative predictions. No hidden final clamp is applied.",
+            "Finite input and output, consistent model ordering, nonnegative targets, valid clipping bounds and solver convergence are enforced concretely. Abstract witnesses validate metadata, not fitted numerical correctness.",
+            "Unknown dimensional metadata is allowed; known physical units must be normalized before the logarithmic transform.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment, other platforms and optional extras are not certified.",
+            "This review qualifies only the two blend atoms, not the original competition CDG or the complete historical ensemble."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "direction": "input",
+        "name": "clip_bounds"
+      },
+      "row": {
+        "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "direction": "input",
+        "ordinal": 4,
+        "name": "clip_bounds",
+        "type_desc": "list",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Two finite numeric bounds with 0 <= lower < upper, expressed in the declared response coordinate; only model predictions are clipped, not calibration targets."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "name": "clip_bounds"
+      },
+      "row": {
+        "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "name": "clip_bounds",
+        "position": 4,
+        "kind": "positional_or_keyword",
+        "type_desc": "list",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Two finite numeric bounds with 0 <= lower < upper, expressed in the declared response coordinate; only model predictions are clipped, not calibration targets.",
+        "dejargonized_description": "Caller supplies clip bounds.",
+        "constraints_json": {
+          "parameter_contract": "Two finite numeric bounds with 0 <= lower < upper, expressed in the declared response coordinate; only model predictions are clipped, not calibration targets.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Synthetic source parity and cross-coordinate examples do not establish accuracy or generalization on a new application.",
+            "Caller supplies held-out or out-of-fold calibration scores in a declared common normalized numeric response coordinate; coordinate labels do not authenticate physical meaning or population independence.",
+            "Positive coefficients need not sum to one; the free intercept can yield negative predictions. No hidden final clamp is applied.",
+            "Finite input and output, consistent model ordering, nonnegative targets, valid clipping bounds and solver convergence are enforced concretely. Abstract witnesses validate metadata, not fitted numerical correctness.",
+            "Unknown dimensional metadata is allowed; known physical units must be normalized before the logarithmic transform.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment, other platforms and optional extras are not certified.",
+            "This review qualifies only the two blend atoms, not the original competition CDG or the complete historical ensemble."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "direction": "input",
+        "name": "controls"
+      },
+      "row": {
+        "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "direction": "input",
+        "ordinal": 5,
+        "name": "controls",
+        "type_desc": "dict",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Dictionary with exactly alpha, max_iter, tolerance, seed. Positive finite alpha and tolerance, positive integer max_iter, integer 0 <= seed < 2**32. Positive Lasso with intercept, precomputed Gram matrix and random coordinate selection. Nonconvergence is rejected."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "name": "controls"
+      },
+      "row": {
+        "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "name": "controls",
+        "position": 5,
+        "kind": "positional_or_keyword",
+        "type_desc": "dict",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Dictionary with exactly alpha, max_iter, tolerance, seed. Positive finite alpha and tolerance, positive integer max_iter, integer 0 <= seed < 2**32. Positive Lasso with intercept, precomputed Gram matrix and random coordinate selection. Nonconvergence is rejected.",
+        "dejargonized_description": "Caller supplies controls.",
+        "constraints_json": {
+          "parameter_contract": "Dictionary with exactly alpha, max_iter, tolerance, seed. Positive finite alpha and tolerance, positive integer max_iter, integer 0 <= seed < 2**32. Positive Lasso with intercept, precomputed Gram matrix and random coordinate selection. Nonconvergence is rejected.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Synthetic source parity and cross-coordinate examples do not establish accuracy or generalization on a new application.",
+            "Caller supplies held-out or out-of-fold calibration scores in a declared common normalized numeric response coordinate; coordinate labels do not authenticate physical meaning or population independence.",
+            "Positive coefficients need not sum to one; the free intercept can yield negative predictions. No hidden final clamp is applied.",
+            "Finite input and output, consistent model ordering, nonnegative targets, valid clipping bounds and solver convergence are enforced concretely. Abstract witnesses validate metadata, not fitted numerical correctness.",
+            "Unknown dimensional metadata is allowed; known physical units must be normalized before the logarithmic transform.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment, other platforms and optional extras are not certified.",
+            "This review qualifies only the two blend atoms, not the original competition CDG or the complete historical ensemble."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "direction": "output",
+        "name": "result"
+      },
+      "row": {
+        "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "direction": "output",
+        "ordinal": 0,
+        "name": "result",
+        "type_desc": "dict",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Portable JSON dictionary with exactly format, model_columns, response_coordinate, coefficients, intercept, clip_bounds. Format sciona.positive_log_blend.v1; finite nonnegative coefficients, finite intercept, valid bounds, exact model and coordinate identities. No pickle."
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "kind": "technical",
+        "language": "en",
+        "content": "Fit positive-coefficient Lasso to clipped log1p calibration scores and log1p targets, returning portable numeric state. Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p. Aligned finite nonnegative float64 vector from the calibration population. Caller must ensure calibration scores are held-out or out-of-fold and have the same normalized response coordinate as targets. Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows. Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state. Two finite numeric bounds with 0 <= lower < upper, expressed in the declared response coordinate; only model predictions are clipped, not calibration targets. Dictionary with exactly alpha, max_iter, tolerance, seed. Positive finite alpha and tolerance, positive integer max_iter, integer 0 <= seed < 2**32. Positive Lasso with intercept, precomputed Gram matrix and random coordinate selection. Nonconvergence is rejected. Portable JSON dictionary with exactly format, model_columns, response_coordinate, coefficients, intercept, clip_bounds. Format sciona.positive_log_blend.v1; finite nonnegative coefficients, finite intercept, valid bounds, exact model and coordinate identities. No pickle. Domain-independent numeric blending with caller-selected normalized response coordinate, clipping bounds and model identities. No competition field names, fixed model count, or original data required.",
+        "generated_by": "positive_log_blend-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.038627
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Learn how to combine several model estimates using separate examples with known answers. Accuracy on new problems must be checked separately.",
+        "generated_by": "positive_log_blend-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "atom_references",
+      "keys": {
+        "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "ref_key": "positive_log_blend-provider-review-v1"
+      },
+      "row": {
+        "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "ref_key": "positive_log_blend-provider-review-v1",
+        "ref_id": "positive_log_blend-provider-review-v1",
+        "title": "Generic positive log blend implementation and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/51510207/docs/reviews/positive_log_blend_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Fit positive-coefficient Lasso to clipped log1p calibration scores and log1p targets, returning portable numeric state. Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p. Aligned finite nonnegative float64 vector from the calibration population. Caller must ensure calibration scores are held-out or out-of-fold and have the same normalized response coordinate as targets. Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows. Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state. Two finite numeric bounds with 0 <= lower < upper, expressed in the declared response coordinate; only model predictions are clipped, not calibration targets. Dictionary with exactly alpha, max_iter, tolerance, seed. Positive finite alpha and tolerance, positive integer max_iter, integer 0 <= seed < 2**32. Positive Lasso with intercept, precomputed Gram matrix and random coordinate selection. Nonconvergence is rejected. Portable JSON dictionary with exactly format, model_columns, response_coordinate, coefficients, intercept, clip_bounds. Format sciona.positive_log_blend.v1; finite nonnegative coefficients, finite intercept, valid bounds, exact model and coordinate identities. No pickle."
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "name": "predictions"
+      },
+      "row": {
+        "artifact_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "name": "predictions",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "NDArray[np.float64]",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p.",
+        "dejargonized_description": "Caller supplies predictions.",
+        "constraints_json": {
+          "parameter_contract": "Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Synthetic source parity and cross-coordinate examples do not establish accuracy or generalization on a new application.",
+            "Caller supplies held-out or out-of-fold calibration scores in a declared common normalized numeric response coordinate; coordinate labels do not authenticate physical meaning or population independence.",
+            "Positive coefficients need not sum to one; the free intercept can yield negative predictions. No hidden final clamp is applied.",
+            "Finite input and output, consistent model ordering, nonnegative targets, valid clipping bounds and solver convergence are enforced concretely. Abstract witnesses validate metadata, not fitted numerical correctness.",
+            "Unknown dimensional metadata is allowed; known physical units must be normalized before the logarithmic transform.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment, other platforms and optional extras are not certified.",
+            "This review qualifies only the two blend atoms, not the original competition CDG or the complete historical ensemble."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "name": "targets"
+      },
+      "row": {
+        "artifact_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "name": "targets",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "NDArray[np.float64]",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Aligned finite nonnegative float64 vector from the calibration population. Caller must ensure calibration scores are held-out or out-of-fold and have the same normalized response coordinate as targets.",
+        "dejargonized_description": "Caller supplies targets.",
+        "constraints_json": {
+          "parameter_contract": "Aligned finite nonnegative float64 vector from the calibration population. Caller must ensure calibration scores are held-out or out-of-fold and have the same normalized response coordinate as targets.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Synthetic source parity and cross-coordinate examples do not establish accuracy or generalization on a new application.",
+            "Caller supplies held-out or out-of-fold calibration scores in a declared common normalized numeric response coordinate; coordinate labels do not authenticate physical meaning or population independence.",
+            "Positive coefficients need not sum to one; the free intercept can yield negative predictions. No hidden final clamp is applied.",
+            "Finite input and output, consistent model ordering, nonnegative targets, valid clipping bounds and solver convergence are enforced concretely. Abstract witnesses validate metadata, not fitted numerical correctness.",
+            "Unknown dimensional metadata is allowed; known physical units must be normalized before the logarithmic transform.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment, other platforms and optional extras are not certified.",
+            "This review qualifies only the two blend atoms, not the original competition CDG or the complete historical ensemble."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "name": "model_columns"
+      },
+      "row": {
+        "artifact_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "name": "model_columns",
+        "position": 2,
+        "kind": "positional_or_keyword",
+        "type_desc": "list",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows.",
+        "dejargonized_description": "Caller supplies model columns.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Synthetic source parity and cross-coordinate examples do not establish accuracy or generalization on a new application.",
+            "Caller supplies held-out or out-of-fold calibration scores in a declared common normalized numeric response coordinate; coordinate labels do not authenticate physical meaning or population independence.",
+            "Positive coefficients need not sum to one; the free intercept can yield negative predictions. No hidden final clamp is applied.",
+            "Finite input and output, consistent model ordering, nonnegative targets, valid clipping bounds and solver convergence are enforced concretely. Abstract witnesses validate metadata, not fitted numerical correctness.",
+            "Unknown dimensional metadata is allowed; known physical units must be normalized before the logarithmic transform.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment, other platforms and optional extras are not certified.",
+            "This review qualifies only the two blend atoms, not the original competition CDG or the complete historical ensemble."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "name": "response_coordinate"
+      },
+      "row": {
+        "artifact_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "name": "response_coordinate",
+        "position": 3,
+        "kind": "positional_or_keyword",
+        "type_desc": "str",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state.",
+        "dejargonized_description": "Caller supplies response coordinate.",
+        "constraints_json": {
+          "parameter_contract": "Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Synthetic source parity and cross-coordinate examples do not establish accuracy or generalization on a new application.",
+            "Caller supplies held-out or out-of-fold calibration scores in a declared common normalized numeric response coordinate; coordinate labels do not authenticate physical meaning or population independence.",
+            "Positive coefficients need not sum to one; the free intercept can yield negative predictions. No hidden final clamp is applied.",
+            "Finite input and output, consistent model ordering, nonnegative targets, valid clipping bounds and solver convergence are enforced concretely. Abstract witnesses validate metadata, not fitted numerical correctness.",
+            "Unknown dimensional metadata is allowed; known physical units must be normalized before the logarithmic transform.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment, other platforms and optional extras are not certified.",
+            "This review qualifies only the two blend atoms, not the original competition CDG or the complete historical ensemble."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "name": "clip_bounds"
+      },
+      "row": {
+        "artifact_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "name": "clip_bounds",
+        "position": 4,
+        "kind": "positional_or_keyword",
+        "type_desc": "list",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Two finite numeric bounds with 0 <= lower < upper, expressed in the declared response coordinate; only model predictions are clipped, not calibration targets.",
+        "dejargonized_description": "Caller supplies clip bounds.",
+        "constraints_json": {
+          "parameter_contract": "Two finite numeric bounds with 0 <= lower < upper, expressed in the declared response coordinate; only model predictions are clipped, not calibration targets.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Synthetic source parity and cross-coordinate examples do not establish accuracy or generalization on a new application.",
+            "Caller supplies held-out or out-of-fold calibration scores in a declared common normalized numeric response coordinate; coordinate labels do not authenticate physical meaning or population independence.",
+            "Positive coefficients need not sum to one; the free intercept can yield negative predictions. No hidden final clamp is applied.",
+            "Finite input and output, consistent model ordering, nonnegative targets, valid clipping bounds and solver convergence are enforced concretely. Abstract witnesses validate metadata, not fitted numerical correctness.",
+            "Unknown dimensional metadata is allowed; known physical units must be normalized before the logarithmic transform.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment, other platforms and optional extras are not certified.",
+            "This review qualifies only the two blend atoms, not the original competition CDG or the complete historical ensemble."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "name": "controls"
+      },
+      "row": {
+        "artifact_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+        "name": "controls",
+        "position": 5,
+        "kind": "positional_or_keyword",
+        "type_desc": "dict",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Dictionary with exactly alpha, max_iter, tolerance, seed. Positive finite alpha and tolerance, positive integer max_iter, integer 0 <= seed < 2**32. Positive Lasso with intercept, precomputed Gram matrix and random coordinate selection. Nonconvergence is rejected.",
+        "dejargonized_description": "Caller supplies controls.",
+        "constraints_json": {
+          "parameter_contract": "Dictionary with exactly alpha, max_iter, tolerance, seed. Positive finite alpha and tolerance, positive integer max_iter, integer 0 <= seed < 2**32. Positive Lasso with intercept, precomputed Gram matrix and random coordinate selection. Nonconvergence is rejected.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Synthetic source parity and cross-coordinate examples do not establish accuracy or generalization on a new application.",
+            "Caller supplies held-out or out-of-fold calibration scores in a declared common normalized numeric response coordinate; coordinate labels do not authenticate physical meaning or population independence.",
+            "Positive coefficients need not sum to one; the free intercept can yield negative predictions. No hidden final clamp is applied.",
+            "Finite input and output, consistent model ordering, nonnegative targets, valid clipping bounds and solver convergence are enforced concretely. Abstract witnesses validate metadata, not fitted numerical correctness.",
+            "Unknown dimensional metadata is allowed; known physical units must be normalized before the logarithmic transform.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment, other platforms and optional extras are not certified.",
+            "This review qualifies only the two blend atoms, not the original competition CDG or the complete historical ensemble."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "kind": "technical",
+        "language": "en",
+        "content": "Fit positive-coefficient Lasso to clipped log1p calibration scores and log1p targets, returning portable numeric state. Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p. Aligned finite nonnegative float64 vector from the calibration population. Caller must ensure calibration scores are held-out or out-of-fold and have the same normalized response coordinate as targets. Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows. Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state. Two finite numeric bounds with 0 <= lower < upper, expressed in the declared response coordinate; only model predictions are clipped, not calibration targets. Dictionary with exactly alpha, max_iter, tolerance, seed. Positive finite alpha and tolerance, positive integer max_iter, integer 0 <= seed < 2**32. Positive Lasso with intercept, precomputed Gram matrix and random coordinate selection. Nonconvergence is rejected. Portable JSON dictionary with exactly format, model_columns, response_coordinate, coefficients, intercept, clip_bounds. Format sciona.positive_log_blend.v1; finite nonnegative coefficients, finite intercept, valid bounds, exact model and coordinate identities. No pickle. Domain-independent numeric blending with caller-selected normalized response coordinate, clipping bounds and model identities. No competition field names, fixed model count, or original data required.",
+        "generated_by": "positive_log_blend-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.038627
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Learn how to combine several model estimates using separate examples with known answers. Accuracy on new problems must be checked separately.",
+        "generated_by": "positive_log_blend-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "artifact_references",
+      "keys": {
+        "artifact_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "ref_key": "positive_log_blend-provider-review-v1"
+      },
+      "row": {
+        "artifact_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+        "ref_key": "positive_log_blend-provider-review-v1",
+        "ref_id": "positive_log_blend-provider-review-v1",
+        "title": "Generic positive log blend implementation and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/51510207/docs/reviews/positive_log_blend_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Fit positive-coefficient Lasso to clipped log1p calibration scores and log1p targets, returning portable numeric state. Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p. Aligned finite nonnegative float64 vector from the calibration population. Caller must ensure calibration scores are held-out or out-of-fold and have the same normalized response coordinate as targets. Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows. Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state. Two finite numeric bounds with 0 <= lower < upper, expressed in the declared response coordinate; only model predictions are clipped, not calibration targets. Dictionary with exactly alpha, max_iter, tolerance, seed. Positive finite alpha and tolerance, positive integer max_iter, integer 0 <= seed < 2**32. Positive Lasso with intercept, precomputed Gram matrix and random coordinate selection. Nonconvergence is rejected. Portable JSON dictionary with exactly format, model_columns, response_coordinate, coefficients, intercept, clip_bounds. Format sciona.positive_log_blend.v1; finite nonnegative coefficients, finite intercept, valid bounds, exact model and coordinate identities. No pickle."
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+        "direction": "input",
+        "name": "predictions"
+      },
+      "row": {
+        "atom_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+        "direction": "input",
+        "ordinal": 0,
+        "name": "predictions",
+        "type_desc": "NDArray[np.float64]",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+        "name": "predictions"
+      },
+      "row": {
+        "atom_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+        "name": "predictions",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "NDArray[np.float64]",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p.",
+        "dejargonized_description": "Caller supplies predictions.",
+        "constraints_json": {
+          "parameter_contract": "Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Synthetic source parity and cross-coordinate examples do not establish accuracy or generalization on a new application.",
+            "Caller supplies held-out or out-of-fold calibration scores in a declared common normalized numeric response coordinate; coordinate labels do not authenticate physical meaning or population independence.",
+            "Positive coefficients need not sum to one; the free intercept can yield negative predictions. No hidden final clamp is applied.",
+            "Finite input and output, consistent model ordering, nonnegative targets, valid clipping bounds and solver convergence are enforced concretely. Abstract witnesses validate metadata, not fitted numerical correctness.",
+            "Unknown dimensional metadata is allowed; known physical units must be normalized before the logarithmic transform.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment, other platforms and optional extras are not certified.",
+            "This review qualifies only the two blend atoms, not the original competition CDG or the complete historical ensemble."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+        "direction": "input",
+        "name": "model_columns"
+      },
+      "row": {
+        "atom_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+        "direction": "input",
+        "ordinal": 1,
+        "name": "model_columns",
+        "type_desc": "list",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+        "name": "model_columns"
+      },
+      "row": {
+        "atom_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+        "name": "model_columns",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "list",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows.",
+        "dejargonized_description": "Caller supplies model columns.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Synthetic source parity and cross-coordinate examples do not establish accuracy or generalization on a new application.",
+            "Caller supplies held-out or out-of-fold calibration scores in a declared common normalized numeric response coordinate; coordinate labels do not authenticate physical meaning or population independence.",
+            "Positive coefficients need not sum to one; the free intercept can yield negative predictions. No hidden final clamp is applied.",
+            "Finite input and output, consistent model ordering, nonnegative targets, valid clipping bounds and solver convergence are enforced concretely. Abstract witnesses validate metadata, not fitted numerical correctness.",
+            "Unknown dimensional metadata is allowed; known physical units must be normalized before the logarithmic transform.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment, other platforms and optional extras are not certified.",
+            "This review qualifies only the two blend atoms, not the original competition CDG or the complete historical ensemble."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+        "direction": "input",
+        "name": "response_coordinate"
+      },
+      "row": {
+        "atom_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+        "direction": "input",
+        "ordinal": 2,
+        "name": "response_coordinate",
+        "type_desc": "str",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+        "name": "response_coordinate"
+      },
+      "row": {
+        "atom_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+        "name": "response_coordinate",
+        "position": 2,
+        "kind": "positional_or_keyword",
+        "type_desc": "str",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state.",
+        "dejargonized_description": "Caller supplies response coordinate.",
+        "constraints_json": {
+          "parameter_contract": "Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Synthetic source parity and cross-coordinate examples do not establish accuracy or generalization on a new application.",
+            "Caller supplies held-out or out-of-fold calibration scores in a declared common normalized numeric response coordinate; coordinate labels do not authenticate physical meaning or population independence.",
+            "Positive coefficients need not sum to one; the free intercept can yield negative predictions. No hidden final clamp is applied.",
+            "Finite input and output, consistent model ordering, nonnegative targets, valid clipping bounds and solver convergence are enforced concretely. Abstract witnesses validate metadata, not fitted numerical correctness.",
+            "Unknown dimensional metadata is allowed; known physical units must be normalized before the logarithmic transform.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment, other platforms and optional extras are not certified.",
+            "This review qualifies only the two blend atoms, not the original competition CDG or the complete historical ensemble."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+        "direction": "input",
+        "name": "state"
+      },
+      "row": {
+        "atom_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+        "direction": "input",
+        "ordinal": 3,
+        "name": "state",
+        "type_desc": "dict",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Portable JSON dictionary with exactly format, model_columns, response_coordinate, coefficients, intercept, clip_bounds. Format sciona.positive_log_blend.v1; finite nonnegative coefficients, finite intercept, valid bounds, exact model and coordinate identities. No pickle."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+        "name": "state"
+      },
+      "row": {
+        "atom_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+        "name": "state",
+        "position": 3,
+        "kind": "positional_or_keyword",
+        "type_desc": "dict",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Portable JSON dictionary with exactly format, model_columns, response_coordinate, coefficients, intercept, clip_bounds. Format sciona.positive_log_blend.v1; finite nonnegative coefficients, finite intercept, valid bounds, exact model and coordinate identities. No pickle.",
+        "dejargonized_description": "Caller supplies state.",
+        "constraints_json": {
+          "parameter_contract": "Portable JSON dictionary with exactly format, model_columns, response_coordinate, coefficients, intercept, clip_bounds. Format sciona.positive_log_blend.v1; finite nonnegative coefficients, finite intercept, valid bounds, exact model and coordinate identities. No pickle.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Synthetic source parity and cross-coordinate examples do not establish accuracy or generalization on a new application.",
+            "Caller supplies held-out or out-of-fold calibration scores in a declared common normalized numeric response coordinate; coordinate labels do not authenticate physical meaning or population independence.",
+            "Positive coefficients need not sum to one; the free intercept can yield negative predictions. No hidden final clamp is applied.",
+            "Finite input and output, consistent model ordering, nonnegative targets, valid clipping bounds and solver convergence are enforced concretely. Abstract witnesses validate metadata, not fitted numerical correctness.",
+            "Unknown dimensional metadata is allowed; known physical units must be normalized before the logarithmic transform.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment, other platforms and optional extras are not certified.",
+            "This review qualifies only the two blend atoms, not the original competition CDG or the complete historical ensemble."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+        "direction": "output",
+        "name": "result"
+      },
+      "row": {
+        "atom_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+        "direction": "output",
+        "ordinal": 0,
+        "name": "result",
+        "type_desc": "NDArray[np.float64]",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Finite float64 vector aligned with input rows, in the declared normalized response coordinate. Intercept is unconstrained: outputs may be negative; there is no silent final clamp. Inverse-transform overflow is rejected."
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "kind": "technical",
+        "language": "en",
+        "content": "Apply stored positive-coefficient log1p blend and expm1 inverse with exact model-column and response-coordinate identity. Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p. Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows. Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state. Portable JSON dictionary with exactly format, model_columns, response_coordinate, coefficients, intercept, clip_bounds. Format sciona.positive_log_blend.v1; finite nonnegative coefficients, finite intercept, valid bounds, exact model and coordinate identities. No pickle. Finite float64 vector aligned with input rows, in the declared normalized response coordinate. Intercept is unconstrained: outputs may be negative; there is no silent final clamp. Inverse-transform overflow is rejected. Domain-independent numeric blending with caller-selected normalized response coordinate, clipping bounds and model identities. No competition field names, fixed model count, or original data required.",
+        "generated_by": "positive_log_blend-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.04918
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Combine model estimates using previously learned weights and the same response scale. Accuracy on new problems must be checked separately.",
+        "generated_by": "positive_log_blend-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "atom_references",
+      "keys": {
+        "atom_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "ref_key": "positive_log_blend-provider-review-v1"
+      },
+      "row": {
+        "atom_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "ref_key": "positive_log_blend-provider-review-v1",
+        "ref_id": "positive_log_blend-provider-review-v1",
+        "title": "Generic positive log blend implementation and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/51510207/docs/reviews/positive_log_blend_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Apply stored positive-coefficient log1p blend and expm1 inverse with exact model-column and response-coordinate identity. Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p. Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows. Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state. Portable JSON dictionary with exactly format, model_columns, response_coordinate, coefficients, intercept, clip_bounds. Format sciona.positive_log_blend.v1; finite nonnegative coefficients, finite intercept, valid bounds, exact model and coordinate identities. No pickle. Finite float64 vector aligned with input rows, in the declared normalized response coordinate. Intercept is unconstrained: outputs may be negative; there is no silent final clamp. Inverse-transform overflow is rejected."
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+        "name": "predictions"
+      },
+      "row": {
+        "artifact_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+        "name": "predictions",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "NDArray[np.float64]",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p.",
+        "dejargonized_description": "Caller supplies predictions.",
+        "constraints_json": {
+          "parameter_contract": "Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Synthetic source parity and cross-coordinate examples do not establish accuracy or generalization on a new application.",
+            "Caller supplies held-out or out-of-fold calibration scores in a declared common normalized numeric response coordinate; coordinate labels do not authenticate physical meaning or population independence.",
+            "Positive coefficients need not sum to one; the free intercept can yield negative predictions. No hidden final clamp is applied.",
+            "Finite input and output, consistent model ordering, nonnegative targets, valid clipping bounds and solver convergence are enforced concretely. Abstract witnesses validate metadata, not fitted numerical correctness.",
+            "Unknown dimensional metadata is allowed; known physical units must be normalized before the logarithmic transform.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment, other platforms and optional extras are not certified.",
+            "This review qualifies only the two blend atoms, not the original competition CDG or the complete historical ensemble."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+        "name": "model_columns"
+      },
+      "row": {
+        "artifact_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+        "name": "model_columns",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "list",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows.",
+        "dejargonized_description": "Caller supplies model columns.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Synthetic source parity and cross-coordinate examples do not establish accuracy or generalization on a new application.",
+            "Caller supplies held-out or out-of-fold calibration scores in a declared common normalized numeric response coordinate; coordinate labels do not authenticate physical meaning or population independence.",
+            "Positive coefficients need not sum to one; the free intercept can yield negative predictions. No hidden final clamp is applied.",
+            "Finite input and output, consistent model ordering, nonnegative targets, valid clipping bounds and solver convergence are enforced concretely. Abstract witnesses validate metadata, not fitted numerical correctness.",
+            "Unknown dimensional metadata is allowed; known physical units must be normalized before the logarithmic transform.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment, other platforms and optional extras are not certified.",
+            "This review qualifies only the two blend atoms, not the original competition CDG or the complete historical ensemble."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+        "name": "response_coordinate"
+      },
+      "row": {
+        "artifact_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+        "name": "response_coordinate",
+        "position": 2,
+        "kind": "positional_or_keyword",
+        "type_desc": "str",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state.",
+        "dejargonized_description": "Caller supplies response coordinate.",
+        "constraints_json": {
+          "parameter_contract": "Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Synthetic source parity and cross-coordinate examples do not establish accuracy or generalization on a new application.",
+            "Caller supplies held-out or out-of-fold calibration scores in a declared common normalized numeric response coordinate; coordinate labels do not authenticate physical meaning or population independence.",
+            "Positive coefficients need not sum to one; the free intercept can yield negative predictions. No hidden final clamp is applied.",
+            "Finite input and output, consistent model ordering, nonnegative targets, valid clipping bounds and solver convergence are enforced concretely. Abstract witnesses validate metadata, not fitted numerical correctness.",
+            "Unknown dimensional metadata is allowed; known physical units must be normalized before the logarithmic transform.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment, other platforms and optional extras are not certified.",
+            "This review qualifies only the two blend atoms, not the original competition CDG or the complete historical ensemble."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+        "name": "state"
+      },
+      "row": {
+        "artifact_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+        "name": "state",
+        "position": 3,
+        "kind": "positional_or_keyword",
+        "type_desc": "dict",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Portable JSON dictionary with exactly format, model_columns, response_coordinate, coefficients, intercept, clip_bounds. Format sciona.positive_log_blend.v1; finite nonnegative coefficients, finite intercept, valid bounds, exact model and coordinate identities. No pickle.",
+        "dejargonized_description": "Caller supplies state.",
+        "constraints_json": {
+          "parameter_contract": "Portable JSON dictionary with exactly format, model_columns, response_coordinate, coefficients, intercept, clip_bounds. Format sciona.positive_log_blend.v1; finite nonnegative coefficients, finite intercept, valid bounds, exact model and coordinate identities. No pickle.",
+          "limitations": [
+            "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+            "Synthetic source parity and cross-coordinate examples do not establish accuracy or generalization on a new application.",
+            "Caller supplies held-out or out-of-fold calibration scores in a declared common normalized numeric response coordinate; coordinate labels do not authenticate physical meaning or population independence.",
+            "Positive coefficients need not sum to one; the free intercept can yield negative predictions. No hidden final clamp is applied.",
+            "Finite input and output, consistent model ordering, nonnegative targets, valid clipping bounds and solver convergence are enforced concretely. Abstract witnesses validate metadata, not fitted numerical correctness.",
+            "Unknown dimensional metadata is allowed; known physical units must be normalized before the logarithmic transform.",
+            "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment, other platforms and optional extras are not certified.",
+            "This review qualifies only the two blend atoms, not the original competition CDG or the complete historical ensemble."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "kind": "technical",
+        "language": "en",
+        "content": "Apply stored positive-coefficient log1p blend and expm1 inverse with exact model-column and response-coordinate identity. Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p. Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows. Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state. Portable JSON dictionary with exactly format, model_columns, response_coordinate, coefficients, intercept, clip_bounds. Format sciona.positive_log_blend.v1; finite nonnegative coefficients, finite intercept, valid bounds, exact model and coordinate identities. No pickle. Finite float64 vector aligned with input rows, in the declared normalized response coordinate. Intercept is unconstrained: outputs may be negative; there is no silent final clamp. Inverse-transform overflow is rejected. Domain-independent numeric blending with caller-selected normalized response coordinate, clipping bounds and model identities. No competition field names, fixed model count, or original data required.",
+        "generated_by": "positive_log_blend-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.04918
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Combine model estimates using previously learned weights and the same response scale. Accuracy on new problems must be checked separately.",
+        "generated_by": "positive_log_blend-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "artifact_references",
+      "keys": {
+        "artifact_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "ref_key": "positive_log_blend-provider-review-v1"
+      },
+      "row": {
+        "artifact_id": "9eb66967-271f-585b-aa88-492bc3973930",
+        "ref_key": "positive_log_blend-provider-review-v1",
+        "ref_id": "positive_log_blend-provider-review-v1",
+        "title": "Generic positive log blend implementation and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/51510207/docs/reviews/positive_log_blend_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Apply stored positive-coefficient log1p blend and expm1 inverse with exact model-column and response-coordinate identity. Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p. Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows. Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state. Portable JSON dictionary with exactly format, model_columns, response_coordinate, coefficients, intercept, clip_bounds. Format sciona.positive_log_blend.v1; finite nonnegative coefficients, finite intercept, valid bounds, exact model and coordinate identities. No pickle. Finite float64 vector aligned with input rows, in the declared normalized response coordinate. Intercept is unconstrained: outputs may be negative; there is no silent final clamp. Inverse-transform overflow is rejected."
+      }
+    }
+  ],
+  "rollups": [
+    {
+      "table": "atom_audit_rollups",
+      "key": "atom_id",
+      "identity": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+          "Synthetic source parity and cross-coordinate examples do not establish accuracy or generalization on a new application.",
+          "Caller supplies held-out or out-of-fold calibration scores in a declared common normalized numeric response coordinate; coordinate labels do not authenticate physical meaning or population independence.",
+          "Positive coefficients need not sum to one; the free intercept can yield negative predictions. No hidden final clamp is applied.",
+          "Finite input and output, consistent model ordering, nonnegative targets, valid clipping bounds and solver convergence are enforced concretely. Abstract witnesses validate metadata, not fitted numerical correctness.",
+          "Unknown dimensional metadata is allowed; known physical units must be normalized before the logarithmic transform.",
+          "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment, other platforms and optional extras are not certified.",
+          "This review qualifies only the two blend atoms, not the original competition CDG or the complete historical ensemble.",
+          "Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p. Aligned finite nonnegative float64 vector from the calibration population. Caller must ensure calibration scores are held-out or out-of-fold and have the same normalized response coordinate as targets. Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows. Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state. Two finite numeric bounds with 0 <= lower < upper, expressed in the declared response coordinate; only model predictions are clipped, not calibration targets. Dictionary with exactly alpha, max_iter, tolerance, seed. Positive finite alpha and tolerance, positive integer max_iter, integer 0 <= seed < 2**32. Positive Lasso with intercept, precomputed Gram matrix and random coordinate selection. Nonconvergence is rejected. Portable JSON dictionary with exactly format, model_columns, response_coordinate, coefficients, intercept, clip_bounds. Format sciona.positive_log_blend.v1; finite nonnegative coefficients, finite intercept, valid bounds, exact model and coordinate identities. No pickle."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "artifact_audit_rollups",
+      "key": "artifact_id",
+      "identity": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+          "Synthetic source parity and cross-coordinate examples do not establish accuracy or generalization on a new application.",
+          "Caller supplies held-out or out-of-fold calibration scores in a declared common normalized numeric response coordinate; coordinate labels do not authenticate physical meaning or population independence.",
+          "Positive coefficients need not sum to one; the free intercept can yield negative predictions. No hidden final clamp is applied.",
+          "Finite input and output, consistent model ordering, nonnegative targets, valid clipping bounds and solver convergence are enforced concretely. Abstract witnesses validate metadata, not fitted numerical correctness.",
+          "Unknown dimensional metadata is allowed; known physical units must be normalized before the logarithmic transform.",
+          "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment, other platforms and optional extras are not certified.",
+          "This review qualifies only the two blend atoms, not the original competition CDG or the complete historical ensemble.",
+          "Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p. Aligned finite nonnegative float64 vector from the calibration population. Caller must ensure calibration scores are held-out or out-of-fold and have the same normalized response coordinate as targets. Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows. Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state. Two finite numeric bounds with 0 <= lower < upper, expressed in the declared response coordinate; only model predictions are clipped, not calibration targets. Dictionary with exactly alpha, max_iter, tolerance, seed. Positive finite alpha and tolerance, positive integer max_iter, integer 0 <= seed < 2**32. Positive Lasso with intercept, precomputed Gram matrix and random coordinate selection. Nonconvergence is rejected. Portable JSON dictionary with exactly format, model_columns, response_coordinate, coefficients, intercept, clip_bounds. Format sciona.positive_log_blend.v1; finite nonnegative coefficients, finite intercept, valid bounds, exact model and coordinate identities. No pickle."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "atom_audit_rollups",
+      "key": "atom_id",
+      "identity": "9eb66967-271f-585b-aa88-492bc3973930",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+          "Synthetic source parity and cross-coordinate examples do not establish accuracy or generalization on a new application.",
+          "Caller supplies held-out or out-of-fold calibration scores in a declared common normalized numeric response coordinate; coordinate labels do not authenticate physical meaning or population independence.",
+          "Positive coefficients need not sum to one; the free intercept can yield negative predictions. No hidden final clamp is applied.",
+          "Finite input and output, consistent model ordering, nonnegative targets, valid clipping bounds and solver convergence are enforced concretely. Abstract witnesses validate metadata, not fitted numerical correctness.",
+          "Unknown dimensional metadata is allowed; known physical units must be normalized before the logarithmic transform.",
+          "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment, other platforms and optional extras are not certified.",
+          "This review qualifies only the two blend atoms, not the original competition CDG or the complete historical ensemble.",
+          "Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p. Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows. Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state. Portable JSON dictionary with exactly format, model_columns, response_coordinate, coefficients, intercept, clip_bounds. Format sciona.positive_log_blend.v1; finite nonnegative coefficients, finite intercept, valid bounds, exact model and coordinate identities. No pickle. Finite float64 vector aligned with input rows, in the declared normalized response coordinate. Intercept is unconstrained: outputs may be negative; there is no silent final clamp. Inverse-transform overflow is rejected."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "artifact_audit_rollups",
+      "key": "artifact_id",
+      "identity": "9eb66967-271f-585b-aa88-492bc3973930",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+          "Synthetic source parity and cross-coordinate examples do not establish accuracy or generalization on a new application.",
+          "Caller supplies held-out or out-of-fold calibration scores in a declared common normalized numeric response coordinate; coordinate labels do not authenticate physical meaning or population independence.",
+          "Positive coefficients need not sum to one; the free intercept can yield negative predictions. No hidden final clamp is applied.",
+          "Finite input and output, consistent model ordering, nonnegative targets, valid clipping bounds and solver convergence are enforced concretely. Abstract witnesses validate metadata, not fitted numerical correctness.",
+          "Unknown dimensional metadata is allowed; known physical units must be normalized before the logarithmic transform.",
+          "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment, other platforms and optional extras are not certified.",
+          "This review qualifies only the two blend atoms, not the original competition CDG or the complete historical ensemble.",
+          "Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p. Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows. Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state. Portable JSON dictionary with exactly format, model_columns, response_coordinate, coefficients, intercept, clip_bounds. Format sciona.positive_log_blend.v1; finite nonnegative coefficients, finite intercept, valid bounds, exact model and coordinate identities. No pickle. Finite float64 vector aligned with input rows, in the declared normalized response coordinate. Intercept is unconstrained: outputs may be negative; there is no silent final clamp. Inverse-transform overflow is rejected."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    }
+  ],
+  "states": {
+    "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad": {
+      "atom": {
+        "status": "flagged",
+        "is_publishable": false
+      },
+      "artifact": {
+        "status": "draft",
+        "is_publishable": false
+      }
+    },
+    "9eb66967-271f-585b-aa88-492bc3973930": {
+      "atom": {
+        "status": "flagged",
+        "is_publishable": false
+      },
+      "artifact": {
+        "status": "draft",
+        "is_publishable": false
+      }
+    }
+  },
+  "before": {
+    "atoms": "d72b7fa8269e400d4e9c4c464a0658e6a530f08c8df1f7955a121d2d8f6bdbe8",
+    "artifacts": "5ad8ffe91c95431c7e48a7597878ab1821d992ae22746a335885e473da296354",
+    "atom_versions": "d8002efaa948c2cbfd04f02ffcb6ef4871a61fd269d41777f5a6232a36922a73",
+    "artifact_versions": "d594e45dc0291a9da295d543cf827253a839b76072b265ed9b85ab3ba7492cd6",
+    "atom_io_specs": "08730c79b10363a7fc34caff341c83f5cda86b33c8d574dc1770509a2525f510",
+    "artifact_io_specs": "e9ab3c14f027ac6c82fdf20b21756e49f9a19aa8b7143692704f35fa65b7baf2",
+    "atom_parameters": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_parameters": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_descriptions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_descriptions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_references": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_references": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_audit_rollups": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_audit_rollups": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_audit_evidence": "012fa14f7cea3d05fcdf75c15eeceef03a18a458797975105e21aca07691f890"
+  },
+  "preserved": {
+    "atom_versions": [
+      {
+        "row": {
+          "s3_key": "",
+          "semver": "0.0.0+local.7a7d239bd1c4",
+          "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+          "is_latest": true,
+          "created_at": "2026-11-10T18:51:42.040127+00:00",
+          "trust_tier": 3,
+          "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+          "fingerprint": "bdac90a0b11e6a0402318194ea957bea03a2eadd2398846f643d7e936a5212ad",
+          "content_hash": "7a7d239bd1c418aaeaa8879505ab470dbd55e2e675a5d4ab7cf2c7598508f600",
+          "derives_from": null
+        }
+      },
+      {
+        "row": {
+          "s3_key": "",
+          "semver": "0.0.0+local.d31746fc0fd6",
+          "atom_id": "9eb66967-271f-585b-aa88-492bc3973930",
+          "is_latest": true,
+          "created_at": "2026-11-10T18:51:42.040127+00:00",
+          "trust_tier": 3,
+          "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+          "fingerprint": "6355e50f973037a3b1b4edbafabdc31ffce7411a81a18a00742d3113931234fb",
+          "content_hash": "d31746fc0fd65c7ea988b6dbd4dca65d05a136f8319ef2b1cc2d12f71409d6b6",
+          "derives_from": null
+        }
+      }
+    ],
+    "atom_parameters": [],
+    "atom_references": [],
+    "atom_io_specs": [
+      {
+        "row": {
+          "name": "clip_bounds",
+          "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+          "ordinal": 4,
+          "required": true,
+          "direction": "input",
+          "type_desc": "list",
+          "io_spec_id": "4735eaac-7572-4302-97aa-f2b926fff3f1",
+          "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+          "constraints": "Two finite numeric bounds with 0 <= lower < upper, expressed in the declared response coordinate; only model predictions are clipped, not calibration targets.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "controls",
+          "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+          "ordinal": 5,
+          "required": true,
+          "direction": "input",
+          "type_desc": "dict",
+          "io_spec_id": "01d4dfcb-c299-4dd2-a058-2f112454fa0a",
+          "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+          "constraints": "Dictionary with exactly alpha, max_iter, tolerance, seed. Positive finite alpha and tolerance, positive integer max_iter, integer 0 <= seed < 2**32. Positive Lasso with intercept, precomputed Gram matrix and random coordinate selection. Nonconvergence is rejected.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "model_columns",
+          "atom_id": "9eb66967-271f-585b-aa88-492bc3973930",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "list",
+          "io_spec_id": "25400385-dbb0-4e9f-ae62-50f4bd113a85",
+          "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+          "constraints": "Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "model_columns",
+          "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+          "ordinal": 2,
+          "required": true,
+          "direction": "input",
+          "type_desc": "list",
+          "io_spec_id": "776beb17-dd41-492d-be33-df1e23015b2d",
+          "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+          "constraints": "Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "predictions",
+          "atom_id": "9eb66967-271f-585b-aa88-492bc3973930",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "NDArray[np.float64]",
+          "io_spec_id": "120ce647-e70c-4117-ac98-14950426d9a2",
+          "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+          "constraints": "Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "predictions",
+          "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "NDArray[np.float64]",
+          "io_spec_id": "34f88b8a-ed78-4192-93ba-8f5e8bedcb24",
+          "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+          "constraints": "Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "response_coordinate",
+          "atom_id": "9eb66967-271f-585b-aa88-492bc3973930",
+          "ordinal": 2,
+          "required": true,
+          "direction": "input",
+          "type_desc": "str",
+          "io_spec_id": "37b12dd0-a8ed-445e-aef2-9ca9875b5a34",
+          "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+          "constraints": "Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "response_coordinate",
+          "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+          "ordinal": 3,
+          "required": true,
+          "direction": "input",
+          "type_desc": "str",
+          "io_spec_id": "89f9abed-77c8-4d2c-8bcd-9fb78d925bdb",
+          "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+          "constraints": "Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "result",
+          "atom_id": "9eb66967-271f-585b-aa88-492bc3973930",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "NDArray[np.float64]",
+          "io_spec_id": "13cf0373-5f3a-449c-97cb-43a8239d62bc",
+          "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+          "constraints": "Finite float64 vector aligned with input rows, in the declared normalized response coordinate. Intercept is unconstrained: outputs may be negative; there is no silent final clamp. Inverse-transform overflow is rejected.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "result",
+          "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "dict",
+          "io_spec_id": "15568ee7-01da-4dae-9993-2a219a4189a2",
+          "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+          "constraints": "Portable JSON dictionary with exactly format, model_columns, response_coordinate, coefficients, intercept, clip_bounds. Format sciona.positive_log_blend.v1; finite nonnegative coefficients, finite intercept, valid bounds, exact model and coordinate identities. No pickle.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "state",
+          "atom_id": "9eb66967-271f-585b-aa88-492bc3973930",
+          "ordinal": 3,
+          "required": true,
+          "direction": "input",
+          "type_desc": "dict",
+          "io_spec_id": "cf8cc851-0fd3-4a2a-ae1e-1f953a1ef363",
+          "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+          "constraints": "Portable JSON dictionary with exactly format, model_columns, response_coordinate, coefficients, intercept, clip_bounds. Format sciona.positive_log_blend.v1; finite nonnegative coefficients, finite intercept, valid bounds, exact model and coordinate identities. No pickle.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "targets",
+          "atom_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "NDArray[np.float64]",
+          "io_spec_id": "d3b27a35-f560-4b1c-9128-f0d202890dd9",
+          "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+          "constraints": "Aligned finite nonnegative float64 vector from the calibration population. Caller must ensure calibration scores are held-out or out-of-fold and have the same normalized response coordinate as targets.",
+          "default_value_repr": ""
+        }
+      }
+    ],
+    "artifact_versions": [
+      {
+        "row": {
+          "s3_key": "",
+          "semver": "0.0.0+local.7a7d239bd1c4",
+          "is_latest": true,
+          "created_at": "2026-11-10T18:51:42.040127+00:00",
+          "trust_tier": 3,
+          "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+          "artifact_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+          "fingerprint": "bdac90a0b11e6a0402318194ea957bea03a2eadd2398846f643d7e936a5212ad",
+          "content_hash": "7a7d239bd1c418aaeaa8879505ab470dbd55e2e675a5d4ab7cf2c7598508f600",
+          "derives_from": null
+        }
+      },
+      {
+        "row": {
+          "s3_key": "",
+          "semver": "0.0.0+local.d31746fc0fd6",
+          "is_latest": true,
+          "created_at": "2026-11-10T18:51:42.040127+00:00",
+          "trust_tier": 3,
+          "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+          "artifact_id": "9eb66967-271f-585b-aa88-492bc3973930",
+          "fingerprint": "6355e50f973037a3b1b4edbafabdc31ffce7411a81a18a00742d3113931234fb",
+          "content_hash": "d31746fc0fd65c7ea988b6dbd4dca65d05a136f8319ef2b1cc2d12f71409d6b6",
+          "derives_from": null
+        }
+      }
+    ],
+    "artifact_parameters": [],
+    "artifact_references": [],
+    "artifact_io_specs": [
+      {
+        "row": {
+          "name": "clip_bounds",
+          "ordinal": 4,
+          "required": true,
+          "direction": "input",
+          "type_desc": "list",
+          "io_spec_id": "f970b4c1-3371-4510-be6e-784d1159482d",
+          "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+          "artifact_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+          "constraints": "Two finite numeric bounds with 0 <= lower < upper, expressed in the declared response coordinate; only model predictions are clipped, not calibration targets.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "controls",
+          "ordinal": 5,
+          "required": true,
+          "direction": "input",
+          "type_desc": "dict",
+          "io_spec_id": "babbddce-767e-433a-b74a-f78148490d2f",
+          "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+          "artifact_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+          "constraints": "Dictionary with exactly alpha, max_iter, tolerance, seed. Positive finite alpha and tolerance, positive integer max_iter, integer 0 <= seed < 2**32. Positive Lasso with intercept, precomputed Gram matrix and random coordinate selection. Nonconvergence is rejected.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "model_columns",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "list",
+          "io_spec_id": "26acb6df-5aaf-4d74-8fe3-11139f667d10",
+          "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+          "artifact_id": "9eb66967-271f-585b-aa88-492bc3973930",
+          "constraints": "Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "model_columns",
+          "ordinal": 2,
+          "required": true,
+          "direction": "input",
+          "type_desc": "list",
+          "io_spec_id": "25a893c8-71b1-4ccf-9195-3d97e8ac65d8",
+          "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+          "artifact_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+          "constraints": "Nonempty ordered list of unique nonempty model-output identifiers matching matrix width. Exact identity and order must agree with fitted state; these identify models, not data rows.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "predictions",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "NDArray[np.float64]",
+          "io_spec_id": "7abe3738-8432-43db-adad-43f01f9f9cc7",
+          "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+          "artifact_id": "9eb66967-271f-585b-aa88-492bc3973930",
+          "constraints": "Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "predictions",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "NDArray[np.float64]",
+          "io_spec_id": "da0cf7bb-16d7-4a45-8d18-81199a5a2bc2",
+          "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+          "artifact_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+          "constraints": "Finite float64 matrix (rows, model columns) in one declared normalized numeric response coordinate. Exact ordered model-column identity required. Fit requires at least two rows; apply permits zero rows. Values clip to explicit fitted bounds before log1p.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "response_coordinate",
+          "ordinal": 2,
+          "required": true,
+          "direction": "input",
+          "type_desc": "str",
+          "io_spec_id": "3959ed28-eb54-426a-8c98-458a90d5b337",
+          "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+          "artifact_id": "9eb66967-271f-585b-aa88-492bc3973930",
+          "constraints": "Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "response_coordinate",
+          "ordinal": 3,
+          "required": true,
+          "direction": "input",
+          "type_desc": "str",
+          "io_spec_id": "a3defab7-597f-43f6-9613-1736840745aa",
+          "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+          "artifact_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+          "constraints": "Nonblank identifier for an explicitly chosen common normalized numeric response coordinate. Physical measurements must be normalized before log1p. Exact identifier must match fitted state.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "result",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "dict",
+          "io_spec_id": "d10c12c6-894f-4a39-89bd-238b04695bbd",
+          "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+          "artifact_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+          "constraints": "Portable JSON dictionary with exactly format, model_columns, response_coordinate, coefficients, intercept, clip_bounds. Format sciona.positive_log_blend.v1; finite nonnegative coefficients, finite intercept, valid bounds, exact model and coordinate identities. No pickle.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "result",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "NDArray[np.float64]",
+          "io_spec_id": "ea03dc49-d589-4de1-be7d-2f1720984b73",
+          "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+          "artifact_id": "9eb66967-271f-585b-aa88-492bc3973930",
+          "constraints": "Finite float64 vector aligned with input rows, in the declared normalized response coordinate. Intercept is unconstrained: outputs may be negative; there is no silent final clamp. Inverse-transform overflow is rejected.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "state",
+          "ordinal": 3,
+          "required": true,
+          "direction": "input",
+          "type_desc": "dict",
+          "io_spec_id": "99059ade-09ea-4913-bcea-6ef888f98fe8",
+          "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+          "artifact_id": "9eb66967-271f-585b-aa88-492bc3973930",
+          "constraints": "Portable JSON dictionary with exactly format, model_columns, response_coordinate, coefficients, intercept, clip_bounds. Format sciona.positive_log_blend.v1; finite nonnegative coefficients, finite intercept, valid bounds, exact model and coordinate identities. No pickle.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "targets",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "NDArray[np.float64]",
+          "io_spec_id": "4da55549-465e-4636-a817-2da581d7cca5",
+          "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+          "artifact_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+          "constraints": "Aligned finite nonnegative float64 vector from the calibration population. Caller must ensure calibration scores are held-out or out-of-fold and have the same normalized response coordinate as targets.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      }
+    ],
+    "artifact_audit_evidence": [
+      {
+        "row": {
+          "passed": true,
+          "status": "completed",
+          "details": {
+            "scope": "Exact source/version/interface draft import only. Dependency qualification, full metadata and semantic publication gates remain pending.",
+            "plan_commit": "d2de13dd",
+            "plan_sha256": "f7fa0d96de43d64b4e1cf2fafe9ad822e81bb74e84c20559d76958343ff67504",
+            "provider_sha256": "a82dbd49f55df1414b8713d92216a0bd552756f2ee717db3543a51dc1a34b61a",
+            "execution_evidence_sha256": "a61009f92aefacf6679f0fc49edb6703696340d8cc11c453287384a993c25bfb"
+          },
+          "audit_type": "asset_integrity_check",
+          "created_at": "2026-11-10T18:51:42.040127+00:00",
+          "version_id": "8a551df1-0187-5345-a5f1-684dc279869b",
+          "artifact_id": "9eb66967-271f-585b-aa88-492bc3973930",
+          "evidence_id": "cc006306-56a3-5384-ba8f-2c382bfc92d3",
+          "source_kind": "automated",
+          "runner_version": "positive-log-blend-draft-intake.v1",
+          "review_basis_at": null,
+          "run_duration_ms": null,
+          "source_revision": "",
+          "upstream_version": ""
+        }
+      },
+      {
+        "row": {
+          "passed": true,
+          "status": "completed",
+          "details": {
+            "scope": "Exact source/version/interface draft import only. Dependency qualification, full metadata and semantic publication gates remain pending.",
+            "plan_commit": "d2de13dd",
+            "plan_sha256": "f7fa0d96de43d64b4e1cf2fafe9ad822e81bb74e84c20559d76958343ff67504",
+            "provider_sha256": "a82dbd49f55df1414b8713d92216a0bd552756f2ee717db3543a51dc1a34b61a",
+            "execution_evidence_sha256": "a61009f92aefacf6679f0fc49edb6703696340d8cc11c453287384a993c25bfb"
+          },
+          "audit_type": "asset_integrity_check",
+          "created_at": "2026-11-10T18:51:42.040127+00:00",
+          "version_id": "eecfe405-a85b-5fc1-87bf-a635f39a8100",
+          "artifact_id": "f5ee9a51-bdd4-5303-bd0b-47fc0c621fad",
+          "evidence_id": "1425bed3-75ea-5578-b9b6-0c8e991591db",
+          "source_kind": "automated",
+          "runner_version": "positive-log-blend-draft-intake.v1",
+          "review_basis_at": null,
+          "run_duration_ms": null,
+          "source_revision": "",
+          "upstream_version": ""
+        }
+      }
+    ]
+  },
+  "publisher_sha256": "fffc87317bc1233061dff95d622677642eadf26944bb6afab2efc337dad15307",
+  "review_sha256": "945dbb8f35176e700c0b2017bc881e8aa8e9c7203b12571b18c6e175a57df793"
+}
