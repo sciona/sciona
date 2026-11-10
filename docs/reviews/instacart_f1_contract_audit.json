@@ -1,0 +1,64 @@
+{
+  "format": "instacart-f1-contract-audit.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "fqdn": "cdg.competition.solution.kaggle.instacart_basket_1st",
+  "original": {
+    "artifact_id": "c949d16b-ae73-5851-9dae-000c61dd0c0b",
+    "status": "draft",
+    "is_publishable": false,
+    "version_id": "0588e264-1ce5-5c7f-b008-5cbc6c4869bb",
+    "content_hash": "4291ab0eecaa866d3fe9c32d6452925f8cc634ce5dcac1fb93b41fa6540ad7e5"
+  },
+  "related_provider_records": [
+    {
+      "atom_id": "5bc43708-c82f-474e-9006-629beceb0d77",
+      "fqdn": "sciona.atoms.scoring.expected_f1_threshold",
+      "status": "approved",
+      "is_publishable": false,
+      "version_id": "d992edd8-1fb1-532b-9ee4-b6edeca30c76",
+      "content_hash": "255136e406a0da666a5cbc2ac01b7f4ff6ebac060ef1291f6afa2f082f793449"
+    }
+  ],
+  "counterexample": {
+    "probabilities": [
+      "1/10",
+      "3/10",
+      "3/5"
+    ],
+    "supplied_positive_count": 1,
+    "supplied_count_equals_expected_cardinality": true,
+    "candidate_selection": [
+      0,
+      0,
+      1
+    ],
+    "optimal_selection": [
+      0,
+      1,
+      1
+    ],
+    "candidate_expected_f1": "523/1000",
+    "optimal_expected_f1": "2637/5000",
+    "outcome_states": 8,
+    "prediction_sets": 8,
+    "arithmetic": "exact rational enumeration"
+  },
+  "conclusion": "The helper optimizes a fixed-count denominator objective; it cannot establish the intake independent-Bernoulli expected-F1 guarantee.",
+  "empty_set_policy": "F1(empty,empty)=0. Both compared selections are nonempty, so their strict ordering is independent of this convention.",
+  "provider_sha256": "103de27c6c86e814749899ffc89fa7446d32e24a87dc7822eacb2c6c7c93329c",
+  "auditor_sha256": "ed9851d90a83d3a7fb6de3e1471f872f83a422f5c40ef435b9b1831f39d64db3",
+  "required_next_steps": [
+    "Resolve first-place source identity and permission; the intake code URL was not retrievable in this review.",
+    "Qualify the exact expected-F1 decision rule, including empty-outcome policy and deterministic ties, against independent enumeration.",
+    "Keep probability estimation, grouping and domain output conventions separate from reusable decision computation.",
+    "Reconstruct and execute the complete source workflow before original-intake promotion."
+  ],
+  "limitations": [
+    "This does not refute the helper under a genuinely fixed known true cardinality; that is a different probability model.",
+    "No claim is made that this synthetic counterexample reproduces the inaccessible first-place source.",
+    "No provider or CDG status was changed by this audit."
+  ]
+}
