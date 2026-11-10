@@ -1,0 +1,120 @@
+{
+  "format": "osic-quantile-objective-validation.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "source_revision": "cd6dfa56c012e3c0eb81ed15534f436b3ba16d19",
+  "source_function_sha256": {
+    "score": "a7846c4cccd5c6260345fa89b88a1b1589d3f9a0186898cfc41bec91c9623434",
+    "qloss": "eb775c738637dac1b91f6bbca81aa72ce4db212a06a8adffb366b4b53aab5542",
+    "mloss": "23f320fc7f033713d72d674c7db3073be2f67eb7695f7db61cf5964e608ec001"
+  },
+  "source_comparisons": [
+    {
+      "case": "continuous",
+      "objective": "pinball",
+      "value_exact": true,
+      "gradient_exact": true
+    },
+    {
+      "case": "continuous",
+      "objective": "score",
+      "value_exact": true,
+      "gradient_exact": true
+    },
+    {
+      "case": "continuous",
+      "objective": "mixed",
+      "value_exact": true,
+      "gradient_exact": true
+    },
+    {
+      "case": "clipping_boundaries",
+      "objective": "pinball",
+      "value_exact": true,
+      "gradient_exact": true
+    },
+    {
+      "case": "clipping_boundaries",
+      "objective": "score",
+      "value_exact": true,
+      "gradient_exact": true
+    },
+    {
+      "case": "clipping_boundaries",
+      "objective": "mixed",
+      "value_exact": true,
+      "gradient_exact": true
+    },
+    {
+      "case": "crossed_outputs",
+      "objective": "pinball",
+      "value_exact": true,
+      "gradient_exact": true
+    },
+    {
+      "case": "crossed_outputs",
+      "objective": "score",
+      "value_exact": true,
+      "gradient_exact": true
+    },
+    {
+      "case": "crossed_outputs",
+      "objective": "mixed",
+      "value_exact": true,
+      "gradient_exact": true
+    }
+  ],
+  "explicit_policy_cases": [
+    {
+      "case": "synthetic-duration",
+      "explicit_policy_matches_scalar_reference": true
+    },
+    {
+      "case": "synthetic-charge",
+      "explicit_policy_matches_scalar_reference": true
+    }
+  ],
+  "rejected_contract_cases": [
+    "wrong_dtype",
+    "wrong_target_rank",
+    "nonfinite_prediction",
+    "quantile_column_mismatch",
+    "invalid_quantile",
+    "zero_scale",
+    "scale_underflow",
+    "scale_overflow"
+  ],
+  "optimizer_probe": {
+    "implementation": "tf_keras.optimizers.legacy.Adam",
+    "updates": 40,
+    "epsilon": 1e-07,
+    "inverse_time_decay": 0.01,
+    "base_learning_rate": 0.1,
+    "maximum_absolute_error": 4.457072105279458e-07,
+    "float64_equation_reference": true
+  },
+  "software_sha256": {
+    "matcher/scripts/validate_osic_quantile_objective.py": "e7598cb3feb5d83f3348556054d2412c445303b179acf413e2ba10f9176b98ab",
+    "matcher/sciona/osic_quantile_objective.py": "b1726979feb3375c7193764c8de69fd9dafdc203ce99b2c41c41ab8fd9459804",
+    "matcher/sciona/tensorflow_distribution_losses.py": "fc0396a88c5c4ebd81f91eb0169be40e00418d02b7ff15529489804924db4975",
+    "matcher/.venv/lib/python3.13/site-packages/tf_keras/src/optimizers/legacy/adam.py": "4d07400be2f1bfdc5717fe109e1da60807e6b6debf3daa38a31fe4f4eb795ed4"
+  },
+  "runtime": {
+    "tensorflow": "2.20.0",
+    "tf_keras": "2.20.1",
+    "numpy": "2.2.6"
+  },
+  "resource_policy": {
+    "native_threads": 1,
+    "tensorflow_intraop_threads": 1,
+    "tensorflow_interop_threads": 1
+  },
+  "limitations": [
+    "Loss values and prediction gradients match pinned source under the current TensorFlow backend.",
+    "Legacy Adam dense float32 updates match independent equations within stated tolerances; historical backend bitwise equality is not claimed.",
+    "No complete model training, feature preparation, package provenance or original CDG publication is qualified.",
+    "Quantile ordering and calibrated coverage are not guaranteed by these objectives."
+  ]
+}
