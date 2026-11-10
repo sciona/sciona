@@ -56,7 +56,7 @@
         "group": 3,
         "passed": false,
         "error_type": "InvalidParameterError",
-        "error": "The 'loss' parameter of SGDRegressor must be a str among {'epsilon_insensitive', 'huber', 'squared_error', 'squared_epsilon_insensitive'}. Got 'squared_loss' instead."
+        "error": "The 'loss' parameter of SGDRegressor must be a str among {'squared_error', 'epsilon_insensitive', 'squared_epsilon_insensitive', 'huber'}. Got 'squared_loss' instead."
       }
     ],
     "runtime_versions": {
@@ -76,9 +76,10 @@
     "limits": [
       "Diagnostic execution in current dependencies only, not a promoted provider implementation or historical environment proof.",
       "No source dataset, real-data accuracy, training ensemble or full original CDG approval.",
-      "Successful synthetic cases do not qualify missing values, unseen categories, arbitrary token populations or all legacy feature semantics."
+      "Held-out boundary outcomes apply only to the recorded synthetic cases; arbitrary token populations, training on missing values and all legacy feature semantics remain unqualified.",
+      "Unchanged reference-query replay checks observable inference stability after boundary transforms; it does not prove that every internal object is immutable."
     ],
-    "probe_sha256": "9eac05f42fb9369f77c8c6688b8019f49e21854497145aad7a82c8d13876872a"
+    "probe_sha256": "7c1c398b4469a4b7aca42647b4303d0cf89f880041e12639c2db8548d2e2e092"
   },
   "modern_api": {
     "format": "mercari-feature-runtime-probe.v1",
@@ -99,37 +100,217 @@
         "backend": "tensorflow",
         "group": 1,
         "passed": true,
-        "synthetic_feature_count": 64
+        "synthetic_feature_count": 64,
+        "synthetic_row_order_and_batch_partition_invariant": true,
+        "held_out_boundaries": [
+          {
+            "synthetic_case": "unseen_text_and_categories",
+            "passed": true,
+            "reference_query_unchanged": true
+          },
+          {
+            "synthetic_case": "all_missing_values",
+            "passed": true,
+            "reference_query_unchanged": true
+          },
+          {
+            "synthetic_case": "empty_text_values",
+            "passed": true,
+            "reference_query_unchanged": true
+          },
+          {
+            "synthetic_case": "short_category_hierarchy",
+            "passed": true,
+            "reference_query_unchanged": true
+          },
+          {
+            "synthetic_case": "zero_query_rows",
+            "passed": false,
+            "error_type": "ValueError",
+            "error": "Sample sequence X is empty.",
+            "reference_query_unchanged": true
+          }
+        ]
       },
       {
         "backend": "tensorflow",
         "group": 2,
         "passed": true,
-        "synthetic_feature_count": 46
+        "synthetic_feature_count": 46,
+        "synthetic_row_order_and_batch_partition_invariant": true,
+        "held_out_boundaries": [
+          {
+            "synthetic_case": "unseen_text_and_categories",
+            "passed": true,
+            "reference_query_unchanged": true
+          },
+          {
+            "synthetic_case": "all_missing_values",
+            "passed": true,
+            "reference_query_unchanged": true
+          },
+          {
+            "synthetic_case": "empty_text_values",
+            "passed": true,
+            "reference_query_unchanged": true
+          },
+          {
+            "synthetic_case": "short_category_hierarchy",
+            "passed": true,
+            "reference_query_unchanged": true
+          },
+          {
+            "synthetic_case": "zero_query_rows",
+            "passed": false,
+            "error_type": "ValueError",
+            "error": "Found array with 0 sample(s) (shape=(0, 17)) while a minimum of 1 is required by TfidfTransformer.",
+            "reference_query_unchanged": true
+          }
+        ]
       },
       {
         "backend": "tensorflow",
         "group": 3,
         "passed": true,
-        "synthetic_feature_count": 84
+        "synthetic_feature_count": 84,
+        "synthetic_row_order_and_batch_partition_invariant": true,
+        "held_out_boundaries": [
+          {
+            "synthetic_case": "unseen_text_and_categories",
+            "passed": true,
+            "reference_query_unchanged": true
+          },
+          {
+            "synthetic_case": "all_missing_values",
+            "passed": true,
+            "reference_query_unchanged": true
+          },
+          {
+            "synthetic_case": "empty_text_values",
+            "passed": true,
+            "reference_query_unchanged": true
+          },
+          {
+            "synthetic_case": "short_category_hierarchy",
+            "passed": true,
+            "reference_query_unchanged": true
+          },
+          {
+            "synthetic_case": "zero_query_rows",
+            "passed": false,
+            "error_type": "ValueError",
+            "error": "Found array with 0 sample(s) (shape=(0, 19)) while a minimum of 1 is required by TfidfTransformer.",
+            "reference_query_unchanged": true
+          }
+        ]
       },
       {
         "backend": "mxnet",
         "group": 1,
         "passed": true,
-        "synthetic_feature_count": 111
+        "synthetic_feature_count": 111,
+        "synthetic_row_order_and_batch_partition_invariant": true,
+        "held_out_boundaries": [
+          {
+            "synthetic_case": "unseen_text_and_categories",
+            "passed": true,
+            "reference_query_unchanged": true
+          },
+          {
+            "synthetic_case": "all_missing_values",
+            "passed": true,
+            "reference_query_unchanged": true
+          },
+          {
+            "synthetic_case": "empty_text_values",
+            "passed": true,
+            "reference_query_unchanged": true
+          },
+          {
+            "synthetic_case": "short_category_hierarchy",
+            "passed": true,
+            "reference_query_unchanged": true
+          },
+          {
+            "synthetic_case": "zero_query_rows",
+            "passed": false,
+            "error_type": "ValueError",
+            "error": "Sample sequence X is empty.",
+            "reference_query_unchanged": true
+          }
+        ]
       },
       {
         "backend": "mxnet",
         "group": 2,
         "passed": true,
-        "synthetic_feature_count": 76
+        "synthetic_feature_count": 76,
+        "synthetic_row_order_and_batch_partition_invariant": true,
+        "held_out_boundaries": [
+          {
+            "synthetic_case": "unseen_text_and_categories",
+            "passed": true,
+            "reference_query_unchanged": true
+          },
+          {
+            "synthetic_case": "all_missing_values",
+            "passed": true,
+            "reference_query_unchanged": true
+          },
+          {
+            "synthetic_case": "empty_text_values",
+            "passed": true,
+            "reference_query_unchanged": true
+          },
+          {
+            "synthetic_case": "short_category_hierarchy",
+            "passed": true,
+            "reference_query_unchanged": true
+          },
+          {
+            "synthetic_case": "zero_query_rows",
+            "passed": false,
+            "error_type": "ValueError",
+            "error": "Found array with 0 sample(s) (shape=(0, 37)) while a minimum of 1 is required by TfidfTransformer.",
+            "reference_query_unchanged": true
+          }
+        ]
       },
       {
         "backend": "mxnet",
         "group": 3,
         "passed": true,
-        "synthetic_feature_count": 74
+        "synthetic_feature_count": 74,
+        "synthetic_row_order_and_batch_partition_invariant": true,
+        "held_out_boundaries": [
+          {
+            "synthetic_case": "unseen_text_and_categories",
+            "passed": true,
+            "reference_query_unchanged": true
+          },
+          {
+            "synthetic_case": "all_missing_values",
+            "passed": true,
+            "reference_query_unchanged": true
+          },
+          {
+            "synthetic_case": "empty_text_values",
+            "passed": true,
+            "reference_query_unchanged": true
+          },
+          {
+            "synthetic_case": "short_category_hierarchy",
+            "passed": true,
+            "reference_query_unchanged": true
+          },
+          {
+            "synthetic_case": "zero_query_rows",
+            "passed": false,
+            "error_type": "ValueError",
+            "error": "Found array with 0 sample(s) (shape=(0, 19)) while a minimum of 1 is required by TfidfTransformer.",
+            "reference_query_unchanged": true
+          }
+        ]
       }
     ],
     "runtime_versions": {
@@ -152,8 +333,9 @@
     "limits": [
       "Diagnostic execution in current dependencies only, not a promoted provider implementation or historical environment proof.",
       "No source dataset, real-data accuracy, training ensemble or full original CDG approval.",
-      "Successful synthetic cases do not qualify missing values, unseen categories, arbitrary token populations or all legacy feature semantics."
+      "Held-out boundary outcomes apply only to the recorded synthetic cases; arbitrary token populations, training on missing values and all legacy feature semantics remain unqualified.",
+      "Unchanged reference-query replay checks observable inference stability after boundary transforms; it does not prove that every internal object is immutable."
     ],
-    "probe_sha256": "9eac05f42fb9369f77c8c6688b8019f49e21854497145aad7a82c8d13876872a"
+    "probe_sha256": "7c1c398b4469a4b7aca42647b4303d0cf89f880041e12639c2db8548d2e2e092"
   }
 }

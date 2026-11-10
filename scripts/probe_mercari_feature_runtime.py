@@ -116,6 +116,23 @@ def probe(directory, modernize=False):
         category_name='synthetic/devices/sensors', brand_name=f'maker{i%2}',
         shipping=i%2, item_condition_id=i%3+1) for i in range(160)])
     query = train.iloc[:8].copy(deep=True)
+    boundaries = {}
+    unseen = query.copy(deep=True)
+    for column in ('name', 'item_description', 'category_name', 'brand_name'):
+        unseen[column] = 'unseen synthetic token'
+    boundaries['unseen_text_and_categories'] = unseen
+    missing = query.copy(deep=True)
+    for column in missing.columns:
+        missing[column] = None
+    boundaries['all_missing_values'] = missing
+    blank = query.copy(deep=True)
+    for column in ('name', 'item_description', 'category_name', 'brand_name'):
+        blank[column] = ''
+    boundaries['empty_text_values'] = blank
+    short_category = query.copy(deep=True)
+    short_category['category_name'] = 'synthetic'
+    boundaries['short_category_hierarchy'] = short_category
+    boundaries['zero_query_rows'] = query.iloc[:0].copy(deep=True)
     targets = np.linspace(1., 10., len(train))
     cases = []
     for backend, filename in [('tensorflow', 'datasets_tf.py'), ('mxnet', 'datasets_mx.py')]:
@@ -131,9 +148,34 @@ def probe(directory, modernize=False):
                 assert sparse.issparse(fitted) and sparse.issparse(predicted)
                 assert fitted.shape[0] == 160 and predicted.shape == (8, fitted.shape[1])
                 assert np.isfinite(fitted.data).all() and np.isfinite(predicted.data).all()
+                reverse = pipeline.transform(query.iloc[::-1].copy(deep=True))[::-1].tocsr()
+                split = sparse.vstack([pipeline.transform(query.iloc[:3].copy(deep=True)),
+                                       pipeline.transform(query.iloc[3:].copy(deep=True))]).tocsr()
+                for alternate in (reverse, split):
+                    assert alternate.shape == predicted.shape
+                    assert (alternate != predicted).nnz == 0
                 case.update(passed=True, synthetic_feature_count=fitted.shape[1])
+                case['synthetic_row_order_and_batch_partition_invariant'] = True
+                case['held_out_boundaries'] = []
+                for label, frame in boundaries.items():
+                    boundary = dict(synthetic_case=label, passed=False)
+                    try:
+                        result = pipeline.transform(frame.copy(deep=True))
+                        assert sparse.issparse(result) and result.shape == (len(frame), fitted.shape[1])
+                        assert np.isfinite(result.data).all()
+                        boundary['passed'] = True
+                    except Exception as error:
+                        boundary.update(error_type=type(error).__name__, error=str(error))
+                    # A held-out transform, even one that fails, must not change
+                    # subsequent predictions for the unchanged reference query.
+                    replay = pipeline.transform(query.copy(deep=True))
+                    np.testing.assert_array_equal(replay.indptr, predicted.indptr)
+                    np.testing.assert_array_equal(replay.indices, predicted.indices)
+                    np.testing.assert_array_equal(replay.data, predicted.data)
+                    boundary['reference_query_unchanged'] = True
+                    case['held_out_boundaries'].append(boundary)
             except Exception as error:
-                case.update(error_type=type(error).__name__, error=str(error))
+                case.update(passed=False, error_type=type(error).__name__, error=str(error))
             cases.append(case)
     return dict(format='mercari-feature-runtime-probe.v1', approved=False, catalog_mutations=0,
         synthetic_only=True, worker_processes=0, modern_api_names=modernize, source_commit=topology['source_commit'],
@@ -148,7 +190,8 @@ def probe(directory, modernize=False):
             'Stateless ReportShape, SparseMatrixOptimize, FalseBrands and FeaturesPatterns advertise fitted status for modern sklearn pipeline checks.'] if modernize else []),
         limits=['Diagnostic execution in current dependencies only, not a promoted provider implementation or historical environment proof.',
                 'No source dataset, real-data accuracy, training ensemble or full original CDG approval.',
-                'Successful synthetic cases do not qualify missing values, unseen categories, arbitrary token populations or all legacy feature semantics.'],
+                'Held-out boundary outcomes apply only to the recorded synthetic cases; arbitrary token populations, training on missing values and all legacy feature semantics remain unqualified.',
+                'Unchanged reference-query replay checks observable inference stability after boundary transforms; it does not prove that every internal object is immutable.'],
         probe_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest())
 
 
@@ -161,4 +204,7 @@ if __name__ == '__main__':
         result = dict(format='mercari-feature-runtime-comparison.v1', approved=False,
                       baseline=probe(directory), modern_api=probe(directory, modernize=True))
     (ROOT/'docs/reviews/competition_mercari_feature_runtime_probe.json').write_text(json.dumps(result, indent=2)+'\n')
-    print(json.dumps({k: result[k]['cases'] for k in ('baseline', 'modern_api')}))
+    print(json.dumps({k: dict(pipelines_passed=sum(c['passed'] for c in result[k]['cases']),
+        boundary_cases=sum(len(c.get('held_out_boundaries', [])) for c in result[k]['cases']),
+        boundaries_passed=sum(b['passed'] for c in result[k]['cases'] for b in c.get('held_out_boundaries', [])))
+        for k in ('baseline', 'modern_api')}))
