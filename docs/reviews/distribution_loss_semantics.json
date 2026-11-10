@@ -1,0 +1,567 @@
+{
+  "format": "distribution-loss-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "providers": [
+    {
+      "artifact_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+      "fqdn": "sciona.atoms.ml.tensorflow_distribution_losses.clipped_laplace_score",
+      "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+      "content_hash": "b38663fb11890ce1968df7d1250b61937fcf7d144a0ad2ec2e59fb160b574534",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "targets",
+          "type_desc": "TensorFlow float32 Tensor or convertible float32 array",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "predictions",
+          "type_desc": "TensorFlow float32 Tensor or Variable or convertible float32 array",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "minimum_scale",
+          "type_desc": "float or int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Floor on high-minus-low spread, in target units. Crossed or negative spreads encounter this floor."
+        },
+        {
+          "direction": "input",
+          "ordinal": 3,
+          "name": "maximum_error",
+          "type_desc": "float or int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Cap on absolute point error, in target units. No unit conversion is performed."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "TensorFlow float32 scalar Tensor",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Scalar float32 Tensor: row mean of sqrt(2)*min(abs(target-point),cap)/max(high-low,floor) + log(sqrt(2)*max(high-low,floor)). Numeric score depends on the caller unit convention; the logarithm uses the numerical scale in those units. Piecewise differentiable, with TensorFlow subgradients at boundaries. No calibration guarantee. Concrete provisioned TensorFlow execution only; abstract witness rejects. No training, optimizer or state mutation. Extreme finite float32 inputs can overflow intermediate arithmetic; callers must check loss and gradients before updates. TensorFlow tensors and gradient tapes are in-process objects; JSON/HTTP serialization is not qualified."
+        }
+      ],
+      "operation": "Compute a mean clipped error-and-spread score with explicit scale floor and absolute-error cap.",
+      "plain_description": "Score point predictions and their spread using caller-chosen limits on error and minimum spread.",
+      "validity_bounds": "Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability. Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape. Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Floor on high-minus-low spread, in target units. Crossed or negative spreads encounter this floor. Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Cap on absolute point error, in target units. No unit conversion is performed. Scalar float32 Tensor: row mean of sqrt(2)*min(abs(target-point),cap)/max(high-low,floor) + log(sqrt(2)*max(high-low,floor)). Numeric score depends on the caller unit convention; the logarithm uses the numerical scale in those units. Piecewise differentiable, with TensorFlow subgradients at boundaries. No calibration guarantee. Concrete provisioned TensorFlow execution only; abstract witness rejects. No training, optimizer or state mutation. Extreme finite float32 inputs can overflow intermediate arithmetic; callers must check loss and gradients before updates. TensorFlow tensors and gradient tapes are in-process objects; JSON/HTTP serialization is not qualified.",
+      "reuse": "Continuous prediction objectives with explicit caller units and policy; synthetic duration and energy numerical examples. Application feature construction, model architecture, optimizer and calibration assessment remain separate.",
+      "registered_provider_dependencies": []
+    },
+    {
+      "artifact_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+      "fqdn": "sciona.atoms.ml.tensorflow_distribution_losses.mean_pinball",
+      "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+      "content_hash": "1aab2d391c4ef377ca1383094fb7744f5935ead635d232c0d8a2c5972cf9c21b",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "targets",
+          "type_desc": "TensorFlow float32 Tensor or convertible float32 array",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "predictions",
+          "type_desc": "TensorFlow float32 Tensor or Variable or convertible float32 array",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "quantiles",
+          "type_desc": "float32-convertible vector",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Shape (Q,), Q>0; every quantile strictly between zero and one after float32 conversion. Explicit column correspondence; sorting and uniqueness are not required or performed. Quantiles are dimensionless caller policy."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "TensorFlow float32 scalar Tensor",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Scalar float32 Tensor: arithmetic mean over all N*Q pinball terms, in target units. Differentiable almost everywhere; TensorFlow defines subgradients at ties. No calibration or prediction ordering guarantee. Concrete provisioned TensorFlow execution only; abstract witness rejects. No training, optimizer or state mutation. Extreme finite float32 inputs can overflow intermediate arithmetic; callers must check loss and gradients before updates. TensorFlow tensors and gradient tapes are in-process objects; JSON/HTTP serialization is not qualified."
+        }
+      ],
+      "operation": "Compute the mean asymmetric quantile loss over aligned rows and explicitly ordered quantile columns.",
+      "plain_description": "Score quantile predictions with caller-chosen penalties for underprediction and overprediction.",
+      "validity_bounds": "Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability. Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape. Shape (Q,), Q>0; every quantile strictly between zero and one after float32 conversion. Explicit column correspondence; sorting and uniqueness are not required or performed. Quantiles are dimensionless caller policy. Scalar float32 Tensor: arithmetic mean over all N*Q pinball terms, in target units. Differentiable almost everywhere; TensorFlow defines subgradients at ties. No calibration or prediction ordering guarantee. Concrete provisioned TensorFlow execution only; abstract witness rejects. No training, optimizer or state mutation. Extreme finite float32 inputs can overflow intermediate arithmetic; callers must check loss and gradients before updates. TensorFlow tensors and gradient tapes are in-process objects; JSON/HTTP serialization is not qualified.",
+      "reuse": "Continuous prediction objectives with explicit caller units and policy; synthetic duration and energy numerical examples. Application feature construction, model architecture, optimizer and calibration assessment remain separate.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "tests": {
+    "tests": 5,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "software_sha256": {
+    "provider": "6d5e93c25ced4e359c38d44273612a0d6a92105d033dfb413a0b4e88692cd658",
+    "provider_tests": "bcf04624f0f3b39296091fbe9a0589c89f58c39cee803db61b44023f1ea9a1a7",
+    "provider_dependencies": "118a04efead6c9b220cc88099e72e580c53eb223c8b40bcb793ae49ca2266a1f",
+    "scripts/review_distribution_loss_semantics.py": "b3c0ddb49b0e5c7c139da06686cffd15ebcc364a8d4120f5da1ef83046b8e9ac",
+    "scripts/import_distribution_loss_drafts.py": "f46cf928549752321f7dfa2f9a7ff332e6856d03f4fe6dade02d3d373e267a18",
+    "scripts/plan_distribution_loss_intake.py": "78e73672b3143aa4fbc66e4f0c96e5045abe7d516d76c9057ae1d32a876bee75",
+    "scripts/review_osic_runtime_integrity.py": "4b2cbc1751fd5262eb6c4bdb32afb32fb9d4366aa23d937797cbf6ff22e80797",
+    "scripts/review_video_numeric_runtime.py": "f0e5acb6f7820467a521c8186a54eca0591cdcbc0125c66c446539c506cdb3ac"
+  },
+  "installed_packages": {
+    "absl-py": {
+      "version": "2.5.0",
+      "hashed_files_verified": 31,
+      "active_requirements": []
+    },
+    "annotated-types": {
+      "version": "0.7.0",
+      "hashed_files_verified": 7,
+      "active_requirements": []
+    },
+    "asttokens": {
+      "version": "2.4.1",
+      "hashed_files_verified": 13,
+      "active_requirements": [
+        "six>=1.12.0"
+      ]
+    },
+    "astunparse": {
+      "version": "1.6.3",
+      "hashed_files_verified": 11,
+      "active_requirements": [
+        "six<2.0,>=1.6.1",
+        "wheel<1.0,>=0.23.0"
+      ]
+    },
+    "certifi": {
+      "version": "2026.7.22",
+      "hashed_files_verified": 13,
+      "active_requirements": []
+    },
+    "charset-normalizer": {
+      "version": "3.5.1",
+      "hashed_files_verified": 23,
+      "active_requirements": []
+    },
+    "flatbuffers": {
+      "version": "25.12.19",
+      "hashed_files_verified": 14,
+      "active_requirements": []
+    },
+    "gast": {
+      "version": "0.7.0",
+      "hashed_files_verified": 13,
+      "active_requirements": []
+    },
+    "google-pasta": {
+      "version": "0.2.0",
+      "hashed_files_verified": 30,
+      "active_requirements": [
+        "six"
+      ]
+    },
+    "grpcio": {
+      "version": "1.83.1",
+      "hashed_files_verified": 67,
+      "active_requirements": [
+        "typing-extensions~=4.12"
+      ]
+    },
+    "h5py": {
+      "version": "3.16.0",
+      "hashed_files_verified": 103,
+      "active_requirements": [
+        "numpy>=1.21.2"
+      ]
+    },
+    "icontract": {
+      "version": "2.7.3",
+      "hashed_files_verified": 16,
+      "active_requirements": [
+        "asttokens<3,>=2",
+        "typing_extensions"
+      ]
+    },
+    "idna": {
+      "version": "3.19",
+      "hashed_files_verified": 18,
+      "active_requirements": []
+    },
+    "imageio": {
+      "version": "2.37.3",
+      "hashed_files_verified": 66,
+      "active_requirements": [
+        "numpy",
+        "pillow>=8.3.2"
+      ]
+    },
+    "joblib": {
+      "version": "1.5.3",
+      "hashed_files_verified": 143,
+      "active_requirements": []
+    },
+    "keras": {
+      "version": "3.15.1",
+      "hashed_files_verified": 910,
+      "active_requirements": [
+        "absl-py",
+        "h5py",
+        "ml-dtypes",
+        "namex",
+        "numpy",
+        "optree",
+        "packaging",
+        "rich"
+      ]
+    },
+    "lazy-loader": {
+      "version": "0.5",
+      "hashed_files_verified": 6,
+      "active_requirements": [
+        "packaging"
+      ]
+    },
+    "libclang": {
+      "version": "18.1.1",
+      "hashed_files_verified": 11,
+      "active_requirements": []
+    },
+    "markdown": {
+      "version": "3.10.3",
+      "hashed_files_verified": 41,
+      "active_requirements": []
+    },
+    "markdown-it-py": {
+      "version": "4.2.0",
+      "hashed_files_verified": 76,
+      "active_requirements": [
+        "mdurl~=0.1"
+      ]
+    },
+    "markupsafe": {
+      "version": "3.0.3",
+      "hashed_files_verified": 11,
+      "active_requirements": []
+    },
+    "mdurl": {
+      "version": "0.1.2",
+      "hashed_files_verified": 11,
+      "active_requirements": []
+    },
+    "ml-dtypes": {
+      "version": "0.6.0",
+      "hashed_files_verified": 11,
+      "active_requirements": [
+        "numpy>=2.0.0",
+        "numpy>=2.1.0; python_version >= \"3.13\""
+      ]
+    },
+    "namex": {
+      "version": "0.1.0",
+      "hashed_files_verified": 10,
+      "active_requirements": []
+    },
+    "networkx": {
+      "version": "3.6.1",
+      "hashed_files_verified": 602,
+      "active_requirements": []
+    },
+    "numpy": {
+      "version": "2.2.6",
+      "hashed_files_verified": 876,
+      "active_requirements": []
+    },
+    "opencv-python-headless": {
+      "version": "5.0.0.93",
+      "hashed_files_verified": 145,
+      "active_requirements": [
+        "numpy>=2; python_version >= \"3.9\""
+      ]
+    },
+    "opt-einsum": {
+      "version": "3.4.0",
+      "hashed_files_verified": 32,
+      "active_requirements": []
+    },
+    "optree": {
+      "version": "0.20.0",
+      "hashed_files_verified": 25,
+      "active_requirements": [
+        "typing-extensions>=4.10.0",
+        "typing-extensions>=4.12.0; python_version >= \"3.13\""
+      ]
+    },
+    "packaging": {
+      "version": "26.3",
+      "hashed_files_verified": 30,
+      "active_requirements": []
+    },
+    "pandas": {
+      "version": "2.3.3",
+      "hashed_files_verified": 1513,
+      "active_requirements": [
+        "numpy>=1.26.0; python_version >= \"3.12\"",
+        "python-dateutil>=2.8.2",
+        "pytz>=2020.1",
+        "tzdata>=2022.7"
+      ]
+    },
+    "pillow": {
+      "version": "12.3.0",
+      "hashed_files_verified": 140,
+      "active_requirements": []
+    },
+    "protobuf": {
+      "version": "6.33.5",
+      "hashed_files_verified": 60,
+      "active_requirements": []
+    },
+    "pydantic": {
+      "version": "2.12.5",
+      "hashed_files_verified": 111,
+      "active_requirements": [
+        "annotated-types>=0.6.0",
+        "pydantic-core==2.41.5",
+        "typing-extensions>=4.14.1",
+        "typing-inspection>=0.4.2"
+      ]
+    },
+    "pydantic-core": {
+      "version": "2.41.5",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.14.1"
+      ]
+    },
+    "pygments": {
+      "version": "2.21.0",
+      "hashed_files_verified": 351,
+      "active_requirements": []
+    },
+    "python-dateutil": {
+      "version": "2.9.0.post0",
+      "hashed_files_verified": 25,
+      "active_requirements": [
+        "six>=1.5"
+      ]
+    },
+    "pytz": {
+      "version": "2026.1.post1",
+      "hashed_files_verified": 616,
+      "active_requirements": []
+    },
+    "requests": {
+      "version": "2.34.2",
+      "hashed_files_verified": 27,
+      "active_requirements": [
+        "certifi>=2023.5.7",
+        "charset_normalizer<4,>=2",
+        "idna<4,>=2.5",
+        "urllib3<3,>=1.26"
+      ]
+    },
+    "rich": {
+      "version": "15.0.0",
+      "hashed_files_verified": 106,
+      "active_requirements": [
+        "markdown-it-py>=2.2.0",
+        "pygments<3.0.0,>=2.13.0"
+      ]
+    },
+    "scikit-image": {
+      "version": "0.26.0",
+      "hashed_files_verified": 310,
+      "active_requirements": [
+        "imageio!=2.35.0,>=2.33",
+        "lazy-loader>=0.4",
+        "networkx>=3.0",
+        "numpy>=1.24",
+        "packaging>=21",
+        "pillow>=10.1",
+        "scipy>=1.11.4",
+        "tifffile>=2022.8.12"
+      ]
+    },
+    "scikit-learn": {
+      "version": "1.8.0",
+      "hashed_files_verified": 960,
+      "active_requirements": [
+        "joblib>=1.3.0",
+        "numpy>=1.24.1",
+        "scipy>=1.10.0",
+        "threadpoolctl>=3.2.0"
+      ]
+    },
+    "scipy": {
+      "version": "1.17.1",
+      "hashed_files_verified": 1423,
+      "active_requirements": [
+        "numpy<2.7,>=1.26.4"
+      ]
+    },
+    "setuptools": {
+      "version": "80.9.0",
+      "hashed_files_verified": 513,
+      "active_requirements": []
+    },
+    "six": {
+      "version": "1.17.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "tensorboard": {
+      "version": "2.20.0",
+      "hashed_files_verified": 273,
+      "active_requirements": [
+        "absl-py>=0.4",
+        "grpcio>=1.48.2",
+        "markdown>=2.6.8",
+        "numpy>=1.12.0",
+        "packaging",
+        "pillow",
+        "protobuf!=4.24.0,>=3.19.6",
+        "setuptools>=41.0.0",
+        "tensorboard-data-server<0.8.0,>=0.7.0",
+        "werkzeug>=1.0.1"
+      ]
+    },
+    "tensorboard-data-server": {
+      "version": "0.7.2",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "tensorflow": {
+      "version": "2.20.0",
+      "hashed_files_verified": 11548,
+      "active_requirements": [
+        "absl-py>=1.0.0",
+        "astunparse>=1.6.0",
+        "flatbuffers>=24.3.25",
+        "gast!=0.5.0,!=0.5.1,!=0.5.2,>=0.2.1",
+        "google_pasta>=0.1.1",
+        "grpcio<2.0,>=1.24.3",
+        "h5py>=3.11.0",
+        "keras>=3.10.0",
+        "libclang>=13.0.0",
+        "ml_dtypes<1.0.0,>=0.5.1",
+        "numpy>=1.26.0",
+        "opt_einsum>=2.3.2",
+        "packaging",
+        "protobuf>=5.28.0",
+        "requests<3,>=2.21.0",
+        "setuptools",
+        "six>=1.12.0",
+        "tensorboard~=2.20.0",
+        "termcolor>=1.1.0",
+        "typing_extensions>=3.6.6",
+        "wrapt>=1.11.0"
+      ]
+    },
+    "termcolor": {
+      "version": "3.3.0",
+      "hashed_files_verified": 9,
+      "active_requirements": []
+    },
+    "tf-keras": {
+      "version": "2.20.1",
+      "hashed_files_verified": 591,
+      "active_requirements": [
+        "tensorflow<2.21,>=2.20"
+      ]
+    },
+    "threadpoolctl": {
+      "version": "3.6.0",
+      "hashed_files_verified": 5,
+      "active_requirements": []
+    },
+    "tifffile": {
+      "version": "2026.4.11",
+      "hashed_files_verified": 21,
+      "active_requirements": [
+        "numpy>=2.0"
+      ]
+    },
+    "typing-extensions": {
+      "version": "4.16.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "typing-inspection": {
+      "version": "0.4.2",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.12.0"
+      ]
+    },
+    "tzdata": {
+      "version": "2025.3",
+      "hashed_files_verified": 633,
+      "active_requirements": []
+    },
+    "urllib3": {
+      "version": "2.7.0",
+      "hashed_files_verified": 43,
+      "active_requirements": []
+    },
+    "werkzeug": {
+      "version": "3.1.8",
+      "hashed_files_verified": 64,
+      "active_requirements": [
+        "markupsafe>=2.1.1"
+      ]
+    },
+    "wheel": {
+      "version": "0.48.0",
+      "hashed_files_verified": 22,
+      "active_requirements": [
+        "packaging>=24.0"
+      ]
+    },
+    "wrapt": {
+      "version": "2.4.1",
+      "hashed_files_verified": 22,
+      "active_requirements": []
+    }
+  },
+  "intake_plan_sha256": "accf9b5d9225a5a2daf391d49519458c7c1935bea563fe2c1952d24b56afed47",
+  "connected_execution_commit": "98113163",
+  "connected_execution_sha256": "e14d40a6e8a701129bf110bf6bcc428c6d8b8d42b6d80c5e80704c91c33f0e01",
+  "resource_policy": {
+    "native_threads": 1,
+    "workers": 1
+  },
+  "limitations": [
+    "Automated Tier 3 for concrete provisioned TensorFlow execution only; no human Tier 1 or empirical Tier 2 claim.",
+    "Caller establishes target units, row identity, column alignment and observation availability; no domain policy is inferred.",
+    "Pinball carries target units. The clipped score logarithm depends on the numerical unit convention; scores from different unit conventions cannot be compared directly.",
+    "Crossed predictions are permitted. Neither objective establishes calibrated uncertainty or ordered quantiles.",
+    "GradientTape must enclose the call; JSON transport, remote execution and abstract simulation do not preserve this qualified differentiable interface.",
+    "Finite float32 inputs may overflow intermediate arithmetic. Callers must check loss and gradients before optimizer updates.",
+    "Synthetic analytic tests and source comparisons qualify numerical behavior, not empirical transfer or the full OSIC workflow.",
+    "Installed RECORD integrity and dependency constraints do not authenticate publishers or qualify clean-platform installation or redistribution."
+  ]
+}
