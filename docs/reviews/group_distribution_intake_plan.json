@@ -1,0 +1,129 @@
+{
+  "format": "group-distribution-intake-plan.v1",
+  "passed": true,
+  "applied": false,
+  "approved": false,
+  "catalog_mutations": 0,
+  "owner": {
+    "owner_id": "33ed07a2-1bea-5b17-8b71-d6d0e590fdd9",
+    "source_repo_id": "27b787a0-27ed-4760-92b7-ad8e8b4b815c"
+  },
+  "new_providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.group_distribution_matching.group_subset_ks",
+      "atom_id": "0e5093cd-f0c3-5d53-85e8-d47331ff2af6",
+      "version_id": "eb215f19-48ff-5d2c-ac96-24b3ed7a012f",
+      "content_hash": "07b44257575b0ea08cd5e9cd5659a1ccc2fbfa385215a433b52e374ce5e8532f",
+      "provider_sha256": "a1cdce58faf3a2c7524fe7bc7242784a6849b42c0b0ad70c2378266b159a311d",
+      "semver": "0.0.0+local.07b44257575b",
+      "fingerprint": "8a73e12a6842db7fe9285eed78b7d46be8098a5c25d0bc2753dfbb6fef89feea",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.group_distribution_matching.group_subset_ks",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.group_distribution_matching",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.group_distribution_matching",
+        "import_module": "sciona.atoms.ml.group_distribution_matching",
+        "source_symbol": "group_subset_ks",
+        "description": "Compare each supplied whole-group subset with a reference population. Returns candidates-by-features two-sided empirical KS distances, using the registered compute_ks_agreement operation with equal row weights. Groups contribute all their rows, so larger groups carry more mass. Group labels must exactly cover observed training labels; every candidate selects at least one group. Duplicate candidates are permitted and retain ordering. Feature columns and their coordinate must be aligned by the caller across both matrices. No scaling, feature screening, random subset generation, p-values, averaging, tie-breaking or automatic winner selection occurs. Inputs must be finite and float64-representable; very large integers may lose precision. Inputs are not mutated. Executes serially without workers. Using a future/query reference population makes selection transductive; it is unsuitable where that population is unavailable at decision time. Small distances do not establish independence, predictive quality, joint distribution agreement or a valid causal/temporal validation split. Witnesses check layout only; runtime additionally checks values and groups.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "training",
+          "type_desc": "np.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite real rows-by-features NumPy matrix. Caller provides common feature ordering, units and preprocessing with reference. Converted to float64; large integer precision may be lost."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "reference",
+          "type_desc": "np.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite real rows-by-features NumPy matrix with training width and identical feature coordinates. Reference population must be available when selection occurs; query-driven selection is transductive."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "row_groups",
+          "type_desc": "np.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "One integer group identifier per training row. Exact observed labels must equal group_labels. Whole groups are included without balancing; larger groups have greater empirical mass."
+        },
+        {
+          "direction": "input",
+          "ordinal": 3,
+          "name": "candidates",
+          "type_desc": "np.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty boolean candidates-by-groups mask with columns in group_labels order. Every row selects at least one whole group. Duplicate candidate rows allowed and preserved. No subset generation occurs."
+        },
+        {
+          "direction": "input",
+          "ordinal": 4,
+          "name": "group_labels",
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty unique Python integer list defining candidate-mask column order; must exactly cover observed row_groups values."
+        },
+        {
+          "direction": "input",
+          "ordinal": 5,
+          "name": "feature_columns",
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unique nonblank string list defining identical ordered features in training and reference; length equals both matrix widths. Caller must establish alignment."
+        },
+        {
+          "direction": "input",
+          "ordinal": 6,
+          "name": "feature_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonblank shared coordinate identifier binding upstream feature semantics and preprocessing. No inference, conversion or feature selection occurs."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "np.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Independent float64 candidates-by-features matrix of two-sided marginal empirical KS distances in [0,1]. Uses registered compute_ks_agreement with equal row weights. No p-values, averaging, candidate selection or tie-breaking. No guarantee of joint agreement or predictive accuracy. Witness checks shape and dimension compatibility; runtime also validates finite values and complete group membership."
+        }
+      ]
+    }
+  ],
+  "registered_provider_dependencies": [
+    {
+      "artifact_id": "74033526-0610-476c-93a3-ded75c62a6a0",
+      "fqdn": "sciona.atoms.ml.constrained_ml.decorrelation.compute_ks_agreement",
+      "version_id": "e9524a66-a716-52a1-951a-103af97a97e6",
+      "content_hash": "63e8b77a6266089462e50d7f70140bcdc5ef87c5cb393ad6d4b89be625dfa73f",
+      "trust_tier": 3
+    }
+  ],
+  "execution_evidence_commit": "40df3de1",
+  "execution_evidence_sha256": "4c748af69e88c9f967d1de482e34984beb71b2df5383b7e045e8f3c264e03d52",
+  "provider_revision": "08c7fb3",
+  "planner_sha256": "02fb83edad74e7a55a37b9166a0e37a85a91813061a731608116551ded3fce0e",
+  "limitations": [
+    "Non-serving draft only; metadata, dependencies, semantic review and transactional publication gates remain required.",
+    "Independent empirical-CDF qualification; no historical feature or model reconstruction claim.",
+    "Whole-group scoring with explicit application adapters; no original LANL CDG approval."
+  ]
+}
