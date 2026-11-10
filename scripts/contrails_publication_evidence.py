@@ -63,12 +63,24 @@ def validate_stored_reports(reports, plan):
                 raise ValueError('Stored execution identity differs: '+key)
 
 
+def qualification_limits(source, providers, reports):
+    """Preserve semantic, provider and actual execution limits in selection metadata."""
+    groups = [source['limitations'], providers['limitations']]
+    groups.extend(reports[v]['limits'] for v in FOLDS)
+    if any(not isinstance(group, list) or not group or
+           any(not isinstance(item, str) or not item.strip() for item in group)
+           for group in groups):
+        raise ValueError('Explicit limits required from every qualification layer')
+    return list(dict.fromkeys(item for group in groups for item in group))
+
+
 def review():
     from scripts import stage_contrails_corrected_intake as intake
     from scripts.validate_contrails_corrected_execution import prerequisites
     paths = {v:'docs/reviews/contrails_corrected_execution_'+v+'.json' for v in FOLDS}
     reports = {v:committed_report(path) for v,path in paths.items()}
     source = committed_report(SOURCE)
+    providers = committed_report('docs/reviews/contrails_provider_contracts.json')
     plan = intake.qualified_plan()
     validate_stored_reports(reports, dict(plan, plan_sha256=sha(intake.PLAN)))
     if source['artifact_id'] != intake.IDENTITY or source['source_version_id'] != intake.ORIGINAL:
@@ -83,7 +95,7 @@ def review():
     return dict(review_source='automated', proposed_tier=3, verdict='acceptable_with_limits',
         evidence_commit=EVIDENCE_COMMIT,
         execution_sha256={v:sha(ROOT/path) for v,path in paths.items()},
-        source_review_sha256=sha(ROOT/SOURCE), limitations=source['limitations'],
+        source_review_sha256=sha(ROOT/SOURCE), limitations=qualification_limits(source, providers, reports),
         resolved_source_corrections={r['stage_id']:r['realization']+' '+r['correction']
                                     for r in source['source_stage_review']},
         reuse_decision=source['reuse_decision'])

@@ -71,3 +71,21 @@ def test_reject_wrong_stored_execution(fault):
 def test_unfinished_evidence_cannot_publish(monkeypatch):
     monkeypatch.setattr(evidence, 'EVIDENCE_COMMIT', None)
     with pytest.raises(ValueError): evidence.committed_report('unused')
+
+
+def test_preserve_all_qualification_limits():
+    limits=evidence.qualification_limits(
+        {'limitations':['physical encoding','independent populations']},
+        {'limitations':['physical encoding','CPU only']},
+        {'v43':{'limits':['one epoch','random initialization']},
+         'v47':{'limits':['one epoch','no accuracy claim']}})
+    assert limits==['physical encoding','independent populations','CPU only',
+                    'one epoch','random initialization','no accuracy claim']
+
+
+@pytest.mark.parametrize('bad_limits', [[], None, [''], [False]])
+def test_missing_execution_limits_rejected(bad_limits):
+    with pytest.raises(ValueError):
+        evidence.qualification_limits({'limitations':['source bound']},
+            {'limitations':['provider bound']},
+            {'v43':{'limits':['execution bound']},'v47':{'limits':bad_limits}})

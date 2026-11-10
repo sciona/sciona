@@ -53,7 +53,7 @@ def publish(apply=False,fail_at=None):
             or gate['execution_sha256']!=qualification['execution_sha256']):raise ValueError('Current publication transaction gates required')
         if not evidence.strict_equal(gate['qualification'],qualification):
             raise ValueError('Publication qualification changed after rollback checks')
-        if gate['execution_evidence_tests']!=dict(passed=True,count=25,sha256=intake.sha(ROOT/'tests/test_contrails_corrected_publication_evidence.py')):
+        if gate['execution_evidence_tests']!=dict(passed=True,count=30,sha256=intake.sha(ROOT/'tests/test_contrails_corrected_publication_evidence.py')):
             raise ValueError('Current execution evidence rejection tests required')
     identity,version=UUID(plan['artifact_id']),UUID(plan['version_id'])
     topology=build_published_cdg_projection(artifact={'artifact_id':str(identity),'fqdn':plan['fqdn']},

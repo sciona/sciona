@@ -28,8 +28,8 @@ def validate():
     result=subprocess.run([sys.executable,'-m','pytest','-q',test_path],cwd=intake.ROOT,
         env=environment,capture_output=True,text=True,check=True)
     match=re.search(r'(\d+) passed',result.stdout)
-    if not match or int(match.group(1))!=25:raise ValueError('Complete publication evidence tests required')
-    tests=dict(passed=True,count=25,sha256=intake.sha(intake.ROOT/test_path))
+    if not match or int(match.group(1))!=30:raise ValueError('Complete publication evidence tests required')
+    tests=dict(passed=True,count=30,sha256=intake.sha(intake.ROOT/test_path))
     with intake.connect() as db:before=snapshot(db)
     def unchanged():
         with intake.connect() as db:
