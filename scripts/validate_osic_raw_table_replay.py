@@ -12,6 +12,7 @@ import tf_keras as keras
 import argparse
 import copy
 import hashlib
+import inspect
 import json
 from pathlib import Path
 import subprocess
@@ -24,6 +25,8 @@ from sciona import osic_quantile_training as training
 from sciona import osic_feature_state as feature_state
 from sciona.osic_feature_state import export_preparation_state, transform_queries
 from scripts.validate_osic_quantile_features import synthetic_tables
+from sciona.atoms.ml import tensorflow_distribution_losses
+from sciona.atoms.numerical.statistics import ordered_sum
 
 ROOT = Path(__file__).resolve().parents[1]
 FEATURE, RESPONSE = 'synthetic-joint-features.v1', 'synthetic-response.v1'
@@ -65,7 +68,10 @@ def validate():
         ROOT/'sciona/osic_quantile_training.py', ROOT/'sciona/osic_quantile_state.py',
         ROOT/'sciona/osic_quantile_model.py', ROOT/'sciona/osic_quantile_objective.py',
         ROOT/'sciona/tensorflow_distribution_losses.py', ROOT/'sciona/osic_predictions.py']
-    before = {str(p.relative_to(ROOT)):sha(p) for p in paths}
+    paths = {str(p.relative_to(ROOT)): p for p in paths}
+    for module in (tensorflow_distribution_losses, ordered_sum):
+        paths[module.__name__] = Path(inspect.getfile(module))
+    before = {name:sha(path) for name,path in paths.items()}
     train, baseline, queries = synthetic_tables()
     # Include known baseline queries as well as extrapolation on both sides.
     queries = pd.concat([queries, baseline[['entity', 'time']]], ignore_index=True)
@@ -122,7 +128,7 @@ def validate():
         replay_report = json.loads(process.stdout)
         if hashes != {p.name:sha(p) for p in directory.iterdir()}:
             raise ValueError('Replay changed private artifacts')
-    if before != {str(p.relative_to(ROOT)):sha(p) for p in paths}:
+    if before != {name:sha(path) for name,path in paths.items()}:
         raise ValueError('Implementation changed during qualification')
     return dict(format='osic-raw-table-replay.v1', passed=True, approved=False,
         catalog_mutations=0, synthetic_only=True, fresh_process_replay=replay_report,
