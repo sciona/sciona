@@ -12,7 +12,7 @@ import numpy as np
 import torch
 from threadpoolctl import threadpool_limits
 from scripts.audit_hubmap_original_readiness import ROOT, sha
-from scripts.hubmap_synthetic_rasters import labeled_raster
+from scripts.hubmap_structured_synthetic_rasters import labeled_raster
 from scripts import review_video_numeric_runtime as runtime_checker
 from sciona.hubmap_encoder import build_encoder
 from sciona.hubmap_lifecycle import FoldStage
@@ -49,7 +49,7 @@ def main():
             or policy['pseudo_checkpoint_role']!='best_score'
             or any(policy[k]['num_epochs']!=20 or policy[k]['patience']!=50 for k in ('initial_training','retraining'))):
         raise ValueError('Qualified source schedule and pseudo checkpoint selection required')
-    paths=set(baseline['software_sha256'])|{'scripts/validate_hubmap_current_graph.py','scripts/hubmap_synthetic_rasters.py',
+    paths=set(baseline['software_sha256'])|{'scripts/validate_hubmap_current_graph.py','scripts/hubmap_structured_synthetic_rasters.py',
         'sciona/services/execution_graph_codec.py','sciona/visualizer/runner.py',
         policy_path,'scripts/review_hubmap_source_policy.py'}
     hashes={p:sha(ROOT/p) for p in sorted(paths)}
@@ -130,7 +130,7 @@ def main():
         limits=['Synthetic random encoder state, four initial and four fresh retraining folds, twenty consecutive epochs from epoch1 per fold with source patience50 and resource-adapted batch2. No historical trained-weight or predictive accuracy claim.',
                 'Source-sized network and tile geometry with synthetic rasters; no whole-slide codec, GPU or unbounded-memory qualification.',
                 'Four initial best-score checkpoints follow the pinned pseudo policy. Four final best-loss checkpoints are an explicit caller selection; historical final notebook checkpoint policy and provenance remain unverified.',
-                'Synthetic foreground is encoded by raster intensity; no real data or accuracy evaluation is involved.',
+                'Synthetic circular foreground is encoded by raster intensity; no real data or application accuracy evaluation is involved.',
                 'Existing source-comparison evidence is retained separately; this run is not a fresh independent-source parity comparison.',
                 'Corrected stored original execution and publication remain separate requirements.'])
     (ROOT/'docs/reviews/hubmap_current_graph.json').write_text(json.dumps(report,indent=2)+'\n')

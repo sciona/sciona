@@ -7,7 +7,7 @@ from scripts.plasticc_publication_evidence import strict_equal
 
 RESOURCE_POLICY=dict(serial_training=True,torch_threads=1,interop_threads=1,native_threads=1,
     opencv_threads=1,opencv_opencl=False,data_loader_workers=0)
-REQUIRED_SOFTWARE={'scripts/validate_hubmap_current_graph.py','scripts/hubmap_synthetic_rasters.py','scripts/review_hubmap_source_policy.py',
+REQUIRED_SOFTWARE={'scripts/validate_hubmap_current_graph.py','scripts/hubmap_structured_synthetic_rasters.py','scripts/review_hubmap_source_policy.py',
     'docs/reviews/hubmap_source_policy.json','sciona/hubmap_lifecycle.py',
     'sciona/hubmap_network.py','sciona/hubmap_encoder.py','sciona/hubmap_graph_runtime.py',
     'sciona/hubmap_retraining.py','sciona/hubmap_raw_inference.py',
