@@ -1,0 +1,136 @@
+{
+  "format": "character-tokenizer-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "providers": [
+    {
+      "artifact_id": "7e883bb5-d5c0-5040-8971-80546e651ada",
+      "fqdn": "sciona.atoms.ml.character_run_tokenization.tokenize_character_runs",
+      "version_id": "9a2049c1-d7c6-5b7d-98f1-9bf174ba8aef",
+      "content_hash": "d5420073c514539d6612d077d2030775a57118282f78c8553639f6ee951d6528",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "text",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unicode Python string; empty input allowed. No coercion of missing values, case folding, normalization, transliteration, stemming or deletion. Caller resolves table missing-value policies before this operation."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "word_characters",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit string whose code points form the word-run alphabet. Empty and repeated characters allowed; membership only matters. Must be disjoint from whitespace_characters. Caller preserves the same policy across training and inference and chooses it for the intended domain."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "whitespace_characters",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit string whose code points form the whitespace-run alphabet. Empty and repeated characters allowed. No automatic Unicode whitespace expansion. Must be disjoint from word_characters; characters outside both alphabets become individual tokens."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Ordered list of nonempty string tokens; empty input returns an empty list. Consecutive word or whitespace code points form runs; all other code points are individual tokens. Joining tokens exactly reproduces the input. Code-point semantics are not grapheme or linguistic segmentation. Independent chunk tokenization may change run boundaries. Witness metadata gives bounds only, not an exact token-array shape."
+        }
+      ],
+      "operation": "Split text into maximal caller-defined word and whitespace runs and individual remaining code points without changing text.",
+      "plain_description": "Split text into pieces using caller-chosen character groups, preserving every character.",
+      "validity_bounds": "Unicode Python string; empty input allowed. No coercion of missing values, case folding, normalization, transliteration, stemming or deletion. Caller resolves table missing-value policies before this operation. Explicit string whose code points form the word-run alphabet. Empty and repeated characters allowed; membership only matters. Must be disjoint from whitespace_characters. Caller preserves the same policy across training and inference and chooses it for the intended domain. Explicit string whose code points form the whitespace-run alphabet. Empty and repeated characters allowed. No automatic Unicode whitespace expansion. Must be disjoint from word_characters; characters outside both alphabets become individual tokens. Ordered list of nonempty string tokens; empty input returns an empty list. Consecutive word or whitespace code points form runs; all other code points are individual tokens. Joining tokens exactly reproduces the input. Code-point semantics are not grapheme or linguistic segmentation. Independent chunk tokenization may change run boundaries. Witness metadata gives bounds only, not an exact token-array shape.",
+      "reuse": "Reusable across textual measurements, symbolic expressions and biological sequence strings through explicit character alphabets. No competition fields, learned vocabulary, language-specific normalization or fixed application schema are required.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "tests": {
+    "tests": 19,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "software_sha256": {
+    "tests/test_character_run_tokenizer.py": "6aeefadf3bcc41c962aae592845ad8354bba2d441d0fed7a094582a0d1c62ffb",
+    "provider/test_character_run_tokenization_provider.py": "84c73521a7aae3bb15da7c0f75d8c0e795a59d74a18b0573a0f9268a1c9a98a9",
+    "sciona/character_run_tokenizer.py": "ff7e9401252a5a8958322054737de8269d33eb1f5f0a79ad09cbf8ec5dd4a708",
+    "scripts/review_character_tokenizer_semantics.py": "e6492635cbc0d4839159495848b2d1e9661e6d4617418c28efc11dc924eab39f",
+    "scripts/import_character_tokenizer_drafts.py": "ba88b53eca8976bf685b481925c9e2c35d901c020439c78b83011fdc810f6310",
+    "scripts/plan_character_tokenizer_intake.py": "7fb8e2d6780e616e7480749aeabc52c23cc697ab71a3757004b53c5547b1b176",
+    "docs/licenses/mercari-solution-LICENSE.txt": "ebd4587bd7c8d16ffb12e88219f6930a505962abb85a72c58ebf597c59d5abe2",
+    "sciona.atoms.ml.character_run_tokenization": "1606cd9cfbd3f3232e10f710d43e2646c0824150f56556d997320713c0d26418",
+    "sciona.ghost.registry": "793723a75d07a88eed39f59d8d4dc327c54adbf75db7a03003516a6f74c81b51",
+    "sciona.ghost.abstract": "9574bed61c8292b2eaf6ff054bcf46504b07e679c521a19d2440396c3ea63670",
+    "sciona.ghost.dimensions": "61be1958aa50725f3c6598d5b5447a806d2549698d5ce3ec243d467816754b7e"
+  },
+  "installed_packages": {
+    "annotated-types": {
+      "version": "0.7.0",
+      "hashed_files_verified": 7,
+      "active_requirements": []
+    },
+    "numpy": {
+      "version": "2.2.6",
+      "hashed_files_verified": 876,
+      "active_requirements": []
+    },
+    "pydantic": {
+      "version": "2.12.5",
+      "hashed_files_verified": 111,
+      "active_requirements": [
+        "annotated-types>=0.6.0",
+        "pydantic-core==2.41.5",
+        "typing-extensions>=4.14.1",
+        "typing-inspection>=0.4.2"
+      ]
+    },
+    "pydantic-core": {
+      "version": "2.41.5",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.14.1"
+      ]
+    },
+    "typing-extensions": {
+      "version": "4.16.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "typing-inspection": {
+      "version": "0.4.2",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.12.0"
+      ]
+    }
+  },
+  "intake_plan_sha256": "960bb6b20ddfbf2eb5c687b187cb8f9225f2a0e3824b7a844cb03b4ac0727b21",
+  "connected_execution_commit": "df784132",
+  "connected_execution_sha256": "fc517f3b61acca3ca236f9f154c29612ec5578582d39a42f6eb49aa25fc98ec4",
+  "resource_policy": {
+    "native_threads": 1,
+    "test_workers": 1
+  },
+  "limitations": [
+    "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+    "Caller supplies disjoint word and whitespace alphabets and preserves policy across training and inference. Domain-specific language and sequence semantics are not inferred.",
+    "Lossless code-point segmentation only; no Unicode normalization, grapheme handling, stemming, transliteration, whitespace deletion or linguistic word detection. Independent chunks can change run boundaries.",
+    "Witness output contains token-count bounds, not exact token shape or observed text. Downstream witnesses must handle variable-length sequences explicitly.",
+    "Connected feature parity uses an explicit source character-policy adapter, diagnostic source feature loaders and synthetic inputs. It does not certify new-domain predictive accuracy or historical-runtime equivalence.",
+    "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment and other platforms are not certified.",
+    "This review qualifies one generic tokenizer atom, not the application-specific text-cleaning policy, full feature pipeline or original competition CDG."
+  ]
+}
