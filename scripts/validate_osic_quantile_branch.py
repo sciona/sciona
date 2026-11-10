@@ -11,6 +11,7 @@ tf.config.threading.set_inter_op_parallelism_threads(1)
 import tf_keras as keras
 import argparse
 import hashlib
+import inspect
 import json
 from pathlib import Path
 import subprocess
@@ -20,14 +21,16 @@ import pandas as pd
 
 from sciona.osic_quantile_features import FIELDS
 from sciona.osic_quantile_training import train_quantile_branch, replay_quantile_branch
+from sciona.atoms.ml import tensorflow_distribution_losses
+from sciona.atoms.numerical.statistics import ordered_sum
 
 ROOT = Path(__file__).resolve().parents[1]
 FEATURE = 'synthetic-joint-features.v1'
 RESPONSE = 'synthetic-response.v1'
 EVIDENCE = {
     'osic_quantile_features_validation.json': 'bc56e3e4',
-    'osic_quantile_model_validation.json': '1745b3a9',
-    'osic_quantile_state_validation.json': '3a0c8bc0',
+    'osic_quantile_model_validation.json': '6d114c56',
+    'osic_quantile_state_validation.json': '6d114c56',
     'osic_prediction_validation.json': '7449dbae',
 }
 
@@ -71,7 +74,10 @@ def child(directory):
 def validate():
     previous = evidence()
     files = [Path(__file__), ROOT/'sciona/osic_quantile_training.py']
-    before = {str(p.relative_to(ROOT)):sha(p) for p in files}
+    files = {str(p.relative_to(ROOT)): p for p in files}
+    for module in (tensorflow_distribution_losses, ordered_sum):
+        files[module.__name__] = Path(inspect.getfile(module))
+    before = {name:sha(path) for name,path in files.items()}
     rows = []
     for entity in range(135):
         for time in (0., 2.):
@@ -108,7 +114,7 @@ def validate():
         replay = json.loads(process.stdout)
         if hashes != {p.name:sha(p) for p in directory.iterdir()}:
             raise ValueError('Replay changed saved state or input arrays')
-    if previous != evidence() or before != {str(p.relative_to(ROOT)):sha(p) for p in files}:
+    if previous != evidence() or before != {name:sha(path) for name,path in files.items()}:
         raise ValueError('Qualification changed during connected execution')
     return dict(format='osic-quantile-branch-validation.v1', passed=True, approved=False,
         catalog_mutations=0, synthetic_only=True, folds=result['folds'], total_candidate_updates=2400,
