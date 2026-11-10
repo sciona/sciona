@@ -25,14 +25,16 @@ def image_trajectories(slice_slopes, baseline_time, baseline_value,
 
 Require at least two slice predictions per subject, one baseline per subject,
 and integer subject positions for each query. Time and slope coordinates must
-agree. Uncertainty is the source heuristic, not a calibrated interval; negative
+    agree. Slice quantiles retain the input dtype behavior of the qualified
+    NumPy runtime; promoting float32 before the quantile changes rounding.
+    Uncertainty is the source heuristic, not a calibrated interval; negative
 results are preserved. Source arithmetic forms the intercept before prediction.
 """
     if not isinstance(slice_slopes, (list, tuple)) or not slice_slopes:
         raise ValueError('Explicit per-subject slice predictions required')
     slopes = []
     for values in slice_slopes:
-        values = _numeric(values)
+        _numeric(values)
         if values.ndim not in (1, 2) or (values.ndim == 2 and values.shape[1] != 1) or len(values) < 2:
             raise ValueError('At least two scalar slice predictions per subject required')
         slopes.append(np.quantile(values, .5))
@@ -46,7 +48,12 @@ results are preserved. Source arithmetic forms the intercept before prediction.
     index = query_subject.astype(np.intp)
     with np.errstate(over='raise', invalid='raise'):
         intercept = bv - a * bt
-        point = a[index] * qt + intercept[index]
+        # The source parses each query time into a Python int and multiplies a
+        # scalar slope before adding its float64 baseline intercept. NumPy 2's
+        # float32 scalar promotion differs from a vectorized float64 product.
+        query_scalar = int if query_time.dtype.kind in 'iu' else float
+        point = np.array([a[i] * query_scalar(t) + intercept[i]
+                          for i,t in zip(index, query_time)])
         uncertainty = bu[index] - a[index] * np.abs(bt[index] - qt)
     return np.column_stack((point, uncertainty))
 

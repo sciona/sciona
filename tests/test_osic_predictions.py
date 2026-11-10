@@ -10,6 +10,17 @@ def test_image_trajectory_preserves_negative_uncertainty_and_query_order():
     np.testing.assert_array_equal(result, [[14., 8.], [10., 1.], [18., -7.]])
 
 
+def test_image_float32_quantile_and_scalar_extrapolation_keep_source_rounding():
+    following = np.nextafter(np.float32(1), np.float32(2))
+    actual = image_trajectories([np.array([1,following],dtype=np.float32),
+                                np.array([following,following],dtype=np.float32)],
+        np.array([0.,0.]),np.array([0.,0.]),np.array([1.,1.]),
+        np.array([0,1]),np.array([1,3],dtype=np.int64))
+    assert actual[0,0] == 1.
+    assert actual[1,0] == float(np.float32(following*3))
+    assert actual[1,0] != float(following)*3
+
+
 def test_raw_crossed_quantiles_and_known_outcome_override_before_blend():
     folds = np.array([[[3., 2., 1.], [4., 5., 6.]], [[5., 4., 3.], [8., 9., 10.]]])
     original = folds.copy()

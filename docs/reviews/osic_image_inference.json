@@ -1,0 +1,66 @@
+{
+  "format": "osic-image-inference.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "source": {
+    "repository": "https://github.com/artkulak/osic-pulmonary-fibrosis-progression",
+    "revision": "cd6dfa56c012e3c0eb81ed15534f436b3ba16d19",
+    "normalized_cell_sha256": {
+      "6": "56eee99ee8632632a72876cf33e6234c7becfc0f2f8ce3d7e86c8f0a9987a3e7",
+      "9": "4ff759ede08f197111d0aada45ef7800a0960e6982fb76143b42f377fccdf621",
+      "15": "b8931415e14679cf6fc9bcdb52a1f3f222a776f514f0791629e13c097cdedf17",
+      "17": "b2b3f38aa020fc2eaddb3ced944b05cbe458114678e399ddf5a319ef129619e3"
+    }
+  },
+  "cases": [
+    {
+      "case": "synthetic_linear_predictor",
+      "queries": 4,
+      "selected_slices": 12,
+      "exact_predictor_inputs": true,
+      "exact_source_outputs": true,
+      "query_order_preserved": true
+    },
+    {
+      "case": "float32_median_rounding",
+      "queries": 4,
+      "selected_slices": 12,
+      "exact_predictor_inputs": true,
+      "exact_source_outputs": true,
+      "query_order_preserved": true
+    },
+    {
+      "case": "float32_scalar_rounding",
+      "queries": 4,
+      "selected_slices": 12,
+      "exact_predictor_inputs": true,
+      "exact_source_outputs": true,
+      "query_order_preserved": true
+    }
+  ],
+  "invalid_contracts_rejected": 5,
+  "runtime": {
+    "numpy": "2.2.6",
+    "pandas": "2.3.3",
+    "opencv": "5.0.0",
+    "opencv_workers": 1
+  },
+  "software_sha256": {
+    "sciona/osic_image_inference.py": "3b12cfe230057d5a45f9256009c95a77066a5ab6e58e8920bb522e5b059bf2e1",
+    "sciona/osic_image_metadata.py": "7c36c3eeff029f0a32f044589b386ea9c53da99ebb4ebf087e89d6833a2c605d",
+    "sciona/osic_image_preprocessing.py": "9c46a4977dae5a5967da24b432db836130c27af29f1cdca69552557face7757e",
+    "sciona/osic_predictions.py": "6e3dbca24d78302ae74ea525fe8d2f380cda9308dc76a4a3f225c4cd863ebace",
+    "scripts/validate_osic_image_inference.py": "cc48851deda85bfcea36bec827abab3bf11ea2c38ad00a16521cf3597c06177c"
+  },
+  "limitations": [
+    "Synthetic deterministic predictor substitutes for trained B5; trained inference and batch-size-32 parity remain separate qualification.",
+    "Synthetic decoded integer planes substitute for file decoding; DICOM parsing is not qualified.",
+    "One source image model only; the source multi-model loop repeatedly uses its first result and is not generalized here.",
+    "Numerical parity is for the recorded current NumPy runtime, including float32 quantile/scalar rounding; historical binary parity is not claimed.",
+    "Int64/float64 baseline coordinates and integer query times only; incomplete slice coverage is rejected.",
+    "Publication must bind quantile workflow evidence to the corrected prediction-helper revision.",
+    "No original workflow approval or empirical effectiveness claim."
+  ]
+}
