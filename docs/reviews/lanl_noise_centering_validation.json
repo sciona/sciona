@@ -1,0 +1,55 @@
+{
+  "format": "lanl-noise-centering-validation.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "cases": [
+    {
+      "synthetic_family": "constant",
+      "windows": 2,
+      "samples_per_window": 150000,
+      "exact_prose_equation_equal": true,
+      "finite": true
+    },
+    {
+      "synthetic_family": "quantized",
+      "windows": 2,
+      "samples_per_window": 150000,
+      "exact_prose_equation_equal": true,
+      "finite": true
+    },
+    {
+      "synthetic_family": "oscillatory",
+      "windows": 2,
+      "samples_per_window": 150000,
+      "exact_prose_equation_equal": true,
+      "finite": true
+    },
+    {
+      "synthetic_family": "sparse_impulses",
+      "windows": 2,
+      "samples_per_window": 150000,
+      "exact_prose_equation_equal": true,
+      "finite": true
+    }
+  ],
+  "source": "https://www.kaggle.com/c/LANL-earthquake-Prediction/discussion/94390",
+  "reference_kind": "Independent implementation of the explicitly described arithmetic, not source-code replay.",
+  "software_sha256": {
+    "sciona-atoms-ml/src/sciona/atoms/ml/noise_median_centering.py": "69bf58a8edceef7c189d4c327b9850ca6bb8b77dba0ec8038e3aea668300b25f",
+    "sciona-atoms-ml/tests/test_noise_median_centering_provider.py": "8ad584975c5b02bf7546328a873fde3601f7d6df2854cf33ac170dee5f85acf1",
+    "sciona-matcher/scripts/validate_lanl_noise_centering.py": "47fa958952c53719459b3d45928cb8d5659acc6c7bd9482fd1887de47ea6a865"
+  },
+  "resource_policy": {
+    "concurrent_workers": 1,
+    "native_threads": 1
+  },
+  "reuse": "Caller supplies aligned noise in the same amplitude coordinate; window geometry, distribution, seed and event semantics stay outside the operation.",
+  "limitations": [
+    "This component removes absolute baseline and adds perturbations; predictive improvement is not established.",
+    "The selected synthetic RNG seed and per-window noise draws do not recover historical random-state or noise reuse policy.",
+    "Feature extraction, distribution screening, all model families and final blend remain unqualified.",
+    "Provider registration alone does not approve catalog selection or the original competition CDG."
+  ]
+}
