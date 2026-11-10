@@ -21,7 +21,7 @@ from sciona.services.execution_graph_codec import encode_execution_graph,decode_
 from sciona.visualizer import runner
 
 
-STAGING_COMMIT = None
+STAGING_COMMIT = 'e06d8dc7d4bd8f2b2ed064919ecdfcef985fd24b'
 
 
 def qualified_staging():
