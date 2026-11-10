@@ -9,6 +9,7 @@ import tempfile
 from unittest.mock import patch
 
 import numpy as np
+import cv2
 import torch
 from threadpoolctl import threadpool_limits
 from sciona import contrails_lifecycle as lifecycle
@@ -19,6 +20,7 @@ from sciona.visualizer import runner
 from scripts.audit_contrails_original_readiness import ROOT, sha
 from scripts.validate_contrails_graph import synthetic_payload
 from scripts import review_video_numeric_runtime as runtime_checker
+from scripts.review_contrails_augmentation_runtime import review as augmentation_review
 
 EVIDENCE = 'docs/reviews/contrails_current_contracts.json'
 COMMIT = 'b07e4b40'
@@ -41,6 +43,9 @@ def prerequisites():
             raise ValueError('Qualified numerical runtime changed')
     finally:
         runtime_checker.ROOT_PACKAGES = previous
+    augmentation = json.loads((ROOT/'docs/reviews/contrails_augmentation_runtime.json').read_text())
+    if augmentation_review() != augmentation:
+        raise ValueError('Qualified augmentation runtime changed')
     return report
 
 
@@ -48,10 +53,15 @@ def validate(variant):
     baseline = prerequisites()
     paths = list(baseline['software_sha256']) + [
         'scripts/validate_contrails_current_graph.py', 'scripts/validate_contrails_graph.py',
+        'scripts/review_contrails_augmentation_runtime.py', 'docs/reviews/contrails_augmentation_runtime.json',
         'sciona/services/execution_graph_codec.py', 'sciona/visualizer/runner.py']
     before = {p:sha(ROOT/p) for p in paths}
     torch.set_num_threads(1)
     torch.set_num_interop_threads(1)
+    cv2.setNumThreads(1)
+    cv2.ocl.setUseOpenCL(False)
+    if cv2.getNumThreads() != 1 or cv2.ocl.useOpenCL():
+        raise ValueError('OpenCV must use one CPU thread without OpenCL')
     digest, nodes, edges = encode_execution_graph(build_contrails_graph())
     graph = decode_execution_graph(nodes, edges, digest)
     if encode_execution_graph(graph)[0] != digest:
@@ -111,7 +121,7 @@ def validate(variant):
         actual_runner_nodes=2, all_nodes_uncached=True, exact_state_routing=True,
         strict_json_output=True, source_sized_inputs_and_outputs=True,
         resource_policy=dict(serial_models=True, torch_threads=1, interop_threads=1,
-                             native_threads=1, data_loader_workers=0),
+                             native_threads=1, data_loader_workers=0, opencv_threads=1, opencv_opencl=False),
         limits=['Local serialized graph execution; corrected original stored-graph execution and publication remain separate gates.',
                 'One explicitly configured epoch per fold and random initialization; no default 35/40-epoch schedule or pretrained accuracy claim.',
                 'All selected full MaxViT/U-Net models, terminal checkpoint reloads and eight-way spatial inference run without stand-ins.',
