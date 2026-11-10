@@ -1,0 +1,170 @@
+{
+  "format": "contrails-original-scope.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "review_source": "automated",
+  "scope": "Source-scope review only; full-model execution and publication remain separate requirements.",
+  "artifact_id": "84c35748-a68d-52f7-ac3c-9635778ad9a0",
+  "fqdn": "cdg.competition.solution.kaggle.google_contrails_1st",
+  "source_version_id": "dd8cc8a7-162b-52f1-a74d-256ce661f7ba",
+  "source_content_hash": "6f8962c26d57adbdead9c31a1ed95d7bc31d66bf4e042f5da564d0c8c6d23dee",
+  "source_snapshot_reconstructed": true,
+  "source_commit": "08a15beb36f9cbed4c3990e74c625c1332b61fe8",
+  "source_stage_review": [
+    {
+      "stage_id": "temporal_windowing",
+      "realization": "Accept four selected ordered time frames per example; the single branch uses frame3 and the temporal branch uses all four.",
+      "correction": "Replace the inaccurate five-frame window claim. Upstream selection, time spacing, input decoding and alignment are caller responsibilities.",
+      "source_anchors": [
+        {
+          "file": "sciona/contrails_runtime.py",
+          "symbol": "prepare",
+          "line": 50,
+          "file_sha256": "9f2f069bf5215137029b1d59b880d175e0dd2e57f5a95a77bb2fc2c25bb95836"
+        },
+        {
+          "file": "sciona/contrails_prediction.py",
+          "symbol": "prepare_inference",
+          "line": 19,
+          "file_sha256": "ed96170e509aaf35ddd1c8104855651a027f4a31a2c800ba35937eb8db5a77a2"
+        }
+      ]
+    },
+    {
+      "stage_id": "false_color_generation",
+      "realization": "Apply the exact source inverted three-channel thermal-difference transform with fixed offsets/scales and no clipping, then source branch-specific resizing.",
+      "correction": "This is a physical encoding assumption, not generic RGB normalization. Callers must preserve the channel scale and order; shape validation alone does not establish them.",
+      "source_anchors": [
+        {
+          "file": "sciona/contrails_preprocessing.py",
+          "symbol": "ash_color",
+          "line": 10,
+          "file_sha256": "f15593a2f17359969b3a8ff5f076ef18e004d2310753ca7e27512b71f7276e11"
+        },
+        {
+          "file": "sciona/contrails_preparation.py",
+          "symbol": "prepare_training_example",
+          "line": 26,
+          "file_sha256": "af1868eb6af3899ccb1e65b80473839fc57004f0d69b2034f50b698fe19c74a6"
+        },
+        {
+          "file": "sciona/contrails_prediction.py",
+          "symbol": "prepare_inference",
+          "line": 19,
+          "file_sha256": "ed96170e509aaf35ddd1c8104855651a027f4a31a2c800ba35937eb8db5a77a2"
+        }
+      ]
+    },
+    {
+      "stage_id": "2_5d_stacking",
+      "realization": "Arrange four three-channel frames into a spatial panel with frame order3,0 / 1,2. Keep temporal quadrants fixed under spatial augmentation.",
+      "correction": "Replace the inaccurate fifteen-channel temporal stacking claim. The temporal network receives a three-channel spatial panel; the other branch receives a single three-channel frame.",
+      "source_anchors": [
+        {
+          "file": "sciona/contrails_temporal.py",
+          "symbol": "create_four_panels",
+          "line": 18,
+          "file_sha256": "10459120ae7700463b3a3a5f6857a131f96ce715dc15e89407689cb6ac1fec89"
+        },
+        {
+          "file": "sciona/contrails_temporal.py",
+          "symbol": "create_four_panels_tta",
+          "line": 30,
+          "file_sha256": "10459120ae7700463b3a3a5f6857a131f96ce715dc15e89407689cb6ac1fec89"
+        }
+      ]
+    },
+    {
+      "stage_id": "u_net_architecture",
+      "realization": "Train both full MaxViT/U-Net branches across every selected fold, preserving source decoder/head differences, shifted-label geometry, augmented-loss masking, AdamW, scheduling, validation-break timing and terminal checkpoint reload.",
+      "correction": "The source realization selects MaxViT rather than an interchangeable ConvNeXt alternative. It does not operate on a fifteen-channel input. Explicit shortened epochs and random initialization qualify execution only, not historical accuracy.",
+      "source_anchors": [
+        {
+          "file": "sciona/contrails_single_model.py",
+          "symbol": "Model",
+          "line": 46,
+          "file_sha256": "7e8c6aae4f73326a5a40b106f6e2f9057afe1a78fb0670602dea19003f263328"
+        },
+        {
+          "file": "sciona/contrails_temporal_model.py",
+          "symbol": "Model",
+          "line": 42,
+          "file_sha256": "c31ad4e3bce828e411b7eec24e4516fdb76d106056000aff0550099ea008bb39"
+        },
+        {
+          "file": "sciona/contrails_lifecycle.py",
+          "symbol": "run_lifecycle",
+          "line": 18,
+          "file_sha256": "ec0fdaf7b6c76b042e077bef65a2260dd1062c156e43e3767a86bb22bc74962f"
+        },
+        {
+          "file": "sciona/contrails_fold.py",
+          "symbol": "train_fold",
+          "line": 16,
+          "file_sha256": "577cc12b5c2afc9c27e7ce52c68613c2e56e46483fe1c1568d2a978595b80d10"
+        },
+        {
+          "file": "sciona/contrails_epoch.py",
+          "symbol": "train_epoch",
+          "line": 10,
+          "file_sha256": "79842180df794e59b201c561bc4b63639cbc177a131e0e6e0539df9e652084d8"
+        }
+      ]
+    },
+    {
+      "stage_id": "temporal_tta",
+      "realization": "Run eight-way spatial D4 probability averaging for each selected checkpoint; combine folds and branches using the exact unnormalized source weights and encode the strict0.5 decision as column-major run lengths.",
+      "correction": "Replace temporal-window shifting with spatial rotations/flips. Threshold diagnostics do not replace the fixed final threshold, and weighted outputs are not calibrated probabilities.",
+      "source_anchors": [
+        {
+          "file": "sciona/contrails_preprocessing.py",
+          "symbol": "SpatialTTA",
+          "line": 27,
+          "file_sha256": "f15593a2f17359969b3a8ff5f076ef18e004d2310753ca7e27512b71f7276e11"
+        },
+        {
+          "file": "sciona/contrails_temporal_inference.py",
+          "symbol": "Model",
+          "line": 70,
+          "file_sha256": "85c8bf1b70d36d29f4a621f38e37415c5b3e62174a2fb2fee2dc757b47cbb29a"
+        },
+        {
+          "file": "sciona/contrails_single_inference.py",
+          "symbol": "Model",
+          "line": 52,
+          "file_sha256": "64f2a8464904a2ea3195cd10e3e18f25ca15cd566bb50034ba99191fd7e8cada"
+        },
+        {
+          "file": "sciona/contrails_prediction.py",
+          "symbol": "ensemble_probabilities",
+          "line": 36,
+          "file_sha256": "ed96170e509aaf35ddd1c8104855651a027f4a31a2c800ba35937eb8db5a77a2"
+        },
+        {
+          "file": "sciona/contrails_prediction.py",
+          "symbol": "encode_mask",
+          "line": 60,
+          "file_sha256": "ed96170e509aaf35ddd1c8104855651a027f4a31a2c800ba35937eb8db5a77a2"
+        }
+      ]
+    }
+  ],
+  "reuse_decision": "Other aligned thermal-image segmentation tasks may reuse the recipe only when the source physical encoding, temporal order, target meaning, transformation invariances and fold assumptions are justified. Domain-neutral keys and arrays do not remove those assumptions. Preparation and execution remain recipe adapters; generic spatial augmentation or mask encoding would need independent provider contracts and qualification before separate selection.",
+  "limitations": [
+    "Shape and finiteness checks do not establish physical units, channel identity or temporal spacing. Arbitrary RGB or unrelated numeric channels do not satisfy the semantic contract merely by matching shape.",
+    "Caller must justify spatial transformation invariance and target alignment in any new application. This is a fixed two-branch recipe; generic temporal averaging is not implemented.",
+    "Distinct keys do not prove independent subjects, locations, times or arrays. Scoring participates in diagnostics and is not an independent final evaluation. Annotation means must retain their intended meaning.",
+    "Prepared state is neither deeply immutable nor a safe untrusted deserialization boundary. Callers must avoid mutation between preparation and execution; detached copying is not promised.",
+    "Weight shape checks do not certify provenance. No pretrained downloads or historical predictive parity. Callers must set num_workers=0 and bound Torch, native pools and OpenCV for the shared resource budget; source defaults do not enforce that budget.",
+    "The field named probabilities is a source-weighted sum that can exceed one; it is not a calibrated posterior. Diagnostic threshold sweeps do not replace the fixed final threshold. No trained model is returned for later reuse."
+  ],
+  "historical_source_review_sha256": "ce6ed79ddd355b81d80e8222c39ecf82ffa9b9a47a0508b01e22201631744f0f",
+  "reuse_reviewer_sha256": "e03d7aea87f13a5a9928e4c3cebdffccfcb99bf45b1fe2c5bccaed8c30d5cd0f",
+  "reviewer_sha256": "d59c0d0275c1ba45b376460a183b9ad108a80da46833b9451ab9d18315bfc0df",
+  "remaining": [
+    "Complete both full-model variants with explicit bounded resources and dependency integrity.",
+    "Review provider contracts and reconcile metadata with rollback gates.",
+    "Stage and execute the corrected stored original; qualify publication and served selection."
+  ]
+}
