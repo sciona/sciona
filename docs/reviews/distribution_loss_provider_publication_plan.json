@@ -1,0 +1,2092 @@
+{
+  "records": [
+    {
+      "artifact_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+      "fqdn": "sciona.atoms.ml.tensorflow_distribution_losses.clipped_laplace_score",
+      "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+      "content_hash": "b38663fb11890ce1968df7d1250b61937fcf7d144a0ad2ec2e59fb160b574534",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "targets",
+          "type_desc": "TensorFlow float32 Tensor or convertible float32 array",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "predictions",
+          "type_desc": "TensorFlow float32 Tensor or Variable or convertible float32 array",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "minimum_scale",
+          "type_desc": "float or int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Floor on high-minus-low spread, in target units. Crossed or negative spreads encounter this floor."
+        },
+        {
+          "direction": "input",
+          "ordinal": 3,
+          "name": "maximum_error",
+          "type_desc": "float or int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Cap on absolute point error, in target units. No unit conversion is performed."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "TensorFlow float32 scalar Tensor",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Scalar float32 Tensor: row mean of sqrt(2)*min(abs(target-point),cap)/max(high-low,floor) + log(sqrt(2)*max(high-low,floor)). Numeric score depends on the caller unit convention; the logarithm uses the numerical scale in those units. Piecewise differentiable, with TensorFlow subgradients at boundaries. No calibration guarantee. Concrete provisioned TensorFlow execution only; abstract witness rejects. No training, optimizer or state mutation. Extreme finite float32 inputs can overflow intermediate arithmetic; callers must check loss and gradients before updates. TensorFlow tensors and gradient tapes are in-process objects; JSON/HTTP serialization is not qualified."
+        }
+      ],
+      "operation": "Compute a mean clipped error-and-spread score with explicit scale floor and absolute-error cap.",
+      "plain_description": "Score point predictions and their spread using caller-chosen limits on error and minimum spread.",
+      "validity_bounds": "Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability. Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape. Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Floor on high-minus-low spread, in target units. Crossed or negative spreads encounter this floor. Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Cap on absolute point error, in target units. No unit conversion is performed. Scalar float32 Tensor: row mean of sqrt(2)*min(abs(target-point),cap)/max(high-low,floor) + log(sqrt(2)*max(high-low,floor)). Numeric score depends on the caller unit convention; the logarithm uses the numerical scale in those units. Piecewise differentiable, with TensorFlow subgradients at boundaries. No calibration guarantee. Concrete provisioned TensorFlow execution only; abstract witness rejects. No training, optimizer or state mutation. Extreme finite float32 inputs can overflow intermediate arithmetic; callers must check loss and gradients before updates. TensorFlow tensors and gradient tapes are in-process objects; JSON/HTTP serialization is not qualified.",
+      "reuse": "Continuous prediction objectives with explicit caller units and policy; synthetic duration and energy numerical examples. Application feature construction, model architecture, optimizer and calibration assessment remain separate.",
+      "registered_provider_dependencies": []
+    },
+    {
+      "artifact_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+      "fqdn": "sciona.atoms.ml.tensorflow_distribution_losses.mean_pinball",
+      "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+      "content_hash": "1aab2d391c4ef377ca1383094fb7744f5935ead635d232c0d8a2c5972cf9c21b",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "targets",
+          "type_desc": "TensorFlow float32 Tensor or convertible float32 array",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "predictions",
+          "type_desc": "TensorFlow float32 Tensor or Variable or convertible float32 array",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "quantiles",
+          "type_desc": "float32-convertible vector",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Shape (Q,), Q>0; every quantile strictly between zero and one after float32 conversion. Explicit column correspondence; sorting and uniqueness are not required or performed. Quantiles are dimensionless caller policy."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "TensorFlow float32 scalar Tensor",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Scalar float32 Tensor: arithmetic mean over all N*Q pinball terms, in target units. Differentiable almost everywhere; TensorFlow defines subgradients at ties. No calibration or prediction ordering guarantee. Concrete provisioned TensorFlow execution only; abstract witness rejects. No training, optimizer or state mutation. Extreme finite float32 inputs can overflow intermediate arithmetic; callers must check loss and gradients before updates. TensorFlow tensors and gradient tapes are in-process objects; JSON/HTTP serialization is not qualified."
+        }
+      ],
+      "operation": "Compute the mean asymmetric quantile loss over aligned rows and explicitly ordered quantile columns.",
+      "plain_description": "Score quantile predictions with caller-chosen penalties for underprediction and overprediction.",
+      "validity_bounds": "Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability. Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape. Shape (Q,), Q>0; every quantile strictly between zero and one after float32 conversion. Explicit column correspondence; sorting and uniqueness are not required or performed. Quantiles are dimensionless caller policy. Scalar float32 Tensor: arithmetic mean over all N*Q pinball terms, in target units. Differentiable almost everywhere; TensorFlow defines subgradients at ties. No calibration or prediction ordering guarantee. Concrete provisioned TensorFlow execution only; abstract witness rejects. No training, optimizer or state mutation. Extreme finite float32 inputs can overflow intermediate arithmetic; callers must check loss and gradients before updates. TensorFlow tensors and gradient tapes are in-process objects; JSON/HTTP serialization is not qualified.",
+      "reuse": "Continuous prediction objectives with explicit caller units and policy; synthetic duration and energy numerical examples. Application feature construction, model architecture, optimizer and calibration assessment remain separate.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "qualification": {
+    "format": "distribution-loss-semantics.v1",
+    "passed": true,
+    "approved": false,
+    "proposed_tier": 3,
+    "verdict": "acceptable_with_limits",
+    "catalog_mutations": 0,
+    "synthetic_only": true,
+    "providers": [
+      {
+        "artifact_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "fqdn": "sciona.atoms.ml.tensorflow_distribution_losses.clipped_laplace_score",
+        "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+        "content_hash": "b38663fb11890ce1968df7d1250b61937fcf7d144a0ad2ec2e59fb160b574534",
+        "interfaces": [
+          {
+            "direction": "input",
+            "ordinal": 0,
+            "name": "targets",
+            "type_desc": "TensorFlow float32 Tensor or convertible float32 array",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability."
+          },
+          {
+            "direction": "input",
+            "ordinal": 1,
+            "name": "predictions",
+            "type_desc": "TensorFlow float32 Tensor or Variable or convertible float32 array",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape."
+          },
+          {
+            "direction": "input",
+            "ordinal": 2,
+            "name": "minimum_scale",
+            "type_desc": "float or int",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Floor on high-minus-low spread, in target units. Crossed or negative spreads encounter this floor."
+          },
+          {
+            "direction": "input",
+            "ordinal": 3,
+            "name": "maximum_error",
+            "type_desc": "float or int",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Cap on absolute point error, in target units. No unit conversion is performed."
+          },
+          {
+            "direction": "output",
+            "ordinal": 0,
+            "name": "result",
+            "type_desc": "TensorFlow float32 scalar Tensor",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Scalar float32 Tensor: row mean of sqrt(2)*min(abs(target-point),cap)/max(high-low,floor) + log(sqrt(2)*max(high-low,floor)). Numeric score depends on the caller unit convention; the logarithm uses the numerical scale in those units. Piecewise differentiable, with TensorFlow subgradients at boundaries. No calibration guarantee. Concrete provisioned TensorFlow execution only; abstract witness rejects. No training, optimizer or state mutation. Extreme finite float32 inputs can overflow intermediate arithmetic; callers must check loss and gradients before updates. TensorFlow tensors and gradient tapes are in-process objects; JSON/HTTP serialization is not qualified."
+          }
+        ],
+        "operation": "Compute a mean clipped error-and-spread score with explicit scale floor and absolute-error cap.",
+        "plain_description": "Score point predictions and their spread using caller-chosen limits on error and minimum spread.",
+        "validity_bounds": "Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability. Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape. Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Floor on high-minus-low spread, in target units. Crossed or negative spreads encounter this floor. Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Cap on absolute point error, in target units. No unit conversion is performed. Scalar float32 Tensor: row mean of sqrt(2)*min(abs(target-point),cap)/max(high-low,floor) + log(sqrt(2)*max(high-low,floor)). Numeric score depends on the caller unit convention; the logarithm uses the numerical scale in those units. Piecewise differentiable, with TensorFlow subgradients at boundaries. No calibration guarantee. Concrete provisioned TensorFlow execution only; abstract witness rejects. No training, optimizer or state mutation. Extreme finite float32 inputs can overflow intermediate arithmetic; callers must check loss and gradients before updates. TensorFlow tensors and gradient tapes are in-process objects; JSON/HTTP serialization is not qualified.",
+        "reuse": "Continuous prediction objectives with explicit caller units and policy; synthetic duration and energy numerical examples. Application feature construction, model architecture, optimizer and calibration assessment remain separate.",
+        "registered_provider_dependencies": []
+      },
+      {
+        "artifact_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+        "fqdn": "sciona.atoms.ml.tensorflow_distribution_losses.mean_pinball",
+        "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+        "content_hash": "1aab2d391c4ef377ca1383094fb7744f5935ead635d232c0d8a2c5972cf9c21b",
+        "interfaces": [
+          {
+            "direction": "input",
+            "ordinal": 0,
+            "name": "targets",
+            "type_desc": "TensorFlow float32 Tensor or convertible float32 array",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability."
+          },
+          {
+            "direction": "input",
+            "ordinal": 1,
+            "name": "predictions",
+            "type_desc": "TensorFlow float32 Tensor or Variable or convertible float32 array",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape."
+          },
+          {
+            "direction": "input",
+            "ordinal": 2,
+            "name": "quantiles",
+            "type_desc": "float32-convertible vector",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Shape (Q,), Q>0; every quantile strictly between zero and one after float32 conversion. Explicit column correspondence; sorting and uniqueness are not required or performed. Quantiles are dimensionless caller policy."
+          },
+          {
+            "direction": "output",
+            "ordinal": 0,
+            "name": "result",
+            "type_desc": "TensorFlow float32 scalar Tensor",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Scalar float32 Tensor: arithmetic mean over all N*Q pinball terms, in target units. Differentiable almost everywhere; TensorFlow defines subgradients at ties. No calibration or prediction ordering guarantee. Concrete provisioned TensorFlow execution only; abstract witness rejects. No training, optimizer or state mutation. Extreme finite float32 inputs can overflow intermediate arithmetic; callers must check loss and gradients before updates. TensorFlow tensors and gradient tapes are in-process objects; JSON/HTTP serialization is not qualified."
+          }
+        ],
+        "operation": "Compute the mean asymmetric quantile loss over aligned rows and explicitly ordered quantile columns.",
+        "plain_description": "Score quantile predictions with caller-chosen penalties for underprediction and overprediction.",
+        "validity_bounds": "Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability. Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape. Shape (Q,), Q>0; every quantile strictly between zero and one after float32 conversion. Explicit column correspondence; sorting and uniqueness are not required or performed. Quantiles are dimensionless caller policy. Scalar float32 Tensor: arithmetic mean over all N*Q pinball terms, in target units. Differentiable almost everywhere; TensorFlow defines subgradients at ties. No calibration or prediction ordering guarantee. Concrete provisioned TensorFlow execution only; abstract witness rejects. No training, optimizer or state mutation. Extreme finite float32 inputs can overflow intermediate arithmetic; callers must check loss and gradients before updates. TensorFlow tensors and gradient tapes are in-process objects; JSON/HTTP serialization is not qualified.",
+        "reuse": "Continuous prediction objectives with explicit caller units and policy; synthetic duration and energy numerical examples. Application feature construction, model architecture, optimizer and calibration assessment remain separate.",
+        "registered_provider_dependencies": []
+      }
+    ],
+    "tests": {
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "software_sha256": {
+      "provider": "6d5e93c25ced4e359c38d44273612a0d6a92105d033dfb413a0b4e88692cd658",
+      "provider_tests": "bcf04624f0f3b39296091fbe9a0589c89f58c39cee803db61b44023f1ea9a1a7",
+      "provider_dependencies": "118a04efead6c9b220cc88099e72e580c53eb223c8b40bcb793ae49ca2266a1f",
+      "scripts/review_distribution_loss_semantics.py": "b3c0ddb49b0e5c7c139da06686cffd15ebcc364a8d4120f5da1ef83046b8e9ac",
+      "scripts/import_distribution_loss_drafts.py": "f46cf928549752321f7dfa2f9a7ff332e6856d03f4fe6dade02d3d373e267a18",
+      "scripts/plan_distribution_loss_intake.py": "78e73672b3143aa4fbc66e4f0c96e5045abe7d516d76c9057ae1d32a876bee75",
+      "scripts/review_osic_runtime_integrity.py": "4b2cbc1751fd5262eb6c4bdb32afb32fb9d4366aa23d937797cbf6ff22e80797",
+      "scripts/review_video_numeric_runtime.py": "f0e5acb6f7820467a521c8186a54eca0591cdcbc0125c66c446539c506cdb3ac"
+    },
+    "installed_packages": {
+      "absl-py": {
+        "version": "2.5.0",
+        "hashed_files_verified": 31,
+        "active_requirements": []
+      },
+      "annotated-types": {
+        "version": "0.7.0",
+        "hashed_files_verified": 7,
+        "active_requirements": []
+      },
+      "asttokens": {
+        "version": "2.4.1",
+        "hashed_files_verified": 13,
+        "active_requirements": [
+          "six>=1.12.0"
+        ]
+      },
+      "astunparse": {
+        "version": "1.6.3",
+        "hashed_files_verified": 11,
+        "active_requirements": [
+          "six<2.0,>=1.6.1",
+          "wheel<1.0,>=0.23.0"
+        ]
+      },
+      "certifi": {
+        "version": "2026.7.22",
+        "hashed_files_verified": 13,
+        "active_requirements": []
+      },
+      "charset-normalizer": {
+        "version": "3.5.1",
+        "hashed_files_verified": 23,
+        "active_requirements": []
+      },
+      "flatbuffers": {
+        "version": "25.12.19",
+        "hashed_files_verified": 14,
+        "active_requirements": []
+      },
+      "gast": {
+        "version": "0.7.0",
+        "hashed_files_verified": 13,
+        "active_requirements": []
+      },
+      "google-pasta": {
+        "version": "0.2.0",
+        "hashed_files_verified": 30,
+        "active_requirements": [
+          "six"
+        ]
+      },
+      "grpcio": {
+        "version": "1.83.1",
+        "hashed_files_verified": 67,
+        "active_requirements": [
+          "typing-extensions~=4.12"
+        ]
+      },
+      "h5py": {
+        "version": "3.16.0",
+        "hashed_files_verified": 103,
+        "active_requirements": [
+          "numpy>=1.21.2"
+        ]
+      },
+      "icontract": {
+        "version": "2.7.3",
+        "hashed_files_verified": 16,
+        "active_requirements": [
+          "asttokens<3,>=2",
+          "typing_extensions"
+        ]
+      },
+      "idna": {
+        "version": "3.19",
+        "hashed_files_verified": 18,
+        "active_requirements": []
+      },
+      "imageio": {
+        "version": "2.37.3",
+        "hashed_files_verified": 66,
+        "active_requirements": [
+          "numpy",
+          "pillow>=8.3.2"
+        ]
+      },
+      "joblib": {
+        "version": "1.5.3",
+        "hashed_files_verified": 143,
+        "active_requirements": []
+      },
+      "keras": {
+        "version": "3.15.1",
+        "hashed_files_verified": 910,
+        "active_requirements": [
+          "absl-py",
+          "h5py",
+          "ml-dtypes",
+          "namex",
+          "numpy",
+          "optree",
+          "packaging",
+          "rich"
+        ]
+      },
+      "lazy-loader": {
+        "version": "0.5",
+        "hashed_files_verified": 6,
+        "active_requirements": [
+          "packaging"
+        ]
+      },
+      "libclang": {
+        "version": "18.1.1",
+        "hashed_files_verified": 11,
+        "active_requirements": []
+      },
+      "markdown": {
+        "version": "3.10.3",
+        "hashed_files_verified": 41,
+        "active_requirements": []
+      },
+      "markdown-it-py": {
+        "version": "4.2.0",
+        "hashed_files_verified": 76,
+        "active_requirements": [
+          "mdurl~=0.1"
+        ]
+      },
+      "markupsafe": {
+        "version": "3.0.3",
+        "hashed_files_verified": 11,
+        "active_requirements": []
+      },
+      "mdurl": {
+        "version": "0.1.2",
+        "hashed_files_verified": 11,
+        "active_requirements": []
+      },
+      "ml-dtypes": {
+        "version": "0.6.0",
+        "hashed_files_verified": 11,
+        "active_requirements": [
+          "numpy>=2.0.0",
+          "numpy>=2.1.0; python_version >= \"3.13\""
+        ]
+      },
+      "namex": {
+        "version": "0.1.0",
+        "hashed_files_verified": 10,
+        "active_requirements": []
+      },
+      "networkx": {
+        "version": "3.6.1",
+        "hashed_files_verified": 602,
+        "active_requirements": []
+      },
+      "numpy": {
+        "version": "2.2.6",
+        "hashed_files_verified": 876,
+        "active_requirements": []
+      },
+      "opencv-python-headless": {
+        "version": "5.0.0.93",
+        "hashed_files_verified": 145,
+        "active_requirements": [
+          "numpy>=2; python_version >= \"3.9\""
+        ]
+      },
+      "opt-einsum": {
+        "version": "3.4.0",
+        "hashed_files_verified": 32,
+        "active_requirements": []
+      },
+      "optree": {
+        "version": "0.20.0",
+        "hashed_files_verified": 25,
+        "active_requirements": [
+          "typing-extensions>=4.10.0",
+          "typing-extensions>=4.12.0; python_version >= \"3.13\""
+        ]
+      },
+      "packaging": {
+        "version": "26.3",
+        "hashed_files_verified": 30,
+        "active_requirements": []
+      },
+      "pandas": {
+        "version": "2.3.3",
+        "hashed_files_verified": 1513,
+        "active_requirements": [
+          "numpy>=1.26.0; python_version >= \"3.12\"",
+          "python-dateutil>=2.8.2",
+          "pytz>=2020.1",
+          "tzdata>=2022.7"
+        ]
+      },
+      "pillow": {
+        "version": "12.3.0",
+        "hashed_files_verified": 140,
+        "active_requirements": []
+      },
+      "protobuf": {
+        "version": "6.33.5",
+        "hashed_files_verified": 60,
+        "active_requirements": []
+      },
+      "pydantic": {
+        "version": "2.12.5",
+        "hashed_files_verified": 111,
+        "active_requirements": [
+          "annotated-types>=0.6.0",
+          "pydantic-core==2.41.5",
+          "typing-extensions>=4.14.1",
+          "typing-inspection>=0.4.2"
+        ]
+      },
+      "pydantic-core": {
+        "version": "2.41.5",
+        "hashed_files_verified": 9,
+        "active_requirements": [
+          "typing-extensions>=4.14.1"
+        ]
+      },
+      "pygments": {
+        "version": "2.21.0",
+        "hashed_files_verified": 351,
+        "active_requirements": []
+      },
+      "python-dateutil": {
+        "version": "2.9.0.post0",
+        "hashed_files_verified": 25,
+        "active_requirements": [
+          "six>=1.5"
+        ]
+      },
+      "pytz": {
+        "version": "2026.1.post1",
+        "hashed_files_verified": 616,
+        "active_requirements": []
+      },
+      "requests": {
+        "version": "2.34.2",
+        "hashed_files_verified": 27,
+        "active_requirements": [
+          "certifi>=2023.5.7",
+          "charset_normalizer<4,>=2",
+          "idna<4,>=2.5",
+          "urllib3<3,>=1.26"
+        ]
+      },
+      "rich": {
+        "version": "15.0.0",
+        "hashed_files_verified": 106,
+        "active_requirements": [
+          "markdown-it-py>=2.2.0",
+          "pygments<3.0.0,>=2.13.0"
+        ]
+      },
+      "scikit-image": {
+        "version": "0.26.0",
+        "hashed_files_verified": 310,
+        "active_requirements": [
+          "imageio!=2.35.0,>=2.33",
+          "lazy-loader>=0.4",
+          "networkx>=3.0",
+          "numpy>=1.24",
+          "packaging>=21",
+          "pillow>=10.1",
+          "scipy>=1.11.4",
+          "tifffile>=2022.8.12"
+        ]
+      },
+      "scikit-learn": {
+        "version": "1.8.0",
+        "hashed_files_verified": 960,
+        "active_requirements": [
+          "joblib>=1.3.0",
+          "numpy>=1.24.1",
+          "scipy>=1.10.0",
+          "threadpoolctl>=3.2.0"
+        ]
+      },
+      "scipy": {
+        "version": "1.17.1",
+        "hashed_files_verified": 1423,
+        "active_requirements": [
+          "numpy<2.7,>=1.26.4"
+        ]
+      },
+      "setuptools": {
+        "version": "80.9.0",
+        "hashed_files_verified": 513,
+        "active_requirements": []
+      },
+      "six": {
+        "version": "1.17.0",
+        "hashed_files_verified": 6,
+        "active_requirements": []
+      },
+      "tensorboard": {
+        "version": "2.20.0",
+        "hashed_files_verified": 273,
+        "active_requirements": [
+          "absl-py>=0.4",
+          "grpcio>=1.48.2",
+          "markdown>=2.6.8",
+          "numpy>=1.12.0",
+          "packaging",
+          "pillow",
+          "protobuf!=4.24.0,>=3.19.6",
+          "setuptools>=41.0.0",
+          "tensorboard-data-server<0.8.0,>=0.7.0",
+          "werkzeug>=1.0.1"
+        ]
+      },
+      "tensorboard-data-server": {
+        "version": "0.7.2",
+        "hashed_files_verified": 6,
+        "active_requirements": []
+      },
+      "tensorflow": {
+        "version": "2.20.0",
+        "hashed_files_verified": 11548,
+        "active_requirements": [
+          "absl-py>=1.0.0",
+          "astunparse>=1.6.0",
+          "flatbuffers>=24.3.25",
+          "gast!=0.5.0,!=0.5.1,!=0.5.2,>=0.2.1",
+          "google_pasta>=0.1.1",
+          "grpcio<2.0,>=1.24.3",
+          "h5py>=3.11.0",
+          "keras>=3.10.0",
+          "libclang>=13.0.0",
+          "ml_dtypes<1.0.0,>=0.5.1",
+          "numpy>=1.26.0",
+          "opt_einsum>=2.3.2",
+          "packaging",
+          "protobuf>=5.28.0",
+          "requests<3,>=2.21.0",
+          "setuptools",
+          "six>=1.12.0",
+          "tensorboard~=2.20.0",
+          "termcolor>=1.1.0",
+          "typing_extensions>=3.6.6",
+          "wrapt>=1.11.0"
+        ]
+      },
+      "termcolor": {
+        "version": "3.3.0",
+        "hashed_files_verified": 9,
+        "active_requirements": []
+      },
+      "tf-keras": {
+        "version": "2.20.1",
+        "hashed_files_verified": 591,
+        "active_requirements": [
+          "tensorflow<2.21,>=2.20"
+        ]
+      },
+      "threadpoolctl": {
+        "version": "3.6.0",
+        "hashed_files_verified": 5,
+        "active_requirements": []
+      },
+      "tifffile": {
+        "version": "2026.4.11",
+        "hashed_files_verified": 21,
+        "active_requirements": [
+          "numpy>=2.0"
+        ]
+      },
+      "typing-extensions": {
+        "version": "4.16.0",
+        "hashed_files_verified": 6,
+        "active_requirements": []
+      },
+      "typing-inspection": {
+        "version": "0.4.2",
+        "hashed_files_verified": 9,
+        "active_requirements": [
+          "typing-extensions>=4.12.0"
+        ]
+      },
+      "tzdata": {
+        "version": "2025.3",
+        "hashed_files_verified": 633,
+        "active_requirements": []
+      },
+      "urllib3": {
+        "version": "2.7.0",
+        "hashed_files_verified": 43,
+        "active_requirements": []
+      },
+      "werkzeug": {
+        "version": "3.1.8",
+        "hashed_files_verified": 64,
+        "active_requirements": [
+          "markupsafe>=2.1.1"
+        ]
+      },
+      "wheel": {
+        "version": "0.48.0",
+        "hashed_files_verified": 22,
+        "active_requirements": [
+          "packaging>=24.0"
+        ]
+      },
+      "wrapt": {
+        "version": "2.4.1",
+        "hashed_files_verified": 22,
+        "active_requirements": []
+      }
+    },
+    "intake_plan_sha256": "accf9b5d9225a5a2daf391d49519458c7c1935bea563fe2c1952d24b56afed47",
+    "connected_execution_commit": "98113163",
+    "connected_execution_sha256": "e14d40a6e8a701129bf110bf6bcc428c6d8b8d42b6d80c5e80704c91c33f0e01",
+    "resource_policy": {
+      "native_threads": 1,
+      "workers": 1
+    },
+    "limitations": [
+      "Automated Tier 3 for concrete provisioned TensorFlow execution only; no human Tier 1 or empirical Tier 2 claim.",
+      "Caller establishes target units, row identity, column alignment and observation availability; no domain policy is inferred.",
+      "Pinball carries target units. The clipped score logarithm depends on the numerical unit convention; scores from different unit conventions cannot be compared directly.",
+      "Crossed predictions are permitted. Neither objective establishes calibrated uncertainty or ordered quantiles.",
+      "GradientTape must enclose the call; JSON transport, remote execution and abstract simulation do not preserve this qualified differentiable interface.",
+      "Finite float32 inputs may overflow intermediate arithmetic. Callers must check loss and gradients before optimizer updates.",
+      "Synthetic analytic tests and source comparisons qualify numerical behavior, not empirical transfer or the full OSIC workflow.",
+      "Installed RECORD integrity and dependency constraints do not authenticate publishers or qualify clean-platform installation or redistribution."
+    ]
+  },
+  "inserts": [
+    {
+      "table": "references_registry",
+      "keys": {
+        "ref_id": "distribution_loss-provider-review-v1"
+      },
+      "row": {
+        "ref_id": "distribution_loss-provider-review-v1",
+        "ref_type": "web",
+        "title": "Differentiable distribution loss implementation and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/43c24f6b/docs/reviews/distribution_loss_semantics.json"
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+        "direction": "input",
+        "name": "targets"
+      },
+      "row": {
+        "atom_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+        "direction": "input",
+        "ordinal": 0,
+        "name": "targets",
+        "type_desc": "TensorFlow float32 Tensor or convertible float32 array",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+        "name": "targets"
+      },
+      "row": {
+        "atom_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+        "name": "targets",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "TensorFlow float32 Tensor or convertible float32 array",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability.",
+        "dejargonized_description": "Caller supplies targets.",
+        "constraints_json": {
+          "parameter_contract": "Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability.",
+          "limitations": [
+            "Automated Tier 3 for concrete provisioned TensorFlow execution only; no human Tier 1 or empirical Tier 2 claim.",
+            "Caller establishes target units, row identity, column alignment and observation availability; no domain policy is inferred.",
+            "Pinball carries target units. The clipped score logarithm depends on the numerical unit convention; scores from different unit conventions cannot be compared directly.",
+            "Crossed predictions are permitted. Neither objective establishes calibrated uncertainty or ordered quantiles.",
+            "GradientTape must enclose the call; JSON transport, remote execution and abstract simulation do not preserve this qualified differentiable interface.",
+            "Finite float32 inputs may overflow intermediate arithmetic. Callers must check loss and gradients before optimizer updates.",
+            "Synthetic analytic tests and source comparisons qualify numerical behavior, not empirical transfer or the full OSIC workflow.",
+            "Installed RECORD integrity and dependency constraints do not authenticate publishers or qualify clean-platform installation or redistribution."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+        "direction": "input",
+        "name": "predictions"
+      },
+      "row": {
+        "atom_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+        "direction": "input",
+        "ordinal": 1,
+        "name": "predictions",
+        "type_desc": "TensorFlow float32 Tensor or Variable or convertible float32 array",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+        "name": "predictions"
+      },
+      "row": {
+        "atom_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+        "name": "predictions",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "TensorFlow float32 Tensor or Variable or convertible float32 array",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape.",
+        "dejargonized_description": "Caller supplies predictions.",
+        "constraints_json": {
+          "parameter_contract": "Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape.",
+          "limitations": [
+            "Automated Tier 3 for concrete provisioned TensorFlow execution only; no human Tier 1 or empirical Tier 2 claim.",
+            "Caller establishes target units, row identity, column alignment and observation availability; no domain policy is inferred.",
+            "Pinball carries target units. The clipped score logarithm depends on the numerical unit convention; scores from different unit conventions cannot be compared directly.",
+            "Crossed predictions are permitted. Neither objective establishes calibrated uncertainty or ordered quantiles.",
+            "GradientTape must enclose the call; JSON transport, remote execution and abstract simulation do not preserve this qualified differentiable interface.",
+            "Finite float32 inputs may overflow intermediate arithmetic. Callers must check loss and gradients before optimizer updates.",
+            "Synthetic analytic tests and source comparisons qualify numerical behavior, not empirical transfer or the full OSIC workflow.",
+            "Installed RECORD integrity and dependency constraints do not authenticate publishers or qualify clean-platform installation or redistribution."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+        "direction": "input",
+        "name": "minimum_scale"
+      },
+      "row": {
+        "atom_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+        "direction": "input",
+        "ordinal": 2,
+        "name": "minimum_scale",
+        "type_desc": "float or int",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Floor on high-minus-low spread, in target units. Crossed or negative spreads encounter this floor."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+        "name": "minimum_scale"
+      },
+      "row": {
+        "atom_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+        "name": "minimum_scale",
+        "position": 2,
+        "kind": "positional_or_keyword",
+        "type_desc": "float or int",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Floor on high-minus-low spread, in target units. Crossed or negative spreads encounter this floor.",
+        "dejargonized_description": "Caller supplies minimum scale.",
+        "constraints_json": {
+          "parameter_contract": "Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Floor on high-minus-low spread, in target units. Crossed or negative spreads encounter this floor.",
+          "limitations": [
+            "Automated Tier 3 for concrete provisioned TensorFlow execution only; no human Tier 1 or empirical Tier 2 claim.",
+            "Caller establishes target units, row identity, column alignment and observation availability; no domain policy is inferred.",
+            "Pinball carries target units. The clipped score logarithm depends on the numerical unit convention; scores from different unit conventions cannot be compared directly.",
+            "Crossed predictions are permitted. Neither objective establishes calibrated uncertainty or ordered quantiles.",
+            "GradientTape must enclose the call; JSON transport, remote execution and abstract simulation do not preserve this qualified differentiable interface.",
+            "Finite float32 inputs may overflow intermediate arithmetic. Callers must check loss and gradients before optimizer updates.",
+            "Synthetic analytic tests and source comparisons qualify numerical behavior, not empirical transfer or the full OSIC workflow.",
+            "Installed RECORD integrity and dependency constraints do not authenticate publishers or qualify clean-platform installation or redistribution."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+        "direction": "input",
+        "name": "maximum_error"
+      },
+      "row": {
+        "atom_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+        "direction": "input",
+        "ordinal": 3,
+        "name": "maximum_error",
+        "type_desc": "float or int",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Cap on absolute point error, in target units. No unit conversion is performed."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+        "name": "maximum_error"
+      },
+      "row": {
+        "atom_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+        "name": "maximum_error",
+        "position": 3,
+        "kind": "positional_or_keyword",
+        "type_desc": "float or int",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Cap on absolute point error, in target units. No unit conversion is performed.",
+        "dejargonized_description": "Caller supplies maximum error.",
+        "constraints_json": {
+          "parameter_contract": "Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Cap on absolute point error, in target units. No unit conversion is performed.",
+          "limitations": [
+            "Automated Tier 3 for concrete provisioned TensorFlow execution only; no human Tier 1 or empirical Tier 2 claim.",
+            "Caller establishes target units, row identity, column alignment and observation availability; no domain policy is inferred.",
+            "Pinball carries target units. The clipped score logarithm depends on the numerical unit convention; scores from different unit conventions cannot be compared directly.",
+            "Crossed predictions are permitted. Neither objective establishes calibrated uncertainty or ordered quantiles.",
+            "GradientTape must enclose the call; JSON transport, remote execution and abstract simulation do not preserve this qualified differentiable interface.",
+            "Finite float32 inputs may overflow intermediate arithmetic. Callers must check loss and gradients before optimizer updates.",
+            "Synthetic analytic tests and source comparisons qualify numerical behavior, not empirical transfer or the full OSIC workflow.",
+            "Installed RECORD integrity and dependency constraints do not authenticate publishers or qualify clean-platform installation or redistribution."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+        "direction": "output",
+        "name": "result"
+      },
+      "row": {
+        "atom_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+        "direction": "output",
+        "ordinal": 0,
+        "name": "result",
+        "type_desc": "TensorFlow float32 scalar Tensor",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Scalar float32 Tensor: row mean of sqrt(2)*min(abs(target-point),cap)/max(high-low,floor) + log(sqrt(2)*max(high-low,floor)). Numeric score depends on the caller unit convention; the logarithm uses the numerical scale in those units. Piecewise differentiable, with TensorFlow subgradients at boundaries. No calibration guarantee. Concrete provisioned TensorFlow execution only; abstract witness rejects. No training, optimizer or state mutation. Extreme finite float32 inputs can overflow intermediate arithmetic; callers must check loss and gradients before updates. TensorFlow tensors and gradient tapes are in-process objects; JSON/HTTP serialization is not qualified."
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "kind": "technical",
+        "language": "en",
+        "content": "Compute a mean clipped error-and-spread score with explicit scale floor and absolute-error cap. Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability. Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape. Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Floor on high-minus-low spread, in target units. Crossed or negative spreads encounter this floor. Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Cap on absolute point error, in target units. No unit conversion is performed. Scalar float32 Tensor: row mean of sqrt(2)*min(abs(target-point),cap)/max(high-low,floor) + log(sqrt(2)*max(high-low,floor)). Numeric score depends on the caller unit convention; the logarithm uses the numerical scale in those units. Piecewise differentiable, with TensorFlow subgradients at boundaries. No calibration guarantee. Concrete provisioned TensorFlow execution only; abstract witness rejects. No training, optimizer or state mutation. Extreme finite float32 inputs can overflow intermediate arithmetic; callers must check loss and gradients before updates. TensorFlow tensors and gradient tapes are in-process objects; JSON/HTTP serialization is not qualified. Continuous prediction objectives with explicit caller units and policy; synthetic duration and energy numerical examples. Application feature construction, model architecture, optimizer and calibration assessment remain separate.",
+        "generated_by": "distribution_loss-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.004032
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Score point predictions and their spread using caller-chosen limits on error and minimum spread. Accuracy on new problems must be checked separately.",
+        "generated_by": "distribution_loss-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "atom_references",
+      "keys": {
+        "atom_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "ref_key": "distribution_loss-provider-review-v1"
+      },
+      "row": {
+        "atom_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "ref_key": "distribution_loss-provider-review-v1",
+        "ref_id": "distribution_loss-provider-review-v1",
+        "title": "Differentiable distribution loss implementation and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/43c24f6b/docs/reviews/distribution_loss_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Compute a mean clipped error-and-spread score with explicit scale floor and absolute-error cap. Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability. Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape. Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Floor on high-minus-low spread, in target units. Crossed or negative spreads encounter this floor. Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Cap on absolute point error, in target units. No unit conversion is performed. Scalar float32 Tensor: row mean of sqrt(2)*min(abs(target-point),cap)/max(high-low,floor) + log(sqrt(2)*max(high-low,floor)). Numeric score depends on the caller unit convention; the logarithm uses the numerical scale in those units. Piecewise differentiable, with TensorFlow subgradients at boundaries. No calibration guarantee. Concrete provisioned TensorFlow execution only; abstract witness rejects. No training, optimizer or state mutation. Extreme finite float32 inputs can overflow intermediate arithmetic; callers must check loss and gradients before updates. TensorFlow tensors and gradient tapes are in-process objects; JSON/HTTP serialization is not qualified."
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+        "name": "targets"
+      },
+      "row": {
+        "artifact_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+        "name": "targets",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "TensorFlow float32 Tensor or convertible float32 array",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability.",
+        "dejargonized_description": "Caller supplies targets.",
+        "constraints_json": {
+          "parameter_contract": "Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability.",
+          "limitations": [
+            "Automated Tier 3 for concrete provisioned TensorFlow execution only; no human Tier 1 or empirical Tier 2 claim.",
+            "Caller establishes target units, row identity, column alignment and observation availability; no domain policy is inferred.",
+            "Pinball carries target units. The clipped score logarithm depends on the numerical unit convention; scores from different unit conventions cannot be compared directly.",
+            "Crossed predictions are permitted. Neither objective establishes calibrated uncertainty or ordered quantiles.",
+            "GradientTape must enclose the call; JSON transport, remote execution and abstract simulation do not preserve this qualified differentiable interface.",
+            "Finite float32 inputs may overflow intermediate arithmetic. Callers must check loss and gradients before optimizer updates.",
+            "Synthetic analytic tests and source comparisons qualify numerical behavior, not empirical transfer or the full OSIC workflow.",
+            "Installed RECORD integrity and dependency constraints do not authenticate publishers or qualify clean-platform installation or redistribution."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+        "name": "predictions"
+      },
+      "row": {
+        "artifact_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+        "name": "predictions",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "TensorFlow float32 Tensor or Variable or convertible float32 array",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape.",
+        "dejargonized_description": "Caller supplies predictions.",
+        "constraints_json": {
+          "parameter_contract": "Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape.",
+          "limitations": [
+            "Automated Tier 3 for concrete provisioned TensorFlow execution only; no human Tier 1 or empirical Tier 2 claim.",
+            "Caller establishes target units, row identity, column alignment and observation availability; no domain policy is inferred.",
+            "Pinball carries target units. The clipped score logarithm depends on the numerical unit convention; scores from different unit conventions cannot be compared directly.",
+            "Crossed predictions are permitted. Neither objective establishes calibrated uncertainty or ordered quantiles.",
+            "GradientTape must enclose the call; JSON transport, remote execution and abstract simulation do not preserve this qualified differentiable interface.",
+            "Finite float32 inputs may overflow intermediate arithmetic. Callers must check loss and gradients before optimizer updates.",
+            "Synthetic analytic tests and source comparisons qualify numerical behavior, not empirical transfer or the full OSIC workflow.",
+            "Installed RECORD integrity and dependency constraints do not authenticate publishers or qualify clean-platform installation or redistribution."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+        "name": "minimum_scale"
+      },
+      "row": {
+        "artifact_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+        "name": "minimum_scale",
+        "position": 2,
+        "kind": "positional_or_keyword",
+        "type_desc": "float or int",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Floor on high-minus-low spread, in target units. Crossed or negative spreads encounter this floor.",
+        "dejargonized_description": "Caller supplies minimum scale.",
+        "constraints_json": {
+          "parameter_contract": "Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Floor on high-minus-low spread, in target units. Crossed or negative spreads encounter this floor.",
+          "limitations": [
+            "Automated Tier 3 for concrete provisioned TensorFlow execution only; no human Tier 1 or empirical Tier 2 claim.",
+            "Caller establishes target units, row identity, column alignment and observation availability; no domain policy is inferred.",
+            "Pinball carries target units. The clipped score logarithm depends on the numerical unit convention; scores from different unit conventions cannot be compared directly.",
+            "Crossed predictions are permitted. Neither objective establishes calibrated uncertainty or ordered quantiles.",
+            "GradientTape must enclose the call; JSON transport, remote execution and abstract simulation do not preserve this qualified differentiable interface.",
+            "Finite float32 inputs may overflow intermediate arithmetic. Callers must check loss and gradients before optimizer updates.",
+            "Synthetic analytic tests and source comparisons qualify numerical behavior, not empirical transfer or the full OSIC workflow.",
+            "Installed RECORD integrity and dependency constraints do not authenticate publishers or qualify clean-platform installation or redistribution."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+        "name": "maximum_error"
+      },
+      "row": {
+        "artifact_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+        "name": "maximum_error",
+        "position": 3,
+        "kind": "positional_or_keyword",
+        "type_desc": "float or int",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Cap on absolute point error, in target units. No unit conversion is performed.",
+        "dejargonized_description": "Caller supplies maximum error.",
+        "constraints_json": {
+          "parameter_contract": "Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Cap on absolute point error, in target units. No unit conversion is performed.",
+          "limitations": [
+            "Automated Tier 3 for concrete provisioned TensorFlow execution only; no human Tier 1 or empirical Tier 2 claim.",
+            "Caller establishes target units, row identity, column alignment and observation availability; no domain policy is inferred.",
+            "Pinball carries target units. The clipped score logarithm depends on the numerical unit convention; scores from different unit conventions cannot be compared directly.",
+            "Crossed predictions are permitted. Neither objective establishes calibrated uncertainty or ordered quantiles.",
+            "GradientTape must enclose the call; JSON transport, remote execution and abstract simulation do not preserve this qualified differentiable interface.",
+            "Finite float32 inputs may overflow intermediate arithmetic. Callers must check loss and gradients before optimizer updates.",
+            "Synthetic analytic tests and source comparisons qualify numerical behavior, not empirical transfer or the full OSIC workflow.",
+            "Installed RECORD integrity and dependency constraints do not authenticate publishers or qualify clean-platform installation or redistribution."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "kind": "technical",
+        "language": "en",
+        "content": "Compute a mean clipped error-and-spread score with explicit scale floor and absolute-error cap. Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability. Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape. Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Floor on high-minus-low spread, in target units. Crossed or negative spreads encounter this floor. Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Cap on absolute point error, in target units. No unit conversion is performed. Scalar float32 Tensor: row mean of sqrt(2)*min(abs(target-point),cap)/max(high-low,floor) + log(sqrt(2)*max(high-low,floor)). Numeric score depends on the caller unit convention; the logarithm uses the numerical scale in those units. Piecewise differentiable, with TensorFlow subgradients at boundaries. No calibration guarantee. Concrete provisioned TensorFlow execution only; abstract witness rejects. No training, optimizer or state mutation. Extreme finite float32 inputs can overflow intermediate arithmetic; callers must check loss and gradients before updates. TensorFlow tensors and gradient tapes are in-process objects; JSON/HTTP serialization is not qualified. Continuous prediction objectives with explicit caller units and policy; synthetic duration and energy numerical examples. Application feature construction, model architecture, optimizer and calibration assessment remain separate.",
+        "generated_by": "distribution_loss-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.004032
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Score point predictions and their spread using caller-chosen limits on error and minimum spread. Accuracy on new problems must be checked separately.",
+        "generated_by": "distribution_loss-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "artifact_references",
+      "keys": {
+        "artifact_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "ref_key": "distribution_loss-provider-review-v1"
+      },
+      "row": {
+        "artifact_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+        "ref_key": "distribution_loss-provider-review-v1",
+        "ref_id": "distribution_loss-provider-review-v1",
+        "title": "Differentiable distribution loss implementation and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/43c24f6b/docs/reviews/distribution_loss_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Compute a mean clipped error-and-spread score with explicit scale floor and absolute-error cap. Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability. Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape. Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Floor on high-minus-low spread, in target units. Crossed or negative spreads encounter this floor. Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Cap on absolute point error, in target units. No unit conversion is performed. Scalar float32 Tensor: row mean of sqrt(2)*min(abs(target-point),cap)/max(high-low,floor) + log(sqrt(2)*max(high-low,floor)). Numeric score depends on the caller unit convention; the logarithm uses the numerical scale in those units. Piecewise differentiable, with TensorFlow subgradients at boundaries. No calibration guarantee. Concrete provisioned TensorFlow execution only; abstract witness rejects. No training, optimizer or state mutation. Extreme finite float32 inputs can overflow intermediate arithmetic; callers must check loss and gradients before updates. TensorFlow tensors and gradient tapes are in-process objects; JSON/HTTP serialization is not qualified."
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+        "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+        "direction": "input",
+        "name": "targets"
+      },
+      "row": {
+        "atom_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+        "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+        "direction": "input",
+        "ordinal": 0,
+        "name": "targets",
+        "type_desc": "TensorFlow float32 Tensor or convertible float32 array",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+        "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+        "name": "targets"
+      },
+      "row": {
+        "atom_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+        "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+        "name": "targets",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "TensorFlow float32 Tensor or convertible float32 array",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability.",
+        "dejargonized_description": "Caller supplies targets.",
+        "constraints_json": {
+          "parameter_contract": "Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability.",
+          "limitations": [
+            "Automated Tier 3 for concrete provisioned TensorFlow execution only; no human Tier 1 or empirical Tier 2 claim.",
+            "Caller establishes target units, row identity, column alignment and observation availability; no domain policy is inferred.",
+            "Pinball carries target units. The clipped score logarithm depends on the numerical unit convention; scores from different unit conventions cannot be compared directly.",
+            "Crossed predictions are permitted. Neither objective establishes calibrated uncertainty or ordered quantiles.",
+            "GradientTape must enclose the call; JSON transport, remote execution and abstract simulation do not preserve this qualified differentiable interface.",
+            "Finite float32 inputs may overflow intermediate arithmetic. Callers must check loss and gradients before optimizer updates.",
+            "Synthetic analytic tests and source comparisons qualify numerical behavior, not empirical transfer or the full OSIC workflow.",
+            "Installed RECORD integrity and dependency constraints do not authenticate publishers or qualify clean-platform installation or redistribution."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+        "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+        "direction": "input",
+        "name": "predictions"
+      },
+      "row": {
+        "atom_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+        "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+        "direction": "input",
+        "ordinal": 1,
+        "name": "predictions",
+        "type_desc": "TensorFlow float32 Tensor or Variable or convertible float32 array",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+        "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+        "name": "predictions"
+      },
+      "row": {
+        "atom_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+        "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+        "name": "predictions",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "TensorFlow float32 Tensor or Variable or convertible float32 array",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape.",
+        "dejargonized_description": "Caller supplies predictions.",
+        "constraints_json": {
+          "parameter_contract": "Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape.",
+          "limitations": [
+            "Automated Tier 3 for concrete provisioned TensorFlow execution only; no human Tier 1 or empirical Tier 2 claim.",
+            "Caller establishes target units, row identity, column alignment and observation availability; no domain policy is inferred.",
+            "Pinball carries target units. The clipped score logarithm depends on the numerical unit convention; scores from different unit conventions cannot be compared directly.",
+            "Crossed predictions are permitted. Neither objective establishes calibrated uncertainty or ordered quantiles.",
+            "GradientTape must enclose the call; JSON transport, remote execution and abstract simulation do not preserve this qualified differentiable interface.",
+            "Finite float32 inputs may overflow intermediate arithmetic. Callers must check loss and gradients before optimizer updates.",
+            "Synthetic analytic tests and source comparisons qualify numerical behavior, not empirical transfer or the full OSIC workflow.",
+            "Installed RECORD integrity and dependency constraints do not authenticate publishers or qualify clean-platform installation or redistribution."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+        "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+        "direction": "input",
+        "name": "quantiles"
+      },
+      "row": {
+        "atom_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+        "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+        "direction": "input",
+        "ordinal": 2,
+        "name": "quantiles",
+        "type_desc": "float32-convertible vector",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Shape (Q,), Q>0; every quantile strictly between zero and one after float32 conversion. Explicit column correspondence; sorting and uniqueness are not required or performed. Quantiles are dimensionless caller policy."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+        "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+        "name": "quantiles"
+      },
+      "row": {
+        "atom_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+        "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+        "name": "quantiles",
+        "position": 2,
+        "kind": "positional_or_keyword",
+        "type_desc": "float32-convertible vector",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Shape (Q,), Q>0; every quantile strictly between zero and one after float32 conversion. Explicit column correspondence; sorting and uniqueness are not required or performed. Quantiles are dimensionless caller policy.",
+        "dejargonized_description": "Caller supplies quantiles.",
+        "constraints_json": {
+          "parameter_contract": "Shape (Q,), Q>0; every quantile strictly between zero and one after float32 conversion. Explicit column correspondence; sorting and uniqueness are not required or performed. Quantiles are dimensionless caller policy.",
+          "limitations": [
+            "Automated Tier 3 for concrete provisioned TensorFlow execution only; no human Tier 1 or empirical Tier 2 claim.",
+            "Caller establishes target units, row identity, column alignment and observation availability; no domain policy is inferred.",
+            "Pinball carries target units. The clipped score logarithm depends on the numerical unit convention; scores from different unit conventions cannot be compared directly.",
+            "Crossed predictions are permitted. Neither objective establishes calibrated uncertainty or ordered quantiles.",
+            "GradientTape must enclose the call; JSON transport, remote execution and abstract simulation do not preserve this qualified differentiable interface.",
+            "Finite float32 inputs may overflow intermediate arithmetic. Callers must check loss and gradients before optimizer updates.",
+            "Synthetic analytic tests and source comparisons qualify numerical behavior, not empirical transfer or the full OSIC workflow.",
+            "Installed RECORD integrity and dependency constraints do not authenticate publishers or qualify clean-platform installation or redistribution."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+        "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+        "direction": "output",
+        "name": "result"
+      },
+      "row": {
+        "atom_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+        "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+        "direction": "output",
+        "ordinal": 0,
+        "name": "result",
+        "type_desc": "TensorFlow float32 scalar Tensor",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Scalar float32 Tensor: arithmetic mean over all N*Q pinball terms, in target units. Differentiable almost everywhere; TensorFlow defines subgradients at ties. No calibration or prediction ordering guarantee. Concrete provisioned TensorFlow execution only; abstract witness rejects. No training, optimizer or state mutation. Extreme finite float32 inputs can overflow intermediate arithmetic; callers must check loss and gradients before updates. TensorFlow tensors and gradient tapes are in-process objects; JSON/HTTP serialization is not qualified."
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+        "kind": "technical",
+        "language": "en",
+        "content": "Compute the mean asymmetric quantile loss over aligned rows and explicitly ordered quantile columns. Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability. Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape. Shape (Q,), Q>0; every quantile strictly between zero and one after float32 conversion. Explicit column correspondence; sorting and uniqueness are not required or performed. Quantiles are dimensionless caller policy. Scalar float32 Tensor: arithmetic mean over all N*Q pinball terms, in target units. Differentiable almost everywhere; TensorFlow defines subgradients at ties. No calibration or prediction ordering guarantee. Concrete provisioned TensorFlow execution only; abstract witness rejects. No training, optimizer or state mutation. Extreme finite float32 inputs can overflow intermediate arithmetic; callers must check loss and gradients before updates. TensorFlow tensors and gradient tapes are in-process objects; JSON/HTTP serialization is not qualified. Continuous prediction objectives with explicit caller units and policy; synthetic duration and energy numerical examples. Application feature construction, model architecture, optimizer and calibration assessment remain separate.",
+        "generated_by": "distribution_loss-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Score quantile predictions with caller-chosen penalties for underprediction and overprediction. Accuracy on new problems must be checked separately.",
+        "generated_by": "distribution_loss-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.055556
+      }
+    },
+    {
+      "table": "atom_references",
+      "keys": {
+        "atom_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+        "ref_key": "distribution_loss-provider-review-v1"
+      },
+      "row": {
+        "atom_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+        "ref_key": "distribution_loss-provider-review-v1",
+        "ref_id": "distribution_loss-provider-review-v1",
+        "title": "Differentiable distribution loss implementation and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/43c24f6b/docs/reviews/distribution_loss_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Compute the mean asymmetric quantile loss over aligned rows and explicitly ordered quantile columns. Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability. Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape. Shape (Q,), Q>0; every quantile strictly between zero and one after float32 conversion. Explicit column correspondence; sorting and uniqueness are not required or performed. Quantiles are dimensionless caller policy. Scalar float32 Tensor: arithmetic mean over all N*Q pinball terms, in target units. Differentiable almost everywhere; TensorFlow defines subgradients at ties. No calibration or prediction ordering guarantee. Concrete provisioned TensorFlow execution only; abstract witness rejects. No training, optimizer or state mutation. Extreme finite float32 inputs can overflow intermediate arithmetic; callers must check loss and gradients before updates. TensorFlow tensors and gradient tapes are in-process objects; JSON/HTTP serialization is not qualified."
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+        "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+        "name": "targets"
+      },
+      "row": {
+        "artifact_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+        "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+        "name": "targets",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "TensorFlow float32 Tensor or convertible float32 array",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability.",
+        "dejargonized_description": "Caller supplies targets.",
+        "constraints_json": {
+          "parameter_contract": "Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability.",
+          "limitations": [
+            "Automated Tier 3 for concrete provisioned TensorFlow execution only; no human Tier 1 or empirical Tier 2 claim.",
+            "Caller establishes target units, row identity, column alignment and observation availability; no domain policy is inferred.",
+            "Pinball carries target units. The clipped score logarithm depends on the numerical unit convention; scores from different unit conventions cannot be compared directly.",
+            "Crossed predictions are permitted. Neither objective establishes calibrated uncertainty or ordered quantiles.",
+            "GradientTape must enclose the call; JSON transport, remote execution and abstract simulation do not preserve this qualified differentiable interface.",
+            "Finite float32 inputs may overflow intermediate arithmetic. Callers must check loss and gradients before optimizer updates.",
+            "Synthetic analytic tests and source comparisons qualify numerical behavior, not empirical transfer or the full OSIC workflow.",
+            "Installed RECORD integrity and dependency constraints do not authenticate publishers or qualify clean-platform installation or redistribution."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+        "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+        "name": "predictions"
+      },
+      "row": {
+        "artifact_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+        "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+        "name": "predictions",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "TensorFlow float32 Tensor or Variable or convertible float32 array",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape.",
+        "dejargonized_description": "Caller supplies predictions.",
+        "constraints_json": {
+          "parameter_contract": "Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape.",
+          "limitations": [
+            "Automated Tier 3 for concrete provisioned TensorFlow execution only; no human Tier 1 or empirical Tier 2 claim.",
+            "Caller establishes target units, row identity, column alignment and observation availability; no domain policy is inferred.",
+            "Pinball carries target units. The clipped score logarithm depends on the numerical unit convention; scores from different unit conventions cannot be compared directly.",
+            "Crossed predictions are permitted. Neither objective establishes calibrated uncertainty or ordered quantiles.",
+            "GradientTape must enclose the call; JSON transport, remote execution and abstract simulation do not preserve this qualified differentiable interface.",
+            "Finite float32 inputs may overflow intermediate arithmetic. Callers must check loss and gradients before optimizer updates.",
+            "Synthetic analytic tests and source comparisons qualify numerical behavior, not empirical transfer or the full OSIC workflow.",
+            "Installed RECORD integrity and dependency constraints do not authenticate publishers or qualify clean-platform installation or redistribution."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+        "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+        "name": "quantiles"
+      },
+      "row": {
+        "artifact_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+        "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+        "name": "quantiles",
+        "position": 2,
+        "kind": "positional_or_keyword",
+        "type_desc": "float32-convertible vector",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Shape (Q,), Q>0; every quantile strictly between zero and one after float32 conversion. Explicit column correspondence; sorting and uniqueness are not required or performed. Quantiles are dimensionless caller policy.",
+        "dejargonized_description": "Caller supplies quantiles.",
+        "constraints_json": {
+          "parameter_contract": "Shape (Q,), Q>0; every quantile strictly between zero and one after float32 conversion. Explicit column correspondence; sorting and uniqueness are not required or performed. Quantiles are dimensionless caller policy.",
+          "limitations": [
+            "Automated Tier 3 for concrete provisioned TensorFlow execution only; no human Tier 1 or empirical Tier 2 claim.",
+            "Caller establishes target units, row identity, column alignment and observation availability; no domain policy is inferred.",
+            "Pinball carries target units. The clipped score logarithm depends on the numerical unit convention; scores from different unit conventions cannot be compared directly.",
+            "Crossed predictions are permitted. Neither objective establishes calibrated uncertainty or ordered quantiles.",
+            "GradientTape must enclose the call; JSON transport, remote execution and abstract simulation do not preserve this qualified differentiable interface.",
+            "Finite float32 inputs may overflow intermediate arithmetic. Callers must check loss and gradients before optimizer updates.",
+            "Synthetic analytic tests and source comparisons qualify numerical behavior, not empirical transfer or the full OSIC workflow.",
+            "Installed RECORD integrity and dependency constraints do not authenticate publishers or qualify clean-platform installation or redistribution."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+        "kind": "technical",
+        "language": "en",
+        "content": "Compute the mean asymmetric quantile loss over aligned rows and explicitly ordered quantile columns. Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability. Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape. Shape (Q,), Q>0; every quantile strictly between zero and one after float32 conversion. Explicit column correspondence; sorting and uniqueness are not required or performed. Quantiles are dimensionless caller policy. Scalar float32 Tensor: arithmetic mean over all N*Q pinball terms, in target units. Differentiable almost everywhere; TensorFlow defines subgradients at ties. No calibration or prediction ordering guarantee. Concrete provisioned TensorFlow execution only; abstract witness rejects. No training, optimizer or state mutation. Extreme finite float32 inputs can overflow intermediate arithmetic; callers must check loss and gradients before updates. TensorFlow tensors and gradient tapes are in-process objects; JSON/HTTP serialization is not qualified. Continuous prediction objectives with explicit caller units and policy; synthetic duration and energy numerical examples. Application feature construction, model architecture, optimizer and calibration assessment remain separate.",
+        "generated_by": "distribution_loss-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Score quantile predictions with caller-chosen penalties for underprediction and overprediction. Accuracy on new problems must be checked separately.",
+        "generated_by": "distribution_loss-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.055556
+      }
+    },
+    {
+      "table": "artifact_references",
+      "keys": {
+        "artifact_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+        "ref_key": "distribution_loss-provider-review-v1"
+      },
+      "row": {
+        "artifact_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+        "ref_key": "distribution_loss-provider-review-v1",
+        "ref_id": "distribution_loss-provider-review-v1",
+        "title": "Differentiable distribution loss implementation and synthetic qualification",
+        "url": "https://github.com/sciona/sciona/blob/43c24f6b/docs/reviews/distribution_loss_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Compute the mean asymmetric quantile loss over aligned rows and explicitly ordered quantile columns. Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability. Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape. Shape (Q,), Q>0; every quantile strictly between zero and one after float32 conversion. Explicit column correspondence; sorting and uniqueness are not required or performed. Quantiles are dimensionless caller policy. Scalar float32 Tensor: arithmetic mean over all N*Q pinball terms, in target units. Differentiable almost everywhere; TensorFlow defines subgradients at ties. No calibration or prediction ordering guarantee. Concrete provisioned TensorFlow execution only; abstract witness rejects. No training, optimizer or state mutation. Extreme finite float32 inputs can overflow intermediate arithmetic; callers must check loss and gradients before updates. TensorFlow tensors and gradient tapes are in-process objects; JSON/HTTP serialization is not qualified."
+      }
+    }
+  ],
+  "rollups": [
+    {
+      "table": "atom_audit_rollups",
+      "key": "atom_id",
+      "identity": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 for concrete provisioned TensorFlow execution only; no human Tier 1 or empirical Tier 2 claim.",
+          "Caller establishes target units, row identity, column alignment and observation availability; no domain policy is inferred.",
+          "Pinball carries target units. The clipped score logarithm depends on the numerical unit convention; scores from different unit conventions cannot be compared directly.",
+          "Crossed predictions are permitted. Neither objective establishes calibrated uncertainty or ordered quantiles.",
+          "GradientTape must enclose the call; JSON transport, remote execution and abstract simulation do not preserve this qualified differentiable interface.",
+          "Finite float32 inputs may overflow intermediate arithmetic. Callers must check loss and gradients before optimizer updates.",
+          "Synthetic analytic tests and source comparisons qualify numerical behavior, not empirical transfer or the full OSIC workflow.",
+          "Installed RECORD integrity and dependency constraints do not authenticate publishers or qualify clean-platform installation or redistribution.",
+          "Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability. Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape. Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Floor on high-minus-low spread, in target units. Crossed or negative spreads encounter this floor. Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Cap on absolute point error, in target units. No unit conversion is performed. Scalar float32 Tensor: row mean of sqrt(2)*min(abs(target-point),cap)/max(high-low,floor) + log(sqrt(2)*max(high-low,floor)). Numeric score depends on the caller unit convention; the logarithm uses the numerical scale in those units. Piecewise differentiable, with TensorFlow subgradients at boundaries. No calibration guarantee. Concrete provisioned TensorFlow execution only; abstract witness rejects. No training, optimizer or state mutation. Extreme finite float32 inputs can overflow intermediate arithmetic; callers must check loss and gradients before updates. TensorFlow tensors and gradient tapes are in-process objects; JSON/HTTP serialization is not qualified."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "artifact_audit_rollups",
+      "key": "artifact_id",
+      "identity": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 for concrete provisioned TensorFlow execution only; no human Tier 1 or empirical Tier 2 claim.",
+          "Caller establishes target units, row identity, column alignment and observation availability; no domain policy is inferred.",
+          "Pinball carries target units. The clipped score logarithm depends on the numerical unit convention; scores from different unit conventions cannot be compared directly.",
+          "Crossed predictions are permitted. Neither objective establishes calibrated uncertainty or ordered quantiles.",
+          "GradientTape must enclose the call; JSON transport, remote execution and abstract simulation do not preserve this qualified differentiable interface.",
+          "Finite float32 inputs may overflow intermediate arithmetic. Callers must check loss and gradients before optimizer updates.",
+          "Synthetic analytic tests and source comparisons qualify numerical behavior, not empirical transfer or the full OSIC workflow.",
+          "Installed RECORD integrity and dependency constraints do not authenticate publishers or qualify clean-platform installation or redistribution.",
+          "Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability. Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape. Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Floor on high-minus-low spread, in target units. Crossed or negative spreads encounter this floor. Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Cap on absolute point error, in target units. No unit conversion is performed. Scalar float32 Tensor: row mean of sqrt(2)*min(abs(target-point),cap)/max(high-low,floor) + log(sqrt(2)*max(high-low,floor)). Numeric score depends on the caller unit convention; the logarithm uses the numerical scale in those units. Piecewise differentiable, with TensorFlow subgradients at boundaries. No calibration guarantee. Concrete provisioned TensorFlow execution only; abstract witness rejects. No training, optimizer or state mutation. Extreme finite float32 inputs can overflow intermediate arithmetic; callers must check loss and gradients before updates. TensorFlow tensors and gradient tapes are in-process objects; JSON/HTTP serialization is not qualified."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "atom_audit_rollups",
+      "key": "atom_id",
+      "identity": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 for concrete provisioned TensorFlow execution only; no human Tier 1 or empirical Tier 2 claim.",
+          "Caller establishes target units, row identity, column alignment and observation availability; no domain policy is inferred.",
+          "Pinball carries target units. The clipped score logarithm depends on the numerical unit convention; scores from different unit conventions cannot be compared directly.",
+          "Crossed predictions are permitted. Neither objective establishes calibrated uncertainty or ordered quantiles.",
+          "GradientTape must enclose the call; JSON transport, remote execution and abstract simulation do not preserve this qualified differentiable interface.",
+          "Finite float32 inputs may overflow intermediate arithmetic. Callers must check loss and gradients before optimizer updates.",
+          "Synthetic analytic tests and source comparisons qualify numerical behavior, not empirical transfer or the full OSIC workflow.",
+          "Installed RECORD integrity and dependency constraints do not authenticate publishers or qualify clean-platform installation or redistribution.",
+          "Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability. Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape. Shape (Q,), Q>0; every quantile strictly between zero and one after float32 conversion. Explicit column correspondence; sorting and uniqueness are not required or performed. Quantiles are dimensionless caller policy. Scalar float32 Tensor: arithmetic mean over all N*Q pinball terms, in target units. Differentiable almost everywhere; TensorFlow defines subgradients at ties. No calibration or prediction ordering guarantee. Concrete provisioned TensorFlow execution only; abstract witness rejects. No training, optimizer or state mutation. Extreme finite float32 inputs can overflow intermediate arithmetic; callers must check loss and gradients before updates. TensorFlow tensors and gradient tapes are in-process objects; JSON/HTTP serialization is not qualified."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "artifact_audit_rollups",
+      "key": "artifact_id",
+      "identity": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 for concrete provisioned TensorFlow execution only; no human Tier 1 or empirical Tier 2 claim.",
+          "Caller establishes target units, row identity, column alignment and observation availability; no domain policy is inferred.",
+          "Pinball carries target units. The clipped score logarithm depends on the numerical unit convention; scores from different unit conventions cannot be compared directly.",
+          "Crossed predictions are permitted. Neither objective establishes calibrated uncertainty or ordered quantiles.",
+          "GradientTape must enclose the call; JSON transport, remote execution and abstract simulation do not preserve this qualified differentiable interface.",
+          "Finite float32 inputs may overflow intermediate arithmetic. Callers must check loss and gradients before optimizer updates.",
+          "Synthetic analytic tests and source comparisons qualify numerical behavior, not empirical transfer or the full OSIC workflow.",
+          "Installed RECORD integrity and dependency constraints do not authenticate publishers or qualify clean-platform installation or redistribution.",
+          "Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability. Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape. Shape (Q,), Q>0; every quantile strictly between zero and one after float32 conversion. Explicit column correspondence; sorting and uniqueness are not required or performed. Quantiles are dimensionless caller policy. Scalar float32 Tensor: arithmetic mean over all N*Q pinball terms, in target units. Differentiable almost everywhere; TensorFlow defines subgradients at ties. No calibration or prediction ordering guarantee. Concrete provisioned TensorFlow execution only; abstract witness rejects. No training, optimizer or state mutation. Extreme finite float32 inputs can overflow intermediate arithmetic; callers must check loss and gradients before updates. TensorFlow tensors and gradient tapes are in-process objects; JSON/HTTP serialization is not qualified."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    }
+  ],
+  "states": {
+    "c645c2e2-5333-5658-ad96-b0ffff1282dd": {
+      "atom": {
+        "status": "flagged",
+        "is_publishable": false
+      },
+      "artifact": {
+        "status": "draft",
+        "is_publishable": false
+      }
+    },
+    "21a7030b-209c-5642-a812-b8a766e4b9cb": {
+      "atom": {
+        "status": "flagged",
+        "is_publishable": false
+      },
+      "artifact": {
+        "status": "draft",
+        "is_publishable": false
+      }
+    }
+  },
+  "before": {
+    "atoms": "72c87b7091dbd23c40791a098e35b05ff087064bc899a92435d3f46944843271",
+    "artifacts": "134557ad8568cca27a2248b2eb246d4927b73a7a73bc0d1506ea13710bb6b393",
+    "atom_versions": "ac7005b0a004a09c8c3be1770dae8fd46c3aa293256b0e6cc1673832136e2f9a",
+    "artifact_versions": "060f0da077c1a7dde3c0f10f32af840a80326926b12fcf4af765a82cb3aaef61",
+    "atom_io_specs": "65123ef77bbefb13c1ae17d6002e7553c5c05fb24a23452b91f1f5940a3fa07b",
+    "artifact_io_specs": "7258e22ab7efd6f77fbd0d6605e38fcbe6e2f1986ab82bdc648e50e3226c0b02",
+    "atom_parameters": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_parameters": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_descriptions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_descriptions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_references": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_references": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_audit_rollups": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_audit_rollups": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_audit_evidence": "90beac75434e0dd5f7458bdc23be84b20ca9aa5db58edd93b4a8caae25c68ba0",
+    "artifact_dependencies": []
+  },
+  "preserved": {
+    "atom_versions": [
+      {
+        "row": {
+          "s3_key": "",
+          "semver": "0.0.0+local.1aab2d391c4e",
+          "atom_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+          "is_latest": true,
+          "created_at": "2026-11-10T23:04:25.304968+00:00",
+          "trust_tier": 3,
+          "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+          "fingerprint": "11d102286e817465496719d2b414408e44a097a48a2f24c46f9c8e17a299cd7d",
+          "content_hash": "1aab2d391c4ef377ca1383094fb7744f5935ead635d232c0d8a2c5972cf9c21b",
+          "derives_from": null
+        }
+      },
+      {
+        "row": {
+          "s3_key": "",
+          "semver": "0.0.0+local.b38663fb1189",
+          "atom_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+          "is_latest": true,
+          "created_at": "2026-11-10T23:04:25.304968+00:00",
+          "trust_tier": 3,
+          "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+          "fingerprint": "3bd1be064faff0aa390eab3e74433e3c8349fe3ee9859d9fd614525b0e253572",
+          "content_hash": "b38663fb11890ce1968df7d1250b61937fcf7d144a0ad2ec2e59fb160b574534",
+          "derives_from": null
+        }
+      }
+    ],
+    "atom_parameters": [],
+    "atom_references": [],
+    "atom_io_specs": [
+      {
+        "row": {
+          "name": "maximum_error",
+          "atom_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+          "ordinal": 3,
+          "required": true,
+          "direction": "input",
+          "type_desc": "float or int",
+          "io_spec_id": "b20175d8-35a9-4b4b-b02a-cdbb84e4b834",
+          "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+          "constraints": "Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Cap on absolute point error, in target units. No unit conversion is performed.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "minimum_scale",
+          "atom_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+          "ordinal": 2,
+          "required": true,
+          "direction": "input",
+          "type_desc": "float or int",
+          "io_spec_id": "43a8ce73-feac-46f0-a581-1027f741dc32",
+          "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+          "constraints": "Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Floor on high-minus-low spread, in target units. Crossed or negative spreads encounter this floor.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "predictions",
+          "atom_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "TensorFlow float32 Tensor or Variable or convertible float32 array",
+          "io_spec_id": "d76baee3-db3d-49ab-9171-ed223c67e439",
+          "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+          "constraints": "Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "predictions",
+          "atom_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "TensorFlow float32 Tensor or Variable or convertible float32 array",
+          "io_spec_id": "95dc8909-ba7a-41bf-8ada-5c8504663561",
+          "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+          "constraints": "Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "quantiles",
+          "atom_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+          "ordinal": 2,
+          "required": true,
+          "direction": "input",
+          "type_desc": "float32-convertible vector",
+          "io_spec_id": "d73333fa-ed5f-4de4-a12c-162950ceed5a",
+          "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+          "constraints": "Shape (Q,), Q>0; every quantile strictly between zero and one after float32 conversion. Explicit column correspondence; sorting and uniqueness are not required or performed. Quantiles are dimensionless caller policy.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "result",
+          "atom_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "TensorFlow float32 scalar Tensor",
+          "io_spec_id": "3b34c51a-4f47-4338-a9ac-2913854bc029",
+          "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+          "constraints": "Scalar float32 Tensor: arithmetic mean over all N*Q pinball terms, in target units. Differentiable almost everywhere; TensorFlow defines subgradients at ties. No calibration or prediction ordering guarantee. Concrete provisioned TensorFlow execution only; abstract witness rejects. No training, optimizer or state mutation. Extreme finite float32 inputs can overflow intermediate arithmetic; callers must check loss and gradients before updates. TensorFlow tensors and gradient tapes are in-process objects; JSON/HTTP serialization is not qualified.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "result",
+          "atom_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "TensorFlow float32 scalar Tensor",
+          "io_spec_id": "272de51a-a1b3-41a6-8570-01e000f87700",
+          "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+          "constraints": "Scalar float32 Tensor: row mean of sqrt(2)*min(abs(target-point),cap)/max(high-low,floor) + log(sqrt(2)*max(high-low,floor)). Numeric score depends on the caller unit convention; the logarithm uses the numerical scale in those units. Piecewise differentiable, with TensorFlow subgradients at boundaries. No calibration guarantee. Concrete provisioned TensorFlow execution only; abstract witness rejects. No training, optimizer or state mutation. Extreme finite float32 inputs can overflow intermediate arithmetic; callers must check loss and gradients before updates. TensorFlow tensors and gradient tapes are in-process objects; JSON/HTTP serialization is not qualified.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "targets",
+          "atom_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "TensorFlow float32 Tensor or convertible float32 array",
+          "io_spec_id": "266c1b2b-56f1-4e2b-b9a4-73d44d8eb206",
+          "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+          "constraints": "Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "targets",
+          "atom_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "TensorFlow float32 Tensor or convertible float32 array",
+          "io_spec_id": "79b52f77-aeaf-4001-89ca-e77e0bf774e3",
+          "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+          "constraints": "Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability.",
+          "default_value_repr": ""
+        }
+      }
+    ],
+    "artifact_versions": [
+      {
+        "row": {
+          "s3_key": "",
+          "semver": "0.0.0+local.1aab2d391c4e",
+          "is_latest": true,
+          "created_at": "2026-11-10T23:04:25.304968+00:00",
+          "trust_tier": 3,
+          "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+          "artifact_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+          "fingerprint": "11d102286e817465496719d2b414408e44a097a48a2f24c46f9c8e17a299cd7d",
+          "content_hash": "1aab2d391c4ef377ca1383094fb7744f5935ead635d232c0d8a2c5972cf9c21b",
+          "derives_from": null
+        }
+      },
+      {
+        "row": {
+          "s3_key": "",
+          "semver": "0.0.0+local.b38663fb1189",
+          "is_latest": true,
+          "created_at": "2026-11-10T23:04:25.304968+00:00",
+          "trust_tier": 3,
+          "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+          "artifact_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+          "fingerprint": "3bd1be064faff0aa390eab3e74433e3c8349fe3ee9859d9fd614525b0e253572",
+          "content_hash": "b38663fb11890ce1968df7d1250b61937fcf7d144a0ad2ec2e59fb160b574534",
+          "derives_from": null
+        }
+      }
+    ],
+    "artifact_parameters": [],
+    "artifact_references": [],
+    "artifact_io_specs": [
+      {
+        "row": {
+          "name": "maximum_error",
+          "ordinal": 3,
+          "required": true,
+          "direction": "input",
+          "type_desc": "float or int",
+          "io_spec_id": "cee8b40d-eb67-4507-9693-eed3599f3d78",
+          "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+          "artifact_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+          "constraints": "Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Cap on absolute point error, in target units. No unit conversion is performed.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "minimum_scale",
+          "ordinal": 2,
+          "required": true,
+          "direction": "input",
+          "type_desc": "float or int",
+          "io_spec_id": "b63bfa8f-e468-42ca-910c-4d9b6813a3e6",
+          "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+          "artifact_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+          "constraints": "Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Floor on high-minus-low spread, in target units. Crossed or negative spreads encounter this floor.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "predictions",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "TensorFlow float32 Tensor or Variable or convertible float32 array",
+          "io_spec_id": "0f7681a3-dee3-4037-8bbb-c4fdb686761a",
+          "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+          "artifact_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+          "constraints": "Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "predictions",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "TensorFlow float32 Tensor or Variable or convertible float32 array",
+          "io_spec_id": "7cc040c9-f6a8-433e-9814-d69d655724a5",
+          "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+          "artifact_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+          "constraints": "Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "quantiles",
+          "ordinal": 2,
+          "required": true,
+          "direction": "input",
+          "type_desc": "float32-convertible vector",
+          "io_spec_id": "605120a6-cbf4-4928-a3e0-87c77cec6cd3",
+          "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+          "artifact_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+          "constraints": "Shape (Q,), Q>0; every quantile strictly between zero and one after float32 conversion. Explicit column correspondence; sorting and uniqueness are not required or performed. Quantiles are dimensionless caller policy.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "result",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "TensorFlow float32 scalar Tensor",
+          "io_spec_id": "1757cb05-1207-4c26-a7b6-82d25eecbe55",
+          "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+          "artifact_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+          "constraints": "Scalar float32 Tensor: arithmetic mean over all N*Q pinball terms, in target units. Differentiable almost everywhere; TensorFlow defines subgradients at ties. No calibration or prediction ordering guarantee. Concrete provisioned TensorFlow execution only; abstract witness rejects. No training, optimizer or state mutation. Extreme finite float32 inputs can overflow intermediate arithmetic; callers must check loss and gradients before updates. TensorFlow tensors and gradient tapes are in-process objects; JSON/HTTP serialization is not qualified.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "result",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "TensorFlow float32 scalar Tensor",
+          "io_spec_id": "df1446a5-e6c2-4141-a325-a75aab681f82",
+          "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+          "artifact_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+          "constraints": "Scalar float32 Tensor: row mean of sqrt(2)*min(abs(target-point),cap)/max(high-low,floor) + log(sqrt(2)*max(high-low,floor)). Numeric score depends on the caller unit convention; the logarithm uses the numerical scale in those units. Piecewise differentiable, with TensorFlow subgradients at boundaries. No calibration guarantee. Concrete provisioned TensorFlow execution only; abstract witness rejects. No training, optimizer or state mutation. Extreme finite float32 inputs can overflow intermediate arithmetic; callers must check loss and gradients before updates. TensorFlow tensors and gradient tapes are in-process objects; JSON/HTTP serialization is not qualified.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "targets",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "TensorFlow float32 Tensor or convertible float32 array",
+          "io_spec_id": "2375a56d-1095-44cf-89f0-f28c9737e641",
+          "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+          "artifact_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+          "constraints": "Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "targets",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "TensorFlow float32 Tensor or convertible float32 array",
+          "io_spec_id": "7f593b14-660d-4476-be93-fbe45e771975",
+          "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+          "artifact_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+          "constraints": "Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      }
+    ],
+    "artifact_audit_evidence": [
+      {
+        "row": {
+          "passed": true,
+          "status": "completed",
+          "details": {
+            "scope": "Exact source/version/interface draft import only. Dependency qualification, full metadata and semantic publication gates remain pending.",
+            "plan_commit": "eac75834",
+            "plan_sha256": "accf9b5d9225a5a2daf391d49519458c7c1935bea563fe2c1952d24b56afed47",
+            "provider_sha256": "6d5e93c25ced4e359c38d44273612a0d6a92105d033dfb413a0b4e88692cd658",
+            "execution_evidence_sha256": "e14d40a6e8a701129bf110bf6bcc428c6d8b8d42b6d80c5e80704c91c33f0e01"
+          },
+          "audit_type": "asset_integrity_check",
+          "created_at": "2026-11-10T23:04:25.304968+00:00",
+          "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+          "artifact_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+          "evidence_id": "bad8e1b3-f32e-5b74-8fc3-c8fc5e6e3570",
+          "source_kind": "automated",
+          "runner_version": "distribution_loss-draft-intake.v1",
+          "review_basis_at": null,
+          "run_duration_ms": null,
+          "source_revision": "",
+          "upstream_version": ""
+        }
+      },
+      {
+        "row": {
+          "passed": true,
+          "status": "completed",
+          "details": {
+            "scope": "Exact source/version/interface draft import only. Dependency qualification, full metadata and semantic publication gates remain pending.",
+            "plan_commit": "eac75834",
+            "plan_sha256": "accf9b5d9225a5a2daf391d49519458c7c1935bea563fe2c1952d24b56afed47",
+            "provider_sha256": "6d5e93c25ced4e359c38d44273612a0d6a92105d033dfb413a0b4e88692cd658",
+            "execution_evidence_sha256": "e14d40a6e8a701129bf110bf6bcc428c6d8b8d42b6d80c5e80704c91c33f0e01"
+          },
+          "audit_type": "asset_integrity_check",
+          "created_at": "2026-11-10T23:04:25.304968+00:00",
+          "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+          "artifact_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+          "evidence_id": "2ef1a736-06f1-5c55-af5c-8603be74e222",
+          "source_kind": "automated",
+          "runner_version": "distribution_loss-draft-intake.v1",
+          "review_basis_at": null,
+          "run_duration_ms": null,
+          "source_revision": "",
+          "upstream_version": ""
+        }
+      }
+    ],
+    "artifact_dependencies": []
+  },
+  "publisher_sha256": "def7505779fbb3a6d845dbd8a24b09a2e43011711310a63098617ac2129019d9",
+  "review_sha256": "7316905824a711f97a9ccec6a678573a822ad3f30070ef57b24b8302083f4dc0"
+}
