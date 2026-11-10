@@ -1,0 +1,83 @@
+{
+  "format": "osic-quantile-branch-validation.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "folds": [
+    {
+      "fold": 0,
+      "epochs": 600,
+      "batch_size": 128,
+      "training_rows": 135,
+      "validation_rows": 135,
+      "optimizer_updates": 1200,
+      "validation_checks": 600,
+      "final_validation_loss": 0.9544002413749695
+    },
+    {
+      "fold": 1,
+      "epochs": 600,
+      "batch_size": 128,
+      "training_rows": 135,
+      "validation_rows": 135,
+      "optimizer_updates": 1200,
+      "validation_checks": 600,
+      "final_validation_loss": 0.962115466594696
+    }
+  ],
+  "total_candidate_updates": 2400,
+  "feature_count": 8,
+  "training_rows_after_deduplication": 270,
+  "out_of_fold_predictions": 270,
+  "known_observation_overrides": 6,
+  "fresh_process_replay": {
+    "passed": true,
+    "queries": 12,
+    "prediction_values": 24,
+    "exact": true,
+    "fitting_disabled": true
+  },
+  "source_component_evidence": {
+    "osic_quantile_features_validation.json": {
+      "commit": "bc56e3e4",
+      "sha256": "411bc970fdb8300408a46844eea0f25679e70f541182720f2d290df77d5fc232"
+    },
+    "osic_quantile_model_validation.json": {
+      "commit": "1745b3a9",
+      "sha256": "5193f73b090492115d54e60394f929de08f94e2e2b594b47fcd8063d940345a7"
+    },
+    "osic_quantile_state_validation.json": {
+      "commit": "3a0c8bc0",
+      "sha256": "929879fb09b99330dca1af59adf9a654c1a4a4425dab64477572c56ca555c2be"
+    },
+    "osic_prediction_validation.json": {
+      "commit": "00d8de5e",
+      "sha256": "ebc51f8c226b066969ade19b4b3ebcb9a797d3c82d7f76d1fb7be7156e9406cc"
+    }
+  },
+  "software_sha256": {
+    "scripts/validate_osic_quantile_branch.py": "27c6234b48d60c4bb771df3ec74d46091f01782754370bf3fb67df1b93e8ab25",
+    "sciona/osic_quantile_training.py": "59cff517f5ee946b674bc0545ec82953a3dee6f467a5b57cb47f021194dc87da"
+  },
+  "private_artifacts_unchanged": true,
+  "inputs_unchanged": true,
+  "runtime": {
+    "tensorflow": "2.20.0",
+    "tf_keras": "2.20.1",
+    "numpy": "2.2.6",
+    "pandas": "2.3.3"
+  },
+  "resource_policy": {
+    "native_threads": 1,
+    "serial_folds": true,
+    "data_loader_workers": 0
+  },
+  "limitations": [
+    "Complete quantile branch on synthetic mapped tables, not the complete two-branch competition workflow.",
+    "Fresh-process replay consumes frozen prepared query features; a raw-table preprocessing state codec remains separate work.",
+    "Historical random draws, population size and competitive accuracy are not reproduced.",
+    "Joint query-dependent preparation is preserved; this is not a leakage-free validation estimate.",
+    "The image branch, final connected blend, compositional catalog graph and publication gates remain pending."
+  ]
+}

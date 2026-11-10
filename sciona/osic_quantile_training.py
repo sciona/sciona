@@ -1,0 +1,106 @@
+"""Serial two-fold OSIC quantile lifecycle over explicit transductive inputs.
+
+Preserves two contiguous folds, batch size 128 and 600 epochs. Seeds are caller
+policy, not a claim to reproduce historical random draws. Feature preparation
+is joint with the declared query population; validation is not leakage-free.
+"""
+import json
+import math
+import numpy as np
+
+from sciona.osic_quantile_features import prepare_features
+from sciona.osic_quantile_model import build_model
+from sciona.osic_quantile_state import export_prediction_state, restore_prediction_state
+from sciona.osic_predictions import quantile_predictions
+
+
+def predict_in_batches(model, features):
+    if not isinstance(features, np.ndarray) or features.ndim != 2 or not len(features):
+        raise ValueError('Nonempty prepared query matrix required')
+    return np.concatenate([model(features[start:start+128], training=False).numpy()
+                           for start in range(0, len(features), 128)], axis=0)
+
+
+def known_observations(baseline, queries):
+    """Caller-supplied observed baselines only; equality follows the source keys."""
+    lookup = {(r.entity, r.time):r.target for r in baseline.itertuples()}
+    keys = [(r.entity, r.time) for r in queries.itertuples()]
+    return (np.array([k in lookup for k in keys], dtype=bool),
+            np.array([lookup.get(k, 0.) for k in keys], dtype=np.float64))
+
+
+def replay_quantile_branch(states, features, columns, feature_coordinate, response_coordinate,
+                           observed_mask, observed_values):
+    """Replay the two fixed fold models on identically prepared features.
+
+No scaler fitting or training occurs. Feature preparation and the complete
+transductive query population remain separate explicit inputs/provenance.
+"""
+    if type(states) is not list or len(states) != 2:
+        raise ValueError('Both source fold states required')
+    predictions = []
+    for state in states:
+        model = restore_prediction_state(state, columns, feature_coordinate, response_coordinate)
+        predictions.append(predict_in_batches(model, features))
+    return quantile_predictions(np.stack(predictions), observed_mask, observed_values)
+
+
+def train_quantile_branch(training, baseline, queries, *, feature_coordinate, response_coordinate,
+                          seeds, allow_transductive, progress=None):
+    import tensorflow as tf
+    import tf_keras as keras
+    if (type(seeds) is not tuple or len(seeds) != 2
+            or any(type(s) is not int or not 0 <= s < 2**31 for s in seeds)):
+        raise ValueError('Two explicit nonnegative 31-bit fold seeds required')
+    prepared = prepare_features(training, baseline, queries, allow_transductive=allow_transductive)
+    columns = [json.dumps(c, separators=(',', ':')) for c in prepared['feature_columns']]
+    x = prepared['populations']['training']['features'].astype(np.float32)
+    y = prepared['populations']['training']['targets'].astype(np.float32).reshape(-1, 1)
+    query_features = prepared['populations']['query']['features'].astype(np.float32)
+    if len(x) < 2 or not all(np.isfinite(v).all() for v in (x, y, query_features)):
+        raise ValueError('Two nonempty folds and finite float32 inputs required')
+    oof = np.empty((len(x), 3), dtype=np.float32)
+    states, predictions, records = [], [], []
+    # sklearn KFold(n_splits=2, shuffle=False) assigns the extra row to fold 0.
+    boundaries = (0, (len(x)+1)//2, len(x))
+    for fold, seed in enumerate(seeds):
+        keras.backend.clear_session()
+        keras.utils.set_random_seed(seed)
+        rng = np.random.default_rng(seed)
+        validation = np.arange(boundaries[fold], boundaries[fold+1])
+        fit = np.setdiff1d(np.arange(len(x)), validation)
+        model = build_model(x.shape[1])
+        @tf.function(input_signature=[tf.TensorSpec([None, x.shape[1]], tf.float32), tf.TensorSpec([None, 1], tf.float32)])
+        def step(features, targets):
+            with tf.GradientTape() as tape:
+                loss = model.loss(targets, model(features, training=True))
+            model.optimizer.apply_gradients(zip(tape.gradient(loss, model.trainable_variables), model.trainable_variables))
+            return loss
+        validation_loss = None
+        for epoch in range(600):
+            order = rng.permutation(fit)
+            for start in range(0, len(order), 128):
+                batch = order[start:start+128]
+                loss = float(step(x[batch], y[batch]).numpy())
+                if not math.isfinite(loss):
+                    raise ValueError('Nonfinite training loss')
+            validation_predictions = predict_in_batches(model, x[validation])
+            validation_loss = float(model.loss(y[validation], validation_predictions).numpy())
+            if not math.isfinite(validation_loss):
+                raise ValueError('Nonfinite held-out loss')
+            if progress is not None and (epoch+1) % 200 == 0:
+                progress(dict(fold=fold, completed_epochs=epoch+1))
+        oof[validation] = validation_predictions
+        predictions.append(predict_in_batches(model, query_features))
+        expected_updates = 600*math.ceil(len(fit)/128)
+        if int(model.optimizer.iterations.numpy()) != expected_updates:
+            raise ValueError('Incomplete training schedule')
+        states.append(export_prediction_state(model, columns, feature_coordinate, response_coordinate))
+        records.append(dict(fold=fold, epochs=600, batch_size=128, training_rows=len(fit),
+            validation_rows=len(validation), optimizer_updates=expected_updates,
+            validation_checks=600, final_validation_loss=validation_loss))
+    mask, values = known_observations(baseline, queries)
+    output = quantile_predictions(np.stack(predictions), mask, values)
+    return dict(predictions=output, oof_predictions=oof, fold_states=states, folds=records,
+        query_features=query_features, feature_columns=columns, preparation=prepared,
+        observed_mask=mask, observed_values=values)
