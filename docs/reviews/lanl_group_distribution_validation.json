@@ -1,0 +1,57 @@
+{
+  "format": "lanl-group-distribution-validation.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "reused_catalog_dependencies": [
+    {
+      "artifact_id": "74033526-0610-476c-93a3-ded75c62a6a0",
+      "fqdn": "sciona.atoms.ml.constrained_ml.decorrelation.compute_ks_agreement",
+      "version_id": "e9524a66-a716-52a1-951a-103af97a97e6",
+      "content_hash": "63e8b77a6266089462e50d7f70140bcdc5ef87c5cb393ad6d4b89be625dfa73f",
+      "trust_tier": 3
+    }
+  ],
+  "cases": [
+    {
+      "synthetic_domain": "synthetic-instrument-batches",
+      "candidates": 10000,
+      "groups": 17,
+      "selected_groups_per_candidate": 10,
+      "feature_count": 4,
+      "distances_checked": 40000,
+      "maximum_absolute_error": 7.216449660063518e-16,
+      "selected_oracle_minimizer": true
+    },
+    {
+      "synthetic_domain": "synthetic-production-batches",
+      "candidates": 64,
+      "groups": 17,
+      "selected_groups_per_candidate": 10,
+      "feature_count": 4,
+      "distances_checked": 256,
+      "maximum_absolute_error": 5.551115123125783e-16,
+      "selected_oracle_minimizer": true
+    }
+  ],
+  "software_sha256": {
+    "sciona-atoms-ml/src/sciona/atoms/ml/group_distribution_matching.py": "a1cdce58faf3a2c7524fe7bc7242784a6849b42c0b0ad70c2378266b159a311d",
+    "sciona-atoms-ml/src/sciona/atoms/ml/constrained_ml/decorrelation/atoms.py": "933f788397cf84543c2a7fb33889e8f070bdb88b1943811cb45efe9bf9a09639",
+    "sciona-atoms-ml/tests/test_group_distribution_matching_provider.py": "3fc507da3522543150e7ef6b4f7dd0cb60914c679a4f52d2004523a46bde7fb5",
+    "sciona-matcher/scripts/validate_lanl_group_distribution_matching.py": "11d258cefb7773297d66b7cb9dbcf3d716c9bfa9ea2670357b165607894241a5"
+  },
+  "resource_policy": {
+    "concurrent_workers": 1,
+    "native_threads": 1
+  },
+  "source": "https://medium.com/@ph_singer/1st-place-in-kaggle-lanl-earthquake-prediction-competition-15a1137c2457",
+  "source_scope": "The author describes repeated whole-group subset comparison using averaged marginal KS distances. Candidate generation here is explicit synthetic policy.",
+  "limitations": [
+    "Only distribution scoring and an explicit mean-distance selection example are qualified; no full LANL graph approval.",
+    "Synthetic groups, candidate draws and features do not reproduce historical data or randomness.",
+    "Marginal agreement does not imply joint distribution agreement or predictive accuracy; reference-population availability is a caller obligation.",
+    "The author publications disagree on the feature-screening p-value inequality. This scorer computes no p-values and makes no screening decision.",
+    "KS equivalence is within floating-point tolerance. Near ties require an explicit selection tolerance and tie policy in the caller."
+  ]
+}
