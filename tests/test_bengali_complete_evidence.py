@@ -23,6 +23,14 @@ def test_complete_contract_allows_zero_alternate_routes():
     evidence.validate_report(report())
 
 
+@pytest.mark.parametrize('branch', ['train_ood', 'train_seen'])
+@pytest.mark.parametrize('epoch', [198, 200])
+def test_last_checkpoint_uses_zero_based_final_epoch(branch, epoch):
+    value = report(); value['training'][branch]['selected_epoch'] = epoch
+    with pytest.raises(ValueError, match='training'):
+        evidence.validate_report(value)
+
+
 @pytest.mark.parametrize('field,value', [
     ('actual_runner_nodes', 21), ('exact_edge_handoffs', 31),
     ('all_nodes_uncached', False), ('inference_checkpoint_replays', 7),

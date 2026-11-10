@@ -9,8 +9,9 @@ ROOT = Path(__file__).resolve().parents[1]
 REPORT = 'docs/reviews/bengali_complete_graph.json'
 PROVIDER = '../sciona-atoms-dl/src/sciona/atoms/dl/grapheme_execution.py'
 TRAINING = {
-    'train_ood': dict(epochs=200, updates=400, selected_epoch=200, backbone_updated=True),
-    'train_seen': dict(epochs=200, updates=400, selected_epoch=200, backbone_updated=True),
+    # The fitter labels epochs with range(epochs); last-of-200 has index 199.
+    'train_ood': dict(epochs=200, updates=400, selected_epoch=199, backbone_updated=True),
+    'train_seen': dict(epochs=200, updates=400, selected_epoch=199, backbone_updated=True),
     'train_font_a': dict(epochs=60, updates=180),
     'train_font_b': dict(epochs=60, updates=180),
     'train_generator_a': dict(epochs=40, updates=120, all_four_networks_updated=True, frozen_classifier_unchanged=True),
