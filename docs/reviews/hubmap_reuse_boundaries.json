@@ -1,0 +1,173 @@
+{
+  "format": "hubmap-reuse-boundaries.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "review_source": "automated",
+  "scope": "Static implementation-bound review; full execution and publication remain separate.",
+  "boundaries": [
+    {
+      "name": "raster_targets_and_preparation",
+      "contract": "Decoded RGB uint8 rasters and aligned binary masks feed unshifted and half-shifted tiles, mask-area ordering, JPEG roundtrip, standard-deviation filtering and rounded-area presence bins.",
+      "limitation": "Binary foreground semantics, physical scale, color statistics and lossy preprocessing must be justified for each application. A nonempty mask can enter the background sampling population. TIFF decoding and stain normalization are not implemented by this graph.",
+      "source_anchors": [
+        {
+          "file": "sciona/hubmap_raw_population.py",
+          "symbol": "prepare_population",
+          "line": 7,
+          "file_sha256": "a32bacc34b571bd0452e2eebef41c73d6bfd84ec3f541302a441883c9c96752b"
+        },
+        {
+          "file": "sciona/hubmap_preparation.py",
+          "symbol": "prepare_tile",
+          "line": 6,
+          "file_sha256": "6d879b22aafa81cbbc091727a1d35078a4a8f885160e8cd258f8050a0406122c"
+        },
+        {
+          "file": "sciona/hubmap_preparation.py",
+          "symbol": "select_training_tiles",
+          "line": 27,
+          "file_sha256": "6d879b22aafa81cbbc091727a1d35078a4a8f885160e8cd258f8050a0406122c"
+        }
+      ]
+    },
+    {
+      "name": "population_independence",
+      "contract": "Caller-supplied group labels partition whole rasters before tile preparation. Both training and validation must retain selected tiles. Pseudo populations append to training only.",
+      "limitation": "Group labels do not establish independence of subjects, acquisition sessions or sources. The caller must exclude validation overlap from pseudo sources; the implementation does not detect that overlap.",
+      "source_anchors": [
+        {
+          "file": "sciona/hubmap_raw_training.py",
+          "symbol": "prepare_fold",
+          "line": 7,
+          "file_sha256": "605e089d2c233bc52b4417b86b58fb20bfc21e1dab7b2c602df26be9e5f2926c"
+        },
+        {
+          "file": "sciona/hubmap_retraining.py",
+          "symbol": "prepare_retraining",
+          "line": 28,
+          "file_sha256": "ca98b27ef53c2dcd3f9ec67b30e29182a263ed4aeb5a8a32518bdfb7509f9c27"
+        }
+      ]
+    },
+    {
+      "name": "fresh_training_and_checkpoint_selection",
+      "contract": "Each FoldStage constructs a full SE-ResNeXt101 segmentation model from explicit encoder state with fresh decoder, Adam optimizer and cosine scheduler. Ordered selectors identify produced fold/checkpoint roles; retraining starts fresh and consumes generated pseudo masks.",
+      "limitation": "Encoder-state shape compatibility and deterministic seeds do not authenticate pretrained weights or prove accuracy. Explicit stage schedules and checkpoint roles must be executable. The graph stage functions use _train_stages directly and do not inherit all run_lifecycle selector validation.",
+      "source_anchors": [
+        {
+          "file": "sciona/hubmap_lifecycle.py",
+          "symbol": "train_fold",
+          "line": 20,
+          "file_sha256": "76c746915a89e79446104dacf47fddd69d244a67cef021aff370245bf8182649"
+        },
+        {
+          "file": "sciona/hubmap_lifecycle.py",
+          "symbol": "_train_stages",
+          "line": 42,
+          "file_sha256": "76c746915a89e79446104dacf47fddd69d244a67cef021aff370245bf8182649"
+        },
+        {
+          "file": "sciona/hubmap_graph_runtime.py",
+          "symbol": "initial_training",
+          "line": 6,
+          "file_sha256": "abe37489c453f23e7c668cdb2ba8be9c2a6ec61557fd1875b0abe0dbeb417d4a"
+        },
+        {
+          "file": "sciona/hubmap_graph_runtime.py",
+          "symbol": "retraining",
+          "line": 29,
+          "file_sha256": "abe37489c453f23e7c668cdb2ba8be9c2a6ec61557fd1875b0abe0dbeb417d4a"
+        }
+      ]
+    },
+    {
+      "name": "pseudo_label_policy",
+      "contract": "Initial models generate masks with four flip views and threshold0.5. Ordered pseudo populations retain only rounded-bin-positive tiles for retraining.",
+      "limitation": "Pseudo masks are model outputs, not independent ground truth. Positive-only filtering, area bins and augmentation invariance are recipe assumptions; application transfer requires justification and independent evaluation.",
+      "source_anchors": [
+        {
+          "file": "sciona/hubmap_graph_runtime.py",
+          "symbol": "pseudo_labels",
+          "line": 23,
+          "file_sha256": "abe37489c453f23e7c668cdb2ba8be9c2a6ec61557fd1875b0abe0dbeb417d4a"
+        },
+        {
+          "file": "sciona/hubmap_retraining.py",
+          "symbol": "append_pseudo",
+          "line": 8,
+          "file_sha256": "ca98b27ef53c2dcd3f9ec67b30e29182a263ed4aeb5a8a32518bdfb7509f9c27"
+        },
+        {
+          "file": "sciona/hubmap_augmentation.py",
+          "symbol": "augment",
+          "line": 8,
+          "file_sha256": "370f2ca831a8e8e4888802eeb60da5ac7781c4c45fe6068382744ead1db4e851"
+        }
+      ]
+    },
+    {
+      "name": "inference_geometry_and_batch_dependence",
+      "contract": "Final inference uses three flip views, ordered model averaging, resize before strict thresholding and source grid stitching. The classifier shortcut skips the segmentation path when all examples in a batch fall below its classifier threshold.",
+      "limitation": "Batch composition, tile scale, padding, normalization and thresholds affect meaning and output. An empty final mask can result from the classifier shortcut; it is not evidence of absent foreground. Binary outputs are not calibrated uncertainty estimates.",
+      "source_anchors": [
+        {
+          "file": "sciona/hubmap_graph_runtime.py",
+          "symbol": "final_prediction",
+          "line": 33,
+          "file_sha256": "abe37489c453f23e7c668cdb2ba8be9c2a6ec61557fd1875b0abe0dbeb417d4a"
+        },
+        {
+          "file": "sciona/hubmap_raw_inference.py",
+          "symbol": "predict_slide",
+          "line": 16,
+          "file_sha256": "8f8670ef857263815caa8e92a4942603ef5a31b2baaf34220d0b67cf6e464179"
+        },
+        {
+          "file": "sciona/hubmap_network.py",
+          "symbol": "UNET_SERESNEXT101.forward",
+          "line": 154,
+          "file_sha256": "32a82b4af15101d4882909038a58c2708b5867b9cebc3f1295b5b1c8adda1e74"
+        },
+        {
+          "file": "sciona/hubmap_inference.py",
+          "symbol": "predict_batch",
+          "line": 7,
+          "file_sha256": "c30e4eb325b47bc4eeecfafaf858104d98fab1c4fecbdd10aeb82028ff0a4c9b"
+        }
+      ]
+    },
+    {
+      "name": "runtime_objects_and_reusable_units",
+      "contract": "Graph boundaries pass runtime arrays, FoldStage objects, explicit RNG streams, checkpoint bytes and evaluation models. Model restoration requires a nonempty ordered checkpoint ensemble; inference uses zero data-loader workers.",
+      "limitation": "These provider interfaces are recipe stages and trusted runtime-object boundaries, not a generic JSON service. Image tiling, balanced sampling and aggregation need independently qualified contracts before standalone cross-domain selection.",
+      "source_anchors": [
+        {
+          "file": "sciona/hubmap_graph_runtime.py",
+          "symbol": "restore_models",
+          "line": 10,
+          "file_sha256": "abe37489c453f23e7c668cdb2ba8be9c2a6ec61557fd1875b0abe0dbeb417d4a"
+        },
+        {
+          "file": "sciona/hubmap_lifecycle.py",
+          "symbol": "FoldStage",
+          "line": 12,
+          "file_sha256": "76c746915a89e79446104dacf47fddd69d244a67cef021aff370245bf8182649"
+        },
+        {
+          "file": "sciona/hubmap_raw_inference.py",
+          "symbol": "predict_slide",
+          "line": 16,
+          "file_sha256": "8f8670ef857263815caa8e92a4942603ef5a31b2baaf34220d0b67cf6e464179"
+        }
+      ]
+    }
+  ],
+  "reuse_decision": "The recipe may transfer to other binary raster-segmentation tasks with justified foreground semantics, physical scale, color and augmentation assumptions, independent grouped populations and pseudo-source isolation. Keep explicit stage and inference policies. Generic image or sampling operations require independent qualification before standalone selection.",
+  "remaining": [
+    "Review original source stages and exact provider interfaces.",
+    "Qualify current full networks, source-sized geometry and complete fold routing with bounded resources.",
+    "Execute the corrected stored graph and verify transactional publication and selection."
+  ],
+  "reviewer_sha256": "16cc2496d402b7f113eb151ddf7adde1db2d6976e4e773f4878810ac22a6819d"
+}

@@ -1,0 +1,955 @@
+{
+  "format": "hubmap-original-readiness.v1",
+  "read_only": true,
+  "catalog_mutations": 0,
+  "original_ready_for_promotion": false,
+  "records": [
+    {
+      "identity": {
+        "artifact_id": "be47041d-30f6-565b-97f0-3708f5190323",
+        "fqdn": "cdg.competition.solution.kaggle.hubmap_kidney_1st",
+        "artifact_kind": "cdg",
+        "status": "draft",
+        "is_publishable": false,
+        "version_id": "325c30ff-ea2a-515c-8d40-110a5fd6991d",
+        "content_hash": "6f290e9ea9794b85f83ff3e52034a41a1c400f84d2f3f5182beb65d837664468",
+        "trust_tier": 3,
+        "eligible": false,
+        "served": false
+      },
+      "catalogs": {
+        "artifact": {
+          "counts": {
+            "descriptions": 0,
+            "parameters": 0,
+            "references": 0,
+            "audit_rollups": 0
+          },
+          "descriptions": [],
+          "ports": [
+            {
+              "direction": "input",
+              "name": "wsi_images",
+              "type_desc": "list[Path]",
+              "ordinal": 0,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": "Gigapixel whole-slide TIFF images of kidney tissue. Typically 30,000+ x 30,000+ pixels."
+            },
+            {
+              "direction": "output",
+              "name": "segmentation_mask",
+              "type_desc": "NDArray[np.uint8]",
+              "ordinal": 0,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": "Per-pixel binary mask at full resolution. 1 = glomerulus, 0 = background."
+            }
+          ],
+          "eligible": false
+        }
+      }
+    },
+    {
+      "identity": {
+        "artifact_id": "1a2892f1-dd11-5553-be82-50dfb8302ca9",
+        "fqdn": "cdg.competition.solution.kaggle.hubmap_kidney_1st.execution",
+        "artifact_kind": "cdg",
+        "status": "approved",
+        "is_publishable": true,
+        "version_id": "57c74f12-a6db-547c-8991-30a919a53a0c",
+        "content_hash": "126471f8fb4d6ba85909bccc37199376f369d369874bd910c405501b7fb89387",
+        "trust_tier": 3,
+        "eligible": false,
+        "served": true
+      },
+      "catalogs": {
+        "artifact": {
+          "counts": {
+            "descriptions": 0,
+            "parameters": 0,
+            "references": 2,
+            "audit_rollups": 1
+          },
+          "descriptions": [],
+          "ports": [
+            {
+              "direction": "input",
+              "name": "slides",
+              "type_desc": "object",
+              "ordinal": 0,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "groups",
+              "type_desc": "object",
+              "ordinal": 1,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "initial_stages",
+              "type_desc": "object",
+              "ordinal": 2,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "initial_selectors",
+              "type_desc": "object",
+              "ordinal": 3,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "tile_size",
+              "type_desc": "int",
+              "ordinal": 4,
+              "required": false,
+              "default_value_repr": "1024",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "input_resolution",
+              "type_desc": "int",
+              "ordinal": 5,
+              "required": false,
+              "default_value_repr": "320",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "pseudo_sources",
+              "type_desc": "object",
+              "ordinal": 6,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "pseudo_rng",
+              "type_desc": "object",
+              "ordinal": 7,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "inference_geometry",
+              "type_desc": "object",
+              "ordinal": 8,
+              "required": false,
+              "default_value_repr": "None",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "retraining_stages",
+              "type_desc": "object",
+              "ordinal": 9,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "final_selectors",
+              "type_desc": "object",
+              "ordinal": 10,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "final_images",
+              "type_desc": "object",
+              "ordinal": 11,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "final_rng",
+              "type_desc": "object",
+              "ordinal": 12,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "output",
+              "name": "initial_metrics",
+              "type_desc": "object",
+              "ordinal": 0,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "output",
+              "name": "retraining_metrics",
+              "type_desc": "object",
+              "ordinal": 1,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "output",
+              "name": "predictions",
+              "type_desc": "object",
+              "ordinal": 2,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            }
+          ],
+          "eligible": false
+        }
+      }
+    },
+    {
+      "identity": {
+        "artifact_id": "78c8a5ab-dfb8-5af6-a98f-38805f07cf4d",
+        "fqdn": "sciona.atoms.dl.segmentation.hubmap_execution.hubmap_final_prediction",
+        "artifact_kind": "atom",
+        "status": "approved",
+        "is_publishable": true,
+        "version_id": "c692df68-7521-516f-acab-1de573c0274d",
+        "content_hash": "4422196cc42c4ea9effdb53b9cc14a2d085ef00dd6bfd37462c836a1851f90b4",
+        "trust_tier": 3,
+        "eligible": false,
+        "served": true
+      },
+      "catalogs": {
+        "artifact": {
+          "counts": {
+            "descriptions": 0,
+            "parameters": 0,
+            "references": 2,
+            "audit_rollups": 1
+          },
+          "descriptions": [],
+          "ports": [
+            {
+              "direction": "input",
+              "name": "models",
+              "type_desc": "object",
+              "ordinal": 0,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "final_images",
+              "type_desc": "object",
+              "ordinal": 1,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "final_rng",
+              "type_desc": "object",
+              "ordinal": 2,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "inference_geometry",
+              "type_desc": "object",
+              "ordinal": 3,
+              "required": false,
+              "default_value_repr": "None",
+              "constraints": ""
+            },
+            {
+              "direction": "output",
+              "name": "predictions",
+              "type_desc": "object",
+              "ordinal": 0,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            }
+          ],
+          "eligible": false
+        },
+        "atom": {
+          "counts": {
+            "descriptions": 0,
+            "parameters": 0,
+            "references": 2,
+            "audit_rollups": 1
+          },
+          "descriptions": [],
+          "ports": [
+            {
+              "direction": "input",
+              "name": "models",
+              "type_desc": "object",
+              "ordinal": 0,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "final_images",
+              "type_desc": "object",
+              "ordinal": 1,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "final_rng",
+              "type_desc": "object",
+              "ordinal": 2,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "inference_geometry",
+              "type_desc": "object",
+              "ordinal": 3,
+              "required": false,
+              "default_value_repr": "None",
+              "constraints": ""
+            },
+            {
+              "direction": "output",
+              "name": "predictions",
+              "type_desc": "object",
+              "ordinal": 0,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            }
+          ],
+          "eligible": false
+        }
+      }
+    },
+    {
+      "identity": {
+        "artifact_id": "a3293440-a4ea-5f0b-a7c0-6a5e4187e9be",
+        "fqdn": "sciona.atoms.dl.segmentation.hubmap_execution.hubmap_initial_training",
+        "artifact_kind": "atom",
+        "status": "approved",
+        "is_publishable": true,
+        "version_id": "f18ac9ca-b2e6-5952-8750-1130041cbd75",
+        "content_hash": "dcb39a84d2123c806c77dc628b57db9625e618fdaddca2f56386bdbc48ed6fad",
+        "trust_tier": 3,
+        "eligible": false,
+        "served": true
+      },
+      "catalogs": {
+        "artifact": {
+          "counts": {
+            "descriptions": 0,
+            "parameters": 0,
+            "references": 2,
+            "audit_rollups": 1
+          },
+          "descriptions": [],
+          "ports": [
+            {
+              "direction": "input",
+              "name": "slides",
+              "type_desc": "object",
+              "ordinal": 0,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "groups",
+              "type_desc": "object",
+              "ordinal": 1,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "initial_stages",
+              "type_desc": "object",
+              "ordinal": 2,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "initial_selectors",
+              "type_desc": "object",
+              "ordinal": 3,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "tile_size",
+              "type_desc": "int",
+              "ordinal": 4,
+              "required": false,
+              "default_value_repr": "1024",
+              "constraints": ""
+            },
+            {
+              "direction": "output",
+              "name": "initial_checkpoints",
+              "type_desc": "object",
+              "ordinal": 0,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "output",
+              "name": "initial_metrics",
+              "type_desc": "object",
+              "ordinal": 1,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            }
+          ],
+          "eligible": false
+        },
+        "atom": {
+          "counts": {
+            "descriptions": 0,
+            "parameters": 0,
+            "references": 2,
+            "audit_rollups": 1
+          },
+          "descriptions": [],
+          "ports": [
+            {
+              "direction": "input",
+              "name": "slides",
+              "type_desc": "object",
+              "ordinal": 0,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "groups",
+              "type_desc": "object",
+              "ordinal": 1,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "initial_stages",
+              "type_desc": "object",
+              "ordinal": 2,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "initial_selectors",
+              "type_desc": "object",
+              "ordinal": 3,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "tile_size",
+              "type_desc": "int",
+              "ordinal": 4,
+              "required": false,
+              "default_value_repr": "1024",
+              "constraints": ""
+            },
+            {
+              "direction": "output",
+              "name": "initial_checkpoints",
+              "type_desc": "object",
+              "ordinal": 0,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "output",
+              "name": "initial_metrics",
+              "type_desc": "object",
+              "ordinal": 1,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            }
+          ],
+          "eligible": false
+        }
+      }
+    },
+    {
+      "identity": {
+        "artifact_id": "7e74c834-c78b-5027-b70b-6c95f3c65cce",
+        "fqdn": "sciona.atoms.dl.segmentation.hubmap_execution.hubmap_pseudo_labels",
+        "artifact_kind": "atom",
+        "status": "approved",
+        "is_publishable": true,
+        "version_id": "bdc9ad25-131e-5d2f-8233-f1fdfcad94c4",
+        "content_hash": "5bc271219ef5dcb550bdc827359c604b8a2185b264442bd5f4fbd4531277260c",
+        "trust_tier": 3,
+        "eligible": false,
+        "served": true
+      },
+      "catalogs": {
+        "artifact": {
+          "counts": {
+            "descriptions": 0,
+            "parameters": 0,
+            "references": 2,
+            "audit_rollups": 1
+          },
+          "descriptions": [],
+          "ports": [
+            {
+              "direction": "input",
+              "name": "models",
+              "type_desc": "object",
+              "ordinal": 0,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "pseudo_sources",
+              "type_desc": "object",
+              "ordinal": 1,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "pseudo_rng",
+              "type_desc": "object",
+              "ordinal": 2,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "inference_geometry",
+              "type_desc": "object",
+              "ordinal": 3,
+              "required": false,
+              "default_value_repr": "None",
+              "constraints": ""
+            },
+            {
+              "direction": "output",
+              "name": "pseudo_labeled_sources",
+              "type_desc": "object",
+              "ordinal": 0,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            }
+          ],
+          "eligible": false
+        },
+        "atom": {
+          "counts": {
+            "descriptions": 0,
+            "parameters": 0,
+            "references": 2,
+            "audit_rollups": 1
+          },
+          "descriptions": [],
+          "ports": [
+            {
+              "direction": "input",
+              "name": "models",
+              "type_desc": "object",
+              "ordinal": 0,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "pseudo_sources",
+              "type_desc": "object",
+              "ordinal": 1,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "pseudo_rng",
+              "type_desc": "object",
+              "ordinal": 2,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "inference_geometry",
+              "type_desc": "object",
+              "ordinal": 3,
+              "required": false,
+              "default_value_repr": "None",
+              "constraints": ""
+            },
+            {
+              "direction": "output",
+              "name": "pseudo_labeled_sources",
+              "type_desc": "object",
+              "ordinal": 0,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            }
+          ],
+          "eligible": false
+        }
+      }
+    },
+    {
+      "identity": {
+        "artifact_id": "62f4e16d-39ff-5758-a74b-9f96e25adcbb",
+        "fqdn": "sciona.atoms.dl.segmentation.hubmap_execution.hubmap_restore_models",
+        "artifact_kind": "atom",
+        "status": "approved",
+        "is_publishable": true,
+        "version_id": "8f037008-6a58-57d7-ad14-a9f5f2159c21",
+        "content_hash": "9c716fbdd04fc16267bc853f43b2c985724c82298dc2a7ddc48c63049ca6a8fd",
+        "trust_tier": 3,
+        "eligible": false,
+        "served": true
+      },
+      "catalogs": {
+        "artifact": {
+          "counts": {
+            "descriptions": 0,
+            "parameters": 0,
+            "references": 2,
+            "audit_rollups": 1
+          },
+          "descriptions": [],
+          "ports": [
+            {
+              "direction": "input",
+              "name": "checkpoints",
+              "type_desc": "object",
+              "ordinal": 0,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "input_resolution",
+              "type_desc": "int",
+              "ordinal": 1,
+              "required": false,
+              "default_value_repr": "320",
+              "constraints": ""
+            },
+            {
+              "direction": "output",
+              "name": "models",
+              "type_desc": "object",
+              "ordinal": 0,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            }
+          ],
+          "eligible": false
+        },
+        "atom": {
+          "counts": {
+            "descriptions": 0,
+            "parameters": 0,
+            "references": 2,
+            "audit_rollups": 1
+          },
+          "descriptions": [],
+          "ports": [
+            {
+              "direction": "input",
+              "name": "checkpoints",
+              "type_desc": "object",
+              "ordinal": 0,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "input_resolution",
+              "type_desc": "int",
+              "ordinal": 1,
+              "required": false,
+              "default_value_repr": "320",
+              "constraints": ""
+            },
+            {
+              "direction": "output",
+              "name": "models",
+              "type_desc": "object",
+              "ordinal": 0,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            }
+          ],
+          "eligible": false
+        }
+      }
+    },
+    {
+      "identity": {
+        "artifact_id": "448cef2e-4481-5a0c-bfa3-297b5c198082",
+        "fqdn": "sciona.atoms.dl.segmentation.hubmap_execution.hubmap_retraining",
+        "artifact_kind": "atom",
+        "status": "approved",
+        "is_publishable": true,
+        "version_id": "37d5b46a-0128-5e96-bbf2-03618c194e29",
+        "content_hash": "3e8be25c350b7a114e3ee9f2109d15a0a2fd159b04686f4113cb228c3f46d640",
+        "trust_tier": 3,
+        "eligible": false,
+        "served": true
+      },
+      "catalogs": {
+        "artifact": {
+          "counts": {
+            "descriptions": 0,
+            "parameters": 0,
+            "references": 2,
+            "audit_rollups": 1
+          },
+          "descriptions": [],
+          "ports": [
+            {
+              "direction": "input",
+              "name": "slides",
+              "type_desc": "object",
+              "ordinal": 0,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "groups",
+              "type_desc": "object",
+              "ordinal": 1,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "retraining_stages",
+              "type_desc": "object",
+              "ordinal": 2,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "final_selectors",
+              "type_desc": "object",
+              "ordinal": 3,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "pseudo_labeled_sources",
+              "type_desc": "object",
+              "ordinal": 4,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "tile_size",
+              "type_desc": "int",
+              "ordinal": 5,
+              "required": false,
+              "default_value_repr": "1024",
+              "constraints": ""
+            },
+            {
+              "direction": "output",
+              "name": "final_checkpoints",
+              "type_desc": "object",
+              "ordinal": 0,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "output",
+              "name": "retraining_metrics",
+              "type_desc": "object",
+              "ordinal": 1,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            }
+          ],
+          "eligible": false
+        },
+        "atom": {
+          "counts": {
+            "descriptions": 0,
+            "parameters": 0,
+            "references": 2,
+            "audit_rollups": 1
+          },
+          "descriptions": [],
+          "ports": [
+            {
+              "direction": "input",
+              "name": "slides",
+              "type_desc": "object",
+              "ordinal": 0,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "groups",
+              "type_desc": "object",
+              "ordinal": 1,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "retraining_stages",
+              "type_desc": "object",
+              "ordinal": 2,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "final_selectors",
+              "type_desc": "object",
+              "ordinal": 3,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "pseudo_labeled_sources",
+              "type_desc": "object",
+              "ordinal": 4,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "input",
+              "name": "tile_size",
+              "type_desc": "int",
+              "ordinal": 5,
+              "required": false,
+              "default_value_repr": "1024",
+              "constraints": ""
+            },
+            {
+              "direction": "output",
+              "name": "final_checkpoints",
+              "type_desc": "object",
+              "ordinal": 0,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            },
+            {
+              "direction": "output",
+              "name": "retraining_metrics",
+              "type_desc": "object",
+              "ordinal": 1,
+              "required": true,
+              "default_value_repr": "",
+              "constraints": ""
+            }
+          ],
+          "eligible": false
+        }
+      }
+    }
+  ],
+  "historical_execution_software_drift": [],
+  "historical_provider_unchanged": true,
+  "historical_execution_checks": {
+    "synthetic_only": true,
+    "independent_raw_lifecycle_reference": true,
+    "graph_nodes": 6,
+    "graph_edges": 5,
+    "exact_both_stage_metrics_checkpoints_rng": true,
+    "exact_generated_pseudo_and_final_masks": true
+  },
+  "execution_sha256": "20bcd801399c17532974197872f5dbe4beff18fcc43c028dc6c5a989271adc81",
+  "full_model_coverage": "Historical serialized evidence covers six connected nodes, one fold and one epoch in each training stage, compared to an independent raw lifecycle reference. Current-runtime and source-sized qualification remain required.",
+  "auditor_sha256": "7bbe88ce647e99540582cf26a9f83ca9463da04f6be0bfc98b23ac9466ebd9fa",
+  "next_requirements": [
+    "Review reusable provider contracts and add missing plain descriptions and parameter metadata with transaction gates.",
+    "Require both native eligibility predicates, exact runtime bindings and current semantic bounds for reused atoms.",
+    "Review every original source stage and reusable operation boundaries before creating its corrected version.",
+    "Qualify numerical, encoder, augmentation and image-codec dependencies; execute initial training, model restoration, pseudo masks, fresh retraining and final inference with justified fold coverage and geometry.",
+    "Execute the corrected stored original, then test transactional publication and production selection."
+  ],
+  "limits": [
+    "Retained served flags alone do not establish current native publication eligibility.",
+    "Historical full-ensemble evidence is distinct from current-runtime and corrected-original qualification.",
+    "No new approval, historical competition accuracy, cross-domain accuracy or human Tier 1 review is claimed."
+  ]
+}
