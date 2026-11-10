@@ -1,0 +1,997 @@
+{
+  "format": "mercari-feature-topology.v1",
+  "approved": false,
+  "catalog_mutations": 0,
+  "source_commit": "374301ad1c32cbc93dcc40313d5d7bb9c5503746",
+  "source_sha256": {
+    "mercari/datasets_tf.py": "2023f6fe3b6a7f21b8372cf077f4805a29356a1c0f190a0caa101b7754e20e8e",
+    "mercari/datasets_mx.py": "9befc4fe71e05876170a0df675b234211402bfb9660f47130759bf36a23d52bb",
+    "mercari/transformers.py": "3dcc0f896e965bf0acece4cbed61fc58b7d82d10be3bb8a71eb768f747466c44",
+    "mercari/text_utils.py": "076683d8877644cf7b8f13b125e57ed596bd2a5455f531bb8f162b4df285c9bc"
+  },
+  "source_repository": "https://github.com/pjankiewicz/mercari-solution",
+  "variants": {
+    "tensorflow": [
+      {
+        "group": 1,
+        "branch_count": 6,
+        "graph": {
+          "operation": "make_pipeline",
+          "children": [
+            {
+              "operation": "FillEmpty"
+            },
+            {
+              "operation": "PreprocessDataPJ",
+              "explicit_controls": {
+                "n_jobs": {
+                  "source_expression": "n_jobs"
+                }
+              }
+            },
+            {
+              "operation": "make_union_mp",
+              "children": [
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "ConcatTexts"
+                    },
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "CountVectorizer",
+                      "explicit_controls": {
+                        "ngram_range": [
+                          1,
+                          1
+                        ],
+                        "binary": true,
+                        "min_df": 5,
+                        "dtype": {
+                          "source_expression": "np.float32"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "CountVectorizer",
+                      "explicit_controls": {
+                        "binary": true,
+                        "min_df": 5,
+                        "ngram_range": [
+                          1,
+                          1
+                        ],
+                        "dtype": {
+                          "source_expression": "np.float32"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "CountVectorizer",
+                      "explicit_controls": {
+                        "binary": true,
+                        "analyzer": "char_wb",
+                        "min_df": 25,
+                        "ngram_range": [
+                          3,
+                          3
+                        ],
+                        "dtype": {
+                          "source_expression": "np.float32"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "CountVectorizer",
+                      "explicit_controls": {
+                        "binary": true,
+                        "min_df": 5,
+                        "ngram_range": [
+                          1,
+                          1
+                        ],
+                        "dtype": {
+                          "source_expression": "np.float32"
+                        }
+                      }
+                    },
+                    {
+                      "operation": "SparseMatrixOptimize"
+                    }
+                  ]
+                },
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "CountVectorizer",
+                      "explicit_controls": {
+                        "binary": true,
+                        "min_df": 5,
+                        "dtype": {
+                          "source_expression": "np.float32"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "PandasToRecords"
+                    },
+                    {
+                      "operation": "DictVectorizer",
+                      "explicit_controls": {
+                        "dtype": {
+                          "source_expression": "np.float32"
+                        }
+                      }
+                    }
+                  ]
+                }
+              ],
+              "explicit_controls": {
+                "n_jobs": {
+                  "source_expression": "n_jobs"
+                }
+              }
+            },
+            {
+              "operation": "SparseMatrixOptimize"
+            },
+            {
+              "operation": "SanitizeSparseMatrix"
+            },
+            {
+              "operation": "ReportShape"
+            }
+          ]
+        }
+      },
+      {
+        "group": 2,
+        "branch_count": 4,
+        "graph": {
+          "operation": "make_pipeline",
+          "children": [
+            {
+              "operation": "FillEmpty"
+            },
+            {
+              "operation": "PreprocessDataKL"
+            },
+            {
+              "operation": "FeatureUnionMP",
+              "children": [
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "TfidfVectorizer",
+                      "explicit_controls": {
+                        "max_features": {
+                          "source_expression": "max_feat_descr"
+                        },
+                        "ngram_range": [
+                          1,
+                          2
+                        ],
+                        "dtype": {
+                          "source_expression": "np.float32"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "CountVectorizer",
+                      "explicit_controls": {
+                        "max_features": {
+                          "source_expression": "max_feat_name"
+                        },
+                        "ngram_range": [
+                          1,
+                          2
+                        ],
+                        "dtype": {
+                          "source_expression": "np.float32"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "CountVectorizer",
+                      "explicit_controls": {
+                        "dtype": {
+                          "source_expression": "np.float32"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "PandasToRecords"
+                    },
+                    {
+                      "operation": "DictVectorizer"
+                    }
+                  ]
+                }
+              ],
+              "explicit_controls": {
+                "n_jobs": {
+                  "source_expression": "n_jobs"
+                }
+              }
+            },
+            {
+              "operation": "SparseMatrixOptimize"
+            },
+            {
+              "operation": "SanitizeSparseMatrix"
+            },
+            {
+              "operation": "ReportShape"
+            }
+          ]
+        }
+      },
+      {
+        "group": 3,
+        "branch_count": 4,
+        "graph": {
+          "operation": "make_pipeline",
+          "children": [
+            {
+              "operation": "FillEmpty"
+            },
+            {
+              "operation": "PreprocessDataPJ",
+              "explicit_controls": {
+                "n_jobs": {
+                  "source_expression": "n_jobs"
+                }
+              }
+            },
+            {
+              "operation": "FeatureUnionMP",
+              "children": [
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "ConcatTexts"
+                    },
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "TfidfVectorizer",
+                      "explicit_controls": {
+                        "ngram_range": [
+                          1,
+                          1
+                        ],
+                        "binary": true,
+                        "min_df": 5
+                      }
+                    }
+                  ]
+                },
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "ConcatTexts"
+                    },
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "TfidfVectorizer",
+                      "explicit_controls": {
+                        "ngram_range": [
+                          2,
+                          2
+                        ],
+                        "binary": true,
+                        "min_df": 25
+                      }
+                    },
+                    {
+                      "operation": "ReportShape"
+                    }
+                  ]
+                },
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "TfidfVectorizer",
+                      "explicit_controls": {
+                        "ngram_range": [
+                          3,
+                          3
+                        ],
+                        "analyzer": "char",
+                        "binary": true,
+                        "min_df": 25
+                      }
+                    }
+                  ]
+                },
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "PandasToRecords"
+                    },
+                    {
+                      "operation": "DictVectorizer"
+                    }
+                  ]
+                }
+              ],
+              "explicit_controls": {
+                "n_jobs": {
+                  "source_expression": "n_jobs"
+                }
+              }
+            },
+            {
+              "operation": "SparseMatrixOptimize"
+            },
+            {
+              "operation": "SanitizeSparseMatrix"
+            },
+            {
+              "operation": "ReportShape"
+            }
+          ]
+        }
+      }
+    ],
+    "mxnet": [
+      {
+        "group": 1,
+        "branch_count": 12,
+        "graph": {
+          "operation": "make_pipeline",
+          "children": [
+            {
+              "operation": "PreprocessDataPJ",
+              "explicit_controls": {
+                "n_jobs": {
+                  "source_expression": "n_jobs"
+                }
+              }
+            },
+            {
+              "operation": "make_union_mp",
+              "children": [
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "ConcatTexts"
+                    },
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "CountVectorizer",
+                      "explicit_controls": {
+                        "ngram_range": [
+                          1,
+                          1
+                        ],
+                        "binary": true,
+                        "min_df": 5,
+                        "dtype": {
+                          "source_expression": "np.float32"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "CountVectorizer",
+                      "explicit_controls": {
+                        "binary": true,
+                        "min_df": 5,
+                        "ngram_range": [
+                          1,
+                          1
+                        ],
+                        "dtype": {
+                          "source_expression": "np.float32"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "CountVectorizer",
+                      "explicit_controls": {
+                        "binary": true,
+                        "analyzer": "char_wb",
+                        "min_df": 25,
+                        "ngram_range": [
+                          3,
+                          3
+                        ],
+                        "dtype": {
+                          "source_expression": "np.float32"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "CountVectorizer",
+                      "explicit_controls": {
+                        "binary": true,
+                        "min_df": 5,
+                        "ngram_range": [
+                          1,
+                          1
+                        ],
+                        "dtype": {
+                          "source_expression": "np.float32"
+                        }
+                      }
+                    },
+                    {
+                      "operation": "SparseMatrixOptimize"
+                    }
+                  ]
+                },
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "CountVectorizer",
+                      "explicit_controls": {
+                        "binary": true,
+                        "min_df": 5,
+                        "dtype": {
+                          "source_expression": "np.float32"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "PandasToRecords"
+                    },
+                    {
+                      "operation": "DictVectorizer",
+                      "explicit_controls": {
+                        "dtype": {
+                          "source_expression": "np.float32"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "FeaturesEngName"
+                    },
+                    {
+                      "operation": "MinMaxScaler"
+                    }
+                  ]
+                },
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "FeaturesEngItemDescription"
+                    },
+                    {
+                      "operation": "MinMaxScaler"
+                    }
+                  ]
+                },
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "FalseBrands"
+                    }
+                  ]
+                },
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "FeaturesPatterns"
+                    }
+                  ]
+                },
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "FeaturesPatterns"
+                    }
+                  ]
+                },
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "ExtractSpecifics"
+                    },
+                    {
+                      "operation": "DictVectorizer"
+                    },
+                    {
+                      "operation": "SparsityFilter",
+                      "explicit_controls": {
+                        "threshold": 25
+                      }
+                    },
+                    {
+                      "operation": "MaxAbsScaler"
+                    }
+                  ]
+                }
+              ],
+              "explicit_controls": {
+                "n_jobs": {
+                  "source_expression": "n_jobs"
+                }
+              }
+            },
+            {
+              "operation": "SparseMatrixOptimize"
+            },
+            {
+              "operation": "SanitizeSparseMatrix"
+            },
+            {
+              "operation": "ReportShape"
+            }
+          ]
+        }
+      },
+      {
+        "group": 2,
+        "branch_count": 5,
+        "graph": {
+          "operation": "make_pipeline",
+          "children": [
+            {
+              "operation": "PreprocessDataKL"
+            },
+            {
+              "operation": "FeatureUnionMP",
+              "children": [
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "ConcatTexts"
+                    },
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "TfidfVectorizer",
+                      "explicit_controls": {
+                        "max_features": {
+                          "source_expression": "max_feat_descr"
+                        },
+                        "ngram_range": [
+                          1,
+                          2
+                        ],
+                        "dtype": {
+                          "source_expression": "np.float32"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "ConcatTexts"
+                    },
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "CountVectorizer",
+                      "explicit_controls": {
+                        "max_features": {
+                          "source_expression": "max_feat_name"
+                        },
+                        "ngram_range": [
+                          1,
+                          2
+                        ],
+                        "dtype": {
+                          "source_expression": "np.float32"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "ConcatTexts"
+                    },
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "NumericalVectorizer",
+                      "explicit_controls": {
+                        "min_df": 5,
+                        "ngram_range": [
+                          1,
+                          1
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "CountVectorizer",
+                      "explicit_controls": {
+                        "dtype": {
+                          "source_expression": "np.float32"
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "PandasToRecords"
+                    },
+                    {
+                      "operation": "DictVectorizer"
+                    }
+                  ]
+                }
+              ],
+              "explicit_controls": {
+                "n_jobs": {
+                  "source_expression": "n_jobs"
+                }
+              }
+            },
+            {
+              "operation": "SparseMatrixOptimize"
+            },
+            {
+              "operation": "SanitizeSparseMatrix"
+            },
+            {
+              "operation": "ReportShape"
+            }
+          ]
+        }
+      },
+      {
+        "group": 3,
+        "branch_count": 5,
+        "graph": {
+          "operation": "make_pipeline",
+          "children": [
+            {
+              "operation": "PreprocessDataPJ",
+              "explicit_controls": {
+                "n_jobs": {
+                  "source_expression": "n_jobs"
+                }
+              }
+            },
+            {
+              "operation": "FillEmpty"
+            },
+            {
+              "operation": "FeatureUnionMP",
+              "children": [
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "ConcatTexts"
+                    },
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "TfidfVectorizer",
+                      "explicit_controls": {
+                        "ngram_range": [
+                          1,
+                          1
+                        ],
+                        "binary": true,
+                        "min_df": 5
+                      }
+                    }
+                  ]
+                },
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "ConcatTexts"
+                    },
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "TfidfVectorizer",
+                      "explicit_controls": {
+                        "ngram_range": [
+                          2,
+                          2
+                        ],
+                        "binary": true,
+                        "min_df": 5
+                      }
+                    },
+                    {
+                      "operation": "SGDFeatureSelectionV2",
+                      "explicit_controls": {
+                        "threshold": 70
+                      }
+                    },
+                    {
+                      "operation": "ReportShape"
+                    }
+                  ]
+                },
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "TfidfVectorizer",
+                      "explicit_controls": {
+                        "ngram_range": [
+                          3,
+                          3
+                        ],
+                        "analyzer": "char",
+                        "binary": true,
+                        "min_df": 25
+                      }
+                    }
+                  ]
+                },
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "PandasToRecords"
+                    },
+                    {
+                      "operation": "DictVectorizer"
+                    }
+                  ]
+                },
+                {
+                  "operation": "make_pipeline",
+                  "children": [
+                    {
+                      "operation": "PandasSelector"
+                    },
+                    {
+                      "operation": "ExtractSpecifics"
+                    },
+                    {
+                      "operation": "DictVectorizer"
+                    },
+                    {
+                      "operation": "SparsityFilter",
+                      "explicit_controls": {
+                        "threshold": 25
+                      }
+                    },
+                    {
+                      "operation": "MaxAbsScaler"
+                    }
+                  ]
+                }
+              ],
+              "explicit_controls": {
+                "n_jobs": {
+                  "source_expression": "n_jobs"
+                }
+              }
+            },
+            {
+              "operation": "SparseMatrixOptimize"
+            },
+            {
+              "operation": "SanitizeSparseMatrix"
+            },
+            {
+              "operation": "ReportShape"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "reuse_boundaries": [
+    "Generic sparse count/TF-IDF encoding, feature concatenation, support filtering and supervised selection can have domain-independent contracts.",
+    "Text cleaning, fixed field bindings, categorical conventions, numeric-unit extraction and brand heuristics require explicit application adapters.",
+    "Learn vocabularies, scaling, support masks, supervised feature masks and clipping bounds on training inputs; reuse fitted state at inference.",
+    "The MXNet feature graph cannot be replaced by the smaller TensorFlow graph while claiming reproduction of the MXNet pipeline."
+  ],
+  "qualification_gaps": [
+    "Topology only: tokenizer expressions, constructor defaults, categorical coercions and feature values are not runtime-qualified.",
+    "MXNet group three applies supervised SGD selection at percentile 70 after its bigram encoder; TensorFlow does not.",
+    "Source sanitizer fits nanmax over stored sparse values, replaces NaNs with zero, then clips to the fitted maximum; empty/nonfinite bounds require explicit qualification.",
+    "Source pattern transformer suppresses digit-containing strings before numeric extraction, contains adjacent concatenated regex literals, and uses removed pandas ix; do not silently repair and claim historical parity.",
+    "Legacy sklearn private imports and historical SGD defaults require compatibility qualification.",
+    "This inventory does not approve the original CDG or establish complete ensemble execution."
+  ],
+  "extractor_sha256": "8b3d0715b24ea51a2c5ebb8d8fb41437204785ab99c8cbfe7b2a68efc9d6aced"
+}
