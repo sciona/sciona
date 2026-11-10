@@ -58,7 +58,8 @@ def validate(variant):
     before = {p:sha(ROOT/p) for p in paths}
     torch.set_num_threads(1)
     torch.set_num_interop_threads(1)
-    cv2.setNumThreads(1)
+    # Zero disables OpenCV parallel regions; this build reports one thread then.
+    cv2.setNumThreads(0)
     cv2.ocl.setUseOpenCL(False)
     if cv2.getNumThreads() != 1 or cv2.ocl.useOpenCL():
         raise ValueError('OpenCV must use one CPU thread without OpenCL')
