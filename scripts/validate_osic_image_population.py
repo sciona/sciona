@@ -279,6 +279,7 @@ def validate(dependencies,source_directory,state_directory=None,compose=False):
             'sciona/osic_quantile_objective.py','sciona/tensorflow_distribution_losses.py'])
     return dict(format='osic-image-population.v1',passed=True,approved=False,catalog_mutations=0,
         synthetic_only=True,shared_environment_mutations=0,execution=result,dependency_archive_sha256=pins,
+        affine_provider_sha256=sha(ROOT.parent/'sciona-atoms/src/sciona/atoms/numerical/statistics/affine_fit.py'),
         software_sha256={name:sha(ROOT/name) for name in files},
         limitations=[('Actual B5 inference uses seeded random weights; complete training and trained-checkpoint composition remain pending.'
             if state_directory is None else

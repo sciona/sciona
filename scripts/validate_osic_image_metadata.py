@@ -115,6 +115,7 @@ def validate(directory):
             historical_documentation='https://numpy.org/doc/1.19/reference/generated/numpy.linalg.lstsq.html',
             current_documentation='https://numpy.org/doc/stable/reference/generated/numpy.linalg.lstsq.html'),
         fit_sha256=sha(ROOT/'sciona/affine_trajectory_fit.py'),
+        provider_sha256=sha(ROOT.parent/'sciona-atoms/src/sciona/atoms/numerical/statistics/affine_fit.py'),
         adapter_sha256=sha(ROOT/'sciona/osic_image_metadata.py'),validator_sha256=sha(__file__),
         limitations=['Historical NumPy default convention is reconstructed explicitly; historical binary/LAPACK equivalence is unqualified.',
             'No clinical validity, observation availability, raw image decoding or source exclusion-list qualification.',
