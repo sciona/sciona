@@ -22,7 +22,7 @@ def sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
-def worker(source_directory,overlay,state_directory=None):
+def worker(source_directory,overlay,state_directory=None,compose=False):
     import tensorflow as tf
     tf.config.threading.set_intra_op_parallelism_threads(1)
     tf.config.threading.set_inter_op_parallelism_threads(1)
@@ -111,6 +111,23 @@ def worker(source_directory,overlay,state_directory=None):
     baseline_source=baseline.rename(columns=dict(entity='Patient',time='Weeks',target='FVC',numeric='Age',
                                                 category_a='Sex',category_b='SmokingStatus',uncertainty='Percent'))
     query_source=pd.DataFrame(dict(Patient_Week=query['key'],FVC=np.zeros(4),Confidence=np.zeros(4)))
+    if compose:
+        from sciona.osic_feature_state import export_preparation_state
+        from sciona.osic_quantile_training import train_quantile_branch
+        from sciona.osic_quantile_features import FIELDS
+        from sciona.osic_quantile_inference import predict_from_state
+        from sciona.osic_predictions import blend_predictions
+        feature_coordinate='synthetic-joint-features.v1'
+        response_coordinate='synthetic-response.v1'
+        raw_queries=query[['entity','time']]
+        preparation=export_preparation_state(table,baseline[FIELDS],raw_queries,
+            feature_coordinate=feature_coordinate,response_coordinate=response_coordinate,
+            allow_transductive=True)
+        quantile=train_quantile_branch(table,baseline[FIELDS],raw_queries,
+            feature_coordinate=feature_coordinate,response_coordinate=response_coordinate,
+            seeds=(910,911),allow_transductive=True)
+        bundle=json.loads(json.dumps(dict(preparation=preparation,models=quantile['fold_states']),allow_nan=False))
+        bundle_before=json.dumps(bundle,sort_keys=True)
     keras.utils.set_random_seed(617)
     private_paths=[]
     if state_directory is None:
@@ -148,6 +165,45 @@ def worker(source_directory,overlay,state_directory=None):
     np.testing.assert_array_equal(result['values'],scope['sub'][['FVC','Confidence']].to_numpy())
     if private_paths:
         assert private_before==[sha(path) for path in private_paths]
+    composition=None
+    if compose:
+        from sciona import osic_feature_state,osic_quantile_features,osic_quantile_training
+        for module,names in ((osic_feature_state,('export_preparation_state','assemble_populations','joint_population_features')),
+                (osic_quantile_features,('prepare_features','assemble_populations','joint_population_features')),
+                (osic_quantile_training,('train_quantile_branch','prepare_features'))):
+            for name in names:
+                setattr(module,name,forbidden)
+        replay=predict_from_state(bundle['preparation'],bundle['models'],query,
+            feature_coordinate=feature_coordinate,response_coordinate=response_coordinate)
+        np.testing.assert_array_equal(replay['values'],quantile['predictions'])
+        # Deliberately present the branches in different orders at the join.
+        keys,values=blend_predictions(result['keys'],result['values'],replay['keys'][::-1],replay['values'][::-1])
+        source_image=scope['sub'].sort_values('Patient_Week')
+        order=np.argsort(query['key'].to_numpy())
+        expected=.45*source_image[['FVC','Confidence']].to_numpy()+.55*quantile['predictions'][order]
+        assert keys==source_image['Patient_Week'].tolist()
+        np.testing.assert_array_equal(values,expected)
+        rejected=[]
+        def reject(label,queries,coordinate=response_coordinate):
+            try:
+                predict_from_state(bundle['preparation'],bundle['models'],queries,
+                    feature_coordinate=feature_coordinate,response_coordinate=coordinate)
+            except ValueError:
+                rejected.append(label)
+            else:
+                raise AssertionError('Invalid replay contract accepted: '+label)
+        duplicate=query.copy();duplicate.loc[1,'key']=duplicate.loc[0,'key']
+        reject('duplicate_keys',duplicate)
+        reject('missing_key',query.drop(columns='key'))
+        reject('response_coordinate',query,'wrong')
+        reject('changed_query_population',query.iloc[::-1].reset_index(drop=True))
+        assert json.dumps(bundle,sort_keys=True)==bundle_before
+        composition=dict(queries=len(keys),exact_blend=True,quantile_replay_exact=True,
+            quantile_epochs=[r['epochs'] for r in quantile['folds']],
+            quantile_updates=[r['optimizer_updates'] for r in quantile['folds']],
+            feature_fitting_disabled=True,model_fitting_disabled=True,numeric_bundle_unchanged=True,
+            differently_ordered_branches_aligned=True,rejected_contract_cases=rejected,
+            image_training_complete=False)
     return dict(source_training_batches=3,source_training_samples=24,training_arrays_and_rng_exact=True,
         source_entity_order_preserved=True,excluded_corrupt_payload_not_decoded=True,
         actual_b5_inference_queries=4,source_inference_exact=True,unselected_corrupt_payloads_not_decoded=4,
@@ -155,12 +211,13 @@ def worker(source_directory,overlay,state_directory=None):
         intermediate_optimizer_updates=None if state_directory is None else updates,
         fitting_disabled=state_directory is not None,
         private_artifacts_unchanged=True if private_paths else None,
+        composition=composition,
         runtime=dict(tensorflow=tf.__version__,legacy_keras=keras.__version__,pydicom=pydicom.__version__,
                      numpy=np.__version__,opencv=cv2.__version__),
         resource_policy=dict(native_threads=1,dataset_workers=1))
 
 
-def validate(dependencies,source_directory,state_directory=None):
+def validate(dependencies,source_directory,state_directory=None,compose=False):
     from scripts.validate_osic_image_model import PINS
     from scripts.validate_osic_dicom import WHEEL,WHEEL_SHA
     from scripts.audit_osic_opencv_isolation import audit_distribution,digest
@@ -199,6 +256,8 @@ def validate(dependencies,source_directory,state_directory=None):
             '--dependencies',str(overlay),'--source-directory',str(source_directory)]
         if state_directory is not None:
             command.extend(['--state-directory',str(state_directory)])
+        if compose:
+            command.append('--compose')
         process=subprocess.run(command,
             env=env,capture_output=True,text=True)
         if process.returncode:
@@ -213,6 +272,11 @@ def validate(dependencies,source_directory,state_directory=None):
         'sciona/osic_predictions.py','scripts/validate_osic_image_population.py']
     if state_directory is not None:
         files.extend(['sciona/osic_image_state.py','scripts/validate_osic_image_state.py'])
+    if compose:
+        files.extend(['sciona/osic_quantile_inference.py','sciona/osic_feature_state.py',
+            'sciona/osic_quantile_training.py','sciona/osic_quantile_features.py',
+            'sciona/osic_quantile_state.py','sciona/osic_quantile_model.py',
+            'sciona/osic_quantile_objective.py','sciona/tensorflow_distribution_losses.py'])
     return dict(format='osic-image-population.v1',passed=True,approved=False,catalog_mutations=0,
         synthetic_only=True,shared_environment_mutations=0,execution=result,dependency_archive_sha256=pins,
         software_sha256={name:sha(ROOT/name) for name in files},
@@ -222,7 +286,8 @@ def validate(dependencies,source_directory,state_directory=None):
             'The source exclusion values are replaced with an explicit synthetic policy; source filtering code and order are preserved.',
             'Training requires valid eligible images and does not reproduce silently shortened batches after decoder errors.',
             'The historical least-squares default is reconstructed with explicit rcond=-1 in the current runtime.',
-            'This does not complete the quantile/image blend, graph publication or empirical validation.'])
+            'Complete image training, graph publication and empirical validation remain pending.',
+            'Composition, when enabled, compares the existing source image oracle and qualified quantile lifecycle with an independent sorted weighted blend; it does not replay the entire original training notebook.'])
 
 
 if __name__=='__main__':
@@ -231,11 +296,16 @@ if __name__=='__main__':
     parser.add_argument('--source-directory',required=True)
     parser.add_argument('--worker',action='store_true')
     parser.add_argument('--state-directory',type=Path)
+    parser.add_argument('--compose',action='store_true')
     args=parser.parse_args()
+    if args.compose and args.state_directory is None:
+        parser.error('--compose requires --state-directory')
     if args.worker:
-        print(json.dumps(worker(args.source_directory,args.dependencies,args.state_directory)))
+        print(json.dumps(worker(args.source_directory,args.dependencies,args.state_directory,args.compose)))
     else:
-        report=validate(args.dependencies,args.source_directory,args.state_directory)
+        report=validate(args.dependencies,args.source_directory,args.state_directory,args.compose)
         name='osic_image_population.json' if args.state_directory is None else 'osic_image_population_state.json'
+        if args.compose:
+            name='osic_intermediate_composition.json'
         (ROOT/'docs/reviews'/name).write_text(json.dumps(report,indent=2)+'\n')
         print(json.dumps(report['execution']))
