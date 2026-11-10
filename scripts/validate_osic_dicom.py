@@ -12,6 +12,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+from unittest.mock import patch
 import zipfile
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -29,6 +30,7 @@ def worker(source_directory,overlay):
     import cv2
     import numpy as np
     import pydicom
+    from pydicom.pixels.decoders.base import DecodeRunner
     from pydicom.dataset import Dataset,FileMetaDataset
     from pydicom.uid import (ExplicitVRLittleEndian,ImplicitVRLittleEndian,ExplicitVRBigEndian,
         DeflatedExplicitVRLittleEndian,RLELossless,SecondaryCaptureImageStorage,generate_uid)
@@ -79,7 +81,17 @@ def worker(source_directory,overlay):
                 path=Path(tmp)/'synthetic.dcm'
                 pydicom.dcmwrite(path,dataset,enforce_file_format=True)
                 encoded=path.read_bytes()
-                decoded=decode_plane(encoded,read_rescale=True)
+                # Observe the successful backend without replacing plugin
+                # selection or decoding. This hook is bound to the pinned wheel.
+                selected_plugins=[]
+                original_decode_frame=DecodeRunner._decode_frame
+                def observe_decode_frame(runner,src):
+                    frame=original_decode_frame(runner,src)
+                    selected_plugins.append(runner._previous[0])
+                    return frame
+                with patch.object(DecodeRunner,'_decode_frame',observe_decode_frame):
+                    decoded=decode_plane(encoded,read_rescale=True)
+                assert selected_plugins==(['pydicom'] if syntax==RLELossless else [])
                 np.testing.assert_array_equal(decoded['pixels'],values)
                 assert decoded['rescale']==dict(intercept=-17.25,slope=1.5)
                 for branch,adapter in [('training',training_image),('inference',inference_image)]:
@@ -90,6 +102,7 @@ def worker(source_directory,overlay):
                     np.testing.assert_array_equal(got,expected)
                 cases.append(dict(transfer_syntax=syntax.name,bits_allocated=bits,
                     bits_stored=dataset.BitsStored,signed=signed,decoded_values=247,
+                    successful_frame_plugins=selected_plugins,
                     stored_pixels_exact=True,training_and_inference_source_exact=True))
         # Missing rescale metadata is permitted only in the inference branch.
         del dataset.RescaleIntercept
