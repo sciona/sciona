@@ -1,0 +1,159 @@
+{
+  "format": "mercari-feature-runtime-comparison.v1",
+  "approved": false,
+  "baseline": {
+    "format": "mercari-feature-runtime-probe.v1",
+    "approved": false,
+    "catalog_mutations": 0,
+    "synthetic_only": true,
+    "worker_processes": 0,
+    "modern_api_names": false,
+    "source_commit": "374301ad1c32cbc93dcc40313d5d7bb9c5503746",
+    "source_sha256": {
+      "mercari/datasets_tf.py": "2023f6fe3b6a7f21b8372cf077f4805a29356a1c0f190a0caa101b7754e20e8e",
+      "mercari/datasets_mx.py": "9befc4fe71e05876170a0df675b234211402bfb9660f47130759bf36a23d52bb",
+      "mercari/transformers.py": "3dcc0f896e965bf0acece4cbed61fc58b7d82d10be3bb8a71eb768f747466c44",
+      "mercari/text_utils.py": "076683d8877644cf7b8f13b125e57ed596bd2a5455f531bb8f162b4df285c9bc"
+    },
+    "cases": [
+      {
+        "backend": "tensorflow",
+        "group": 1,
+        "passed": false,
+        "error_type": "NotFittedError",
+        "error": "This Pipeline instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator."
+      },
+      {
+        "backend": "tensorflow",
+        "group": 2,
+        "passed": false,
+        "error_type": "PatternError",
+        "error": "invalid group reference 1 at position 1"
+      },
+      {
+        "backend": "tensorflow",
+        "group": 3,
+        "passed": false,
+        "error_type": "NotFittedError",
+        "error": "This Pipeline instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator."
+      },
+      {
+        "backend": "mxnet",
+        "group": 1,
+        "passed": false,
+        "error_type": "AttributeError",
+        "error": "'DataFrame' object has no attribute 'ix'"
+      },
+      {
+        "backend": "mxnet",
+        "group": 2,
+        "passed": false,
+        "error_type": "PatternError",
+        "error": "invalid group reference 1 at position 1"
+      },
+      {
+        "backend": "mxnet",
+        "group": 3,
+        "passed": false,
+        "error_type": "InvalidParameterError",
+        "error": "The 'loss' parameter of SGDRegressor must be a str among {'epsilon_insensitive', 'huber', 'squared_error', 'squared_epsilon_insensitive'}. Got 'squared_loss' instead."
+      }
+    ],
+    "runtime_versions": {
+      "numpy": "2.2.6",
+      "scipy": "1.17.1",
+      "pandas": "2.3.3",
+      "scikit-learn": "1.8.0",
+      "Unidecode": "1.4.0",
+      "nltk": "3.9.4"
+    },
+    "compatibility_shims": [
+      "Pool.map executes serially.",
+      "Source feature union replaced by serial branch selection, deep-copied inputs and sparse concatenation; weighted unions are not qualified.",
+      "Removed sklearn integer-array helper replaced by array.array of C integers.",
+      "Source config constants supplied explicitly; source imports bypassed to avoid logger files and private-library import failures."
+    ],
+    "limits": [
+      "Diagnostic execution in current dependencies only, not a promoted provider implementation or historical environment proof.",
+      "No source dataset, real-data accuracy, training ensemble or full original CDG approval.",
+      "Successful synthetic cases do not qualify missing values, unseen categories, arbitrary token populations or all legacy feature semantics."
+    ],
+    "probe_sha256": "9eac05f42fb9369f77c8c6688b8019f49e21854497145aad7a82c8d13876872a"
+  },
+  "modern_api": {
+    "format": "mercari-feature-runtime-probe.v1",
+    "approved": false,
+    "catalog_mutations": 0,
+    "synthetic_only": true,
+    "worker_processes": 0,
+    "modern_api_names": true,
+    "source_commit": "374301ad1c32cbc93dcc40313d5d7bb9c5503746",
+    "source_sha256": {
+      "mercari/datasets_tf.py": "2023f6fe3b6a7f21b8372cf077f4805a29356a1c0f190a0caa101b7754e20e8e",
+      "mercari/datasets_mx.py": "9befc4fe71e05876170a0df675b234211402bfb9660f47130759bf36a23d52bb",
+      "mercari/transformers.py": "3dcc0f896e965bf0acece4cbed61fc58b7d82d10be3bb8a71eb768f747466c44",
+      "mercari/text_utils.py": "076683d8877644cf7b8f13b125e57ed596bd2a5455f531bb8f162b4df285c9bc"
+    },
+    "cases": [
+      {
+        "backend": "tensorflow",
+        "group": 1,
+        "passed": true,
+        "synthetic_feature_count": 64
+      },
+      {
+        "backend": "tensorflow",
+        "group": 2,
+        "passed": true,
+        "synthetic_feature_count": 46
+      },
+      {
+        "backend": "tensorflow",
+        "group": 3,
+        "passed": true,
+        "synthetic_feature_count": 84
+      },
+      {
+        "backend": "mxnet",
+        "group": 1,
+        "passed": true,
+        "synthetic_feature_count": 111
+      },
+      {
+        "backend": "mxnet",
+        "group": 2,
+        "passed": true,
+        "synthetic_feature_count": 76
+      },
+      {
+        "backend": "mxnet",
+        "group": 3,
+        "passed": true,
+        "synthetic_feature_count": 74
+      }
+    ],
+    "runtime_versions": {
+      "numpy": "2.2.6",
+      "scipy": "1.17.1",
+      "pandas": "2.3.3",
+      "scikit-learn": "1.8.0",
+      "Unidecode": "1.4.0",
+      "nltk": "3.9.4"
+    },
+    "compatibility_shims": [
+      "Pool.map executes serially.",
+      "Source feature union replaced by serial branch selection, deep-copied inputs and sparse concatenation; weighted unions are not qualified.",
+      "Removed sklearn integer-array helper replaced by array.array of C integers.",
+      "Source config constants supplied explicitly; source imports bypassed to avoid logger files and private-library import failures.",
+      "Explicit regex=True for regex replacements carrying flags; source ix label slicing becomes loc.",
+      "SGD squared_loss spelling becomes squared_error; current optimizer defaults remain unqualified against historical defaults.",
+      "Stateless ReportShape, SparseMatrixOptimize, FalseBrands and FeaturesPatterns advertise fitted status for modern sklearn pipeline checks."
+    ],
+    "limits": [
+      "Diagnostic execution in current dependencies only, not a promoted provider implementation or historical environment proof.",
+      "No source dataset, real-data accuracy, training ensemble or full original CDG approval.",
+      "Successful synthetic cases do not qualify missing values, unseen categories, arbitrary token populations or all legacy feature semantics."
+    ],
+    "probe_sha256": "9eac05f42fb9369f77c8c6688b8019f49e21854497145aad7a82c8d13876872a"
+  }
+}
