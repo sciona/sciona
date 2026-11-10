@@ -1,0 +1,190 @@
+{
+  "format": "dfdc-provider-contract-review.v1",
+  "passed": true,
+  "approved": false,
+  "review_source": "automated",
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "catalog_mutations": 0,
+  "providers": [
+    {
+      "artifact_id": "fbece5d1-ce83-5532-b835-75c98b69c967",
+      "runtime_fqdn": "sciona.atoms.dl.dfdc_execution.dfdc_prepare",
+      "version_id": "438e1e5b-d8b4-51b5-b519-a2b057ea1278",
+      "content_hash": "dadb8ad84b6e7e03217f10e484762af4f01d2172c7263a6570dd62dc6cb121fb",
+      "plain_description": "Check video populations, original and altered pairs, model states, fold settings and the requested training checkpoints.",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "payload",
+          "type_desc": "dict",
+          "ordinal": 0,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact version-1 envelope with training, prediction, detector, classifier, hull, plan and config. Training entries carry numerical-transport frames, positional part in [0,49] and original index; prediction carries numerical-transport clips. Frames decode to uint8 RGB with four axes, final axis3 and spatial dimensions at least2; training clips are nonempty. Config requires record_order_seed in [0,2**32); optional n_splits in [1,50], positive batch_size, batches_per_epoch, test_every and frames_per_video, and precision float16/float32. Detector policy is random or supplied state with explicit seed. Classifier policy is random, encoder or complete per-run states. Hull requires a caller-supplied native predictor path, kept out of report fields. Runs and requests are explicit integer triples. Decoded uint8 RGB clips, explicit original/altered pair relationships and positional part groups. Labels derive from whether a clip references itself as its original. Both classes must occur in each selected training and validation population. Fold assignment partitions fifty positional groups and keeps each original and its alterations in the same fold. Originals must reference themselves directly. Full EfficientNet-B7 classifier with explicit random, encoder or complete state initialization. Runs specify seed, fold and epoch count; requests specify zero-based checkpoint epochs. Every requested run must be configured."
+        },
+        {
+          "direction": "output",
+          "name": "prepared",
+          "type_desc": "object",
+          "ordinal": 0,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Trusted mutable mapping returned by preparation, containing decoded clips, states, configuration, plan and private native predictor reference. execute_prepared does not revalidate the public envelope; callers must not mutate prepared state before execution."
+        }
+      ],
+      "source_anchors": [
+        {
+          "file": "sciona/dfdc_runtime.py",
+          "symbol": "prepare",
+          "line": 42,
+          "file_sha256": "cd142617329b81fe11840df183453f9e385dfe13117933a816d6b3f76517229e"
+        },
+        {
+          "file": "sciona/dfdc_codec.py",
+          "symbol": "decode_array",
+          "line": 37,
+          "file_sha256": "4256101fe8c78ad8df1eec4ff6db08ae53a7291a4506e73784ffad25ad39b15a"
+        },
+        {
+          "file": "sciona/dfdc_selection.py",
+          "symbol": "selection_plan",
+          "line": 27,
+          "file_sha256": "c7accd53093451760b2371cbbab3d58e204a0ef8d41833e500bf47ddc161501a"
+        }
+      ],
+      "role": "recipe_adapter",
+      "reuse": "Other paired face-video alteration tasks may reuse this recipe only with justified target meanings, population grouping, detector and landmark conventions, augmentation invariances and checkpoint plans. Preparation and execution remain recipe adapters. General image geometry, sampling and aggregation require independent contracts before standalone selection.",
+      "validity_bounds": [
+        "This is a face-focused alteration recipe, not a generic video classifier. Caller must justify RGB encoding, frame order, paired target meaning and valid face geometry; matching array shapes is insufficient.",
+        "Positional group numbers and pair-fold agreement do not prove independence of people, recording sessions or acquisition sources. Caller must supply a grouping justified for the new task.",
+        "A sixty-eight-point count does not establish the semantic ordering or quality of landmarks. Native predictor deserialization is a trusted-file boundary. The operation named convex hull uses an ordered landmark polygon, and source failures silently leave the image unchanged.",
+        "Source default forty-epoch runs cannot supply a request for zero-based epoch forty. An explicit executable adaptation is required; do not silently extend runs or relabel checkpoints. Tensor shape checks and seed labels do not authenticate historical weights or predictive parity.",
+        "Face detection, augmentation invariance and confidence thresholds are source assumptions requiring justification in another application. Scores are not calibrated cross-domain probabilities. Generic resize or aggregation would need independently qualified provider contracts before separate selection.",
+        "A fallback0.5 is not a successful neutral prediction; downstream consumers must inspect status. Prepared mappings are mutable and execute_prepared does not repeat envelope validation. One-face scalar behavior can cause the source execution-error fallback.",
+        "Automated Tier 3 synthetic execution only; no human Tier 1 or community Tier 2 qualification.",
+        "Qualification uses five full B7 runs with random initialization, two epochs and one batch1 update per epoch, seven selected checkpoints and CPU float32 inference; full default-scale schedules and external pretrained states are not empirically qualified.",
+        "The neural detector uses constructed synthetic state and the native predictor is trained solely on synthetic landmarks. This does not establish pretrained detector quality or positive HOG face quality.",
+        "Current-platform serial execution only; caller must bound Torch, native pools and OpenCV. Source default workload sizes are not shared-budget controls.",
+        "Prepared values and native files remain trusted caller inputs. No clean-install, GPU, large-input or predictive-accuracy qualification."
+      ]
+    },
+    {
+      "artifact_id": "d856afd3-d231-59c6-95a5-6b7a617400b9",
+      "runtime_fqdn": "sciona.atoms.dl.dfdc_execution.dfdc_execute",
+      "version_id": "7bd7a243-2caa-575d-8915-fcddb568ece6",
+      "content_hash": "24faeddc71b24e5f8ba37f7ceec39fc942ab1dce1af815b26adc4fbdb98a16e3",
+      "plain_description": "Prepare face crops, train all requested models, then combine the selected checkpoints into video scores with explicit fallback status.",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "type_desc": "object",
+          "ordinal": 0,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Trusted mutable mapping returned by preparation, containing decoded clips, states, configuration, plan and private native predictor reference. execute_prepared does not revalidate the public envelope; callers must not mutate prepared state before execution."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "type_desc": "dict",
+          "ordinal": 0,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Version1 result mapping with explicit executable plan, training record count, per-run training/validation summaries and ordered predictions. Each prediction includes score, status, reason, selected frame count, classified face count, model count and precision. Inspect status: source_fallback score0.5 can indicate empty input, no faces or caught execution failure. No trained model or native predictor path is returned. Scores are not calibrated cross-domain probabilities."
+        }
+      ],
+      "source_anchors": [
+        {
+          "file": "sciona/dfdc_runtime.py",
+          "symbol": "execute_prepared",
+          "line": 118,
+          "file_sha256": "cd142617329b81fe11840df183453f9e385dfe13117933a816d6b3f76517229e"
+        },
+        {
+          "file": "sciona/dfdc_ensemble_training.py",
+          "symbol": "train_ensemble",
+          "line": 54,
+          "file_sha256": "1ffdfa2bffa859c025820ea4681c7ceeed8599eddfa2afefeb7124df579e166c"
+        },
+        {
+          "file": "sciona/dfdc_prediction.py",
+          "symbol": "predict_video",
+          "line": 20,
+          "file_sha256": "cc5e6f6e4592d5fb493e7ef37174b3c3977341bb4d3e6da947764aabe21251c8"
+        }
+      ],
+      "role": "recipe_adapter",
+      "reuse": "Other paired face-video alteration tasks may reuse this recipe only with justified target meanings, population grouping, detector and landmark conventions, augmentation invariances and checkpoint plans. Preparation and execution remain recipe adapters. General image geometry, sampling and aggregation require independent contracts before standalone selection.",
+      "validity_bounds": [
+        "This is a face-focused alteration recipe, not a generic video classifier. Caller must justify RGB encoding, frame order, paired target meaning and valid face geometry; matching array shapes is insufficient.",
+        "Positional group numbers and pair-fold agreement do not prove independence of people, recording sessions or acquisition sources. Caller must supply a grouping justified for the new task.",
+        "A sixty-eight-point count does not establish the semantic ordering or quality of landmarks. Native predictor deserialization is a trusted-file boundary. The operation named convex hull uses an ordered landmark polygon, and source failures silently leave the image unchanged.",
+        "Source default forty-epoch runs cannot supply a request for zero-based epoch forty. An explicit executable adaptation is required; do not silently extend runs or relabel checkpoints. Tensor shape checks and seed labels do not authenticate historical weights or predictive parity.",
+        "Face detection, augmentation invariance and confidence thresholds are source assumptions requiring justification in another application. Scores are not calibrated cross-domain probabilities. Generic resize or aggregation would need independently qualified provider contracts before separate selection.",
+        "A fallback0.5 is not a successful neutral prediction; downstream consumers must inspect status. Prepared mappings are mutable and execute_prepared does not repeat envelope validation. One-face scalar behavior can cause the source execution-error fallback.",
+        "Automated Tier 3 synthetic execution only; no human Tier 1 or community Tier 2 qualification.",
+        "Qualification uses five full B7 runs with random initialization, two epochs and one batch1 update per epoch, seven selected checkpoints and CPU float32 inference; full default-scale schedules and external pretrained states are not empirically qualified.",
+        "The neural detector uses constructed synthetic state and the native predictor is trained solely on synthetic landmarks. This does not establish pretrained detector quality or positive HOG face quality.",
+        "Current-platform serial execution only; caller must bound Torch, native pools and OpenCV. Source default workload sizes are not shared-budget controls.",
+        "Prepared values and native files remain trusted caller inputs. No clean-install, GPU, large-input or predictive-accuracy qualification."
+      ]
+    }
+  ],
+  "reuse_decision": "Other paired face-video alteration tasks may reuse this recipe only with justified target meanings, population grouping, detector and landmark conventions, augmentation invariances and checkpoint plans. Preparation and execution remain recipe adapters. General image geometry, sampling and aggregation require independent contracts before standalone selection.",
+  "limitations": [
+    "This is a face-focused alteration recipe, not a generic video classifier. Caller must justify RGB encoding, frame order, paired target meaning and valid face geometry; matching array shapes is insufficient.",
+    "Positional group numbers and pair-fold agreement do not prove independence of people, recording sessions or acquisition sources. Caller must supply a grouping justified for the new task.",
+    "A sixty-eight-point count does not establish the semantic ordering or quality of landmarks. Native predictor deserialization is a trusted-file boundary. The operation named convex hull uses an ordered landmark polygon, and source failures silently leave the image unchanged.",
+    "Source default forty-epoch runs cannot supply a request for zero-based epoch forty. An explicit executable adaptation is required; do not silently extend runs or relabel checkpoints. Tensor shape checks and seed labels do not authenticate historical weights or predictive parity.",
+    "Face detection, augmentation invariance and confidence thresholds are source assumptions requiring justification in another application. Scores are not calibrated cross-domain probabilities. Generic resize or aggregation would need independently qualified provider contracts before separate selection.",
+    "A fallback0.5 is not a successful neutral prediction; downstream consumers must inspect status. Prepared mappings are mutable and execute_prepared does not repeat envelope validation. One-face scalar behavior can cause the source execution-error fallback.",
+    "Automated Tier 3 synthetic execution only; no human Tier 1 or community Tier 2 qualification.",
+    "Qualification uses five full B7 runs with random initialization, two epochs and one batch1 update per epoch, seven selected checkpoints and CPU float32 inference; full default-scale schedules and external pretrained states are not empirically qualified.",
+    "The neural detector uses constructed synthetic state and the native predictor is trained solely on synthetic landmarks. This does not establish pretrained detector quality or positive HOG face quality.",
+    "Current-platform serial execution only; caller must bound Torch, native pools and OpenCV. Source default workload sizes are not shared-budget controls.",
+    "Prepared values and native files remain trusted caller inputs. No clean-install, GPU, large-input or predictive-accuracy qualification."
+  ],
+  "derivative": {
+    "plain_description": "Check paired video populations, prepare face crops, train all requested models and combine selected checkpoints into scores with explicit fallback status.",
+    "ports": [
+      {
+        "direction": "input",
+        "name": "payload",
+        "type_desc": "dict",
+        "ordinal": 0,
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Exact version-1 envelope with training, prediction, detector, classifier, hull, plan and config. Training entries carry numerical-transport frames, positional part in [0,49] and original index; prediction carries numerical-transport clips. Frames decode to uint8 RGB with four axes, final axis3 and spatial dimensions at least2; training clips are nonempty. Config requires record_order_seed in [0,2**32); optional n_splits in [1,50], positive batch_size, batches_per_epoch, test_every and frames_per_video, and precision float16/float32. Detector policy is random or supplied state with explicit seed. Classifier policy is random, encoder or complete per-run states. Hull requires a caller-supplied native predictor path, kept out of report fields. Runs and requests are explicit integer triples. Decoded uint8 RGB clips, explicit original/altered pair relationships and positional part groups. Labels derive from whether a clip references itself as its original. Both classes must occur in each selected training and validation population. Fold assignment partitions fifty positional groups and keeps each original and its alterations in the same fold. Originals must reference themselves directly. Full EfficientNet-B7 classifier with explicit random, encoder or complete state initialization. Runs specify seed, fold and epoch count; requests specify zero-based checkpoint epochs. Every requested run must be configured."
+      },
+      {
+        "direction": "output",
+        "name": "result",
+        "type_desc": "dict",
+        "ordinal": 0,
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Version1 result mapping with explicit executable plan, training record count, per-run training/validation summaries and ordered predictions. Each prediction includes score, status, reason, selected frame count, classified face count, model count and precision. Inspect status: source_fallback score0.5 can indicate empty input, no faces or caught execution failure. No trained model or native predictor path is returned. Scores are not calibrated cross-domain probabilities."
+      }
+    ]
+  },
+  "evidence_commit": "34b7661eba04fc29c3266fb4328275f95a4efdba",
+  "execution": {
+    "passed": true,
+    "approved": false,
+    "catalog_mutations": 0,
+    "evidence_commit": "34b7661eba04fc29c3266fb4328275f95a4efdba",
+    "report_sha256": "d0ecfa9d10851935221d38db7dd9c71ae6ad56c8634e94aaf0da2a6cd372565c",
+    "graph_sha256": "dc87409857540e3938483d94ab8cabbba0287cc19993394c1878a7cb2d6f8b86",
+    "limits": "All runtime stages executed without stand-ins. Detector uses constructed synthetic state; dlib68-point predictor trained only on synthetic images. Native loader validates predictor but positive HOG face quality is not claimed. Five B7 runs use random initialization, two epochs/one batch1 update each,380 CPUfloat32. Explicit shortened request plan, not original checkpoint provenance or default-scale quality. Current serialized graph/providers executed; corrected stored original and publication remain separate.",
+    "scope": "Full local graph only; corrected stored original and publication remain separate."
+  },
+  "readiness_sha256": "415a5a02d6f733eca52c3f89ef7ff09ca84698524986e2cc9f51774451c77971",
+  "reuse_sha256": "8aa0a52e5944e3e580c2ff8500b85a7b72c6a933164b7c06305f2ec2312f3de7",
+  "reviewer_sha256": "0790c20f44184e86c91263992b8ed12a4d04a0e1827b2b77efa3ce22e2124686",
+  "remaining": [
+    "Transactional metadata repair and both native eligibility predicates.",
+    "Corrected stored original execution, transactional publication and production selection."
+  ]
+}
