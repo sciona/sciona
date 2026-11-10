@@ -1,0 +1,84 @@
+{
+  "format": "osic-image-training-controls.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "source": {
+    "repository": "https://github.com/artkulak/osic-pulmonary-fibrosis-progression",
+    "revision": "cd6dfa56c012e3c0eb81ed15534f436b3ba16d19",
+    "normalized_cell_sha256": {
+      "11": "2cf4af14c6713a73fe4a14a7bb0eb339539a58f531966998753d2425ce277567",
+      "22": "9c5efe8acb304c3c235753603ba22c1ef8bf988178e3eb39b028baa820477cbe"
+    }
+  },
+  "runtime": {
+    "tensorflow": "2.20.0",
+    "legacy_keras": "2.20.1",
+    "native_threads": 1,
+    "optimizer_mapping": "Historical tf.keras Adam explicitly mapped to tf_keras.optimizers.legacy.Adam"
+  },
+  "schedule": {
+    "epochs": 30,
+    "batch_size": 8,
+    "training_steps": 32,
+    "validation_steps": 16,
+    "same_population_for_training_and_validation": true,
+    "early_stopping_active": false
+  },
+  "replay": {
+    "callback_epochs_per_model": 30,
+    "models": 2,
+    "learning_rates": [
+      0.003000000026077032,
+      0.003000000026077032,
+      0.003000000026077032,
+      0.003000000026077032,
+      0.003000000026077032,
+      0.003000000026077032,
+      0.001500000013038516,
+      0.001500000013038516,
+      0.001500000013038516,
+      0.001500000013038516,
+      0.001500000013038516,
+      0.000750000006519258,
+      0.000750000006519258,
+      0.000750000006519258,
+      0.000750000006519258,
+      0.000750000006519258,
+      0.000750000006519258,
+      0.000750000006519258,
+      0.000750000006519258,
+      0.000750000006519258,
+      0.000375000003259629,
+      0.000375000003259629,
+      0.000375000003259629,
+      0.000375000003259629,
+      0.000375000003259629,
+      0.0001875000016298145,
+      0.0001875000016298145,
+      0.0001875000016298145,
+      0.0001875000016298145,
+      0.0001875000016298145
+    ],
+    "lr_reduction_epochs_one_based": [
+      7,
+      12,
+      21,
+      26
+    ],
+    "best_checkpoint_epoch_one_based": 16,
+    "final_model_epoch_one_based": 30,
+    "checkpoint_reload_passed": true,
+    "tiny_improvement_below_scheduler_min_delta_preserved": true
+  },
+  "controls_sha256": "2af3e015df150795a564588c6ac956d64647941478552080de1fd35b8a4cd501",
+  "validator_sha256": "56967d830f999b2d995cee715f7e371335d0fa1a1a64fbaa1dd1d1aec2d59d38",
+  "limitations": [
+    "Synthetic scalar-model callback replay only; no image training or gradient qualification.",
+    "Source model/generator construction and fit are intercepted to inspect policy; population sampling and batch aggregation remain unqualified.",
+    "Checkpointing executes on scalar models; custom EfficientNet model restoration remains unqualified.",
+    "Historical TensorFlow numerical/random equivalence is not claimed.",
+    "Same-population validation is not held-out generalization evidence."
+  ]
+}

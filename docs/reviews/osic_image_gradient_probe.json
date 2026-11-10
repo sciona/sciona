@@ -1,0 +1,59 @@
+{
+  "format": "osic-image-gradient-probe.v1",
+  "probe_completed": true,
+  "training_qualified": false,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "model_sha256": "403ff9e7f6f3a2ba362c599abc68910c527a831366cff8a2563b2828db7618df",
+  "controls_sha256": "2af3e015df150795a564588c6ac956d64647941478552080de1fd35b8a4cd501",
+  "probe_sha256": "e0f5825897de03b99e2d2cc6f025ee92b2339811cea0427f2a097ec55935443c",
+  "dependency_archive_sha256": {
+    "efficientnet-1.1.0-py3-none-any.whl": "4f8a56d15e9c44e9a62dae35404079724c4a1d9e9bfbcfd2a18077e5eda58bf7",
+    "Keras_Applications-1.0.8-py3-none-any.whl": "df4323692b8c1174af821bf906f1e442e63fa7589bf0f1230a0b6bdc5a810c95",
+    "keras-applications-source.zip": "ff87b242e5de063242132c7c8a1155679c084123b857d25adec626d1374a54b4"
+  },
+  "cases": [
+    {
+      "case": "zero",
+      "batch_size": 8,
+      "image_shape": [
+        512,
+        512,
+        1
+      ],
+      "loss": 1.0036139488220215,
+      "gradient_tensors": 506,
+      "finite_gradient_tensors": 133,
+      "optimizer_update_applied": false,
+      "optimizer_iterations": 0,
+      "all_model_weights_finite": true,
+      "tensorflow": "2.20.0",
+      "native_threads": 1
+    },
+    {
+      "case": "varied",
+      "batch_size": 8,
+      "image_shape": [
+        512,
+        512,
+        1
+      ],
+      "loss": 0.49149662256240845,
+      "gradient_tensors": 506,
+      "finite_gradient_tensors": 506,
+      "optimizer_update_applied": true,
+      "optimizer_iterations": 1,
+      "all_model_weights_finite": true,
+      "tensorflow": "2.20.0",
+      "native_threads": 1
+    }
+  ],
+  "limitations": [
+    "One full-size batch per isolated process, not the complete 30-epoch schedule.",
+    "The probe withholds optimizer updates on nonfinite gradients; source training has no such explicit guard.",
+    "Training-mode BatchNorm state updates occur even when the optimizer update is withheld; each process is discarded.",
+    "No gradient clipping, batch-size reduction, model substitution or pretrained weights.",
+    "No source-versus-adapter training parity or empirical effectiveness claim."
+  ]
+}
