@@ -1,0 +1,939 @@
+{
+  "format": "osic-image-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "providers": [
+    {
+      "artifact_id": "ecc2a1a1-c545-5f99-8bd5-3779801654ba",
+      "fqdn": "sciona.atoms.ml.domain_adapters.osic_image.blend_keyed_predictions",
+      "version_id": "0dffac3b-b344-54c4-874f-ce2d74c3fc3c",
+      "content_hash": "28fe367ea217473debcfddf891f9f1052ad915e82550feea4c9d7d7721dee86b",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "image_keys",
+          "type_desc": "list[str]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty unique nonempty string query keys aligned with image rows. Must have exactly the same set as quantile keys."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "image_values",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite real matrix (M,2) of point and source uncertainty, aligned with image keys; finite float64 representation required. Caller establishes units and applicability."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "quantile_keys",
+          "type_desc": "list[str]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty unique nonempty string query keys aligned with quantile rows. Must have exactly the same set as image keys."
+        },
+        {
+          "direction": "input",
+          "ordinal": 3,
+          "name": "quantile_values",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite real matrix (M,2) of point and source uncertainty, aligned with quantile keys; finite float64 representation required. Same units as the image branch."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "tuple[list[str],numpy.ndarray]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Sorted keys and a fresh float64 (M,2) matrix. Align both branches by keys, then use ordered weighted sum with source weights 0.45 and 0.55. No fitting or empirical calibration. Concrete provisioned execution only; abstract witness rejects."
+        }
+      ],
+      "operation": "Align two prediction branches by keys and apply source weights 0.45/0.55. Both branches require identical nonempty unique string key sets and finite real (M,2) point/uncertainty matrices. Return sorted keys and a float64 matrix using the generic ordered weighted-sum provider. Caller establishes shared units and applicability; this source weighting is not a learned ensemble.",
+      "plain_description": "Match the two sets of predictions by their keys and combine them using fixed weights.",
+      "validity_bounds": "Nonempty unique nonempty string query keys aligned with image rows. Must have exactly the same set as quantile keys. Finite real matrix (M,2) of point and source uncertainty, aligned with image keys; finite float64 representation required. Caller establishes units and applicability. Nonempty unique nonempty string query keys aligned with quantile rows. Must have exactly the same set as image keys. Finite real matrix (M,2) of point and source uncertainty, aligned with quantile keys; finite float64 representation required. Same units as the image branch. Sorted keys and a fresh float64 (M,2) matrix. Align both branches by keys, then use ordered weighted sum with source weights 0.45 and 0.55. No fitting or empirical calibration. Concrete provisioned execution only; abstract witness rejects.",
+      "reuse": "Explicit preparation and reduction over caller-mapped inputs. Generic affine fitting and ordered summation remain reusable independently; application mappings, units, availability and empirical transfer require separate review.",
+      "registered_provider_dependencies": [
+        {
+          "artifact_id": "4f486f1c-82db-50db-b5d2-188aeaa8cc4a",
+          "fqdn": "sciona.atoms.numerical.statistics.ordered_sum.ordered_weighted_sum",
+          "version_id": "5fb9c91f-ff5f-590c-b376-88e2a7360440",
+          "content_hash": "814d0ff20f33820537741e1f116c32dfa69262d56dc16d872f3a055f77bd6968",
+          "trust_tier": 3
+        }
+      ]
+    },
+    {
+      "artifact_id": "755905ac-e308-5fd8-b623-87174252167d",
+      "fqdn": "sciona.atoms.ml.domain_adapters.osic_image.prepare_image_slice_inputs",
+      "version_id": "747efcb8-2494-52e2-a8c7-98e2e3d7226d",
+      "content_hash": "1511679c771f2f73d5bed2da3954fc2c6599512fb3f5482d19c74c84d1b113c7",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "encoded_planes",
+          "type_desc": "list[tuple[str,bytes]]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Private nonempty encoded single-frame, single-sample monochrome DICOM bytes. Qualified provisioned pydicom/OpenCV runtime only. Uncompressed and RLE decoding have separate synthetic qualification; other compressed codecs remain unqualified. Caller disables OpenCV workers before execution. Ordered uniquely named records for exactly one entity. Source names strip four trailing characters to parse integer slice ordinals. Rescale metadata is ignored; unselected payloads are not decoded."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "numeric",
+          "type_desc": "number",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite real scalar metadata coordinate, excluding bool. Apply source (value-30)/30 transform; no clinical or generic interpretation inferred."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "category",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Source inference category string. Case-sensitive comparison to the source label; unknown strings retain the fallback. Not a generic categorical encoder."
+        },
+        {
+          "direction": "input",
+          "ordinal": 3,
+          "name": "status",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Source status string. Exact source cases and unknown-string fallback are retained. Availability and application interpretation remain caller responsibilities."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Private images (S,512,512,1), metadata (S,4) and int64 selected_positions. At least two selected slices; source strict ordinal/count bounds retain caller order. Decode selected payloads only, ignore rescale metadata, divide integer pixels by 2048 and resize. Only one entity is prepared; no model call. Concrete provisioned execution only; abstract witness rejects."
+        }
+      ],
+      "operation": "Prepare selected encoded slices for one entity without invoking a model. Caller supplies ordered unique (name, bytes) records and scalar metadata. Select source ordinal/count positions before decoding; retain at least two slices. Ignore image rescale metadata and apply the source inference normalization, resize and case-sensitive category policy. Return images (S,512,512,1), metadata (S,4) and selected int64 positions. Unselected payloads are not decoded. Disable OpenCV workers; caller owns order and availability.",
+      "plain_description": "Prepare selected images and supplied record-level information for one model prediction group.",
+      "validity_bounds": "Private nonempty encoded single-frame, single-sample monochrome DICOM bytes. Qualified provisioned pydicom/OpenCV runtime only. Uncompressed and RLE decoding have separate synthetic qualification; other compressed codecs remain unqualified. Caller disables OpenCV workers before execution. Ordered uniquely named records for exactly one entity. Source names strip four trailing characters to parse integer slice ordinals. Rescale metadata is ignored; unselected payloads are not decoded. Finite real scalar metadata coordinate, excluding bool. Apply source (value-30)/30 transform; no clinical or generic interpretation inferred. Source inference category string. Case-sensitive comparison to the source label; unknown strings retain the fallback. Not a generic categorical encoder. Source status string. Exact source cases and unknown-string fallback are retained. Availability and application interpretation remain caller responsibilities. Private images (S,512,512,1), metadata (S,4) and int64 selected_positions. At least two selected slices; source strict ordinal/count bounds retain caller order. Decode selected payloads only, ignore rescale metadata, divide integer pixels by 2048 and resize. Only one entity is prepared; no model call. Concrete provisioned execution only; abstract witness rejects.",
+      "reuse": "Explicit preparation and reduction over caller-mapped inputs. Generic affine fitting and ordered summation remain reusable independently; application mappings, units, availability and empirical transfer require separate review.",
+      "registered_provider_dependencies": []
+    },
+    {
+      "artifact_id": "e98d866a-5442-5b28-bd0b-c47ce6434696",
+      "fqdn": "sciona.atoms.ml.domain_adapters.osic_image.prepare_image_training_population",
+      "version_id": "4004c895-ee2e-5714-bd4f-ff009cd7400e",
+      "content_hash": "03f640157753d1413f5a7687ffaa36a26755b289858481715f6335c638b2ef65",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "table",
+          "type_desc": "pandas.DataFrame",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty pandas DataFrame with unique exact caller-mapped fields entity,time,target,numeric,category_a,category_b. Nonempty string entity identities; finite numeric coordinates. Caller owns coordinate units and actual observation availability. No source records or identifiers are embedded. Fit every entity before exclusions with explicit rcond=-1. Preserve first-encounter entity order and first-row metadata; minimum-norm slopes may be rank deficient."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "encoded_planes",
+          "type_desc": "dict[str,list[tuple[str,bytes]]]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Private nonempty encoded single-frame, single-sample monochrome DICOM bytes. Qualified provisioned pydicom/OpenCV runtime only. Uncompressed and RLE decoding have separate synthetic qualification; other compressed codecs remain unqualified. Caller disables OpenCV workers before execution. Exact coverage of all mapped entities, including excluded entities. Eligible entities require nonempty ordered uniquely named records and valid rescale fields with nonzero slope. Excluded payloads are not decoded."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "excluded_entities",
+          "type_desc": "list[str]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit unique nonempty string exclusion identities. Exclusions affect image sampling eligibility after longitudinal fitting. At least one eligible entity must remain. Caller-owned policy, with no source exclusion list embedded."
+        },
+        {
+          "direction": "input",
+          "ordinal": 3,
+          "name": "time_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty time-coordinate declaration; caller owns common units for fitting and later queries. No unit conversion."
+        },
+        {
+          "direction": "input",
+          "ordinal": 4,
+          "name": "response_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty response-coordinate declaration. Fitted slopes have response units per time unit; labels do not prove compatible coordinates."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Private entities, per-entity images (S,512,512,1), metadata (G,4), slopes (G,), fit diagnostics and coordinate declarations. Training normalization subtracts intercept, divides by slope*1000, then resizes. No model fitting or sampling; image groups are materialized for this training population. Concrete provisioned execution only; abstract witness rejects."
+        }
+      ],
+      "operation": "Prepare source training images, metadata and longitudinal slope targets. Fit all mapped entities before applying caller-supplied exclusions. Preserve first-encounter entity order and first-row metadata. Decode eligible images in caller order, with the source training rescale/resize policy. Invalid eligible images raise; excluded payloads are not decoded. Return private image groups, metadata, slopes, fit diagnostics and coordinate declarations. No model construction, training or sampling occurs. Disable OpenCV workers before execution; the provisioned decoder supports only qualified formats.",
+      "plain_description": "Prepare supplied images and record-level information for model training, with an explicit exclusion list.",
+      "validity_bounds": "Nonempty pandas DataFrame with unique exact caller-mapped fields entity,time,target,numeric,category_a,category_b. Nonempty string entity identities; finite numeric coordinates. Caller owns coordinate units and actual observation availability. No source records or identifiers are embedded. Fit every entity before exclusions with explicit rcond=-1. Preserve first-encounter entity order and first-row metadata; minimum-norm slopes may be rank deficient. Private nonempty encoded single-frame, single-sample monochrome DICOM bytes. Qualified provisioned pydicom/OpenCV runtime only. Uncompressed and RLE decoding have separate synthetic qualification; other compressed codecs remain unqualified. Caller disables OpenCV workers before execution. Exact coverage of all mapped entities, including excluded entities. Eligible entities require nonempty ordered uniquely named records and valid rescale fields with nonzero slope. Excluded payloads are not decoded. Explicit unique nonempty string exclusion identities. Exclusions affect image sampling eligibility after longitudinal fitting. At least one eligible entity must remain. Caller-owned policy, with no source exclusion list embedded. Nonempty time-coordinate declaration; caller owns common units for fitting and later queries. No unit conversion. Nonempty response-coordinate declaration. Fitted slopes have response units per time unit; labels do not prove compatible coordinates. Private entities, per-entity images (S,512,512,1), metadata (G,4), slopes (G,), fit diagnostics and coordinate declarations. Training normalization subtracts intercept, divides by slope*1000, then resizes. No model fitting or sampling; image groups are materialized for this training population. Concrete provisioned execution only; abstract witness rejects.",
+      "reuse": "Explicit preparation and reduction over caller-mapped inputs. Generic affine fitting and ordered summation remain reusable independently; application mappings, units, availability and empirical transfer require separate review.",
+      "registered_provider_dependencies": [
+        {
+          "artifact_id": "c5a57e38-9d64-526e-8f6c-953fb10545f1",
+          "fqdn": "sciona.atoms.numerical.statistics.affine_fit.affine_least_squares",
+          "version_id": "a9cae503-875f-5dec-b82b-a113c8aec6cf",
+          "content_hash": "115433af2fa42aa4454253a18682acef7c1447142261590539cbef9da6da5896",
+          "trust_tier": 3
+        }
+      ]
+    },
+    {
+      "artifact_id": "35d37d9a-9f7b-5d28-8e76-66e55b8ed4f6",
+      "fqdn": "sciona.atoms.ml.domain_adapters.osic_image.reduce_image_predictions",
+      "version_id": "84257250-64a3-5d1d-b7f8-afb6da9edff4",
+      "content_hash": "3aac9d82a09ad0c0c856c1d32c505f395c0a0ebd7780fe1eded4262a7b6ff5b2",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "slice_slopes",
+          "type_desc": "list[numpy.ndarray]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty ordered per-entity finite real arrays (S,) or (S,1), S>=2. Median retains input dtype behavior; do not promote float32 before reduction. Finite float64 representation required."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "baseline_time",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite real vector (G,) aligned with the slope groups. Same time coordinate as query times; converted to float64."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "baseline_value",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite real vector (G,) of already observed baseline outcomes aligned with slope groups. Response units must agree with slopes times time; converted to float64."
+        },
+        {
+          "direction": "input",
+          "ordinal": 3,
+          "name": "baseline_uncertainty",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite real vector (G,) of caller-supplied source heuristic values, aligned with slope groups. Not calibrated uncertainty; negative values are not clipped."
+        },
+        {
+          "direction": "input",
+          "ordinal": 4,
+          "name": "query_subject",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Integer vector (M,) indexing the supplied slope groups, with 0<=index<G. Explicit caller mapping; no entity joining occurs."
+        },
+        {
+          "direction": "input",
+          "ordinal": 5,
+          "name": "query_time",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite real vector (M,) sharing baseline time units. Integer inputs retain source scalar-integer multiplication behavior; floating inputs use floating scalar multiplication. Finite float64 representation required."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Float64 (M,2) source point and heuristic uncertainty. Median each group; form the intercept before extrapolating. Preserve input-dtype median/scalar rounding and negative uncertainty. No calibrated interval claim. Concrete provisioned execution only; abstract witness rejects."
+        }
+      ],
+      "operation": "Reduce per-entity slice slopes to source point and uncertainty predictions. Require at least two finite scalar slice predictions per entity, aligned finite baseline vectors and integer entity positions for queries. Preserve input-dtype median rounding and source intercept-first arithmetic. Time and slope units must agree. The uncertainty heuristic can be negative and is not calibrated. No model execution, entity joining or availability inference.",
+      "plain_description": "Combine image predictions with supplied starting measurements to calculate values at requested times.",
+      "validity_bounds": "Nonempty ordered per-entity finite real arrays (S,) or (S,1), S>=2. Median retains input dtype behavior; do not promote float32 before reduction. Finite float64 representation required. Finite real vector (G,) aligned with the slope groups. Same time coordinate as query times; converted to float64. Finite real vector (G,) of already observed baseline outcomes aligned with slope groups. Response units must agree with slopes times time; converted to float64. Finite real vector (G,) of caller-supplied source heuristic values, aligned with slope groups. Not calibrated uncertainty; negative values are not clipped. Integer vector (M,) indexing the supplied slope groups, with 0<=index<G. Explicit caller mapping; no entity joining occurs. Nonempty finite real vector (M,) sharing baseline time units. Integer inputs retain source scalar-integer multiplication behavior; floating inputs use floating scalar multiplication. Finite float64 representation required. Float64 (M,2) source point and heuristic uncertainty. Median each group; form the intercept before extrapolating. Preserve input-dtype median/scalar rounding and negative uncertainty. No calibrated interval claim. Concrete provisioned execution only; abstract witness rejects.",
+      "reuse": "Explicit preparation and reduction over caller-mapped inputs. Generic affine fitting and ordered summation remain reusable independently; application mappings, units, availability and empirical transfer require separate review.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "connected_execution": {
+    "format": "osic-image-population.v1",
+    "passed": true,
+    "approved": false,
+    "catalog_mutations": 0,
+    "synthetic_only": true,
+    "shared_environment_mutations": 0,
+    "execution": {
+      "source_training_batches": 3,
+      "source_training_samples": 24,
+      "training_arrays_and_rng_exact": true,
+      "source_entity_order_preserved": true,
+      "excluded_corrupt_payload_not_decoded": true,
+      "actual_b5_inference_queries": 4,
+      "source_inference_exact": true,
+      "unselected_corrupt_payloads_not_decoded": 4,
+      "numeric_state_restored": true,
+      "intermediate_optimizer_updates": 96,
+      "fitting_disabled": true,
+      "private_artifacts_unchanged": true,
+      "composition": {
+        "queries": 4,
+        "exact_blend": true,
+        "quantile_replay_exact": true,
+        "quantile_epochs": [
+          600,
+          600
+        ],
+        "quantile_updates": [
+          600,
+          600
+        ],
+        "feature_fitting_disabled": true,
+        "model_fitting_disabled": true,
+        "numeric_bundle_unchanged": true,
+        "differently_ordered_branches_aligned": true,
+        "rejected_contract_cases": [
+          "duplicate_keys",
+          "missing_key",
+          "response_coordinate",
+          "changed_query_population"
+        ],
+        "image_training_complete": false
+      },
+      "provider_interfaces_executed": [
+        "prepare_image_training_population",
+        "prepare_image_slice_inputs",
+        "reduce_image_predictions",
+        "blend_keyed_predictions"
+      ],
+      "separate_image_preparation_and_reduction_exact": true,
+      "runtime": {
+        "tensorflow": "2.20.0",
+        "legacy_keras": "2.20.1",
+        "pydicom": "3.0.1",
+        "numpy": "2.2.6",
+        "opencv": "5.0.0"
+      },
+      "resource_policy": {
+        "native_threads": 1,
+        "dataset_workers": 1
+      }
+    },
+    "dependency_archive_sha256": {
+      "efficientnet-1.1.0-py3-none-any.whl": "4f8a56d15e9c44e9a62dae35404079724c4a1d9e9bfbcfd2a18077e5eda58bf7",
+      "Keras_Applications-1.0.8-py3-none-any.whl": "df4323692b8c1174af821bf906f1e442e63fa7589bf0f1230a0b6bdc5a810c95",
+      "keras-applications-source.zip": "ff87b242e5de063242132c7c8a1155679c084123b857d25adec626d1374a54b4",
+      "pydicom-3.0.1-py3-none-any.whl": "db32f78b2641bd7972096b8289111ddab01fb221610de8d7afa835eb938adb41"
+    },
+    "image_provider_sha256": "eebdaf4aba9381f05a927be4b266c40c124bced550137a0c41ad75c1fcee17e4",
+    "affine_provider_sha256": "39856bac33e0fe22e02a0c4d11ca83585d989f68775ddced57bfeb4de8ef84af",
+    "software_sha256": {
+      "sciona/osic_image_population.py": "0d52dfc07b87d9dcf68e8eee2e66c2b2bf77dbd3133601412f5ea54a172e135a",
+      "sciona/osic_image_inference.py": "944467b578e0725ac666a32ff84ffc57a9de857143537bb5a305541ff4047bab",
+      "sciona/dicom_planes.py": "c0edf39544f67d5fbe7860bf3fa0d709f7b20ad87329ef59d0c9ed3230335a0c",
+      "sciona/osic_dicom.py": "598e2e736fc9b2222aeb104e5f6f610012139fca0a4f94f63f52de5ef36468c7",
+      "sciona/osic_image_metadata.py": "7c36c3eeff029f0a32f044589b386ea9c53da99ebb4ebf087e89d6833a2c605d",
+      "sciona/affine_trajectory_fit.py": "690dc187c9e87722e15a91f3f4a185740b73aa392bb6e84975151e9437b1a190",
+      "sciona/osic_image_batches.py": "164306fb3ff8ff616f55d331d385d5cd9e39347ffd127bc66a30ad82b4c913a4",
+      "sciona/group_member_sampling.py": "0aa10a2ad8feea1ac979e4f2a522214b27b515a131ac1340f11f541e42f51466",
+      "sciona/osic_image_preprocessing.py": "9c46a4977dae5a5967da24b432db836130c27af29f1cdca69552557face7757e",
+      "sciona/osic_image_model.py": "403ff9e7f6f3a2ba362c599abc68910c527a831366cff8a2563b2828db7618df",
+      "sciona/osic_image_predictor.py": "337f73be79f20d9472c490d9efbe539d42f0c70581ae6e44dca16fbf748d077d",
+      "sciona/keras_bounded_prediction.py": "fe36ca313054cd1b6c3882f59139a6228d306fd92d06e469c1abc1ac3e570d55",
+      "sciona/osic_predictions.py": "6e3dbca24d78302ae74ea525fe8d2f380cda9308dc76a4a3f225c4cd863ebace",
+      "scripts/validate_osic_image_population.py": "32ae954f6d203c63471320053d8958985ebcb5968fbe2738d43ec61297146fee",
+      "sciona/osic_image_state.py": "876b5328b675634e0a18e42589aee8d444cf50eb1a5824cab8d01bc663817a54",
+      "scripts/validate_osic_image_state.py": "f37279187dc05185f4d2b86b69552f15143bf46f463368136b84a38462b39ddc",
+      "sciona/osic_quantile_inference.py": "6abf862e299db13037d31043229141dae983aa8525126af2e4f77821740e4b4c",
+      "sciona/osic_feature_state.py": "4d2dfba5ad2e367591586bf8be1f7896290a492a7394a0ee536e5e196cfe4136",
+      "sciona/osic_quantile_training.py": "c0f81b5b4ccb3926ec6cc030c8b121e828e962f8ab7313ba1daac43287f46fbd",
+      "sciona/osic_quantile_features.py": "7db2c03ec342165e8a93325dd21a0746575adde4363f325eea6bed8406553d2b",
+      "sciona/osic_quantile_state.py": "5776cb1ba94373672b937e9324c478a2e46da26b5be5e2f2bda93b6077633802",
+      "sciona/osic_quantile_model.py": "80bb8d8e135c96be73c046cd05882d48c5fa5779d39a2a01b5f6284f7708d8e8",
+      "sciona/osic_quantile_objective.py": "b1726979feb3375c7193764c8de69fd9dafdc203ce99b2c41c41ab8fd9459804",
+      "sciona/tensorflow_distribution_losses.py": "0d2e7b87f1fab0d3181b6eae412a4ff27af501e202b306b46b224e5e24bb8be6"
+    },
+    "numeric_provider_sha256": {
+      "ordered_weighted_sum": "893e4fb0c884d1732d9bba0ae2e203b72170bba11fbc89443306e6fd1b6ea359",
+      "distribution_losses": "6d5e93c25ced4e359c38d44273612a0d6a92105d033dfb413a0b4e88692cd658"
+    },
+    "limitations": [
+      "Raw synthetic inference restores numeric weights from an intermediate checkpoint; complete 30-epoch training remains pending.",
+      "The source exclusion values are replaced with an explicit synthetic policy; source filtering code and order are preserved.",
+      "Training requires valid eligible images and does not reproduce silently shortened batches after decoder errors.",
+      "The historical least-squares default is reconstructed with explicit rcond=-1 in the current runtime.",
+      "Complete image training, graph publication and empirical validation remain pending.",
+      "Composition, when enabled, compares the existing source image oracle and qualified quantile lifecycle with an independent sorted weighted blend; it does not replay the entire original training notebook."
+    ]
+  },
+  "software_sha256": {
+    "sciona/osic_image_population.py": "0d52dfc07b87d9dcf68e8eee2e66c2b2bf77dbd3133601412f5ea54a172e135a",
+    "sciona/osic_image_inference.py": "944467b578e0725ac666a32ff84ffc57a9de857143537bb5a305541ff4047bab",
+    "sciona/dicom_planes.py": "c0edf39544f67d5fbe7860bf3fa0d709f7b20ad87329ef59d0c9ed3230335a0c",
+    "sciona/osic_dicom.py": "598e2e736fc9b2222aeb104e5f6f610012139fca0a4f94f63f52de5ef36468c7",
+    "sciona/osic_image_metadata.py": "7c36c3eeff029f0a32f044589b386ea9c53da99ebb4ebf087e89d6833a2c605d",
+    "sciona/affine_trajectory_fit.py": "690dc187c9e87722e15a91f3f4a185740b73aa392bb6e84975151e9437b1a190",
+    "sciona/osic_image_batches.py": "164306fb3ff8ff616f55d331d385d5cd9e39347ffd127bc66a30ad82b4c913a4",
+    "sciona/group_member_sampling.py": "0aa10a2ad8feea1ac979e4f2a522214b27b515a131ac1340f11f541e42f51466",
+    "sciona/osic_image_preprocessing.py": "9c46a4977dae5a5967da24b432db836130c27af29f1cdca69552557face7757e",
+    "sciona/osic_image_model.py": "403ff9e7f6f3a2ba362c599abc68910c527a831366cff8a2563b2828db7618df",
+    "sciona/osic_image_predictor.py": "337f73be79f20d9472c490d9efbe539d42f0c70581ae6e44dca16fbf748d077d",
+    "sciona/keras_bounded_prediction.py": "fe36ca313054cd1b6c3882f59139a6228d306fd92d06e469c1abc1ac3e570d55",
+    "sciona/osic_predictions.py": "6e3dbca24d78302ae74ea525fe8d2f380cda9308dc76a4a3f225c4cd863ebace",
+    "scripts/validate_osic_image_population.py": "32ae954f6d203c63471320053d8958985ebcb5968fbe2738d43ec61297146fee",
+    "sciona/osic_image_state.py": "876b5328b675634e0a18e42589aee8d444cf50eb1a5824cab8d01bc663817a54",
+    "scripts/validate_osic_image_state.py": "f37279187dc05185f4d2b86b69552f15143bf46f463368136b84a38462b39ddc",
+    "sciona/osic_quantile_inference.py": "6abf862e299db13037d31043229141dae983aa8525126af2e4f77821740e4b4c",
+    "sciona/osic_feature_state.py": "4d2dfba5ad2e367591586bf8be1f7896290a492a7394a0ee536e5e196cfe4136",
+    "sciona/osic_quantile_training.py": "c0f81b5b4ccb3926ec6cc030c8b121e828e962f8ab7313ba1daac43287f46fbd",
+    "sciona/osic_quantile_features.py": "7db2c03ec342165e8a93325dd21a0746575adde4363f325eea6bed8406553d2b",
+    "sciona/osic_quantile_state.py": "5776cb1ba94373672b937e9324c478a2e46da26b5be5e2f2bda93b6077633802",
+    "sciona/osic_quantile_model.py": "80bb8d8e135c96be73c046cd05882d48c5fa5779d39a2a01b5f6284f7708d8e8",
+    "sciona/osic_quantile_objective.py": "b1726979feb3375c7193764c8de69fd9dafdc203ce99b2c41c41ab8fd9459804",
+    "sciona/tensorflow_distribution_losses.py": "0d2e7b87f1fab0d3181b6eae412a4ff27af501e202b306b46b224e5e24bb8be6",
+    "provider": "eebdaf4aba9381f05a927be4b266c40c124bced550137a0c41ad75c1fcee17e4",
+    "scripts/review_osic_image_semantics.py": "14058ab836e519b8b53b619f6ecba62b0468f60fa2d18f5284b6984dca29ad34",
+    "scripts/import_osic_image_drafts.py": "60adeb3ae04e9882b34551bee3a8b511e3d884ad750d8516796517af73d8b112",
+    "scripts/plan_osic_image_intake.py": "518f4a046124e92bc6c3ec5ed9407f5def32f4f4c192575efc225724245a80d3",
+    "scripts/review_osic_runtime_integrity.py": "4b2cbc1751fd5262eb6c4bdb32afb32fb9d4366aa23d937797cbf6ff22e80797",
+    "scripts/review_video_numeric_runtime.py": "f0e5acb6f7820467a521c8186a54eca0591cdcbc0125c66c446539c506cdb3ac",
+    "scripts/review_osic_archive_notices.py": "a7a520f96453b5a41fe1aabd56b02e3fab0296165410423fa7ac830aa7be6eae"
+  },
+  "installed_packages": {
+    "absl-py": {
+      "version": "2.5.0",
+      "hashed_files_verified": 31,
+      "active_requirements": []
+    },
+    "annotated-types": {
+      "version": "0.7.0",
+      "hashed_files_verified": 7,
+      "active_requirements": []
+    },
+    "asttokens": {
+      "version": "2.4.1",
+      "hashed_files_verified": 13,
+      "active_requirements": [
+        "six>=1.12.0"
+      ]
+    },
+    "astunparse": {
+      "version": "1.6.3",
+      "hashed_files_verified": 11,
+      "active_requirements": [
+        "six<2.0,>=1.6.1",
+        "wheel<1.0,>=0.23.0"
+      ]
+    },
+    "certifi": {
+      "version": "2026.7.22",
+      "hashed_files_verified": 13,
+      "active_requirements": []
+    },
+    "charset-normalizer": {
+      "version": "3.5.1",
+      "hashed_files_verified": 23,
+      "active_requirements": []
+    },
+    "flatbuffers": {
+      "version": "25.12.19",
+      "hashed_files_verified": 14,
+      "active_requirements": []
+    },
+    "gast": {
+      "version": "0.7.0",
+      "hashed_files_verified": 13,
+      "active_requirements": []
+    },
+    "google-pasta": {
+      "version": "0.2.0",
+      "hashed_files_verified": 30,
+      "active_requirements": [
+        "six"
+      ]
+    },
+    "grpcio": {
+      "version": "1.83.1",
+      "hashed_files_verified": 67,
+      "active_requirements": [
+        "typing-extensions~=4.12"
+      ]
+    },
+    "h5py": {
+      "version": "3.16.0",
+      "hashed_files_verified": 103,
+      "active_requirements": [
+        "numpy>=1.21.2"
+      ]
+    },
+    "icontract": {
+      "version": "2.7.3",
+      "hashed_files_verified": 16,
+      "active_requirements": [
+        "asttokens<3,>=2",
+        "typing_extensions"
+      ]
+    },
+    "idna": {
+      "version": "3.19",
+      "hashed_files_verified": 18,
+      "active_requirements": []
+    },
+    "imageio": {
+      "version": "2.37.3",
+      "hashed_files_verified": 66,
+      "active_requirements": [
+        "numpy",
+        "pillow>=8.3.2"
+      ]
+    },
+    "joblib": {
+      "version": "1.5.3",
+      "hashed_files_verified": 143,
+      "active_requirements": []
+    },
+    "keras": {
+      "version": "3.15.1",
+      "hashed_files_verified": 910,
+      "active_requirements": [
+        "absl-py",
+        "h5py",
+        "ml-dtypes",
+        "namex",
+        "numpy",
+        "optree",
+        "packaging",
+        "rich"
+      ]
+    },
+    "lazy-loader": {
+      "version": "0.5",
+      "hashed_files_verified": 6,
+      "active_requirements": [
+        "packaging"
+      ]
+    },
+    "libclang": {
+      "version": "18.1.1",
+      "hashed_files_verified": 11,
+      "active_requirements": []
+    },
+    "markdown": {
+      "version": "3.10.3",
+      "hashed_files_verified": 41,
+      "active_requirements": []
+    },
+    "markdown-it-py": {
+      "version": "4.2.0",
+      "hashed_files_verified": 76,
+      "active_requirements": [
+        "mdurl~=0.1"
+      ]
+    },
+    "markupsafe": {
+      "version": "3.0.3",
+      "hashed_files_verified": 11,
+      "active_requirements": []
+    },
+    "mdurl": {
+      "version": "0.1.2",
+      "hashed_files_verified": 11,
+      "active_requirements": []
+    },
+    "ml-dtypes": {
+      "version": "0.6.0",
+      "hashed_files_verified": 11,
+      "active_requirements": [
+        "numpy>=2.0.0",
+        "numpy>=2.1.0; python_version >= \"3.13\""
+      ]
+    },
+    "namex": {
+      "version": "0.1.0",
+      "hashed_files_verified": 10,
+      "active_requirements": []
+    },
+    "networkx": {
+      "version": "3.6.1",
+      "hashed_files_verified": 602,
+      "active_requirements": []
+    },
+    "numpy": {
+      "version": "2.2.6",
+      "hashed_files_verified": 876,
+      "active_requirements": []
+    },
+    "opencv-python-headless": {
+      "version": "5.0.0.93",
+      "hashed_files_verified": 145,
+      "active_requirements": [
+        "numpy>=2; python_version >= \"3.9\""
+      ]
+    },
+    "opt-einsum": {
+      "version": "3.4.0",
+      "hashed_files_verified": 32,
+      "active_requirements": []
+    },
+    "optree": {
+      "version": "0.20.0",
+      "hashed_files_verified": 25,
+      "active_requirements": [
+        "typing-extensions>=4.10.0",
+        "typing-extensions>=4.12.0; python_version >= \"3.13\""
+      ]
+    },
+    "packaging": {
+      "version": "26.3",
+      "hashed_files_verified": 30,
+      "active_requirements": []
+    },
+    "pandas": {
+      "version": "2.3.3",
+      "hashed_files_verified": 1513,
+      "active_requirements": [
+        "numpy>=1.26.0; python_version >= \"3.12\"",
+        "python-dateutil>=2.8.2",
+        "pytz>=2020.1",
+        "tzdata>=2022.7"
+      ]
+    },
+    "pillow": {
+      "version": "12.3.0",
+      "hashed_files_verified": 140,
+      "active_requirements": []
+    },
+    "protobuf": {
+      "version": "6.33.5",
+      "hashed_files_verified": 60,
+      "active_requirements": []
+    },
+    "pydantic": {
+      "version": "2.12.5",
+      "hashed_files_verified": 111,
+      "active_requirements": [
+        "annotated-types>=0.6.0",
+        "pydantic-core==2.41.5",
+        "typing-extensions>=4.14.1",
+        "typing-inspection>=0.4.2"
+      ]
+    },
+    "pydantic-core": {
+      "version": "2.41.5",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.14.1"
+      ]
+    },
+    "pygments": {
+      "version": "2.21.0",
+      "hashed_files_verified": 351,
+      "active_requirements": []
+    },
+    "python-dateutil": {
+      "version": "2.9.0.post0",
+      "hashed_files_verified": 25,
+      "active_requirements": [
+        "six>=1.5"
+      ]
+    },
+    "pytz": {
+      "version": "2026.1.post1",
+      "hashed_files_verified": 616,
+      "active_requirements": []
+    },
+    "requests": {
+      "version": "2.34.2",
+      "hashed_files_verified": 27,
+      "active_requirements": [
+        "certifi>=2023.5.7",
+        "charset_normalizer<4,>=2",
+        "idna<4,>=2.5",
+        "urllib3<3,>=1.26"
+      ]
+    },
+    "rich": {
+      "version": "15.0.0",
+      "hashed_files_verified": 106,
+      "active_requirements": [
+        "markdown-it-py>=2.2.0",
+        "pygments<3.0.0,>=2.13.0"
+      ]
+    },
+    "scikit-image": {
+      "version": "0.26.0",
+      "hashed_files_verified": 310,
+      "active_requirements": [
+        "imageio!=2.35.0,>=2.33",
+        "lazy-loader>=0.4",
+        "networkx>=3.0",
+        "numpy>=1.24",
+        "packaging>=21",
+        "pillow>=10.1",
+        "scipy>=1.11.4",
+        "tifffile>=2022.8.12"
+      ]
+    },
+    "scikit-learn": {
+      "version": "1.8.0",
+      "hashed_files_verified": 960,
+      "active_requirements": [
+        "joblib>=1.3.0",
+        "numpy>=1.24.1",
+        "scipy>=1.10.0",
+        "threadpoolctl>=3.2.0"
+      ]
+    },
+    "scipy": {
+      "version": "1.17.1",
+      "hashed_files_verified": 1423,
+      "active_requirements": [
+        "numpy<2.7,>=1.26.4"
+      ]
+    },
+    "setuptools": {
+      "version": "80.9.0",
+      "hashed_files_verified": 513,
+      "active_requirements": []
+    },
+    "six": {
+      "version": "1.17.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "tensorboard": {
+      "version": "2.20.0",
+      "hashed_files_verified": 273,
+      "active_requirements": [
+        "absl-py>=0.4",
+        "grpcio>=1.48.2",
+        "markdown>=2.6.8",
+        "numpy>=1.12.0",
+        "packaging",
+        "pillow",
+        "protobuf!=4.24.0,>=3.19.6",
+        "setuptools>=41.0.0",
+        "tensorboard-data-server<0.8.0,>=0.7.0",
+        "werkzeug>=1.0.1"
+      ]
+    },
+    "tensorboard-data-server": {
+      "version": "0.7.2",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "tensorflow": {
+      "version": "2.20.0",
+      "hashed_files_verified": 11548,
+      "active_requirements": [
+        "absl-py>=1.0.0",
+        "astunparse>=1.6.0",
+        "flatbuffers>=24.3.25",
+        "gast!=0.5.0,!=0.5.1,!=0.5.2,>=0.2.1",
+        "google_pasta>=0.1.1",
+        "grpcio<2.0,>=1.24.3",
+        "h5py>=3.11.0",
+        "keras>=3.10.0",
+        "libclang>=13.0.0",
+        "ml_dtypes<1.0.0,>=0.5.1",
+        "numpy>=1.26.0",
+        "opt_einsum>=2.3.2",
+        "packaging",
+        "protobuf>=5.28.0",
+        "requests<3,>=2.21.0",
+        "setuptools",
+        "six>=1.12.0",
+        "tensorboard~=2.20.0",
+        "termcolor>=1.1.0",
+        "typing_extensions>=3.6.6",
+        "wrapt>=1.11.0"
+      ]
+    },
+    "termcolor": {
+      "version": "3.3.0",
+      "hashed_files_verified": 9,
+      "active_requirements": []
+    },
+    "tf-keras": {
+      "version": "2.20.1",
+      "hashed_files_verified": 591,
+      "active_requirements": [
+        "tensorflow<2.21,>=2.20"
+      ]
+    },
+    "threadpoolctl": {
+      "version": "3.6.0",
+      "hashed_files_verified": 5,
+      "active_requirements": []
+    },
+    "tifffile": {
+      "version": "2026.4.11",
+      "hashed_files_verified": 21,
+      "active_requirements": [
+        "numpy>=2.0"
+      ]
+    },
+    "typing-extensions": {
+      "version": "4.16.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "typing-inspection": {
+      "version": "0.4.2",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.12.0"
+      ]
+    },
+    "tzdata": {
+      "version": "2025.3",
+      "hashed_files_verified": 633,
+      "active_requirements": []
+    },
+    "urllib3": {
+      "version": "2.7.0",
+      "hashed_files_verified": 43,
+      "active_requirements": []
+    },
+    "werkzeug": {
+      "version": "3.1.8",
+      "hashed_files_verified": 64,
+      "active_requirements": [
+        "markupsafe>=2.1.1"
+      ]
+    },
+    "wheel": {
+      "version": "0.48.0",
+      "hashed_files_verified": 22,
+      "active_requirements": [
+        "packaging>=24.0"
+      ]
+    },
+    "wrapt": {
+      "version": "2.4.1",
+      "hashed_files_verified": 22,
+      "active_requirements": []
+    }
+  },
+  "intake_plan_sha256": "4ab56c2d231615e38b4609891ff4a60295f1a3f13df715d5d389cb8643262b3d",
+  "connected_execution_commit": "bddbcf34",
+  "connected_execution_sha256": "7cf105f82452e4533bc5c45a1992df52c3053b054a6e445944a0c8964c042713",
+  "archive_notices": {
+    "format": "osic-archive-notices.v1",
+    "passed": true,
+    "approved": false,
+    "catalog_mutations": 0,
+    "package_installations": 0,
+    "source_notice": {
+      "declared_license": "Unlicense",
+      "notice_sha256": "6b0382b16279f26ff69014300541967a356a666eb0b91b422f6862f6b7dad17e",
+      "retained_notice": "docs/licenses/OSIC-source-Unlicense.txt"
+    },
+    "dependency_notices": {
+      "efficientnet": {
+        "archive": "efficientnet-1.1.0-py3-none-any.whl",
+        "archive_sha256": "4f8a56d15e9c44e9a62dae35404079724c4a1d9e9bfbcfd2a18077e5eda58bf7",
+        "version": "1.1.0",
+        "declared_license": "Apache-2.0",
+        "notice_sha256": "e486cea90cab95bee73cbe32de74e5e8e84ba4e87228e837be71af9e41a55203",
+        "retained_notice": "docs/licenses/Cassava-qubvel-efficientnet-Apache-2.0.txt"
+      },
+      "keras-applications": {
+        "archive": "Keras_Applications-1.0.8-py3-none-any.whl",
+        "archive_sha256": "df4323692b8c1174af821bf906f1e442e63fa7589bf0f1230a0b6bdc5a810c95",
+        "version": "1.0.8",
+        "declared_license": "MIT",
+        "notice_sha256": "82e4461dcead03930115f469fd487dc1e60421119e36b25c5be707f1dba08170",
+        "retained_notice": "docs/licenses/OSIC-Keras-Applications-MIT.txt"
+      },
+      "pydicom": {
+        "archive": "pydicom-3.0.1-py3-none-any.whl",
+        "archive_sha256": "db32f78b2641bd7972096b8289111ddab01fb221610de8d7afa835eb938adb41",
+        "version": "3.0.1",
+        "declared_license": "MIT",
+        "notice_sha256": "39b3259cb15151df25167119087df1fef33624765e639af42447ba6fe86dada3",
+        "retained_notice": "docs/licenses/OSIC-pydicom-MIT.txt",
+        "additional_notice": "GDCM-derived private dictionary portions: three-clause BSD terms retained in the same file"
+      }
+    },
+    "keras_applications_source_wheel_notice_equal": true,
+    "active_direct_requirements": [
+      {
+        "distribution": "efficientnet",
+        "requirement": "keras-applications<=1.0.8,>=1.0.7",
+        "resolved_version": "1.0.8",
+        "resolution": "pinned_overlay"
+      },
+      {
+        "distribution": "efficientnet",
+        "requirement": "scikit-image",
+        "resolved_version": "0.26.0",
+        "resolution": "provisioned_environment"
+      },
+      {
+        "distribution": "keras-applications",
+        "requirement": "numpy>=1.9.1",
+        "resolved_version": "2.2.6",
+        "resolution": "provisioned_environment"
+      },
+      {
+        "distribution": "keras-applications",
+        "requirement": "h5py",
+        "resolved_version": "3.16.0",
+        "resolution": "provisioned_environment"
+      }
+    ],
+    "reviewer_sha256": "a7a520f96453b5a41fe1aabd56b02e3fab0296165410423fa7ac830aa7be6eae",
+    "limitations": [
+      "Exact declared source/archive notices only; not an independent legal opinion or complete redistribution approval.",
+      "Installed transitive runtime packages, native library notices and dependency provenance require their own review.",
+      "No optional extras are enabled by this review; codec availability and actual plugin selection remain separate runtime checks.",
+      "The existing efficientnet notice is reused byte-for-byte; its historical filename does not narrow its applicability.",
+      "Full original workflow training, provider registration and publication gates remain pending."
+    ]
+  },
+  "resource_policy": {
+    "native_threads": 1,
+    "dataset_workers": 1,
+    "foreground_cpu_budget": 2
+  },
+  "limitations": [
+    "Automated Tier 3 for provisioned concrete in-process execution only; abstract witnesses reject. No human Tier 1 or empirical Tier 2 claim.",
+    "These are source-specific preparation and prediction policies. Generic affine fitting and ordered weighted summation remain independently reusable; source category meanings and weighting do not establish cross-domain effectiveness.",
+    "Caller supplies mapped fields, coordinate units, ordering, complete aligned populations and actual observation availability. No private source records or exclusion identities are embedded.",
+    "Training fits all entities before exclusions, uses first-row metadata and explicit rcond=-1, and can produce minimum-norm slopes for rank-deficient groups. These slopes are not uniquely identified trends.",
+    "Training and inference intentionally use different image normalization and case handling. Eligible training images must decode successfully; silently shortened batches are not reproduced.",
+    "Provisioned DICOM/OpenCV execution only. Disable OpenCV workers; private inputs require single-frame monochrome integer planes. Other codec/runtime configurations need separate qualification.",
+    "Per-entity inference preparation retains source ordinal/count selection and ignores unselected payloads. Training preparation materializes the eligible image population; callers own its memory budget.",
+    "Source median/scalar rounding and negative heuristic uncertainty are retained. The final 0.45/0.55 weighted blend is fixed source policy, not calibrated predictive uncertainty or a learned ensemble.",
+    "Connected synthetic evidence uses a stable intermediate image checkpoint plus full quantile fits; it does not complete the 30-epoch image schedule or the original CDG.",
+    "Private state provenance remains external. Installed RECORD and archive notice checks do not qualify redistribution, authenticate publishers or establish effectiveness."
+  ]
+}
