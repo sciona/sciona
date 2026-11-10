@@ -1,0 +1,92 @@
+{
+  "format": "bengali-b7-lifecycle.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "branches": [
+    {
+      "branch": "ood",
+      "completed_epochs": 200,
+      "optimizer_updates": 200,
+      "batch_norm_updates": 200,
+      "selected_epoch": 199,
+      "exact_checkpoint_replay": true,
+      "maximum_parameter_changes": {
+        "stem": 0.018384933471679688,
+        "head": 0.024838261306285858
+      },
+      "initial_training_loss": 0.7305107712745667,
+      "final_training_loss": 0.0001590504834894091,
+      "final_validation_score": -0.00010548581485636532,
+      "all_epoch_metrics_finite": true
+    },
+    {
+      "branch": "seen",
+      "completed_epochs": 200,
+      "optimizer_updates": 200,
+      "batch_norm_updates": 200,
+      "selected_epoch": 199,
+      "exact_checkpoint_replay": true,
+      "maximum_parameter_changes": {
+        "stem": 0.010650873184204102,
+        "head": 0.013369809836149216
+      },
+      "initial_training_loss": 9.829985618591309,
+      "final_training_loss": 2.3841810161684407e-06,
+      "final_validation_score": -8.28498559712898e-06,
+      "all_epoch_metrics_finite": true
+    }
+  ],
+  "implementation_sha256": {
+    "scripts/validate_bengali_b7_lifecycle.py": "e8351b537b35144c353dad768cec11fc74dd1b573d893f0cf799c6805924cd76",
+    "sciona/grapheme_b7_fit.py": "c1d04aadfe9c9ac4e40b45cc89f406ca78ed7499cd4cdf7c458622d2df61d2cd",
+    "sciona/grapheme_b7_training.py": "a3fa801c7f89b0b32a00ae091c580d306612b253eb2c3411bb3e7628f8604893",
+    "sciona/grapheme_b7_head.py": "0fb0f04df66cb56394d611dd2bf3e636e5709e144e1131b58d2e8409102d0ba5",
+    "sciona/grapheme_b7_initialization.py": "b2ec0447814afee02812243987660095765f26be354627c628e58d2f534179f6",
+    "sciona/grapheme_b7_preprocessing.py": "bf1708b09b575ee452cac872c6ba09a7be24897f4ae4994cab81ded33ce4e7e4",
+    "sciona/grapheme_b7_schedule.py": "7a82e2f87419ca5cf60703ab510c9ec7c52778727816e8a84d881e876e1f6c88",
+    "sciona/bengali_ood_loss.py": "ca3963b6f66ea4e5aa7a41432a9b22205bf3c727c799e0a1981431eaf0808814",
+    "sciona/svhn_autoaugment.py": "9c2b4e5280102c0e0cfd03639c9c4c07a236e353cf9600aba6191175dcb7f28f"
+  },
+  "initialization_sha256": "dcc49843b8ec5a097a8cb166eded1d7a09291093eff7735f603bcfcafce12c8e",
+  "versions": {
+    "torch": "2.11.0",
+    "efficientnet-pytorch": "0.7.1",
+    "numpy": "2.2.6",
+    "pillow": "12.3.0"
+  },
+  "policy": {
+    "epochs": 200,
+    "batch_size": 2,
+    "steps_per_epoch": 1,
+    "warmup_steps": 10,
+    "first_schedule_index": 0,
+    "checkpoint": "last",
+    "mean": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "std": [
+      0.5,
+      0.5,
+      0.5
+    ]
+  },
+  "resources": {
+    "compute_threads": 1,
+    "torch_interop_threads": 1,
+    "data_loader_workers": 0,
+    "branches_serial": true,
+    "native_pool_threads": [
+      1
+    ]
+  },
+  "limits": [
+    "Synthetic two-example populations and batch 2 instead of source batch 32; no recognition or transfer-accuracy claim.",
+    "200 epochs match the published count; normalization, warmup, schedule origin, validation metric and final checkpoint policy are explicit synthetic-run choices.",
+    "Publisher initialization candidate and installed libraries do not establish exact historical artifact/environment identity.",
+    "Both font/generator branches, routing calibration and complete stored graph qualification remain pending."
+  ]
+}
