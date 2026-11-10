@@ -1,0 +1,212 @@
+{
+  "format": "bengali-original-scope.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "review_source": "automated",
+  "source_snapshot_reconstructed": true,
+  "scope": "Complete intake-stage correction mapping with retained source evidence; not source-license clearance or publication.",
+  "artifact_id": "24d6fede-7b40-522d-9632-18cef3c7a9a3",
+  "fqdn": "cdg.competition.solution.kaggle.bengali_grapheme_1st",
+  "source_version_id": "0c0997e0-c5f7-509c-9068-dcf00a167f56",
+  "source_content_hash": "d9dfe89a2b146a6ee459b864b7d93e998a2e368b6ac5154b8aa088f11cfd4c82",
+  "source_review_commit": "55af25e366b13c79185a897a763ef86cab510e4f",
+  "source_stage_review": [
+    {
+      "stage_id": "image_preprocessing",
+      "realization": "Keep B7 grayscale geometry137x236, replicate RGB and use explicit normalization. The separate font/GAN path crops six columns per side, resizes224 square and normalizes with mean/std0.5.",
+      "correction": "Remove mandatory inversion and content-bounding-box crop. Winner evidence rejects cropping for the B7 path; mandatory inversion is unsupported. The fixed font-path crop is a different operation.",
+      "implementation_anchors": [
+        {
+          "file": "sciona/grapheme_b7_preprocessing.py",
+          "symbol": "prepare_classifier_images",
+          "line": 14,
+          "file_sha256": "bf1708b09b575ee452cac872c6ba09a7be24897f4ae4994cab81ded33ce4e7e4"
+        },
+        {
+          "file": "sciona/bengali_preprocessing.py",
+          "symbol": "prepare_handwriting",
+          "line": 32,
+          "file_sha256": "1a2cdb8f791a1a78d055ddca1f99b0a66b20e0f5d9c1e44dd556c92d9033e5b8"
+        }
+      ]
+    },
+    {
+      "stage_id": "heavy_augmentation",
+      "realization": "Use reconstructed SVHN AutoAugment for B7 and source-specific font augmentation with explicit random streams. Preserve separate handwriting and font preprocessing.",
+      "correction": "CutMix, MixUp and GridMask are unsupported intake claims. Do not attribute mixed-label training to this reconstruction.",
+      "implementation_anchors": [
+        {
+          "file": "sciona/svhn_autoaugment.py",
+          "symbol": "SVHNAutoAugment",
+          "line": 44,
+          "file_sha256": "9c2b4e5280102c0e0cfd03639c9c4c07a236e353cf9600aba6191175dcb7f28f"
+        },
+        {
+          "file": "sciona/grapheme_workflow_runtime.py",
+          "symbol": "train_b7",
+          "line": 56,
+          "file_sha256": "7923726b01d1d6cfd974465d06b883f7a5b7196fa00e0684a7141e7f5d7636b3"
+        },
+        {
+          "file": "sciona/grapheme_workflow_runtime.py",
+          "symbol": "train_font",
+          "line": 105,
+          "file_sha256": "7923726b01d1d6cfd974465d06b883f7a5b7196fa00e0684a7141e7f5d7636b3"
+        }
+      ]
+    },
+    {
+      "stage_id": "multihead_backbone",
+      "realization": "Train separate EfficientNet-B7 OOD1295 and seen14784 classifiers; train two B0 font classifiers and two classifier-guided CycleGAN branches.",
+      "correction": "Replace the SE-ResNeXt50 three-head description. The font classifier uses the implemented B0 width1280, not the paper width2560. All six fits belong to the complete recipe.",
+      "implementation_anchors": [
+        {
+          "file": "sciona/grapheme_b7_head.py",
+          "symbol": "GraphemeB7Head",
+          "line": 10,
+          "file_sha256": "0fb0f04df66cb56394d611dd2bf3e636e5709e144e1131b58d2e8409102d0ba5"
+        },
+        {
+          "file": "sciona/grapheme_workflow_runtime.py",
+          "symbol": "train_font",
+          "line": 105,
+          "file_sha256": "7923726b01d1d6cfd974465d06b883f7a5b7196fa00e0684a7141e7f5d7636b3"
+        },
+        {
+          "file": "sciona/grapheme_workflow_runtime.py",
+          "symbol": "train_generator",
+          "line": 126,
+          "file_sha256": "7923726b01d1d6cfd974465d06b883f7a5b7196fa00e0684a7141e7f5d7636b3"
+        }
+      ]
+    },
+    {
+      "stage_id": "weighted_multitask_loss",
+      "realization": "Use hard-negative BCE for OOD, cross entropy for seen/font classifiers, and bidirectional adversarial, cycle and frozen-classifier guidance losses for domain translation.",
+      "correction": "The2:1:1 component weights belong to the evaluation/calibration metric, not a three-head classification training loss. Keep metric and training objectives distinct.",
+      "implementation_anchors": [
+        {
+          "file": "sciona/bengali_ood_loss.py",
+          "symbol": "ood_training_loss",
+          "line": 11,
+          "file_sha256": "ca3963b6f66ea4e5aa7a41432a9b22205bf3c727c799e0a1981431eaf0808814"
+        },
+        {
+          "file": "sciona/grapheme_workflow_runtime.py",
+          "symbol": "train_b7",
+          "line": 56,
+          "file_sha256": "7923726b01d1d6cfd974465d06b883f7a5b7196fa00e0684a7141e7f5d7636b3"
+        },
+        {
+          "file": "sciona/bengali_gan_training.py",
+          "symbol": "CycleGANTraining",
+          "line": 17,
+          "file_sha256": "0c963b499915f651986d9ca8b11033e678897ea21999fba0ef994efd3ebbb441"
+        },
+        {
+          "file": "sciona/grapheme_routing_calibration.py",
+          "symbol": "calibrate_grapheme_router",
+          "line": 21,
+          "file_sha256": "f560ee305152f4250fdb628c565da09fc6336f1cd6d4be88e5e082d4a4ec490e"
+        }
+      ]
+    },
+    {
+      "stage_id": "ohem_training",
+      "realization": "For each OOD example include its positive class and negative classes whose detached sigmoid exceeds0.1; normalize by selected class count then average examples.",
+      "correction": "This is class-level hard-negative selection, not top-k sample OHEM. Every positive target contributes; no claim that only hardest batch examples receive updates.",
+      "implementation_anchors": [
+        {
+          "file": "sciona/bengali_ood_loss.py",
+          "symbol": "ood_training_loss",
+          "line": 11,
+          "file_sha256": "ca3963b6f66ea4e5aa7a41432a9b22205bf3c727c799e0a1981431eaf0808814"
+        }
+      ]
+    },
+    {
+      "stage_id": "soft_voting_ensemble",
+      "realization": "Softmax and marginalize each font branch, combine component scores, fit a confidence threshold on separate weighted calibration rows, route low-confidence unknown alternate classes, and decode canonical components.",
+      "correction": "Replace simple seed-averaging across three heads with OOD/seen/two-font routing and known-class fallback. Threshold grid, weights and seen softmax decoder are explicit reconstruction choices; exact historical values remain unverified.",
+      "implementation_anchors": [
+        {
+          "file": "sciona/bengali_unseen_ensemble.py",
+          "symbol": "marginal_predictions",
+          "line": 5,
+          "file_sha256": "cbbfbb59467c19a8e303cecc4380689ccece340cf0bc5ab9160620aa1c56bff5"
+        },
+        {
+          "file": "sciona/grapheme_routing_calibration.py",
+          "symbol": "calibrate_grapheme_router",
+          "line": 21,
+          "file_sha256": "f560ee305152f4250fdb628c565da09fc6336f1cd6d4be88e5e082d4a4ec490e"
+        },
+        {
+          "file": "sciona/bengali_routing.py",
+          "symbol": "route_predictions",
+          "line": 10,
+          "file_sha256": "5ef0f7003112b5bbd80a173e4461387546b3c44e4f4838b75a1e8026c9be3421"
+        },
+        {
+          "file": "sciona/grapheme_routing_calibration.py",
+          "symbol": "submission_components",
+          "line": 15,
+          "file_sha256": "f560ee305152f4250fdb628c565da09fc6336f1cd6d4be88e5e082d4a4ec490e"
+        }
+      ]
+    }
+  ],
+  "omitted_original_lifecycle": [
+    "Separate OOD and seen B7 training",
+    "Two font-classifier fits",
+    "Two classifier-guided CycleGAN fits",
+    "Fresh checkpoint inference for calibration and query",
+    "Weighted calibration and known-class fallback"
+  ],
+  "full_execution": {
+    "passed": true,
+    "approved": false,
+    "catalog_mutations": 0,
+    "evidence_commit": "6fb098a30429ccde1c4beb39daed250a90d1157a",
+    "report_sha256": "082f2f173988e1f8c114dc1c7456a9c1d7f00817e004db44e2b3d70a648a7694",
+    "graph_sha256": "6d2e3c63a9c1d3005dc137bb390973b53eb5cf2284cae4d57a827c72ba232ec6",
+    "limits": [
+      "Constructed geometric symbols only; execution is not glyph-recognition, zero-shot accuracy or empirical transfer evidence.",
+      "Published epoch counts with batch 2 and small synthetic populations; original training update counts are not reproduced.",
+      "Explicit B7 normalization, warmup, shuffle, final checkpoint and seen decoding policies do not establish exact historical choices.",
+      "Calibration weights and 21-point threshold grid are caller choices; calibration score is not an unbiased test score.",
+      "Provisioned local filesystem and installed runtime only; source/reuse/provider/catalog publication reviews remain pending."
+    ],
+    "scope": "Complete local synthetic execution only; source, reuse, provider and catalog reviews remain separate."
+  },
+  "reuse_decision": "Expose confidence routing and component-recall computation separately from fixed grapheme ontologies and font-model adapters. Transfer of the complete recipe remains conditional on target-domain semantics, label preservation, confidence behavior and independent population evaluation.",
+  "evidence_sha256": {
+    "docs/reviews/competition_bengali_grapheme_source_triage.json": "77bd687b6c1c8fde423a8cbe1b6274f97b8009e8be725037eecd67fa9d2f7e54",
+    "docs/reviews/bengali_reuse_boundaries.json": "7562c8070ee155dd6c38ba2e7949a2c240fb46811bafd4b05c57725c4b1042b6",
+    "docs/reviews/bengali_provider_contracts.json": "4e67598a3d29d4080fe21c5c18370caa704d8520989db158c1e2db5564ef5b27"
+  },
+  "limitations": [
+    "The domain adapter supplies eligibility, utility units, validation independence and deployment mixture. Optimality covers only the supplied grid. Calibration utility is not an unbiased performance estimate; lower-precision boundary comparisons require separate qualification.",
+    "Per-row utilities already include the metric sample weights; calibration must not apply those weights twice. Metric equivalence is tested with independent route-then-score calculations, not real application quality.",
+    "Separating calibration and query graph inputs does not prove population independence. Callers must prevent training/calibration/query leakage and justify unseen-class membership. Font-only synthetic classes test routing structure, not zero-shot accuracy.",
+    "Current adapters have fixed architectures and class widths. Checkpoint paths require a provisioned trusted local filesystem; model-only checkpoints do not resume optimizer/RNG history. Explicit training policies and candidate pretrained initialization do not authenticate exact historical winner choices.",
+    "Maximum sigmoid is not calibrated uncertainty. Independent component maxima may form a joint class neither model selected directly. Seen decoding is an explicit reconstruction choice, and float32 softmax tie behavior is retained.",
+    "Object ports and kind witnesses alone do not establish shapes, population alignment, resource safety or catalog eligibility. Full execution, source/license review, complete catalog port constraints and transactional publication remain separate requirements.",
+    "Constructed geometric symbols only; execution is not glyph-recognition, zero-shot accuracy or empirical transfer evidence.",
+    "Published epoch counts with batch 2 and small synthetic populations; original training update counts are not reproduced.",
+    "Explicit B7 normalization, warmup, shuffle, final checkpoint and seen decoding policies do not establish exact historical choices.",
+    "Calibration weights and 21-point threshold grid are caller choices; calibration score is not an unbiased test score.",
+    "Provisioned local filesystem and installed runtime only; source/reuse/provider/catalog publication reviews remain pending."
+  ],
+  "outstanding_permissions": [
+    "Training notebook version4 has an indexed Apache2 declaration; classifier and submission notebook licenses remain unresolved.",
+    "Review upstream attribution/notices and candidate B7 initialization permissions separately. A compatible checkpoint is not historical provenance."
+  ],
+  "remaining": [
+    "Resolve permissions and explicitly retain unrecovered historical policy limits.",
+    "Complete provider semantic/dependency metadata and qualify approval transaction gates.",
+    "Stage and execute the complete corrected stored original; prove publication rollback, repeat and served selection."
+  ],
+  "reviewer_sha256": "21b71b983f449d9ad9ec83840e4c702111481a42a8850b488b61149cf548e620"
+}
