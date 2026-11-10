@@ -1,0 +1,380 @@
+{
+  "passed": true,
+  "catalog_mutations": 0,
+  "records": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.calibration.empirical_f1.apply_column_thresholds",
+      "artifact_id": "fe055a2d-5444-5c56-a52c-b4f1876aeba1",
+      "version_id": "2c4add48-5699-5485-865c-da509201fc45",
+      "content_hash": "b1df674cf843553cef39c8fefb23c21a23cad31671503a6104e64aa954aebe8f",
+      "catalog_fqdn": "sciona.atoms.ml.calibration.empirical_f1.apply_column_thresholds",
+      "recipe_adapter": false,
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "scores",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input scores. Apply inclusive per-column thresholds to finite float64 scores (N,L).\n\nScores must be nonempty and in [0,1]. Thresholds are a finite float64 vector\n(L,), allowed outside [0,1] to express all/none decisions. Returns a new\nint64 binary matrix of identical shape. No fitting, clipping or mutation."
+        },
+        {
+          "direction": "input",
+          "name": "thresholds",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input thresholds. Apply inclusive per-column thresholds to finite float64 scores (N,L).\n\nScores must be nonempty and in [0,1]. Thresholds are a finite float64 vector\n(L,), allowed outside [0,1] to express all/none decisions. Returns a new\nint64 binary matrix of identical shape. No fitting, clipping or mutation."
+        },
+        {
+          "direction": "output",
+          "name": "predictions",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "output predictions. Apply inclusive per-column thresholds to finite float64 scores (N,L).\n\nScores must be nonempty and in [0,1]. Thresholds are a finite float64 vector\n(L,), allowed outside [0,1] to express all/none decisions. Returns a new\nint64 binary matrix of identical shape. No fitting, clipping or mutation."
+        }
+      ],
+      "ports": [
+        {
+          "direction": "input",
+          "name": "scores",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input scores. Apply inclusive per-column thresholds to finite float64 scores (N,L).\n\nScores must be nonempty and in [0,1]. Thresholds are a finite float64 vector\n(L,), allowed outside [0,1] to express all/none decisions. Returns a new\nint64 binary matrix of identical shape. No fitting, clipping or mutation."
+        },
+        {
+          "direction": "input",
+          "name": "thresholds",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input thresholds. Apply inclusive per-column thresholds to finite float64 scores (N,L).\n\nScores must be nonempty and in [0,1]. Thresholds are a finite float64 vector\n(L,), allowed outside [0,1] to express all/none decisions. Returns a new\nint64 binary matrix of identical shape. No fitting, clipping or mutation."
+        },
+        {
+          "direction": "output",
+          "name": "predictions",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "output predictions. Apply inclusive per-column thresholds to finite float64 scores (N,L).\n\nScores must be nonempty and in [0,1]. Thresholds are a finite float64 vector\n(L,), allowed outside [0,1] to express all/none decisions. Returns a new\nint64 binary matrix of identical shape. No fitting, clipping or mutation."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.calibration.empirical_f1.fit_empirical_f1_thresholds",
+      "artifact_id": "1d426405-3d0e-5545-b9c4-51b4eb2681af",
+      "version_id": "83608ee9-c047-53da-acb5-209901f7b245",
+      "content_hash": "a0c822126d1cfe7c14c4a451a0a8ae1070ffb50a0959a56776c2d3127c4e7c96",
+      "catalog_fqdn": "sciona.atoms.ml.calibration.empirical_f1.fit_empirical_f1_thresholds",
+      "recipe_adapter": false,
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "scores",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input scores. Maximize held-out empirical F1 independently for each score column.\n\nNonempty finite float64 scores (N,L) in [0,1] and aligned int64 binary\nlabels are required; every column must contain both classes. Predictions\nuse score >= threshold. Among equal computed float64 F1 values, choose\nthe highest observed-score threshold. Tied scores are processed together.\nReturns a new float64 vector (L,); inputs are unchanged. Sorting takes\nO(L*N*log(N)) time and O(N) temporary memory per column.\n\nCaller must enforce training/calibration/query separation. This fits a\ndecision threshold, not calibrated probabilities or unbiased accuracy.\nNo expected-F1 approximation, class weighting or domain policy is used."
+        },
+        {
+          "direction": "input",
+          "name": "labels",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input labels. Maximize held-out empirical F1 independently for each score column.\n\nNonempty finite float64 scores (N,L) in [0,1] and aligned int64 binary\nlabels are required; every column must contain both classes. Predictions\nuse score >= threshold. Among equal computed float64 F1 values, choose\nthe highest observed-score threshold. Tied scores are processed together.\nReturns a new float64 vector (L,); inputs are unchanged. Sorting takes\nO(L*N*log(N)) time and O(N) temporary memory per column.\n\nCaller must enforce training/calibration/query separation. This fits a\ndecision threshold, not calibrated probabilities or unbiased accuracy.\nNo expected-F1 approximation, class weighting or domain policy is used."
+        },
+        {
+          "direction": "output",
+          "name": "thresholds",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "output thresholds. Maximize held-out empirical F1 independently for each score column.\n\nNonempty finite float64 scores (N,L) in [0,1] and aligned int64 binary\nlabels are required; every column must contain both classes. Predictions\nuse score >= threshold. Among equal computed float64 F1 values, choose\nthe highest observed-score threshold. Tied scores are processed together.\nReturns a new float64 vector (L,); inputs are unchanged. Sorting takes\nO(L*N*log(N)) time and O(N) temporary memory per column.\n\nCaller must enforce training/calibration/query separation. This fits a\ndecision threshold, not calibrated probabilities or unbiased accuracy.\nNo expected-F1 approximation, class weighting or domain policy is used."
+        }
+      ],
+      "ports": [
+        {
+          "direction": "input",
+          "name": "scores",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input scores. Maximize held-out empirical F1 independently for each score column.\n\nNonempty finite float64 scores (N,L) in [0,1] and aligned int64 binary\nlabels are required; every column must contain both classes. Predictions\nuse score >= threshold. Among equal computed float64 F1 values, choose\nthe highest observed-score threshold. Tied scores are processed together.\nReturns a new float64 vector (L,); inputs are unchanged. Sorting takes\nO(L*N*log(N)) time and O(N) temporary memory per column.\n\nCaller must enforce training/calibration/query separation. This fits a\ndecision threshold, not calibrated probabilities or unbiased accuracy.\nNo expected-F1 approximation, class weighting or domain policy is used."
+        },
+        {
+          "direction": "input",
+          "name": "labels",
+          "ordinal": 1,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "input labels. Maximize held-out empirical F1 independently for each score column.\n\nNonempty finite float64 scores (N,L) in [0,1] and aligned int64 binary\nlabels are required; every column must contain both classes. Predictions\nuse score >= threshold. Among equal computed float64 F1 values, choose\nthe highest observed-score threshold. Tied scores are processed together.\nReturns a new float64 vector (L,); inputs are unchanged. Sorting takes\nO(L*N*log(N)) time and O(N) temporary memory per column.\n\nCaller must enforce training/calibration/query separation. This fits a\ndecision threshold, not calibrated probabilities or unbiased accuracy.\nNo expected-F1 approximation, class weighting or domain policy is used."
+        },
+        {
+          "direction": "output",
+          "name": "thresholds",
+          "ordinal": 0,
+          "type_desc": "ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "output thresholds. Maximize held-out empirical F1 independently for each score column.\n\nNonempty finite float64 scores (N,L) in [0,1] and aligned int64 binary\nlabels are required; every column must contain both classes. Predictions\nuse score >= threshold. Among equal computed float64 F1 values, choose\nthe highest observed-score threshold. Tied scores are processed together.\nReturns a new float64 vector (L,); inputs are unchanged. Sorting takes\nO(L*N*log(N)) time and O(N) temporary memory per column.\n\nCaller must enforce training/calibration/query separation. This fits a\ndecision threshold, not calibrated probabilities or unbiased accuracy.\nNo expected-F1 approximation, class weighting or domain policy is used."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.image_tabular_complete_execution.calibrate",
+      "artifact_id": "79b8e219-355b-540c-9451-ef0b1a5c0778",
+      "version_id": "dada4c0f-bba4-51c2-9ec8-bf22d8f58fae",
+      "content_hash": "89443d87f2dc961a2ba3b82c251ca98c69fdd195d861822da1d46d9b4b5bb1e1",
+      "catalog_fqdn": "sciona.atoms.ml.image_tabular_complete_execution.calibrate",
+      "recipe_adapter": true,
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "fitted",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Fitted ensemble and revalidated source configuration. Predict calibration probabilities without refitting any feature transform or neural model. Existing generic float64 empirical-F1 provider consumes one score column and int64 binary labels; both classes required. Inclusive threshold comparison, highest observed threshold among equal computed F1 values. Return threshold and calibration count while retaining the fitted ensemble. Decision selection is not probability calibration or independent accuracy; caller owns meaningful group separation."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Fitted ensemble and revalidated source configuration. Predict calibration probabilities without refitting any feature transform or neural model. Existing generic float64 empirical-F1 provider consumes one score column and int64 binary labels; both classes required. Inclusive threshold comparison, highest observed threshold among equal computed F1 values. Return threshold and calibration count while retaining the fitted ensemble. Decision selection is not probability calibration or independent accuracy; caller owns meaningful group separation."
+        }
+      ],
+      "ports": [
+        {
+          "direction": "input",
+          "name": "fitted",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Fitted ensemble and revalidated source configuration. Predict calibration probabilities without refitting any feature transform or neural model. Existing generic float64 empirical-F1 provider consumes one score column and int64 binary labels; both classes required. Inclusive threshold comparison, highest observed threshold among equal computed F1 values. Return threshold and calibration count while retaining the fitted ensemble. Decision selection is not probability calibration or independent accuracy; caller owns meaningful group separation."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Fitted ensemble and revalidated source configuration. Predict calibration probabilities without refitting any feature transform or neural model. Existing generic float64 empirical-F1 provider consumes one score column and int64 binary labels; both classes required. Inclusive threshold comparison, highest observed threshold among equal computed F1 values. Return threshold and calibration count while retaining the fitted ensemble. Decision selection is not probability calibration or independent accuracy; caller owns meaningful group separation."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.image_tabular_complete_execution.fit",
+      "artifact_id": "40cc0e0e-afff-51a9-be40-e2c5b428cc79",
+      "version_id": "22a4e393-5e8e-5ff9-b000-30d256353b5d",
+      "content_hash": "7bc75a930c611f5956f3a6be09bb5ec74bdcc755fe6a1ba1feee35665062a352",
+      "catalog_fqdn": "sciona.atoms.ml.image_tabular_complete_execution.fit",
+      "recipe_adapter": true,
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Revalidated Prepared configuration. Extract 31 fixed RGB moments, histograms, gradients and aspect descriptors. Each fitting fold learns numeric medians, categorical vocabulary and fused standardization only from its training rows. All-missing numeric columns use zero; unknown categories have zero indicator vectors. Train CPU float64 MLPs with seeded dropout, smoothed binary cross entropy, Adam and every configured epoch. Complete out-of-fold predictions and equal mean of retained fold probabilities. No learned image backbone, early stopping, OOF stacking or full-data refit. Dense features and full-batch training; trusted in-process models, no portable persistence or large-scale resource claim."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Revalidated Prepared configuration. Extract 31 fixed RGB moments, histograms, gradients and aspect descriptors. Each fitting fold learns numeric medians, categorical vocabulary and fused standardization only from its training rows. All-missing numeric columns use zero; unknown categories have zero indicator vectors. Train CPU float64 MLPs with seeded dropout, smoothed binary cross entropy, Adam and every configured epoch. Complete out-of-fold predictions and equal mean of retained fold probabilities. No learned image backbone, early stopping, OOF stacking or full-data refit. Dense features and full-batch training; trusted in-process models, no portable persistence or large-scale resource claim."
+        }
+      ],
+      "ports": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Revalidated Prepared configuration. Extract 31 fixed RGB moments, histograms, gradients and aspect descriptors. Each fitting fold learns numeric medians, categorical vocabulary and fused standardization only from its training rows. All-missing numeric columns use zero; unknown categories have zero indicator vectors. Train CPU float64 MLPs with seeded dropout, smoothed binary cross entropy, Adam and every configured epoch. Complete out-of-fold predictions and equal mean of retained fold probabilities. No learned image backbone, early stopping, OOF stacking or full-data refit. Dense features and full-batch training; trusted in-process models, no portable persistence or large-scale resource claim."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Revalidated Prepared configuration. Extract 31 fixed RGB moments, histograms, gradients and aspect descriptors. Each fitting fold learns numeric medians, categorical vocabulary and fused standardization only from its training rows. All-missing numeric columns use zero; unknown categories have zero indicator vectors. Train CPU float64 MLPs with seeded dropout, smoothed binary cross entropy, Adam and every configured epoch. Complete out-of-fold predictions and equal mean of retained fold probabilities. No learned image backbone, early stopping, OOF stacking or full-data refit. Dense features and full-batch training; trusted in-process models, no portable persistence or large-scale resource claim."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.image_tabular_complete_execution.predict",
+      "artifact_id": "c8ee5591-df23-5876-9466-b182f4aa0c04",
+      "version_id": "68567bf5-4bf8-5c24-bf5a-b35bd040cc4b",
+      "content_hash": "4f1d428639f7fc721148116453ee0d6d340ecb62a5e142b5b87d0625f856382b",
+      "catalog_fqdn": "sciona.atoms.ml.image_tabular_complete_execution.predict",
+      "recipe_adapter": true,
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "calibrated",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Calibrated state and revalidated configuration. Equal mean of retained fold probabilities in query order, then existing generic inclusive column-threshold provider. Return finite JSON scores, classes, threshold, population counts, fold and OOF counts, visual feature count, epochs and mean initial/final training loss. Query labels prohibited; no refit. Generic binary output, no named submission format, predictive utility guarantee or portable fitted state."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Calibrated state and revalidated configuration. Equal mean of retained fold probabilities in query order, then existing generic inclusive column-threshold provider. Return finite JSON scores, classes, threshold, population counts, fold and OOF counts, visual feature count, epochs and mean initial/final training loss. Query labels prohibited; no refit. Generic binary output, no named submission format, predictive utility guarantee or portable fitted state."
+        }
+      ],
+      "ports": [
+        {
+          "direction": "input",
+          "name": "calibrated",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Calibrated state and revalidated configuration. Equal mean of retained fold probabilities in query order, then existing generic inclusive column-threshold provider. Return finite JSON scores, classes, threshold, population counts, fold and OOF counts, visual feature count, epochs and mean initial/final training loss. Query labels prohibited; no refit. Generic binary output, no named submission format, predictive utility guarantee or portable fitted state."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unmodified Calibrated state and revalidated configuration. Equal mean of retained fold probabilities in query order, then existing generic inclusive column-threshold provider. Return finite JSON scores, classes, threshold, population counts, fold and OOF counts, visual feature count, epochs and mean initial/final training loss. Query labels prohibited; no refit. Generic binary output, no named submission format, predictive utility guarantee or portable fitted state."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.image_tabular_complete_execution.prepare",
+      "artifact_id": "23dc8d06-833f-5ada-a614-e60913682841",
+      "version_id": "f831672b-74a3-522c-b912-baddfe3014a9",
+      "content_hash": "c55181edbde09b37260d54f71c1b787c020642a6c4015e19a5e053fc366602bc",
+      "catalog_fqdn": "sciona.atoms.ml.image_tabular_complete_execution.prepare",
+      "recipe_adapter": true,
+      "legacy_ports": [
+        {
+          "direction": "input",
+          "name": "payload",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact finite version-1 JSON. Normalized RGB images in [0,1], aligned rectangular numeric and categorical metadata, binary labels on training/calibration only. Both labeled populations contain both classes. Nonempty caller-supplied groups are disjoint across populations and consistent within contiguous training folds; every fitting partition contains both classes. Explicit valid seed, hidden size, epochs, learning rate, dropout and label smoothing. Return detached immutable JSON configuration. Caller owns image meaning, units and group identity; no file decoding or duplicate discovery."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact finite version-1 JSON. Normalized RGB images in [0,1], aligned rectangular numeric and categorical metadata, binary labels on training/calibration only. Both labeled populations contain both classes. Nonempty caller-supplied groups are disjoint across populations and consistent within contiguous training folds; every fitting partition contains both classes. Explicit valid seed, hidden size, epochs, learning rate, dropout and label smoothing. Return detached immutable JSON configuration. Caller owns image meaning, units and group identity; no file decoding or duplicate discovery."
+        }
+      ],
+      "ports": [
+        {
+          "direction": "input",
+          "name": "payload",
+          "ordinal": 0,
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact finite version-1 JSON. Normalized RGB images in [0,1], aligned rectangular numeric and categorical metadata, binary labels on training/calibration only. Both labeled populations contain both classes. Nonempty caller-supplied groups are disjoint across populations and consistent within contiguous training folds; every fitting partition contains both classes. Explicit valid seed, hidden size, epochs, learning rate, dropout and label smoothing. Return detached immutable JSON configuration. Caller owns image meaning, units and group identity; no file decoding or duplicate discovery."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "ordinal": 0,
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact finite version-1 JSON. Normalized RGB images in [0,1], aligned rectangular numeric and categorical metadata, binary labels on training/calibration only. Both labeled populations contain both classes. Nonempty caller-supplied groups are disjoint across populations and consistent within contiguous training folds; every fitting partition contains both classes. Explicit valid seed, hidden size, epochs, learning rate, dropout and label smoothing. Return detached immutable JSON configuration. Caller owns image meaning, units and group identity; no file decoding or duplicate discovery."
+        }
+      ]
+    }
+  ],
+  "checker_sha256": "028f3f938ecc7e28b38ac8e5f3ead8cba74536cdf483effd6b85dbbdb5aad552",
+  "evidence_sha256": {
+    "docs/reviews/image_tabular_complete_runtime.json": "c24f2fed757aa76d67b9f96a56949b16af3029e9edf7363133c92b422b12f703",
+    "docs/reviews/image_tabular_provider_reuse.json": "1b1cadd347658d98be60cf38d363f8baeccd7a5faa96a9de58d077fb044253af",
+    "docs/reviews/image_tabular_provider_semantics.json": "bff40363cb8b17c059a224522cabce81fefd852e583e20a1d577fbefe340e738",
+    "docs/reviews/complete_image_tabular_provider_publication_plan.json": "9e71067fee18f5b91f1294e25f07bc0ef2c31e44338273692cedbb95f87e3ad4"
+  },
+  "catalog_snapshot": {
+    "atoms": "860e869a87cdbaa207730f4297d882099aacad35a6bfc852a388963873f4acdb",
+    "artifacts": "186d0f9fb432f4d94dec97a400fb76b17cc19a02cc6df6c428c0b057c50cde51",
+    "atom_versions": "234b46ac1d3d26665b6aa91793e51b4636d84a5bd5b34ace24d8094ce46f9de5",
+    "artifact_versions": "d6a3148cc0dbcdc3d910fb9a0ab15e7b40c4867aa7070a4540d21ca52aad0e24",
+    "atom_io_specs": "101742314799751d211597a5d109c4f09ad4b1d677309c3912ad9c6329d35d2b",
+    "artifact_io_specs": "a11a61e0cf90f9e5cc3b37eba65c100edd36bd3da186c7e4ea751dd0200397fd",
+    "atom_parameters": "469de8900a9865e37b80ab4826b1cc137a025013050e9d125308e461b7309e4a",
+    "artifact_parameters": "efd94ca717fd7a1a41502ea9c53fa975f5bcb17b7a1e26fccd33eae50325d535",
+    "atom_descriptions": "3c2b7db15e042a190e5128a1d374e2dae1d88ca36c9ed1a8aec6eff5b856f622",
+    "artifact_descriptions": "cf7223222dca7870af7c2d44de68ca224c549fd0a8035920a89853b40ff9928e",
+    "atom_references": "cda9b4e738762d704faafd208afbdb6760f1ff71d6e0f17c9325674c2811d97c",
+    "artifact_references": "c296fa38e40cdb7c690619bedd577561618fcffb8b8b960c3d5e658db464a882",
+    "atom_audit_rollups": "fa8bcd42fbf5c16cfb96dd8815ff766d78e779c758bd2f9560008d3c593d4c4c",
+    "artifact_audit_rollups": "12bee588a633ef042bc697ffd79aee49d7e343da8498e9e1fb358a5ffe5fff72",
+    "artifact_audit_evidence": "94e6d02839fbe3e371cf1e6af05495abe2083117e5e8ab8bc2b5d4637c7f2f76"
+  },
+  "dependencies": [
+    {
+      "dependent_version_id": "68567bf5-4bf8-5c24-bf5a-b35bd040cc4b",
+      "dependency_artifact_fqdn": "sciona.atoms.ml.calibration.empirical_f1.apply_column_thresholds",
+      "dependency_content_hash": "b1df674cf843553cef39c8fefb23c21a23cad31671503a6104e64aa954aebe8f",
+      "port_name": "",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "binding_metadata": {
+        "dependency_version_id": "2c4add48-5699-5485-865c-da509201fc45",
+        "dependency_artifact_id": "fe055a2d-5444-5c56-a52c-b4f1876aeba1"
+      }
+    },
+    {
+      "dependent_version_id": "dada4c0f-bba4-51c2-9ec8-bf22d8f58fae",
+      "dependency_artifact_fqdn": "sciona.atoms.ml.calibration.empirical_f1.fit_empirical_f1_thresholds",
+      "dependency_content_hash": "a0c822126d1cfe7c14c4a451a0a8ae1070ffb50a0959a56776c2d3127c4e7c96",
+      "port_name": "",
+      "dependency_role": "logic_atom",
+      "optional": false,
+      "binding_metadata": {
+        "dependency_version_id": "83608ee9-c047-53da-acb5-209901f7b245",
+        "dependency_artifact_id": "1d426405-3d0e-5545-b9c4-51b4eb2681af"
+      }
+    }
+  ]
+}
