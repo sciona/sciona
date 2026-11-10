@@ -132,6 +132,14 @@
   ],
   "optimizer_updates": 72,
   "checkpoint_replays": 12,
+  "fresh_process_replay": {
+    "passed": true,
+    "restored_models": 12,
+    "restored_features": 3,
+    "restored_blends": 1,
+    "exact_query_predictions": true,
+    "training_executed": false
+  },
   "source_commit": "374301ad1c32cbc93dcc40313d5d7bb9c5503746",
   "source_sha256": {
     "mercari/main_tf.py": "d86a29ff22764f799c0c87ead55ec4e78e52de8b425d539c4f565bafc5cf4db4",
@@ -148,12 +156,13 @@
     "mercari/config.py": "6d9fbf474190a0b018eed5930f09acbd0e9a8bd662015ac4802a20cfb1a587f3"
   },
   "software_sha256": {
-    "scripts/run_mercari_tensorflow_synthetic_graph.py": "b6566dbe004d331f2c61a247662a9484d5d925ca491740fac815c06c7a54316d",
+    "scripts/run_mercari_tensorflow_synthetic_graph.py": "a135d9a2fafa17a7ccb5849ebd3a4b79a6bc82d9caa1bd333f8f7636161ac6e8",
     "scripts/probe_mercari_tensorflow_runtime.py": "b9bda3cbdb83cec0f458fbb507c4abddcff8903846a1b1abb3077d4629974290",
     "scripts/probe_mercari_feature_runtime.py": "a612521579cef3b427d2b7e1882c143989a333ce378ed99e4da2d784c8b7c732",
     "scripts/inventory_mercari_models.py": "cb780d7a9582b080ff2cec925ad3137d7a3f11febb00fffad2a068d1f9856125",
     "scripts/inventory_mercari_features.py": "8b3d0715b24ea51a2c5ebb8d8fb41437204785ab99c8cbfe7b2a68efc9d6aced",
-    "scripts/mercari_checkpoint_probe.py": "5442519a5fb802d701b0db84785d29a810ab68767ec738320e0fecab7a171e4b"
+    "scripts/mercari_checkpoint_probe.py": "35141c3d606f621e8d0704300618d3782e3fe962fad4046a49860b47eba0dfe2",
+    "scripts/replay_mercari_synthetic_graph.py": "4cfeafd04e1577f1cd572e8a406008066460f29193d0736f1e395e9ca0d279f1"
   },
   "runtime_versions": {
     "tensorflow": "2.20.0",
@@ -162,7 +171,8 @@
     "scikit-learn": "1.8.0",
     "pandas": "2.3.3",
     "Unidecode": "1.4.0",
-    "nltk": "3.9.4"
+    "nltk": "3.9.4",
+    "joblib": "1.5.3"
   },
   "resource_policy": {
     "concurrent_fits": 1,
@@ -174,7 +184,8 @@
     "Current TensorFlow compatibility API and documented serial feature shims, not historical runtime numerical equivalence.",
     "Distinct synthetic training/calibration/query populations; no real-data accuracy or held-out model selection claim.",
     "Source MSE dispatch, feature recipes, clip bounds and learned positive Lasso blend retained, including group execution order 1,3,2.",
-    "Model checkpoints and target-inversion state replayed in fresh graphs/sessions in the same process; full feature and blend serialization and fresh-process replay remain outstanding.",
+    "Fitted features, all 12 model checkpoints, target-inversion state and final blend replayed in a separate process without retraining; serialized code is trusted local diagnostic material, not a portable public provider format.",
+    "Source text memoization wrappers removed for serialization; their underlying functions and output semantics are retained, with no cache-performance claim.",
     "This executes source via diagnostic loaders; reusable production providers, dependency publication review, stored corrected CDG and promotion remain outstanding."
   ]
 }

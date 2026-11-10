@@ -25,9 +25,12 @@ def save_and_replay(model, model_class, controls, tf, directory, matrices):
         saver = tf.train.Saver()
         saver.save(model._session, prefix)
     model._session.close()
+    return replay_checkpoint(model_class, controls, tf, directory, matrices)
 
-    # Reconstruct target inversion separately from the trained instance.
-    # Only files just produced above are read, never caller-provided artifacts.
+
+def replay_checkpoint(model_class, controls, tf, directory, matrices):
+    """Replay only trusted locally generated files verified by the caller."""
+    prefix = str(directory/'model')
     restored = model_class(**controls)
     with (directory/'inverse-state.pkl').open('rb') as stream:
         state = pickle.load(stream)

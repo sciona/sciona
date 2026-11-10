@@ -14,12 +14,17 @@ import faulthandler
 import hashlib
 from importlib.metadata import version
 import json
+import os
 from pathlib import Path
+import pickle
+import subprocess
+import sys
 import warnings
 
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import Lasso
+from joblib.externals import cloudpickle
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -42,6 +47,10 @@ def run(directory, runtime):
         raise ValueError('Use an empty private runtime directory; existing checkpoints will not be replaced')
     model_ns, models, quantile_sha = load_model_namespace(directory)
     feature_ns, topology = load_feature_namespace(directory, modernize=True)
+    # Source cache wrappers reference a transient exec namespace and cannot be
+    # serialized. Preserve their pure functions, without process-local caches.
+    for name in ('stem_word', 'word_to_charset'):
+        feature_ns[name] = feature_ns[name].__wrapped__
     tree = ast.parse((directory/'mercari/datasets_tf.py').read_text())
     exec(compile(ast.Module(body=[n for n in tree.body if isinstance(n, ast.FunctionDef)], type_ignores=[]),
                  '<source-feature-recipes>', 'exec'), feature_ns)
@@ -70,6 +79,8 @@ def run(directory, runtime):
     for group in (1, 3, 2):
         features = feature_ns[f'prepare_vectorizer_{group}_tf'](n_jobs=1)
         X = features.fit_transform(training.copy(deep=True), training_targets)
+        with (runtime/f'features-{group}.pkl').open('wb') as stream:
+            cloudpickle.dump(features, stream)
         C = features.transform(calibration.copy(deep=True))
         Q = features.transform(query.copy(deep=True))
         assert X.shape[1] == C.shape[1] == Q.shape[1]
@@ -117,24 +128,46 @@ def run(directory, runtime):
                            query_count=32, finite_predictions=True, independent_affine_oracle_passed=True))
         print(json.dumps(dict(completed_fits=len(fits), completed_blends=len(rounds))), flush=True)
     assert len(fits) == 12 and sum(f['optimizer_updates'] for f in fits) == 72
+    with (runtime/'blend.pkl').open('wb') as stream:
+        pickle.dump(estimators[-1], stream)
+    np.save(runtime/'expected.npy', predicted, allow_pickle=False)
+    manifest = dict(format='mercari-private-synthetic-replay.v1',
+                    files={str(p.relative_to(runtime)): hashlib.sha256(p.read_bytes()).hexdigest()
+                           for p in sorted(runtime.rglob('*')) if p.is_file()})
+    manifest_bytes = (json.dumps(manifest, sort_keys=True)+'\n').encode()
+    (runtime/'manifest.json').write_bytes(manifest_bytes)
+    child = subprocess.run([sys.executable, str(ROOT/'scripts/replay_mercari_synthetic_graph.py'),
+        '--source-directory', str(directory), '--runtime-directory', str(runtime),
+        '--manifest-sha256', hashlib.sha256(manifest_bytes).hexdigest()],
+        env={**os.environ, 'OMP_NUM_THREADS':'1', 'OPENBLAS_NUM_THREADS':'1', 'MKL_NUM_THREADS':'1',
+             'VECLIB_MAXIMUM_THREADS':'1', 'NUMEXPR_NUM_THREADS':'1',
+             'TF_NUM_INTRAOP_THREADS':'1', 'TF_NUM_INTEROP_THREADS':'1'},
+        capture_output=True, text=True, timeout=120)
+    if child.returncode:
+        raise RuntimeError('Fresh-process replay failed: '+child.stderr[-2000:])
+    replay_summary = json.loads(child.stdout.strip().splitlines()[-1])
+    assert replay_summary == dict(passed=True, restored_models=12, restored_features=3, restored_blends=1,
+                                  exact_query_predictions=True, training_executed=False)
     files = ['scripts/run_mercari_tensorflow_synthetic_graph.py', 'scripts/probe_mercari_tensorflow_runtime.py',
              'scripts/probe_mercari_feature_runtime.py', 'scripts/inventory_mercari_models.py', 'scripts/inventory_mercari_features.py',
-             'scripts/mercari_checkpoint_probe.py']
+             'scripts/mercari_checkpoint_probe.py', 'scripts/replay_mercari_synthetic_graph.py']
     return dict(format='mercari-declared-tensorflow-synthetic-graph.v1', passed=True, approved=False,
         catalog_mutations=0, synthetic_only=True, role_counts=dict(training=8192, calibration=256, query=32),
         fits=fits, blend_rounds=rounds, optimizer_updates=72, checkpoint_replays=12,
+        fresh_process_replay=replay_summary,
         source_commit=models['source_commit'],
         source_sha256={**models['source_sha256'], **topology['source_sha256'],
             'mercari/regression_clf.py': quantile_sha, 'mercari/main_helpers.py': pins['mercari/main_helpers.py'],
             'mercari/config.py': pins['mercari/config.py']},
         software_sha256={p: hashlib.sha256((ROOT/p).read_bytes()).hexdigest() for p in files},
-        runtime_versions={p: version(p) for p in ('tensorflow', 'numpy', 'scipy', 'scikit-learn', 'pandas', 'Unidecode', 'nltk')},
+        runtime_versions={p: version(p) for p in ('tensorflow', 'numpy', 'scipy', 'scikit-learn', 'pandas', 'Unidecode', 'nltk', 'joblib')},
         resource_policy=dict(concurrent_fits=1, native_pool_threads=1, worker_processes=0),
         limitations=['Declared 12-model TensorFlow path only; additional four winning models and backend identity remain unresolved.',
             'Current TensorFlow compatibility API and documented serial feature shims, not historical runtime numerical equivalence.',
             'Distinct synthetic training/calibration/query populations; no real-data accuracy or held-out model selection claim.',
             'Source MSE dispatch, feature recipes, clip bounds and learned positive Lasso blend retained, including group execution order 1,3,2.',
-            'Model checkpoints and target-inversion state replayed in fresh graphs/sessions in the same process; full feature and blend serialization and fresh-process replay remain outstanding.',
+            'Fitted features, all 12 model checkpoints, target-inversion state and final blend replayed in a separate process without retraining; serialized code is trusted local diagnostic material, not a portable public provider format.',
+            'Source text memoization wrappers removed for serialization; their underlying functions and output semantics are retained, with no cache-performance claim.',
             'This executes source via diagnostic loaders; reusable production providers, dependency publication review, stored corrected CDG and promotion remain outstanding.'])
 
 
