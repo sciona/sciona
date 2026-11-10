@@ -1,0 +1,814 @@
+{
+  "format": "osic-quantile-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "providers": [
+    {
+      "artifact_id": "ea0d65b9-f1d9-5d83-903d-e101a1be7ab5",
+      "fqdn": "sciona.atoms.ml.domain_adapters.osic_quantile.assemble_quantile_populations",
+      "version_id": "2d6b53d2-3bf2-56c3-b7c6-b07e2734eec9",
+      "content_hash": "eb5181f4589fc8b26b1dad6593535d842f1ceab90ad0df18e5a63bc547e391a1",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "training",
+          "type_desc": "pandas.DataFrame",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty complete pandas DataFrame with exact caller-mapped fields entity,time,target,numeric,category_a,category_b. String labels must be nonblank; numeric coordinates finite. Caller owns units and observation availability. No real records or metadata are embedded in this contract. All duplicate entity/time rows are removed, not collapsed to one row; encounter order is retained."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "baseline",
+          "type_desc": "pandas.DataFrame",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty complete pandas DataFrame with exact caller-mapped fields entity,time,target,numeric,category_a,category_b. String labels must be nonblank; numeric coordinates finite. Caller owns units and observation availability. No real records or metadata are embedded in this contract. Exactly one supplied baseline per queried entity; supplied outcomes must already be observable."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "queries",
+          "type_desc": "pandas.DataFrame",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty exact entity,time fields with complete finite numeric times and nonblank entity strings. Every entity must have a supplied baseline. Query order and the complete population are significant."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "pandas.DataFrame",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Joint ordered training/baseline/query table with population roles; training duplicates removed and query metadata joined. No feature fitting. Concrete provisioned execution only; abstract witness rejects."
+        }
+      ],
+      "operation": "Assemble source populations after removing all duplicate training keys. Caller maps the exact neutral table fields and establishes availability. Each queried entity requires one supplied baseline. Encounter order matters. This performs joins and population tagging only, not feature fitting.",
+      "plain_description": "Join the supplied training, baseline and query tables, removing all repeated training keys.",
+      "validity_bounds": "Nonempty complete pandas DataFrame with exact caller-mapped fields entity,time,target,numeric,category_a,category_b. String labels must be nonblank; numeric coordinates finite. Caller owns units and observation availability. No real records or metadata are embedded in this contract. All duplicate entity/time rows are removed, not collapsed to one row; encounter order is retained. Nonempty complete pandas DataFrame with exact caller-mapped fields entity,time,target,numeric,category_a,category_b. String labels must be nonblank; numeric coordinates finite. Caller owns units and observation availability. No real records or metadata are embedded in this contract. Exactly one supplied baseline per queried entity; supplied outcomes must already be observable. Nonempty exact entity,time fields with complete finite numeric times and nonblank entity strings. Every entity must have a supplied baseline. Query order and the complete population are significant. Joint ordered training/baseline/query table with population roles; training duplicates removed and query metadata joined. No feature fitting. Concrete provisioned execution only; abstract witness rejects.",
+      "reuse": "Explicit source recipe over caller-mapped tables and prepared numeric inputs. Application mapping and availability policies stay outside the generic loss atoms; empirical transfer requires separate evaluation.",
+      "registered_provider_dependencies": []
+    },
+    {
+      "artifact_id": "a045d349-a1fb-5f9a-b772-954fbbe55ec7",
+      "fqdn": "sciona.atoms.ml.domain_adapters.osic_quantile.fit_joint_quantile_features",
+      "version_id": "1a4ae848-f735-5ecf-81be-87f495625257",
+      "content_hash": "61cec2ee6f7834e8ea63c6ffa91166f85ce6098db230314dd3d42aef0ff85fe8",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "population",
+          "type_desc": "pandas.DataFrame",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty complete pandas DataFrame with exact caller-mapped fields entity,time,target,numeric,category_a,category_b. String labels must be nonblank; numeric coordinates finite. Caller owns units and observation availability. No real records or metadata are embedded in this contract. Additional population field must contain exactly training,baseline,query roles. Produced by assemble_quantile_populations; retain row order."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "allow_transductive",
+          "type_desc": "bool",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Must be exactly True. Authorizes fitting joint categories and ranges using the query population; changed queries can alter training features."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Per-role feature matrices, targets and entity/time order plus ordered columns, categories and ranges. Source encounter-order category encoding and min/max scaling; reject degenerate ranges and cross-field category-name collisions. Must cast model inputs explicitly to float32. This is joint transductive preparation, not a train-only scaler. Concrete provisioned execution only; abstract witness rejects."
+        }
+      ],
+      "operation": "Fit the source feature recipe over the explicit joint population. Requires allow_transductive=True. Returns numeric matrices by role and ordered fitted feature metadata. A changed query population can change training features; this is not a train-only reusable scaler.",
+      "plain_description": "Build shared numeric features from the complete supplied population, including queries.",
+      "validity_bounds": "Nonempty complete pandas DataFrame with exact caller-mapped fields entity,time,target,numeric,category_a,category_b. String labels must be nonblank; numeric coordinates finite. Caller owns units and observation availability. No real records or metadata are embedded in this contract. Additional population field must contain exactly training,baseline,query roles. Produced by assemble_quantile_populations; retain row order. Must be exactly True. Authorizes fitting joint categories and ranges using the query population; changed queries can alter training features. Per-role feature matrices, targets and entity/time order plus ordered columns, categories and ranges. Source encounter-order category encoding and min/max scaling; reject degenerate ranges and cross-field category-name collisions. Must cast model inputs explicitly to float32. This is joint transductive preparation, not a train-only scaler. Concrete provisioned execution only; abstract witness rejects.",
+      "reuse": "Explicit source recipe over caller-mapped tables and prepared numeric inputs. Application mapping and availability policies stay outside the generic loss atoms; empirical transfer requires separate evaluation.",
+      "registered_provider_dependencies": []
+    },
+    {
+      "artifact_id": "4bff299b-a560-5801-963a-29bae15a0ea5",
+      "fqdn": "sciona.atoms.ml.domain_adapters.osic_quantile.reduce_quantile_predictions",
+      "version_id": "928c22b6-42b9-5b74-ad1c-61a7bbfd16e1",
+      "content_hash": "0801f94c2f110cd8be71a350560d9ee70e36db88b547c2954b323d1d5d451338",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "folds",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite float32 or float64 (F,M,3) outputs in aligned query order. Divide each fold in its original dtype before float64 accumulation. Columns are low,point,high; crossings are retained."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "observed_mask",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Boolean vector (M,) marking only outcomes already known at prediction time. Caller establishes availability, not merely event time."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "observed_values",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite real vector (M,) in response units. Only masked rows are used, but all rows must be finite."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Float64 (M,2) point and raw uncertainty. Average folds in source order; midpoint is column 1 and spread is high-low. Preserve negative spreads. Override masked points with observed values and uncertainty 0.1 before branch blend. This is a source policy, not calibrated uncertainty. Concrete provisioned execution only; abstract witness rejects."
+        }
+      ],
+      "operation": "Apply source fold averaging, midpoint/spread extraction and known values. Fold predictions (F,M,3) are finite float32/float64. Divide in input dtype before accumulating in float64. Preserve crossed/negative spreads. Caller supplies a boolean availability mask and aligned finite observed values; selected rows receive those values and uncertainty 0.1 before branch blend. This domain policy does not establish interval calibration.",
+      "plain_description": "Average the model outputs and apply supplied known outcomes before combining prediction branches.",
+      "validity_bounds": "Nonempty finite float32 or float64 (F,M,3) outputs in aligned query order. Divide each fold in its original dtype before float64 accumulation. Columns are low,point,high; crossings are retained. Boolean vector (M,) marking only outcomes already known at prediction time. Caller establishes availability, not merely event time. Finite real vector (M,) in response units. Only masked rows are used, but all rows must be finite. Float64 (M,2) point and raw uncertainty. Average folds in source order; midpoint is column 1 and spread is high-low. Preserve negative spreads. Override masked points with observed values and uncertainty 0.1 before branch blend. This is a source policy, not calibrated uncertainty. Concrete provisioned execution only; abstract witness rejects.",
+      "reuse": "Explicit source recipe over caller-mapped tables and prepared numeric inputs. Application mapping and availability policies stay outside the generic loss atoms; empirical transfer requires separate evaluation.",
+      "registered_provider_dependencies": []
+    },
+    {
+      "artifact_id": "68e8b7f2-8601-5129-9f1b-6091784f2401",
+      "fqdn": "sciona.atoms.ml.domain_adapters.osic_quantile.replay_prepared_quantile_folds",
+      "version_id": "d40bc60a-2b10-5eb5-85e2-3fee9f934b38",
+      "content_hash": "063f375269a74443ff7c89ca4fcef9a4ac38223b6336a93006005b5af0d896fe",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "states",
+          "type_desc": "list[dict]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exactly two private numeric sciona.osic_quantile_prediction.v1 states with fixed eight-array float32 weight inventory and matching columns/coordinates. No executable graph or optimizer state; caller verifies authenticity."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "features",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float32 matrix (N,D), D>=1. Training requires N>=2; replay requires N>=1. Caller aligns columns to explicit feature coordinates and owns prior preparation."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "columns",
+          "type_desc": "list[str]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "D unique nonblank ordered feature names. Must agree exactly with saved state on replay; names do not prove semantic equivalence."
+        },
+        {
+          "direction": "input",
+          "ordinal": 3,
+          "name": "feature_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonblank feature-space declaration matching saved states exactly. Caller owns feature construction and alignment."
+        },
+        {
+          "direction": "input",
+          "ordinal": 4,
+          "name": "response_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonblank response-space declaration matching saved states exactly. Caller owns target units; no inverse transform is inferred."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Float32 raw predictions (2,M,3) restored from both states. No preparation or fitting. Query features must match the original preparation scope; no baseline policy. Concrete provisioned execution only; abstract witness rejects."
+        }
+      ],
+      "operation": "Restore both numeric fold states and return raw (2,M,3) predictions. Requires finite float32 features with the saved feature order and matching coordinates. No fitting, reduction or baseline override. Caller verifies state provenance; serialized state supports inference, not training resume.",
+      "plain_description": "Use both saved models to predict from prepared numbers without training again.",
+      "validity_bounds": "Exactly two private numeric sciona.osic_quantile_prediction.v1 states with fixed eight-array float32 weight inventory and matching columns/coordinates. No executable graph or optimizer state; caller verifies authenticity. Finite float32 matrix (N,D), D>=1. Training requires N>=2; replay requires N>=1. Caller aligns columns to explicit feature coordinates and owns prior preparation. D unique nonblank ordered feature names. Must agree exactly with saved state on replay; names do not prove semantic equivalence. Nonblank feature-space declaration matching saved states exactly. Caller owns feature construction and alignment. Nonblank response-space declaration matching saved states exactly. Caller owns target units; no inverse transform is inferred. Float32 raw predictions (2,M,3) restored from both states. No preparation or fitting. Query features must match the original preparation scope; no baseline policy. Concrete provisioned execution only; abstract witness rejects.",
+      "reuse": "Explicit source recipe over caller-mapped tables and prepared numeric inputs. Application mapping and availability policies stay outside the generic loss atoms; empirical transfer requires separate evaluation.",
+      "registered_provider_dependencies": [
+        {
+          "artifact_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+          "fqdn": "sciona.atoms.ml.tensorflow_distribution_losses.clipped_laplace_score",
+          "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+          "content_hash": "b38663fb11890ce1968df7d1250b61937fcf7d144a0ad2ec2e59fb160b574534",
+          "trust_tier": 3
+        },
+        {
+          "artifact_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+          "fqdn": "sciona.atoms.ml.tensorflow_distribution_losses.mean_pinball",
+          "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+          "content_hash": "1aab2d391c4ef377ca1383094fb7744f5935ead635d232c0d8a2c5972cf9c21b",
+          "trust_tier": 3
+        }
+      ]
+    },
+    {
+      "artifact_id": "8c09198c-c3c0-5114-999e-654ebddc5218",
+      "fqdn": "sciona.atoms.ml.domain_adapters.osic_quantile.train_prepared_quantile_folds",
+      "version_id": "9da28b68-6360-5305-bb6a-53b21ef8d98f",
+      "content_hash": "fb5b941e20835a6869773192b51f5b338fea77bc802b6c4d1bc7c869bd897320",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "features",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float32 matrix (N,D), D>=1. Training requires N>=2; replay requires N>=1. Caller aligns columns to explicit feature coordinates and owns prior preparation."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "targets",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float32 matrix (N,1), row-aligned with training features, in the declared response units. No response scaling is inferred."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "query_features",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float32 matrix (M,D), M>=1, with the same ordered feature meanings and units as training."
+        },
+        {
+          "direction": "input",
+          "ordinal": 3,
+          "name": "columns",
+          "type_desc": "list[str]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "D unique nonblank ordered feature names. Must agree exactly with saved state on replay; names do not prove semantic equivalence."
+        },
+        {
+          "direction": "input",
+          "ordinal": 4,
+          "name": "feature_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonblank feature-space declaration matching saved states exactly. Caller owns feature construction and alignment."
+        },
+        {
+          "direction": "input",
+          "ordinal": 5,
+          "name": "response_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonblank response-space declaration matching saved states exactly. Caller owns target units; no inverse transform is inferred."
+        },
+        {
+          "direction": "input",
+          "ordinal": 6,
+          "name": "seeds",
+          "type_desc": "tuple[int,int]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exactly two Python integers in [0,2**31), excluding bool. Resets Keras/random seeds for each fold; historical random draws are not reproduced. Serial execution only."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Raw fold_predictions (2,M,3), oof_predictions (N,3), two private fold_states and aggregate fold records. Fixed source architecture, two contiguous folds, 600 epochs, batches of 128 including partial batches, legacy Adam and source mixed loss. No fold reduction or baseline override. Model state is inference-only. Concrete provisioned execution only; abstract witness rejects."
+        }
+      ],
+      "operation": "Train two fixed 600-epoch folds from aligned finite float32 matrices. Features (N,D), targets (N,1), queries (M,D); N>=2, M>=1, D>=1. Explicit ordered columns, coordinates and a tuple of two 31-bit seeds are required. Returns raw fold predictions, out-of-fold values, private prediction states and training records. No feature fitting or known-baseline overrides.",
+      "plain_description": "Train two fixed prediction models from prepared numbers and retain their saved states.",
+      "validity_bounds": "Finite float32 matrix (N,D), D>=1. Training requires N>=2; replay requires N>=1. Caller aligns columns to explicit feature coordinates and owns prior preparation. Finite float32 matrix (N,1), row-aligned with training features, in the declared response units. No response scaling is inferred. Finite float32 matrix (M,D), M>=1, with the same ordered feature meanings and units as training. D unique nonblank ordered feature names. Must agree exactly with saved state on replay; names do not prove semantic equivalence. Nonblank feature-space declaration matching saved states exactly. Caller owns feature construction and alignment. Nonblank response-space declaration matching saved states exactly. Caller owns target units; no inverse transform is inferred. Exactly two Python integers in [0,2**31), excluding bool. Resets Keras/random seeds for each fold; historical random draws are not reproduced. Serial execution only. Raw fold_predictions (2,M,3), oof_predictions (N,3), two private fold_states and aggregate fold records. Fixed source architecture, two contiguous folds, 600 epochs, batches of 128 including partial batches, legacy Adam and source mixed loss. No fold reduction or baseline override. Model state is inference-only. Concrete provisioned execution only; abstract witness rejects.",
+      "reuse": "Explicit source recipe over caller-mapped tables and prepared numeric inputs. Application mapping and availability policies stay outside the generic loss atoms; empirical transfer requires separate evaluation.",
+      "registered_provider_dependencies": [
+        {
+          "artifact_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+          "fqdn": "sciona.atoms.ml.tensorflow_distribution_losses.clipped_laplace_score",
+          "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+          "content_hash": "b38663fb11890ce1968df7d1250b61937fcf7d144a0ad2ec2e59fb160b574534",
+          "trust_tier": 3
+        },
+        {
+          "artifact_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+          "fqdn": "sciona.atoms.ml.tensorflow_distribution_losses.mean_pinball",
+          "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+          "content_hash": "1aab2d391c4ef377ca1383094fb7744f5935ead635d232c0d8a2c5972cf9c21b",
+          "trust_tier": 3
+        }
+      ]
+    }
+  ],
+  "connected_execution": {
+    "passed": true,
+    "approved": false,
+    "catalog_mutations": 0,
+    "synthetic_only": true,
+    "frozen_lifecycle_commit": "760fc106",
+    "frozen_lifecycle_sha256": "59cff517f5ee946b674bc0545ec82953a3dee6f467a5b57cb47f021194dc87da",
+    "training_sha256": "c0f81b5b4ccb3926ec6cc030c8b121e828e962f8ab7313ba1daac43287f46fbd",
+    "validator_sha256": "ffc5638fd5b4eba8cb316dd7860997e88fb8af45935444d293794136f64041c4",
+    "provider_sha256": "1d39499ed4ea783f460257e947e9789130be5c1be1165837bc8f22b79d42538f",
+    "lifecycle_outputs_exact": true,
+    "private_fold_states_exact": true,
+    "numeric_boundary_without_preparation": true,
+    "raw_fold_replay_exact": true,
+    "replay_training_and_preparation_disabled": true,
+    "full_schedule_fits": 6,
+    "epochs_per_fit": 600,
+    "rejected_before_model_construction": [
+      "dtype",
+      "target_rank",
+      "rows",
+      "query_width",
+      "empty_query",
+      "nonfinite",
+      "column_count",
+      "duplicate_columns"
+    ],
+    "limitations": [
+      "The prepared trainer retains the fixed OSIC architecture and schedule; this is decomposition, not a general model trainer.",
+      "Synthetic regression against the preceding qualified lifecycle only; no empirical accuracy or full original CDG approval."
+    ]
+  },
+  "software_sha256": {
+    "sciona/osic_quantile_features.py": "7db2c03ec342165e8a93325dd21a0746575adde4363f325eea6bed8406553d2b",
+    "sciona/osic_quantile_training.py": "c0f81b5b4ccb3926ec6cc030c8b121e828e962f8ab7313ba1daac43287f46fbd",
+    "sciona/osic_quantile_model.py": "80bb8d8e135c96be73c046cd05882d48c5fa5779d39a2a01b5f6284f7708d8e8",
+    "sciona/osic_quantile_objective.py": "b1726979feb3375c7193764c8de69fd9dafdc203ce99b2c41c41ab8fd9459804",
+    "sciona/osic_quantile_state.py": "5776cb1ba94373672b937e9324c478a2e46da26b5be5e2f2bda93b6077633802",
+    "sciona/osic_predictions.py": "6e3dbca24d78302ae74ea525fe8d2f380cda9308dc76a4a3f225c4cd863ebace",
+    "sciona/tensorflow_distribution_losses.py": "0d2e7b87f1fab0d3181b6eae412a4ff27af501e202b306b46b224e5e24bb8be6",
+    "provider": "1d39499ed4ea783f460257e947e9789130be5c1be1165837bc8f22b79d42538f",
+    "scripts/review_osic_quantile_semantics.py": "5b73e450a954851f3629dda66f39c4f0c639c54b53e3dc08cbb257965cecc7e7",
+    "scripts/import_osic_quantile_drafts.py": "d3918edc972813a862812c576a24a9b9029a370c0ee4885a7b80fb12df581a2c",
+    "scripts/plan_osic_quantile_intake.py": "c301e3ad493ebad2e172e0bba7fbcc96273d2ba4eda37be09d1911db246f1272",
+    "scripts/validate_osic_training_boundary.py": "ffc5638fd5b4eba8cb316dd7860997e88fb8af45935444d293794136f64041c4",
+    "scripts/review_osic_runtime_integrity.py": "4b2cbc1751fd5262eb6c4bdb32afb32fb9d4366aa23d937797cbf6ff22e80797",
+    "scripts/review_video_numeric_runtime.py": "f0e5acb6f7820467a521c8186a54eca0591cdcbc0125c66c446539c506cdb3ac"
+  },
+  "installed_packages": {
+    "absl-py": {
+      "version": "2.5.0",
+      "hashed_files_verified": 31,
+      "active_requirements": []
+    },
+    "annotated-types": {
+      "version": "0.7.0",
+      "hashed_files_verified": 7,
+      "active_requirements": []
+    },
+    "asttokens": {
+      "version": "2.4.1",
+      "hashed_files_verified": 13,
+      "active_requirements": [
+        "six>=1.12.0"
+      ]
+    },
+    "astunparse": {
+      "version": "1.6.3",
+      "hashed_files_verified": 11,
+      "active_requirements": [
+        "six<2.0,>=1.6.1",
+        "wheel<1.0,>=0.23.0"
+      ]
+    },
+    "certifi": {
+      "version": "2026.7.22",
+      "hashed_files_verified": 13,
+      "active_requirements": []
+    },
+    "charset-normalizer": {
+      "version": "3.5.1",
+      "hashed_files_verified": 23,
+      "active_requirements": []
+    },
+    "flatbuffers": {
+      "version": "25.12.19",
+      "hashed_files_verified": 14,
+      "active_requirements": []
+    },
+    "gast": {
+      "version": "0.7.0",
+      "hashed_files_verified": 13,
+      "active_requirements": []
+    },
+    "google-pasta": {
+      "version": "0.2.0",
+      "hashed_files_verified": 30,
+      "active_requirements": [
+        "six"
+      ]
+    },
+    "grpcio": {
+      "version": "1.83.1",
+      "hashed_files_verified": 67,
+      "active_requirements": [
+        "typing-extensions~=4.12"
+      ]
+    },
+    "h5py": {
+      "version": "3.16.0",
+      "hashed_files_verified": 103,
+      "active_requirements": [
+        "numpy>=1.21.2"
+      ]
+    },
+    "icontract": {
+      "version": "2.7.3",
+      "hashed_files_verified": 16,
+      "active_requirements": [
+        "asttokens<3,>=2",
+        "typing_extensions"
+      ]
+    },
+    "idna": {
+      "version": "3.19",
+      "hashed_files_verified": 18,
+      "active_requirements": []
+    },
+    "imageio": {
+      "version": "2.37.3",
+      "hashed_files_verified": 66,
+      "active_requirements": [
+        "numpy",
+        "pillow>=8.3.2"
+      ]
+    },
+    "joblib": {
+      "version": "1.5.3",
+      "hashed_files_verified": 143,
+      "active_requirements": []
+    },
+    "keras": {
+      "version": "3.15.1",
+      "hashed_files_verified": 910,
+      "active_requirements": [
+        "absl-py",
+        "h5py",
+        "ml-dtypes",
+        "namex",
+        "numpy",
+        "optree",
+        "packaging",
+        "rich"
+      ]
+    },
+    "lazy-loader": {
+      "version": "0.5",
+      "hashed_files_verified": 6,
+      "active_requirements": [
+        "packaging"
+      ]
+    },
+    "libclang": {
+      "version": "18.1.1",
+      "hashed_files_verified": 11,
+      "active_requirements": []
+    },
+    "markdown": {
+      "version": "3.10.3",
+      "hashed_files_verified": 41,
+      "active_requirements": []
+    },
+    "markdown-it-py": {
+      "version": "4.2.0",
+      "hashed_files_verified": 76,
+      "active_requirements": [
+        "mdurl~=0.1"
+      ]
+    },
+    "markupsafe": {
+      "version": "3.0.3",
+      "hashed_files_verified": 11,
+      "active_requirements": []
+    },
+    "mdurl": {
+      "version": "0.1.2",
+      "hashed_files_verified": 11,
+      "active_requirements": []
+    },
+    "ml-dtypes": {
+      "version": "0.6.0",
+      "hashed_files_verified": 11,
+      "active_requirements": [
+        "numpy>=2.0.0",
+        "numpy>=2.1.0; python_version >= \"3.13\""
+      ]
+    },
+    "namex": {
+      "version": "0.1.0",
+      "hashed_files_verified": 10,
+      "active_requirements": []
+    },
+    "networkx": {
+      "version": "3.6.1",
+      "hashed_files_verified": 602,
+      "active_requirements": []
+    },
+    "numpy": {
+      "version": "2.2.6",
+      "hashed_files_verified": 876,
+      "active_requirements": []
+    },
+    "opencv-python-headless": {
+      "version": "5.0.0.93",
+      "hashed_files_verified": 145,
+      "active_requirements": [
+        "numpy>=2; python_version >= \"3.9\""
+      ]
+    },
+    "opt-einsum": {
+      "version": "3.4.0",
+      "hashed_files_verified": 32,
+      "active_requirements": []
+    },
+    "optree": {
+      "version": "0.20.0",
+      "hashed_files_verified": 25,
+      "active_requirements": [
+        "typing-extensions>=4.10.0",
+        "typing-extensions>=4.12.0; python_version >= \"3.13\""
+      ]
+    },
+    "packaging": {
+      "version": "26.3",
+      "hashed_files_verified": 30,
+      "active_requirements": []
+    },
+    "pandas": {
+      "version": "2.3.3",
+      "hashed_files_verified": 1513,
+      "active_requirements": [
+        "numpy>=1.26.0; python_version >= \"3.12\"",
+        "python-dateutil>=2.8.2",
+        "pytz>=2020.1",
+        "tzdata>=2022.7"
+      ]
+    },
+    "pillow": {
+      "version": "12.3.0",
+      "hashed_files_verified": 140,
+      "active_requirements": []
+    },
+    "protobuf": {
+      "version": "6.33.5",
+      "hashed_files_verified": 60,
+      "active_requirements": []
+    },
+    "pydantic": {
+      "version": "2.12.5",
+      "hashed_files_verified": 111,
+      "active_requirements": [
+        "annotated-types>=0.6.0",
+        "pydantic-core==2.41.5",
+        "typing-extensions>=4.14.1",
+        "typing-inspection>=0.4.2"
+      ]
+    },
+    "pydantic-core": {
+      "version": "2.41.5",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.14.1"
+      ]
+    },
+    "pygments": {
+      "version": "2.21.0",
+      "hashed_files_verified": 351,
+      "active_requirements": []
+    },
+    "python-dateutil": {
+      "version": "2.9.0.post0",
+      "hashed_files_verified": 25,
+      "active_requirements": [
+        "six>=1.5"
+      ]
+    },
+    "pytz": {
+      "version": "2026.1.post1",
+      "hashed_files_verified": 616,
+      "active_requirements": []
+    },
+    "requests": {
+      "version": "2.34.2",
+      "hashed_files_verified": 27,
+      "active_requirements": [
+        "certifi>=2023.5.7",
+        "charset_normalizer<4,>=2",
+        "idna<4,>=2.5",
+        "urllib3<3,>=1.26"
+      ]
+    },
+    "rich": {
+      "version": "15.0.0",
+      "hashed_files_verified": 106,
+      "active_requirements": [
+        "markdown-it-py>=2.2.0",
+        "pygments<3.0.0,>=2.13.0"
+      ]
+    },
+    "scikit-image": {
+      "version": "0.26.0",
+      "hashed_files_verified": 310,
+      "active_requirements": [
+        "imageio!=2.35.0,>=2.33",
+        "lazy-loader>=0.4",
+        "networkx>=3.0",
+        "numpy>=1.24",
+        "packaging>=21",
+        "pillow>=10.1",
+        "scipy>=1.11.4",
+        "tifffile>=2022.8.12"
+      ]
+    },
+    "scikit-learn": {
+      "version": "1.8.0",
+      "hashed_files_verified": 960,
+      "active_requirements": [
+        "joblib>=1.3.0",
+        "numpy>=1.24.1",
+        "scipy>=1.10.0",
+        "threadpoolctl>=3.2.0"
+      ]
+    },
+    "scipy": {
+      "version": "1.17.1",
+      "hashed_files_verified": 1423,
+      "active_requirements": [
+        "numpy<2.7,>=1.26.4"
+      ]
+    },
+    "setuptools": {
+      "version": "80.9.0",
+      "hashed_files_verified": 513,
+      "active_requirements": []
+    },
+    "six": {
+      "version": "1.17.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "tensorboard": {
+      "version": "2.20.0",
+      "hashed_files_verified": 273,
+      "active_requirements": [
+        "absl-py>=0.4",
+        "grpcio>=1.48.2",
+        "markdown>=2.6.8",
+        "numpy>=1.12.0",
+        "packaging",
+        "pillow",
+        "protobuf!=4.24.0,>=3.19.6",
+        "setuptools>=41.0.0",
+        "tensorboard-data-server<0.8.0,>=0.7.0",
+        "werkzeug>=1.0.1"
+      ]
+    },
+    "tensorboard-data-server": {
+      "version": "0.7.2",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "tensorflow": {
+      "version": "2.20.0",
+      "hashed_files_verified": 11548,
+      "active_requirements": [
+        "absl-py>=1.0.0",
+        "astunparse>=1.6.0",
+        "flatbuffers>=24.3.25",
+        "gast!=0.5.0,!=0.5.1,!=0.5.2,>=0.2.1",
+        "google_pasta>=0.1.1",
+        "grpcio<2.0,>=1.24.3",
+        "h5py>=3.11.0",
+        "keras>=3.10.0",
+        "libclang>=13.0.0",
+        "ml_dtypes<1.0.0,>=0.5.1",
+        "numpy>=1.26.0",
+        "opt_einsum>=2.3.2",
+        "packaging",
+        "protobuf>=5.28.0",
+        "requests<3,>=2.21.0",
+        "setuptools",
+        "six>=1.12.0",
+        "tensorboard~=2.20.0",
+        "termcolor>=1.1.0",
+        "typing_extensions>=3.6.6",
+        "wrapt>=1.11.0"
+      ]
+    },
+    "termcolor": {
+      "version": "3.3.0",
+      "hashed_files_verified": 9,
+      "active_requirements": []
+    },
+    "tf-keras": {
+      "version": "2.20.1",
+      "hashed_files_verified": 591,
+      "active_requirements": [
+        "tensorflow<2.21,>=2.20"
+      ]
+    },
+    "threadpoolctl": {
+      "version": "3.6.0",
+      "hashed_files_verified": 5,
+      "active_requirements": []
+    },
+    "tifffile": {
+      "version": "2026.4.11",
+      "hashed_files_verified": 21,
+      "active_requirements": [
+        "numpy>=2.0"
+      ]
+    },
+    "typing-extensions": {
+      "version": "4.16.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "typing-inspection": {
+      "version": "0.4.2",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.12.0"
+      ]
+    },
+    "tzdata": {
+      "version": "2025.3",
+      "hashed_files_verified": 633,
+      "active_requirements": []
+    },
+    "urllib3": {
+      "version": "2.7.0",
+      "hashed_files_verified": 43,
+      "active_requirements": []
+    },
+    "werkzeug": {
+      "version": "3.1.8",
+      "hashed_files_verified": 64,
+      "active_requirements": [
+        "markupsafe>=2.1.1"
+      ]
+    },
+    "wheel": {
+      "version": "0.48.0",
+      "hashed_files_verified": 22,
+      "active_requirements": [
+        "packaging>=24.0"
+      ]
+    },
+    "wrapt": {
+      "version": "2.4.1",
+      "hashed_files_verified": 22,
+      "active_requirements": []
+    }
+  },
+  "intake_plan_sha256": "3ffcba43b26804f3d0d202aa67a8f3ec5eb5541adde6a60ba4efb135d4ad7d2e",
+  "connected_execution_commit": "59c7e284",
+  "connected_execution_sha256": "c650a67341785a6e93a2eb97d2fe0445726489b24fa108210ac721a199b8c431",
+  "resource_policy": {
+    "native_threads": 1,
+    "workers": 1
+  },
+  "limitations": [
+    "Automated Tier 3 for provisioned concrete in-process execution only; abstract witnesses reject. No human Tier 1 or empirical Tier 2 claim.",
+    "Source-specific adapters and a fixed model recipe; generic loss atoms remain independently reusable. No empirical cross-domain effectiveness is established.",
+    "Caller supplies mapped table fields, units, alignment, available observations and complete query population. Labels do not prove coordinate equivalence.",
+    "Joint preparation is transductive: queries can change training features. Fold validation does not establish a leakage-free estimate.",
+    "Training uses the fixed source architecture, 600 epochs per fold and explicit caller seeds. It changes process random-generator state and must execute serially.",
+    "Saved states are private inference-only numeric artifacts. Authenticity is external; no exact training resume or arbitrary architecture loading.",
+    "Crossed predictions and negative raw uncertainty are retained. Known-outcome overrides require actual availability before prediction.",
+    "Six synthetic regression fits establish connected behavior against the preceding qualified lifecycle, not historical random draws or predictive accuracy.",
+    "The complete image branch, final combined graph and original OSIC intake remain separate pending work.",
+    "Installed RECORD and active dependency checks do not authenticate publishers, certify redistribution or qualify other platforms."
+  ]
+}
