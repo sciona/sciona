@@ -1,0 +1,123 @@
+{
+  "format": "arc-original-scope.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "artifact_id": "500d0bdc-c108-56ea-aad5-7ea4e2086db5",
+  "fqdn": "cdg.competition.solution.kaggle.arc_program_synthesis_1st",
+  "source_version_id": "4a5eaed3-fbc0-564f-b12b-120a76304e05",
+  "source_content_hash": "6be75e601582ede9f8122169f2ff4a763759a628a0631acae25b34a3fda826bf",
+  "source_snapshot_reconstructed": true,
+  "source_commit": "9407072659de1270358c2ba34c527785214dd68b",
+  "source_stage_review": [
+    {
+      "stage_id": "grid_translation",
+      "original_description": "convert the 2D visual color grids into discrete graph representations (connected components, bounding boxes, internal shapes) (custom Python)",
+      "realization": "C++ Image with position, dimensions and signed-char pixel mask; normalizeCols supplies reversible color normalization. Components and bounding boxes are DSL operations, not a mandatory Python graph conversion.",
+      "software_sources": [
+        {
+          "path": "headers/utils.hpp",
+          "sha256": "0ea4c63cacaeff8d3c77e80b6a88e4a76ce5b4b6cfb9ecfb33c3a8e6c787128f"
+        },
+        {
+          "path": "src/normalize.cpp",
+          "sha256": "d3314d9f38f13ccde54ee53b3c1a263e332dc0e8b4576d77713dd88feaa05403"
+        },
+        {
+          "path": "src/runner.cpp",
+          "sha256": "bbf7df86444cdf7c0dac5b123158996e33f7bb0e337fac3a4069fa797888a193"
+        }
+      ]
+    },
+    {
+      "stage_id": "dsl_construction",
+      "original_description": "define a Domain Specific Language (DSL) consisting of standard functional primitives (e.g., rotate, fill, translate, intersect)",
+      "realization": "initFuncs3 registers scalar and vector image operations with costs; functions include color filters, rigid transforms, splits, joins, embedding and composition.",
+      "software_sources": [
+        {
+          "path": "src/brute2.cpp",
+          "sha256": "6fa3bfa35e75e1863162d46514fdc8b4a97491f7ad8df599534c0b0873beca63"
+        }
+      ]
+    },
+    {
+      "stage_id": "tree_search",
+      "original_description": "implement an A* search algorithm to iteratively combine DSL primitives into candidate functional programs",
+      "realization": "Cost-limited DAG state expansion followed by cross-example piece extraction, greedy composition and outer-product deduction. The active DAG::build loop iterates appended nodes; it is not the claimed A* search. Output-size deduction runs a separate piece search capped at cost 30.",
+      "software_sources": [
+        {
+          "path": "src/brute2.cpp",
+          "sha256": "6fa3bfa35e75e1863162d46514fdc8b4a97491f7ad8df599534c0b0873beca63"
+        },
+        {
+          "path": "src/pieces.cpp",
+          "sha256": "a158f8b270be4d23c2991968e0c90c808e0fcbe48a9af1208dc74d299998669f"
+        },
+        {
+          "path": "src/compose2.cpp",
+          "sha256": "444630213f756932430e54b9bfc441d20bbc3a5bfcee336ce87b10f32f340885"
+        },
+        {
+          "path": "src/deduce_op.cpp",
+          "sha256": "bff9c1ac75753f45ae0b27fdf32f7d7b2c0e84db2f0be8c5b4683ebf5acb833d"
+        },
+        {
+          "path": "src/brute_size.cpp",
+          "sha256": "7faba5035a4e0960201602deeea4f0b97ec69754ff15098b06e26ef12c29c908"
+        }
+      ]
+    },
+    {
+      "stage_id": "program_validation",
+      "original_description": "execute the candidate programs against the provided \"train\" input grids; if the output matches the \"train\" output grids perfectly, save the program",
+      "realization": "evaluateCands accepts at least one exact training match, subject to output validity, and scores goods - .01*(max_depth + .001*cnt_pieces). It does not require every training example to match, and the runner exports predicted grids and scores rather than a saved executable program.",
+      "software_sources": [
+        {
+          "path": "src/compose2.cpp",
+          "sha256": "444630213f756932430e54b9bfc441d20bbc3a5bfcee336ce87b10f32f340885"
+        },
+        {
+          "path": "src/runner.cpp",
+          "sha256": "bbf7df86444cdf7c0dac5b123158996e33f7bb0e337fac3a4069fa797888a193"
+        }
+      ]
+    },
+    {
+      "stage_id": "inference",
+      "original_description": "apply the successfully discovered functional program to the unseen \"test\" input grid to generate the final prediction (Python)",
+      "realization": "Test input participates in parallel DAG evaluation. Runner hash-deduplicates to at most three candidate grids, reverses color normalization, adjusts flip scores, and serializes answers. Python scheduler merges runs by descending (score, serialized image), exact string deduplication and top three.",
+      "software_sources": [
+        {
+          "path": "src/runner.cpp",
+          "sha256": "bbf7df86444cdf7c0dac5b123158996e33f7bb0e337fac3a4069fa797888a193"
+        },
+        {
+          "path": "src/read.cpp",
+          "sha256": "1ab1854de355f802d8f1d1e029e875fd24a7f36b8aa0028929c6eccc51e5ed27"
+        },
+        {
+          "path": "safe_run.py",
+          "sha256": "6efbe43874e8f18eceadcc9a9bad84959e76a9d341b7d3f8d0b883f8140e2a3d"
+        }
+      ]
+    }
+  ],
+  "reuse_decision": "Use for discrete grid transformation tasks in other disciplines only when callers explicitly encode their examples as 0..9 categorical grids and the pinned DSL expresses the desired rules. Preparation is separately selectable. The execution provider is a source-specific search recipe, not a generic numerical primitive. C++ image operations, search state and scoring are coupled inside the reviewed binary; exposing them as independent Python atoms would require new interfaces and independent qualification. Do not claim that existing opaque wrappers provide that decomposition.",
+  "limitations": [
+    "Automated Tier 3 synthetic evidence only; no human Tier 1 review or historical competition accuracy.",
+    "Caller supplies a faithful categorical-grid encoding. No numeric units, spatial resolution, physical laws or domain meaning are inferred.",
+    "Search is restricted to the pinned image DSL, cost rules, composition and candidate scoring. No universal program synthesis or cross-domain accuracy guarantee.",
+    "The exact reviewed macOS arm64 bundle must be provisioned through deployment configuration. No runtime download or automatic build.",
+    "Adaptive phases use up to four solver children, then two in the last phase. Callers must reserve the total allocation before invoking; two-input validation uses at most two children.",
+    "Process RSS is sampled and excludes parent memory. Global monotonic deadline and explicit kill/reap differ from the original monitor; budgets are not instantaneous operating-system limits.",
+    "Timing-dependent baseline estimates and resource contention can affect the search. A successful invocation may still report incomplete runs."
+  ],
+  "output_scope": "Ranked grid predictions and search status from the complete four-phase C++ solver. No saved-program, perfect training agreement, Python A* or competition submission-format claim.",
+  "provider_contracts_sha256": "4d5e00785ae7533f99c5e2577f187847310658b6d779d75d9bd8ddc77c1e32c4",
+  "source_review_sha256": "24ad44275ddb09b0b02590c620f3132d02b629b23e3e42a0047fd03d734257a8",
+  "reviewer_sha256": "78f11f23d4ed2171d42a88d5215f5f0cc075859774b2d97b798654d9106fb996",
+  "remaining": [
+    "Corrected catalog graph execution and immutable evidence.",
+    "Staging, rollback qualification, Tier 3 publication and production selection."
+  ]
+}
