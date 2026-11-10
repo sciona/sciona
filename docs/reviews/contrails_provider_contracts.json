@@ -1,0 +1,195 @@
+{
+  "format": "contrails-provider-contract-review.v1",
+  "passed": true,
+  "approved": false,
+  "review_source": "automated",
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "catalog_mutations": 0,
+  "providers": [
+    {
+      "artifact_id": "c2e1f0b3-9b18-51f9-b054-89b96d700f22",
+      "runtime_fqdn": "sciona.atoms.dl.contrails_execution.contrails_prepare",
+      "version_id": "72f62c5c-08d5-524b-8fbe-393c65e56eb4",
+      "content_hash": "8fd613748ceae092539081306a6012e4ae6ebad5a1d7be6170f9535b28df6c77",
+      "plain_description": "Check ordered thermal image populations, targets, training settings and initial model state, then prepare them for execution.",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "payload",
+          "type_desc": "dict",
+          "ordinal": 0,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact version-1 envelope with training, scoring, prediction, initialization and config. Config requires integer seed in [0,2**32); optional variant v43/v47, positive integer batch_size, nonnegative integer num_workers and integer epoch_limit in [1,35]. Qualification uses explicit batch_size=1, num_workers=0 and epoch_limit=1. Finite float32-compatible arrays shaped (4,3,256,256), with caller-defined ordered times and the source thermal-channel physical scale. False color is 1-((channel2-channel1+4)/6, (channel1-channel0+4)/9, (channel1-243)/60), without clipping or per-image normalization. At least ten ordered training examples and nonempty scoring/prediction populations. Training/scoring supply label and annotation_mean arrays shaped (1,256,256) in [0,1]. Globally distinct nonempty keys; source shuffled ten-fold selection and explicit v43/v47 branch-fold subsets. Explicit seed and initialization policy: random, supplied encoder states or supplied full-model states per selected fold. Complete MaxViT/U-Net models, source loss/schedule, terminal checkpoints and all selected folds. Optional epoch_limit explicitly shortens the schedule."
+        },
+        {
+          "direction": "output",
+          "name": "prepared",
+          "type_desc": "object",
+          "ordinal": 0,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Preparation returns a trusted Python mapping of decoded populations, initialization states and configuration. Existing float32 input arrays may be aliased; execution shallow-copies mappings and does not repeat the original envelope validation. Prepared state is neither deeply immutable nor a safe untrusted deserialization boundary. Callers must avoid mutation between preparation and execution; detached copying is not promised."
+        }
+      ],
+      "source_anchors": [
+        {
+          "file": "sciona/contrails_runtime.py",
+          "symbol": "prepare",
+          "line": 50,
+          "file_sha256": "9f2f069bf5215137029b1d59b880d175e0dd2e57f5a95a77bb2fc2c25bb95836"
+        },
+        {
+          "file": "sciona/contrails_runtime.py",
+          "symbol": "_array",
+          "line": 16,
+          "file_sha256": "9f2f069bf5215137029b1d59b880d175e0dd2e57f5a95a77bb2fc2c25bb95836"
+        },
+        {
+          "file": "sciona/contrails_runtime.py",
+          "symbol": "_state",
+          "line": 28,
+          "file_sha256": "9f2f069bf5215137029b1d59b880d175e0dd2e57f5a95a77bb2fc2c25bb95836"
+        }
+      ],
+      "role": "recipe_adapter",
+      "reuse": "Other aligned thermal-image segmentation tasks may reuse the recipe only when the source physical encoding, temporal order, target meaning, transformation invariances and fold assumptions are justified. Domain-neutral keys and arrays do not remove those assumptions. Preparation and execution remain recipe adapters; generic spatial augmentation or mask encoding would need independent provider contracts and qualification before separate selection.",
+      "validity_bounds": [
+        "Shape and finiteness checks do not establish physical units, channel identity or temporal spacing. Arbitrary RGB or unrelated numeric channels do not satisfy the semantic contract merely by matching shape.",
+        "Caller must justify spatial transformation invariance and target alignment in any new application. This is a fixed two-branch recipe; generic temporal averaging is not implemented.",
+        "Distinct keys do not prove independent subjects, locations, times or arrays. Scoring participates in diagnostics and is not an independent final evaluation. Annotation means must retain their intended meaning.",
+        "Prepared state is neither deeply immutable nor a safe untrusted deserialization boundary. Callers must avoid mutation between preparation and execution; detached copying is not promised.",
+        "Weight shape checks do not certify provenance. No pretrained downloads or historical predictive parity. Callers must set num_workers=0 and bound Torch, native pools and OpenCV for the shared resource budget; source defaults do not enforce that budget.",
+        "The field named probabilities is a source-weighted sum that can exceed one; it is not a calibrated posterior. Diagnostic threshold sweeps do not replace the fixed final threshold. No trained model is returned for later reuse.",
+        "Automated Tier 3 synthetic execution only; no human Tier 1, community Tier 2 or historical accuracy claim.",
+        "Both full variants are required, each with one explicit epoch per fold and random initialization; default 35/40-epoch schedules and external pretrained states are not empirically qualified.",
+        "Fixed spatial interpolation, shifted targets, loss masking, source fold selection, terminal-checkpoint policy and unnormalized weights remain recipe choices.",
+        "Validation covers current-platform serial CPU execution; no GPU, large-input memory or clean-install qualification."
+      ]
+    },
+    {
+      "artifact_id": "def568d6-b5e1-57b0-8379-5e155ec063b9",
+      "runtime_fqdn": "sciona.atoms.dl.contrails_execution.contrails_execute",
+      "version_id": "1018f874-52bb-52e9-a433-cc5f9e302de4",
+      "content_hash": "d485fb68c6a47cfb80506ad3ebf2e122edf3d65fe4be35a61b149cdeb45d8f33",
+      "plain_description": "Train all selected models, reload their final states, and combine spatial predictions into weighted image scores and encoded masks.",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "type_desc": "object",
+          "ordinal": 0,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Preparation returns a trusted Python mapping of decoded populations, initialization states and configuration. Existing float32 input arrays may be aliased; execution shallow-copies mappings and does not repeat the original envelope validation. Prepared state is neither deeply immutable nor a safe untrusted deserialization boundary. Callers must avoid mutation between preparation and execution; detached copying is not promised."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "type_desc": "dict",
+          "ordinal": 0,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Ordered per-example (1,256,256) unnormalized weighted fold/branch sums, plus column-major one-based run-length masks using strict threshold0.5 and the empty marker \"-\". Return variant, seed, initialization, epoch limit and per-fold optimizer-update summaries. The field named probabilities is a source-weighted sum that can exceed one; it is not a calibrated posterior. Diagnostic threshold sweeps do not replace the fixed final threshold. No trained model is returned for later reuse."
+        }
+      ],
+      "source_anchors": [
+        {
+          "file": "sciona/contrails_runtime.py",
+          "symbol": "execute_prepared",
+          "line": 110,
+          "file_sha256": "9f2f069bf5215137029b1d59b880d175e0dd2e57f5a95a77bb2fc2c25bb95836"
+        },
+        {
+          "file": "sciona/contrails_lifecycle.py",
+          "symbol": "run_lifecycle",
+          "line": 18,
+          "file_sha256": "ec0fdaf7b6c76b042e077bef65a2260dd1062c156e43e3767a86bb22bc74962f"
+        },
+        {
+          "file": "sciona/contrails_prediction.py",
+          "symbol": "ensemble_probabilities",
+          "line": 36,
+          "file_sha256": "ed96170e509aaf35ddd1c8104855651a027f4a31a2c800ba35937eb8db5a77a2"
+        }
+      ],
+      "role": "recipe_adapter",
+      "reuse": "Other aligned thermal-image segmentation tasks may reuse the recipe only when the source physical encoding, temporal order, target meaning, transformation invariances and fold assumptions are justified. Domain-neutral keys and arrays do not remove those assumptions. Preparation and execution remain recipe adapters; generic spatial augmentation or mask encoding would need independent provider contracts and qualification before separate selection.",
+      "validity_bounds": [
+        "Shape and finiteness checks do not establish physical units, channel identity or temporal spacing. Arbitrary RGB or unrelated numeric channels do not satisfy the semantic contract merely by matching shape.",
+        "Caller must justify spatial transformation invariance and target alignment in any new application. This is a fixed two-branch recipe; generic temporal averaging is not implemented.",
+        "Distinct keys do not prove independent subjects, locations, times or arrays. Scoring participates in diagnostics and is not an independent final evaluation. Annotation means must retain their intended meaning.",
+        "Prepared state is neither deeply immutable nor a safe untrusted deserialization boundary. Callers must avoid mutation between preparation and execution; detached copying is not promised.",
+        "Weight shape checks do not certify provenance. No pretrained downloads or historical predictive parity. Callers must set num_workers=0 and bound Torch, native pools and OpenCV for the shared resource budget; source defaults do not enforce that budget.",
+        "The field named probabilities is a source-weighted sum that can exceed one; it is not a calibrated posterior. Diagnostic threshold sweeps do not replace the fixed final threshold. No trained model is returned for later reuse.",
+        "Automated Tier 3 synthetic execution only; no human Tier 1, community Tier 2 or historical accuracy claim.",
+        "Both full variants are required, each with one explicit epoch per fold and random initialization; default 35/40-epoch schedules and external pretrained states are not empirically qualified.",
+        "Fixed spatial interpolation, shifted targets, loss masking, source fold selection, terminal-checkpoint policy and unnormalized weights remain recipe choices.",
+        "Validation covers current-platform serial CPU execution; no GPU, large-input memory or clean-install qualification."
+      ]
+    }
+  ],
+  "reuse_decision": "Other aligned thermal-image segmentation tasks may reuse the recipe only when the source physical encoding, temporal order, target meaning, transformation invariances and fold assumptions are justified. Domain-neutral keys and arrays do not remove those assumptions. Preparation and execution remain recipe adapters; generic spatial augmentation or mask encoding would need independent provider contracts and qualification before separate selection.",
+  "limitations": [
+    "Shape and finiteness checks do not establish physical units, channel identity or temporal spacing. Arbitrary RGB or unrelated numeric channels do not satisfy the semantic contract merely by matching shape.",
+    "Caller must justify spatial transformation invariance and target alignment in any new application. This is a fixed two-branch recipe; generic temporal averaging is not implemented.",
+    "Distinct keys do not prove independent subjects, locations, times or arrays. Scoring participates in diagnostics and is not an independent final evaluation. Annotation means must retain their intended meaning.",
+    "Prepared state is neither deeply immutable nor a safe untrusted deserialization boundary. Callers must avoid mutation between preparation and execution; detached copying is not promised.",
+    "Weight shape checks do not certify provenance. No pretrained downloads or historical predictive parity. Callers must set num_workers=0 and bound Torch, native pools and OpenCV for the shared resource budget; source defaults do not enforce that budget.",
+    "The field named probabilities is a source-weighted sum that can exceed one; it is not a calibrated posterior. Diagnostic threshold sweeps do not replace the fixed final threshold. No trained model is returned for later reuse.",
+    "Automated Tier 3 synthetic execution only; no human Tier 1, community Tier 2 or historical accuracy claim.",
+    "Both full variants are required, each with one explicit epoch per fold and random initialization; default 35/40-epoch schedules and external pretrained states are not empirically qualified.",
+    "Fixed spatial interpolation, shifted targets, loss masking, source fold selection, terminal-checkpoint policy and unnormalized weights remain recipe choices.",
+    "Validation covers current-platform serial CPU execution; no GPU, large-input memory or clean-install qualification."
+  ],
+  "derivative": {
+    "plain_description": "Check thermal image populations, train all selected models, and combine their spatial predictions into weighted scores and masks.",
+    "ports": [
+      {
+        "direction": "input",
+        "name": "payload",
+        "type_desc": "dict",
+        "ordinal": 0,
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Exact version-1 envelope with training, scoring, prediction, initialization and config. Config requires integer seed in [0,2**32); optional variant v43/v47, positive integer batch_size, nonnegative integer num_workers and integer epoch_limit in [1,35]. Qualification uses explicit batch_size=1, num_workers=0 and epoch_limit=1. Finite float32-compatible arrays shaped (4,3,256,256), with caller-defined ordered times and the source thermal-channel physical scale. False color is 1-((channel2-channel1+4)/6, (channel1-channel0+4)/9, (channel1-243)/60), without clipping or per-image normalization. At least ten ordered training examples and nonempty scoring/prediction populations. Training/scoring supply label and annotation_mean arrays shaped (1,256,256) in [0,1]. Globally distinct nonempty keys; source shuffled ten-fold selection and explicit v43/v47 branch-fold subsets. Explicit seed and initialization policy: random, supplied encoder states or supplied full-model states per selected fold. Complete MaxViT/U-Net models, source loss/schedule, terminal checkpoints and all selected folds. Optional epoch_limit explicitly shortens the schedule."
+      },
+      {
+        "direction": "output",
+        "name": "result",
+        "type_desc": "dict",
+        "ordinal": 0,
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Ordered per-example (1,256,256) unnormalized weighted fold/branch sums, plus column-major one-based run-length masks using strict threshold0.5 and the empty marker \"-\". Return variant, seed, initialization, epoch limit and per-fold optimizer-update summaries. The field named probabilities is a source-weighted sum that can exceed one; it is not a calibrated posterior. Diagnostic threshold sweeps do not replace the fixed final threshold. No trained model is returned for later reuse."
+      }
+    ]
+  },
+  "evidence_commit": "69805cffd3517608d926712936de6ccc619efc4c",
+  "execution": {
+    "passed": true,
+    "approved": false,
+    "catalog_mutations": 0,
+    "evidence_commit": "69805cffd3517608d926712936de6ccc619efc4c",
+    "variants": {
+      "v43": {
+        "report_sha256": "338f1212465eefdd48a6b53b58ffde0ad2a61024de61292c66a8ac55f780af3a",
+        "models": 4
+      },
+      "v47": {
+        "report_sha256": "a60fc9265df60295e33a63ba2e6ecf30a15dd15f161197a53efa40c6f3e3a94f",
+        "models": 10
+      }
+    },
+    "graph_sha256": "24d14e4e0e49effaf298813fa0eea18e55f8e7d448fccf61acea6c8209bc4388",
+    "scope": "Both full local variants; corrected-original stored execution remains separate."
+  },
+  "readiness_sha256": "45566a4aca24b8c9f7a88d9e8bcd299c0f926d5153bb33c4713a3529d548d424",
+  "reuse_sha256": "e7caa1b2a723650cbf24894a88830cf0a3799cfad09e8bea04709776c25074e6",
+  "reviewer_sha256": "1f5818f812bff06e96c441c5c9b589bac64b2019141566cf7e7a223102f6ad0c",
+  "remaining": [
+    "Transactional metadata repair and both native eligibility predicates.",
+    "Corrected stored original execution, transactional publication and production selection."
+  ]
+}
