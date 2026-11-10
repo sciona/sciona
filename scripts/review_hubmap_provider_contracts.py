@@ -60,7 +60,7 @@ def contracts():
     nodes={n.matched_primitive:n for n in graph.nodes}
     limits=[b['limitation'] for b in reuse['boundaries']]+[
         'Automated Tier 3 qualification only; no human Tier 1 designation.',
-        'Current qualification uses synthetic random encoder state and an explicit shortened schedule. No historical final checkpoint provenance, full training schedule, predictive accuracy or clean-install claim.',
+        'Current qualification uses synthetic random encoder state and the source epoch schedule with resource-adapted batch size. No historical final checkpoint policy/provenance, predictive accuracy or clean-install claim.',
         'Caller must bound CPU threads and memory. Model ensembles, checkpoint bytes, full decoded inputs and output masks remain resident; zero loader workers is not a memory limit.']
     providers=[];derivative=None
     for record in baseline['records']:
