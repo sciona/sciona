@@ -1,0 +1,255 @@
+{
+  "format": "quantile-response-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "providers": [
+    {
+      "artifact_id": "49720071-abba-59ae-a91c-d4e21b1f0609",
+      "fqdn": "sciona.atoms.ml.quantile_response_encoding.fit_quantile_response",
+      "version_id": "0672c378-ba7d-5c7a-962a-d7d445614d80",
+      "content_hash": "1209a9ac07f0ef32a115a6383ecabdee70126065c1472dcfb2722911c691a73b",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "targets",
+          "type_desc": "np.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite float32 or float64 target vector in an explicitly chosen normalized numeric response coordinate. Fit uses training targets only, promotes to float64 and retains repeated quantiles. Encoding must use the same coordinate and fitted boundaries."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "response_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonblank normalized numeric response-coordinate identifier, matching fitted state exactly. Caller owns meaning, upstream normalization and any inverse transform; labels do not prove physical equivalence."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "n_bins",
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Positive integer bin count excluding booleans. Source-style floating percentile grid must produce exactly n_bins + 1 boundaries. Linear quantile interpolation; repeated edges and classes are retained."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Portable JSON dictionary with exactly format, response_coordinate and boundaries. Format sciona.quantile_response.v1; at least two finite nondecreasing numeric boundaries with finite midpoint computations. Exact response-coordinate identity required. Fitted boundaries are runtime state, not public evaluation data."
+        }
+      ],
+      "operation": "Fit linearly interpolated training quantiles and retain repeated boundaries in portable state.",
+      "plain_description": "Learn value ranges from training examples for later use.",
+      "validity_bounds": "Nonempty finite float32 or float64 target vector in an explicitly chosen normalized numeric response coordinate. Fit uses training targets only, promotes to float64 and retains repeated quantiles. Encoding must use the same coordinate and fitted boundaries. Nonblank normalized numeric response-coordinate identifier, matching fitted state exactly. Caller owns meaning, upstream normalization and any inverse transform; labels do not prove physical equivalence. Positive integer bin count excluding booleans. Source-style floating percentile grid must produce exactly n_bins + 1 boundaries. Linear quantile interpolation; repeated edges and classes are retained. Portable JSON dictionary with exactly format, response_coordinate and boundaries. Format sciona.quantile_response.v1; at least two finite nondecreasing numeric boundaries with finite midpoint computations. Exact response-coordinate identity required. Fitted boundaries are runtime state, not public evaluation data.",
+      "reuse": "Domain-independent numeric target encoding with explicit response coordinate, bin count and precision policy. No competition field names or fixed response transform are required.",
+      "registered_provider_dependencies": []
+    },
+    {
+      "artifact_id": "1f25f217-6a2a-5de9-ab5c-94cc0f8499fd",
+      "fqdn": "sciona.atoms.ml.quantile_response_encoding.encode_quantile_response",
+      "version_id": "22d9f7ff-c68a-53da-bab8-a0e1a0261c37",
+      "content_hash": "23a8b8490b0b5e69646227c853be31db7d26a1d57460009d5c11c248abda12e3",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "targets",
+          "type_desc": "np.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite float32 or float64 target vector in an explicitly chosen normalized numeric response coordinate. Fit uses training targets only, promotes to float64 and retains repeated quantiles. Encoding must use the same coordinate and fitted boundaries."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "response_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonblank normalized numeric response-coordinate identifier, matching fitted state exactly. Caller owns meaning, upstream normalization and any inverse transform; labels do not prove physical equivalence."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "state",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Portable JSON dictionary with exactly format, response_coordinate and boundaries. Format sciona.quantile_response.v1; at least two finite nondecreasing numeric boundaries with finite midpoint computations. Exact response-coordinate identity required. Fitted boundaries are runtime state, not public evaluation data."
+        },
+        {
+          "direction": "input",
+          "ordinal": 3,
+          "name": "soft",
+          "type_desc": "bool",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit boolean. True returns float64 normalized exponential distance weights. False returns float32 left-open/right-closed indicators, preserving all-zero rows at the minimum or outside the fitted range."
+        },
+        {
+          "direction": "input",
+          "ordinal": 4,
+          "name": "precision",
+          "type_desc": "float",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Positive finite numeric precision, excluding booleans, in inverse squared response-coordinate units. Used only in soft mode but required valid in both modes. Scale changes require inverse-square precision adjustment. Direct exponential normalization underflow or overflow is rejected."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "np.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite matrix (target rows, fitted bins): float64 normalized soft weights or float32 hard indicators. Hard rows may sum to zero; they are not necessarily probability distributions. No refit."
+        }
+      ],
+      "operation": "Encode targets using fitted quantile midpoints with explicit hard or soft policy and inverse-square precision units.",
+      "plain_description": "Represent each value by its membership in previously learned ranges.",
+      "validity_bounds": "Nonempty finite float32 or float64 target vector in an explicitly chosen normalized numeric response coordinate. Fit uses training targets only, promotes to float64 and retains repeated quantiles. Encoding must use the same coordinate and fitted boundaries. Nonblank normalized numeric response-coordinate identifier, matching fitted state exactly. Caller owns meaning, upstream normalization and any inverse transform; labels do not prove physical equivalence. Portable JSON dictionary with exactly format, response_coordinate and boundaries. Format sciona.quantile_response.v1; at least two finite nondecreasing numeric boundaries with finite midpoint computations. Exact response-coordinate identity required. Fitted boundaries are runtime state, not public evaluation data. Explicit boolean. True returns float64 normalized exponential distance weights. False returns float32 left-open/right-closed indicators, preserving all-zero rows at the minimum or outside the fitted range. Positive finite numeric precision, excluding booleans, in inverse squared response-coordinate units. Used only in soft mode but required valid in both modes. Scale changes require inverse-square precision adjustment. Direct exponential normalization underflow or overflow is rejected. Finite matrix (target rows, fitted bins): float64 normalized soft weights or float32 hard indicators. Hard rows may sum to zero; they are not necessarily probability distributions. No refit.",
+      "reuse": "Domain-independent numeric target encoding with explicit response coordinate, bin count and precision policy. No competition field names or fixed response transform are required.",
+      "registered_provider_dependencies": []
+    },
+    {
+      "artifact_id": "06e07f2a-f43b-5c09-8f94-07421576a1aa",
+      "fqdn": "sciona.atoms.ml.quantile_response_encoding.decode_quantile_response",
+      "version_id": "12cf6ac0-3d3d-5076-a261-87afcc028402",
+      "content_hash": "b31cff33d899c878568681b47ccb977bb53345b813cba27f4c05a3262daab651",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "probabilities",
+          "type_desc": "np.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite nonnegative float32 or float64 matrix with one column per fitted bin, in exact fitted bin order. Rows sum to one within rtol 1e-6 and atol 1e-8; all-zero hard-encoding rows are rejected. Caller owns probability calibration and bin-column semantics."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "response_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonblank normalized numeric response-coordinate identifier, matching fitted state exactly. Caller owns meaning, upstream normalization and any inverse transform; labels do not prove physical equivalence."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "state",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Portable JSON dictionary with exactly format, response_coordinate and boundaries. Format sciona.quantile_response.v1; at least two finite nondecreasing numeric boundaries with finite midpoint computations. Exact response-coordinate identity required. Fitted boundaries are runtime state, not public evaluation data."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "np.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float64 vector of probability-weighted bin midpoints in the declared normalized response coordinate. No inverse response transform or calibration is inferred; overflow is rejected."
+        }
+      ],
+      "operation": "Decode normalized ordered bin probabilities as the finite weighted midpoint expectation.",
+      "plain_description": "Convert probabilities over learned ranges back into an estimated value.",
+      "validity_bounds": "Nonempty finite nonnegative float32 or float64 matrix with one column per fitted bin, in exact fitted bin order. Rows sum to one within rtol 1e-6 and atol 1e-8; all-zero hard-encoding rows are rejected. Caller owns probability calibration and bin-column semantics. Nonblank normalized numeric response-coordinate identifier, matching fitted state exactly. Caller owns meaning, upstream normalization and any inverse transform; labels do not prove physical equivalence. Portable JSON dictionary with exactly format, response_coordinate and boundaries. Format sciona.quantile_response.v1; at least two finite nondecreasing numeric boundaries with finite midpoint computations. Exact response-coordinate identity required. Fitted boundaries are runtime state, not public evaluation data. Finite float64 vector of probability-weighted bin midpoints in the declared normalized response coordinate. No inverse response transform or calibration is inferred; overflow is rejected.",
+      "reuse": "Domain-independent numeric target encoding with explicit response coordinate, bin count and precision policy. No competition field names or fixed response transform are required.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "tests": {
+    "tests": 21,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "software_sha256": {
+    "tests/test_quantile_target_encoding.py": "51cc24eb80f5301e1b59c3b76f850680a8a3a6d47e0a256760a0f1190179c8bc",
+    "provider/test_quantile_response_encoding_provider.py": "3c6a4913174d957992fbccd35aa6c3f41110ff21027908fa7e6e1433f1c82b0f",
+    "sciona/quantile_target_encoding.py": "9b877c348baf77db5db291c375bdffb217c3eebc6df8309c900a447675ebe492",
+    "scripts/review_quantile_response_semantics.py": "77ae846a733e475ab904a5ca0e95a04d373e86cba79dcdc6b6e293de6e6bd36d",
+    "scripts/import_quantile_response_drafts.py": "bce64605061f24ed66223bd8ac49942d2d8cc5f34e109b49682b788cf398d23f",
+    "scripts/plan_quantile_response_intake.py": "ed91b043c78ff398b38bae6d401abb4a84b235e4e2e70e9e0f2fab678e31f401",
+    "docs/licenses/mercari-solution-LICENSE.txt": "ebd4587bd7c8d16ffb12e88219f6930a505962abb85a72c58ebf597c59d5abe2",
+    "sciona.atoms.ml.quantile_response_encoding": "cbf7d2f24e30a52defcf10a68499abca4b1c17f9c31288ac93756dfa0efd622f",
+    "sciona.ghost.registry": "793723a75d07a88eed39f59d8d4dc327c54adbf75db7a03003516a6f74c81b51",
+    "sciona.ghost.abstract": "9574bed61c8292b2eaf6ff054bcf46504b07e679c521a19d2440396c3ea63670",
+    "sciona.ghost.dimensions": "61be1958aa50725f3c6598d5b5447a806d2549698d5ce3ec243d467816754b7e"
+  },
+  "installed_packages": {
+    "annotated-types": {
+      "version": "0.7.0",
+      "hashed_files_verified": 7,
+      "active_requirements": []
+    },
+    "numpy": {
+      "version": "2.2.6",
+      "hashed_files_verified": 876,
+      "active_requirements": []
+    },
+    "pydantic": {
+      "version": "2.12.5",
+      "hashed_files_verified": 111,
+      "active_requirements": [
+        "annotated-types>=0.6.0",
+        "pydantic-core==2.41.5",
+        "typing-extensions>=4.14.1",
+        "typing-inspection>=0.4.2"
+      ]
+    },
+    "pydantic-core": {
+      "version": "2.41.5",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.14.1"
+      ]
+    },
+    "typing-extensions": {
+      "version": "4.16.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "typing-inspection": {
+      "version": "0.4.2",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.12.0"
+      ]
+    }
+  },
+  "intake_plan_sha256": "d8ed13c2d1fde541056c64d0f12076e53b983841949ba5c5e2c3f95907545a8c",
+  "connected_execution_commit": "64c60ec3",
+  "connected_execution_sha256": "dff4b3e044e011c97dcea98e3637a687040318484d3b6cd6235a6aaf50be9596",
+  "resource_policy": {
+    "native_threads": 1,
+    "test_workers": 1
+  },
+  "limitations": [
+    "Automated Tier 3 only; no human Tier 1 review or Tier 2 usage certification.",
+    "Synthetic source parity and coordinate-transfer tests do not establish accuracy, calibration or generalization on a new application.",
+    "Caller owns training-only quantile fitting, normalized response semantics and ordered probability-bin identity. Coordinate labels do not authenticate these properties.",
+    "Repeated quantile boundaries are retained. Hard intervals are left-open/right-closed, so minimum and out-of-range targets may yield all-zero rows that cannot be decoded as probabilities.",
+    "Soft encoding preserves direct exponential normalization. Underflow/overflow is rejected rather than silently replacing the source formula. Precision is in inverse squared coordinate units and must change when response scale changes.",
+    "Decoding is a midpoint expectation in the same numeric coordinate; it does not infer inverse transforms or probability calibration. Nonfinite decoded outputs are rejected.",
+    "Abstract witnesses check shapes, dtypes and coordinate identity, not concrete finiteness, sorted edges or probability normalization. Known physical dimensions require upstream normalization; unknown metadata is allowed.",
+    "Six synthetic classifiers match saved boundaries, all training encodings and checkpoint predictions; neural models are not retrained by that replay. Source feature/model loaders remain diagnostic.",
+    "Installed files match their own RECORD hashes and active dependency constraints. Independent package provenance, clean deployment and other platforms are not certified.",
+    "This review qualifies only three quantile atoms, not the original competition CDG or the full historical ensemble."
+  ]
+}
