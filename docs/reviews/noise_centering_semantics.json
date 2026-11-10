@@ -1,0 +1,134 @@
+{
+  "format": "noise-centering-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "providers": [
+    {
+      "artifact_id": "4a11a797-8b08-5968-8ba8-36e049926b01",
+      "fqdn": "sciona.atoms.ml.noise_median_centering.add_noise_median_center",
+      "version_id": "15aa26a3-9ffa-5b9a-92e9-5c3414c800f9",
+      "content_hash": "129424b49baf4cd55745d01150dc0569c8b817beaa7ad1d6e87169854dc9eb2c",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "windows",
+          "type_desc": "np.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty real NumPy array with axes (windows,samples); no complex, boolean or object values. Values must remain finite after float64 conversion and arithmetic. Caller supplies window boundaries, sample-rate context and amplitude units. Integer precision beyond float64 may be lost."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "additive_noise",
+          "type_desc": "np.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Real finite NumPy array with exactly the same shape, sample alignment, amplitude coordinate and scale as windows. No broadcasting. Caller supplies distribution, magnitude, seed and reuse policy; no randomness is generated here."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "amplitude_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit nonblank string naming the common amplitude representation and scale of both arrays. No unit conversion or runtime inference of physical dimensions. Witness rejects unequal dimensions, including one known and one unknown."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "np.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Independent float64 array with input shape. Add supplied noise before subtracting each row median; input arrays unchanged. Baseline information is lost and noise is added. No denoising or predictive-benefit guarantee. Empty windows and nonfinite or overflowing arithmetic reject. Rows may be batched independently; splitting sample windows changes results. Witness preserves shape and matching dimension, without claiming numeric bounds."
+        }
+      ],
+      "operation": "Add supplied perturbations and subtract each perturbed window median, preserving shape and amplitude units.",
+      "plain_description": "Add the supplied noise to each signal window, then shift that window so its median is zero.",
+      "validity_bounds": "Nonempty real NumPy array with axes (windows,samples); no complex, boolean or object values. Values must remain finite after float64 conversion and arithmetic. Caller supplies window boundaries, sample-rate context and amplitude units. Integer precision beyond float64 may be lost. Real finite NumPy array with exactly the same shape, sample alignment, amplitude coordinate and scale as windows. No broadcasting. Caller supplies distribution, magnitude, seed and reuse policy; no randomness is generated here. Explicit nonblank string naming the common amplitude representation and scale of both arrays. No unit conversion or runtime inference of physical dimensions. Witness rejects unequal dimensions, including one known and one unknown. Independent float64 array with input shape. Add supplied noise before subtracting each row median; input arrays unchanged. Baseline information is lost and noise is added. No denoising or predictive-benefit guarantee. Empty windows and nonfinite or overflowing arithmetic reject. Rows may be batched independently; splitting sample windows changes results. Witness preserves shape and matching dimension, without claiming numeric bounds.",
+      "reuse": "Reusable across signal and measurement windows with explicit additive perturbations and common amplitude coordinates. No event labels, source-domain fields, fixed window length or implicit random policy are required.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "tests": {
+    "tests": 12,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "software_sha256": {
+    "provider/test_noise_median_centering_provider.py": "8ad584975c5b02bf7546328a873fde3601f7d6df2854cf33ac170dee5f85acf1",
+    "scripts/review_noise_centering_semantics.py": "fe67d2685a9f7b952753bf8f0df3ad2b7bc68230892521bca60bb3ffaa12c85c",
+    "scripts/import_noise_centering_drafts.py": "492f04ba5ca81008dddc84de8a3b0785120da01f76ea59076cc166b3a660b048",
+    "scripts/plan_noise_centering_intake.py": "3ed5d7d5b5457d5e8c105e344da963ea3187b6543bd72225366de63532926d3e",
+    "scripts/validate_lanl_noise_centering.py": "47fa958952c53719459b3d45928cb8d5659acc6c7bd9482fd1887de47ea6a865",
+    "sciona.atoms.ml.noise_median_centering": "69bf58a8edceef7c189d4c327b9850ca6bb8b77dba0ec8038e3aea668300b25f",
+    "sciona.ghost.registry": "793723a75d07a88eed39f59d8d4dc327c54adbf75db7a03003516a6f74c81b51",
+    "sciona.ghost.abstract": "9574bed61c8292b2eaf6ff054bcf46504b07e679c521a19d2440396c3ea63670",
+    "sciona.ghost.dimensions": "61be1958aa50725f3c6598d5b5447a806d2549698d5ce3ec243d467816754b7e"
+  },
+  "installed_packages": {
+    "annotated-types": {
+      "version": "0.7.0",
+      "hashed_files_verified": 7,
+      "active_requirements": []
+    },
+    "numpy": {
+      "version": "2.2.6",
+      "hashed_files_verified": 876,
+      "active_requirements": []
+    },
+    "pydantic": {
+      "version": "2.12.5",
+      "hashed_files_verified": 111,
+      "active_requirements": [
+        "annotated-types>=0.6.0",
+        "pydantic-core==2.41.5",
+        "typing-extensions>=4.14.1",
+        "typing-inspection>=0.4.2"
+      ]
+    },
+    "pydantic-core": {
+      "version": "2.41.5",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.14.1"
+      ]
+    },
+    "typing-extensions": {
+      "version": "4.16.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "typing-inspection": {
+      "version": "0.4.2",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.12.0"
+      ]
+    }
+  },
+  "intake_plan_sha256": "2c42e37a78ff9f7a3978f81640073f07dad96d7dd1d5b1c906ad6d9b868b1bc9",
+  "connected_execution_commit": "305854c6",
+  "connected_execution_sha256": "0b9bbffba5cd44e2f29a59768378c71e7c60aafe835565ee1aa53e2306e3197a",
+  "resource_policy": {
+    "native_threads": 1,
+    "test_workers": 1
+  },
+  "limitations": [
+    "Automated Tier 3 only; no human Tier 1 certification or Tier 2 usage qualification.",
+    "Caller supplies matching finite arrays, common amplitude coordinate, aligned perturbations and window boundaries.",
+    "No unit conversion, noise generation or denoising guarantee. Baseline is lost and float64 conversion may lose large-integer precision.",
+    "Witness checks shape and dimensions but cannot inspect finite values or verify the caller-stated physical coordinate.",
+    "Full-size synthetic equality validates the writeup equation, not recovered executable source or historical randomness.",
+    "Installed RECORD hashes and active constraints are checked; independent package provenance and other platforms are not certified.",
+    "One reusable arithmetic operation only. Complete LANL feature extraction, model training and blending remain unqualified."
+  ]
+}
