@@ -2706,3 +2706,30 @@ qualification is separate from its historical binary evidence. Corrected-origina
 staging and full raw stored-graph execution, followed by publication gates,
 remain outstanding. See the audio_windows_canonical reports and
 `ensemble_post_window_dependency_scope.json`.
+
+
+### Quantile stage publication
+
+Five source-specific quantile stages now have automated Tier 3 approval in both
+catalogs: population assembly, joint feature preparation, prepared fold training,
+prepared fold replay and prediction reduction. The two generic distribution-loss
+atoms remain separate approved dependencies. This preserves independently
+selectable computation without presenting the fixed source recipe as a general
+training algorithm or claiming empirical cross-domain effectiveness.
+
+Publication rejected 121 catalog corruption cases and passed four complete
+rollback checks, including preservation of the approved loss dependencies.
+Fresh served binding resolution and execution matched the frozen preceding
+lifecycle on synthetic inputs: four complete 600-epoch fits, exact saved states,
+query features, out-of-fold values, raw replay and reduced predictions. Replay
+ran with training disabled. The caller explicitly casts matrices to float32 and
+serializes structured feature descriptors into ordered string identifiers at the
+training boundary; the stages do not infer that conversion.
+
+Joint feature preparation remains transductive, known-outcome overrides require
+actual observation availability, and private saved states support inference
+only. The image branch and final combined graph still need qualification before
+the original OSIC intake can be promoted. These five atom approvals do not
+increase the count of approved competition originals. See
+`osic_quantile_provider_publication_gates.json` and
+`osic_quantile_served_verification.json`.
