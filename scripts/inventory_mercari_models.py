@@ -27,13 +27,40 @@ def value(node, variables):
 def inventory(directory):
     triage = json.loads((ROOT/'docs/reviews/competition_mercari_source_triage.json').read_text())
     pins = {r['path']: r['sha256'] for r in triage['source_files']}
-    names = ['mercari/main_tf.py', 'mercari/main_mx.py', 'script_template.tmpl']
+    names = ['mercari/main_tf.py', 'mercari/main_mx.py', 'script_template.tmpl',
+             'mercari/tf_sparse.py', 'mercari/mx_sparse.py']
     for name in names:
         if hashlib.sha256((directory/name).read_bytes()).hexdigest() != pins[name]:
             raise ValueError('Pinned source changed: '+name)
     variants = {}
     for backend, name in [('tensorflow', names[0]), ('mxnet', names[1])]:
         tree = ast.parse((directory/name).read_text())
+        implementation = ast.parse((directory / names[3 if backend == 'tensorflow' else 4]).read_text())
+        classes = {n.name: n for n in implementation.body if isinstance(n, ast.ClassDef)}
+
+        def constructor_defaults(class_name):
+            cls = classes[class_name]
+            initializer = next((n for n in cls.body if isinstance(n, ast.FunctionDef) and n.name == '__init__'), None)
+            if initializer is None:
+                if len(cls.bases) != 1 or not isinstance(cls.bases[0], ast.Name):
+                    raise ValueError('Unqualified initializer inheritance: ' + class_name)
+                return constructor_defaults(cls.bases[0].id)
+            args = initializer.args
+            if args.vararg or args.kwarg or args.kwonlyargs or args.posonlyargs:
+                raise ValueError('Unsupported constructor signature')
+            if len(args.args) - len(args.defaults) != 1 or args.args[0].arg != 'self':
+                raise ValueError('All model constructor arguments must have defaults')
+            return cls.name, {arg.arg: value(default, {})
+                              for arg, default in zip(args.args[1:], args.defaults)}
+
+        calls = [n for n in ast.walk(tree) if isinstance(n, ast.Call)
+                 and isinstance(n.func, ast.Name) and n.func.id.startswith('define_models_')]
+        if len(calls) != 3:
+            raise ValueError('Expected three model-family launch calls')
+        for group, call in enumerate(calls, 1):
+            if (call.func.id != f'define_models_{group}' or call.args
+                    or {k.arg: value(k.value, {}) for k in call.keywords} != {'n_jobs': 4, 'seed': group}):
+                raise ValueError('Source launch seeds or worker defaults changed')
         models = []
         functions = [n for n in tree.body if isinstance(n, ast.FunctionDef) and n.name.startswith('define_models_')]
         if [n.name for n in functions] != ['define_models_1', 'define_models_2', 'define_models_3']:
@@ -54,20 +81,27 @@ def inventory(directory):
             for ordinal, constructor in enumerate(declared.elts):
                 if not isinstance(constructor, ast.Call) or not isinstance(constructor.func, ast.Name) or constructor.args:
                     raise ValueError('Explicit named model construction required')
+                owner, defaults = constructor_defaults(constructor.func.id)
+                controls = {k.arg: value(k.value, variables) for k in constructor.keywords}
+                if not set(controls) <= set(defaults):
+                    raise ValueError('Unknown model constructor override')
+                resolved = {**defaults, **controls, 'seed': group*100+ordinal}
                 models.append(dict(group=group, ordinal=ordinal, model_class=constructor.func.id,
                     seed=group*100+ordinal,
-                    explicit_controls={k.arg: value(k.value, variables) for k in constructor.keywords}))
+                    explicit_controls=controls, initializer_owner=owner,
+                    inherited_defaults={k: v for k, v in defaults.items() if k not in controls and k != 'seed'},
+                    resolved_constructor_controls=resolved))
         variants[backend] = models
     launch = (directory/'script_template.tmpl').read_text()
     commands = [line for line in launch.splitlines() if line.startswith("run('python mercari/")]
     expected = [f"run('python mercari/main_{{name}}.py {action}')" for group in (1, 3, 2) for action in (group, 'merge')]
     if commands != expected:
         raise ValueError('Source group/blend ordering changed')
-    return dict(format='mercari-declared-model-inventory.v1', approved=False, catalog_mutations=0,
+    return dict(format='mercari-declared-model-inventory.v2', approved=False, catalog_mutations=0,
         source_commit=triage['source_commit'], source_sha256={n: pins[n] for n in names},
         variants=variants, group_execution_order=[1, 3, 2], refit_blend_after_each_group=True,
         declared_models_per_backend=12, full_input_epochs_per_model=3, reduced_input_epochs_per_model=1,
-        scope='Static inventory of explicit constructor overrides, not resolved inherited defaults or full winning model inventory.',
+        scope='Static inventory of constructor overrides, inherited initializer defaults and launch seeds; not runtime parity or the full winning model inventory.',
         limitations=['Select and qualify a backend; TensorFlow and MXNet models are not assumed equivalent.',
             'Additional four best-submission models noted by MXNet source lack exact pinned seed/configuration evidence.',
             'TensorFlow Huber-named models use the inherited MSE builder in this commit.',
