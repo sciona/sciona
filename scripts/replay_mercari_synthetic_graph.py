@@ -11,6 +11,7 @@ import pickle
 import warnings
 
 import numpy as np
+from sciona.atoms.ml.positive_log_blending import apply_positive_log_blend
 
 
 def replay(directory, runtime, expected_manifest_sha):
@@ -49,7 +50,11 @@ def replay(directory, runtime, expected_manifest_sha):
     with (runtime/'reusable-blend.pkl').open('rb') as stream:
         reusable_blend = pickle.load(stream)
     np.testing.assert_array_equal(reusable_blend.predict(matrix), expected)
-    return dict(passed=True, restored_models=12, restored_features=3, restored_blends=2,
+    provider_state = json.loads((runtime/'provider-blend.json').read_text())
+    provider_predictions = apply_positive_log_blend(matrix, provider_state['model_columns'],
+        'synthetic-response-coordinate.v1', provider_state)
+    np.testing.assert_array_equal(provider_predictions, expected)
+    return dict(passed=True, restored_models=12, restored_features=3, restored_blends=3,
                 exact_query_predictions=True, training_executed=False)
 
 
