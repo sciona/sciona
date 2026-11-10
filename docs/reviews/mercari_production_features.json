@@ -1,0 +1,98 @@
+{
+  "format": "mercari-production-features.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "cases": [
+    {
+      "group": 1,
+      "synthetic_role": "training",
+      "exact_canonical_csr_equal": true
+    },
+    {
+      "group": 1,
+      "synthetic_role": "calibration",
+      "exact_canonical_csr_equal": true
+    },
+    {
+      "group": 1,
+      "synthetic_role": "query",
+      "exact_canonical_csr_equal": true
+    },
+    {
+      "group": 3,
+      "synthetic_role": "training",
+      "exact_canonical_csr_equal": true
+    },
+    {
+      "group": 3,
+      "synthetic_role": "calibration",
+      "exact_canonical_csr_equal": true
+    },
+    {
+      "group": 3,
+      "synthetic_role": "query",
+      "exact_canonical_csr_equal": true
+    },
+    {
+      "group": 2,
+      "synthetic_role": "training",
+      "exact_canonical_csr_equal": true
+    },
+    {
+      "group": 2,
+      "synthetic_role": "calibration",
+      "exact_canonical_csr_equal": true
+    },
+    {
+      "group": 2,
+      "synthetic_role": "query",
+      "exact_canonical_csr_equal": true
+    }
+  ],
+  "registered_clip_stages": 3,
+  "role_counts": {
+    "training": 8192,
+    "calibration": 256,
+    "query": 32
+  },
+  "source_commit": "374301ad1c32cbc93dcc40313d5d7bb9c5503746",
+  "source_sha256": {
+    "mercari/datasets_tf.py": "2023f6fe3b6a7f21b8372cf077f4805a29356a1c0f190a0caa101b7754e20e8e",
+    "mercari/datasets_mx.py": "9befc4fe71e05876170a0df675b234211402bfb9660f47130759bf36a23d52bb",
+    "mercari/transformers.py": "3dcc0f896e965bf0acece4cbed61fc58b7d82d10be3bb8a71eb768f747466c44",
+    "mercari/text_utils.py": "076683d8877644cf7b8f13b125e57ed596bd2a5455f531bb8f162b4df285c9bc"
+  },
+  "software_sha256": {
+    "scripts/validate_mercari_production_features.py": "1d2459adaa3911eb18413601c77065b6c700fce9c08daa7b4b7e0c2a94a24474",
+    "sciona/mercari_feature_recipes.py": "f469d48aef6f470cf7f8d018e9e5f2ff765d5f30ef00d66626e38a60a04e8fa6",
+    "sciona/sparse_clip_transformer.py": "43af29bc451e24e6212e414a6b945c5293113fd563bd39e3f1ec9e6a2cb824a3",
+    "sciona/mercari_pj_preprocessing.py": "213e212604e03c9991071f1fed9af4dbf0c9642ba36ecd223c4bdd925f36a3ad",
+    "sciona/mercari_table_preprocessing.py": "6bd8446c9c59c00605df64907ed73faaaa4efe528bf9e9ca372143dcf1005736",
+    "sciona/mercari_text_cleaning.py": "469b736aa15ba5189c9db9845bcb6df166642cd6e7ef4405c9a729d546a1c4d2",
+    "sciona/mercari_text_policy.py": "af18ac364e6f2a344f95ef5db2061a65169edde1ced4c3456167af5d281df8ac",
+    "sciona/character_run_tokenizer.py": "ff7e9401252a5a8958322054737de8269d33eb1f5f0a79ad09cbf8ec5dd4a708",
+    "sciona/table_feature_operations.py": "e6b5ddf1c5aa6746a1d7356993ba80838b983e96f7be1b8e812735889f99e271",
+    "sciona/serial_feature_union.py": "a1904222f58377a845d1fcde5d2fe805d8d4d50e96b92f4d103df1e41631e351",
+    "scripts/probe_mercari_feature_runtime.py": "a612521579cef3b427d2b7e1882c143989a333ce378ed99e4da2d784c8b7c732",
+    "scripts/inventory_mercari_features.py": "8b3d0715b24ea51a2c5ebb8d8fb41437204785ab99c8cbfe7b2a68efc9d6aced",
+    "scripts/run_mercari_tensorflow_synthetic_graph.py": "a74494a024c72455d9e1e39c28411fea22d5c4497a01212e2e5ae900d52d2c63",
+    "sciona/fitted_sparse_clip.py": "f2791503b2dbd9ded3f2c5f468c2c0785cea4a1b93132dcda1d569d3a67c9ca2"
+  },
+  "provider_sha256": "f322798a4d198b6d6aa95c87eef122134a344de341edcdb39407763fcf4e055b",
+  "resource_policy": {
+    "concurrent_pipelines": 1,
+    "worker_processes": 0,
+    "native_threads": 1
+  },
+  "limitations": [
+    "Exact current-runtime synthetic feature matrices only; no historical runtime or real-data accuracy claim.",
+    "Explicit adapter sorts CSR indices without summing duplicates. Source matrices are compared after the same storage normalization; downstream floating-point reduction order is not certified by this feature-only check.",
+    "Slot identities bind this fitted pipeline ordering; they do not establish vocabulary equivalence across independent pipelines.",
+    "Candidate assembly uses production modules only; the source reference still uses diagnostic compatibility shims. No historical-runtime equivalence is implied.",
+    "Application text/category policy is explicit and lossy; other domains must supply deliberate adapters. Unidecode dependency publication review remains open.",
+    "Source matrix logging is replaced by explicit identity operations. Their logging effects and empty-input errors are not reproduced.",
+    "No model retraining or whole-CDG approval; dependency and catalog publication review remain pending."
+  ]
+}
