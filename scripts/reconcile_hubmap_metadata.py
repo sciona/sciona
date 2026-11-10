@@ -12,7 +12,7 @@ from scripts.review_hubmap_provider_contracts import review, READINESS
 from scripts.audit_hubmap_original_readiness import sha
 
 RUNNER = 'hubmap-reviewed-metadata.v1'
-COMMIT = None
+COMMIT = '73e673280320835527e9e55c4f8bdf127a129728'
 REPORT = 'docs/reviews/hubmap_provider_contracts.json'
 GATES = ROOT/'docs/reviews/hubmap_metadata_gates.json'
 
@@ -166,11 +166,12 @@ def validate():
             faults = []
             for prefix,key in [('artifact','artifact_id'),('atom','atom_id')]:
                 if prefix not in target['catalogs']:continue
+                rejected_status = 'draft' if prefix == 'artifact' else 'flagged'
                 faults.extend([
                     (prefix+'_hash',f'UPDATE {prefix}_versions SET content_hash=%s WHERE version_id=%s',('0'*64,r['version_id'])),
                     (prefix+'_tier',f'UPDATE {prefix}_versions SET trust_tier=1 WHERE version_id=%s',(r['version_id'],)),
                     (prefix+'_latest',f'UPDATE {prefix}_versions SET is_latest=false WHERE version_id=%s',(r['version_id'],)),
-                    (prefix+'_status',f"UPDATE {prefix}s SET status='draft' WHERE {key}=%s",(r['artifact_id'],)),
+                    (prefix+'_status',f"UPDATE {prefix}s SET status=%s WHERE {key}=%s",(rejected_status,r['artifact_id'])),
                     (prefix+'_publishable',f'UPDATE {prefix}s SET is_publishable=false WHERE {key}=%s',(r['artifact_id'],)),
                     (prefix+'_failed_audit',f"INSERT INTO {prefix}_audit_evidence({key},version_id,audit_type,passed,status,source_kind,runner_version) VALUES(%s,%s,'semantic_audit',false,'completed','automated','synthetic-rollback-test')",(r['artifact_id'],r['version_id'])),
                 ])
