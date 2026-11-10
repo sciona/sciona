@@ -22,6 +22,34 @@ names and their mapping to decoded planes remain private runtime material.
     return np.array([i for i,n in enumerate(ordinals) if -.1 < n/len(names) < 1.1],dtype=np.int64)
 
 
+def prepare_slice_inputs(records,numeric,category,status,*,decode_selected=None):
+    """Prepare source model inputs for one entity, without invoking a model.
+
+Records are ordered (name, integer 2D plane) pairs, or encoded payloads with an
+explicit decoder. Select source ordinal/count positions before decoding;
+unselected payloads are never decoded. At least two selected slices required.
+Returns images (S,512,512,1), metadata (S,4) and int64 selected positions. The
+source intensity normalization and case-sensitive category policy stay here;
+model execution and median/trajectory reduction are separate operations.
+Only this entity's image tensors are materialized. Caller owns name order,
+observation availability and the application meaning of metadata coordinates.
+"""
+    if decode_selected is not None and not callable(decode_selected):
+        raise ValueError('A callable selected-plane decoder is required')
+    if (not isinstance(records,(list,tuple)) or not records
+            or any(not isinstance(r,(list,tuple)) or len(r)!=2 for r in records)):
+        raise ValueError('Ordered named decoded planes required')
+    positions=select_slice_positions([record[0] for record in records])
+    if len(positions)<2:
+        raise ValueError('Source cannot produce complete predictions with fewer than two selected slices')
+    vector=encode(numeric,category,status,branch='inference')
+    pixels=[decode_selected(records[i][1]) if decode_selected is not None else records[i][1]
+            for i in positions]
+    images=np.expand_dims(np.stack([inference_plane(plane) for plane in pixels]),axis=-1)
+    metadata=np.stack([vector for _ in positions])
+    return dict(images=images,metadata=metadata,selected_positions=positions)
+
+
 def predict(baselines,queries,planes,predict_slices,*,decode_selected=None):
     """Prepare selected slices, predict slopes, and restore explicit query order.
 
@@ -59,19 +87,11 @@ queries use explicit unique keys and integer times. Full coverage is required.
         raise ValueError('Aligned image population and fitted predictor required')
     selected=[];slopes=[];prediction_dtype=None
     for entity in entities:
-        records=planes[entity]
-        if (not isinstance(records,(list,tuple)) or not records
-                or any(not isinstance(r,(list,tuple)) or len(r)!=2 for r in records)):
-            raise ValueError('Ordered named decoded planes required')
-        positions=select_slice_positions([record[0] for record in records])
-        if len(positions)<2:
-            raise ValueError('Source cannot produce complete predictions with fewer than two selected slices')
         row=baselines.loc[baselines['entity']==entity].iloc[0]
-        vector=encode(row['numeric'],row['category_a'],row['category_b'],branch='inference')
-        pixels=[decode_selected(records[i][1]) if decode_selected is not None else records[i][1]
-                for i in positions]
-        images=np.expand_dims(np.stack([inference_plane(plane) for plane in pixels]),axis=-1)
-        metadata=np.stack([vector for _ in positions])
+        prepared=prepare_slice_inputs(planes[entity],row['numeric'],row['category_a'],row['category_b'],
+            decode_selected=decode_selected)
+        images,metadata=prepared['images'],prepared['metadata']
+        positions=prepared['selected_positions']
         prediction=predict_slices([images,metadata])
         if (not isinstance(prediction,np.ndarray) or prediction.shape!=(len(positions),1)
                 or prediction.dtype not in (np.dtype('float32'),np.dtype('float64'))

@@ -10,7 +10,8 @@ import cv2
 import numpy as np
 import pandas as pd
 
-from sciona.osic_image_inference import predict,select_slice_positions
+from sciona.osic_image_inference import predict,select_slice_positions,prepare_slice_inputs
+from sciona.osic_predictions import image_trajectories
 from scripts.review_osic_original_scope import ROOT,INFERENCE,REPOSITORY,REVISION
 
 PINS={6:'56eee99ee8632632a72876cf33e6234c7becfc0f2f8ce3d7e86c8f0a9987a3e7',
@@ -69,10 +70,24 @@ def validate(directory):
             for a,b in zip(pair1,pair2):
                 assert a.dtype==b.dtype
                 np.testing.assert_array_equal(a,b)
+        calls.clear()
+        prepared=[]
+        for row in baselines.itertuples():
+            prepared.append(prepare_slice_inputs(planes[row.entity],row.numeric,row.category_a,row.category_b))
+        assert not calls
+        for item,expected_inputs in zip(prepared,source_calls):
+            for array,expected_array in zip((item['images'],item['metadata']),expected_inputs):
+                assert array.dtype==expected_array.dtype
+                np.testing.assert_array_equal(array,expected_array)
+        slice_predictions=[predictor([item['images'],item['metadata']]) for item in prepared]
+        reduced=image_trajectories(slice_predictions,baselines['time'].to_numpy(),baselines['target'].to_numpy(),
+            baselines['uncertainty'].to_numpy(),np.array([1,0,1,0],dtype=np.int64),queries['time'].to_numpy())
+        np.testing.assert_array_equal(reduced,actual['values'])
         np.testing.assert_array_equal(actual['selected_positions'][0],np.arange(1,9))
         np.testing.assert_array_equal(actual['selected_positions'][1],[0,1,3,4])
         cases.append(dict(case=case,queries=4,selected_slices=12,exact_predictor_inputs=True,
-                          exact_source_outputs=True,query_order_preserved=True))
+                          exact_source_outputs=True,query_order_preserved=True,
+                          standalone_preparation_and_reduction_exact=True,preparation_model_calls=0))
     rejected=0
     for names in ([],['1.dcm','1.dcm'],['bad.dcm'],['.dcm']):
         try:
@@ -89,6 +104,12 @@ def validate(directory):
         rejected+=1
     else:
         raise AssertionError('Incomplete source prediction accepted')
+    try:
+        prepare_slice_inputs(planes['synthetic-a'],47.,'Male','other',decode_selected='invalid')
+    except ValueError:
+        rejected+=1
+    else:
+        raise AssertionError('Invalid explicit decoder accepted')
     files=['sciona/osic_image_inference.py','sciona/osic_image_metadata.py',
            'sciona/osic_image_preprocessing.py','sciona/osic_predictions.py',
            'scripts/validate_osic_image_inference.py']

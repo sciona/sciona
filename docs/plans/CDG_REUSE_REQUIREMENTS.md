@@ -2733,3 +2733,17 @@ the original OSIC intake can be promoted. These five atom approvals do not
 increase the count of approved competition originals. See
 `osic_quantile_provider_publication_gates.json` and
 `osic_quantile_served_verification.json`.
+
+
+Image inference now exposes per-entity slice preparation separately from model
+execution and source trajectory reduction. The existing population wrapper
+retains sequential per-entity execution rather than materializing every entity's
+image tensors together. Preparation preserves source slice selection, decoding of
+only selected payloads, normalization and case-sensitive metadata encoding.
+Three synthetic source-oracle cases compare the standalone preparation and
+reduction, including float32 rounding; six invalid contracts are rejected.
+Refreshed intermediate-checkpoint composition reproduces four image queries,
+two complete quantile fits and the aligned final blend exactly, with fitting
+disabled during replay. This remains intermediate-checkpoint evidence; no image
+provider or original intake is approved by this change. See
+`osic_image_inference.json` and `osic_intermediate_composition.json`.

@@ -170,7 +170,7 @@ def worker(source_directory,overlay,state_directory=None,compose=False):
         from sciona import osic_feature_state,osic_quantile_features,osic_quantile_training
         for module,names in ((osic_feature_state,('export_preparation_state','assemble_populations','joint_population_features')),
                 (osic_quantile_features,('prepare_features','assemble_populations','joint_population_features')),
-                (osic_quantile_training,('train_quantile_branch','prepare_features'))):
+                (osic_quantile_training,('train_quantile_branch','train_prepared_quantile_folds','prepare_features'))):
             for name in names:
                 setattr(module,name,forbidden)
         replay=predict_from_state(bundle['preparation'],bundle['models'],query,
@@ -281,6 +281,9 @@ def validate(dependencies,source_directory,state_directory=None,compose=False):
         synthetic_only=True,shared_environment_mutations=0,execution=result,dependency_archive_sha256=pins,
         affine_provider_sha256=sha(ROOT.parent/'sciona-atoms/src/sciona/atoms/numerical/statistics/affine_fit.py'),
         software_sha256={name:sha(ROOT/name) for name in files},
+        numeric_provider_sha256=dict(
+            ordered_weighted_sum=sha(ROOT.parent/'sciona-atoms/src/sciona/atoms/numerical/statistics/ordered_sum.py'),
+            distribution_losses=sha(ROOT.parent/'sciona-atoms-ml/src/sciona/atoms/ml/tensorflow_distribution_losses.py')),
         limitations=[('Actual B5 inference uses seeded random weights; complete training and trained-checkpoint composition remain pending.'
             if state_directory is None else
             'Raw synthetic inference restores numeric weights from an intermediate checkpoint; complete 30-epoch training remains pending.'),
