@@ -12,8 +12,7 @@ from scripts.review_contrails_provider_contracts import review, READINESS
 from scripts.audit_contrails_original_readiness import sha
 
 RUNNER = 'contrails-reviewed-metadata.v1'
-# Pin the completed provider-contract review before validating or applying.
-COMMIT = None
+COMMIT = '174ca3c22b9e11d9ee9714deae72bb95805fa78c'
 REPORT = 'docs/reviews/contrails_provider_contracts.json'
 GATES = ROOT/'docs/reviews/contrails_metadata_gates.json'
 
