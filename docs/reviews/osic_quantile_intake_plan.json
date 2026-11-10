@@ -1,0 +1,440 @@
+{
+  "format": "osic-quantile-intake-plan.v1",
+  "passed": true,
+  "applied": false,
+  "approved": false,
+  "catalog_mutations": 0,
+  "owner": {
+    "owner_id": "33ed07a2-1bea-5b17-8b71-d6d0e590fdd9",
+    "source_repo_id": "27b787a0-27ed-4760-92b7-ad8e8b4b815c"
+  },
+  "new_providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.domain_adapters.osic_quantile.assemble_quantile_populations",
+      "atom_id": "ea0d65b9-f1d9-5d83-903d-e101a1be7ab5",
+      "version_id": "2d6b53d2-3bf2-56c3-b7c6-b07e2734eec9",
+      "content_hash": "eb5181f4589fc8b26b1dad6593535d842f1ceab90ad0df18e5a63bc547e391a1",
+      "provider_sha256": "1d39499ed4ea783f460257e947e9789130be5c1be1165837bc8f22b79d42538f",
+      "semver": "0.0.0+local.eb5181f4589f",
+      "fingerprint": "325388d6adc109937d0b6977cb2df6c0f78ed5b1ecf6609d75912411148ff151",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.domain_adapters.osic_quantile.assemble_quantile_populations",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.domain_adapters.osic_quantile",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.domain_adapters.osic_quantile",
+        "import_module": "sciona.atoms.ml.domain_adapters.osic_quantile",
+        "source_symbol": "assemble_quantile_populations",
+        "description": "Assemble source populations after removing all duplicate training keys. Caller maps the exact neutral table fields and establishes availability. Each queried entity requires one supplied baseline. Encounter order matters. This performs joins and population tagging only, not feature fitting.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "training",
+          "type_desc": "pandas.DataFrame",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty complete pandas DataFrame with exact caller-mapped fields entity,time,target,numeric,category_a,category_b. String labels must be nonblank; numeric coordinates finite. Caller owns units and observation availability. No real records or metadata are embedded in this contract. All duplicate entity/time rows are removed, not collapsed to one row; encounter order is retained."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "baseline",
+          "type_desc": "pandas.DataFrame",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty complete pandas DataFrame with exact caller-mapped fields entity,time,target,numeric,category_a,category_b. String labels must be nonblank; numeric coordinates finite. Caller owns units and observation availability. No real records or metadata are embedded in this contract. Exactly one supplied baseline per queried entity; supplied outcomes must already be observable."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "queries",
+          "type_desc": "pandas.DataFrame",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty exact entity,time fields with complete finite numeric times and nonblank entity strings. Every entity must have a supplied baseline. Query order and the complete population are significant."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "pandas.DataFrame",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Joint ordered training/baseline/query table with population roles; training duplicates removed and query metadata joined. No feature fitting. Concrete provisioned execution only; abstract witness rejects."
+        }
+      ],
+      "registered_provider_dependencies": []
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.domain_adapters.osic_quantile.fit_joint_quantile_features",
+      "atom_id": "a045d349-a1fb-5f9a-b772-954fbbe55ec7",
+      "version_id": "1a4ae848-f735-5ecf-81be-87f495625257",
+      "content_hash": "61cec2ee6f7834e8ea63c6ffa91166f85ce6098db230314dd3d42aef0ff85fe8",
+      "provider_sha256": "1d39499ed4ea783f460257e947e9789130be5c1be1165837bc8f22b79d42538f",
+      "semver": "0.0.0+local.61cec2ee6f78",
+      "fingerprint": "b93ecaad3d3fe433f11848c60e06178ba9450a85de04e3a272ae218d49fa4de6",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.domain_adapters.osic_quantile.fit_joint_quantile_features",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.domain_adapters.osic_quantile",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.domain_adapters.osic_quantile",
+        "import_module": "sciona.atoms.ml.domain_adapters.osic_quantile",
+        "source_symbol": "fit_joint_quantile_features",
+        "description": "Fit the source feature recipe over the explicit joint population. Requires allow_transductive=True. Returns numeric matrices by role and ordered fitted feature metadata. A changed query population can change training features; this is not a train-only reusable scaler.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "population",
+          "type_desc": "pandas.DataFrame",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty complete pandas DataFrame with exact caller-mapped fields entity,time,target,numeric,category_a,category_b. String labels must be nonblank; numeric coordinates finite. Caller owns units and observation availability. No real records or metadata are embedded in this contract. Additional population field must contain exactly training,baseline,query roles. Produced by assemble_quantile_populations; retain row order."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "allow_transductive",
+          "type_desc": "bool",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Must be exactly True. Authorizes fitting joint categories and ranges using the query population; changed queries can alter training features."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Per-role feature matrices, targets and entity/time order plus ordered columns, categories and ranges. Source encounter-order category encoding and min/max scaling; reject degenerate ranges and cross-field category-name collisions. Must cast model inputs explicitly to float32. This is joint transductive preparation, not a train-only scaler. Concrete provisioned execution only; abstract witness rejects."
+        }
+      ],
+      "registered_provider_dependencies": []
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.domain_adapters.osic_quantile.reduce_quantile_predictions",
+      "atom_id": "4bff299b-a560-5801-963a-29bae15a0ea5",
+      "version_id": "928c22b6-42b9-5b74-ad1c-61a7bbfd16e1",
+      "content_hash": "0801f94c2f110cd8be71a350560d9ee70e36db88b547c2954b323d1d5d451338",
+      "provider_sha256": "1d39499ed4ea783f460257e947e9789130be5c1be1165837bc8f22b79d42538f",
+      "semver": "0.0.0+local.0801f94c2f11",
+      "fingerprint": "061bca0c4b0e9276d06398a29296f0b1b5dc46d4d44e88128f9db8b95f0483e4",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.domain_adapters.osic_quantile.reduce_quantile_predictions",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.domain_adapters.osic_quantile",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.domain_adapters.osic_quantile",
+        "import_module": "sciona.atoms.ml.domain_adapters.osic_quantile",
+        "source_symbol": "reduce_quantile_predictions",
+        "description": "Apply source fold averaging, midpoint/spread extraction and known values. Fold predictions (F,M,3) are finite float32/float64. Divide in input dtype before accumulating in float64. Preserve crossed/negative spreads. Caller supplies a boolean availability mask and aligned finite observed values; selected rows receive those values and uncertainty 0.1 before branch blend. This domain policy does not establish interval calibration.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "folds",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite float32 or float64 (F,M,3) outputs in aligned query order. Divide each fold in its original dtype before float64 accumulation. Columns are low,point,high; crossings are retained."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "observed_mask",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Boolean vector (M,) marking only outcomes already known at prediction time. Caller establishes availability, not merely event time."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "observed_values",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite real vector (M,) in response units. Only masked rows are used, but all rows must be finite."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Float64 (M,2) point and raw uncertainty. Average folds in source order; midpoint is column 1 and spread is high-low. Preserve negative spreads. Override masked points with observed values and uncertainty 0.1 before branch blend. This is a source policy, not calibrated uncertainty. Concrete provisioned execution only; abstract witness rejects."
+        }
+      ],
+      "registered_provider_dependencies": []
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.domain_adapters.osic_quantile.replay_prepared_quantile_folds",
+      "atom_id": "68e8b7f2-8601-5129-9f1b-6091784f2401",
+      "version_id": "d40bc60a-2b10-5eb5-85e2-3fee9f934b38",
+      "content_hash": "063f375269a74443ff7c89ca4fcef9a4ac38223b6336a93006005b5af0d896fe",
+      "provider_sha256": "1d39499ed4ea783f460257e947e9789130be5c1be1165837bc8f22b79d42538f",
+      "semver": "0.0.0+local.063f375269a7",
+      "fingerprint": "8bf21d8748db95d5dcc8711c1bb9ea745b46a8380a2de6ec557481cdef70841a",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.domain_adapters.osic_quantile.replay_prepared_quantile_folds",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.domain_adapters.osic_quantile",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.domain_adapters.osic_quantile",
+        "import_module": "sciona.atoms.ml.domain_adapters.osic_quantile",
+        "source_symbol": "replay_prepared_quantile_folds",
+        "description": "Restore both numeric fold states and return raw (2,M,3) predictions. Requires finite float32 features with the saved feature order and matching coordinates. No fitting, reduction or baseline override. Caller verifies state provenance; serialized state supports inference, not training resume.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "states",
+          "type_desc": "list[dict]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exactly two private numeric sciona.osic_quantile_prediction.v1 states with fixed eight-array float32 weight inventory and matching columns/coordinates. No executable graph or optimizer state; caller verifies authenticity."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "features",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float32 matrix (N,D), D>=1. Training requires N>=2; replay requires N>=1. Caller aligns columns to explicit feature coordinates and owns prior preparation."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "columns",
+          "type_desc": "list[str]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "D unique nonblank ordered feature names. Must agree exactly with saved state on replay; names do not prove semantic equivalence."
+        },
+        {
+          "direction": "input",
+          "ordinal": 3,
+          "name": "feature_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonblank feature-space declaration matching saved states exactly. Caller owns feature construction and alignment."
+        },
+        {
+          "direction": "input",
+          "ordinal": 4,
+          "name": "response_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonblank response-space declaration matching saved states exactly. Caller owns target units; no inverse transform is inferred."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Float32 raw predictions (2,M,3) restored from both states. No preparation or fitting. Query features must match the original preparation scope; no baseline policy. Concrete provisioned execution only; abstract witness rejects."
+        }
+      ],
+      "registered_provider_dependencies": [
+        {
+          "artifact_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+          "fqdn": "sciona.atoms.ml.tensorflow_distribution_losses.clipped_laplace_score",
+          "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+          "content_hash": "b38663fb11890ce1968df7d1250b61937fcf7d144a0ad2ec2e59fb160b574534",
+          "trust_tier": 3
+        },
+        {
+          "artifact_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+          "fqdn": "sciona.atoms.ml.tensorflow_distribution_losses.mean_pinball",
+          "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+          "content_hash": "1aab2d391c4ef377ca1383094fb7744f5935ead635d232c0d8a2c5972cf9c21b",
+          "trust_tier": 3
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.domain_adapters.osic_quantile.train_prepared_quantile_folds",
+      "atom_id": "8c09198c-c3c0-5114-999e-654ebddc5218",
+      "version_id": "9da28b68-6360-5305-bb6a-53b21ef8d98f",
+      "content_hash": "fb5b941e20835a6869773192b51f5b338fea77bc802b6c4d1bc7c869bd897320",
+      "provider_sha256": "1d39499ed4ea783f460257e947e9789130be5c1be1165837bc8f22b79d42538f",
+      "semver": "0.0.0+local.fb5b941e2083",
+      "fingerprint": "2972b1f1dde1ab93b3594cf2c7ce7bec071b2f98e275962e535c0f87c15416ac",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.domain_adapters.osic_quantile.train_prepared_quantile_folds",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.domain_adapters.osic_quantile",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.domain_adapters.osic_quantile",
+        "import_module": "sciona.atoms.ml.domain_adapters.osic_quantile",
+        "source_symbol": "train_prepared_quantile_folds",
+        "description": "Train two fixed 600-epoch folds from aligned finite float32 matrices. Features (N,D), targets (N,1), queries (M,D); N>=2, M>=1, D>=1. Explicit ordered columns, coordinates and a tuple of two 31-bit seeds are required. Returns raw fold predictions, out-of-fold values, private prediction states and training records. No feature fitting or known-baseline overrides.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "features",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float32 matrix (N,D), D>=1. Training requires N>=2; replay requires N>=1. Caller aligns columns to explicit feature coordinates and owns prior preparation."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "targets",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float32 matrix (N,1), row-aligned with training features, in the declared response units. No response scaling is inferred."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "query_features",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite float32 matrix (M,D), M>=1, with the same ordered feature meanings and units as training."
+        },
+        {
+          "direction": "input",
+          "ordinal": 3,
+          "name": "columns",
+          "type_desc": "list[str]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "D unique nonblank ordered feature names. Must agree exactly with saved state on replay; names do not prove semantic equivalence."
+        },
+        {
+          "direction": "input",
+          "ordinal": 4,
+          "name": "feature_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonblank feature-space declaration matching saved states exactly. Caller owns feature construction and alignment."
+        },
+        {
+          "direction": "input",
+          "ordinal": 5,
+          "name": "response_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonblank response-space declaration matching saved states exactly. Caller owns target units; no inverse transform is inferred."
+        },
+        {
+          "direction": "input",
+          "ordinal": 6,
+          "name": "seeds",
+          "type_desc": "tuple[int,int]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exactly two Python integers in [0,2**31), excluding bool. Resets Keras/random seeds for each fold; historical random draws are not reproduced. Serial execution only."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Raw fold_predictions (2,M,3), oof_predictions (N,3), two private fold_states and aggregate fold records. Fixed source architecture, two contiguous folds, 600 epochs, batches of 128 including partial batches, legacy Adam and source mixed loss. No fold reduction or baseline override. Model state is inference-only. Concrete provisioned execution only; abstract witness rejects."
+        }
+      ],
+      "registered_provider_dependencies": [
+        {
+          "artifact_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+          "fqdn": "sciona.atoms.ml.tensorflow_distribution_losses.clipped_laplace_score",
+          "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+          "content_hash": "b38663fb11890ce1968df7d1250b61937fcf7d144a0ad2ec2e59fb160b574534",
+          "trust_tier": 3
+        },
+        {
+          "artifact_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+          "fqdn": "sciona.atoms.ml.tensorflow_distribution_losses.mean_pinball",
+          "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+          "content_hash": "1aab2d391c4ef377ca1383094fb7744f5935ead635d232c0d8a2c5972cf9c21b",
+          "trust_tier": 3
+        }
+      ]
+    }
+  ],
+  "registered_provider_dependencies": [
+    {
+      "artifact_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+      "fqdn": "sciona.atoms.ml.tensorflow_distribution_losses.clipped_laplace_score",
+      "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+      "content_hash": "b38663fb11890ce1968df7d1250b61937fcf7d144a0ad2ec2e59fb160b574534",
+      "trust_tier": 3
+    },
+    {
+      "artifact_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+      "fqdn": "sciona.atoms.ml.tensorflow_distribution_losses.mean_pinball",
+      "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+      "content_hash": "1aab2d391c4ef377ca1383094fb7744f5935ead635d232c0d8a2c5972cf9c21b",
+      "trust_tier": 3
+    }
+  ],
+  "execution_evidence_commit": "59c7e284",
+  "execution_evidence_sha256": "c650a67341785a6e93a2eb97d2fe0445726489b24fa108210ac721a199b8c431",
+  "provider_revision": "0b7695b",
+  "implementation_sha256": {
+    "sciona/osic_quantile_features.py": "7db2c03ec342165e8a93325dd21a0746575adde4363f325eea6bed8406553d2b",
+    "sciona/osic_quantile_training.py": "c0f81b5b4ccb3926ec6cc030c8b121e828e962f8ab7313ba1daac43287f46fbd",
+    "sciona/osic_quantile_model.py": "80bb8d8e135c96be73c046cd05882d48c5fa5779d39a2a01b5f6284f7708d8e8",
+    "sciona/osic_quantile_objective.py": "b1726979feb3375c7193764c8de69fd9dafdc203ce99b2c41c41ab8fd9459804",
+    "sciona/osic_quantile_state.py": "5776cb1ba94373672b937e9324c478a2e46da26b5be5e2f2bda93b6077633802",
+    "sciona/osic_predictions.py": "6e3dbca24d78302ae74ea525fe8d2f380cda9308dc76a4a3f225c4cd863ebace",
+    "sciona/tensorflow_distribution_losses.py": "0d2e7b87f1fab0d3181b6eae412a4ff27af501e202b306b46b224e5e24bb8be6"
+  },
+  "planner_sha256": "c301e3ad493ebad2e172e0bba7fbcc96273d2ba4eda37be09d1911db246f1272",
+  "dependency_review_commit": "43c24f6b",
+  "dependency_review_sha256": "7316905824a711f97a9ccec6a678573a822ad3f30070ef57b24b8302083f4dc0",
+  "limitations": [
+    "Draft plan only; transaction, semantic, runtime and publication gates remain required.",
+    "Replay reconstructs the compiled fixed model and therefore retains the registered loss dependencies even though no optimizer update occurs.",
+    "Thin interfaces depend on the separately pinned matcher implementations; provider source hashes alone do not qualify their behavior.",
+    "Original full OSIC workflow, image branch and final catalog graph remain unapproved."
+  ]
+}
