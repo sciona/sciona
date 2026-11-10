@@ -1,0 +1,80 @@
+{
+  "passed": true,
+  "catalog_mutations": 0,
+  "rejected_faults": [
+    "candidate_hash",
+    "candidate_tier",
+    "candidate_lineage",
+    "original_latest",
+    "original_history",
+    "parent_history",
+    "parent_latest",
+    "parent_publication",
+    "binding_hash",
+    "binding_missing",
+    "dependency_optional",
+    "root_input_type",
+    "result_output_missing",
+    "failed_candidate_audit",
+    "serialized_node",
+    "serialized_edge",
+    "provider_tier"
+  ],
+  "dry_run": {
+    "applied": false,
+    "already_approved": false,
+    "rows_created": 7,
+    "rows_updated": 3,
+    "trust_tier": 3,
+    "original_artifact_id": "cce1e54a-66f6-56ee-8819-44594773acf0",
+    "version_id": "a3d086fa-27d8-50fb-a71c-bffbdb56b971",
+    "graph_sha256": "5312a26c99c55c82ce7aa793279817204024a7b0fc5eba9875520fe4aebf0f67",
+    "served_cdgs": 1,
+    "reused_providers": 2,
+    "source_histories_preserved": true,
+    "plan_sha256": "cf0c5b0ee21b4e8679eb0ccb8fa410789266d241a0bff9fe5017628ba12e2b3a"
+  },
+  "execution_evidence_tests": {
+    "passed": true,
+    "count": 21,
+    "sha256": "a995426a5b086170ab12b048ab9382903c743b2464922816510cbfe510f2f1a3"
+  },
+  "all_rollbacks_complete": true,
+  "injected_failure_points": [
+    "metadata",
+    "activation"
+  ],
+  "publisher_sha256": "0ca8e5e417424296f2e60b58e1768153d7368efe3b9f9b30a373d690c6ff2d02",
+  "validator_sha256": "4eb4e8325ae3d1b19543893c31945861ce02814430cb5f81cd8c6c197817c2c0",
+  "execution_sha256": "5a96f8abac87201652a8134a55f64fab8b59a5f7a5308c3b909918da302c9d26",
+  "qualification": {
+    "review_source": "automated",
+    "proposed_tier": 3,
+    "verdict": "acceptable_with_limits",
+    "evidence_commit": "3b2f64a3ad821f9f4b8003c5968e716a1f28a5c1",
+    "execution_sha256": "5a96f8abac87201652a8134a55f64fab8b59a5f7a5308c3b909918da302c9d26",
+    "source_review_sha256": "68ea3202de57fbf20580e56b0ce5dfa4d4f7607c1eede0ab97ffab6eb7f96e43",
+    "limitations": [
+      "Automated Tier 3 synthetic execution only; no human Tier 1 review, historical training parity or independent predictive accuracy.",
+      "Fixed 32000 Hz mono waveform representation, 264 output slots, full DenseNet121 sound-event heads, fourfold/fivefold ensemble and fixed threshold/voting policy remain explicit recipe choices.",
+      "All thirteen models and seventeen phases execute. Four mixup members use model-only continuation with fresh optimizer state. Epoch and batch controls are caller supplied; qualification uses two epochs per phase and explicit random initialization.",
+      "Pinned historical noise augmentation, class-balanced sampling with replacement, training drop-last, two validation clips, two-epoch validation cadence and five score-ranked checkpoints are retained. Best score/latest retained tie replaces hand-picked historical checkpoints.",
+      "Ten evaluation copies are averaged despite evaluation disabling spectrogram masking. Primary-label dropout loss remains stochastic during validation for the configured members. No probability calibration is claimed.",
+      "External backbone training provenance is not certified by shape checks. Noise and audio inputs stay runtime values; linked notebook code is comparison evidence only and is not copied into runtime.",
+      "Fold separation checks record keys within each supplied split; they do not establish subject separation, correct cross-fold membership or inference independence. Caller must enforce those properties for the intended application.",
+      "Serial current-platform execution used one numerical thread. Runtime callers must separately bound thread pools and reserve the shared worker budget. No large-input memory, GPU or clean-install qualification."
+    ],
+    "resolved_source_corrections": {
+      "audio_conversion": "Accept caller-prepared mono 32000 Hz arrays; execute the source waveform STFT and log-mel representation inside each full sound-event model. No file decoding, resampling, five-minute input requirement or saved spectrogram images. Representation is part of the model and follows waveform augmentation during training, correcting the intake linear ordering.",
+      "background_noise_augmentation": "Run the pinned three-transform or eight-transform historical audio augmentation recipe with supplied background and short-noise arrays before source training crops; retain class-balanced replacement sampling and training drop-last. No automatic external noise acquisition or inferred noise semantics. Explicit per-instance random state replaces worker entropy. Reject silent/nonfinite or short banks; historical Gaussian-SNR behavior is retained without reinterpreting it as modern decibel semantics.",
+      "sound_event_detection_sed_model": "Train thirteen full DenseNet121 attention sound-event models in seventeen phases, including four model-only continuations with fresh optimizer state; retain source losses, schedule, two-clip validation, checkpoint selection and reload. Correct the ResNeSt-50 claim. Fixed 264 output slots and explicit fourfold/fivefold populations remain recipe policy. Caller chooses epochs and initialization; current synthetic qualification uses two epochs per phase. Best-score/latest-retained-tie selection replaces hand-picked historical checkpoints. No pretrained or predictive-accuracy parity.",
+      "thresholding_optimization": "Apply fixed 0.3 clip and frame thresholds, require four of thirteen model votes for an interval, and four already-selected intervals for a whole-record decision. Correct the learned per-species threshold claim: no threshold fitting, probability calibration or label taxonomy is inferred. Independent array voting supports singleton/empty events and excludes padding/endpoints with half-open intervals.",
+      "inference_chunking": "Predict nonoverlapping thirty-second chunks using all thirteen selected models, average ten evaluation copies per model, then aggregate frame events into five-second intervals and whole-record decisions. Correct overlapping five-second model-window inference. Evaluation disables spectrogram masking despite ten copies. Partial final intervals are supported. Outputs are ordered generic class-slot decisions, without named submission formatting or persisted trained models."
+    },
+    "reuse_decision": "Reusable for other weakly supervised audio-event applications when callers supply faithful mono 32000 Hz waveforms, consistent class-index meaning across 264 output slots, meaningful fold populations and appropriate noise banks. No bird taxonomy or domain meaning is inferred. Preparation can be selected independently; execution is the complete source-specific ensemble recipe. STFT, neural training, augmentation and voting helpers are not newly registered independent primitives here; their interfaces and fixed source assumptions would require separate qualification before independent selection. Cross-domain applicability is a contract possibility, not demonstrated predictive effectiveness.",
+    "plan_sha256": "cf0c5b0ee21b4e8679eb0ccb8fa410789266d241a0bff9fe5017628ba12e2b3a",
+    "parameter_contract": "Exact version-1 dict containing populations, background and short-noise banks, inference, epochs, batch_size, seed and initialization. Exactly four fourfold and five fivefold training/validation splits; unique nonempty record keys within each population and disjoint keys within each split. Finite nonempty mono arrays explicitly sampled at 32000 Hz; primary and distinct secondary class indices in 0..263. Training requires a primary label; empty-label validation records are permitted. Nonempty noise banks, each waveform at least 3200 samples with finite positive float32 RMS. Inference contains only sample_rate and waveform. At least two epochs, positive even batch size at least two with a complete training batch per fold, bounded integer seed, and explicit synthetic or provisioned_backbone initialization. Caller owns consistent units, label meaning, fold membership and population independence; no audio decoding, resampling or automatic duplicate detection.",
+    "output_contract": "Finite Python dict containing models_completed=13, seventeen training-phase summaries including four continuations, integer window_votes and boolean window_decisions for each five-second interval and 264 output slots, plus 264 whole_record_decisions. Clip and frame threshold is fixed at 0.3; four of thirteen model votes select a window. Whole-record decisions require four already-selected windows. Final partial windows are allowed; padding and endpoints are excluded by half-open intervals. Singleton and empty events are supported. Training summaries report selected epoch and validation score; they are not unbiased performance estimates or calibrated probabilities. No named submission formatting or persisted reusable model is returned.",
+    "evidence_checker_sha256": "31c3261c456969c51a38a7d2a2298fe42962878cbb6f6b17c72559fdea4273ae"
+  }
+}
