@@ -1,0 +1,402 @@
+{
+  "format": "osic-image-intake-plan.v1",
+  "passed": true,
+  "applied": false,
+  "approved": false,
+  "catalog_mutations": 0,
+  "owner": {
+    "owner_id": "33ed07a2-1bea-5b17-8b71-d6d0e590fdd9",
+    "source_repo_id": "27b787a0-27ed-4760-92b7-ad8e8b4b815c"
+  },
+  "new_providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.domain_adapters.osic_image.blend_keyed_predictions",
+      "atom_id": "ecc2a1a1-c545-5f99-8bd5-3779801654ba",
+      "version_id": "0dffac3b-b344-54c4-874f-ce2d74c3fc3c",
+      "content_hash": "28fe367ea217473debcfddf891f9f1052ad915e82550feea4c9d7d7721dee86b",
+      "provider_sha256": "eebdaf4aba9381f05a927be4b266c40c124bced550137a0c41ad75c1fcee17e4",
+      "semver": "0.0.0+local.28fe367ea217",
+      "fingerprint": "a314f89f0ef03aa25661fbaacdf39ab67ab20e82bce3a5bcf41e6aab4547a8c6",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.domain_adapters.osic_image.blend_keyed_predictions",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.domain_adapters.osic_image",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.domain_adapters.osic_image",
+        "import_module": "sciona.atoms.ml.domain_adapters.osic_image",
+        "source_symbol": "blend_keyed_predictions",
+        "description": "Align two prediction branches by keys and apply source weights 0.45/0.55. Both branches require identical nonempty unique string key sets and finite real (M,2) point/uncertainty matrices. Return sorted keys and a float64 matrix using the generic ordered weighted-sum provider. Caller establishes shared units and applicability; this source weighting is not a learned ensemble.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "image_keys",
+          "type_desc": "list[str]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty unique nonempty string query keys aligned with image rows. Must have exactly the same set as quantile keys."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "image_values",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite real matrix (M,2) of point and source uncertainty, aligned with image keys; finite float64 representation required. Caller establishes units and applicability."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "quantile_keys",
+          "type_desc": "list[str]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty unique nonempty string query keys aligned with quantile rows. Must have exactly the same set as image keys."
+        },
+        {
+          "direction": "input",
+          "ordinal": 3,
+          "name": "quantile_values",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite real matrix (M,2) of point and source uncertainty, aligned with quantile keys; finite float64 representation required. Same units as the image branch."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "tuple[list[str],numpy.ndarray]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Sorted keys and a fresh float64 (M,2) matrix. Align both branches by keys, then use ordered weighted sum with source weights 0.45 and 0.55. No fitting or empirical calibration. Concrete provisioned execution only; abstract witness rejects."
+        }
+      ],
+      "registered_provider_dependencies": [
+        {
+          "artifact_id": "4f486f1c-82db-50db-b5d2-188aeaa8cc4a",
+          "fqdn": "sciona.atoms.numerical.statistics.ordered_sum.ordered_weighted_sum",
+          "version_id": "5fb9c91f-ff5f-590c-b376-88e2a7360440",
+          "content_hash": "814d0ff20f33820537741e1f116c32dfa69262d56dc16d872f3a055f77bd6968",
+          "trust_tier": 3
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.domain_adapters.osic_image.prepare_image_slice_inputs",
+      "atom_id": "755905ac-e308-5fd8-b623-87174252167d",
+      "version_id": "747efcb8-2494-52e2-a8c7-98e2e3d7226d",
+      "content_hash": "1511679c771f2f73d5bed2da3954fc2c6599512fb3f5482d19c74c84d1b113c7",
+      "provider_sha256": "eebdaf4aba9381f05a927be4b266c40c124bced550137a0c41ad75c1fcee17e4",
+      "semver": "0.0.0+local.1511679c771f",
+      "fingerprint": "c3e0810dfaf37999f2a515ca283fecd3237fbf2dadae9bc71d7dcf3b6aa9c2ec",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.domain_adapters.osic_image.prepare_image_slice_inputs",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.domain_adapters.osic_image",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.domain_adapters.osic_image",
+        "import_module": "sciona.atoms.ml.domain_adapters.osic_image",
+        "source_symbol": "prepare_image_slice_inputs",
+        "description": "Prepare selected encoded slices for one entity without invoking a model. Caller supplies ordered unique (name, bytes) records and scalar metadata. Select source ordinal/count positions before decoding; retain at least two slices. Ignore image rescale metadata and apply the source inference normalization, resize and case-sensitive category policy. Return images (S,512,512,1), metadata (S,4) and selected int64 positions. Unselected payloads are not decoded. Disable OpenCV workers; caller owns order and availability.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "encoded_planes",
+          "type_desc": "list[tuple[str,bytes]]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Private nonempty encoded single-frame, single-sample monochrome DICOM bytes. Qualified provisioned pydicom/OpenCV runtime only. Uncompressed and RLE decoding have separate synthetic qualification; other compressed codecs remain unqualified. Caller disables OpenCV workers before execution. Ordered uniquely named records for exactly one entity. Source names strip four trailing characters to parse integer slice ordinals. Rescale metadata is ignored; unselected payloads are not decoded."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "numeric",
+          "type_desc": "number",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite real scalar metadata coordinate, excluding bool. Apply source (value-30)/30 transform; no clinical or generic interpretation inferred."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "category",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Source inference category string. Case-sensitive comparison to the source label; unknown strings retain the fallback. Not a generic categorical encoder."
+        },
+        {
+          "direction": "input",
+          "ordinal": 3,
+          "name": "status",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Source status string. Exact source cases and unknown-string fallback are retained. Availability and application interpretation remain caller responsibilities."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Private images (S,512,512,1), metadata (S,4) and int64 selected_positions. At least two selected slices; source strict ordinal/count bounds retain caller order. Decode selected payloads only, ignore rescale metadata, divide integer pixels by 2048 and resize. Only one entity is prepared; no model call. Concrete provisioned execution only; abstract witness rejects."
+        }
+      ],
+      "registered_provider_dependencies": []
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.domain_adapters.osic_image.prepare_image_training_population",
+      "atom_id": "e98d866a-5442-5b28-bd0b-c47ce6434696",
+      "version_id": "4004c895-ee2e-5714-bd4f-ff009cd7400e",
+      "content_hash": "03f640157753d1413f5a7687ffaa36a26755b289858481715f6335c638b2ef65",
+      "provider_sha256": "eebdaf4aba9381f05a927be4b266c40c124bced550137a0c41ad75c1fcee17e4",
+      "semver": "0.0.0+local.03f640157753",
+      "fingerprint": "7bea76f018e95ff4c7bc1a3b1706cbbd69a2c6181ac7ce2f85b1be80e3fe6714",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.domain_adapters.osic_image.prepare_image_training_population",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.domain_adapters.osic_image",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.domain_adapters.osic_image",
+        "import_module": "sciona.atoms.ml.domain_adapters.osic_image",
+        "source_symbol": "prepare_image_training_population",
+        "description": "Prepare source training images, metadata and longitudinal slope targets. Fit all mapped entities before applying caller-supplied exclusions. Preserve first-encounter entity order and first-row metadata. Decode eligible images in caller order, with the source training rescale/resize policy. Invalid eligible images raise; excluded payloads are not decoded. Return private image groups, metadata, slopes, fit diagnostics and coordinate declarations. No model construction, training or sampling occurs. Disable OpenCV workers before execution; the provisioned decoder supports only qualified formats.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "table",
+          "type_desc": "pandas.DataFrame",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty pandas DataFrame with unique exact caller-mapped fields entity,time,target,numeric,category_a,category_b. Nonempty string entity identities; finite numeric coordinates. Caller owns coordinate units and actual observation availability. No source records or identifiers are embedded. Fit every entity before exclusions with explicit rcond=-1. Preserve first-encounter entity order and first-row metadata; minimum-norm slopes may be rank deficient."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "encoded_planes",
+          "type_desc": "dict[str,list[tuple[str,bytes]]]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Private nonempty encoded single-frame, single-sample monochrome DICOM bytes. Qualified provisioned pydicom/OpenCV runtime only. Uncompressed and RLE decoding have separate synthetic qualification; other compressed codecs remain unqualified. Caller disables OpenCV workers before execution. Exact coverage of all mapped entities, including excluded entities. Eligible entities require nonempty ordered uniquely named records and valid rescale fields with nonzero slope. Excluded payloads are not decoded."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "excluded_entities",
+          "type_desc": "list[str]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit unique nonempty string exclusion identities. Exclusions affect image sampling eligibility after longitudinal fitting. At least one eligible entity must remain. Caller-owned policy, with no source exclusion list embedded."
+        },
+        {
+          "direction": "input",
+          "ordinal": 3,
+          "name": "time_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty time-coordinate declaration; caller owns common units for fitting and later queries. No unit conversion."
+        },
+        {
+          "direction": "input",
+          "ordinal": 4,
+          "name": "response_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty response-coordinate declaration. Fitted slopes have response units per time unit; labels do not prove compatible coordinates."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Private entities, per-entity images (S,512,512,1), metadata (G,4), slopes (G,), fit diagnostics and coordinate declarations. Training normalization subtracts intercept, divides by slope*1000, then resizes. No model fitting or sampling; image groups are materialized for this training population. Concrete provisioned execution only; abstract witness rejects."
+        }
+      ],
+      "registered_provider_dependencies": [
+        {
+          "artifact_id": "c5a57e38-9d64-526e-8f6c-953fb10545f1",
+          "fqdn": "sciona.atoms.numerical.statistics.affine_fit.affine_least_squares",
+          "version_id": "a9cae503-875f-5dec-b82b-a113c8aec6cf",
+          "content_hash": "115433af2fa42aa4454253a18682acef7c1447142261590539cbef9da6da5896",
+          "trust_tier": 3
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.domain_adapters.osic_image.reduce_image_predictions",
+      "atom_id": "35d37d9a-9f7b-5d28-8e76-66e55b8ed4f6",
+      "version_id": "84257250-64a3-5d1d-b7f8-afb6da9edff4",
+      "content_hash": "3aac9d82a09ad0c0c856c1d32c505f395c0a0ebd7780fe1eded4262a7b6ff5b2",
+      "provider_sha256": "eebdaf4aba9381f05a927be4b266c40c124bced550137a0c41ad75c1fcee17e4",
+      "semver": "0.0.0+local.3aac9d82a09a",
+      "fingerprint": "d70cb2846d97c3876abea79deaed2552fd9b0b3860700235d1b81849fd23a3af",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.domain_adapters.osic_image.reduce_image_predictions",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.domain_adapters.osic_image",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.domain_adapters.osic_image",
+        "import_module": "sciona.atoms.ml.domain_adapters.osic_image",
+        "source_symbol": "reduce_image_predictions",
+        "description": "Reduce per-entity slice slopes to source point and uncertainty predictions. Require at least two finite scalar slice predictions per entity, aligned finite baseline vectors and integer entity positions for queries. Preserve input-dtype median rounding and source intercept-first arithmetic. Time and slope units must agree. The uncertainty heuristic can be negative and is not calibrated. No model execution, entity joining or availability inference.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "slice_slopes",
+          "type_desc": "list[numpy.ndarray]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty ordered per-entity finite real arrays (S,) or (S,1), S>=2. Median retains input dtype behavior; do not promote float32 before reduction. Finite float64 representation required."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "baseline_time",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite real vector (G,) aligned with the slope groups. Same time coordinate as query times; converted to float64."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "baseline_value",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite real vector (G,) of already observed baseline outcomes aligned with slope groups. Response units must agree with slopes times time; converted to float64."
+        },
+        {
+          "direction": "input",
+          "ordinal": 3,
+          "name": "baseline_uncertainty",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite real vector (G,) of caller-supplied source heuristic values, aligned with slope groups. Not calibrated uncertainty; negative values are not clipped."
+        },
+        {
+          "direction": "input",
+          "ordinal": 4,
+          "name": "query_subject",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Integer vector (M,) indexing the supplied slope groups, with 0<=index<G. Explicit caller mapping; no entity joining occurs."
+        },
+        {
+          "direction": "input",
+          "ordinal": 5,
+          "name": "query_time",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite real vector (M,) sharing baseline time units. Integer inputs retain source scalar-integer multiplication behavior; floating inputs use floating scalar multiplication. Finite float64 representation required."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Float64 (M,2) source point and heuristic uncertainty. Median each group; form the intercept before extrapolating. Preserve input-dtype median/scalar rounding and negative uncertainty. No calibrated interval claim. Concrete provisioned execution only; abstract witness rejects."
+        }
+      ],
+      "registered_provider_dependencies": []
+    }
+  ],
+  "registered_provider_dependencies": [
+    {
+      "artifact_id": "c5a57e38-9d64-526e-8f6c-953fb10545f1",
+      "fqdn": "sciona.atoms.numerical.statistics.affine_fit.affine_least_squares",
+      "version_id": "a9cae503-875f-5dec-b82b-a113c8aec6cf",
+      "content_hash": "115433af2fa42aa4454253a18682acef7c1447142261590539cbef9da6da5896",
+      "trust_tier": 3
+    },
+    {
+      "artifact_id": "4f486f1c-82db-50db-b5d2-188aeaa8cc4a",
+      "fqdn": "sciona.atoms.numerical.statistics.ordered_sum.ordered_weighted_sum",
+      "version_id": "5fb9c91f-ff5f-590c-b376-88e2a7360440",
+      "content_hash": "814d0ff20f33820537741e1f116c32dfa69262d56dc16d872f3a055f77bd6968",
+      "trust_tier": 3
+    }
+  ],
+  "execution_evidence_commit": "bddbcf34",
+  "execution_evidence_sha256": "7cf105f82452e4533bc5c45a1992df52c3053b054a6e445944a0c8964c042713",
+  "provider_revision": "ec50c40",
+  "implementation_sha256": {
+    "sciona/osic_image_population.py": "0d52dfc07b87d9dcf68e8eee2e66c2b2bf77dbd3133601412f5ea54a172e135a",
+    "sciona/osic_image_inference.py": "944467b578e0725ac666a32ff84ffc57a9de857143537bb5a305541ff4047bab",
+    "sciona/dicom_planes.py": "c0edf39544f67d5fbe7860bf3fa0d709f7b20ad87329ef59d0c9ed3230335a0c",
+    "sciona/osic_dicom.py": "598e2e736fc9b2222aeb104e5f6f610012139fca0a4f94f63f52de5ef36468c7",
+    "sciona/osic_image_metadata.py": "7c36c3eeff029f0a32f044589b386ea9c53da99ebb4ebf087e89d6833a2c605d",
+    "sciona/affine_trajectory_fit.py": "690dc187c9e87722e15a91f3f4a185740b73aa392bb6e84975151e9437b1a190",
+    "sciona/osic_image_batches.py": "164306fb3ff8ff616f55d331d385d5cd9e39347ffd127bc66a30ad82b4c913a4",
+    "sciona/group_member_sampling.py": "0aa10a2ad8feea1ac979e4f2a522214b27b515a131ac1340f11f541e42f51466",
+    "sciona/osic_image_preprocessing.py": "9c46a4977dae5a5967da24b432db836130c27af29f1cdca69552557face7757e",
+    "sciona/osic_image_model.py": "403ff9e7f6f3a2ba362c599abc68910c527a831366cff8a2563b2828db7618df",
+    "sciona/osic_image_predictor.py": "337f73be79f20d9472c490d9efbe539d42f0c70581ae6e44dca16fbf748d077d",
+    "sciona/keras_bounded_prediction.py": "fe36ca313054cd1b6c3882f59139a6228d306fd92d06e469c1abc1ac3e570d55",
+    "sciona/osic_predictions.py": "6e3dbca24d78302ae74ea525fe8d2f380cda9308dc76a4a3f225c4cd863ebace",
+    "scripts/validate_osic_image_population.py": "32ae954f6d203c63471320053d8958985ebcb5968fbe2738d43ec61297146fee",
+    "sciona/osic_image_state.py": "876b5328b675634e0a18e42589aee8d444cf50eb1a5824cab8d01bc663817a54",
+    "scripts/validate_osic_image_state.py": "f37279187dc05185f4d2b86b69552f15143bf46f463368136b84a38462b39ddc",
+    "sciona/osic_quantile_inference.py": "6abf862e299db13037d31043229141dae983aa8525126af2e4f77821740e4b4c",
+    "sciona/osic_feature_state.py": "4d2dfba5ad2e367591586bf8be1f7896290a492a7394a0ee536e5e196cfe4136",
+    "sciona/osic_quantile_training.py": "c0f81b5b4ccb3926ec6cc030c8b121e828e962f8ab7313ba1daac43287f46fbd",
+    "sciona/osic_quantile_features.py": "7db2c03ec342165e8a93325dd21a0746575adde4363f325eea6bed8406553d2b",
+    "sciona/osic_quantile_state.py": "5776cb1ba94373672b937e9324c478a2e46da26b5be5e2f2bda93b6077633802",
+    "sciona/osic_quantile_model.py": "80bb8d8e135c96be73c046cd05882d48c5fa5779d39a2a01b5f6284f7708d8e8",
+    "sciona/osic_quantile_objective.py": "b1726979feb3375c7193764c8de69fd9dafdc203ce99b2c41c41ab8fd9459804",
+    "sciona/tensorflow_distribution_losses.py": "0d2e7b87f1fab0d3181b6eae412a4ff27af501e202b306b46b224e5e24bb8be6"
+  },
+  "planner_sha256": "518f4a046124e92bc6c3ec5ed9407f5def32f4f4c192575efc225724245a80d3",
+  "dependency_implementation_sha256": {
+    "sciona-atoms/src/sciona/atoms/numerical/statistics/affine_fit.py": "39856bac33e0fe22e02a0c4d11ca83585d989f68775ddced57bfeb4de8ef84af",
+    "sciona-atoms/src/sciona/atoms/numerical/statistics/ordered_sum.py": "893e4fb0c884d1732d9bba0ae2e203b72170bba11fbc89443306e6fd1b6ea359"
+  },
+  "limitations": [
+    "Draft plan only; transaction, semantic, runtime and publication gates remain required.",
+    "Four source-specific preparation/reduction interfaces only. Generic affine fitting and ordered summation remain independent approved atoms.",
+    "Training and inference use different source image normalization and category policies. Caller mapping and observation availability are external.",
+    "The execution oracle uses a private intermediate synthetic image checkpoint, not completion of the 30-epoch image training schedule.",
+    "Thin interfaces depend on separately pinned matcher implementations and provisioned decoder/model dependencies; provider source hashes alone do not qualify behavior.",
+    "No image-model training provider, original full workflow or final catalog graph is approved."
+  ]
+}
