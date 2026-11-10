@@ -39,6 +39,7 @@ def snapshot(db, records, *, preserved=False):
     result = {}
     for prefix, key in [('artifact','artifact_id'), ('atom','atom_id')]:
         suffixes = ['versions','references','audit_rollups']
+        if prefix=='atom':suffixes.append('audit_evidence')
         if not preserved:
             suffixes += ['descriptions','parameters','io_specs']
         for suffix in suffixes:
@@ -64,13 +65,13 @@ def check_identity(db, target):
         wanted = {k:r[k] for k in ('fqdn','status','is_publishable','version_id','content_hash','trust_tier')}
         if actual != [wanted]:
             raise ValueError('Retained provider or graph identity changed')
+        if db.execute(f'SELECT 1 FROM {prefix}_audit_evidence WHERE version_id=%s AND NOT passed',(r['version_id'],)).fetchone():
+            raise ValueError('Failed retained audit in '+prefix+' catalog')
     if r['artifact_kind'] == 'atom':
         module, symbol = r['fqdn'].rsplit('.',1)
         actual = db.execute('SELECT import_module,source_symbol FROM atoms WHERE atom_id=%s', (r['artifact_id'],)).fetchone()
         if actual != dict(import_module=module, source_symbol=symbol):
             raise ValueError('Runtime binding changed')
-    if db.execute('SELECT 1 FROM artifact_audit_evidence WHERE version_id=%s AND NOT passed', (r['version_id'],)).fetchone():
-        raise ValueError('Failed retained audit')
 
 
 class InjectedFailure(RuntimeError):
@@ -101,6 +102,8 @@ def reconcile(apply=False, fail_after=None):
         db.execute('SELECT pg_advisory_xact_lock(hashtext(%s))', (RUNNER,))
         for target in targets:
             db.execute('SELECT artifact_id FROM artifacts WHERE artifact_id=%s FOR UPDATE', (target['identity']['artifact_id'],)).fetchone()
+            if 'atom' in target['catalogs']:
+                db.execute('SELECT atom_id FROM atoms WHERE atom_id=%s FOR UPDATE',(target['identity']['artifact_id'],)).fetchone()
             check_identity(db, target)
         preserved = snapshot(db, targets, preserved=True)
         original_before = snapshot(db, [original])
@@ -160,11 +163,17 @@ def validate():
     with connect() as db:
         for target in targets:
             r = target['identity']
-            faults = [
-                ('hash','UPDATE artifact_versions SET content_hash=%s WHERE version_id=%s',('0'*64,r['version_id'])),
-                ('tier','UPDATE artifact_versions SET trust_tier=1 WHERE version_id=%s',(r['version_id'],)),
-                ('status',"UPDATE artifacts SET status='draft' WHERE artifact_id=%s",(r['artifact_id'],)),
-            ]
+            faults = []
+            for prefix,key in [('artifact','artifact_id'),('atom','atom_id')]:
+                if prefix not in target['catalogs']:continue
+                faults.extend([
+                    (prefix+'_hash',f'UPDATE {prefix}_versions SET content_hash=%s WHERE version_id=%s',('0'*64,r['version_id'])),
+                    (prefix+'_tier',f'UPDATE {prefix}_versions SET trust_tier=1 WHERE version_id=%s',(r['version_id'],)),
+                    (prefix+'_latest',f'UPDATE {prefix}_versions SET is_latest=false WHERE version_id=%s',(r['version_id'],)),
+                    (prefix+'_status',f"UPDATE {prefix}s SET status='draft' WHERE {key}=%s",(r['artifact_id'],)),
+                    (prefix+'_publishable',f'UPDATE {prefix}s SET is_publishable=false WHERE {key}=%s',(r['artifact_id'],)),
+                    (prefix+'_failed_audit',f"INSERT INTO {prefix}_audit_evidence({key},version_id,audit_type,passed,status,source_kind,runner_version) VALUES(%s,%s,'semantic_audit',false,'completed','automated','synthetic-rollback-test')",(r['artifact_id'],r['version_id'])),
+                ])
             if r['artifact_kind']=='atom':
                 faults.append(('runtime',"UPDATE atoms SET source_symbol='incorrect' WHERE atom_id=%s",(r['artifact_id'],)))
             for name, sql, args in faults:

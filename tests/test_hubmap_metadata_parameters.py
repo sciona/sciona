@@ -29,3 +29,21 @@ def test_output_not_parameter():
 def test_unqualified_metadata_rejected(monkeypatch):
     monkeypatch.setattr(metadata,'COMMIT',None)
     with pytest.raises(ValueError,match='Committed'):metadata.qualified()
+
+
+@pytest.mark.parametrize('failed_catalog',['artifact','atom'])
+def test_failed_evidence_in_either_catalog_rejected(failed_catalog):
+    identity=dict(artifact_id='synthetic-id',artifact_kind='atom',fqdn='synthetic.provider',
+        status='approved',is_publishable=True,version_id='synthetic-version',content_hash='a'*64,trust_tier=3)
+    wanted={k:identity[k] for k in ('fqdn','status','is_publishable','version_id','content_hash','trust_tier')}
+    class Result:
+        def __init__(self,rows):self.rows=rows
+        def fetchall(self):return self.rows
+        def fetchone(self):return self.rows[0] if self.rows else None
+    class Database:
+        def execute(self,sql,args):
+            if 'JOIN' in sql:return Result([wanted])
+            if '_audit_evidence' in sql:return Result([{'failed':True}] if failed_catalog+'_audit_evidence' in sql else [])
+            raise AssertionError('Unexpected query before failed audit rejection')
+    with pytest.raises(ValueError,match='Failed retained audit in '+failed_catalog):
+        metadata.check_identity(Database(),dict(identity=identity,catalogs=dict(artifact={},atom={})))
