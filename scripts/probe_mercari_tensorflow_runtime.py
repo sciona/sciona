@@ -45,7 +45,7 @@ class InstrumentTraining(ast.NodeTransformer):
         return node
 
 
-def probe(directory):
+def load_model_namespace(directory):
     models = inventory(directory)
     triage = json.loads((ROOT/'docs/reviews/competition_mercari_source_triage.json').read_text())
     quantile_sha = next(r['sha256'] for r in triage['source_files'] if r['path'] == 'mercari/regression_clf.py')
@@ -63,6 +63,11 @@ def probe(directory):
     definitions = [n for n in tree.body if isinstance(n, (ast.ClassDef, ast.FunctionDef))]
     instrumented = ast.fix_missing_locations(InstrumentTraining().visit(ast.Module(body=definitions, type_ignores=[])))
     exec(compile(instrumented, '<source-tensorflow>', 'exec'), namespace)
+    return namespace, models, quantile_sha
+
+
+def probe(directory):
+    namespace, models, quantile_sha = load_model_namespace(directory)
     rng = np.random.default_rng(853)
     dense = rng.uniform(0, 1, (8192, 23)).astype(np.float32)
     dense[rng.random(dense.shape) < .7] = 0

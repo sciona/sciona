@@ -82,7 +82,7 @@ class ModernApiNames(ast.NodeTransformer):
         return node
 
 
-def probe(directory, modernize=False):
+def load_feature_namespace(directory, modernize=False):
     topology = inventory(directory)
     namespace = dict(np=np, pd=pd, sp=sparse, csr_matrix=sparse.csr_matrix,
         BaseEstimator=BaseEstimator, TransformerMixin=TransformerMixin,
@@ -109,6 +109,11 @@ def probe(directory, modernize=False):
     if modernize:
         for name in ('ReportShape', 'SparseMatrixOptimize', 'FalseBrands', 'FeaturesPatterns'):
             namespace[name].__sklearn_is_fitted__ = lambda self: True
+    return namespace, topology
+
+
+def probe(directory, modernize=False):
+    namespace, topology = load_feature_namespace(directory, modernize)
     # These names are public source interface bindings, not a private template.
     # Every value below is generated solely for this probe.
     train = pd.DataFrame([dict(name=f'synthetic sensor {i%4+1} cm',
