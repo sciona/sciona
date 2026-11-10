@@ -42,9 +42,11 @@ def value_gradient(fn, targets, predictions):
 def validate(directory):
     paths = [Path(__file__), ROOT/'sciona/osic_quantile_objective.py',
         ROOT/'sciona/tensorflow_distribution_losses.py',
+        Path(inspect.getfile(generic.mean_pinball)),
         Path(inspect.getfile(tf_keras.optimizers.legacy.Adam))]
     before = {('matcher/'+str(p.relative_to(ROOT))) if p.is_relative_to(ROOT)
-              else 'legacy_optimizer_source': sha(p) for p in paths}
+              else ('distribution_loss_provider' if p.name == 'tensorflow_distribution_losses.py'
+                    else 'legacy_optimizer_source'): sha(p) for p in paths}
     notebook = json.loads((Path(directory)/INFERENCE).read_text())
     definitions = {node.name: node for node in ast.parse(''.join(notebook['cells'][32]['source'])).body
                    if isinstance(node, ast.FunctionDef)}
@@ -121,7 +123,8 @@ def validate(directory):
         raise ValueError('Optimizer iteration count differs')
     np.testing.assert_allclose(opt._decayed_lr(tf.float32).numpy(), .1/(1+.01*40), rtol=2e-7)
     after = {('matcher/'+str(p.relative_to(ROOT))) if p.is_relative_to(ROOT)
-             else 'legacy_optimizer_source': sha(p) for p in paths}
+             else ('distribution_loss_provider' if p.name == 'tensorflow_distribution_losses.py'
+                   else 'legacy_optimizer_source'): sha(p) for p in paths}
     if before != after:
         raise ValueError('Implementation changed during qualification')
     return dict(format='osic-quantile-objective-validation.v1', passed=True, approved=False,
