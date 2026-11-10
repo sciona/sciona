@@ -1,0 +1,183 @@
+{
+  "format": "cornell-provider-contract-review.v1",
+  "passed": true,
+  "approved": false,
+  "review_source": "automated",
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "catalog_mutations": 0,
+  "providers": [
+    {
+      "artifact_id": "4bda22f1-8e2c-5927-b105-1d3eeca9e71b",
+      "runtime_fqdn": "sciona.atoms.ml.cornell_execution.cornell_prepare",
+      "version_id": "a0c8771b-c22b-5da9-a08a-65a94e6b0d45",
+      "content_hash": "23c5fe0be7b8ac61430b15fd0a3fc3c806a92f44e29a28ee118bce46def6b095",
+      "plain_description": "Check audio arrays, labels, fold populations, noise banks and training settings, then copy the request.",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "payload",
+          "type_desc": "dict",
+          "ordinal": 0,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact version-1 dict containing populations, background and short-noise banks, inference, epochs, batch_size, seed and initialization. Exactly four fourfold and five fivefold training/validation splits; unique nonempty record keys within each population and disjoint keys within each split. Finite nonempty mono arrays explicitly sampled at 32000 Hz; primary and distinct secondary class indices in 0..263. Training requires a primary label; empty-label validation records are permitted. Nonempty noise banks, each waveform at least 3200 samples with finite positive float32 RMS. Inference contains only sample_rate and waveform. At least two epochs, positive even batch size at least two with a complete training batch per fold, bounded integer seed, and explicit synthetic or provisioned_backbone initialization. Caller owns consistent units, label meaning, fold membership and population independence; no audio decoding, resampling or automatic duplicate detection."
+        },
+        {
+          "direction": "output",
+          "name": "prepared",
+          "type_desc": "object",
+          "ordinal": 0,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Trusted sciona.cornell_contract.Prepared containing a detached deep copy of the request. The frozen dataclass contains mutable arrays and dictionaries; it is not deeply immutable. Execution revalidates the payload, but concurrent mutation and untrusted object deserialization are not qualified. Pinned source and historical augmentation software must be provisioned via deployment configuration; provisioned initialization additionally requires a complete DenseNet121 backbone state."
+        }
+      ],
+      "source_anchors": [
+        {
+          "file": "sciona/cornell_contract.py",
+          "symbol": "prepare",
+          "line": 24,
+          "file_sha256": "491a2e1f93616dc816855744a7864013ff7a681ab9ebf175e7643977b05eb578"
+        },
+        {
+          "file": "sciona/cornell_population.py",
+          "symbol": "prepare_records",
+          "line": 16,
+          "file_sha256": "d3b45637c1a10a635a8cc6a39ce9d700c4f1b29b8813e7d3810c6142f08d0dd6"
+        },
+        {
+          "file": "sciona/cornell_population.py",
+          "symbol": "check_split",
+          "line": 42,
+          "file_sha256": "d3b45637c1a10a635a8cc6a39ce9d700c4f1b29b8813e7d3810c6142f08d0dd6"
+        }
+      ],
+      "role": "recipe_adapter",
+      "reuse": "Reusable for other weakly supervised audio-event applications when callers supply faithful mono 32000 Hz waveforms, consistent class-index meaning across 264 output slots, meaningful fold populations and appropriate noise banks. No bird taxonomy or domain meaning is inferred. Preparation can be selected independently; execution is the complete source-specific ensemble recipe. STFT, neural training, augmentation and voting helpers are not newly registered independent primitives here; their interfaces and fixed source assumptions would require separate qualification before independent selection. Cross-domain applicability is a contract possibility, not demonstrated predictive effectiveness.",
+      "validity_bounds": [
+        "Automated Tier 3 synthetic execution only; no human Tier 1 review, historical training parity or independent predictive accuracy.",
+        "Fixed 32000 Hz mono waveform representation, 264 output slots, full DenseNet121 sound-event heads, fourfold/fivefold ensemble and fixed threshold/voting policy remain explicit recipe choices.",
+        "All thirteen models and seventeen phases execute. Four mixup members use model-only continuation with fresh optimizer state. Epoch and batch controls are caller supplied; qualification uses two epochs per phase and explicit random initialization.",
+        "Pinned historical noise augmentation, class-balanced sampling with replacement, training drop-last, two validation clips, two-epoch validation cadence and five score-ranked checkpoints are retained. Best score/latest retained tie replaces hand-picked historical checkpoints.",
+        "Ten evaluation copies are averaged despite evaluation disabling spectrogram masking. Primary-label dropout loss remains stochastic during validation for the configured members. No probability calibration is claimed.",
+        "External backbone training provenance is not certified by shape checks. Noise and audio inputs stay runtime values; linked notebook code is comparison evidence only and is not copied into runtime.",
+        "Fold separation checks record keys within each supplied split; they do not establish subject separation, correct cross-fold membership or inference independence. Caller must enforce those properties for the intended application.",
+        "Serial current-platform execution used one numerical thread. Runtime callers must separately bound thread pools and reserve the shared worker budget. No large-input memory, GPU or clean-install qualification."
+      ]
+    },
+    {
+      "artifact_id": "3685be6e-7665-5ffc-bdb0-8342aa86471b",
+      "runtime_fqdn": "sciona.atoms.ml.cornell_execution.cornell_execute",
+      "version_id": "4d8e3e86-ce7a-5c74-b43d-c14b618f7c3e",
+      "content_hash": "67b0cbca87b4bbb3685fc7b4ead2d460852c05538ab754422dc9e966bace8630",
+      "plain_description": "Train the full audio-event ensemble, reload selected models, and combine their votes for short intervals and the whole recording.",
+      "ports": [
+        {
+          "direction": "input",
+          "name": "prepared",
+          "type_desc": "object",
+          "ordinal": 0,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Trusted sciona.cornell_contract.Prepared containing a detached deep copy of the request. The frozen dataclass contains mutable arrays and dictionaries; it is not deeply immutable. Execution revalidates the payload, but concurrent mutation and untrusted object deserialization are not qualified. Pinned source and historical augmentation software must be provisioned via deployment configuration; provisioned initialization additionally requires a complete DenseNet121 backbone state."
+        },
+        {
+          "direction": "output",
+          "name": "result",
+          "type_desc": "dict",
+          "ordinal": 0,
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite Python dict containing models_completed=13, seventeen training-phase summaries including four continuations, integer window_votes and boolean window_decisions for each five-second interval and 264 output slots, plus 264 whole_record_decisions. Clip and frame threshold is fixed at 0.3; four of thirteen model votes select a window. Whole-record decisions require four already-selected windows. Final partial windows are allowed; padding and endpoints are excluded by half-open intervals. Singleton and empty events are supported. Training summaries report selected epoch and validation score; they are not unbiased performance estimates or calibrated probabilities. No named submission formatting or persisted reusable model is returned."
+        }
+      ],
+      "source_anchors": [
+        {
+          "file": "sciona/cornell_contract.py",
+          "symbol": "execute",
+          "line": 55,
+          "file_sha256": "491a2e1f93616dc816855744a7864013ff7a681ab9ebf175e7643977b05eb578"
+        },
+        {
+          "file": "sciona/cornell_lifecycle.py",
+          "symbol": "execute",
+          "line": 35,
+          "file_sha256": "d12ec363160c543fe83220327058f00b0a500fea3fa73026b594d28085e3c08c"
+        },
+        {
+          "file": "sciona/cornell_training.py",
+          "symbol": "train_phase",
+          "line": 26,
+          "file_sha256": "deda1c6c66d6fb80cdc111befb960a74e7c87dfd61fee41d1d13f5a406e22c5b"
+        },
+        {
+          "file": "sciona/cornell_lifecycle.py",
+          "symbol": "predict",
+          "line": 18,
+          "file_sha256": "d12ec363160c543fe83220327058f00b0a500fea3fa73026b594d28085e3c08c"
+        },
+        {
+          "file": "sciona/cornell_voting.py",
+          "symbol": "vote",
+          "line": 11,
+          "file_sha256": "b78d50ae9b7ecf8ccab18dee2d939833e779e66b21e8dfaee0635450c7144323"
+        }
+      ],
+      "role": "recipe_adapter",
+      "reuse": "Reusable for other weakly supervised audio-event applications when callers supply faithful mono 32000 Hz waveforms, consistent class-index meaning across 264 output slots, meaningful fold populations and appropriate noise banks. No bird taxonomy or domain meaning is inferred. Preparation can be selected independently; execution is the complete source-specific ensemble recipe. STFT, neural training, augmentation and voting helpers are not newly registered independent primitives here; their interfaces and fixed source assumptions would require separate qualification before independent selection. Cross-domain applicability is a contract possibility, not demonstrated predictive effectiveness.",
+      "validity_bounds": [
+        "Automated Tier 3 synthetic execution only; no human Tier 1 review, historical training parity or independent predictive accuracy.",
+        "Fixed 32000 Hz mono waveform representation, 264 output slots, full DenseNet121 sound-event heads, fourfold/fivefold ensemble and fixed threshold/voting policy remain explicit recipe choices.",
+        "All thirteen models and seventeen phases execute. Four mixup members use model-only continuation with fresh optimizer state. Epoch and batch controls are caller supplied; qualification uses two epochs per phase and explicit random initialization.",
+        "Pinned historical noise augmentation, class-balanced sampling with replacement, training drop-last, two validation clips, two-epoch validation cadence and five score-ranked checkpoints are retained. Best score/latest retained tie replaces hand-picked historical checkpoints.",
+        "Ten evaluation copies are averaged despite evaluation disabling spectrogram masking. Primary-label dropout loss remains stochastic during validation for the configured members. No probability calibration is claimed.",
+        "External backbone training provenance is not certified by shape checks. Noise and audio inputs stay runtime values; linked notebook code is comparison evidence only and is not copied into runtime.",
+        "Fold separation checks record keys within each supplied split; they do not establish subject separation, correct cross-fold membership or inference independence. Caller must enforce those properties for the intended application.",
+        "Serial current-platform execution used one numerical thread. Runtime callers must separately bound thread pools and reserve the shared worker budget. No large-input memory, GPU or clean-install qualification."
+      ]
+    }
+  ],
+  "reuse_decision": "Reusable for other weakly supervised audio-event applications when callers supply faithful mono 32000 Hz waveforms, consistent class-index meaning across 264 output slots, meaningful fold populations and appropriate noise banks. No bird taxonomy or domain meaning is inferred. Preparation can be selected independently; execution is the complete source-specific ensemble recipe. STFT, neural training, augmentation and voting helpers are not newly registered independent primitives here; their interfaces and fixed source assumptions would require separate qualification before independent selection. Cross-domain applicability is a contract possibility, not demonstrated predictive effectiveness.",
+  "limitations": [
+    "Automated Tier 3 synthetic execution only; no human Tier 1 review, historical training parity or independent predictive accuracy.",
+    "Fixed 32000 Hz mono waveform representation, 264 output slots, full DenseNet121 sound-event heads, fourfold/fivefold ensemble and fixed threshold/voting policy remain explicit recipe choices.",
+    "All thirteen models and seventeen phases execute. Four mixup members use model-only continuation with fresh optimizer state. Epoch and batch controls are caller supplied; qualification uses two epochs per phase and explicit random initialization.",
+    "Pinned historical noise augmentation, class-balanced sampling with replacement, training drop-last, two validation clips, two-epoch validation cadence and five score-ranked checkpoints are retained. Best score/latest retained tie replaces hand-picked historical checkpoints.",
+    "Ten evaluation copies are averaged despite evaluation disabling spectrogram masking. Primary-label dropout loss remains stochastic during validation for the configured members. No probability calibration is claimed.",
+    "External backbone training provenance is not certified by shape checks. Noise and audio inputs stay runtime values; linked notebook code is comparison evidence only and is not copied into runtime.",
+    "Fold separation checks record keys within each supplied split; they do not establish subject separation, correct cross-fold membership or inference independence. Caller must enforce those properties for the intended application.",
+    "Serial current-platform execution used one numerical thread. Runtime callers must separately bound thread pools and reserve the shared worker budget. No large-input memory, GPU or clean-install qualification."
+  ],
+  "derivative": {
+    "plain_description": "Check audio and fold populations, train the full ensemble, and combine model votes into interval and whole-record decisions.",
+    "ports": [
+      {
+        "direction": "input",
+        "name": "payload",
+        "type_desc": "dict",
+        "ordinal": 0,
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Exact version-1 dict containing populations, background and short-noise banks, inference, epochs, batch_size, seed and initialization. Exactly four fourfold and five fivefold training/validation splits; unique nonempty record keys within each population and disjoint keys within each split. Finite nonempty mono arrays explicitly sampled at 32000 Hz; primary and distinct secondary class indices in 0..263. Training requires a primary label; empty-label validation records are permitted. Nonempty noise banks, each waveform at least 3200 samples with finite positive float32 RMS. Inference contains only sample_rate and waveform. At least two epochs, positive even batch size at least two with a complete training batch per fold, bounded integer seed, and explicit synthetic or provisioned_backbone initialization. Caller owns consistent units, label meaning, fold membership and population independence; no audio decoding, resampling or automatic duplicate detection."
+      },
+      {
+        "direction": "output",
+        "name": "result",
+        "type_desc": "dict",
+        "ordinal": 0,
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Finite Python dict containing models_completed=13, seventeen training-phase summaries including four continuations, integer window_votes and boolean window_decisions for each five-second interval and 264 output slots, plus 264 whole_record_decisions. Clip and frame threshold is fixed at 0.3; four of thirteen model votes select a window. Whole-record decisions require four already-selected windows. Final partial windows are allowed; padding and endpoints are excluded by half-open intervals. Singleton and empty events are supported. Training summaries report selected epoch and validation score; they are not unbiased performance estimates or calibrated probabilities. No named submission formatting or persisted reusable model is returned."
+      }
+    ]
+  },
+  "evidence_commit": "c1d23e39",
+  "readiness_sha256": "4c0c4f4194bebe66196800cf5722b1971ec1ec9970b9ec82d2549d6f150ee6cf",
+  "execution_sha256": "29c98983f3517d4f407492cae5412be5e2d9a4056b6b6ef7a5fc14a15f1bbcc3",
+  "reviewer_sha256": "2d0361b54f1b35b24eab9c158fb27da1445c79be7d6053e33029e3d0440fad96",
+  "remaining": [
+    "Transactional metadata reconciliation and both native eligibility checks.",
+    "Original source-scope review, corrected stored execution, publication and served selection."
+  ]
+}
