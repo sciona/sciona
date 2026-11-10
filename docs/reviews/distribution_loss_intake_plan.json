@@ -1,0 +1,156 @@
+{
+  "format": "distribution-loss-intake-plan.v1",
+  "passed": true,
+  "applied": false,
+  "approved": false,
+  "catalog_mutations": 0,
+  "owner": {
+    "owner_id": "33ed07a2-1bea-5b17-8b71-d6d0e590fdd9",
+    "source_repo_id": "27b787a0-27ed-4760-92b7-ad8e8b4b815c"
+  },
+  "new_providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.tensorflow_distribution_losses.clipped_laplace_score",
+      "atom_id": "c645c2e2-5333-5658-ad96-b0ffff1282dd",
+      "version_id": "45f3836f-f6d2-503d-b289-41a0a2df538a",
+      "content_hash": "b38663fb11890ce1968df7d1250b61937fcf7d144a0ad2ec2e59fb160b574534",
+      "provider_sha256": "6d5e93c25ced4e359c38d44273612a0d6a92105d033dfb413a0b4e88692cd658",
+      "semver": "0.0.0+local.b38663fb1189",
+      "fingerprint": "3bd1be064faff0aa390eab3e74433e3c8349fe3ee9859d9fd614525b0e253572",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.tensorflow_distribution_losses.clipped_laplace_score",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.tensorflow_distribution_losses",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.tensorflow_distribution_losses",
+        "import_module": "sciona.atoms.ml.tensorflow_distribution_losses",
+        "source_symbol": "clipped_laplace_score",
+        "description": "Mean clipped Laplace-style score for low/point/high prediction columns. Scale is high minus low, floored by the positive caller-supplied minimum. Absolute point error is capped by a positive maximum in the same target units. Negative/crossed raw spreads are accepted and encounter the scale floor. This scoring policy alone is not a probabilistic calibration guarantee.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "targets",
+          "type_desc": "TensorFlow float32 Tensor or convertible float32 array",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "predictions",
+          "type_desc": "TensorFlow float32 Tensor or Variable or convertible float32 array",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "minimum_scale",
+          "type_desc": "float or int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Floor on high-minus-low spread, in target units. Crossed or negative spreads encounter this floor."
+        },
+        {
+          "direction": "input",
+          "ordinal": 3,
+          "name": "maximum_error",
+          "type_desc": "float or int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Positive finite Python scalar, excluding bool, remaining finite and positive in float32. Cap on absolute point error, in target units. No unit conversion is performed."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "TensorFlow float32 scalar Tensor",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Scalar float32 Tensor: row mean of sqrt(2)*min(abs(target-point),cap)/max(high-low,floor) + log(sqrt(2)*max(high-low,floor)). Numeric score depends on the caller unit convention; the logarithm uses the numerical scale in those units. Piecewise differentiable, with TensorFlow subgradients at boundaries. No calibration guarantee. Concrete provisioned TensorFlow execution only; abstract witness rejects. No training, optimizer or state mutation. Extreme finite float32 inputs can overflow intermediate arithmetic; callers must check loss and gradients before updates. TensorFlow tensors and gradient tapes are in-process objects; JSON/HTTP serialization is not qualified."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.tensorflow_distribution_losses.mean_pinball",
+      "atom_id": "21a7030b-209c-5642-a812-b8a766e4b9cb",
+      "version_id": "f0adeb59-1d53-5a40-ada9-7fa7df402956",
+      "content_hash": "1aab2d391c4ef377ca1383094fb7744f5935ead635d232c0d8a2c5972cf9c21b",
+      "provider_sha256": "6d5e93c25ced4e359c38d44273612a0d6a92105d033dfb413a0b4e88692cd658",
+      "semver": "0.0.0+local.1aab2d391c4e",
+      "fingerprint": "11d102286e817465496719d2b414408e44a097a48a2f24c46f9c8e17a299cd7d",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.tensorflow_distribution_losses.mean_pinball",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.tensorflow_distribution_losses",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.tensorflow_distribution_losses",
+        "import_module": "sciona.atoms.ml.tensorflow_distribution_losses",
+        "source_symbol": "mean_pinball",
+        "description": "Mean pinball loss over rows and explicit ordered prediction columns. Quantiles must be finite and strictly between zero and one. The objective does not enforce ordering of predictions or establish calibrated interval coverage.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "targets",
+          "type_desc": "TensorFlow float32 Tensor or convertible float32 array",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite nonempty shape (N,1), aligned row-for-row with predictions. Explicit float32 required; no automatic float64 conversion. Caller supplies target units, row identity and observation availability."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "predictions",
+          "type_desc": "TensorFlow float32 Tensor or Variable or convertible float32 array",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite shape (N,Q) for pinball or (N,3) for clipped score. Same units as targets. Pinball columns align with quantiles; score columns are low, point, high. Crossing is permitted. Tensor/Variable conversion preserves the TensorFlow gradient path when used within the caller gradient tape."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "quantiles",
+          "type_desc": "float32-convertible vector",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Shape (Q,), Q>0; every quantile strictly between zero and one after float32 conversion. Explicit column correspondence; sorting and uniqueness are not required or performed. Quantiles are dimensionless caller policy."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "TensorFlow float32 scalar Tensor",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Scalar float32 Tensor: arithmetic mean over all N*Q pinball terms, in target units. Differentiable almost everywhere; TensorFlow defines subgradients at ties. No calibration or prediction ordering guarantee. Concrete provisioned TensorFlow execution only; abstract witness rejects. No training, optimizer or state mutation. Extreme finite float32 inputs can overflow intermediate arithmetic; callers must check loss and gradients before updates. TensorFlow tensors and gradient tapes are in-process objects; JSON/HTTP serialization is not qualified."
+        }
+      ]
+    }
+  ],
+  "registered_provider_dependencies": [],
+  "execution_evidence_commit": "98113163",
+  "execution_evidence_sha256": "e14d40a6e8a701129bf110bf6bcc428c6d8b8d42b6d80c5e80704c91c33f0e01",
+  "provider_revision": "1f5da19",
+  "planner_sha256": "78e73672b3143aa4fbc66e4f0c96e5045abe7d516d76c9057ae1d32a876bee75",
+  "limitations": [
+    "Draft plan only; transaction, semantic review and publication gates remain required.",
+    "TensorFlow is a software dependency, not a registered atom dependency.",
+    "The source-qualified loss pair does not qualify the complete OSIC workflow or empirical transfer."
+  ]
+}
