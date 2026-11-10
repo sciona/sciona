@@ -46,9 +46,17 @@ def validate():
     cases = []
     for domain, candidate_count in [('synthetic-instrument-batches', 10000), ('synthetic-production-batches', 64)]:
         labels = list(range(17))
-        groups = np.repeat(labels, 8)
-        training = rng.normal(size=(len(groups), 4)) + groups[:, None]/10
-        reference = rng.normal(.8, 1.2, size=(96, 4))
+        if domain == 'synthetic-instrument-batches':
+            groups = np.repeat(labels, 8)
+            training = rng.normal(size=(len(groups), 4)) + groups[:, None]/10
+            reference = rng.normal(.8, 1.2, size=(96, 4))
+            construction = 'Continuous synthetic measurements with batch-dependent location shifts and equal batch sizes.'
+        else:
+            groups = np.repeat(labels, np.arange(1, 18))
+            rates = 1 + groups[:, None]/4 + np.arange(4)[None, :]
+            training = rng.poisson(rates).astype(np.float64)
+            reference = rng.poisson([2., 4., 5., 7.], size=(96, 4)).astype(np.float64)
+            construction = 'Discrete synthetic counts with ties, unequal batch sizes and feature-specific rates.'
         candidates = np.zeros((candidate_count, len(labels)), dtype=bool)
         for row in candidates:
             row[rng.choice(len(labels), 10, replace=False)] = True
@@ -66,7 +74,7 @@ def validate():
         best = int(np.argmin(scores))
         if oracle_scores[best] > oracle_scores.min()+1e-12:
             raise ValueError('Selected subset is not an oracle minimizer')
-        cases.append(dict(synthetic_domain=domain, candidates=candidate_count, groups=17,
+        cases.append(dict(synthetic_domain=domain, construction=construction, candidates=candidate_count, groups=17,
             selected_groups_per_candidate=10, feature_count=4, distances_checked=int(actual.size),
             maximum_absolute_error=float(np.max(np.abs(actual-expected))), selected_oracle_minimizer=True))
     if before != {str(p.relative_to(ROOT.parent)): sha(p) for p in paths}:
