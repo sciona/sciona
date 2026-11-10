@@ -32,6 +32,30 @@
     {
       "path": "mercari/regression_clf.py",
       "sha256": "bfcf3c64486544eba4b2a7f95b07a98b6fe9aeaad6f72ae11ad7e7575c1645cd"
+    },
+    {
+      "path": "mercari/main_helpers.py",
+      "sha256": "743f10307d09b4db2336d9c6dc60713b1155967f504f990c74609df8a6eef069"
+    },
+    {
+      "path": "mercari/main_mx.py",
+      "sha256": "9ce2eafebb93b85aff3fbcd60431cec00d7c31735e872f7e8b7181b1c92650b5"
+    },
+    {
+      "path": "mercari/mx_sparse.py",
+      "sha256": "9eba58eacbaaa3bdd0c8889c793faff612e2f49f5aab1eb6243bd54a2a9808e3"
+    },
+    {
+      "path": "build_script.py",
+      "sha256": "62b3182d9382ee8d6f9551ddaae9496f6689c359a132e727b08f49a4b341bd57"
+    },
+    {
+      "path": "script_template.tmpl",
+      "sha256": "98d61fd5b8cbc48497d1ad533552c8b5ff14e93516436ce17a5edc0b6e02ca23"
+    },
+    {
+      "path": "Dockerfile",
+      "sha256": "f9cc05aeea9463b15b254a57026c74071df2166e7ac258c76c0638206b0318a0"
     }
   ],
   "license": {
@@ -40,7 +64,7 @@
     "scope": "Repository LICENSE at pinned commit; downstream dependencies and any external artifacts need separate review."
   },
   "findings": [
-    "Pinned TensorFlow entry point constructs twelve sparse neural models in three groups, using Huber-regression and classification-based regression variants.",
+    "Pinned TensorFlow entry point constructs twelve sparse neural models in three groups, using classes named RegressionHuber and RegressionClf; static method-dispatch review below identifies an effective-loss mismatch.",
     "README records a twelve-component affine blend with an intercept. The intake FM-FTRL/CNN/Ridge blend is not established by this source.",
     "The short golf demonstration is distinct from the full winning implementation and must not replace it."
   ],
@@ -59,5 +83,39 @@
     "Source discovery and preliminary code inspection only; no runtime or source-parity qualification.",
     "No real records, fonts, images or pretrained artifacts were fetched; only selected software text files were retained privately.",
     "Historical winner performance and cross-domain accuracy are not claimed."
-  ]
+  ],
+  "model_scope_followup": {
+    "catalog_mutations": 0,
+    "source_only_static_review": true,
+    "declared_model_counts": {
+      "mercari/main_tf.py": {
+        "define_models_1": 4,
+        "define_models_2": 4,
+        "define_models_3": 4
+      },
+      "mercari/main_mx.py": {
+        "define_models_1": 4,
+        "define_models_2": 4,
+        "define_models_3": 4
+      }
+    },
+    "tensorflow_dispatch": {
+      "caller": "Regression.fit -> self._build_model",
+      "subclass_defined_method": "RegressionHuber.build_model",
+      "inherited_builder": "Regression._build_model",
+      "inherited_objective": "mean_squared_error plus configured first-layer regularization",
+      "conclusion": "The Huber-named TensorFlow subclass does not override the builder called by fit. A port must not silently replace this with Huber loss while claiming parity.",
+      "checks": "AST confirms caller method name, missing subclass override and inherited mean_squared_error call; no historical TensorFlow runtime was executed."
+    },
+    "mxnet_scope": "Entry point declares twelve models, but a source comment identifies four more same models in the best submission. Exact extra-model seeds and winner artifact identity remain unqualified.",
+    "blend": "Shared merge helper fits positive-coefficient Lasso with alpha0.0001, random selection, random_state9999, max_iter1000 and an intercept in log1p response space, then applies expm1. README coefficients are reported fitted values, not an interchangeable plain probability average.",
+    "branch_differences": [
+      "TensorFlow and MXNet use different hidden widths, regularization and learning-rate decay; they are not interchangeable backends without parity evidence."
+    ],
+    "next": [
+      "Resolve the target winning backend and additional-model inventory before declaring complete model coverage.",
+      "Compare sparse preprocessing, response-bin semantics, training updates and output transforms against pinned source.",
+      "Preserve source bugs and reconstruction corrections explicitly; numerical parity remains untested."
+    ]
+  }
 }
