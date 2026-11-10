@@ -1,0 +1,207 @@
+{
+  "format": "group-distribution-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "providers": [
+    {
+      "artifact_id": "0e5093cd-f0c3-5d53-85e8-d47331ff2af6",
+      "fqdn": "sciona.atoms.ml.group_distribution_matching.group_subset_ks",
+      "version_id": "eb215f19-48ff-5d2c-ac96-24b3ed7a012f",
+      "content_hash": "07b44257575b0ea08cd5e9cd5659a1ccc2fbfa385215a433b52e374ce5e8532f",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "training",
+          "type_desc": "np.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite real rows-by-features NumPy matrix. Caller provides common feature ordering, units and preprocessing with reference. Converted to float64; large integer precision may be lost."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "reference",
+          "type_desc": "np.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite real rows-by-features NumPy matrix with training width and identical feature coordinates. Reference population must be available when selection occurs; query-driven selection is transductive."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "row_groups",
+          "type_desc": "np.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "One integer group identifier per training row. Exact observed labels must equal group_labels. Whole groups are included without balancing; larger groups have greater empirical mass."
+        },
+        {
+          "direction": "input",
+          "ordinal": 3,
+          "name": "candidates",
+          "type_desc": "np.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty boolean candidates-by-groups mask with columns in group_labels order. Every row selects at least one whole group. Duplicate candidate rows allowed and preserved. No subset generation occurs."
+        },
+        {
+          "direction": "input",
+          "ordinal": 4,
+          "name": "group_labels",
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty unique Python integer list defining candidate-mask column order; must exactly cover observed row_groups values."
+        },
+        {
+          "direction": "input",
+          "ordinal": 5,
+          "name": "feature_columns",
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Unique nonblank string list defining identical ordered features in training and reference; length equals both matrix widths. Caller must establish alignment."
+        },
+        {
+          "direction": "input",
+          "ordinal": 6,
+          "name": "feature_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonblank shared coordinate identifier binding upstream feature semantics and preprocessing. No inference, conversion or feature selection occurs."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "np.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Independent float64 candidates-by-features matrix of two-sided marginal empirical KS distances in [0,1]. Uses registered compute_ks_agreement with equal row weights. No p-values, averaging, candidate selection or tie-breaking. No guarantee of joint agreement or predictive accuracy. Witness checks shape and dimension compatibility; runtime also validates finite values and complete group membership."
+        }
+      ],
+      "operation": "Compute per-feature two-sided empirical KS distances for each explicitly supplied whole-group subset against a shared reference.",
+      "plain_description": "Compare each chosen collection of groups with a reference population, one feature at a time.",
+      "validity_bounds": "Nonempty finite real rows-by-features NumPy matrix. Caller provides common feature ordering, units and preprocessing with reference. Converted to float64; large integer precision may be lost. Nonempty finite real rows-by-features NumPy matrix with training width and identical feature coordinates. Reference population must be available when selection occurs; query-driven selection is transductive. One integer group identifier per training row. Exact observed labels must equal group_labels. Whole groups are included without balancing; larger groups have greater empirical mass. Nonempty boolean candidates-by-groups mask with columns in group_labels order. Every row selects at least one whole group. Duplicate candidate rows allowed and preserved. No subset generation occurs. Nonempty unique Python integer list defining candidate-mask column order; must exactly cover observed row_groups values. Unique nonblank string list defining identical ordered features in training and reference; length equals both matrix widths. Caller must establish alignment. Nonblank shared coordinate identifier binding upstream feature semantics and preprocessing. No inference, conversion or feature selection occurs. Independent float64 candidates-by-features matrix of two-sided marginal empirical KS distances in [0,1]. Uses registered compute_ks_agreement with equal row weights. No p-values, averaging, candidate selection or tie-breaking. No guarantee of joint agreement or predictive accuracy. Witness checks shape and dimension compatibility; runtime also validates finite values and complete group membership.",
+      "reuse": "Reusable for continuous measurement batches and discrete production counts, with explicit feature alignment and group membership. Source-domain screening and model-selection policies remain separate.",
+      "registered_provider_dependencies": [
+        {
+          "artifact_id": "74033526-0610-476c-93a3-ded75c62a6a0",
+          "fqdn": "sciona.atoms.ml.constrained_ml.decorrelation.compute_ks_agreement",
+          "version_id": "e9524a66-a716-52a1-951a-103af97a97e6",
+          "content_hash": "63e8b77a6266089462e50d7f70140bcdc5ef87c5cb393ad6d4b89be625dfa73f",
+          "trust_tier": 3
+        }
+      ]
+    }
+  ],
+  "tests": {
+    "tests": 11,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "software_sha256": {
+    "provider/test_group_distribution_matching_provider.py": "f92c277c246f480d3388f0d9134abdc1e1255b117d1158ec0f75ec691ddf4c2d",
+    "scripts/review_group_distribution_semantics.py": "9a5c7cb0c29c0e82fe09105702293d63caef7fd3f073aa5c8879a2c36f6f0122",
+    "scripts/import_group_distribution_drafts.py": "454a044e6d905c3d579e1fd230e8441178b8c65e1366c0c0ac51e3f8baf26af6",
+    "scripts/plan_group_distribution_intake.py": "02fb83edad74e7a55a37b9166a0e37a85a91813061a731608116551ded3fce0e",
+    "scripts/validate_lanl_group_distribution_matching.py": "7149149d524875a2a6e8fd74427af7a31dadd284f5477b114ea59b30ddbaaf57",
+    "sciona.atoms.ml.group_distribution_matching": "a1cdce58faf3a2c7524fe7bc7242784a6849b42c0b0ad70c2378266b159a311d",
+    "sciona.atoms.ml.constrained_ml.decorrelation.atoms": "933f788397cf84543c2a7fb33889e8f070bdb88b1943811cb45efe9bf9a09639",
+    "sciona.atoms.ml.constrained_ml.decorrelation.witnesses": "e8c5da0d7367b46afd77a0fd48a91af301453c219fe57dc5857041d32a2fceba",
+    "sciona.ghost.registry": "793723a75d07a88eed39f59d8d4dc327c54adbf75db7a03003516a6f74c81b51",
+    "sciona.ghost.abstract": "9574bed61c8292b2eaf6ff054bcf46504b07e679c521a19d2440396c3ea63670",
+    "sciona.ghost.dimensions": "61be1958aa50725f3c6598d5b5447a806d2549698d5ce3ec243d467816754b7e"
+  },
+  "installed_packages": {
+    "annotated-types": {
+      "version": "0.7.0",
+      "hashed_files_verified": 7,
+      "active_requirements": []
+    },
+    "asttokens": {
+      "version": "2.4.1",
+      "hashed_files_verified": 13,
+      "active_requirements": [
+        "six>=1.12.0"
+      ]
+    },
+    "icontract": {
+      "version": "2.7.3",
+      "hashed_files_verified": 16,
+      "active_requirements": [
+        "asttokens<3,>=2",
+        "typing_extensions"
+      ]
+    },
+    "numpy": {
+      "version": "2.2.6",
+      "hashed_files_verified": 876,
+      "active_requirements": []
+    },
+    "pydantic": {
+      "version": "2.12.5",
+      "hashed_files_verified": 111,
+      "active_requirements": [
+        "annotated-types>=0.6.0",
+        "pydantic-core==2.41.5",
+        "typing-extensions>=4.14.1",
+        "typing-inspection>=0.4.2"
+      ]
+    },
+    "pydantic-core": {
+      "version": "2.41.5",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.14.1"
+      ]
+    },
+    "scipy": {
+      "version": "1.17.1",
+      "hashed_files_verified": 1423,
+      "active_requirements": [
+        "numpy<2.7,>=1.26.4"
+      ]
+    },
+    "six": {
+      "version": "1.17.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "typing-extensions": {
+      "version": "4.16.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "typing-inspection": {
+      "version": "0.4.2",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.12.0"
+      ]
+    }
+  },
+  "intake_plan_sha256": "5aebb7ca8d17df19f416253f179790faab84abf1b60d67a19df8cf75af88d326",
+  "connected_execution_commit": "40df3de1",
+  "connected_execution_sha256": "4c748af69e88c9f967d1de482e34984beb71b2df5383b7e045e8f3c264e03d52",
+  "resource_policy": {
+    "native_threads": 1,
+    "test_workers": 1
+  },
+  "limitations": [
+    "Automated Tier 3 only; no human Tier 1 certification or Tier 2 usage qualification.",
+    "Caller supplies aligned features and coordinates, exact group labels, and explicit candidate masks.",
+    "Equal row weights preserve group size effects. No p-values, feature screening, subset generation, averaging or selection policy.",
+    "Marginal agreement does not establish joint agreement, predictive accuracy, or valid causal/temporal validation.",
+    "Query-driven reference selection is transductive and requires the reference population at decision time.",
+    "Synthetic continuous and discrete examples qualify reusable scoring, not the complete historical competition workflow.",
+    "Installed RECORD hashes and active constraints are checked; independent package provenance and other platforms are not certified."
+  ]
+}
