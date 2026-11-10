@@ -1,0 +1,60 @@
+{
+  "format": "osic-quantile-features-validation.v1",
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "source_revision": "cd6dfa56c012e3c0eb81ed15534f436b3ba16d19",
+  "normalized_source_cell_sha256": {
+    "25": "3030cf0c7c9f0d8cfa1495cafcff63b46af4cdd7d5b0ace67d1ee8bcd5af1745",
+    "26": "6697bebc904c1362b8ae7133bb8c08d945b6e1308bfbfb4dea9bc1f26022031c",
+    "27": "eb6ead161d5798a1e890524697e1f7c6b0bcba25a6789392d7cd5cac0c013c9b",
+    "28": "52ad20e6247bd5e706aa48e236968b7153527833dfe235309e796d96437dc983",
+    "29": "f31938bb6637fe9e46e692e60a36824fae56e0211969664b8ed5738a394958fc",
+    "30": "819477c019a40feaf5432c98f81e3221d2cd9c5581862a7eeded8925841e9050"
+  },
+  "cases": [
+    {
+      "case": "original_order",
+      "exact_source_matrices": true,
+      "exact_targets": true,
+      "ordered_rows_preserved": true,
+      "feature_count": 9
+    },
+    {
+      "case": "reordered_training",
+      "exact_source_matrices": true,
+      "exact_targets": true,
+      "ordered_rows_preserved": true,
+      "feature_count": 9
+    }
+  ],
+  "rejected_contract_cases": [
+    "implicit_transduction",
+    "duplicate_baseline",
+    "missing_query_baseline",
+    "missing_numeric",
+    "constant_scaling_range",
+    "category_label_collision"
+  ],
+  "duplicate_training_rows_removed": 2,
+  "query_range_changes_training_features": true,
+  "observed_only_baseline_time": true,
+  "first_matching_baseline_target": true,
+  "inputs_unchanged": true,
+  "software_sha256": {
+    "scripts/validate_osic_quantile_features.py": "9d42e5baa3f8d3bf5e53180368af8e32e6fc9b3ecfc7f02ead4b0c83723a97c6",
+    "sciona/osic_quantile_features.py": "7db2c03ec342165e8a93325dd21a0746575adde4363f325eea6bed8406553d2b"
+  },
+  "runtime": {
+    "numpy": "2.2.6",
+    "pandas": "2.3.3"
+  },
+  "limitations": [
+    "Source cells for baseline/category/scaling computation execute on synthetic preassembled tables.",
+    "Outer deduplication and metadata join are tested by invariants, not by executing source file-loading cells.",
+    "Complete mapped fields, one baseline per query entity, finite nondegenerate ranges and noncolliding category names are required.",
+    "Query population affects training features; this recipe is unsuitable when queries are unavailable during preparation.",
+    "Domain mapping, observation-availability proof, image branch, full graph and catalog promotion remain pending."
+  ]
+}
