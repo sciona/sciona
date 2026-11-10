@@ -7,7 +7,7 @@ from scripts.plasticc_publication_evidence import strict_equal
 
 RESOURCE_POLICY=dict(serial_training=True,torch_threads=1,interop_threads=1,native_threads=1,
     opencv_threads=1,opencv_opencl=False,data_loader_workers=0)
-REQUIRED_SOFTWARE={'scripts/validate_hubmap_current_graph.py','sciona/hubmap_lifecycle.py',
+REQUIRED_SOFTWARE={'scripts/validate_hubmap_current_graph.py','scripts/hubmap_synthetic_rasters.py','sciona/hubmap_lifecycle.py',
     'sciona/hubmap_network.py','sciona/hubmap_encoder.py','sciona/hubmap_graph_runtime.py',
     'sciona/hubmap_retraining.py','sciona/hubmap_raw_inference.py',
     'sciona/services/execution_graph_codec.py','sciona/visualizer/runner.py',
@@ -28,10 +28,10 @@ def validate_report(report):
         raise ValueError('Eight fold executions required')
     for row,(stage,fold) in zip(folds,wanted):
         if not isinstance(row,dict):raise ValueError('Fold evidence must be a mapping')
-        for key,value in dict(stage=stage,fold=fold,epochs=[1,2],selected_checkpoint='best_loss').items():
+        for key,value in dict(stage=stage,fold=fold,epochs=[1,2,3,4],selected_checkpoint='best_loss').items():
             if not strict_equal(row.get(key),value):raise ValueError('Exact ordered fold/epoch/checkpoint required')
         for key in ('optimizer_updates','validation_examples'):
-            if type(row.get(key)) is not int or row[key]<2:raise ValueError('Connected training and validation required')
+            if type(row.get(key)) is not int or row[key]<4:raise ValueError('Connected training and validation required')
     for key,minimum in [('pseudo_foreground_pixels',1),('final_foreground_pixels',0)]:
         if type(report.get(key)) is not int or not minimum<=report[key]<=600*600:
             raise ValueError('Valid aggregate synthetic mask counts required')

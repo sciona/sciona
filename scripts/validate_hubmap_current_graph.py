@@ -12,6 +12,7 @@ import numpy as np
 import torch
 from threadpoolctl import threadpool_limits
 from scripts.audit_hubmap_original_readiness import ROOT, sha
+from scripts.hubmap_synthetic_rasters import labeled_raster
 from scripts import review_video_numeric_runtime as runtime_checker
 from sciona.hubmap_encoder import build_encoder
 from sciona.hubmap_lifecycle import FoldStage
@@ -40,7 +41,7 @@ def prerequisites():
 
 def main():
     baseline=prerequisites()
-    paths=set(baseline['software_sha256'])|{'scripts/validate_hubmap_current_graph.py',
+    paths=set(baseline['software_sha256'])|{'scripts/validate_hubmap_current_graph.py','scripts/hubmap_synthetic_rasters.py',
         'sciona/services/execution_graph_codec.py','sciona/visualizer/runner.py'}
     hashes={p:sha(ROOT/p) for p in sorted(paths)}
     torch.set_num_threads(1);torch.set_num_interop_threads(1)
@@ -52,17 +53,16 @@ def main():
     slides=[];groups=[]
     for fold in range(4):
         for foreground in (False,True):
-            image=np.random.default_rng(410+fold*2+int(foreground)).integers(0,256,(600,600,3),dtype=np.uint8)
-            mask=np.full((600,600),int(foreground),dtype=np.uint8)
+            image,mask=labeled_raster(410+fold*2+int(foreground),foreground)
             slides.append((image,mask));groups.append('synthetic-group-'+str(fold))
     def stages(offset):
         return [FoldStage(state,offset+fold,['synthetic-group-'+str(fold)],
-            dict(start_epoch=1,end_epoch=2,maximum_bin=4,training_batch_size=2,
+            dict(start_epoch=1,end_epoch=4,maximum_bin=4,training_batch_size=2,
                  validation_batch_size=2,input_side=320,python_rng=random.Random(offset+fold),
                  numpy_rng=np.random.RandomState(offset+fold+1),
                  torch_generator=torch.Generator().manual_seed(offset+fold+2))) for fold in range(4)]
-    pseudo=np.random.default_rng(479).integers(0,256,(600,600,3),dtype=np.uint8)
-    final=np.random.default_rng(483).integers(0,256,(600,600,3),dtype=np.uint8)
+    pseudo,_=labeled_raster(479,True)
+    final,_=labeled_raster(483,True)
     inputs=dict(slides=slides,groups=groups,pseudo_sources=[[pseudo]],final_images=[final],
         initial_stages=stages(0),retraining_stages=stages(100),
         initial_selectors=[(i,'best_loss') for i in range(4)],final_selectors=[(i,'best_loss') for i in range(4)],
@@ -81,6 +81,7 @@ def main():
             routing['pseudo']=value
             counts['pseudo_foreground_pixels']=sum(int(mask.sum()) for source in value for _,mask in source)
             print('Generated pseudo foreground pixels: '+str(counts['pseudo_foreground_pixels']),flush=True)
+            if counts['pseudo_foreground_pixels']==0:raise ValueError('Generated pseudo masks are empty; qualification stops before retraining')
         if (node,name)==('retraining','in_pseudo_labeled_sources'):
             if value is not routing['pseudo']:raise ValueError('Pseudo handoff identity differs')
             routing['verified']=True
@@ -102,9 +103,9 @@ def main():
     for stage in ('initial_training','retraining'):
         if len(metrics[stage])!=4:raise ValueError('Four trained folds required')
         for fold,epochs in enumerate(metrics[stage]):
-            if [e['epoch'] for e in epochs]!=[1,2]:raise ValueError('Two consecutive initial epochs required')
+            if [e['epoch'] for e in epochs]!=[1,2,3,4]:raise ValueError('Four consecutive initial epochs required')
             if any(e['training']['examples']<2 or e['validation']['examples']<1 for e in epochs):raise ValueError('Connected training and validation required')
-            summaries.append(dict(stage=stage,fold=fold,epochs=[1,2],
+            summaries.append(dict(stage=stage,fold=fold,epochs=[1,2,3,4],
                                   optimizer_updates=sum(e['training']['examples']//2 for e in epochs),
                                   validation_examples=sum(e['validation']['examples'] for e in epochs),selected_checkpoint='best_loss'))
     routing.clear();gc.collect()
@@ -117,9 +118,10 @@ def main():
         resource_policy=dict(serial_training=True,torch_threads=1,interop_threads=1,native_threads=1,
                              opencv_threads=1,opencv_opencl=False,data_loader_workers=0),
         software_sha256=hashes,prerequisite_sha256=sha(ROOT/'docs/reviews/hubmap_current_contracts.json'),
-        limits=['Synthetic random encoder state, four initial and four fresh retraining folds, two consecutive epochs from epoch1 per fold with batch2. No full historical schedule or predictive accuracy claim.',
+        limits=['Synthetic random encoder state, four initial and four fresh retraining folds, four consecutive epochs from epoch1 per fold with batch2. No full historical schedule or predictive accuracy claim.',
                 'Source-sized network and tile geometry with synthetic rasters; no whole-slide codec, GPU or unbounded-memory qualification.',
                 'Four best-loss checkpoints per stage are an explicit executable selection; historical final notebook checkpoint provenance remains unverified in this current run.',
+                'Synthetic foreground is encoded by raster intensity; no real data or accuracy evaluation is involved.',
                 'Existing source-comparison evidence is retained separately; this run is not a fresh independent-source parity comparison.',
                 'Corrected stored original execution and publication remain separate requirements.'])
     (ROOT/'docs/reviews/hubmap_current_graph.json').write_text(json.dumps(report,indent=2)+'\n')

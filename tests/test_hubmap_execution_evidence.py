@@ -10,8 +10,8 @@ def report():
         source_geometry=dict(tile_size=1024,input_side=320,pad_size=256),checkpoint_models_per_stage=4,
         generated_nonempty_pseudo_handoff=True,exact_pseudo_state_routing=True,
         resource_policy=deepcopy(evidence.RESOURCE_POLICY),
-        folds=[dict(stage=stage,fold=fold,epochs=[1,2],selected_checkpoint='best_loss',optimizer_updates=2,
-                    validation_examples=2) for stage in ('initial_training','retraining') for fold in range(4)],
+        folds=[dict(stage=stage,fold=fold,epochs=[1,2,3,4],selected_checkpoint='best_loss',optimizer_updates=4,
+                    validation_examples=4) for stage in ('initial_training','retraining') for fold in range(4)],
         pseudo_foreground_pixels=10,final_foreground_pixels=0,
         software_sha256={p:'a'*64 for p in evidence.REQUIRED_SOFTWARE},
         graph_sha256='b'*64,prerequisite_sha256='c'*64,limits=['Synthetic shortened schedule only.'])
