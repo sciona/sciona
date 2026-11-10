@@ -1,0 +1,160 @@
+{
+  "format": "affine-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "providers": [
+    {
+      "artifact_id": "c5a57e38-9d64-526e-8f6c-953fb10545f1",
+      "fqdn": "sciona.atoms.numerical.statistics.affine_fit.affine_least_squares",
+      "version_id": "a9cae503-875f-5dec-b82b-a113c8aec6cf",
+      "content_hash": "115433af2fa42aa4454253a18682acef7c1447142261590539cbef9da6da5896",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "coordinates",
+          "type_desc": "np.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty finite real vector, at most 64-bit elements, aligned row-for-row with values. No sorting or centering. Caller establishes coordinate units and observation availability. Converted through an uncentered float64 [coordinate,1] design; large integers may lose precision."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "values",
+          "type_desc": "np.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Finite real vector with exactly the coordinate shape, at most 64-bit elements. Caller establishes value units and row alignment. No weighting, imputation or availability inference."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "rcond",
+          "type_desc": "float | None",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Required explicit None, -1 or finite ratio in [0,1); booleans rejected. None uses installed NumPy size-dependent cutoff, -1 machine precision, otherwise relative singular-value threshold. Changes rank and minimum-norm coefficients; not regularization."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Dictionary with float64 coefficients of shape (2,) ordered slope/intercept, integer rank, float64 singular_values of shape (min(N,2),), and float64 residual_sums_of_squares shape (1,) only when N>2 and rank=2, otherwise (0,). Empty residuals do not imply zero error. Rank below two means coefficients are not uniquely identifiable; the minimum-norm solution is retained. Slope units are value/coordinate; intercept uses value units. Inputs unchanged. Runtime LAPACK dependent. Concrete provisioned execution only; abstract witness intentionally rejects."
+        }
+      ],
+      "operation": "Fit uncentered affine least squares with explicit singular-value rank cutoff and minimum-norm diagnostics.",
+      "plain_description": "Fit a straight line to paired numbers and report whether its slope and starting value can be determined uniquely.",
+      "validity_bounds": "Nonempty finite real vector, at most 64-bit elements, aligned row-for-row with values. No sorting or centering. Caller establishes coordinate units and observation availability. Converted through an uncentered float64 [coordinate,1] design; large integers may lose precision. Finite real vector with exactly the coordinate shape, at most 64-bit elements. Caller establishes value units and row alignment. No weighting, imputation or availability inference. Required explicit None, -1 or finite ratio in [0,1); booleans rejected. None uses installed NumPy size-dependent cutoff, -1 machine precision, otherwise relative singular-value threshold. Changes rank and minimum-norm coefficients; not regularization. Dictionary with float64 coefficients of shape (2,) ordered slope/intercept, integer rank, float64 singular_values of shape (min(N,2),), and float64 residual_sums_of_squares shape (1,) only when N>2 and rank=2, otherwise (0,). Empty residuals do not imply zero error. Rank below two means coefficients are not uniquely identifiable; the minimum-norm solution is retained. Slope units are value/coordinate; intercept uses value units. Inputs unchanged. Runtime LAPACK dependent. Concrete provisioned execution only; abstract witness intentionally rejects.",
+      "reuse": "Shared numerical fitting for motion measurements and sensor calibration; application units, observation selection and metadata interpretation remain separate.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "independent_numerical_cases": 128,
+  "dtype_shape_cases": 12,
+  "rank_cutoff_boundary_verified": true,
+  "repeated_coordinate_minimum_norm": true,
+  "abstract_rejected": true,
+  "software_sha256": {
+    "sciona.atoms.numerical.statistics.affine_fit": "39856bac33e0fe22e02a0c4d11ca83585d989f68775ddced57bfeb4de8ef84af",
+    "sciona.ghost.registry": "793723a75d07a88eed39f59d8d4dc327c54adbf75db7a03003516a6f74c81b51",
+    "sciona.ghost.abstract": "9574bed61c8292b2eaf6ff054bcf46504b07e679c521a19d2440396c3ea63670",
+    "sciona.ghost.dimensions": "61be1958aa50725f3c6598d5b5447a806d2549698d5ce3ec243d467816754b7e",
+    "scripts/review_affine_semantics.py": "72566850c73fbb27ada7fb316231fa5f4bab7018a043259934533b73130991e9",
+    "scripts/review_group_distribution_semantics.py": "9a5c7cb0c29c0e82fe09105702293d63caef7fd3f073aa5c8879a2c36f6f0122",
+    "scripts/validate_affine_provider.py": "a5fdb88041727002e5efec78d5327b24dfb976172e65cc1ffd54c5f4a274da64",
+    "scripts/import_affine_drafts.py": "f86726812719579cf36b45706fd37faf1c9d834bcaabedb95cca9e972e0eaf44",
+    "scripts/plan_affine_intake.py": "b5b2faf89b4d5666d12bce589437b2a7f6118132e7849003bc369568a8276f7d"
+  },
+  "installed_packages": {
+    "annotated-types": {
+      "version": "0.7.0",
+      "hashed_files_verified": 7,
+      "active_requirements": []
+    },
+    "asttokens": {
+      "version": "2.4.1",
+      "hashed_files_verified": 13,
+      "active_requirements": [
+        "six>=1.12.0"
+      ]
+    },
+    "icontract": {
+      "version": "2.7.3",
+      "hashed_files_verified": 16,
+      "active_requirements": [
+        "asttokens<3,>=2",
+        "typing_extensions"
+      ]
+    },
+    "numpy": {
+      "version": "2.2.6",
+      "hashed_files_verified": 876,
+      "active_requirements": []
+    },
+    "pydantic": {
+      "version": "2.12.5",
+      "hashed_files_verified": 111,
+      "active_requirements": [
+        "annotated-types>=0.6.0",
+        "pydantic-core==2.41.5",
+        "typing-extensions>=4.14.1",
+        "typing-inspection>=0.4.2"
+      ]
+    },
+    "pydantic-core": {
+      "version": "2.41.5",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.14.1"
+      ]
+    },
+    "scipy": {
+      "version": "1.17.1",
+      "hashed_files_verified": 1423,
+      "active_requirements": [
+        "numpy<2.7,>=1.26.4"
+      ]
+    },
+    "six": {
+      "version": "1.17.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "typing-extensions": {
+      "version": "4.16.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "typing-inspection": {
+      "version": "0.4.2",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.12.0"
+      ]
+    }
+  },
+  "intake_plan_sha256": "9c1460ed3bf6a643d2b5eb0ea3d886a489e30cc4472be84932f5f937873f3031",
+  "connected_execution_commit": "8a663cbe",
+  "connected_execution_sha256": "dd4cb20ec0a12a2344319e372b1290618fc8b13af82be4b1d7dcbb3d8ea53d2e",
+  "resource_policy": {
+    "native_threads": 1,
+    "workers": 1
+  },
+  "limitations": [
+    "Automated Tier 3 for concrete provisioned in-process execution only; no human Tier 1 or empirical Tier 2 claim.",
+    "Caller establishes units, alignment and observation availability. No centering, weighting, regularization or temporal filtering.",
+    "Rank below two returns minimum-norm coefficients, not uniquely identified slope/intercept. Empty residual arrays do not imply zero error.",
+    "Explicit cutoff is runtime dependent: None uses the installed NumPy size-dependent default; -1 uses machine precision.",
+    "Float64 design conversion can lose large-integer precision. Abstract witness intentionally rejects; no static dimension inference is qualified.",
+    "Synthetic motion and sensor examples establish numerical reuse only; the original OSIC workflow is not approved by this review.",
+    "Installed RECORD hashes and active requirements are checked; independent distribution provenance and other platforms remain outside qualification."
+  ]
+}
