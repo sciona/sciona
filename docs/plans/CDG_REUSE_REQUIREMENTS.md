@@ -2865,3 +2865,23 @@ All four providers used by the one-entity slice graph are now approved, but the
 graph and original CDG still require their remaining integration and publication
 work. See `ordered_fields_provider_publication_gates.json` and
 `ordered_fields_served_verification.json`.
+
+The image population graph now routes entities sequentially through explicit
+callable preparation, ordered field selection and bounded prediction nodes,
+then passes scalar slopes and query coordinates to separate trajectory
+reduction. This preserves reusable numerical operations while keeping the
+source-specific population mapping and batch-size policy in a narrow adapter.
+The dispatcher releases its own prepared-array references between entities;
+trusted callbacks can retain references, so this is not a global memory bound.
+
+Synthetic routing checks cover float32 and float64 predictions, interleaved
+query order, reference lifetime and nine rejected contracts. The six-node,
+ten-edge graph executes through the canonical codec and sequential executor
+over generated encoded images for two entities and four queries. Its outputs
+match direct qualified provider composition exactly, with fitting and HDF5
+loading disabled and private numeric state unchanged. This is wiring evidence
+over an intermediate checkpoint, not independent source-notebook replay or
+completed training. The dispatcher still requires catalog intake, semantic
+review and publication; the graph and original CDG remain unapproved. Quantile
+graph integration, final blending and complete training remain pending. See
+`osic_image_routing.json` and `osic_image_population_graph.json`.

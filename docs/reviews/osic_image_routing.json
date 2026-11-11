@@ -1,0 +1,57 @@
+{
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "cases": [
+    {
+      "dtype": "float32",
+      "entities": 2,
+      "queries": 4,
+      "exact_source_routing": true,
+      "query_order_preserved": true,
+      "prepared_arrays_released": true,
+      "calls": {
+        "prepare": 2,
+        "select": 2,
+        "predict": 2
+      }
+    },
+    {
+      "dtype": "float64",
+      "entities": 2,
+      "queries": 4,
+      "exact_source_routing": true,
+      "query_order_preserved": true,
+      "prepared_arrays_released": true,
+      "calls": {
+        "prepare": 2,
+        "select": 2,
+        "predict": 2
+      }
+    }
+  ],
+  "rejected_contracts": [
+    "duplicate_entity",
+    "unknown_entity",
+    "duplicate_keys",
+    "fractional_time_dtype",
+    "nonfinite",
+    "missing_planes",
+    "wrong_batch",
+    "boolean_batch",
+    "abstract_execution"
+  ],
+  "provider_sha256": "c2945ee1e9be250c855d38b987b818e2b7fff72692dd804fd45750a789de785b",
+  "software_sha256": {
+    "sciona/osic_image_routing.py": "d725d917b2e3fdb9d598d39d31096aabe757c8b7b1286e0f396c96b975d18f0f",
+    "sciona/osic_image_inference.py": "944467b578e0725ac666a32ff84ffc57a9de857143537bb5a305541ff4047bab",
+    "sciona/osic_predictions.py": "6e3dbca24d78302ae74ea525fe8d2f380cda9308dc76a4a3f225c4cd863ebace",
+    "scripts/validate_osic_image_routing.py": "54df73a628e6a5abe5c640fbc8b7ec714cf2582982e4bf48f80d2ff87d974507"
+  },
+  "limitations": [
+    "Synthetic callbacks qualify population routing and lifetime behavior, not image decoding or model execution.",
+    "Prepared-array release is local to the dispatcher; arbitrary callbacks may retain references.",
+    "Source-specific mapped tables, query order and batch size remain explicit policy; dispatcher is not catalog-approved."
+  ]
+}
