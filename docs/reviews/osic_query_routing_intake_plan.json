@@ -1,0 +1,74 @@
+{
+  "format": "osic-query-routing-intake-plan.v1",
+  "passed": true,
+  "applied": false,
+  "approved": false,
+  "catalog_mutations": 0,
+  "owner": {
+    "owner_id": "33ed07a2-1bea-5b17-8b71-d6d0e590fdd9",
+    "source_repo_id": "27b787a0-27ed-4760-92b7-ad8e8b4b815c"
+  },
+  "new_providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.domain_adapters.osic_query_routing.split_keyed_queries",
+      "atom_id": "a79a210e-acd5-54a7-ad03-fbce08c955fb",
+      "version_id": "47fe4fb8-a560-5995-a64a-fe5d5819ef43",
+      "content_hash": "17ea742ce590e016d0b71e536d737fe969a69462845437cf9373f111bef3c1d6",
+      "provider_sha256": "f9d9625ffd0c52574366caad20da3cde0b237d65c48833bd78700cf73455f58d",
+      "semver": "0.0.0+local.17ea742ce590",
+      "fingerprint": "21c7dcb5f2689eb7593167642352f2ad47ed412035e820a5df5ae99d4e7a3486",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.domain_adapters.osic_query_routing.split_keyed_queries",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.domain_adapters.osic_query_routing",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.domain_adapters.osic_query_routing",
+        "import_module": "sciona.atoms.ml.domain_adapters.osic_query_routing",
+        "source_symbol": "split_keyed_queries",
+        "description": "Return copied entity/time rows and their supplied keys in identical order. Require a nonempty plain DataFrame with exactly key, entity and time columns, unique column names, unique nonblank string keys, nonblank string entities and native int64 times. Preserve row order, index, exact strings and time dtype. Repeated entity/time pairs with different keys remain distinct rows. Return (entity/time DataFrame, key list); modifying either output does not modify input cell values. No sorting, key generation, parsing, fitting or numerical conversion occurs. Caller owns key meaning, time units, frozen query-scope agreement and consistent population mapping across branches.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "queries",
+          "type_desc": "pandas.DataFrame",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty plain DataFrame with exactly key, entity and time columns, unique column names, unique nonblank exact Python string keys, nonblank exact Python string entities and native int64 times. Caller owns key meaning, coordinate units and exact frozen query-scope agreement. Reject floats and nullable integer dtypes; never convert or infer coordinates."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "tuple",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Tuple of copied entity/time DataFrame and supplied key list in identical original row order. Preserve index, exact strings, repeated entity/time pairs and int64 dtype. Output cell mutations do not affect input cells. No sorting, key generation, parsing, merging, fitting or numerical conversion. Concrete in-process source-schema routing only; abstract witness rejects. No empirical transfer, HTTP transport or whole-CDG approval claim. Pandas index internals and concurrent mutation are outside the qualified contract."
+        }
+      ]
+    }
+  ],
+  "registered_provider_dependencies": [],
+  "execution_evidence_commit": "6587ba42",
+  "graph_evidence_commit": "78124515",
+  "execution_evidence_sha256": "8e876e38d5c2cf498ccffc395ec4cf1a663b557b1dbcbfcc525274bc56ea3b09",
+  "provider_revision": "8286367",
+  "planner_sha256": "735d7cb94a1d5c02bf0300def9197b1608d1f2707ed0793be6c32e394dc1c491",
+  "implementation_sha256": "f9d9625ffd0c52574366caad20da3cde0b237d65c48833bd78700cf73455f58d",
+  "execution_evidence_files": [
+    "docs/reviews/osic_query_routing.json",
+    "docs/reviews/osic_keyed_quantile_graph.json"
+  ],
+  "limitations": [
+    "Draft plan only; transaction, semantic review and publication gates remain required.",
+    "The provider uses NumPy dtype checks and pandas table selection/copy operations, with no registered atom dependencies. Quantile-graph evidence is composed use, not a dependency of routing.",
+    "Output cells are independently mutable; callers retain responsibility for semantic identity, frozen scope agreement and units.",
+    "The graph remains unapproved; original workflow execution and empirical transfer are separate."
+  ]
+}
