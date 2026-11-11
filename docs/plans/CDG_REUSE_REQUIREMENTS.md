@@ -2896,3 +2896,16 @@ rolled back completely; the applied import created 23 rows and a repeat created
 none. Semantic review and publication gates remain pending. See
 `osic_image_routing_intake_transactions.json` and
 `osic_image_routing_intake_apply.json`.
+
+The population dispatcher now has automated Tier 3 approval and is served in
+both catalogs. Semantic review freshly reproduced routing qualification and
+rejected seventeen additional malformed callback contracts, including invalid
+positions, nonfinite or misaligned predictions, changing prediction dtype and
+noncallable inputs. Publication rejected 21 corrupted catalog states and
+completely rolled back failures after writes 1, 9, 18 and 28. Fresh execution
+through the exact served binding made 27 calls and reproduced the qualification
+results. The original workflow remains draft: this approval covers the narrow
+dispatcher, with explicit caller-owned mappings and injected computations, not
+the complete graph or completed image training. See
+`osic_image_routing_provider_publication_gates.json` and
+`osic_image_routing_served_verification.json`.
