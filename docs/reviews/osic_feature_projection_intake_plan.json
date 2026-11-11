@@ -1,0 +1,74 @@
+{
+  "format": "osic-feature-projection-intake-plan.v1",
+  "passed": true,
+  "applied": false,
+  "approved": false,
+  "catalog_mutations": 0,
+  "owner": {
+    "owner_id": "33ed07a2-1bea-5b17-8b71-d6d0e590fdd9",
+    "source_repo_id": "27b787a0-27ed-4760-92b7-ad8e8b4b815c"
+  },
+  "new_providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.domain_adapters.osic_feature_projection.unpack_quantile_features",
+      "atom_id": "9702e7bc-3705-5a81-9126-dee8e9957e0d",
+      "version_id": "e14d34fb-2b8b-5475-a79e-114749828272",
+      "content_hash": "e05c716ca7a8059a68cdba34241d9605a256b9a391835078a1370046570ab14c",
+      "provider_sha256": "61e15ea639750c6757b1f62a676ffb0f1b44b632ec30559a069c5e86db9eb776",
+      "semver": "0.0.0+local.e05c716ca7a8",
+      "fingerprint": "fd1ac07607af2fc4d7b8d1583a4e094d7cb879544379e2481aef38843f2928a3",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.domain_adapters.osic_feature_projection.unpack_quantile_features",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.domain_adapters.osic_feature_projection",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.domain_adapters.osic_feature_projection",
+        "import_module": "sciona.atoms.ml.domain_adapters.osic_feature_projection",
+        "source_symbol": "unpack_quantile_features",
+        "description": "Expose features, structured columns, observation mask and values in order. Require a plain mapping with exactly the four frozen-replay fields. Return borrowed values as a tuple without conversion or mutation. This operation only projects ports: upstream replay owns value validation and caller owns units, availability, alignment and downstream mutation of borrowed values.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "prepared",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Plain dict with exactly features, feature_columns, observed_mask and observed_values. Upstream replay owns value validation; this adapter accepts arbitrary borrowed values. Caller owns availability, units, row alignment and downstream mutation."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "tuple",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "New outer tuple in fixed order: features, feature_columns, observed_mask, observed_values. Preserve borrowed identity and shared aliases. No copying, numerical validation, casting, field renaming or model execution. Concrete in-process projection only; abstract witness rejects. Source-schema adapter, not a generic numerical algorithm. No empirical transfer, HTTP transport or whole-CDG approval claim."
+        }
+      ]
+    }
+  ],
+  "registered_provider_dependencies": [],
+  "execution_evidence_commit": "2c54a813",
+  "graph_evidence_commit": "c529089b",
+  "execution_evidence_sha256": "eeca451e55e136c3ed0b1024182fb7552cf36bb766728de2a6f70f1ab018ea27",
+  "provider_revision": "c4a796f",
+  "planner_sha256": "70716841ae450b5c73f551a2adf5f68c3ede8041d45a2b738670cc50a556728c",
+  "implementation_sha256": "61e15ea639750c6757b1f62a676ffb0f1b44b632ec30559a069c5e86db9eb776",
+  "execution_evidence_files": [
+    "docs/reviews/osic_feature_projection.json",
+    "docs/reviews/osic_quantile_replay_graph_unicode_correction.json"
+  ],
+  "limitations": [
+    "Draft plan only; transaction, semantic review and publication gates remain required.",
+    "The provider uses Python container operations and has no registered atom dependencies. Quantile-graph evidence is a composed use, not a dependency of projection.",
+    "Borrowed values are not validated or copied; callers retain responsibility for downstream mutation, alignment and units.",
+    "The graph remains unapproved; original workflow execution and empirical transfer are separate."
+  ]
+}
