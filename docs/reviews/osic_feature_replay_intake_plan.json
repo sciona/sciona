@@ -1,0 +1,99 @@
+{
+  "format": "osic-feature-replay-intake-plan.v1",
+  "passed": true,
+  "applied": false,
+  "approved": false,
+  "catalog_mutations": 0,
+  "owner": {
+    "owner_id": "33ed07a2-1bea-5b17-8b71-d6d0e590fdd9",
+    "source_repo_id": "27b787a0-27ed-4760-92b7-ad8e8b4b815c"
+  },
+  "new_providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.domain_adapters.osic_feature_replay.transform_frozen_queries",
+      "atom_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+      "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+      "content_hash": "3c9c03abfa04035e2b58ee6b7ae135af6d53db5fcadf6f513c57d1c4e4e7aafc",
+      "provider_sha256": "3f73748d3909bff463e3eb5dabd1f5c2ca9af729c00b16b7afe92f8eb3061104",
+      "semver": "0.0.0+local.3c9c03abfa04",
+      "fingerprint": "a732d1976d2836a005793dbf2ec07355d21f929c87f2f34643da75e9ecee5bf4",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.domain_adapters.osic_feature_replay.transform_frozen_queries",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.domain_adapters.osic_feature_replay",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.domain_adapters.osic_feature_replay",
+        "import_module": "sciona.atoms.ml.domain_adapters.osic_feature_replay",
+        "source_symbol": "transform_frozen_queries",
+        "description": "Transform the exact declared query batch using saved source feature state. Require private caller-owned state, mapped entity/time queries and matching nonblank feature and response coordinates. Preserve frozen category order, arithmetic dtypes, scaling ranges, observed baselines and query order. Reject a changed query population or order: this transductive state is not an unrestricted train-only scaler. Return a mapping with features, structured feature_columns, observed_mask and observed_values. Do not cast features to model input dtype, serialize column descriptors, restore models or reduce predictions. Those are separate graph operations. No fitting or extrema discovery occurs. Caller establishes state provenance, category meanings, coordinate units and observation availability. Structural state checks do not authenticate state or establish empirical transfer. Saved observations and query scope must remain private runtime material.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "state",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Private caller-owned frozen preparation state with exact format, coordinates, ordered categories, ranges, arithmetic dtypes, feature_columns, observations and query_scope. Require unique nonblank ordered categories without cross-field collisions; feature order must match category order then numeric,time_offset,baseline_target. Numeric ranges are finite and nondegenerate. Stored observations must uniquely cover queried entities and contain finite numeric values and fitted categories. Supported saved arithmetic dtypes are float32/float64 and signed/unsigned 8/16/32/64-bit integers. Caller establishes provenance and ensures intended arithmetic is representable; structural checks do not authenticate state. Never publish saved observations or query scope."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "queries",
+          "type_desc": "pandas.DataFrame",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty explicitly mapped entity/time table with nonblank string entities and finite real numeric times, complete rows, and exact equality to saved query_scope records in supplied order. Caller supplies unambiguous unique column names. No query population change, reordering, baseline inference or extrapolation to an undeclared population. Query time is converted to saved time-offset arithmetic dtype; caller establishes representability and compatible units."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "feature_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit nonblank Python string exactly matching saved feature_coordinate. Names bind caller-declared feature meanings and order; this operation does not infer units or permit a changed coordinate system."
+        },
+        {
+          "direction": "input",
+          "ordinal": 3,
+          "name": "response_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit nonblank Python string exactly matching saved response_coordinate. Caller establishes compatible response units and actual availability of stored observations; matching labels do not establish provenance."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Mapping with features (M,D) numeric array, structured ordered feature_columns, boolean observed_mask (M,), and observed_values (M,). Features preserve fitted source arithmetic before column stacking; output dtype may be promoted by categorical columns. Observed values contain saved observations where query time exactly equals observed_time, and zero elsewhere. Column metadata is copied; state and query inputs are not mutated. No model-input float32 cast, descriptor serialization, model loading, fitting, extrema discovery, prediction reduction or branch blending. Concrete in-process execution only; abstract witness rejects. This is a source-specific frozen transductive feature recipe, not an unrestricted train-only scaler. Qualification covers synthetic float32/float64 arithmetic. Broader integer configurations require caller validation. No empirical effectiveness, HTTP transport or original-CDG approval claim."
+        }
+      ]
+    }
+  ],
+  "registered_provider_dependencies": [],
+  "execution_evidence_commit": "f4094d4a",
+  "execution_evidence_sha256": "b69f0bfc61b4c4d998ac1d2c14eee767f04845a343ed9b31cce1d6f727ffbd9a",
+  "provider_revision": "0e11572",
+  "planner_sha256": "dc5111de174c62430fbc3bf42cf7ca3675fed6d09d6c4acaf342a17f83290617",
+  "implementation_sha256": "3f73748d3909bff463e3eb5dabd1f5c2ca9af729c00b16b7afe92f8eb3061104",
+  "execution_evidence_files": [
+    "docs/reviews/osic_feature_replay_provider.json"
+  ],
+  "limitations": [
+    "Draft plan only; transaction, semantic review and publication gates remain required.",
+    "The provider delegates to frozen preparation-state software using NumPy and pandas; no registered atom computation is invoked during replay.",
+    "Transductive query scope, coordinate meanings, numeric representability, availability and private state provenance remain caller-owned.",
+    "Input casting, descriptor serialization, model replay, reduction and blending are separate graph boundaries; whole-CDG approval remains pending."
+  ]
+}
