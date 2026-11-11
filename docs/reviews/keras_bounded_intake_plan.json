@@ -1,0 +1,91 @@
+{
+  "format": "keras-bounded-intake-plan.v1",
+  "passed": true,
+  "applied": false,
+  "approved": false,
+  "catalog_mutations": 0,
+  "owner": {
+    "owner_id": "33ed07a2-1bea-5b17-8b71-d6d0e590fdd9",
+    "source_repo_id": "27b787a0-27ed-4760-92b7-ad8e8b4b815c"
+  },
+  "new_providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.keras_bounded_prediction.predict_bounded",
+      "atom_id": "f1a49ede-6561-56d5-b8f4-61c71c466cab",
+      "version_id": "95cfdead-456e-5ab9-9a15-2a0434a6411a",
+      "content_hash": "16d151c4f45e826dcf9251d5ff18b46d488b20c3ba0359d65b32db4f5f04c0b1",
+      "provider_sha256": "3bb43f19a8d648b9098bee19ce85394ae465f7e69e1599e0f1deddfd49d5e75d",
+      "semver": "0.0.0+local.16d151c4f45e",
+      "fingerprint": "d7cf7ed9237dde1a3351b4b347a0e2833a5f603da3984b4bc13a38bcbb52a0cc",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.keras_bounded_prediction.predict_bounded",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.keras_bounded_prediction",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.keras_bounded_prediction",
+        "import_module": "sciona.atoms.ml.keras_bounded_prediction",
+        "source_symbol": "predict_bounded",
+        "description": "Predict a single aligned floating output with bounded Keras batching. Model must be a caller-provisioned tf_keras.Model. Inputs are a nonempty list/tuple of finite float32/float64 arrays sharing a nonzero leading dimension. Preserve native Keras conversion, row order and partial batches. Require an explicit positive Python integer batch_size, excluding bool. Return one finite floating ndarray with the same leading dimension. No fitting, model loading, domain feature transformation or unit conversion occurs. Arbitrary custom model code remains caller-trusted; this operation is not a sandbox or a model authenticity check. Only concrete provisioned execution is supported. Caller limits model-compute threads and reserves one additional private dataset worker; dataset autotuning is disabled.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "model",
+          "type_desc": "tf_keras.Model",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Caller-provisioned trusted legacy-Keras model in the qualified installed runtime. Model input geometry, custom code, state authenticity, feature meanings and units remain caller responsibilities. No model loading or fitting is performed. Custom predict/model code is not sandboxed; automatic graph/cache creation can occur."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "inputs",
+          "type_desc": "list[numpy.ndarray]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty list or tuple of finite float32/float64 arrays, each rank>=1, sharing a nonzero leading dimension N. Preserve caller row and input order. Native Keras conversion remains in effect; model-defined input geometry and dtype conversion are not inferred by this provider. Inputs and model are private in-process runtime values."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "batch_size",
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Positive Python integer excluding bool. Explicit native Keras batch size, including the final partial batch. Caller bounds model-compute threads and reserves one additional private dataset worker. Dataset autotuning is disabled. Batch size does not independently bound memory or model-compute concurrency."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "One finite floating numpy.ndarray with rank>=1 and leading dimension N matching input rows. Remaining shape, output dtype and units follow the caller model. Multiple outputs, nonfinite output and row-count mismatch are rejected after prediction. No feature preparation, key joining, loss, confidence calibration or unit conversion. Concrete provisioned execution only; abstract witness rejects. No JSON/HTTP transport, clean-install or empirical effectiveness qualification. Synthetic motion and electrical-power examples establish constructed reuse, and a full-size B5 check establishes native batch parity."
+        }
+      ]
+    }
+  ],
+  "registered_provider_dependencies": [],
+  "execution_evidence_commit": "10a56033",
+  "execution_evidence_sha256": "751038bfa46e2c74166fff1ac58bd7b297405f7c5c5f1ccfaa77c884a2de349a",
+  "provider_revision": "80fb9de",
+  "planner_sha256": "66729ad9d4b9a38b03b438fa39db347d72ccaa72c5652697999b1f6ad369fef6",
+  "implementation_sha256": "fe36ca313054cd1b6c3882f59139a6228d306fd92d06e469c1abc1ac3e570d55",
+  "execution_evidence_files": [
+    "docs/reviews/keras_bounded_provider.json",
+    "docs/reviews/keras_bounded_b5.json"
+  ],
+  "limitations": [
+    "Draft plan only; transaction, semantic review and publication gates remain required.",
+    "TensorFlow and legacy Keras are software dependencies, not registered atom dependencies. The matcher helper is separately hash-bound.",
+    "Caller-provisioned custom model code remains trusted and may have side effects; this is not arbitrary-code isolation.",
+    "The bounded prediction operation does not qualify image-model training, the complete OSIC workflow or empirical transfer."
+  ]
+}
