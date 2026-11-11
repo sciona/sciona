@@ -2824,3 +2824,20 @@ discovery or caching. This is a prepared-input graph slice, not an approved CDG:
 raw preparation, population routing, trajectory reduction, branch blending and
 complete training still need graph integration. See
 `osic_prepared_inference_graph.json`.
+
+The one-entity slice graph now includes encoded-image preparation and explicit
+ordered field selection before restored-model prediction. The new generic
+selector borrows values from a plain mapping in caller-supplied field order;
+it performs no conversion, schema inference, array alignment or unit inference.
+Eight synthetic motion/electrical-power cases verify ordering, value identity
+and nonmutation; fifteen invalid or abstract contracts are rejected. Aliased
+values remain aliased and downstream mutations remain the caller's concern.
+
+The four-node graph executes through the canonical codec and real sequential
+executor. Selected prepared arrays and model predictions match direct qualified
+provider composition exactly, with two deliberately invalid unselected payloads
+ignored. This is graph-wiring evidence over an intermediate checkpoint, not a
+new independent source-notebook comparison. The selector is not catalog-approved;
+population routing, trajectory reduction, final blend, complete training and
+original-CDG approval remain pending. See `ordered_fields_provider.json` and
+`osic_image_slice_graph.json`.
