@@ -1,0 +1,112 @@
+{
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "graph_execution": {
+    "graph_sha256": "802b4951795a14fe83fcf1106351b934fded21b4ce7ff688e5724fa233da9ef5",
+    "nodes": 2,
+    "edges": 1,
+    "decoded_projection": true,
+    "missing_edge_rejected": true,
+    "bindings": [
+      {
+        "fqdn": "sciona.atoms.ml.domain_adapters.osic_image_lifecycle.restore_image_prediction_state",
+        "version_id": "917815ff-b2f9-5c66-8baf-5f911de1f9bd",
+        "content_hash": "009935fa351e801fca3449730494a2c4f6e56c0674c3b63dcc2d33b2d5e3bea6",
+        "trust_tier": 3,
+        "import_module": "sciona.atoms.ml.domain_adapters.osic_image_lifecycle",
+        "source_symbol": "restore_image_prediction_state"
+      },
+      {
+        "fqdn": "sciona.atoms.ml.keras_bounded_prediction.predict_bounded",
+        "version_id": "95cfdead-456e-5ab9-9a15-2a0434a6411a",
+        "content_hash": "16d151c4f45e826dcf9251d5ff18b46d488b20c3ba0359d65b32db4f5f04c0b1",
+        "trust_tier": 3,
+        "import_module": "sciona.atoms.ml.keras_bounded_prediction",
+        "source_symbol": "predict_bounded"
+      }
+    ],
+    "uncached_node_order": [
+      "restore",
+      "predict"
+    ],
+    "explicit_provider_discovery": true,
+    "intermediate_persistence_disabled": true
+  },
+  "state_qualification": {
+    "format": "osic-image-state.v1",
+    "passed": true,
+    "approved": false,
+    "catalog_mutations": 0,
+    "synthetic_only": true,
+    "full_training_schedule_complete": false,
+    "execution": {
+      "intermediate_optimizer_updates": 96,
+      "weight_arrays": 738,
+      "parameters": 28514709,
+      "fresh_process_replay": {
+        "passed": true,
+        "queries": 3,
+        "exact_predictions": true,
+        "fitting_disabled": true,
+        "hdf5_loading_disabled": true,
+        "optimizer_state_absent": true
+      },
+      "corruption_cases_rejected": [
+        "unknown_format",
+        "executable_field",
+        "architecture",
+        "image_coordinate",
+        "metadata_coordinate",
+        "response_coordinate",
+        "code_identity",
+        "archive_identity",
+        "graph_identity",
+        "weight_inventory"
+      ],
+      "private_artifacts_unchanged": true,
+      "runtime": {
+        "legacy_keras": "2.20.1",
+        "numpy": "2.2.6"
+      },
+      "resource_policy": {
+        "native_threads": 1,
+        "dataset_workers": 1,
+        "export_and_replay_sequential": true
+      }
+    },
+    "dependency_archive_sha256": {
+      "efficientnet-1.1.0-py3-none-any.whl": "4f8a56d15e9c44e9a62dae35404079724c4a1d9e9bfbcfd2a18077e5eda58bf7",
+      "Keras_Applications-1.0.8-py3-none-any.whl": "df4323692b8c1174af821bf906f1e442e63fa7589bf0f1230a0b6bdc5a810c95",
+      "keras-applications-source.zip": "ff87b242e5de063242132c7c8a1155679c084123b857d25adec626d1374a54b4"
+    },
+    "software_sha256": {
+      "sciona/osic_image_state.py": "876b5328b675634e0a18e42589aee8d444cf50eb1a5824cab8d01bc663817a54",
+      "sciona/osic_image_model.py": "403ff9e7f6f3a2ba362c599abc68910c527a831366cff8a2563b2828db7618df",
+      "sciona/osic_image_predictor.py": "337f73be79f20d9472c490d9efbe539d42f0c70581ae6e44dca16fbf748d077d",
+      "sciona/keras_bounded_prediction.py": "fe36ca313054cd1b6c3882f59139a6228d306fd92d06e469c1abc1ac3e570d55",
+      "scripts/validate_osic_image_state.py": "f37279187dc05185f4d2b86b69552f15143bf46f463368136b84a38462b39ddc"
+    },
+    "limitations": [
+      "Intermediate synthetic training checkpoint only; complete 30-epoch training is still pending.",
+      "Numeric inference state excludes optimizer/callback/random state and cannot resume training.",
+      "Coordinate labels are caller declarations; authenticity requires external artifact provenance.",
+      "Restore invokes only the fixed local model constructor and numeric weight loading; no serialized model graph is executed.",
+      "This does not complete raw-input trained inference, the final two-branch graph or publication gates."
+    ]
+  },
+  "private_source_unchanged": true,
+  "software_sha256": {
+    "sciona/osic_image_lifecycle_graphs.py": "e188c1f97a026fdbda7c1125a9a49a05e8fac925833542bd62f95045110efdd2",
+    "sciona/services/execution_graph_codec.py": "1ad42332f8e28adf4ee3f8d53184a4af8351f66304efa1703c63ed32989082a6",
+    "sciona/visualizer/runner.py": "22a49655e61c10d800aa2a6a9b5115cd873a9e699ea9903fa0f856aea8af67a4",
+    "scripts/validate_osic_prepared_inference_graph.py": "92c62e9ee76a40dabba0a88a1415c41a8e5f139d0c1cf712fae35b9aaa1170d2"
+  },
+  "limitations": [
+    "Prepared arrays and numeric model state only; raw preparation, population routing, reduction, blend and training are separate outstanding graph work.",
+    "Graph providers are already served at Tier 3, but this graph is not catalog-approved and does not approve the original CDG.",
+    "The real sequential graph executor runs with explicit provider discovery and intercepted intermediate persistence; HTTP input transport, default provider discovery and visualizer caching are not qualified.",
+    "Intermediate synthetic checkpoint only; exact predictions do not establish empirical effectiveness or complete training."
+  ]
+}

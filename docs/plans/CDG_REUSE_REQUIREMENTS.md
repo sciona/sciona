@@ -2811,3 +2811,16 @@ disabled. Private source files remained unchanged. These approvals support
 explicit lifecycle edges; complete image training and the original stored graph
 remain pending. See `osic_image_lifecycle_provider_publication_gates.json` and
 `osic_image_lifecycle_served_verification.json`.
+
+The prepared-image inference graph now connects the approved numeric-state
+restore provider to the approved generic bounded predictor through an explicit
+model edge. A fresh process decodes the canonical execution projection, resolves
+both exact served identities and executes both nodes sequentially with no cached
+outputs. Predictions match the frozen intermediate-checkpoint oracle exactly;
+fitting and HDF5 loading are disabled and a projection missing the model edge is
+rejected. The validator intercepts intermediate persistence and uses explicit
+provider discovery, so this evidence does not cover HTTP transport, default
+discovery or caching. This is a prepared-input graph slice, not an approved CDG:
+raw preparation, population routing, trajectory reduction, branch blending and
+complete training still need graph integration. See
+`osic_prepared_inference_graph.json`.
