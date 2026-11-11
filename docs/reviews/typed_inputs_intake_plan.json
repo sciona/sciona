@@ -1,0 +1,126 @@
+{
+  "format": "typed-inputs-intake-plan.v1",
+  "passed": true,
+  "applied": false,
+  "approved": false,
+  "catalog_mutations": 0,
+  "owner": {
+    "owner_id": "33ed07a2-1bea-5b17-8b71-d6d0e590fdd9",
+    "source_repo_id": "27b787a0-27ed-4760-92b7-ad8e8b4b815c"
+  },
+  "new_providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.pipeline.typed_inputs.cast_finite_array",
+      "atom_id": "ca51235f-e1cb-5a4f-ab36-7cbef79aa8bc",
+      "version_id": "c4e8dd96-3159-5c22-9013-e5d8d7f022d5",
+      "content_hash": "e5dca6ea6b52929ef698755a0524ac3abdcf2c6e518ae43cc975f0145c4b3200",
+      "provider_sha256": "5a07f91376091761d394c97c7012c4c216d2a708bc91991827fc3ba59ec4683e",
+      "semver": "0.0.0+local.e5dca6ea6b52",
+      "fingerprint": "40e8a8dee565fa10f7b88f25c7a76261fa54d002e41c654ff0d3bfaf0518b415",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.pipeline.typed_inputs.cast_finite_array",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.pipeline.typed_inputs",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.pipeline.typed_inputs",
+        "import_module": "sciona.atoms.ml.pipeline.typed_inputs",
+        "source_symbol": "cast_finite_array",
+        "description": "Copy a finite float32/float64 ndarray to explicit float32 or float64 dtype. Require a nonempty plain ndarray and an exact dtype string. Preserve shape and element order and always allocate independent storage. Use NumPy native conversion; narrowing may round or underflow to zero. Reject nonfinite input or output, including narrowing overflow. No normalization, unit conversion, clipping or feature inference. Caller decides whether precision loss is acceptable and preserves array-axis, coordinate and availability meanings.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "values",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty plain ndarray with finite native float32 or float64 values. Any shape, including scalar arrays, is structurally supported; preserve axes and element order. Integer, complex, object and subclass arrays are rejected. Caller owns coordinate units, axis meanings and precision requirements."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "dtype",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit exact Python string float32 or float64. Always allocate independent storage, including same-dtype conversion. Native NumPy narrowing may round or underflow to zero; nonfinite output including overflow is rejected. No implicit dtype inference, clipping, normalization or unit conversion."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Independent finite array in the requested float32/float64 dtype, preserving shape and element order without input mutation. Native rounding and underflow semantics are retained; precision loss must be acceptable to the caller. Concrete in-process execution only; abstract witness rejects. Synthetic motion and power examples demonstrate constructed conversion reuse, not empirical effectiveness or domain transfer. No HTTP transport or whole-CDG approval claim."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.pipeline.typed_inputs.encode_feature_descriptors",
+      "atom_id": "c08f04c0-a93a-57ed-bc50-5e27f683f7ff",
+      "version_id": "e020448c-a896-58b3-a474-578198795404",
+      "content_hash": "00fc7dca1da32e7c28484beea81d502a0a6a0d982d3dd08d6ee3a4eada4cbe8a",
+      "provider_sha256": "5a07f91376091761d394c97c7012c4c216d2a708bc91991827fc3ba59ec4683e",
+      "semver": "0.0.0+local.00fc7dca1da3",
+      "fingerprint": "79c8dafe8c05f19791f0bf14d5e3deb5a2112b64816ac778b62fc67c1f3ec96b",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.pipeline.typed_inputs.encode_feature_descriptors",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.pipeline.typed_inputs",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.pipeline.typed_inputs",
+        "import_module": "sciona.atoms.ml.pipeline.typed_inputs",
+        "source_symbol": "encode_feature_descriptors",
+        "description": "Encode ordered structured feature labels as compact JSON strings. Require a nonempty plain list of nonempty plain lists of nonblank Python strings, with unique complete descriptors. Preserve descriptor/component order and exact spelling, including surrounding whitespace. Use standard JSON ASCII escaping and compact separators; do not join with a delimiter that could collide with label content. Return a new list of unique strings. Caller establishes column alignment and feature meanings; this does not infer schemas, sort labels, cast arrays or persist private metadata.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "descriptors",
+          "type_desc": "list[list[str]]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty plain list of nonempty plain lists of nonblank Python strings. Complete descriptors must be unique. Preserve descriptor and component order and exact spelling, including surrounding whitespace. Caller owns feature meanings and array-column alignment; real feature labels remain private runtime metadata."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "list[str]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "New list of unique compact JSON strings with standard ASCII escaping and no separator whitespace. Each string round-trips to the corresponding ordered descriptor without delimiter collisions. Input descriptors are not mutated; no schema inference, sorting or array conversion. Concrete in-process execution only; abstract witness rejects. Synthetic motion and power examples demonstrate constructed conversion reuse, not empirical effectiveness or domain transfer. No HTTP transport or whole-CDG approval claim."
+        }
+      ]
+    }
+  ],
+  "registered_provider_dependencies": [],
+  "execution_evidence_commit": "90c85fa6",
+  "execution_evidence_sha256": "6a2697d21f159116f0ea8d8cc01bde572454def675515fbd96e469a77af38eb5",
+  "provider_revision": "a4b3000",
+  "planner_sha256": "47c9b58eec93950f5b911fba45080746af9de5de1573c4cd60cc415ec37aa822",
+  "implementation_sha256": "5a07f91376091761d394c97c7012c4c216d2a708bc91991827fc3ba59ec4683e",
+  "execution_evidence_files": [
+    "docs/reviews/typed_inputs_provider.json",
+    "docs/reviews/osic_quantile_replay_graph.json"
+  ],
+  "limitations": [
+    "Draft plan only; transaction, semantic review and publication gates remain required.",
+    "NumPy casting and standard JSON encoding invoke no registered atom dependencies. Quantile graph evidence is a composed use, not a fixed dependency.",
+    "Caller controls acceptable precision loss, coordinate meanings, descriptor privacy and array-column alignment.",
+    "Quantile graph and original-CDG approval remain pending."
+  ]
+}
