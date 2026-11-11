@@ -1,0 +1,1005 @@
+{
+  "format": "keras-bounded-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "providers": [
+    {
+      "artifact_id": "f1a49ede-6561-56d5-b8f4-61c71c466cab",
+      "fqdn": "sciona.atoms.ml.keras_bounded_prediction.predict_bounded",
+      "version_id": "95cfdead-456e-5ab9-9a15-2a0434a6411a",
+      "content_hash": "16d151c4f45e826dcf9251d5ff18b46d488b20c3ba0359d65b32db4f5f04c0b1",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "model",
+          "type_desc": "tf_keras.Model",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Caller-provisioned trusted legacy-Keras model in the qualified installed runtime. Model input geometry, custom code, state authenticity, feature meanings and units remain caller responsibilities. No model loading or fitting is performed. Custom predict/model code is not sandboxed; automatic graph/cache creation can occur."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "inputs",
+          "type_desc": "list[numpy.ndarray]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty list or tuple of finite float32/float64 arrays, each rank>=1, sharing a nonzero leading dimension N. Preserve caller row and input order. Native Keras conversion remains in effect; model-defined input geometry and dtype conversion are not inferred by this provider. Inputs and model are private in-process runtime values."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "batch_size",
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Positive Python integer excluding bool. Explicit native Keras batch size, including the final partial batch. Caller bounds model-compute threads and reserves one additional private dataset worker. Dataset autotuning is disabled. Batch size does not independently bound memory or model-compute concurrency."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "numpy.ndarray",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "One finite floating numpy.ndarray with rank>=1 and leading dimension N matching input rows. Remaining shape, output dtype and units follow the caller model. Multiple outputs, nonfinite output and row-count mismatch are rejected after prediction. No feature preparation, key joining, loss, confidence calibration or unit conversion. Concrete provisioned execution only; abstract witness rejects. No JSON/HTTP transport, clean-install or empirical effectiveness qualification. Synthetic motion and electrical-power examples establish constructed reuse, and a full-size B5 check establishes native batch parity."
+        }
+      ],
+      "operation": "Run a caller-provisioned legacy-Keras model with explicit native batching, ordered aligned inputs and one bounded dataset worker.",
+      "plain_description": "Run the supplied model on batches of aligned inputs and return predictions in the same row order.",
+      "validity_bounds": "Caller-provisioned trusted legacy-Keras model in the qualified installed runtime. Model input geometry, custom code, state authenticity, feature meanings and units remain caller responsibilities. No model loading or fitting is performed. Custom predict/model code is not sandboxed; automatic graph/cache creation can occur. Nonempty list or tuple of finite float32/float64 arrays, each rank>=1, sharing a nonzero leading dimension N. Preserve caller row and input order. Native Keras conversion remains in effect; model-defined input geometry and dtype conversion are not inferred by this provider. Inputs and model are private in-process runtime values. Positive Python integer excluding bool. Explicit native Keras batch size, including the final partial batch. Caller bounds model-compute threads and reserves one additional private dataset worker. Dataset autotuning is disabled. Batch size does not independently bound memory or model-compute concurrency. One finite floating numpy.ndarray with rank>=1 and leading dimension N matching input rows. Remaining shape, output dtype and units follow the caller model. Multiple outputs, nonfinite output and row-count mismatch are rejected after prediction. No feature preparation, key joining, loss, confidence calibration or unit conversion. Concrete provisioned execution only; abstract witness rejects. No JSON/HTTP transport, clean-install or empirical effectiveness qualification. Synthetic motion and electrical-power examples establish constructed reuse, and a full-size B5 check establishes native batch parity.",
+      "reuse": "Reusable batching and prediction across caller-provided models and numeric input shapes. Synthetic mechanical-motion and electrical-power examples have explicit distinct application contracts; source image preparation and geometry remain separate.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "connected_execution": {
+    "keras_bounded_provider": {
+      "passed": true,
+      "approved": false,
+      "catalog_mutations": 0,
+      "synthetic_only": true,
+      "application_contracts": {
+        "synthetic_planar_motion": "Two-dimensional position in metres plus velocity in metres/second times a fixed 0.5-second interval; output position in metres.",
+        "synthetic_resistive_power": "Scalar current in amperes squared times resistance in ohms; output electrical power in watts. These unit meanings are caller declarations, not inferred by the provider."
+      },
+      "cases": [
+        {
+          "application": "synthetic_planar_motion",
+          "input_dtype": "float32",
+          "rows": 1,
+          "columns": 2,
+          "batch_size": 1,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_planar_motion",
+          "input_dtype": "float32",
+          "rows": 1,
+          "columns": 2,
+          "batch_size": 4,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_planar_motion",
+          "input_dtype": "float32",
+          "rows": 1,
+          "columns": 2,
+          "batch_size": 32,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_planar_motion",
+          "input_dtype": "float32",
+          "rows": 1,
+          "columns": 2,
+          "batch_size": 64,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_planar_motion",
+          "input_dtype": "float32",
+          "rows": 7,
+          "columns": 2,
+          "batch_size": 1,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_planar_motion",
+          "input_dtype": "float32",
+          "rows": 7,
+          "columns": 2,
+          "batch_size": 4,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_planar_motion",
+          "input_dtype": "float32",
+          "rows": 7,
+          "columns": 2,
+          "batch_size": 32,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_planar_motion",
+          "input_dtype": "float32",
+          "rows": 7,
+          "columns": 2,
+          "batch_size": 64,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_planar_motion",
+          "input_dtype": "float32",
+          "rows": 33,
+          "columns": 2,
+          "batch_size": 1,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_planar_motion",
+          "input_dtype": "float32",
+          "rows": 33,
+          "columns": 2,
+          "batch_size": 4,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_planar_motion",
+          "input_dtype": "float32",
+          "rows": 33,
+          "columns": 2,
+          "batch_size": 32,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_planar_motion",
+          "input_dtype": "float32",
+          "rows": 33,
+          "columns": 2,
+          "batch_size": 64,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_planar_motion",
+          "input_dtype": "float64",
+          "rows": 1,
+          "columns": 2,
+          "batch_size": 1,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_planar_motion",
+          "input_dtype": "float64",
+          "rows": 1,
+          "columns": 2,
+          "batch_size": 4,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_planar_motion",
+          "input_dtype": "float64",
+          "rows": 1,
+          "columns": 2,
+          "batch_size": 32,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_planar_motion",
+          "input_dtype": "float64",
+          "rows": 1,
+          "columns": 2,
+          "batch_size": 64,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_planar_motion",
+          "input_dtype": "float64",
+          "rows": 7,
+          "columns": 2,
+          "batch_size": 1,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_planar_motion",
+          "input_dtype": "float64",
+          "rows": 7,
+          "columns": 2,
+          "batch_size": 4,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_planar_motion",
+          "input_dtype": "float64",
+          "rows": 7,
+          "columns": 2,
+          "batch_size": 32,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_planar_motion",
+          "input_dtype": "float64",
+          "rows": 7,
+          "columns": 2,
+          "batch_size": 64,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_planar_motion",
+          "input_dtype": "float64",
+          "rows": 33,
+          "columns": 2,
+          "batch_size": 1,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_planar_motion",
+          "input_dtype": "float64",
+          "rows": 33,
+          "columns": 2,
+          "batch_size": 4,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_planar_motion",
+          "input_dtype": "float64",
+          "rows": 33,
+          "columns": 2,
+          "batch_size": 32,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_planar_motion",
+          "input_dtype": "float64",
+          "rows": 33,
+          "columns": 2,
+          "batch_size": 64,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_resistive_power",
+          "input_dtype": "float32",
+          "rows": 1,
+          "columns": 1,
+          "batch_size": 1,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_resistive_power",
+          "input_dtype": "float32",
+          "rows": 1,
+          "columns": 1,
+          "batch_size": 4,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_resistive_power",
+          "input_dtype": "float32",
+          "rows": 1,
+          "columns": 1,
+          "batch_size": 32,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_resistive_power",
+          "input_dtype": "float32",
+          "rows": 1,
+          "columns": 1,
+          "batch_size": 64,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_resistive_power",
+          "input_dtype": "float32",
+          "rows": 7,
+          "columns": 1,
+          "batch_size": 1,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_resistive_power",
+          "input_dtype": "float32",
+          "rows": 7,
+          "columns": 1,
+          "batch_size": 4,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_resistive_power",
+          "input_dtype": "float32",
+          "rows": 7,
+          "columns": 1,
+          "batch_size": 32,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_resistive_power",
+          "input_dtype": "float32",
+          "rows": 7,
+          "columns": 1,
+          "batch_size": 64,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_resistive_power",
+          "input_dtype": "float32",
+          "rows": 33,
+          "columns": 1,
+          "batch_size": 1,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_resistive_power",
+          "input_dtype": "float32",
+          "rows": 33,
+          "columns": 1,
+          "batch_size": 4,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_resistive_power",
+          "input_dtype": "float32",
+          "rows": 33,
+          "columns": 1,
+          "batch_size": 32,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_resistive_power",
+          "input_dtype": "float32",
+          "rows": 33,
+          "columns": 1,
+          "batch_size": 64,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_resistive_power",
+          "input_dtype": "float64",
+          "rows": 1,
+          "columns": 1,
+          "batch_size": 1,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_resistive_power",
+          "input_dtype": "float64",
+          "rows": 1,
+          "columns": 1,
+          "batch_size": 4,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_resistive_power",
+          "input_dtype": "float64",
+          "rows": 1,
+          "columns": 1,
+          "batch_size": 32,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_resistive_power",
+          "input_dtype": "float64",
+          "rows": 1,
+          "columns": 1,
+          "batch_size": 64,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_resistive_power",
+          "input_dtype": "float64",
+          "rows": 7,
+          "columns": 1,
+          "batch_size": 1,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_resistive_power",
+          "input_dtype": "float64",
+          "rows": 7,
+          "columns": 1,
+          "batch_size": 4,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_resistive_power",
+          "input_dtype": "float64",
+          "rows": 7,
+          "columns": 1,
+          "batch_size": 32,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_resistive_power",
+          "input_dtype": "float64",
+          "rows": 7,
+          "columns": 1,
+          "batch_size": 64,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_resistive_power",
+          "input_dtype": "float64",
+          "rows": 33,
+          "columns": 1,
+          "batch_size": 1,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_resistive_power",
+          "input_dtype": "float64",
+          "rows": 33,
+          "columns": 1,
+          "batch_size": 4,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_resistive_power",
+          "input_dtype": "float64",
+          "rows": 33,
+          "columns": 1,
+          "batch_size": 32,
+          "exact_analytic_predictions": true
+        },
+        {
+          "application": "synthetic_resistive_power",
+          "input_dtype": "float64",
+          "rows": 33,
+          "columns": 1,
+          "batch_size": 64,
+          "exact_analytic_predictions": true
+        }
+      ],
+      "analytic_cases": 48,
+      "batch_normalization_inference_exact": true,
+      "stored_weights_unchanged": true,
+      "rejected_contracts": [
+        "empty_inputs",
+        "not_sequence",
+        "empty_rows",
+        "integer_dtype",
+        "nonfinite",
+        "misaligned",
+        "scalar",
+        "zero_batch",
+        "negative_batch",
+        "boolean_batch",
+        "floating_batch",
+        "multiple_outputs",
+        "wrong_rows",
+        "nonfinite_output",
+        "integer_output",
+        "non_keras_model",
+        "abstract_execution"
+      ],
+      "runtime": {
+        "tensorflow": "2.20.0",
+        "legacy_keras": "2.20.1",
+        "numpy": "2.2.6"
+      },
+      "provider_sha256": "3bb43f19a8d648b9098bee19ce85394ae465f7e69e1599e0f1deddfd49d5e75d",
+      "implementation_sha256": "fe36ca313054cd1b6c3882f59139a6228d306fd92d06e469c1abc1ac3e570d55",
+      "validator_sha256": "c327c74468f9fedde78961c11161bed99e925953bf29c8fed3df957c45eb1741",
+      "resource_policy": {
+        "native_threads": 1,
+        "dataset_workers": 1,
+        "sequential": true
+      },
+      "limitations": [
+        "Constructed mechanical-motion and electrical-power examples only; no empirical model effectiveness claim.",
+        "Caller-provisioned trusted legacy-Keras models in the installed runtime; no model loading, authenticity or arbitrary-code isolation.",
+        "Single finite floating tensor output only; native Keras conversion and model semantics remain in effect.",
+        "Caller must bound compute threads and reserve the additional single dataset worker."
+      ]
+    },
+    "keras_bounded_b5": {
+      "passed": true,
+      "approved": false,
+      "catalog_mutations": 0,
+      "synthetic_only": true,
+      "generic_provider_calls": 4,
+      "source_batch_qualification": {
+        "format": "osic-image-predictor.v1",
+        "passed": true,
+        "approved": false,
+        "catalog_mutations": 0,
+        "synthetic_only": true,
+        "execution": {
+          "queries": 33,
+          "source_default_batch_size": 32,
+          "source_batches": 2,
+          "partial_batch_size": 1,
+          "full_size_images": true,
+          "exact_source_predictions": true,
+          "maximum_absolute_error": 0.0,
+          "learned_weights_unchanged": true,
+          "rejected_input_contracts": 3,
+          "runtime": {
+            "tensorflow": "2.20.0",
+            "legacy_keras": "2.20.1",
+            "numpy": "2.2.6"
+          },
+          "resource_policy": {
+            "native_threads": 1,
+            "reference_dataset_workers": 1,
+            "candidate_dataset_workers": 1,
+            "reference_and_candidate_sequential": true
+          }
+        },
+        "dependency_archive_sha256": {
+          "efficientnet-1.1.0-py3-none-any.whl": "4f8a56d15e9c44e9a62dae35404079724c4a1d9e9bfbcfd2a18077e5eda58bf7",
+          "Keras_Applications-1.0.8-py3-none-any.whl": "df4323692b8c1174af821bf906f1e442e63fa7589bf0f1230a0b6bdc5a810c95",
+          "keras-applications-source.zip": "ff87b242e5de063242132c7c8a1155679c084123b857d25adec626d1374a54b4"
+        },
+        "software_sha256": {
+          "sciona/keras_bounded_prediction.py": "fe36ca313054cd1b6c3882f59139a6228d306fd92d06e469c1abc1ac3e570d55",
+          "sciona/osic_image_predictor.py": "337f73be79f20d9472c490d9efbe539d42f0c70581ae6e44dca16fbf748d077d",
+          "sciona/osic_image_model.py": "403ff9e7f6f3a2ba362c599abc68910c527a831366cff8a2563b2828db7618df",
+          "scripts/validate_osic_image_predictor.py": "465f73226a3edf47a2f2ee162d693d4a928ab937bb5e68bd4ccce11573a47143"
+        },
+        "limitations": [
+          "Seeded random B5 weights, not the ongoing training checkpoint or empirical effectiveness.",
+          "Native Keras array-adapter data order and default batch size retained; its worker pool is explicitly limited to one.",
+          "This qualifies batch dispatch and floating input conversion, not raw DICOM decoding or full branch composition.",
+          "Historical runtime numerical parity and original CDG approval remain unqualified."
+        ]
+      },
+      "provider_sha256": "3bb43f19a8d648b9098bee19ce85394ae465f7e69e1599e0f1deddfd49d5e75d",
+      "validator_sha256": "b8e09766d434f1c7a42f8b4c677ed4981e8294c2bdfdf18440e54472ac5e6275",
+      "limitations": [
+        "Random-initialized full-size B5 qualification, not completion of image training or empirical effectiveness.",
+        "The generic provider retains the native batch-size-32 and partial-batch numerical behavior; source image geometry remains outside it."
+      ]
+    }
+  },
+  "software_sha256": {
+    "provider": "3bb43f19a8d648b9098bee19ce85394ae465f7e69e1599e0f1deddfd49d5e75d",
+    "implementation": "fe36ca313054cd1b6c3882f59139a6228d306fd92d06e469c1abc1ac3e570d55",
+    "provider_dependencies": "118a04efead6c9b220cc88099e72e580c53eb223c8b40bcb793ae49ca2266a1f",
+    "scripts/review_keras_bounded_semantics.py": "4902944788782ce5c287cf5be7c2a80afd9e732eaae1748816632b839e1e2d7f",
+    "scripts/import_keras_bounded_drafts.py": "a6337a600f9c9f9815d1455a7f6ad65fad87c48b5ef7693c12989888e25fb5ba",
+    "scripts/plan_keras_bounded_intake.py": "66729ad9d4b9a38b03b438fa39db347d72ccaa72c5652697999b1f6ad369fef6",
+    "scripts/review_osic_runtime_integrity.py": "4b2cbc1751fd5262eb6c4bdb32afb32fb9d4366aa23d937797cbf6ff22e80797",
+    "scripts/review_video_numeric_runtime.py": "f0e5acb6f7820467a521c8186a54eca0591cdcbc0125c66c446539c506cdb3ac",
+    "scripts/validate_keras_bounded_provider.py": "c327c74468f9fedde78961c11161bed99e925953bf29c8fed3df957c45eb1741",
+    "scripts/validate_keras_bounded_b5.py": "b8e09766d434f1c7a42f8b4c677ed4981e8294c2bdfdf18440e54472ac5e6275"
+  },
+  "installed_packages": {
+    "absl-py": {
+      "version": "2.5.0",
+      "hashed_files_verified": 31,
+      "active_requirements": []
+    },
+    "annotated-types": {
+      "version": "0.7.0",
+      "hashed_files_verified": 7,
+      "active_requirements": []
+    },
+    "asttokens": {
+      "version": "2.4.1",
+      "hashed_files_verified": 13,
+      "active_requirements": [
+        "six>=1.12.0"
+      ]
+    },
+    "astunparse": {
+      "version": "1.6.3",
+      "hashed_files_verified": 11,
+      "active_requirements": [
+        "six<2.0,>=1.6.1",
+        "wheel<1.0,>=0.23.0"
+      ]
+    },
+    "certifi": {
+      "version": "2026.7.22",
+      "hashed_files_verified": 13,
+      "active_requirements": []
+    },
+    "charset-normalizer": {
+      "version": "3.5.1",
+      "hashed_files_verified": 23,
+      "active_requirements": []
+    },
+    "flatbuffers": {
+      "version": "25.12.19",
+      "hashed_files_verified": 14,
+      "active_requirements": []
+    },
+    "gast": {
+      "version": "0.7.0",
+      "hashed_files_verified": 13,
+      "active_requirements": []
+    },
+    "google-pasta": {
+      "version": "0.2.0",
+      "hashed_files_verified": 30,
+      "active_requirements": [
+        "six"
+      ]
+    },
+    "grpcio": {
+      "version": "1.83.1",
+      "hashed_files_verified": 67,
+      "active_requirements": [
+        "typing-extensions~=4.12"
+      ]
+    },
+    "h5py": {
+      "version": "3.16.0",
+      "hashed_files_verified": 103,
+      "active_requirements": [
+        "numpy>=1.21.2"
+      ]
+    },
+    "icontract": {
+      "version": "2.7.3",
+      "hashed_files_verified": 16,
+      "active_requirements": [
+        "asttokens<3,>=2",
+        "typing_extensions"
+      ]
+    },
+    "idna": {
+      "version": "3.19",
+      "hashed_files_verified": 18,
+      "active_requirements": []
+    },
+    "imageio": {
+      "version": "2.37.3",
+      "hashed_files_verified": 66,
+      "active_requirements": [
+        "numpy",
+        "pillow>=8.3.2"
+      ]
+    },
+    "joblib": {
+      "version": "1.5.3",
+      "hashed_files_verified": 143,
+      "active_requirements": []
+    },
+    "keras": {
+      "version": "3.15.1",
+      "hashed_files_verified": 910,
+      "active_requirements": [
+        "absl-py",
+        "h5py",
+        "ml-dtypes",
+        "namex",
+        "numpy",
+        "optree",
+        "packaging",
+        "rich"
+      ]
+    },
+    "lazy-loader": {
+      "version": "0.5",
+      "hashed_files_verified": 6,
+      "active_requirements": [
+        "packaging"
+      ]
+    },
+    "libclang": {
+      "version": "18.1.1",
+      "hashed_files_verified": 11,
+      "active_requirements": []
+    },
+    "markdown": {
+      "version": "3.10.3",
+      "hashed_files_verified": 41,
+      "active_requirements": []
+    },
+    "markdown-it-py": {
+      "version": "4.2.0",
+      "hashed_files_verified": 76,
+      "active_requirements": [
+        "mdurl~=0.1"
+      ]
+    },
+    "markupsafe": {
+      "version": "3.0.3",
+      "hashed_files_verified": 11,
+      "active_requirements": []
+    },
+    "mdurl": {
+      "version": "0.1.2",
+      "hashed_files_verified": 11,
+      "active_requirements": []
+    },
+    "ml-dtypes": {
+      "version": "0.6.0",
+      "hashed_files_verified": 11,
+      "active_requirements": [
+        "numpy>=2.0.0",
+        "numpy>=2.1.0; python_version >= \"3.13\""
+      ]
+    },
+    "namex": {
+      "version": "0.1.0",
+      "hashed_files_verified": 10,
+      "active_requirements": []
+    },
+    "networkx": {
+      "version": "3.6.1",
+      "hashed_files_verified": 602,
+      "active_requirements": []
+    },
+    "numpy": {
+      "version": "2.2.6",
+      "hashed_files_verified": 876,
+      "active_requirements": []
+    },
+    "opencv-python-headless": {
+      "version": "5.0.0.93",
+      "hashed_files_verified": 145,
+      "active_requirements": [
+        "numpy>=2; python_version >= \"3.9\""
+      ]
+    },
+    "opt-einsum": {
+      "version": "3.4.0",
+      "hashed_files_verified": 32,
+      "active_requirements": []
+    },
+    "optree": {
+      "version": "0.20.0",
+      "hashed_files_verified": 25,
+      "active_requirements": [
+        "typing-extensions>=4.10.0",
+        "typing-extensions>=4.12.0; python_version >= \"3.13\""
+      ]
+    },
+    "packaging": {
+      "version": "26.3",
+      "hashed_files_verified": 30,
+      "active_requirements": []
+    },
+    "pandas": {
+      "version": "2.3.3",
+      "hashed_files_verified": 1513,
+      "active_requirements": [
+        "numpy>=1.26.0; python_version >= \"3.12\"",
+        "python-dateutil>=2.8.2",
+        "pytz>=2020.1",
+        "tzdata>=2022.7"
+      ]
+    },
+    "pillow": {
+      "version": "12.3.0",
+      "hashed_files_verified": 140,
+      "active_requirements": []
+    },
+    "protobuf": {
+      "version": "6.33.5",
+      "hashed_files_verified": 60,
+      "active_requirements": []
+    },
+    "pydantic": {
+      "version": "2.12.5",
+      "hashed_files_verified": 111,
+      "active_requirements": [
+        "annotated-types>=0.6.0",
+        "pydantic-core==2.41.5",
+        "typing-extensions>=4.14.1",
+        "typing-inspection>=0.4.2"
+      ]
+    },
+    "pydantic-core": {
+      "version": "2.41.5",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.14.1"
+      ]
+    },
+    "pygments": {
+      "version": "2.21.0",
+      "hashed_files_verified": 351,
+      "active_requirements": []
+    },
+    "python-dateutil": {
+      "version": "2.9.0.post0",
+      "hashed_files_verified": 25,
+      "active_requirements": [
+        "six>=1.5"
+      ]
+    },
+    "pytz": {
+      "version": "2026.1.post1",
+      "hashed_files_verified": 616,
+      "active_requirements": []
+    },
+    "requests": {
+      "version": "2.34.2",
+      "hashed_files_verified": 27,
+      "active_requirements": [
+        "certifi>=2023.5.7",
+        "charset_normalizer<4,>=2",
+        "idna<4,>=2.5",
+        "urllib3<3,>=1.26"
+      ]
+    },
+    "rich": {
+      "version": "15.0.0",
+      "hashed_files_verified": 106,
+      "active_requirements": [
+        "markdown-it-py>=2.2.0",
+        "pygments<3.0.0,>=2.13.0"
+      ]
+    },
+    "scikit-image": {
+      "version": "0.26.0",
+      "hashed_files_verified": 310,
+      "active_requirements": [
+        "imageio!=2.35.0,>=2.33",
+        "lazy-loader>=0.4",
+        "networkx>=3.0",
+        "numpy>=1.24",
+        "packaging>=21",
+        "pillow>=10.1",
+        "scipy>=1.11.4",
+        "tifffile>=2022.8.12"
+      ]
+    },
+    "scikit-learn": {
+      "version": "1.8.0",
+      "hashed_files_verified": 960,
+      "active_requirements": [
+        "joblib>=1.3.0",
+        "numpy>=1.24.1",
+        "scipy>=1.10.0",
+        "threadpoolctl>=3.2.0"
+      ]
+    },
+    "scipy": {
+      "version": "1.17.1",
+      "hashed_files_verified": 1423,
+      "active_requirements": [
+        "numpy<2.7,>=1.26.4"
+      ]
+    },
+    "setuptools": {
+      "version": "80.9.0",
+      "hashed_files_verified": 513,
+      "active_requirements": []
+    },
+    "six": {
+      "version": "1.17.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "tensorboard": {
+      "version": "2.20.0",
+      "hashed_files_verified": 273,
+      "active_requirements": [
+        "absl-py>=0.4",
+        "grpcio>=1.48.2",
+        "markdown>=2.6.8",
+        "numpy>=1.12.0",
+        "packaging",
+        "pillow",
+        "protobuf!=4.24.0,>=3.19.6",
+        "setuptools>=41.0.0",
+        "tensorboard-data-server<0.8.0,>=0.7.0",
+        "werkzeug>=1.0.1"
+      ]
+    },
+    "tensorboard-data-server": {
+      "version": "0.7.2",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "tensorflow": {
+      "version": "2.20.0",
+      "hashed_files_verified": 11548,
+      "active_requirements": [
+        "absl-py>=1.0.0",
+        "astunparse>=1.6.0",
+        "flatbuffers>=24.3.25",
+        "gast!=0.5.0,!=0.5.1,!=0.5.2,>=0.2.1",
+        "google_pasta>=0.1.1",
+        "grpcio<2.0,>=1.24.3",
+        "h5py>=3.11.0",
+        "keras>=3.10.0",
+        "libclang>=13.0.0",
+        "ml_dtypes<1.0.0,>=0.5.1",
+        "numpy>=1.26.0",
+        "opt_einsum>=2.3.2",
+        "packaging",
+        "protobuf>=5.28.0",
+        "requests<3,>=2.21.0",
+        "setuptools",
+        "six>=1.12.0",
+        "tensorboard~=2.20.0",
+        "termcolor>=1.1.0",
+        "typing_extensions>=3.6.6",
+        "wrapt>=1.11.0"
+      ]
+    },
+    "termcolor": {
+      "version": "3.3.0",
+      "hashed_files_verified": 9,
+      "active_requirements": []
+    },
+    "tf-keras": {
+      "version": "2.20.1",
+      "hashed_files_verified": 591,
+      "active_requirements": [
+        "tensorflow<2.21,>=2.20"
+      ]
+    },
+    "threadpoolctl": {
+      "version": "3.6.0",
+      "hashed_files_verified": 5,
+      "active_requirements": []
+    },
+    "tifffile": {
+      "version": "2026.4.11",
+      "hashed_files_verified": 21,
+      "active_requirements": [
+        "numpy>=2.0"
+      ]
+    },
+    "typing-extensions": {
+      "version": "4.16.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "typing-inspection": {
+      "version": "0.4.2",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.12.0"
+      ]
+    },
+    "tzdata": {
+      "version": "2025.3",
+      "hashed_files_verified": 633,
+      "active_requirements": []
+    },
+    "urllib3": {
+      "version": "2.7.0",
+      "hashed_files_verified": 43,
+      "active_requirements": []
+    },
+    "werkzeug": {
+      "version": "3.1.8",
+      "hashed_files_verified": 64,
+      "active_requirements": [
+        "markupsafe>=2.1.1"
+      ]
+    },
+    "wheel": {
+      "version": "0.48.0",
+      "hashed_files_verified": 22,
+      "active_requirements": [
+        "packaging>=24.0"
+      ]
+    },
+    "wrapt": {
+      "version": "2.4.1",
+      "hashed_files_verified": 22,
+      "active_requirements": []
+    }
+  },
+  "intake_plan_sha256": "e8466804ab7543c6db9715920d943a71f48838f664c08107e0ddd11a6961ea1d",
+  "connected_execution_commit": "10a56033",
+  "connected_execution_sha256": "751038bfa46e2c74166fff1ac58bd7b297405f7c5c5f1ccfaa77c884a2de349a",
+  "resource_policy": {
+    "native_threads": 1,
+    "dataset_workers": 1,
+    "foreground_cpu_budget": 2
+  },
+  "limitations": [
+    "Automated Tier 3 for concrete provisioned legacy-Keras execution only; no human Tier 1 or empirical Tier 2 claim.",
+    "Caller establishes model architecture, feature and output meanings, units, row alignment and observation availability. The operation performs no domain mapping or unit conversion.",
+    "Only finite float32/float64 input arrays and one finite floating array output with matching row count are supported. Native Keras input conversion and model geometry remain in effect.",
+    "Caller-provided model and custom predict code are trusted; no model loading, code sandboxing or authenticity check is provided. Custom code may have side effects; normal inference can create cached graphs.",
+    "Model fitting is not invoked by the provider. Stored batch-normalization weights remain unchanged in the qualified standard-model test; this is not a state-purity guarantee for arbitrary custom models.",
+    "Caller must limit model-compute threads and reserve one additional private dataset worker. Dataset autotuning is disabled; batch size alone does not bound memory or compute concurrency.",
+    "Constructed motion and electrical-power examples and exact B5 batch parity establish numerical reuse, not empirical effectiveness or complete OSIC training.",
+    "TensorFlow and legacy Keras must already be provisioned at the qualified versions. Installed RECORD integrity does not establish clean installation, publisher authenticity or redistribution approval.",
+    "Model objects and tensors are private in-process runtime values; abstract simulation, HTTP transport and whole-CDG qualification are separate."
+  ]
+}
