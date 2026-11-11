@@ -1,0 +1,142 @@
+{
+  "format": "osic-coordinate-routing-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "providers": [
+    {
+      "artifact_id": "21cb36a5-9a62-5c31-bf85-84d2ae2624b6",
+      "fqdn": "sciona.atoms.ml.domain_adapters.osic_coordinate_routing.route_response_coordinates",
+      "version_id": "d02cc8c9-c262-508c-ad6d-f120b9a4aae7",
+      "content_hash": "01e9a152c63dca1dfd90521f8644aab9b448587ad35948b0c37b8624bffcae4d",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "image_response_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonblank exact Python string matching the private image slope state. Preserve spelling without trimming. Caller establishes the relation between slope, time and response units."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "quantile_response_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonblank exact Python string matching the private quantile response state. Preserve spelling without trimming. Caller establishes compatibility with reduced image predictions and uncertainty meanings."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "tuple",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Tuple of the original image and quantile coordinate strings in that order. Keep declarations independent and preserve exact identity/spelling. Equal labels are permitted but do not prove compatibility. No unit inference, conversion, numerical calculation or state authentication. Concrete in-process declaration routing only; abstract witness rejects. Caller owns physical meanings and downstream compatibility. No empirical transfer, HTTP transport or whole-CDG approval claim."
+        }
+      ],
+      "operation": "Return image and quantile coordinate strings independently, in that order. Require nonblank exact Python strings and preserve spelling without trimming. The image model produces a slope; the quantile model produces response values. Each declaration must match its saved state. Caller establishes the relation between slope, time and response units before trajectory reduction and blending. No unit inference, conversion or compatibility proof occurs. Equal declarations are permitted; equality does not establish compatibility.",
+      "plain_description": "Keep the two supplied coordinate labels separate and return them in order.",
+      "validity_bounds": "Nonblank exact Python string matching the private image slope state. Preserve spelling without trimming. Caller establishes the relation between slope, time and response units. Nonblank exact Python string matching the private quantile response state. Preserve spelling without trimming. Caller establishes compatibility with reduced image predictions and uncertainty meanings. Tuple of the original image and quantile coordinate strings in that order. Keep declarations independent and preserve exact identity/spelling. Equal labels are permitted but do not prove compatibility. No unit inference, conversion, numerical calculation or state authentication. Concrete in-process declaration routing only; abstract witness rejects. Caller owns physical meanings and downstream compatibility. No empirical transfer, HTTP transport or whole-CDG approval claim.",
+      "reuse": "Explicit declaration boundary preserves independent caller labels while numerical operations remain separately reusable. Physical meanings and compatibility are caller-owned.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "connected_execution": {
+    "passed": true,
+    "approved": false,
+    "catalog_mutations": 0,
+    "synthetic_only": true,
+    "graph_sha256": "586bf24fb2947aad1a1c3e3b20a5348679062922ad247c7c908135df22eede4d",
+    "nodes": 15,
+    "edges": 26,
+    "missing_edges_rejected": 26,
+    "coordinate_cases": 3,
+    "coordinate_rejections": 11,
+    "independent_coordinate_edges": true,
+    "exact_registry_signatures": true,
+    "root_inputs": [
+      "baselines",
+      "batch_size",
+      "directory",
+      "dtype",
+      "feature_coordinate",
+      "image_coordinate",
+      "image_response_coordinate",
+      "metadata_coordinate",
+      "planes",
+      "quantile_response_coordinate",
+      "queries",
+      "state",
+      "states"
+    ],
+    "callable_sources": [
+      "image_predict",
+      "image_prepare",
+      "image_select_inputs"
+    ],
+    "shared_keyed_queries": true,
+    "provider_sha256": {
+      "sciona.atoms.ml.domain_adapters.osic_image_lifecycle": "2ecbb4534946cec76e88c0ac05426a8c97db4c97d3833028b6e36d364d4ac3d7",
+      "sciona.atoms.ml.keras_bounded_prediction": "3bb43f19a8d648b9098bee19ce85394ae465f7e69e1599e0f1deddfd49d5e75d",
+      "sciona.atoms.ml.domain_adapters.osic_image": "eebdaf4aba9381f05a927be4b266c40c124bced550137a0c41ad75c1fcee17e4",
+      "sciona.atoms.ml.pipeline.ordered_fields": "70839e71411188f43e18e7a008fe0c05c6e624431412ec8d37d7d089837c9cc2",
+      "sciona.atoms.ml.domain_adapters.osic_image_routing": "c2945ee1e9be250c855d38b987b818e2b7fff72692dd804fd45750a789de785b",
+      "sciona.atoms.ml.domain_adapters.osic_query_routing": "f9d9625ffd0c52574366caad20da3cde0b237d65c48833bd78700cf73455f58d",
+      "sciona.atoms.ml.domain_adapters.osic_feature_replay": "3f73748d3909bff463e3eb5dabd1f5c2ca9af729c00b16b7afe92f8eb3061104",
+      "sciona.atoms.ml.domain_adapters.osic_feature_projection": "61e15ea639750c6757b1f62a676ffb0f1b44b632ec30559a069c5e86db9eb776",
+      "sciona.atoms.ml.pipeline.typed_inputs": "a5545e5b2e1727fc10865fdc8f5fadc9fd72202a7357b1503817d65ec88695cf",
+      "sciona.atoms.ml.domain_adapters.osic_quantile": "1d39499ed4ea783f460257e947e9789130be5c1be1165837bc8f22b79d42538f",
+      "sciona.atoms.ml.domain_adapters.osic_coordinate_routing": "9dbadc7cd3c6c797ec169c92f547ae5b743894dc10df23e641d8dc2790410d4f"
+    },
+    "software_sha256": {
+      "sciona/osic_combined_inference_graph.py": "c964aa612c10f3ab9acc44a74578d2f85d593cde14e79f6e7cc50b0d6c504312",
+      "sciona/osic_image_population_graph.py": "9b9e10888390ab671c590ebbeb09ab8b0db61a068c93e05f87f9c970bc433fa5",
+      "sciona/osic_image_slice_graph.py": "049edb66d10d6e0268796e7929dfbf3005ec83b286f87ef021650300234f8034",
+      "sciona/osic_image_lifecycle_graphs.py": "e188c1f97a026fdbda7c1125a9a49a05e8fac925833542bd62f95045110efdd2",
+      "sciona/osic_keyed_quantile_graph.py": "db90a853b2302209beeedac6773383ccdf6a62206b64a0964b9fe84a73175302",
+      "sciona/osic_quantile_replay_graph.py": "944e01c1fcf3773cc89264ab6abde123703d4a7bc1e53796e15570eebee19937",
+      "sciona/services/execution_graph_codec.py": "1ad42332f8e28adf4ee3f8d53184a4af8351f66304efa1703c63ed32989082a6",
+      "scripts/validate_osic_combined_graph_structure.py": "0a843fa26f81fb9affa61e63c64b0318796520eea2b7b7642005348cb392a3ff"
+    },
+    "limitations": [
+      "Structure and coordinate string routing only; combined numerical execution has not been qualified.",
+      "Coordinate declarations are opaque caller labels; no unit compatibility or conversion is inferred.",
+      "Coordinate provider is not catalog-approved. Graph publication and full original workflow remain pending.",
+      "No empirical effectiveness, HTTP transport or full-training claim."
+    ]
+  },
+  "software_sha256": {
+    "provider": "9dbadc7cd3c6c797ec169c92f547ae5b743894dc10df23e641d8dc2790410d4f",
+    "registry": "793723a75d07a88eed39f59d8d4dc327c54adbf75db7a03003516a6f74c81b51",
+    "scripts/review_osic_coordinate_routing_semantics.py": "e511d783d65950fce697fba0b150094bdf287739c32be53f5a5ba4982a80c991",
+    "scripts/import_osic_coordinate_routing_drafts.py": "fe384b02e3a5c29d738f5e296689dc03534d19070e31ed2299a3f52968d0cff1",
+    "scripts/plan_osic_coordinate_routing_intake.py": "adff04914e858594ded5de397220039c71c3b83c582a95fa5871d9f9dccbb4f7",
+    "scripts/validate_osic_combined_graph_structure.py": "0a843fa26f81fb9affa61e63c64b0318796520eea2b7b7642005348cb392a3ff"
+  },
+  "runtime": {
+    "python": "3.13.11"
+  },
+  "intake_plan_sha256": "5d4a29e9def27ede512e649cacedcb0c6aa79284586afd0455f7b2b710f48b70",
+  "connected_execution_commit": "65036201",
+  "connected_execution_sha256": "df0c413e874ca22b154c9436a7ac56001990d76097e99a141f5bd2649216ad0c",
+  "resource_policy": {
+    "native_threads": 1,
+    "foreground_cpu_budget": 1
+  },
+  "limitations": [
+    "Automated Tier 3 concrete declaration routing only; no human Tier 1 or empirical Tier 2 claim.",
+    "Require nonblank exact Python strings, preserving identity, spelling and whitespace without trimming. Return image then quantile declaration.",
+    "Labels are opaque. Image slope units and quantile response units have different roles; caller establishes slope/time/response compatibility and uncertainty meanings.",
+    "Equal declarations are allowed but do not prove compatibility. No unit inference, conversion, numerical calculation or private-state authentication occurs.",
+    "Source interface boundary only; image inference, feature transformations, model replay and numerical reductions remain separate.",
+    "Fresh structural qualification checks three coordinate cases, eleven rejections, independent response edges and all twenty-six missing-edge projections. Prior combined numerical evidence is pinned; heavy inference is not rerun by this review.",
+    "No HTTP transport, empirical effectiveness or original-CDG approval is established."
+  ]
+}
