@@ -73,10 +73,11 @@ class PrincipalDeps:
     """Injected dependencies for the Principal graph."""
 
     architect: DecompositionAgent
-    sandbox: ExecutionSandbox
+    sandbox: ExecutionSandbox | Any
     match_results_fn: Any = None  # Callable[[CDGExport], list[MatchResult]]
     synthesize_fn: Any = None  # Callable[[CDGExport, list], Awaitable[ExportBundle]]
     evaluation_spec: Any = None
+    problem_harness: Any = None  # Optional ProblemHarness for live prototyping
     dataset_varset: dict[str, str] | None = None
     dataset_slice_start_s: float | None = None
     dataset_slice_stop_s: float | None = None
