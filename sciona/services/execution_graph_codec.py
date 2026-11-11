@@ -11,9 +11,12 @@ def _json(value):return json.dumps(value,sort_keys=True,separators=(',',':'))
 
 
 def encode_execution_graph(graph:CDGExport):
+    return _encode_snapshot(graph, graph.model_dump(mode='json'))
+
+
+def _encode_snapshot(graph, snapshot):
     if not graph.nodes or len({n.node_id for n in graph.nodes})!=len(graph.nodes):
         raise ValueError('execution graph needs unique nonempty nodes')
-    snapshot=graph.model_dump(mode='json')
     digest=hashlib.sha256(_json(snapshot).encode()).hexdigest()
     rows=[]
     for index,node in enumerate(graph.nodes):
@@ -41,8 +44,17 @@ def decode_execution_graph(nodes,edges,expected_hash):
     snapshots=[p for p in payloads if p.get('format')==FORMAT]
     if len(snapshots)!=1 or any(p.get('snapshot_hash')!=expected_hash for p in payloads):
         raise ValueError('execution snapshot identity mismatch')
-    graph=CDGExport.model_validate(snapshots[0]['graph'])
-    digest,expected_nodes,expected_edges=encode_execution_graph(graph)
+    snapshot=snapshots[0]['graph']
+    # Authenticate the stored representation before adding defaults introduced
+    # by newer model schemas. Historical version identities must stay stable.
+    if hashlib.sha256(_json(snapshot).encode()).hexdigest()!=expected_hash:
+        raise ValueError('execution snapshot content hash mismatch')
+    graph=CDGExport.model_validate(snapshot)
+    # Reject ignored fields and coerced values. Only omitted model defaults may
+    # be added in memory; explicit historical data must survive validation.
+    if _json(graph.model_dump(mode='json',exclude_unset=True))!=_json(snapshot):
+        raise ValueError('execution snapshot fields changed during validation')
+    digest,expected_nodes,expected_edges=_encode_snapshot(graph,snapshot)
     if digest!=expected_hash:raise ValueError('execution snapshot content hash mismatch')
     actual_nodes=[{key:row.get(key) for key in expected_nodes[0]} for row in nodes]
     actual_edges=[{key:row.get(key) for key in ['source_id','target_id','output_name','input_name']} for row in edges]
