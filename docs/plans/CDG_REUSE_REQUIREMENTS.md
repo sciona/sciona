@@ -2766,3 +2766,23 @@ model training or the original OSIC intake. Complete image training and final
 stored-graph qualification remain pending. See
 `osic_image_provider_publication_gates.json` and
 `osic_image_served_verification.json`.
+
+
+Generic bounded Keras prediction now has automated Tier 3 approval in both
+catalogs. Caller-provided models, aligned floating arrays and an explicit batch
+size form its interface; source image geometry, feature preparation, units and
+trajectory policy remain outside this operation. Forty-eight exact synthetic
+motion and electrical-power cases establish constructed cross-disciplinary
+reuse. A separate full-size random B5 check preserves native batch and partial
+batch behavior. Neither establishes empirical effectiveness or complete image
+training.
+
+Publication rejected 21 catalog corruption cases and rolled back completely
+after writes 1, 6, 12 and 18. Fresh served-binding execution made 65 calls and
+reproduced the analytic cases, standard batch-normalization state preservation
+and invalid-contract rejection evidence. The runtime must be provisioned with
+the qualified TensorFlow and legacy-Keras versions; callers must reserve one
+dataset worker in addition to bounded model compute. This atom approval does
+not increase the count of approved competition originals. See
+`keras_bounded_provider_publication_gates.json` and
+`keras_bounded_served_verification.json`.
