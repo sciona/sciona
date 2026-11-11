@@ -2885,3 +2885,14 @@ completed training. The dispatcher still requires catalog intake, semantic
 review and publication; the graph and original CDG remain unapproved. Quantile
 graph integration, final blending and complete training remain pending. See
 `osic_image_routing.json` and `osic_image_population_graph.json`.
+
+The population dispatcher now has a non-serving draft in both catalogs, with
+eight explicit input contracts and its ordered eight-item result contract.
+Its preparation, selection and prediction functions are caller-injected
+composition dependencies; the dispatcher imports no fixed registered numerical
+operation. Intake preserved this distinction rather than implying that the
+adapter contains the image computations. Failures after writes 1, 11 and 23
+rolled back completely; the applied import created 23 rows and a repeat created
+none. Semantic review and publication gates remain pending. See
+`osic_image_routing_intake_transactions.json` and
+`osic_image_routing_intake_apply.json`.
