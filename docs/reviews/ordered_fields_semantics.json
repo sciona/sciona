@@ -1,0 +1,182 @@
+{
+  "format": "ordered-fields-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "providers": [
+    {
+      "artifact_id": "10599635-8173-5408-a7ef-95151b7a871c",
+      "fqdn": "sciona.atoms.ml.pipeline.ordered_fields.select_values",
+      "version_id": "4abe4a41-69b9-5e16-a283-5aeda80d881d",
+      "content_hash": "d9229c623f34239ffad9efdd8fb366fd565b0ea0bd4aa1ae018e06a81a7f4926",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "mapping",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Plain dict only, with nonblank string keys. Extra fields are permitted and ignored. Values may be arbitrary caller-owned objects; this operation does not inspect, copy, convert or validate values. Caller establishes schema meanings, alignment, units and downstream value contracts."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "fields",
+          "type_desc": "list[str]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty plain list or tuple of unique nonblank string field names, all present in the mapping. Preserve supplied order and exact names without trimming. Reject missing, duplicate, unordered or invalid field names and container subclasses. No field order or application schema is inferred."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "New outer Python list of selected borrowed values in explicit field order. Preserve value identity, aliasing, dtype and shape without mutating inputs. Downstream mutations of borrowed objects affect caller-owned values. No deep copy, value validation, model execution or unit conversion. Concrete in-process execution only; abstract witness rejects. Synthetic motion and electrical-power examples demonstrate constructed ordering reuse, not empirical effectiveness. No HTTP transport or whole-CDG approval claim."
+        }
+      ],
+      "operation": "Return borrowed mapping values in an explicit caller-selected order. Require a plain dict with nonblank string keys and a nonempty plain list or tuple of unique nonblank string names, all present in the dict. Extra mapping fields are permitted and ignored. Preserve exact names without trimming. Return a new outer list; values retain identity, dtype, shape and aliasing. Do not mutate inputs or copy, convert, inspect or validate values. Caller establishes field meanings, value contracts, alignment and units. Concrete execution only; this operation neither infers a schema nor runs models.",
+      "plain_description": "Select named values from the supplied mapping and return them in the requested order.",
+      "validity_bounds": "Plain dict only, with nonblank string keys. Extra fields are permitted and ignored. Values may be arbitrary caller-owned objects; this operation does not inspect, copy, convert or validate values. Caller establishes schema meanings, alignment, units and downstream value contracts. Nonempty plain list or tuple of unique nonblank string field names, all present in the mapping. Preserve supplied order and exact names without trimming. Reject missing, duplicate, unordered or invalid field names and container subclasses. No field order or application schema is inferred. New outer Python list of selected borrowed values in explicit field order. Preserve value identity, aliasing, dtype and shape without mutating inputs. Downstream mutations of borrowed objects affect caller-owned values. No deep copy, value validation, model execution or unit conversion. Concrete in-process execution only; abstract witness rejects. Synthetic motion and electrical-power examples demonstrate constructed ordering reuse, not empirical effectiveness. No HTTP transport or whole-CDG approval claim.",
+      "reuse": "Application-independent explicit field routing; synthetic mechanical-motion and electrical-power examples preserve order, values and aliasing. Schema, units and downstream interpretation remain caller-owned.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "connected_execution": {
+    "passed": true,
+    "approved": false,
+    "catalog_mutations": 0,
+    "synthetic_only": true,
+    "cases": [
+      {
+        "application": "synthetic_motion",
+        "dtype": "float32",
+        "field_sequence": "list",
+        "analytic_result_exact": true,
+        "explicit_order_preserved": true,
+        "borrowed_values_unchanged": true
+      },
+      {
+        "application": "synthetic_motion",
+        "dtype": "float32",
+        "field_sequence": "tuple",
+        "analytic_result_exact": true,
+        "explicit_order_preserved": true,
+        "borrowed_values_unchanged": true
+      },
+      {
+        "application": "synthetic_motion",
+        "dtype": "float64",
+        "field_sequence": "list",
+        "analytic_result_exact": true,
+        "explicit_order_preserved": true,
+        "borrowed_values_unchanged": true
+      },
+      {
+        "application": "synthetic_motion",
+        "dtype": "float64",
+        "field_sequence": "tuple",
+        "analytic_result_exact": true,
+        "explicit_order_preserved": true,
+        "borrowed_values_unchanged": true
+      },
+      {
+        "application": "synthetic_electrical_power",
+        "dtype": "float32",
+        "field_sequence": "list",
+        "analytic_result_exact": true,
+        "explicit_order_preserved": true,
+        "borrowed_values_unchanged": true
+      },
+      {
+        "application": "synthetic_electrical_power",
+        "dtype": "float32",
+        "field_sequence": "tuple",
+        "analytic_result_exact": true,
+        "explicit_order_preserved": true,
+        "borrowed_values_unchanged": true
+      },
+      {
+        "application": "synthetic_electrical_power",
+        "dtype": "float64",
+        "field_sequence": "list",
+        "analytic_result_exact": true,
+        "explicit_order_preserved": true,
+        "borrowed_values_unchanged": true
+      },
+      {
+        "application": "synthetic_electrical_power",
+        "dtype": "float64",
+        "field_sequence": "tuple",
+        "analytic_result_exact": true,
+        "explicit_order_preserved": true,
+        "borrowed_values_unchanged": true
+      }
+    ],
+    "rejected_contracts": [
+      "not_mapping",
+      "mapping_subclass",
+      "nonstring_key",
+      "blank_key",
+      "unordered_fields",
+      "string_fields",
+      "sequence_subclass",
+      "empty_fields",
+      "nonstring_field",
+      "blank_field",
+      "duplicate_field",
+      "missing_field",
+      "no_implicit_trim",
+      "empty_mapping",
+      "abstract_execution"
+    ],
+    "borrowed_aliasing_preserved": true,
+    "outer_list_independent": true,
+    "exact_names_preserved": true,
+    "application_contracts": {
+      "synthetic_motion": "Position in metres plus velocity in metres per second times 0.5 seconds.",
+      "synthetic_electrical_power": "Current in amperes squared times resistance in ohms gives watts. Units are caller declarations."
+    },
+    "provider_sha256": "70839e71411188f43e18e7a008fe0c05c6e624431412ec8d37d7d089837c9cc2",
+    "validator_sha256": "bdef68c8316f2b73241410a0e6036d9470f033c3fa2ef8bb5ec3051127a0dca6",
+    "limitations": [
+      "Routing only: no value validation, dtype conversion, copying, row alignment or unit inference.",
+      "Returned values are borrowed references; downstream mutation affects caller-owned values.",
+      "Constructed synthetic applications establish explicit ordering reuse, not empirical effectiveness or original-CDG approval."
+    ]
+  },
+  "software_sha256": {
+    "provider": "70839e71411188f43e18e7a008fe0c05c6e624431412ec8d37d7d089837c9cc2",
+    "registry": "793723a75d07a88eed39f59d8d4dc327c54adbf75db7a03003516a6f74c81b51",
+    "scripts/review_ordered_fields_semantics.py": "603aca0d574f258d0adafd160fdd47a5566cb561eb9c49b2157ab9199e141bdb",
+    "scripts/import_ordered_fields_drafts.py": "874b60ac5c10c600ec513b24fc5e2a823b44decca96e96b3e3f3b59e9507a554",
+    "scripts/plan_ordered_fields_intake.py": "3ced503343f6370f2ffb905d319e5abd1b0efa755acb3d6fdb381d77822d8eaf",
+    "scripts/validate_ordered_fields_provider.py": "bdef68c8316f2b73241410a0e6036d9470f033c3fa2ef8bb5ec3051127a0dca6"
+  },
+  "runtime": {
+    "python": "3.13.11",
+    "numpy_fixture_version": "2.2.6"
+  },
+  "intake_plan_sha256": "032918ae1162c9fe65263bf227c444e4b884c8bb44fa11d47425a2367190d007",
+  "connected_execution_commit": "fa541de0",
+  "connected_execution_sha256": "3bc0567e82ba9e0f0f7b006ee075f30b40e5143cf6bad44701d805d9d00a3ca5",
+  "resource_policy": {
+    "native_threads": 1,
+    "foreground_cpu_budget": 1
+  },
+  "limitations": [
+    "Automated Tier 3 concrete in-process routing only; abstract execution rejects. No human Tier 1 or empirical Tier 2 claim.",
+    "Caller supplies a plain dict and explicit unique nonblank string field names in a plain list or tuple. No inferred schema, implicit name trimming or default missing values.",
+    "The result is a new outer list of borrowed values. Values are neither inspected nor copied, validated or converted. Existing aliases remain aliases; downstream value mutation affects caller-owned objects.",
+    "Caller establishes field meanings, dtype and shape contracts, row alignment, units, observation availability and downstream model compatibility.",
+    "Synthetic motion and electrical-power examples establish explicit routing reuse, not empirical effectiveness. Python container behavior is the implementation; NumPy is used only by numerical fixtures.",
+    "The pinned image-slice graph is supplementary prior composition evidence. This review reruns the routing qualification, not image inference or full CDG training.",
+    "No HTTP transport, serialization, thread-safety under concurrent mutation or original-CDG approval is established."
+  ]
+}
