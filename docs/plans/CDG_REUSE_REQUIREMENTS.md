@@ -3201,3 +3201,14 @@ the source anchor needed for subsequent review without claiming a merged release
 or renewed approval. The six changed modules contain fifteen changed callables;
 the combined-graph correction plan covers nine, so six additional callable
 versions need review before publication. See `osic_relocated_source_anchor.json`.
+
+Version review now covers all fifteen changed callables in the six committed
+provider modules, not only the nine used by combined inference. Import-only
+wrapper equivalence, twenty-two transitive runtime implementations, mirrored
+prior versions, unchanged interface signatures and exact approved registered
+dependencies pass checks. Fresh combined execution covers nine callables; the
+six others are explicitly supported here by source equivalence and prior
+contracts, not a claim of new direct execution. No recipe, numeric policy,
+state format or reuse boundary changes. This automated Tier 3 review remains
+unpublished pending expanded transactional and served-execution gates. See
+`osic_relocated_version_review.json`.
