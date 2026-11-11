@@ -1,0 +1,61 @@
+{
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "cases": [
+    {
+      "arithmetic_dtype": "float32",
+      "queries": 5,
+      "exact_fitted_features": true,
+      "exact_observation_mask": true,
+      "exact_observation_values": true,
+      "state_and_queries_unchanged": true,
+      "output_columns_independent": true,
+      "fitting_disabled": true
+    },
+    {
+      "arithmetic_dtype": "float64",
+      "queries": 5,
+      "exact_fitted_features": true,
+      "exact_observation_mask": true,
+      "exact_observation_values": true,
+      "state_and_queries_unchanged": true,
+      "output_columns_independent": true,
+      "fitting_disabled": true
+    }
+  ],
+  "rejected_contracts": [
+    "format",
+    "extra_field",
+    "feature_coordinate",
+    "response_coordinate",
+    "query_scope",
+    "column_order",
+    "missing_observation",
+    "duplicate_observation",
+    "nonfinite_observation",
+    "degenerate_range",
+    "object_dtype",
+    "query_order",
+    "abstract_execution"
+  ],
+  "provider_sha256": "3f73748d3909bff463e3eb5dabd1f5c2ca9af729c00b16b7afe92f8eb3061104",
+  "software_sha256": {
+    "sciona/osic_feature_state.py": "4d2dfba5ad2e367591586bf8be1f7896290a492a7394a0ee536e5e196cfe4136",
+    "sciona/osic_quantile_features.py": "7db2c03ec342165e8a93325dd21a0746575adde4363f325eea6bed8406553d2b",
+    "scripts/validate_osic_quantile_features.py": "9d42e5baa3f8d3bf5e53180368af8e32e6fc9b3ecfc7f02ead4b0c83723a97c6",
+    "scripts/validate_osic_feature_replay_provider.py": "551391e670f9f6620f18bc666ba4354117db0ee531b0fcc75c57c7c31fb872f2"
+  },
+  "runtime": {
+    "numpy": "2.2.6",
+    "pandas": "2.3.3"
+  },
+  "limitations": [
+    "Frozen source-specific transductive preparation only; exact declared query population and order required.",
+    "Compared against qualified fitted feature preparation, not a new independent source-notebook replay.",
+    "Input dtype conversion, column serialization, model replay, reduction and final blending remain separate graph operations.",
+    "Private state contains caller observations and query scope; structural checks do not establish authenticity or empirical effectiveness.",
+    "Provider qualification only; catalog approval and original-CDG approval remain pending."
+  ]
+}

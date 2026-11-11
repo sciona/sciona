@@ -2921,3 +2921,15 @@ intermediate persistence remain qualification limits. The next graph integration
 boundary is quantile feature-state replay and conversion to the prepared-fold
 interface, followed by keyed branch blending. See
 `osic_population_graph_served.json`.
+
+The quantile branch now has a locally qualified provider boundary for frozen
+feature transformation. It delegates to the existing numeric preparation-state
+implementation and preserves structured column descriptors, arithmetic dtypes,
+query order and observed-value availability. Two synthetic arithmetic cases
+(float32 and float64) reproduce fitted features and independently expected
+observation masks/values with fitting disabled. State and query inputs remain
+unchanged, returned column metadata is independently mutable, and thirteen
+invalid or abstract contracts are rejected. This state is tied to the exact
+declared transductive query batch; it is not a general train-only scaler.
+Model-input casting and descriptor serialization remain separate graph work.
+The provider is not yet catalog-approved. See `osic_feature_replay_provider.json`.
