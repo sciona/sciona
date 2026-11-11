@@ -1,0 +1,59 @@
+{
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "generic_provider_calls": 4,
+  "source_batch_qualification": {
+    "format": "osic-image-predictor.v1",
+    "passed": true,
+    "approved": false,
+    "catalog_mutations": 0,
+    "synthetic_only": true,
+    "execution": {
+      "queries": 33,
+      "source_default_batch_size": 32,
+      "source_batches": 2,
+      "partial_batch_size": 1,
+      "full_size_images": true,
+      "exact_source_predictions": true,
+      "maximum_absolute_error": 0.0,
+      "learned_weights_unchanged": true,
+      "rejected_input_contracts": 3,
+      "runtime": {
+        "tensorflow": "2.20.0",
+        "legacy_keras": "2.20.1",
+        "numpy": "2.2.6"
+      },
+      "resource_policy": {
+        "native_threads": 1,
+        "reference_dataset_workers": 1,
+        "candidate_dataset_workers": 1,
+        "reference_and_candidate_sequential": true
+      }
+    },
+    "dependency_archive_sha256": {
+      "efficientnet-1.1.0-py3-none-any.whl": "4f8a56d15e9c44e9a62dae35404079724c4a1d9e9bfbcfd2a18077e5eda58bf7",
+      "Keras_Applications-1.0.8-py3-none-any.whl": "df4323692b8c1174af821bf906f1e442e63fa7589bf0f1230a0b6bdc5a810c95",
+      "keras-applications-source.zip": "ff87b242e5de063242132c7c8a1155679c084123b857d25adec626d1374a54b4"
+    },
+    "software_sha256": {
+      "sciona/keras_bounded_prediction.py": "fe36ca313054cd1b6c3882f59139a6228d306fd92d06e469c1abc1ac3e570d55",
+      "sciona/osic_image_predictor.py": "337f73be79f20d9472c490d9efbe539d42f0c70581ae6e44dca16fbf748d077d",
+      "sciona/osic_image_model.py": "403ff9e7f6f3a2ba362c599abc68910c527a831366cff8a2563b2828db7618df",
+      "scripts/validate_osic_image_predictor.py": "465f73226a3edf47a2f2ee162d693d4a928ab937bb5e68bd4ccce11573a47143"
+    },
+    "limitations": [
+      "Seeded random B5 weights, not the ongoing training checkpoint or empirical effectiveness.",
+      "Native Keras array-adapter data order and default batch size retained; its worker pool is explicitly limited to one.",
+      "This qualifies batch dispatch and floating input conversion, not raw DICOM decoding or full branch composition.",
+      "Historical runtime numerical parity and original CDG approval remain unqualified."
+    ]
+  },
+  "provider_sha256": "3bb43f19a8d648b9098bee19ce85394ae465f7e69e1599e0f1deddfd49d5e75d",
+  "validator_sha256": "b8e09766d434f1c7a42f8b4c677ed4981e8294c2bdfdf18440e54472ac5e6275",
+  "limitations": [
+    "Random-initialized full-size B5 qualification, not completion of image training or empirical effectiveness.",
+    "The generic provider retains the native batch-size-32 and partial-batch numerical behavior; source image geometry remains outside it."
+  ]
+}
