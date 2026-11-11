@@ -1,0 +1,83 @@
+{
+  "format": "osic-coordinate-routing-intake-plan.v1",
+  "passed": true,
+  "applied": false,
+  "approved": false,
+  "catalog_mutations": 0,
+  "owner": {
+    "owner_id": "33ed07a2-1bea-5b17-8b71-d6d0e590fdd9",
+    "source_repo_id": "27b787a0-27ed-4760-92b7-ad8e8b4b815c"
+  },
+  "new_providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.domain_adapters.osic_coordinate_routing.route_response_coordinates",
+      "atom_id": "21cb36a5-9a62-5c31-bf85-84d2ae2624b6",
+      "version_id": "d02cc8c9-c262-508c-ad6d-f120b9a4aae7",
+      "content_hash": "01e9a152c63dca1dfd90521f8644aab9b448587ad35948b0c37b8624bffcae4d",
+      "provider_sha256": "9dbadc7cd3c6c797ec169c92f547ae5b743894dc10df23e641d8dc2790410d4f",
+      "semver": "0.0.0+local.01e9a152c63d",
+      "fingerprint": "e0d99b01c93f6269dfdac842eea8e03481913d88962b0207ee61592bf11845ae",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.domain_adapters.osic_coordinate_routing.route_response_coordinates",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.domain_adapters.osic_coordinate_routing",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.domain_adapters.osic_coordinate_routing",
+        "import_module": "sciona.atoms.ml.domain_adapters.osic_coordinate_routing",
+        "source_symbol": "route_response_coordinates",
+        "description": "Return image and quantile coordinate strings independently, in that order. Require nonblank exact Python strings and preserve spelling without trimming. The image model produces a slope; the quantile model produces response values. Each declaration must match its saved state. Caller establishes the relation between slope, time and response units before trajectory reduction and blending. No unit inference, conversion or compatibility proof occurs. Equal declarations are permitted; equality does not establish compatibility.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "image_response_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonblank exact Python string matching the private image slope state. Preserve spelling without trimming. Caller establishes the relation between slope, time and response units."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "quantile_response_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonblank exact Python string matching the private quantile response state. Preserve spelling without trimming. Caller establishes compatibility with reduced image predictions and uncertainty meanings."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "tuple",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Tuple of the original image and quantile coordinate strings in that order. Keep declarations independent and preserve exact identity/spelling. Equal labels are permitted but do not prove compatibility. No unit inference, conversion, numerical calculation or state authentication. Concrete in-process declaration routing only; abstract witness rejects. Caller owns physical meanings and downstream compatibility. No empirical transfer, HTTP transport or whole-CDG approval claim."
+        }
+      ]
+    }
+  ],
+  "registered_provider_dependencies": [],
+  "execution_evidence_commit": "65036201",
+  "graph_evidence_commit": "5ed15bda",
+  "execution_evidence_sha256": "df0c413e874ca22b154c9436a7ac56001990d76097e99a141f5bd2649216ad0c",
+  "provider_revision": "bfe6e9b",
+  "planner_sha256": "adff04914e858594ded5de397220039c71c3b83c582a95fa5871d9f9dccbb4f7",
+  "implementation_sha256": "9dbadc7cd3c6c797ec169c92f547ae5b743894dc10df23e641d8dc2790410d4f",
+  "execution_evidence_files": [
+    "docs/reviews/osic_combined_graph_structure.json",
+    "docs/reviews/osic_combined_inference_graph.json"
+  ],
+  "limitations": [
+    "Draft plan only; transaction, semantic review and publication gates remain required.",
+    "The provider uses only Python string validation and tuple construction, with no registered atom dependencies. Combined-graph evidence is composed use, not a dependency of routing.",
+    "Coordinate strings are immutable borrowed values; callers retain responsibility for meaning, state agreement and unit compatibility.",
+    "The graph remains unapproved; original workflow execution and empirical transfer are separate."
+  ]
+}
