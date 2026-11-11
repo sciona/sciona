@@ -1,0 +1,590 @@
+{
+  "records": [
+    {
+      "artifact_id": "a79a210e-acd5-54a7-ad03-fbce08c955fb",
+      "fqdn": "sciona.atoms.ml.domain_adapters.osic_query_routing.split_keyed_queries",
+      "version_id": "47fe4fb8-a560-5995-a64a-fe5d5819ef43",
+      "content_hash": "17ea742ce590e016d0b71e536d737fe969a69462845437cf9373f111bef3c1d6",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "queries",
+          "type_desc": "pandas.DataFrame",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty plain DataFrame with exactly key, entity and time columns, unique column names, unique nonblank exact Python string keys, nonblank exact Python string entities and native int64 times. Caller owns key meaning, coordinate units and exact frozen query-scope agreement. Reject floats and nullable integer dtypes; never convert or infer coordinates."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "tuple",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Tuple of copied entity/time DataFrame and supplied key list in identical original row order. Preserve index, exact strings, repeated entity/time pairs and int64 dtype. Output cell mutations do not affect input cells. No sorting, key generation, parsing, merging, fitting or numerical conversion. Concrete in-process source-schema routing only; abstract witness rejects. No empirical transfer, HTTP transport or whole-CDG approval claim. Pandas index internals and concurrent mutation are outside the qualified contract."
+        }
+      ],
+      "operation": "Return copied entity/time rows and their supplied keys in identical order. Require a nonempty plain DataFrame with exactly key, entity and time columns, unique column names, unique nonblank string keys, nonblank string entities and native int64 times. Preserve row order, index, exact strings and time dtype. Repeated entity/time pairs with different keys remain distinct rows. Return (entity/time DataFrame, key list); modifying either output does not modify input cell values. No sorting, key generation, parsing, fitting or numerical conversion occurs. Caller owns key meaning, time units, frozen query-scope agreement and consistent population mapping across branches.",
+      "plain_description": "Copy query rows and return their supplied keys in the same order.",
+      "validity_bounds": "Nonempty plain DataFrame with exactly key, entity and time columns, unique column names, unique nonblank exact Python string keys, nonblank exact Python string entities and native int64 times. Caller owns key meaning, coordinate units and exact frozen query-scope agreement. Reject floats and nullable integer dtypes; never convert or infer coordinates. Tuple of copied entity/time DataFrame and supplied key list in identical original row order. Preserve index, exact strings, repeated entity/time pairs and int64 dtype. Output cell mutations do not affect input cells. No sorting, key generation, parsing, merging, fitting or numerical conversion. Concrete in-process source-schema routing only; abstract witness rejects. No empirical transfer, HTTP transport or whole-CDG approval claim. Pandas index internals and concurrent mutation are outside the qualified contract.",
+      "reuse": "Source-schema query boundary that separates key alignment from reusable numerical operations and model replay. Identity meanings and units remain caller-owned.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "qualification": {
+    "format": "osic-query-routing-semantics.v1",
+    "passed": true,
+    "approved": false,
+    "proposed_tier": 3,
+    "verdict": "acceptable_with_limits",
+    "catalog_mutations": 0,
+    "synthetic_only": true,
+    "providers": [
+      {
+        "artifact_id": "a79a210e-acd5-54a7-ad03-fbce08c955fb",
+        "fqdn": "sciona.atoms.ml.domain_adapters.osic_query_routing.split_keyed_queries",
+        "version_id": "47fe4fb8-a560-5995-a64a-fe5d5819ef43",
+        "content_hash": "17ea742ce590e016d0b71e536d737fe969a69462845437cf9373f111bef3c1d6",
+        "interfaces": [
+          {
+            "direction": "input",
+            "ordinal": 0,
+            "name": "queries",
+            "type_desc": "pandas.DataFrame",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Nonempty plain DataFrame with exactly key, entity and time columns, unique column names, unique nonblank exact Python string keys, nonblank exact Python string entities and native int64 times. Caller owns key meaning, coordinate units and exact frozen query-scope agreement. Reject floats and nullable integer dtypes; never convert or infer coordinates."
+          },
+          {
+            "direction": "output",
+            "ordinal": 0,
+            "name": "result",
+            "type_desc": "tuple",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Tuple of copied entity/time DataFrame and supplied key list in identical original row order. Preserve index, exact strings, repeated entity/time pairs and int64 dtype. Output cell mutations do not affect input cells. No sorting, key generation, parsing, merging, fitting or numerical conversion. Concrete in-process source-schema routing only; abstract witness rejects. No empirical transfer, HTTP transport or whole-CDG approval claim. Pandas index internals and concurrent mutation are outside the qualified contract."
+          }
+        ],
+        "operation": "Return copied entity/time rows and their supplied keys in identical order. Require a nonempty plain DataFrame with exactly key, entity and time columns, unique column names, unique nonblank string keys, nonblank string entities and native int64 times. Preserve row order, index, exact strings and time dtype. Repeated entity/time pairs with different keys remain distinct rows. Return (entity/time DataFrame, key list); modifying either output does not modify input cell values. No sorting, key generation, parsing, fitting or numerical conversion occurs. Caller owns key meaning, time units, frozen query-scope agreement and consistent population mapping across branches.",
+        "plain_description": "Copy query rows and return their supplied keys in the same order.",
+        "validity_bounds": "Nonempty plain DataFrame with exactly key, entity and time columns, unique column names, unique nonblank exact Python string keys, nonblank exact Python string entities and native int64 times. Caller owns key meaning, coordinate units and exact frozen query-scope agreement. Reject floats and nullable integer dtypes; never convert or infer coordinates. Tuple of copied entity/time DataFrame and supplied key list in identical original row order. Preserve index, exact strings, repeated entity/time pairs and int64 dtype. Output cell mutations do not affect input cells. No sorting, key generation, parsing, merging, fitting or numerical conversion. Concrete in-process source-schema routing only; abstract witness rejects. No empirical transfer, HTTP transport or whole-CDG approval claim. Pandas index internals and concurrent mutation are outside the qualified contract.",
+        "reuse": "Source-schema query boundary that separates key alignment from reusable numerical operations and model replay. Identity meanings and units remain caller-owned.",
+        "registered_provider_dependencies": []
+      }
+    ],
+    "connected_execution": {
+      "passed": true,
+      "approved": false,
+      "catalog_mutations": 0,
+      "synthetic_only": true,
+      "column_orders_checked": 6,
+      "row_and_key_order_exact": true,
+      "duplicate_index_preserved": true,
+      "repeated_coordinates_preserved": true,
+      "exact_strings_preserved": true,
+      "output_mutations_leave_input_unchanged": true,
+      "int64_extremes_preserved": true,
+      "rejected_contracts": [
+        "not_frame",
+        "subclass",
+        "empty",
+        "missing_key",
+        "extra_column",
+        "duplicate_columns",
+        "duplicate_key",
+        "float_time",
+        "int32_time",
+        "nullable_time",
+        "boolean_time",
+        "key_blank",
+        "key_null",
+        "key_nonstring",
+        "entity_blank",
+        "entity_null",
+        "entity_nonstring",
+        "abstract_execution"
+      ],
+      "provider_sha256": "f9d9625ffd0c52574366caad20da3cde0b237d65c48833bd78700cf73455f58d",
+      "validator_sha256": "e3ebc6562bf0f5a45f8bfe583e322ce0141cfd62a6a9ddb98ea66b8902de3a73",
+      "limitations": [
+        "Source-schema boundary only; no empirical effectiveness or whole-CDG approval.",
+        "Supplied keys are opaque. Caller owns semantic identity, coordinate units and exact frozen query-scope agreement.",
+        "No key generation, sorting, merging, fitting or numerical conversion.",
+        "Only independent cell-value mutation is qualified; pandas index internals and concurrent mutation are outside this contract."
+      ]
+    },
+    "software_sha256": {
+      "provider": "f9d9625ffd0c52574366caad20da3cde0b237d65c48833bd78700cf73455f58d",
+      "registry": "793723a75d07a88eed39f59d8d4dc327c54adbf75db7a03003516a6f74c81b51",
+      "scripts/review_osic_query_routing_semantics.py": "97859296a48cfcba15b91eab95dd5bcd4e78d03180abf543a5edd37beee1ef73",
+      "scripts/import_osic_query_routing_drafts.py": "73e8190f66817c18f1f43e54e560d8ab74798db5f80c58a9fb3b7e224f0e689e",
+      "scripts/plan_osic_query_routing_intake.py": "735d7cb94a1d5c02bf0300def9197b1608d1f2707ed0793be6c32e394dc1c491",
+      "scripts/validate_osic_query_routing.py": "e3ebc6562bf0f5a45f8bfe583e322ce0141cfd62a6a9ddb98ea66b8902de3a73"
+    },
+    "runtime": {
+      "python": "3.13.11",
+      "numpy": "2.2.6",
+      "pandas": "2.3.3"
+    },
+    "intake_plan_sha256": "4930f380fc59bd1f42d69c65b7a22336581aff061f6a8de102128b5705456f44",
+    "connected_execution_commit": "6587ba42",
+    "connected_execution_sha256": "8e876e38d5c2cf498ccffc395ec4cf1a663b557b1dbcbfcc525274bc56ea3b09",
+    "resource_policy": {
+      "native_threads": 1,
+      "foreground_cpu_budget": 1
+    },
+    "limitations": [
+      "Automated Tier 3 concrete in-process query routing only; no human Tier 1 or empirical Tier 2 claim.",
+      "Exact nonempty plain DataFrame with key/entity/time columns, unique nonblank string keys, nonblank string entities and native int64 times. Reject nullable integers and floating times.",
+      "Copied entity/time rows and supplied keys retain original order, index, exact strings, repeated coordinates and integer dtype. Output cell mutations do not affect input cells.",
+      "Caller owns key meanings, coordinate units, observation availability and exact frozen query-scope agreement. No sorting, generation, parsing, fitting, merging or numerical conversion.",
+      "Source-schema boundary only; reusable feature transformations, model replay and numerical reductions stay separate. No empirical effectiveness claim.",
+      "Six column permutations, integer extremes and eighteen rejection cases are freshly checked. The pinned seven-node keyed graph is prior composition evidence; training is not rerun by this review.",
+      "No HTTP transport, serialization, pandas index internals, concurrent mutation safety or original-CDG approval is established."
+    ]
+  },
+  "inserts": [
+    {
+      "table": "references_registry",
+      "keys": {
+        "ref_id": "osic_query_routing-provider-review-v1"
+      },
+      "row": {
+        "ref_id": "osic_query_routing-provider-review-v1",
+        "ref_type": "web",
+        "title": "Keyed query routing qualification",
+        "url": "https://github.com/sciona/sciona/blob/c92d4a1f/docs/reviews/osic_query_routing_semantics.json"
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "a79a210e-acd5-54a7-ad03-fbce08c955fb",
+        "version_id": "47fe4fb8-a560-5995-a64a-fe5d5819ef43",
+        "direction": "input",
+        "name": "queries"
+      },
+      "row": {
+        "atom_id": "a79a210e-acd5-54a7-ad03-fbce08c955fb",
+        "version_id": "47fe4fb8-a560-5995-a64a-fe5d5819ef43",
+        "direction": "input",
+        "ordinal": 0,
+        "name": "queries",
+        "type_desc": "pandas.DataFrame",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Nonempty plain DataFrame with exactly key, entity and time columns, unique column names, unique nonblank exact Python string keys, nonblank exact Python string entities and native int64 times. Caller owns key meaning, coordinate units and exact frozen query-scope agreement. Reject floats and nullable integer dtypes; never convert or infer coordinates."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "a79a210e-acd5-54a7-ad03-fbce08c955fb",
+        "version_id": "47fe4fb8-a560-5995-a64a-fe5d5819ef43",
+        "name": "queries"
+      },
+      "row": {
+        "atom_id": "a79a210e-acd5-54a7-ad03-fbce08c955fb",
+        "version_id": "47fe4fb8-a560-5995-a64a-fe5d5819ef43",
+        "name": "queries",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "pandas.DataFrame",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonempty plain DataFrame with exactly key, entity and time columns, unique column names, unique nonblank exact Python string keys, nonblank exact Python string entities and native int64 times. Caller owns key meaning, coordinate units and exact frozen query-scope agreement. Reject floats and nullable integer dtypes; never convert or infer coordinates.",
+        "dejargonized_description": "Caller supplies queries.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty plain DataFrame with exactly key, entity and time columns, unique column names, unique nonblank exact Python string keys, nonblank exact Python string entities and native int64 times. Caller owns key meaning, coordinate units and exact frozen query-scope agreement. Reject floats and nullable integer dtypes; never convert or infer coordinates.",
+          "limitations": [
+            "Automated Tier 3 concrete in-process query routing only; no human Tier 1 or empirical Tier 2 claim.",
+            "Exact nonempty plain DataFrame with key/entity/time columns, unique nonblank string keys, nonblank string entities and native int64 times. Reject nullable integers and floating times.",
+            "Copied entity/time rows and supplied keys retain original order, index, exact strings, repeated coordinates and integer dtype. Output cell mutations do not affect input cells.",
+            "Caller owns key meanings, coordinate units, observation availability and exact frozen query-scope agreement. No sorting, generation, parsing, fitting, merging or numerical conversion.",
+            "Source-schema boundary only; reusable feature transformations, model replay and numerical reductions stay separate. No empirical effectiveness claim.",
+            "Six column permutations, integer extremes and eighteen rejection cases are freshly checked. The pinned seven-node keyed graph is prior composition evidence; training is not rerun by this review.",
+            "No HTTP transport, serialization, pandas index internals, concurrent mutation safety or original-CDG approval is established."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "a79a210e-acd5-54a7-ad03-fbce08c955fb",
+        "version_id": "47fe4fb8-a560-5995-a64a-fe5d5819ef43",
+        "direction": "output",
+        "name": "result"
+      },
+      "row": {
+        "atom_id": "a79a210e-acd5-54a7-ad03-fbce08c955fb",
+        "version_id": "47fe4fb8-a560-5995-a64a-fe5d5819ef43",
+        "direction": "output",
+        "ordinal": 0,
+        "name": "result",
+        "type_desc": "tuple",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Tuple of copied entity/time DataFrame and supplied key list in identical original row order. Preserve index, exact strings, repeated entity/time pairs and int64 dtype. Output cell mutations do not affect input cells. No sorting, key generation, parsing, merging, fitting or numerical conversion. Concrete in-process source-schema routing only; abstract witness rejects. No empirical transfer, HTTP transport or whole-CDG approval claim. Pandas index internals and concurrent mutation are outside the qualified contract."
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "a79a210e-acd5-54a7-ad03-fbce08c955fb",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "a79a210e-acd5-54a7-ad03-fbce08c955fb",
+        "kind": "technical",
+        "language": "en",
+        "content": "Return copied entity/time rows and their supplied keys in identical order. Require a nonempty plain DataFrame with exactly key, entity and time columns, unique column names, unique nonblank string keys, nonblank string entities and native int64 times. Preserve row order, index, exact strings and time dtype. Repeated entity/time pairs with different keys remain distinct rows. Return (entity/time DataFrame, key list); modifying either output does not modify input cell values. No sorting, key generation, parsing, fitting or numerical conversion occurs. Caller owns key meaning, time units, frozen query-scope agreement and consistent population mapping across branches. Nonempty plain DataFrame with exactly key, entity and time columns, unique column names, unique nonblank exact Python string keys, nonblank exact Python string entities and native int64 times. Caller owns key meaning, coordinate units and exact frozen query-scope agreement. Reject floats and nullable integer dtypes; never convert or infer coordinates. Tuple of copied entity/time DataFrame and supplied key list in identical original row order. Preserve index, exact strings, repeated entity/time pairs and int64 dtype. Output cell mutations do not affect input cells. No sorting, key generation, parsing, merging, fitting or numerical conversion. Concrete in-process source-schema routing only; abstract witness rejects. No empirical transfer, HTTP transport or whole-CDG approval claim. Pandas index internals and concurrent mutation are outside the qualified contract. Source-schema query boundary that separates key alignment from reusable numerical operations and model replay. Identity meanings and units remain caller-owned.",
+        "generated_by": "osic_query_routing-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "a79a210e-acd5-54a7-ad03-fbce08c955fb",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "a79a210e-acd5-54a7-ad03-fbce08c955fb",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Copy query rows and return their supplied keys in the same order. Accuracy on new problems must be checked separately.",
+        "generated_by": "osic_query_routing-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "atom_references",
+      "keys": {
+        "atom_id": "a79a210e-acd5-54a7-ad03-fbce08c955fb",
+        "ref_key": "osic_query_routing-provider-review-v1"
+      },
+      "row": {
+        "atom_id": "a79a210e-acd5-54a7-ad03-fbce08c955fb",
+        "ref_key": "osic_query_routing-provider-review-v1",
+        "ref_id": "osic_query_routing-provider-review-v1",
+        "title": "Keyed query routing qualification",
+        "url": "https://github.com/sciona/sciona/blob/c92d4a1f/docs/reviews/osic_query_routing_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Return copied entity/time rows and their supplied keys in identical order. Require a nonempty plain DataFrame with exactly key, entity and time columns, unique column names, unique nonblank string keys, nonblank string entities and native int64 times. Preserve row order, index, exact strings and time dtype. Repeated entity/time pairs with different keys remain distinct rows. Return (entity/time DataFrame, key list); modifying either output does not modify input cell values. No sorting, key generation, parsing, fitting or numerical conversion occurs. Caller owns key meaning, time units, frozen query-scope agreement and consistent population mapping across branches. Nonempty plain DataFrame with exactly key, entity and time columns, unique column names, unique nonblank exact Python string keys, nonblank exact Python string entities and native int64 times. Caller owns key meaning, coordinate units and exact frozen query-scope agreement. Reject floats and nullable integer dtypes; never convert or infer coordinates. Tuple of copied entity/time DataFrame and supplied key list in identical original row order. Preserve index, exact strings, repeated entity/time pairs and int64 dtype. Output cell mutations do not affect input cells. No sorting, key generation, parsing, merging, fitting or numerical conversion. Concrete in-process source-schema routing only; abstract witness rejects. No empirical transfer, HTTP transport or whole-CDG approval claim. Pandas index internals and concurrent mutation are outside the qualified contract."
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "a79a210e-acd5-54a7-ad03-fbce08c955fb",
+        "version_id": "47fe4fb8-a560-5995-a64a-fe5d5819ef43",
+        "name": "queries"
+      },
+      "row": {
+        "artifact_id": "a79a210e-acd5-54a7-ad03-fbce08c955fb",
+        "version_id": "47fe4fb8-a560-5995-a64a-fe5d5819ef43",
+        "name": "queries",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "pandas.DataFrame",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonempty plain DataFrame with exactly key, entity and time columns, unique column names, unique nonblank exact Python string keys, nonblank exact Python string entities and native int64 times. Caller owns key meaning, coordinate units and exact frozen query-scope agreement. Reject floats and nullable integer dtypes; never convert or infer coordinates.",
+        "dejargonized_description": "Caller supplies queries.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty plain DataFrame with exactly key, entity and time columns, unique column names, unique nonblank exact Python string keys, nonblank exact Python string entities and native int64 times. Caller owns key meaning, coordinate units and exact frozen query-scope agreement. Reject floats and nullable integer dtypes; never convert or infer coordinates.",
+          "limitations": [
+            "Automated Tier 3 concrete in-process query routing only; no human Tier 1 or empirical Tier 2 claim.",
+            "Exact nonempty plain DataFrame with key/entity/time columns, unique nonblank string keys, nonblank string entities and native int64 times. Reject nullable integers and floating times.",
+            "Copied entity/time rows and supplied keys retain original order, index, exact strings, repeated coordinates and integer dtype. Output cell mutations do not affect input cells.",
+            "Caller owns key meanings, coordinate units, observation availability and exact frozen query-scope agreement. No sorting, generation, parsing, fitting, merging or numerical conversion.",
+            "Source-schema boundary only; reusable feature transformations, model replay and numerical reductions stay separate. No empirical effectiveness claim.",
+            "Six column permutations, integer extremes and eighteen rejection cases are freshly checked. The pinned seven-node keyed graph is prior composition evidence; training is not rerun by this review.",
+            "No HTTP transport, serialization, pandas index internals, concurrent mutation safety or original-CDG approval is established."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "a79a210e-acd5-54a7-ad03-fbce08c955fb",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "a79a210e-acd5-54a7-ad03-fbce08c955fb",
+        "kind": "technical",
+        "language": "en",
+        "content": "Return copied entity/time rows and their supplied keys in identical order. Require a nonempty plain DataFrame with exactly key, entity and time columns, unique column names, unique nonblank string keys, nonblank string entities and native int64 times. Preserve row order, index, exact strings and time dtype. Repeated entity/time pairs with different keys remain distinct rows. Return (entity/time DataFrame, key list); modifying either output does not modify input cell values. No sorting, key generation, parsing, fitting or numerical conversion occurs. Caller owns key meaning, time units, frozen query-scope agreement and consistent population mapping across branches. Nonempty plain DataFrame with exactly key, entity and time columns, unique column names, unique nonblank exact Python string keys, nonblank exact Python string entities and native int64 times. Caller owns key meaning, coordinate units and exact frozen query-scope agreement. Reject floats and nullable integer dtypes; never convert or infer coordinates. Tuple of copied entity/time DataFrame and supplied key list in identical original row order. Preserve index, exact strings, repeated entity/time pairs and int64 dtype. Output cell mutations do not affect input cells. No sorting, key generation, parsing, merging, fitting or numerical conversion. Concrete in-process source-schema routing only; abstract witness rejects. No empirical transfer, HTTP transport or whole-CDG approval claim. Pandas index internals and concurrent mutation are outside the qualified contract. Source-schema query boundary that separates key alignment from reusable numerical operations and model replay. Identity meanings and units remain caller-owned.",
+        "generated_by": "osic_query_routing-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "a79a210e-acd5-54a7-ad03-fbce08c955fb",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "a79a210e-acd5-54a7-ad03-fbce08c955fb",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Copy query rows and return their supplied keys in the same order. Accuracy on new problems must be checked separately.",
+        "generated_by": "osic_query_routing-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "artifact_references",
+      "keys": {
+        "artifact_id": "a79a210e-acd5-54a7-ad03-fbce08c955fb",
+        "ref_key": "osic_query_routing-provider-review-v1"
+      },
+      "row": {
+        "artifact_id": "a79a210e-acd5-54a7-ad03-fbce08c955fb",
+        "ref_key": "osic_query_routing-provider-review-v1",
+        "ref_id": "osic_query_routing-provider-review-v1",
+        "title": "Keyed query routing qualification",
+        "url": "https://github.com/sciona/sciona/blob/c92d4a1f/docs/reviews/osic_query_routing_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Return copied entity/time rows and their supplied keys in identical order. Require a nonempty plain DataFrame with exactly key, entity and time columns, unique column names, unique nonblank string keys, nonblank string entities and native int64 times. Preserve row order, index, exact strings and time dtype. Repeated entity/time pairs with different keys remain distinct rows. Return (entity/time DataFrame, key list); modifying either output does not modify input cell values. No sorting, key generation, parsing, fitting or numerical conversion occurs. Caller owns key meaning, time units, frozen query-scope agreement and consistent population mapping across branches. Nonempty plain DataFrame with exactly key, entity and time columns, unique column names, unique nonblank exact Python string keys, nonblank exact Python string entities and native int64 times. Caller owns key meaning, coordinate units and exact frozen query-scope agreement. Reject floats and nullable integer dtypes; never convert or infer coordinates. Tuple of copied entity/time DataFrame and supplied key list in identical original row order. Preserve index, exact strings, repeated entity/time pairs and int64 dtype. Output cell mutations do not affect input cells. No sorting, key generation, parsing, merging, fitting or numerical conversion. Concrete in-process source-schema routing only; abstract witness rejects. No empirical transfer, HTTP transport or whole-CDG approval claim. Pandas index internals and concurrent mutation are outside the qualified contract."
+      }
+    }
+  ],
+  "rollups": [
+    {
+      "table": "atom_audit_rollups",
+      "key": "atom_id",
+      "identity": "a79a210e-acd5-54a7-ad03-fbce08c955fb",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 concrete in-process query routing only; no human Tier 1 or empirical Tier 2 claim.",
+          "Exact nonempty plain DataFrame with key/entity/time columns, unique nonblank string keys, nonblank string entities and native int64 times. Reject nullable integers and floating times.",
+          "Copied entity/time rows and supplied keys retain original order, index, exact strings, repeated coordinates and integer dtype. Output cell mutations do not affect input cells.",
+          "Caller owns key meanings, coordinate units, observation availability and exact frozen query-scope agreement. No sorting, generation, parsing, fitting, merging or numerical conversion.",
+          "Source-schema boundary only; reusable feature transformations, model replay and numerical reductions stay separate. No empirical effectiveness claim.",
+          "Six column permutations, integer extremes and eighteen rejection cases are freshly checked. The pinned seven-node keyed graph is prior composition evidence; training is not rerun by this review.",
+          "No HTTP transport, serialization, pandas index internals, concurrent mutation safety or original-CDG approval is established.",
+          "Nonempty plain DataFrame with exactly key, entity and time columns, unique column names, unique nonblank exact Python string keys, nonblank exact Python string entities and native int64 times. Caller owns key meaning, coordinate units and exact frozen query-scope agreement. Reject floats and nullable integer dtypes; never convert or infer coordinates. Tuple of copied entity/time DataFrame and supplied key list in identical original row order. Preserve index, exact strings, repeated entity/time pairs and int64 dtype. Output cell mutations do not affect input cells. No sorting, key generation, parsing, merging, fitting or numerical conversion. Concrete in-process source-schema routing only; abstract witness rejects. No empirical transfer, HTTP transport or whole-CDG approval claim. Pandas index internals and concurrent mutation are outside the qualified contract."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "artifact_audit_rollups",
+      "key": "artifact_id",
+      "identity": "a79a210e-acd5-54a7-ad03-fbce08c955fb",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 concrete in-process query routing only; no human Tier 1 or empirical Tier 2 claim.",
+          "Exact nonempty plain DataFrame with key/entity/time columns, unique nonblank string keys, nonblank string entities and native int64 times. Reject nullable integers and floating times.",
+          "Copied entity/time rows and supplied keys retain original order, index, exact strings, repeated coordinates and integer dtype. Output cell mutations do not affect input cells.",
+          "Caller owns key meanings, coordinate units, observation availability and exact frozen query-scope agreement. No sorting, generation, parsing, fitting, merging or numerical conversion.",
+          "Source-schema boundary only; reusable feature transformations, model replay and numerical reductions stay separate. No empirical effectiveness claim.",
+          "Six column permutations, integer extremes and eighteen rejection cases are freshly checked. The pinned seven-node keyed graph is prior composition evidence; training is not rerun by this review.",
+          "No HTTP transport, serialization, pandas index internals, concurrent mutation safety or original-CDG approval is established.",
+          "Nonempty plain DataFrame with exactly key, entity and time columns, unique column names, unique nonblank exact Python string keys, nonblank exact Python string entities and native int64 times. Caller owns key meaning, coordinate units and exact frozen query-scope agreement. Reject floats and nullable integer dtypes; never convert or infer coordinates. Tuple of copied entity/time DataFrame and supplied key list in identical original row order. Preserve index, exact strings, repeated entity/time pairs and int64 dtype. Output cell mutations do not affect input cells. No sorting, key generation, parsing, merging, fitting or numerical conversion. Concrete in-process source-schema routing only; abstract witness rejects. No empirical transfer, HTTP transport or whole-CDG approval claim. Pandas index internals and concurrent mutation are outside the qualified contract."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    }
+  ],
+  "states": {
+    "a79a210e-acd5-54a7-ad03-fbce08c955fb": {
+      "atom": {
+        "status": "flagged",
+        "is_publishable": false
+      },
+      "artifact": {
+        "status": "draft",
+        "is_publishable": false
+      }
+    }
+  },
+  "before": {
+    "atoms": "3494c80621df3a6ea052f4b8c3a00cc53ac356e18042925fb4c215c52409508c",
+    "artifacts": "744c371fc409736cae8b68bfa3c9375c969ffbbbe511ca003ef01ac5410a36b4",
+    "atom_versions": "fed85d659ca022ad4401f5623cf6ebcc42c39602fcc21faa15787651dcf4979d",
+    "artifact_versions": "f95c37737e3f93cfa3b8303f0ca43373d2c636691b94dc28397db6dfc195bd44",
+    "atom_io_specs": "68e767e8ace64c8346f54d7edcac9e181b130bc6b68dfee438c9c2a37ccf2df7",
+    "artifact_io_specs": "063b04b7031ff00412bd97b67d142f41c2667c96424266da7d1e3f51f7939be7",
+    "atom_parameters": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_parameters": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_descriptions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_descriptions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_references": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_references": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_audit_rollups": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_audit_rollups": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_audit_evidence": "6b96e0405d3cd3e262fd6a133fa76f83f72fb22407830301cdb83db9fae4a4a4",
+    "artifact_dependencies": []
+  },
+  "preserved": {
+    "atom_versions": [
+      {
+        "row": {
+          "s3_key": "",
+          "semver": "0.0.0+local.17ea742ce590",
+          "atom_id": "a79a210e-acd5-54a7-ad03-fbce08c955fb",
+          "is_latest": true,
+          "created_at": "2026-11-11T03:25:22.076276+00:00",
+          "trust_tier": 3,
+          "version_id": "47fe4fb8-a560-5995-a64a-fe5d5819ef43",
+          "fingerprint": "21c7dcb5f2689eb7593167642352f2ad47ed412035e820a5df5ae99d4e7a3486",
+          "content_hash": "17ea742ce590e016d0b71e536d737fe969a69462845437cf9373f111bef3c1d6",
+          "derives_from": null
+        }
+      }
+    ],
+    "atom_parameters": [],
+    "atom_references": [],
+    "atom_io_specs": [
+      {
+        "row": {
+          "name": "queries",
+          "atom_id": "a79a210e-acd5-54a7-ad03-fbce08c955fb",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "pandas.DataFrame",
+          "io_spec_id": "e36c762d-7e19-4f72-b133-e5d650aec60a",
+          "version_id": "47fe4fb8-a560-5995-a64a-fe5d5819ef43",
+          "constraints": "Nonempty plain DataFrame with exactly key, entity and time columns, unique column names, unique nonblank exact Python string keys, nonblank exact Python string entities and native int64 times. Caller owns key meaning, coordinate units and exact frozen query-scope agreement. Reject floats and nullable integer dtypes; never convert or infer coordinates.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "result",
+          "atom_id": "a79a210e-acd5-54a7-ad03-fbce08c955fb",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "tuple",
+          "io_spec_id": "7435e30e-da94-4bdd-b51b-9a7e4369dc00",
+          "version_id": "47fe4fb8-a560-5995-a64a-fe5d5819ef43",
+          "constraints": "Tuple of copied entity/time DataFrame and supplied key list in identical original row order. Preserve index, exact strings, repeated entity/time pairs and int64 dtype. Output cell mutations do not affect input cells. No sorting, key generation, parsing, merging, fitting or numerical conversion. Concrete in-process source-schema routing only; abstract witness rejects. No empirical transfer, HTTP transport or whole-CDG approval claim. Pandas index internals and concurrent mutation are outside the qualified contract.",
+          "default_value_repr": ""
+        }
+      }
+    ],
+    "artifact_versions": [
+      {
+        "row": {
+          "s3_key": "",
+          "semver": "0.0.0+local.17ea742ce590",
+          "is_latest": true,
+          "created_at": "2026-11-11T03:25:22.076276+00:00",
+          "trust_tier": 3,
+          "version_id": "47fe4fb8-a560-5995-a64a-fe5d5819ef43",
+          "artifact_id": "a79a210e-acd5-54a7-ad03-fbce08c955fb",
+          "fingerprint": "21c7dcb5f2689eb7593167642352f2ad47ed412035e820a5df5ae99d4e7a3486",
+          "content_hash": "17ea742ce590e016d0b71e536d737fe969a69462845437cf9373f111bef3c1d6",
+          "derives_from": null
+        }
+      }
+    ],
+    "artifact_parameters": [],
+    "artifact_references": [],
+    "artifact_io_specs": [
+      {
+        "row": {
+          "name": "queries",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "pandas.DataFrame",
+          "io_spec_id": "46a66a8f-bdeb-439a-b1a6-6ea991c92925",
+          "version_id": "47fe4fb8-a560-5995-a64a-fe5d5819ef43",
+          "artifact_id": "a79a210e-acd5-54a7-ad03-fbce08c955fb",
+          "constraints": "Nonempty plain DataFrame with exactly key, entity and time columns, unique column names, unique nonblank exact Python string keys, nonblank exact Python string entities and native int64 times. Caller owns key meaning, coordinate units and exact frozen query-scope agreement. Reject floats and nullable integer dtypes; never convert or infer coordinates.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "result",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "tuple",
+          "io_spec_id": "6a7a9c65-309f-4a61-9716-aec37dcdb0cf",
+          "version_id": "47fe4fb8-a560-5995-a64a-fe5d5819ef43",
+          "artifact_id": "a79a210e-acd5-54a7-ad03-fbce08c955fb",
+          "constraints": "Tuple of copied entity/time DataFrame and supplied key list in identical original row order. Preserve index, exact strings, repeated entity/time pairs and int64 dtype. Output cell mutations do not affect input cells. No sorting, key generation, parsing, merging, fitting or numerical conversion. Concrete in-process source-schema routing only; abstract witness rejects. No empirical transfer, HTTP transport or whole-CDG approval claim. Pandas index internals and concurrent mutation are outside the qualified contract.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      }
+    ],
+    "artifact_audit_evidence": [
+      {
+        "row": {
+          "passed": true,
+          "status": "completed",
+          "details": {
+            "scope": "Exact source/version/interface draft import only. Dependency qualification, full metadata and semantic publication gates remain pending.",
+            "plan_commit": "5a8c7249",
+            "plan_sha256": "4930f380fc59bd1f42d69c65b7a22336581aff061f6a8de102128b5705456f44",
+            "provider_sha256": "f9d9625ffd0c52574366caad20da3cde0b237d65c48833bd78700cf73455f58d",
+            "execution_evidence_sha256": "8e876e38d5c2cf498ccffc395ec4cf1a663b557b1dbcbfcc525274bc56ea3b09"
+          },
+          "audit_type": "asset_integrity_check",
+          "created_at": "2026-11-11T03:25:22.076276+00:00",
+          "version_id": "47fe4fb8-a560-5995-a64a-fe5d5819ef43",
+          "artifact_id": "a79a210e-acd5-54a7-ad03-fbce08c955fb",
+          "evidence_id": "9569f791-6ff1-5cf0-9c2f-3e395bd2e878",
+          "source_kind": "automated",
+          "runner_version": "osic_query_routing-draft-intake.v1",
+          "review_basis_at": null,
+          "run_duration_ms": null,
+          "source_revision": "",
+          "upstream_version": ""
+        }
+      }
+    ],
+    "artifact_dependencies": []
+  },
+  "publisher_sha256": "4e24f15a375ab44460783db99df4b5ff6a5cc5317ed2a28ebdbd2c8c4befeb9e",
+  "review_sha256": "14aef462baabc7b419d677081197eb53d7e7c98b7df1e16591def2d01f82b750"
+}
