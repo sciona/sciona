@@ -2988,3 +2988,17 @@ dependency. Failures after writes 1, 10 and 20 rolled back completely. The
 applied import created twenty rows for two providers and the repeat created
 none. Semantic review and publication gates remain pending. See
 `typed_inputs_intake_transactions.json` and `typed_inputs_intake_apply.json`.
+
+Semantic review found a counterexample to the draft descriptor encoder's exact
+round-trip claim: standard JSON decoding combines an explicit UTF-16 surrogate
+pair in a Python string into one Unicode scalar character. The frozen original
+function reproduces this discrepancy. The corrected implementation rejects all
+surrogate code points and explicitly requires Unicode scalar-value strings.
+Three surrogate rejection cases and six valid Unicode/control/normalization
+cases pass, alongside all prior conversion checks. The six-node quantile graph
+also reproduces exact features and predictions with the corrected encoder.
+Original reports remain immutable historical evidence. Existing conversion
+drafts remain non-serving; their pinned provider bytes no longer match and a
+reviewed intake/version update is required before publication. See
+`typed_inputs_unicode_correction.json` and
+`osic_quantile_replay_graph_unicode_correction.json`.
