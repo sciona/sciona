@@ -1,0 +1,1016 @@
+{
+  "records": [
+    {
+      "artifact_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+      "fqdn": "sciona.atoms.ml.domain_adapters.osic_feature_replay.transform_frozen_queries",
+      "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+      "content_hash": "3c9c03abfa04035e2b58ee6b7ae135af6d53db5fcadf6f513c57d1c4e4e7aafc",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "state",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Private caller-owned frozen preparation state with exact format, coordinates, ordered categories, ranges, arithmetic dtypes, feature_columns, observations and query_scope. Require unique nonblank ordered categories without cross-field collisions; feature order must match category order then numeric,time_offset,baseline_target. Numeric ranges are finite and nondegenerate. Stored observations must uniquely cover queried entities and contain finite numeric values and fitted categories. Supported saved arithmetic dtypes are float32/float64 and signed/unsigned 8/16/32/64-bit integers. Caller establishes provenance and ensures intended arithmetic is representable; structural checks do not authenticate state. Never publish saved observations or query scope."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "queries",
+          "type_desc": "pandas.DataFrame",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty explicitly mapped entity/time table with nonblank string entities and finite real numeric times, complete rows, and exact equality to saved query_scope records in supplied order. Caller supplies unambiguous unique column names. No query population change, reordering, baseline inference or extrapolation to an undeclared population. Query time is converted to saved time-offset arithmetic dtype; caller establishes representability and compatible units."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "feature_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit nonblank Python string exactly matching saved feature_coordinate. Names bind caller-declared feature meanings and order; this operation does not infer units or permit a changed coordinate system."
+        },
+        {
+          "direction": "input",
+          "ordinal": 3,
+          "name": "response_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit nonblank Python string exactly matching saved response_coordinate. Caller establishes compatible response units and actual availability of stored observations; matching labels do not establish provenance."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Mapping with features (M,D) numeric array, structured ordered feature_columns, boolean observed_mask (M,), and observed_values (M,). Features preserve fitted source arithmetic before column stacking; output dtype may be promoted by categorical columns. Observed values contain saved observations where query time exactly equals observed_time, and zero elsewhere. Column metadata is copied; state and query inputs are not mutated. No model-input float32 cast, descriptor serialization, model loading, fitting, extrema discovery, prediction reduction or branch blending. Concrete in-process execution only; abstract witness rejects. This is a source-specific frozen transductive feature recipe, not an unrestricted train-only scaler. Qualification covers synthetic float32/float64 arithmetic. Broader integer configurations require caller validation. No empirical effectiveness, HTTP transport or original-CDG approval claim."
+        }
+      ],
+      "operation": "Transform the exact declared query batch using saved source feature state. Require private caller-owned state, mapped entity/time queries and matching nonblank feature and response coordinates. Preserve frozen category order, arithmetic dtypes, scaling ranges, observed baselines and query order. Reject a changed query population or order: this transductive state is not an unrestricted train-only scaler. Return a mapping with features, structured feature_columns, observed_mask and observed_values. Do not cast features to model input dtype, serialize column descriptors, restore models or reduce predictions. Those are separate graph operations. No fitting or extrema discovery occurs. Caller establishes state provenance, category meanings, coordinate units and observation availability. Structural state checks do not authenticate state or establish empirical transfer. Saved observations and query scope must remain private runtime material.",
+      "plain_description": "Use saved preparation rules to turn the same declared query rows into model features and mark which rows have known values.",
+      "validity_bounds": "Private caller-owned frozen preparation state with exact format, coordinates, ordered categories, ranges, arithmetic dtypes, feature_columns, observations and query_scope. Require unique nonblank ordered categories without cross-field collisions; feature order must match category order then numeric,time_offset,baseline_target. Numeric ranges are finite and nondegenerate. Stored observations must uniquely cover queried entities and contain finite numeric values and fitted categories. Supported saved arithmetic dtypes are float32/float64 and signed/unsigned 8/16/32/64-bit integers. Caller establishes provenance and ensures intended arithmetic is representable; structural checks do not authenticate state. Never publish saved observations or query scope. Nonempty explicitly mapped entity/time table with nonblank string entities and finite real numeric times, complete rows, and exact equality to saved query_scope records in supplied order. Caller supplies unambiguous unique column names. No query population change, reordering, baseline inference or extrapolation to an undeclared population. Query time is converted to saved time-offset arithmetic dtype; caller establishes representability and compatible units. Explicit nonblank Python string exactly matching saved feature_coordinate. Names bind caller-declared feature meanings and order; this operation does not infer units or permit a changed coordinate system. Explicit nonblank Python string exactly matching saved response_coordinate. Caller establishes compatible response units and actual availability of stored observations; matching labels do not establish provenance. Mapping with features (M,D) numeric array, structured ordered feature_columns, boolean observed_mask (M,), and observed_values (M,). Features preserve fitted source arithmetic before column stacking; output dtype may be promoted by categorical columns. Observed values contain saved observations where query time exactly equals observed_time, and zero elsewhere. Column metadata is copied; state and query inputs are not mutated. No model-input float32 cast, descriptor serialization, model loading, fitting, extrema discovery, prediction reduction or branch blending. Concrete in-process execution only; abstract witness rejects. This is a source-specific frozen transductive feature recipe, not an unrestricted train-only scaler. Qualification covers synthetic float32/float64 arithmetic. Broader integer configurations require caller validation. No empirical effectiveness, HTTP transport or original-CDG approval claim.",
+      "reuse": "Separate frozen source preprocessing from model-input conversion, model replay and reduction. Cross-domain use requires an explicit compatible mapping, coordinate and availability contract; fixed transductive query scope cannot be generalized away.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "qualification": {
+    "format": "osic-feature-replay-semantics.v1",
+    "passed": true,
+    "approved": false,
+    "proposed_tier": 3,
+    "verdict": "acceptable_with_limits",
+    "catalog_mutations": 0,
+    "synthetic_only": true,
+    "providers": [
+      {
+        "artifact_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "fqdn": "sciona.atoms.ml.domain_adapters.osic_feature_replay.transform_frozen_queries",
+        "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+        "content_hash": "3c9c03abfa04035e2b58ee6b7ae135af6d53db5fcadf6f513c57d1c4e4e7aafc",
+        "interfaces": [
+          {
+            "direction": "input",
+            "ordinal": 0,
+            "name": "state",
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Private caller-owned frozen preparation state with exact format, coordinates, ordered categories, ranges, arithmetic dtypes, feature_columns, observations and query_scope. Require unique nonblank ordered categories without cross-field collisions; feature order must match category order then numeric,time_offset,baseline_target. Numeric ranges are finite and nondegenerate. Stored observations must uniquely cover queried entities and contain finite numeric values and fitted categories. Supported saved arithmetic dtypes are float32/float64 and signed/unsigned 8/16/32/64-bit integers. Caller establishes provenance and ensures intended arithmetic is representable; structural checks do not authenticate state. Never publish saved observations or query scope."
+          },
+          {
+            "direction": "input",
+            "ordinal": 1,
+            "name": "queries",
+            "type_desc": "pandas.DataFrame",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Nonempty explicitly mapped entity/time table with nonblank string entities and finite real numeric times, complete rows, and exact equality to saved query_scope records in supplied order. Caller supplies unambiguous unique column names. No query population change, reordering, baseline inference or extrapolation to an undeclared population. Query time is converted to saved time-offset arithmetic dtype; caller establishes representability and compatible units."
+          },
+          {
+            "direction": "input",
+            "ordinal": 2,
+            "name": "feature_coordinate",
+            "type_desc": "str",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Explicit nonblank Python string exactly matching saved feature_coordinate. Names bind caller-declared feature meanings and order; this operation does not infer units or permit a changed coordinate system."
+          },
+          {
+            "direction": "input",
+            "ordinal": 3,
+            "name": "response_coordinate",
+            "type_desc": "str",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Explicit nonblank Python string exactly matching saved response_coordinate. Caller establishes compatible response units and actual availability of stored observations; matching labels do not establish provenance."
+          },
+          {
+            "direction": "output",
+            "ordinal": 0,
+            "name": "result",
+            "type_desc": "dict",
+            "required": true,
+            "default_value_repr": "",
+            "constraints": "Mapping with features (M,D) numeric array, structured ordered feature_columns, boolean observed_mask (M,), and observed_values (M,). Features preserve fitted source arithmetic before column stacking; output dtype may be promoted by categorical columns. Observed values contain saved observations where query time exactly equals observed_time, and zero elsewhere. Column metadata is copied; state and query inputs are not mutated. No model-input float32 cast, descriptor serialization, model loading, fitting, extrema discovery, prediction reduction or branch blending. Concrete in-process execution only; abstract witness rejects. This is a source-specific frozen transductive feature recipe, not an unrestricted train-only scaler. Qualification covers synthetic float32/float64 arithmetic. Broader integer configurations require caller validation. No empirical effectiveness, HTTP transport or original-CDG approval claim."
+          }
+        ],
+        "operation": "Transform the exact declared query batch using saved source feature state. Require private caller-owned state, mapped entity/time queries and matching nonblank feature and response coordinates. Preserve frozen category order, arithmetic dtypes, scaling ranges, observed baselines and query order. Reject a changed query population or order: this transductive state is not an unrestricted train-only scaler. Return a mapping with features, structured feature_columns, observed_mask and observed_values. Do not cast features to model input dtype, serialize column descriptors, restore models or reduce predictions. Those are separate graph operations. No fitting or extrema discovery occurs. Caller establishes state provenance, category meanings, coordinate units and observation availability. Structural state checks do not authenticate state or establish empirical transfer. Saved observations and query scope must remain private runtime material.",
+        "plain_description": "Use saved preparation rules to turn the same declared query rows into model features and mark which rows have known values.",
+        "validity_bounds": "Private caller-owned frozen preparation state with exact format, coordinates, ordered categories, ranges, arithmetic dtypes, feature_columns, observations and query_scope. Require unique nonblank ordered categories without cross-field collisions; feature order must match category order then numeric,time_offset,baseline_target. Numeric ranges are finite and nondegenerate. Stored observations must uniquely cover queried entities and contain finite numeric values and fitted categories. Supported saved arithmetic dtypes are float32/float64 and signed/unsigned 8/16/32/64-bit integers. Caller establishes provenance and ensures intended arithmetic is representable; structural checks do not authenticate state. Never publish saved observations or query scope. Nonempty explicitly mapped entity/time table with nonblank string entities and finite real numeric times, complete rows, and exact equality to saved query_scope records in supplied order. Caller supplies unambiguous unique column names. No query population change, reordering, baseline inference or extrapolation to an undeclared population. Query time is converted to saved time-offset arithmetic dtype; caller establishes representability and compatible units. Explicit nonblank Python string exactly matching saved feature_coordinate. Names bind caller-declared feature meanings and order; this operation does not infer units or permit a changed coordinate system. Explicit nonblank Python string exactly matching saved response_coordinate. Caller establishes compatible response units and actual availability of stored observations; matching labels do not establish provenance. Mapping with features (M,D) numeric array, structured ordered feature_columns, boolean observed_mask (M,), and observed_values (M,). Features preserve fitted source arithmetic before column stacking; output dtype may be promoted by categorical columns. Observed values contain saved observations where query time exactly equals observed_time, and zero elsewhere. Column metadata is copied; state and query inputs are not mutated. No model-input float32 cast, descriptor serialization, model loading, fitting, extrema discovery, prediction reduction or branch blending. Concrete in-process execution only; abstract witness rejects. This is a source-specific frozen transductive feature recipe, not an unrestricted train-only scaler. Qualification covers synthetic float32/float64 arithmetic. Broader integer configurations require caller validation. No empirical effectiveness, HTTP transport or original-CDG approval claim.",
+        "reuse": "Separate frozen source preprocessing from model-input conversion, model replay and reduction. Cross-domain use requires an explicit compatible mapping, coordinate and availability contract; fixed transductive query scope cannot be generalized away.",
+        "registered_provider_dependencies": []
+      }
+    ],
+    "connected_execution": {
+      "passed": true,
+      "approved": false,
+      "catalog_mutations": 0,
+      "synthetic_only": true,
+      "cases": [
+        {
+          "arithmetic_dtype": "float32",
+          "queries": 5,
+          "exact_fitted_features": true,
+          "exact_observation_mask": true,
+          "exact_observation_values": true,
+          "state_and_queries_unchanged": true,
+          "output_columns_independent": true,
+          "fitting_disabled": true
+        },
+        {
+          "arithmetic_dtype": "float64",
+          "queries": 5,
+          "exact_fitted_features": true,
+          "exact_observation_mask": true,
+          "exact_observation_values": true,
+          "state_and_queries_unchanged": true,
+          "output_columns_independent": true,
+          "fitting_disabled": true
+        }
+      ],
+      "rejected_contracts": [
+        "format",
+        "extra_field",
+        "feature_coordinate",
+        "response_coordinate",
+        "query_scope",
+        "column_order",
+        "missing_observation",
+        "duplicate_observation",
+        "nonfinite_observation",
+        "degenerate_range",
+        "object_dtype",
+        "query_order",
+        "abstract_execution"
+      ],
+      "provider_sha256": "3f73748d3909bff463e3eb5dabd1f5c2ca9af729c00b16b7afe92f8eb3061104",
+      "software_sha256": {
+        "sciona/osic_feature_state.py": "4d2dfba5ad2e367591586bf8be1f7896290a492a7394a0ee536e5e196cfe4136",
+        "sciona/osic_quantile_features.py": "7db2c03ec342165e8a93325dd21a0746575adde4363f325eea6bed8406553d2b",
+        "scripts/validate_osic_quantile_features.py": "9d42e5baa3f8d3bf5e53180368af8e32e6fc9b3ecfc7f02ead4b0c83723a97c6",
+        "scripts/validate_osic_feature_replay_provider.py": "551391e670f9f6620f18bc666ba4354117db0ee531b0fcc75c57c7c31fb872f2"
+      },
+      "runtime": {
+        "numpy": "2.2.6",
+        "pandas": "2.3.3"
+      },
+      "limitations": [
+        "Frozen source-specific transductive preparation only; exact declared query population and order required.",
+        "Compared against qualified fitted feature preparation, not a new independent source-notebook replay.",
+        "Input dtype conversion, column serialization, model replay, reduction and final blending remain separate graph operations.",
+        "Private state contains caller observations and query scope; structural checks do not establish authenticity or empirical effectiveness.",
+        "Provider qualification only; catalog approval and original-CDG approval remain pending."
+      ]
+    },
+    "software_sha256": {
+      "provider": "3f73748d3909bff463e3eb5dabd1f5c2ca9af729c00b16b7afe92f8eb3061104",
+      "registry": "793723a75d07a88eed39f59d8d4dc327c54adbf75db7a03003516a6f74c81b51",
+      "implementation": "4d2dfba5ad2e367591586bf8be1f7896290a492a7394a0ee536e5e196cfe4136",
+      "feature_software": "7db2c03ec342165e8a93325dd21a0746575adde4363f325eea6bed8406553d2b",
+      "scripts/review_osic_feature_replay_semantics.py": "ea65deed8a7cc95c63783c88738df77dff1d86e244bf1919c7905b2b11a832f1",
+      "scripts/import_osic_feature_replay_drafts.py": "1b24b4669b715a5cf75c80800dc64eafe3785532cb2ff7e482c44b5fcc95b170",
+      "scripts/plan_osic_feature_replay_intake.py": "dc5111de174c62430fbc3bf42cf7ca3675fed6d09d6c4acaf342a17f83290617",
+      "scripts/validate_osic_feature_replay_provider.py": "551391e670f9f6620f18bc666ba4354117db0ee531b0fcc75c57c7c31fb872f2"
+    },
+    "runtime": {
+      "python": "3.13.11",
+      "numpy": "2.2.6",
+      "pandas": "2.3.3"
+    },
+    "intake_plan_sha256": "35fb7f4b421b5a5d2c2ce9db70dde623063a9d5595f998abb5922a0e0daab3c1",
+    "connected_execution_commit": "f4094d4a",
+    "connected_execution_sha256": "b69f0bfc61b4c4d998ac1d2c14eee767f04845a343ed9b31cce1d6f727ffbd9a",
+    "resource_policy": {
+      "native_threads": 1,
+      "foreground_cpu_budget": 1
+    },
+    "limitations": [
+      "Automated Tier 3 concrete in-process frozen preprocessing only; abstract execution rejects. No human Tier 1 or empirical Tier 2 claim.",
+      "Exact declared transductive query population and record order are required. A changed population requires separately qualified preparation and model training, not silent reuse of this state.",
+      "Caller supplies private numeric preparation state, mapped entity/time queries and matching feature/response coordinate labels. Baseline observations and query scope must remain private runtime material.",
+      "State validation is structural, not authentication. Caller establishes provenance, unambiguous column names, category meanings, coordinate units, numeric representability and actual observation availability.",
+      "Qualification covers float32 and float64 saved arithmetic. Integer arithmetic options are structurally supported but not comprehensively qualified; overflow, underflow and lossy casting require caller validation.",
+      "The stacked feature matrix can have a promoted dtype from categorical columns. Model-input casting, structured column serialization, model replay, prediction reduction and branch blending are separate operations.",
+      "Fresh synthetic replay reproduces qualified fitted feature preparation, availability masks and observed values without fitting. This is not an independent source-notebook comparison or empirical transfer evidence.",
+      "Source-specific preprocessing is separated from reusable downstream model execution and numerical operations. No unrestricted train-only scaler, HTTP transport, concurrent-mutation safety or original-CDG approval claim."
+    ]
+  },
+  "inserts": [
+    {
+      "table": "references_registry",
+      "keys": {
+        "ref_id": "osic_feature_replay-provider-review-v1"
+      },
+      "row": {
+        "ref_id": "osic_feature_replay-provider-review-v1",
+        "ref_type": "web",
+        "title": "Frozen feature replay and exact query-scope qualification",
+        "url": "https://github.com/sciona/sciona/blob/583e727213f368e83a1a3044a8fc7e1a0e7a6c0c/docs/reviews/osic_feature_replay_semantics.json"
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+        "direction": "input",
+        "name": "state"
+      },
+      "row": {
+        "atom_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+        "direction": "input",
+        "ordinal": 0,
+        "name": "state",
+        "type_desc": "dict",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Private caller-owned frozen preparation state with exact format, coordinates, ordered categories, ranges, arithmetic dtypes, feature_columns, observations and query_scope. Require unique nonblank ordered categories without cross-field collisions; feature order must match category order then numeric,time_offset,baseline_target. Numeric ranges are finite and nondegenerate. Stored observations must uniquely cover queried entities and contain finite numeric values and fitted categories. Supported saved arithmetic dtypes are float32/float64 and signed/unsigned 8/16/32/64-bit integers. Caller establishes provenance and ensures intended arithmetic is representable; structural checks do not authenticate state. Never publish saved observations or query scope."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+        "name": "state"
+      },
+      "row": {
+        "atom_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+        "name": "state",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "dict",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Private caller-owned frozen preparation state with exact format, coordinates, ordered categories, ranges, arithmetic dtypes, feature_columns, observations and query_scope. Require unique nonblank ordered categories without cross-field collisions; feature order must match category order then numeric,time_offset,baseline_target. Numeric ranges are finite and nondegenerate. Stored observations must uniquely cover queried entities and contain finite numeric values and fitted categories. Supported saved arithmetic dtypes are float32/float64 and signed/unsigned 8/16/32/64-bit integers. Caller establishes provenance and ensures intended arithmetic is representable; structural checks do not authenticate state. Never publish saved observations or query scope.",
+        "dejargonized_description": "Caller supplies state.",
+        "constraints_json": {
+          "parameter_contract": "Private caller-owned frozen preparation state with exact format, coordinates, ordered categories, ranges, arithmetic dtypes, feature_columns, observations and query_scope. Require unique nonblank ordered categories without cross-field collisions; feature order must match category order then numeric,time_offset,baseline_target. Numeric ranges are finite and nondegenerate. Stored observations must uniquely cover queried entities and contain finite numeric values and fitted categories. Supported saved arithmetic dtypes are float32/float64 and signed/unsigned 8/16/32/64-bit integers. Caller establishes provenance and ensures intended arithmetic is representable; structural checks do not authenticate state. Never publish saved observations or query scope.",
+          "limitations": [
+            "Automated Tier 3 concrete in-process frozen preprocessing only; abstract execution rejects. No human Tier 1 or empirical Tier 2 claim.",
+            "Exact declared transductive query population and record order are required. A changed population requires separately qualified preparation and model training, not silent reuse of this state.",
+            "Caller supplies private numeric preparation state, mapped entity/time queries and matching feature/response coordinate labels. Baseline observations and query scope must remain private runtime material.",
+            "State validation is structural, not authentication. Caller establishes provenance, unambiguous column names, category meanings, coordinate units, numeric representability and actual observation availability.",
+            "Qualification covers float32 and float64 saved arithmetic. Integer arithmetic options are structurally supported but not comprehensively qualified; overflow, underflow and lossy casting require caller validation.",
+            "The stacked feature matrix can have a promoted dtype from categorical columns. Model-input casting, structured column serialization, model replay, prediction reduction and branch blending are separate operations.",
+            "Fresh synthetic replay reproduces qualified fitted feature preparation, availability masks and observed values without fitting. This is not an independent source-notebook comparison or empirical transfer evidence.",
+            "Source-specific preprocessing is separated from reusable downstream model execution and numerical operations. No unrestricted train-only scaler, HTTP transport, concurrent-mutation safety or original-CDG approval claim."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+        "direction": "input",
+        "name": "queries"
+      },
+      "row": {
+        "atom_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+        "direction": "input",
+        "ordinal": 1,
+        "name": "queries",
+        "type_desc": "pandas.DataFrame",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Nonempty explicitly mapped entity/time table with nonblank string entities and finite real numeric times, complete rows, and exact equality to saved query_scope records in supplied order. Caller supplies unambiguous unique column names. No query population change, reordering, baseline inference or extrapolation to an undeclared population. Query time is converted to saved time-offset arithmetic dtype; caller establishes representability and compatible units."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+        "name": "queries"
+      },
+      "row": {
+        "atom_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+        "name": "queries",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "pandas.DataFrame",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonempty explicitly mapped entity/time table with nonblank string entities and finite real numeric times, complete rows, and exact equality to saved query_scope records in supplied order. Caller supplies unambiguous unique column names. No query population change, reordering, baseline inference or extrapolation to an undeclared population. Query time is converted to saved time-offset arithmetic dtype; caller establishes representability and compatible units.",
+        "dejargonized_description": "Caller supplies queries.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty explicitly mapped entity/time table with nonblank string entities and finite real numeric times, complete rows, and exact equality to saved query_scope records in supplied order. Caller supplies unambiguous unique column names. No query population change, reordering, baseline inference or extrapolation to an undeclared population. Query time is converted to saved time-offset arithmetic dtype; caller establishes representability and compatible units.",
+          "limitations": [
+            "Automated Tier 3 concrete in-process frozen preprocessing only; abstract execution rejects. No human Tier 1 or empirical Tier 2 claim.",
+            "Exact declared transductive query population and record order are required. A changed population requires separately qualified preparation and model training, not silent reuse of this state.",
+            "Caller supplies private numeric preparation state, mapped entity/time queries and matching feature/response coordinate labels. Baseline observations and query scope must remain private runtime material.",
+            "State validation is structural, not authentication. Caller establishes provenance, unambiguous column names, category meanings, coordinate units, numeric representability and actual observation availability.",
+            "Qualification covers float32 and float64 saved arithmetic. Integer arithmetic options are structurally supported but not comprehensively qualified; overflow, underflow and lossy casting require caller validation.",
+            "The stacked feature matrix can have a promoted dtype from categorical columns. Model-input casting, structured column serialization, model replay, prediction reduction and branch blending are separate operations.",
+            "Fresh synthetic replay reproduces qualified fitted feature preparation, availability masks and observed values without fitting. This is not an independent source-notebook comparison or empirical transfer evidence.",
+            "Source-specific preprocessing is separated from reusable downstream model execution and numerical operations. No unrestricted train-only scaler, HTTP transport, concurrent-mutation safety or original-CDG approval claim."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+        "direction": "input",
+        "name": "feature_coordinate"
+      },
+      "row": {
+        "atom_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+        "direction": "input",
+        "ordinal": 2,
+        "name": "feature_coordinate",
+        "type_desc": "str",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Explicit nonblank Python string exactly matching saved feature_coordinate. Names bind caller-declared feature meanings and order; this operation does not infer units or permit a changed coordinate system."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+        "name": "feature_coordinate"
+      },
+      "row": {
+        "atom_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+        "name": "feature_coordinate",
+        "position": 2,
+        "kind": "positional_or_keyword",
+        "type_desc": "str",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Explicit nonblank Python string exactly matching saved feature_coordinate. Names bind caller-declared feature meanings and order; this operation does not infer units or permit a changed coordinate system.",
+        "dejargonized_description": "Caller supplies feature coordinate.",
+        "constraints_json": {
+          "parameter_contract": "Explicit nonblank Python string exactly matching saved feature_coordinate. Names bind caller-declared feature meanings and order; this operation does not infer units or permit a changed coordinate system.",
+          "limitations": [
+            "Automated Tier 3 concrete in-process frozen preprocessing only; abstract execution rejects. No human Tier 1 or empirical Tier 2 claim.",
+            "Exact declared transductive query population and record order are required. A changed population requires separately qualified preparation and model training, not silent reuse of this state.",
+            "Caller supplies private numeric preparation state, mapped entity/time queries and matching feature/response coordinate labels. Baseline observations and query scope must remain private runtime material.",
+            "State validation is structural, not authentication. Caller establishes provenance, unambiguous column names, category meanings, coordinate units, numeric representability and actual observation availability.",
+            "Qualification covers float32 and float64 saved arithmetic. Integer arithmetic options are structurally supported but not comprehensively qualified; overflow, underflow and lossy casting require caller validation.",
+            "The stacked feature matrix can have a promoted dtype from categorical columns. Model-input casting, structured column serialization, model replay, prediction reduction and branch blending are separate operations.",
+            "Fresh synthetic replay reproduces qualified fitted feature preparation, availability masks and observed values without fitting. This is not an independent source-notebook comparison or empirical transfer evidence.",
+            "Source-specific preprocessing is separated from reusable downstream model execution and numerical operations. No unrestricted train-only scaler, HTTP transport, concurrent-mutation safety or original-CDG approval claim."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+        "direction": "input",
+        "name": "response_coordinate"
+      },
+      "row": {
+        "atom_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+        "direction": "input",
+        "ordinal": 3,
+        "name": "response_coordinate",
+        "type_desc": "str",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Explicit nonblank Python string exactly matching saved response_coordinate. Caller establishes compatible response units and actual availability of stored observations; matching labels do not establish provenance."
+      }
+    },
+    {
+      "table": "atom_parameters",
+      "keys": {
+        "atom_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+        "name": "response_coordinate"
+      },
+      "row": {
+        "atom_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+        "name": "response_coordinate",
+        "position": 3,
+        "kind": "positional_or_keyword",
+        "type_desc": "str",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Explicit nonblank Python string exactly matching saved response_coordinate. Caller establishes compatible response units and actual availability of stored observations; matching labels do not establish provenance.",
+        "dejargonized_description": "Caller supplies response coordinate.",
+        "constraints_json": {
+          "parameter_contract": "Explicit nonblank Python string exactly matching saved response_coordinate. Caller establishes compatible response units and actual availability of stored observations; matching labels do not establish provenance.",
+          "limitations": [
+            "Automated Tier 3 concrete in-process frozen preprocessing only; abstract execution rejects. No human Tier 1 or empirical Tier 2 claim.",
+            "Exact declared transductive query population and record order are required. A changed population requires separately qualified preparation and model training, not silent reuse of this state.",
+            "Caller supplies private numeric preparation state, mapped entity/time queries and matching feature/response coordinate labels. Baseline observations and query scope must remain private runtime material.",
+            "State validation is structural, not authentication. Caller establishes provenance, unambiguous column names, category meanings, coordinate units, numeric representability and actual observation availability.",
+            "Qualification covers float32 and float64 saved arithmetic. Integer arithmetic options are structurally supported but not comprehensively qualified; overflow, underflow and lossy casting require caller validation.",
+            "The stacked feature matrix can have a promoted dtype from categorical columns. Model-input casting, structured column serialization, model replay, prediction reduction and branch blending are separate operations.",
+            "Fresh synthetic replay reproduces qualified fitted feature preparation, availability masks and observed values without fitting. This is not an independent source-notebook comparison or empirical transfer evidence.",
+            "Source-specific preprocessing is separated from reusable downstream model execution and numerical operations. No unrestricted train-only scaler, HTTP transport, concurrent-mutation safety or original-CDG approval claim."
+          ]
+        }
+      }
+    },
+    {
+      "table": "atom_io_specs",
+      "keys": {
+        "atom_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+        "direction": "output",
+        "name": "result"
+      },
+      "row": {
+        "atom_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+        "direction": "output",
+        "ordinal": 0,
+        "name": "result",
+        "type_desc": "dict",
+        "required": true,
+        "default_value_repr": "",
+        "constraints": "Mapping with features (M,D) numeric array, structured ordered feature_columns, boolean observed_mask (M,), and observed_values (M,). Features preserve fitted source arithmetic before column stacking; output dtype may be promoted by categorical columns. Observed values contain saved observations where query time exactly equals observed_time, and zero elsewhere. Column metadata is copied; state and query inputs are not mutated. No model-input float32 cast, descriptor serialization, model loading, fitting, extrema discovery, prediction reduction or branch blending. Concrete in-process execution only; abstract witness rejects. This is a source-specific frozen transductive feature recipe, not an unrestricted train-only scaler. Qualification covers synthetic float32/float64 arithmetic. Broader integer configurations require caller validation. No empirical effectiveness, HTTP transport or original-CDG approval claim."
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "kind": "technical",
+        "language": "en",
+        "content": "Transform the exact declared query batch using saved source feature state. Require private caller-owned state, mapped entity/time queries and matching nonblank feature and response coordinates. Preserve frozen category order, arithmetic dtypes, scaling ranges, observed baselines and query order. Reject a changed query population or order: this transductive state is not an unrestricted train-only scaler. Return a mapping with features, structured feature_columns, observed_mask and observed_values. Do not cast features to model input dtype, serialize column descriptors, restore models or reduce predictions. Those are separate graph operations. No fitting or extrema discovery occurs. Caller establishes state provenance, category meanings, coordinate units and observation availability. Structural state checks do not authenticate state or establish empirical transfer. Saved observations and query scope must remain private runtime material. Private caller-owned frozen preparation state with exact format, coordinates, ordered categories, ranges, arithmetic dtypes, feature_columns, observations and query_scope. Require unique nonblank ordered categories without cross-field collisions; feature order must match category order then numeric,time_offset,baseline_target. Numeric ranges are finite and nondegenerate. Stored observations must uniquely cover queried entities and contain finite numeric values and fitted categories. Supported saved arithmetic dtypes are float32/float64 and signed/unsigned 8/16/32/64-bit integers. Caller establishes provenance and ensures intended arithmetic is representable; structural checks do not authenticate state. Never publish saved observations or query scope. Nonempty explicitly mapped entity/time table with nonblank string entities and finite real numeric times, complete rows, and exact equality to saved query_scope records in supplied order. Caller supplies unambiguous unique column names. No query population change, reordering, baseline inference or extrapolation to an undeclared population. Query time is converted to saved time-offset arithmetic dtype; caller establishes representability and compatible units. Explicit nonblank Python string exactly matching saved feature_coordinate. Names bind caller-declared feature meanings and order; this operation does not infer units or permit a changed coordinate system. Explicit nonblank Python string exactly matching saved response_coordinate. Caller establishes compatible response units and actual availability of stored observations; matching labels do not establish provenance. Mapping with features (M,D) numeric array, structured ordered feature_columns, boolean observed_mask (M,), and observed_values (M,). Features preserve fitted source arithmetic before column stacking; output dtype may be promoted by categorical columns. Observed values contain saved observations where query time exactly equals observed_time, and zero elsewhere. Column metadata is copied; state and query inputs are not mutated. No model-input float32 cast, descriptor serialization, model loading, fitting, extrema discovery, prediction reduction or branch blending. Concrete in-process execution only; abstract witness rejects. This is a source-specific frozen transductive feature recipe, not an unrestricted train-only scaler. Qualification covers synthetic float32/float64 arithmetic. Broader integer configurations require caller validation. No empirical effectiveness, HTTP transport or original-CDG approval claim. Separate frozen source preprocessing from model-input conversion, model replay and reduction. Cross-domain use requires an explicit compatible mapping, coordinate and availability contract; fixed transductive query scope cannot be generalized away.",
+        "generated_by": "osic_feature_replay-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.036017
+      }
+    },
+    {
+      "table": "atom_descriptions",
+      "keys": {
+        "atom_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "atom_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Use saved preparation rules to turn the same declared query rows into model features and mark which rows have known values. Accuracy on new problems must be checked separately.",
+        "generated_by": "osic_feature_replay-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "atom_references",
+      "keys": {
+        "atom_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "ref_key": "osic_feature_replay-provider-review-v1"
+      },
+      "row": {
+        "atom_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "ref_key": "osic_feature_replay-provider-review-v1",
+        "ref_id": "osic_feature_replay-provider-review-v1",
+        "title": "Frozen feature replay and exact query-scope qualification",
+        "url": "https://github.com/sciona/sciona/blob/583e727213f368e83a1a3044a8fc7e1a0e7a6c0c/docs/reviews/osic_feature_replay_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Transform the exact declared query batch using saved source feature state. Require private caller-owned state, mapped entity/time queries and matching nonblank feature and response coordinates. Preserve frozen category order, arithmetic dtypes, scaling ranges, observed baselines and query order. Reject a changed query population or order: this transductive state is not an unrestricted train-only scaler. Return a mapping with features, structured feature_columns, observed_mask and observed_values. Do not cast features to model input dtype, serialize column descriptors, restore models or reduce predictions. Those are separate graph operations. No fitting or extrema discovery occurs. Caller establishes state provenance, category meanings, coordinate units and observation availability. Structural state checks do not authenticate state or establish empirical transfer. Saved observations and query scope must remain private runtime material. Private caller-owned frozen preparation state with exact format, coordinates, ordered categories, ranges, arithmetic dtypes, feature_columns, observations and query_scope. Require unique nonblank ordered categories without cross-field collisions; feature order must match category order then numeric,time_offset,baseline_target. Numeric ranges are finite and nondegenerate. Stored observations must uniquely cover queried entities and contain finite numeric values and fitted categories. Supported saved arithmetic dtypes are float32/float64 and signed/unsigned 8/16/32/64-bit integers. Caller establishes provenance and ensures intended arithmetic is representable; structural checks do not authenticate state. Never publish saved observations or query scope. Nonempty explicitly mapped entity/time table with nonblank string entities and finite real numeric times, complete rows, and exact equality to saved query_scope records in supplied order. Caller supplies unambiguous unique column names. No query population change, reordering, baseline inference or extrapolation to an undeclared population. Query time is converted to saved time-offset arithmetic dtype; caller establishes representability and compatible units. Explicit nonblank Python string exactly matching saved feature_coordinate. Names bind caller-declared feature meanings and order; this operation does not infer units or permit a changed coordinate system. Explicit nonblank Python string exactly matching saved response_coordinate. Caller establishes compatible response units and actual availability of stored observations; matching labels do not establish provenance. Mapping with features (M,D) numeric array, structured ordered feature_columns, boolean observed_mask (M,), and observed_values (M,). Features preserve fitted source arithmetic before column stacking; output dtype may be promoted by categorical columns. Observed values contain saved observations where query time exactly equals observed_time, and zero elsewhere. Column metadata is copied; state and query inputs are not mutated. No model-input float32 cast, descriptor serialization, model loading, fitting, extrema discovery, prediction reduction or branch blending. Concrete in-process execution only; abstract witness rejects. This is a source-specific frozen transductive feature recipe, not an unrestricted train-only scaler. Qualification covers synthetic float32/float64 arithmetic. Broader integer configurations require caller validation. No empirical effectiveness, HTTP transport or original-CDG approval claim."
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+        "name": "state"
+      },
+      "row": {
+        "artifact_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+        "name": "state",
+        "position": 0,
+        "kind": "positional_or_keyword",
+        "type_desc": "dict",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Private caller-owned frozen preparation state with exact format, coordinates, ordered categories, ranges, arithmetic dtypes, feature_columns, observations and query_scope. Require unique nonblank ordered categories without cross-field collisions; feature order must match category order then numeric,time_offset,baseline_target. Numeric ranges are finite and nondegenerate. Stored observations must uniquely cover queried entities and contain finite numeric values and fitted categories. Supported saved arithmetic dtypes are float32/float64 and signed/unsigned 8/16/32/64-bit integers. Caller establishes provenance and ensures intended arithmetic is representable; structural checks do not authenticate state. Never publish saved observations or query scope.",
+        "dejargonized_description": "Caller supplies state.",
+        "constraints_json": {
+          "parameter_contract": "Private caller-owned frozen preparation state with exact format, coordinates, ordered categories, ranges, arithmetic dtypes, feature_columns, observations and query_scope. Require unique nonblank ordered categories without cross-field collisions; feature order must match category order then numeric,time_offset,baseline_target. Numeric ranges are finite and nondegenerate. Stored observations must uniquely cover queried entities and contain finite numeric values and fitted categories. Supported saved arithmetic dtypes are float32/float64 and signed/unsigned 8/16/32/64-bit integers. Caller establishes provenance and ensures intended arithmetic is representable; structural checks do not authenticate state. Never publish saved observations or query scope.",
+          "limitations": [
+            "Automated Tier 3 concrete in-process frozen preprocessing only; abstract execution rejects. No human Tier 1 or empirical Tier 2 claim.",
+            "Exact declared transductive query population and record order are required. A changed population requires separately qualified preparation and model training, not silent reuse of this state.",
+            "Caller supplies private numeric preparation state, mapped entity/time queries and matching feature/response coordinate labels. Baseline observations and query scope must remain private runtime material.",
+            "State validation is structural, not authentication. Caller establishes provenance, unambiguous column names, category meanings, coordinate units, numeric representability and actual observation availability.",
+            "Qualification covers float32 and float64 saved arithmetic. Integer arithmetic options are structurally supported but not comprehensively qualified; overflow, underflow and lossy casting require caller validation.",
+            "The stacked feature matrix can have a promoted dtype from categorical columns. Model-input casting, structured column serialization, model replay, prediction reduction and branch blending are separate operations.",
+            "Fresh synthetic replay reproduces qualified fitted feature preparation, availability masks and observed values without fitting. This is not an independent source-notebook comparison or empirical transfer evidence.",
+            "Source-specific preprocessing is separated from reusable downstream model execution and numerical operations. No unrestricted train-only scaler, HTTP transport, concurrent-mutation safety or original-CDG approval claim."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+        "name": "queries"
+      },
+      "row": {
+        "artifact_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+        "name": "queries",
+        "position": 1,
+        "kind": "positional_or_keyword",
+        "type_desc": "pandas.DataFrame",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Nonempty explicitly mapped entity/time table with nonblank string entities and finite real numeric times, complete rows, and exact equality to saved query_scope records in supplied order. Caller supplies unambiguous unique column names. No query population change, reordering, baseline inference or extrapolation to an undeclared population. Query time is converted to saved time-offset arithmetic dtype; caller establishes representability and compatible units.",
+        "dejargonized_description": "Caller supplies queries.",
+        "constraints_json": {
+          "parameter_contract": "Nonempty explicitly mapped entity/time table with nonblank string entities and finite real numeric times, complete rows, and exact equality to saved query_scope records in supplied order. Caller supplies unambiguous unique column names. No query population change, reordering, baseline inference or extrapolation to an undeclared population. Query time is converted to saved time-offset arithmetic dtype; caller establishes representability and compatible units.",
+          "limitations": [
+            "Automated Tier 3 concrete in-process frozen preprocessing only; abstract execution rejects. No human Tier 1 or empirical Tier 2 claim.",
+            "Exact declared transductive query population and record order are required. A changed population requires separately qualified preparation and model training, not silent reuse of this state.",
+            "Caller supplies private numeric preparation state, mapped entity/time queries and matching feature/response coordinate labels. Baseline observations and query scope must remain private runtime material.",
+            "State validation is structural, not authentication. Caller establishes provenance, unambiguous column names, category meanings, coordinate units, numeric representability and actual observation availability.",
+            "Qualification covers float32 and float64 saved arithmetic. Integer arithmetic options are structurally supported but not comprehensively qualified; overflow, underflow and lossy casting require caller validation.",
+            "The stacked feature matrix can have a promoted dtype from categorical columns. Model-input casting, structured column serialization, model replay, prediction reduction and branch blending are separate operations.",
+            "Fresh synthetic replay reproduces qualified fitted feature preparation, availability masks and observed values without fitting. This is not an independent source-notebook comparison or empirical transfer evidence.",
+            "Source-specific preprocessing is separated from reusable downstream model execution and numerical operations. No unrestricted train-only scaler, HTTP transport, concurrent-mutation safety or original-CDG approval claim."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+        "name": "feature_coordinate"
+      },
+      "row": {
+        "artifact_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+        "name": "feature_coordinate",
+        "position": 2,
+        "kind": "positional_or_keyword",
+        "type_desc": "str",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Explicit nonblank Python string exactly matching saved feature_coordinate. Names bind caller-declared feature meanings and order; this operation does not infer units or permit a changed coordinate system.",
+        "dejargonized_description": "Caller supplies feature coordinate.",
+        "constraints_json": {
+          "parameter_contract": "Explicit nonblank Python string exactly matching saved feature_coordinate. Names bind caller-declared feature meanings and order; this operation does not infer units or permit a changed coordinate system.",
+          "limitations": [
+            "Automated Tier 3 concrete in-process frozen preprocessing only; abstract execution rejects. No human Tier 1 or empirical Tier 2 claim.",
+            "Exact declared transductive query population and record order are required. A changed population requires separately qualified preparation and model training, not silent reuse of this state.",
+            "Caller supplies private numeric preparation state, mapped entity/time queries and matching feature/response coordinate labels. Baseline observations and query scope must remain private runtime material.",
+            "State validation is structural, not authentication. Caller establishes provenance, unambiguous column names, category meanings, coordinate units, numeric representability and actual observation availability.",
+            "Qualification covers float32 and float64 saved arithmetic. Integer arithmetic options are structurally supported but not comprehensively qualified; overflow, underflow and lossy casting require caller validation.",
+            "The stacked feature matrix can have a promoted dtype from categorical columns. Model-input casting, structured column serialization, model replay, prediction reduction and branch blending are separate operations.",
+            "Fresh synthetic replay reproduces qualified fitted feature preparation, availability masks and observed values without fitting. This is not an independent source-notebook comparison or empirical transfer evidence.",
+            "Source-specific preprocessing is separated from reusable downstream model execution and numerical operations. No unrestricted train-only scaler, HTTP transport, concurrent-mutation safety or original-CDG approval claim."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_parameters",
+      "keys": {
+        "artifact_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+        "name": "response_coordinate"
+      },
+      "row": {
+        "artifact_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+        "name": "response_coordinate",
+        "position": 3,
+        "kind": "positional_or_keyword",
+        "type_desc": "str",
+        "required": true,
+        "default_value_repr": "",
+        "technical_description": "Explicit nonblank Python string exactly matching saved response_coordinate. Caller establishes compatible response units and actual availability of stored observations; matching labels do not establish provenance.",
+        "dejargonized_description": "Caller supplies response coordinate.",
+        "constraints_json": {
+          "parameter_contract": "Explicit nonblank Python string exactly matching saved response_coordinate. Caller establishes compatible response units and actual availability of stored observations; matching labels do not establish provenance.",
+          "limitations": [
+            "Automated Tier 3 concrete in-process frozen preprocessing only; abstract execution rejects. No human Tier 1 or empirical Tier 2 claim.",
+            "Exact declared transductive query population and record order are required. A changed population requires separately qualified preparation and model training, not silent reuse of this state.",
+            "Caller supplies private numeric preparation state, mapped entity/time queries and matching feature/response coordinate labels. Baseline observations and query scope must remain private runtime material.",
+            "State validation is structural, not authentication. Caller establishes provenance, unambiguous column names, category meanings, coordinate units, numeric representability and actual observation availability.",
+            "Qualification covers float32 and float64 saved arithmetic. Integer arithmetic options are structurally supported but not comprehensively qualified; overflow, underflow and lossy casting require caller validation.",
+            "The stacked feature matrix can have a promoted dtype from categorical columns. Model-input casting, structured column serialization, model replay, prediction reduction and branch blending are separate operations.",
+            "Fresh synthetic replay reproduces qualified fitted feature preparation, availability masks and observed values without fitting. This is not an independent source-notebook comparison or empirical transfer evidence.",
+            "Source-specific preprocessing is separated from reusable downstream model execution and numerical operations. No unrestricted train-only scaler, HTTP transport, concurrent-mutation safety or original-CDG approval claim."
+          ]
+        }
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "kind": "technical",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "kind": "technical",
+        "language": "en",
+        "content": "Transform the exact declared query batch using saved source feature state. Require private caller-owned state, mapped entity/time queries and matching nonblank feature and response coordinates. Preserve frozen category order, arithmetic dtypes, scaling ranges, observed baselines and query order. Reject a changed query population or order: this transductive state is not an unrestricted train-only scaler. Return a mapping with features, structured feature_columns, observed_mask and observed_values. Do not cast features to model input dtype, serialize column descriptors, restore models or reduce predictions. Those are separate graph operations. No fitting or extrema discovery occurs. Caller establishes state provenance, category meanings, coordinate units and observation availability. Structural state checks do not authenticate state or establish empirical transfer. Saved observations and query scope must remain private runtime material. Private caller-owned frozen preparation state with exact format, coordinates, ordered categories, ranges, arithmetic dtypes, feature_columns, observations and query_scope. Require unique nonblank ordered categories without cross-field collisions; feature order must match category order then numeric,time_offset,baseline_target. Numeric ranges are finite and nondegenerate. Stored observations must uniquely cover queried entities and contain finite numeric values and fitted categories. Supported saved arithmetic dtypes are float32/float64 and signed/unsigned 8/16/32/64-bit integers. Caller establishes provenance and ensures intended arithmetic is representable; structural checks do not authenticate state. Never publish saved observations or query scope. Nonempty explicitly mapped entity/time table with nonblank string entities and finite real numeric times, complete rows, and exact equality to saved query_scope records in supplied order. Caller supplies unambiguous unique column names. No query population change, reordering, baseline inference or extrapolation to an undeclared population. Query time is converted to saved time-offset arithmetic dtype; caller establishes representability and compatible units. Explicit nonblank Python string exactly matching saved feature_coordinate. Names bind caller-declared feature meanings and order; this operation does not infer units or permit a changed coordinate system. Explicit nonblank Python string exactly matching saved response_coordinate. Caller establishes compatible response units and actual availability of stored observations; matching labels do not establish provenance. Mapping with features (M,D) numeric array, structured ordered feature_columns, boolean observed_mask (M,), and observed_values (M,). Features preserve fitted source arithmetic before column stacking; output dtype may be promoted by categorical columns. Observed values contain saved observations where query time exactly equals observed_time, and zero elsewhere. Column metadata is copied; state and query inputs are not mutated. No model-input float32 cast, descriptor serialization, model loading, fitting, extrema discovery, prediction reduction or branch blending. Concrete in-process execution only; abstract witness rejects. This is a source-specific frozen transductive feature recipe, not an unrestricted train-only scaler. Qualification covers synthetic float32/float64 arithmetic. Broader integer configurations require caller validation. No empirical effectiveness, HTTP transport or original-CDG approval claim. Separate frozen source preprocessing from model-input conversion, model replay and reduction. Cross-domain use requires an explicit compatible mapping, coordinate and availability contract; fixed transductive query scope cannot be generalized away.",
+        "generated_by": "osic_feature_replay-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.036017
+      }
+    },
+    {
+      "table": "artifact_descriptions",
+      "keys": {
+        "artifact_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "kind": "dejargonized",
+        "language": "en"
+      },
+      "row": {
+        "artifact_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "kind": "dejargonized",
+        "language": "en",
+        "content": "Use saved preparation rules to turn the same declared query rows into model features and mark which rows have known values. Accuracy on new problems must be checked separately.",
+        "generated_by": "osic_feature_replay-provider-community.v1",
+        "reviewed": false,
+        "jargon_score": 0.0
+      }
+    },
+    {
+      "table": "artifact_references",
+      "keys": {
+        "artifact_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "ref_key": "osic_feature_replay-provider-review-v1"
+      },
+      "row": {
+        "artifact_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+        "ref_key": "osic_feature_replay-provider-review-v1",
+        "ref_id": "osic_feature_replay-provider-review-v1",
+        "title": "Frozen feature replay and exact query-scope qualification",
+        "url": "https://github.com/sciona/sciona/blob/583e727213f368e83a1a3044a8fc7e1a0e7a6c0c/docs/reviews/osic_feature_replay_semantics.json",
+        "source": "llm_extracted",
+        "verified": true,
+        "confidence": "high",
+        "relevance_note": "Transform the exact declared query batch using saved source feature state. Require private caller-owned state, mapped entity/time queries and matching nonblank feature and response coordinates. Preserve frozen category order, arithmetic dtypes, scaling ranges, observed baselines and query order. Reject a changed query population or order: this transductive state is not an unrestricted train-only scaler. Return a mapping with features, structured feature_columns, observed_mask and observed_values. Do not cast features to model input dtype, serialize column descriptors, restore models or reduce predictions. Those are separate graph operations. No fitting or extrema discovery occurs. Caller establishes state provenance, category meanings, coordinate units and observation availability. Structural state checks do not authenticate state or establish empirical transfer. Saved observations and query scope must remain private runtime material. Private caller-owned frozen preparation state with exact format, coordinates, ordered categories, ranges, arithmetic dtypes, feature_columns, observations and query_scope. Require unique nonblank ordered categories without cross-field collisions; feature order must match category order then numeric,time_offset,baseline_target. Numeric ranges are finite and nondegenerate. Stored observations must uniquely cover queried entities and contain finite numeric values and fitted categories. Supported saved arithmetic dtypes are float32/float64 and signed/unsigned 8/16/32/64-bit integers. Caller establishes provenance and ensures intended arithmetic is representable; structural checks do not authenticate state. Never publish saved observations or query scope. Nonempty explicitly mapped entity/time table with nonblank string entities and finite real numeric times, complete rows, and exact equality to saved query_scope records in supplied order. Caller supplies unambiguous unique column names. No query population change, reordering, baseline inference or extrapolation to an undeclared population. Query time is converted to saved time-offset arithmetic dtype; caller establishes representability and compatible units. Explicit nonblank Python string exactly matching saved feature_coordinate. Names bind caller-declared feature meanings and order; this operation does not infer units or permit a changed coordinate system. Explicit nonblank Python string exactly matching saved response_coordinate. Caller establishes compatible response units and actual availability of stored observations; matching labels do not establish provenance. Mapping with features (M,D) numeric array, structured ordered feature_columns, boolean observed_mask (M,), and observed_values (M,). Features preserve fitted source arithmetic before column stacking; output dtype may be promoted by categorical columns. Observed values contain saved observations where query time exactly equals observed_time, and zero elsewhere. Column metadata is copied; state and query inputs are not mutated. No model-input float32 cast, descriptor serialization, model loading, fitting, extrema discovery, prediction reduction or branch blending. Concrete in-process execution only; abstract witness rejects. This is a source-specific frozen transductive feature recipe, not an unrestricted train-only scaler. Qualification covers synthetic float32/float64 arithmetic. Broader integer configurations require caller validation. No empirical effectiveness, HTTP transport or original-CDG approval claim."
+      }
+    }
+  ],
+  "rollups": [
+    {
+      "table": "atom_audit_rollups",
+      "key": "atom_id",
+      "identity": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 concrete in-process frozen preprocessing only; abstract execution rejects. No human Tier 1 or empirical Tier 2 claim.",
+          "Exact declared transductive query population and record order are required. A changed population requires separately qualified preparation and model training, not silent reuse of this state.",
+          "Caller supplies private numeric preparation state, mapped entity/time queries and matching feature/response coordinate labels. Baseline observations and query scope must remain private runtime material.",
+          "State validation is structural, not authentication. Caller establishes provenance, unambiguous column names, category meanings, coordinate units, numeric representability and actual observation availability.",
+          "Qualification covers float32 and float64 saved arithmetic. Integer arithmetic options are structurally supported but not comprehensively qualified; overflow, underflow and lossy casting require caller validation.",
+          "The stacked feature matrix can have a promoted dtype from categorical columns. Model-input casting, structured column serialization, model replay, prediction reduction and branch blending are separate operations.",
+          "Fresh synthetic replay reproduces qualified fitted feature preparation, availability masks and observed values without fitting. This is not an independent source-notebook comparison or empirical transfer evidence.",
+          "Source-specific preprocessing is separated from reusable downstream model execution and numerical operations. No unrestricted train-only scaler, HTTP transport, concurrent-mutation safety or original-CDG approval claim.",
+          "Private caller-owned frozen preparation state with exact format, coordinates, ordered categories, ranges, arithmetic dtypes, feature_columns, observations and query_scope. Require unique nonblank ordered categories without cross-field collisions; feature order must match category order then numeric,time_offset,baseline_target. Numeric ranges are finite and nondegenerate. Stored observations must uniquely cover queried entities and contain finite numeric values and fitted categories. Supported saved arithmetic dtypes are float32/float64 and signed/unsigned 8/16/32/64-bit integers. Caller establishes provenance and ensures intended arithmetic is representable; structural checks do not authenticate state. Never publish saved observations or query scope. Nonempty explicitly mapped entity/time table with nonblank string entities and finite real numeric times, complete rows, and exact equality to saved query_scope records in supplied order. Caller supplies unambiguous unique column names. No query population change, reordering, baseline inference or extrapolation to an undeclared population. Query time is converted to saved time-offset arithmetic dtype; caller establishes representability and compatible units. Explicit nonblank Python string exactly matching saved feature_coordinate. Names bind caller-declared feature meanings and order; this operation does not infer units or permit a changed coordinate system. Explicit nonblank Python string exactly matching saved response_coordinate. Caller establishes compatible response units and actual availability of stored observations; matching labels do not establish provenance. Mapping with features (M,D) numeric array, structured ordered feature_columns, boolean observed_mask (M,), and observed_values (M,). Features preserve fitted source arithmetic before column stacking; output dtype may be promoted by categorical columns. Observed values contain saved observations where query time exactly equals observed_time, and zero elsewhere. Column metadata is copied; state and query inputs are not mutated. No model-input float32 cast, descriptor serialization, model loading, fitting, extrema discovery, prediction reduction or branch blending. Concrete in-process execution only; abstract witness rejects. This is a source-specific frozen transductive feature recipe, not an unrestricted train-only scaler. Qualification covers synthetic float32/float64 arithmetic. Broader integer configurations require caller validation. No empirical effectiveness, HTTP transport or original-CDG approval claim."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    },
+    {
+      "table": "artifact_audit_rollups",
+      "key": "artifact_id",
+      "identity": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+      "before": null,
+      "fields": {
+        "overall_verdict": "acceptable_with_limits",
+        "structural_status": "pass",
+        "runtime_status": "pass",
+        "semantic_status": "pass_with_limits",
+        "developer_semantics_status": "pass_with_limits",
+        "review_status": "approved",
+        "review_semantic_verdict": "pass_with_limits",
+        "review_developer_semantics_verdict": "pass_with_limits",
+        "trust_readiness": "ready",
+        "review_limitations": [
+          "Automated Tier 3 concrete in-process frozen preprocessing only; abstract execution rejects. No human Tier 1 or empirical Tier 2 claim.",
+          "Exact declared transductive query population and record order are required. A changed population requires separately qualified preparation and model training, not silent reuse of this state.",
+          "Caller supplies private numeric preparation state, mapped entity/time queries and matching feature/response coordinate labels. Baseline observations and query scope must remain private runtime material.",
+          "State validation is structural, not authentication. Caller establishes provenance, unambiguous column names, category meanings, coordinate units, numeric representability and actual observation availability.",
+          "Qualification covers float32 and float64 saved arithmetic. Integer arithmetic options are structurally supported but not comprehensively qualified; overflow, underflow and lossy casting require caller validation.",
+          "The stacked feature matrix can have a promoted dtype from categorical columns. Model-input casting, structured column serialization, model replay, prediction reduction and branch blending are separate operations.",
+          "Fresh synthetic replay reproduces qualified fitted feature preparation, availability masks and observed values without fitting. This is not an independent source-notebook comparison or empirical transfer evidence.",
+          "Source-specific preprocessing is separated from reusable downstream model execution and numerical operations. No unrestricted train-only scaler, HTTP transport, concurrent-mutation safety or original-CDG approval claim.",
+          "Private caller-owned frozen preparation state with exact format, coordinates, ordered categories, ranges, arithmetic dtypes, feature_columns, observations and query_scope. Require unique nonblank ordered categories without cross-field collisions; feature order must match category order then numeric,time_offset,baseline_target. Numeric ranges are finite and nondegenerate. Stored observations must uniquely cover queried entities and contain finite numeric values and fitted categories. Supported saved arithmetic dtypes are float32/float64 and signed/unsigned 8/16/32/64-bit integers. Caller establishes provenance and ensures intended arithmetic is representable; structural checks do not authenticate state. Never publish saved observations or query scope. Nonempty explicitly mapped entity/time table with nonblank string entities and finite real numeric times, complete rows, and exact equality to saved query_scope records in supplied order. Caller supplies unambiguous unique column names. No query population change, reordering, baseline inference or extrapolation to an undeclared population. Query time is converted to saved time-offset arithmetic dtype; caller establishes representability and compatible units. Explicit nonblank Python string exactly matching saved feature_coordinate. Names bind caller-declared feature meanings and order; this operation does not infer units or permit a changed coordinate system. Explicit nonblank Python string exactly matching saved response_coordinate. Caller establishes compatible response units and actual availability of stored observations; matching labels do not establish provenance. Mapping with features (M,D) numeric array, structured ordered feature_columns, boolean observed_mask (M,), and observed_values (M,). Features preserve fitted source arithmetic before column stacking; output dtype may be promoted by categorical columns. Observed values contain saved observations where query time exactly equals observed_time, and zero elsewhere. Column metadata is copied; state and query inputs are not mutated. No model-input float32 cast, descriptor serialization, model loading, fitting, extrema discovery, prediction reduction or branch blending. Concrete in-process execution only; abstract witness rejects. This is a source-specific frozen transductive feature recipe, not an unrestricted train-only scaler. Qualification covers synthetic float32/float64 arithmetic. Broader integer configurations require caller validation. No empirical effectiveness, HTTP transport or original-CDG approval claim."
+        ],
+        "review_required_actions": [],
+        "trust_blockers": [],
+        "acceptability_band": "acceptable_with_limits"
+      }
+    }
+  ],
+  "states": {
+    "28d309b1-e965-598f-9ee9-239d0b8bf7b9": {
+      "atom": {
+        "status": "flagged",
+        "is_publishable": false
+      },
+      "artifact": {
+        "status": "draft",
+        "is_publishable": false
+      }
+    }
+  },
+  "before": {
+    "atoms": "3fe8d2b937fbcea9be480f4f3b0da12092bf3fd70e695bf83cdff9184c8d0f29",
+    "artifacts": "049477902b46d8520b516964368a38a9efb32dab1b210477ee30f3dd78db47e0",
+    "atom_versions": "8600c8692183525d23b9e58eb524c01298d92f60bf4709a453599b7194516b43",
+    "artifact_versions": "1cf3e024e08115cad2ce593b2fd83cfa217463adc2f4746649a1d0f7da356510",
+    "atom_io_specs": "90c9142756ef271ed720a573bb6179e1f4f28e1d7f288892c6de91f73e36187a",
+    "artifact_io_specs": "8648591b421ea60332031d563297e2edc858ebbc37e330c0c717c2bd7c4f586c",
+    "atom_parameters": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_parameters": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_descriptions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_descriptions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_references": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_references": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "atom_audit_rollups": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_audit_rollups": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "artifact_audit_evidence": "21cb765c00498be8abd894ced23f87434164d9e2e8ab09ee98081737c451e766",
+    "artifact_dependencies": []
+  },
+  "preserved": {
+    "atom_versions": [
+      {
+        "row": {
+          "s3_key": "",
+          "semver": "0.0.0+local.3c9c03abfa04",
+          "atom_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+          "is_latest": true,
+          "created_at": "2026-11-11T02:48:50.479447+00:00",
+          "trust_tier": 3,
+          "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+          "fingerprint": "a732d1976d2836a005793dbf2ec07355d21f929c87f2f34643da75e9ecee5bf4",
+          "content_hash": "3c9c03abfa04035e2b58ee6b7ae135af6d53db5fcadf6f513c57d1c4e4e7aafc",
+          "derives_from": null
+        }
+      }
+    ],
+    "atom_parameters": [],
+    "atom_references": [],
+    "atom_io_specs": [
+      {
+        "row": {
+          "name": "feature_coordinate",
+          "atom_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+          "ordinal": 2,
+          "required": true,
+          "direction": "input",
+          "type_desc": "str",
+          "io_spec_id": "d4b0a0c4-36ac-4c82-98e9-5020d540c8e0",
+          "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+          "constraints": "Explicit nonblank Python string exactly matching saved feature_coordinate. Names bind caller-declared feature meanings and order; this operation does not infer units or permit a changed coordinate system.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "queries",
+          "atom_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "pandas.DataFrame",
+          "io_spec_id": "408a5acd-9ad7-4c3b-a436-ca03cc453e0b",
+          "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+          "constraints": "Nonempty explicitly mapped entity/time table with nonblank string entities and finite real numeric times, complete rows, and exact equality to saved query_scope records in supplied order. Caller supplies unambiguous unique column names. No query population change, reordering, baseline inference or extrapolation to an undeclared population. Query time is converted to saved time-offset arithmetic dtype; caller establishes representability and compatible units.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "response_coordinate",
+          "atom_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+          "ordinal": 3,
+          "required": true,
+          "direction": "input",
+          "type_desc": "str",
+          "io_spec_id": "99c78b66-6a82-42da-bfa4-5cf89a08ad18",
+          "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+          "constraints": "Explicit nonblank Python string exactly matching saved response_coordinate. Caller establishes compatible response units and actual availability of stored observations; matching labels do not establish provenance.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "result",
+          "atom_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "dict",
+          "io_spec_id": "f8fcc546-eed4-43cc-8b38-7ef94c9e3d42",
+          "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+          "constraints": "Mapping with features (M,D) numeric array, structured ordered feature_columns, boolean observed_mask (M,), and observed_values (M,). Features preserve fitted source arithmetic before column stacking; output dtype may be promoted by categorical columns. Observed values contain saved observations where query time exactly equals observed_time, and zero elsewhere. Column metadata is copied; state and query inputs are not mutated. No model-input float32 cast, descriptor serialization, model loading, fitting, extrema discovery, prediction reduction or branch blending. Concrete in-process execution only; abstract witness rejects. This is a source-specific frozen transductive feature recipe, not an unrestricted train-only scaler. Qualification covers synthetic float32/float64 arithmetic. Broader integer configurations require caller validation. No empirical effectiveness, HTTP transport or original-CDG approval claim.",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "state",
+          "atom_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "dict",
+          "io_spec_id": "11feb240-76a2-4985-9f09-eebae361b5fd",
+          "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+          "constraints": "Private caller-owned frozen preparation state with exact format, coordinates, ordered categories, ranges, arithmetic dtypes, feature_columns, observations and query_scope. Require unique nonblank ordered categories without cross-field collisions; feature order must match category order then numeric,time_offset,baseline_target. Numeric ranges are finite and nondegenerate. Stored observations must uniquely cover queried entities and contain finite numeric values and fitted categories. Supported saved arithmetic dtypes are float32/float64 and signed/unsigned 8/16/32/64-bit integers. Caller establishes provenance and ensures intended arithmetic is representable; structural checks do not authenticate state. Never publish saved observations or query scope.",
+          "default_value_repr": ""
+        }
+      }
+    ],
+    "artifact_versions": [
+      {
+        "row": {
+          "s3_key": "",
+          "semver": "0.0.0+local.3c9c03abfa04",
+          "is_latest": true,
+          "created_at": "2026-11-11T02:48:50.479447+00:00",
+          "trust_tier": 3,
+          "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+          "artifact_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+          "fingerprint": "a732d1976d2836a005793dbf2ec07355d21f929c87f2f34643da75e9ecee5bf4",
+          "content_hash": "3c9c03abfa04035e2b58ee6b7ae135af6d53db5fcadf6f513c57d1c4e4e7aafc",
+          "derives_from": null
+        }
+      }
+    ],
+    "artifact_parameters": [],
+    "artifact_references": [],
+    "artifact_io_specs": [
+      {
+        "row": {
+          "name": "feature_coordinate",
+          "ordinal": 2,
+          "required": true,
+          "direction": "input",
+          "type_desc": "str",
+          "io_spec_id": "ca95c612-ac77-405b-9fde-234013af891a",
+          "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+          "artifact_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+          "constraints": "Explicit nonblank Python string exactly matching saved feature_coordinate. Names bind caller-declared feature meanings and order; this operation does not infer units or permit a changed coordinate system.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "queries",
+          "ordinal": 1,
+          "required": true,
+          "direction": "input",
+          "type_desc": "pandas.DataFrame",
+          "io_spec_id": "97df8680-8905-4631-9802-93cee5bd4854",
+          "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+          "artifact_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+          "constraints": "Nonempty explicitly mapped entity/time table with nonblank string entities and finite real numeric times, complete rows, and exact equality to saved query_scope records in supplied order. Caller supplies unambiguous unique column names. No query population change, reordering, baseline inference or extrapolation to an undeclared population. Query time is converted to saved time-offset arithmetic dtype; caller establishes representability and compatible units.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "response_coordinate",
+          "ordinal": 3,
+          "required": true,
+          "direction": "input",
+          "type_desc": "str",
+          "io_spec_id": "8be7ffe4-f73c-41b9-8fad-7b543c70d5c5",
+          "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+          "artifact_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+          "constraints": "Explicit nonblank Python string exactly matching saved response_coordinate. Caller establishes compatible response units and actual availability of stored observations; matching labels do not establish provenance.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "result",
+          "ordinal": 0,
+          "required": true,
+          "direction": "output",
+          "type_desc": "dict",
+          "io_spec_id": "f2ba30e8-84b9-47e5-9ca0-882780f91f90",
+          "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+          "artifact_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+          "constraints": "Mapping with features (M,D) numeric array, structured ordered feature_columns, boolean observed_mask (M,), and observed_values (M,). Features preserve fitted source arithmetic before column stacking; output dtype may be promoted by categorical columns. Observed values contain saved observations where query time exactly equals observed_time, and zero elsewhere. Column metadata is copied; state and query inputs are not mutated. No model-input float32 cast, descriptor serialization, model loading, fitting, extrema discovery, prediction reduction or branch blending. Concrete in-process execution only; abstract witness rejects. This is a source-specific frozen transductive feature recipe, not an unrestricted train-only scaler. Qualification covers synthetic float32/float64 arithmetic. Broader integer configurations require caller validation. No empirical effectiveness, HTTP transport or original-CDG approval claim.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      },
+      {
+        "row": {
+          "name": "state",
+          "ordinal": 0,
+          "required": true,
+          "direction": "input",
+          "type_desc": "dict",
+          "io_spec_id": "c57acf12-52f5-4e1c-8eca-da88c53756cc",
+          "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+          "artifact_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+          "constraints": "Private caller-owned frozen preparation state with exact format, coordinates, ordered categories, ranges, arithmetic dtypes, feature_columns, observations and query_scope. Require unique nonblank ordered categories without cross-field collisions; feature order must match category order then numeric,time_offset,baseline_target. Numeric ranges are finite and nondegenerate. Stored observations must uniquely cover queried entities and contain finite numeric values and fitted categories. Supported saved arithmetic dtypes are float32/float64 and signed/unsigned 8/16/32/64-bit integers. Caller establishes provenance and ensures intended arithmetic is representable; structural checks do not authenticate state. Never publish saved observations or query scope.",
+          "dim_signature": "",
+          "default_value_repr": ""
+        }
+      }
+    ],
+    "artifact_audit_evidence": [
+      {
+        "row": {
+          "passed": true,
+          "status": "completed",
+          "details": {
+            "scope": "Exact source/version/interface draft import only. Dependency qualification, full metadata and semantic publication gates remain pending.",
+            "plan_commit": "6702ea81851c2741385ad43be5f767c675dc0346",
+            "plan_sha256": "35fb7f4b421b5a5d2c2ce9db70dde623063a9d5595f998abb5922a0e0daab3c1",
+            "provider_sha256": "3f73748d3909bff463e3eb5dabd1f5c2ca9af729c00b16b7afe92f8eb3061104",
+            "execution_evidence_sha256": "b69f0bfc61b4c4d998ac1d2c14eee767f04845a343ed9b31cce1d6f727ffbd9a"
+          },
+          "audit_type": "asset_integrity_check",
+          "created_at": "2026-11-11T02:48:50.479447+00:00",
+          "version_id": "4201bf55-007d-5607-b7c0-91bd28f1564b",
+          "artifact_id": "28d309b1-e965-598f-9ee9-239d0b8bf7b9",
+          "evidence_id": "04c1a5f2-b33b-50b1-a76d-424d008460b0",
+          "source_kind": "automated",
+          "runner_version": "osic_feature_replay-draft-intake.v1",
+          "review_basis_at": null,
+          "run_duration_ms": null,
+          "source_revision": "",
+          "upstream_version": ""
+        }
+      }
+    ],
+    "artifact_dependencies": []
+  },
+  "publisher_sha256": "180dac35075aca0acddb17baa707cbf797aa708f81d5c68e82d81f62a5ce8b5b",
+  "review_sha256": "70d117638521e4a7f7bb6e961cebf9eaa5a2e79b9bf13298540a604781b263d0"
+}
