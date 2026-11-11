@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 from enum import Enum
+import re
+from collections.abc import Sequence
 from typing import Any, Literal
 
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
 class ConceptType(str, Enum):
@@ -76,11 +78,455 @@ class ConceptType(str, Enum):
     EXTERNAL_TOOL = "external_tool"
 
 
+def split_top_level_type_args(text: str, sep: str = ",") -> list[str]:
+    """Split *text* on *sep* only at bracket depth 0."""
+    parts: list[str] = []
+    current: list[str] = []
+    depth = 0
+    quote_char: str | None = None
+    for ch in text:
+        if quote_char is not None:
+            current.append(ch)
+            if ch == quote_char:
+                quote_char = None
+            continue
+        if ch in {"'", '"'}:
+            quote_char = ch
+            current.append(ch)
+            continue
+        if ch in "([{":
+            depth += 1
+            current.append(ch)
+        elif ch in ")]}":
+            depth = max(0, depth - 1)
+            current.append(ch)
+        elif ch == sep and depth == 0:
+            token = "".join(current).strip()
+            if token:
+                parts.append(token)
+            current = []
+        else:
+            current.append(ch)
+    tail = "".join(current).strip()
+    if tail:
+        parts.append(tail)
+    return parts
+
+
+_ABSTRACT_WITNESS_TAG_MAP: dict[str, tuple[str, int | None]] = {
+    "abstractsignal": ("signal", 1),
+    "abstractpeaks": ("peaks", 1),
+    "abstractarray": ("array", None),
+    "abstractmatrix": ("matrix", 2),
+    "abstractvector": ("vector", 1),
+    "abstractscalar": ("scalar", 0),
+    "abstractdistribution": ("distribution", None),
+    "abstractgraph": ("graph", None),
+    "abstractstate": ("state", None),
+    "abstractimage": ("image", 2),
+    "abstractspectrum": ("spectrum", 1),
+}
+
+_NUMERIC_DTYPES: frozenset[str] = frozenset(
+    {
+        "int",
+        "int8",
+        "int16",
+        "int32",
+        "int64",
+        "uint8",
+        "uint16",
+        "uint32",
+        "uint64",
+        "float",
+        "float16",
+        "float32",
+        "float64",
+        "complex",
+        "complex64",
+        "complex128",
+        "numeric",
+        "number",
+    }
+)
+
+_INT_DTYPES: frozenset[str] = frozenset(
+    {"int", "int8", "int16", "int32", "int64", "uint8", "uint16", "uint32", "uint64"}
+)
+_FLOAT_DTYPES: frozenset[str] = frozenset(
+    {"float", "float16", "float32", "float64", "numeric", "number"}
+)
+
+
+def _extract_dtype_token(text: str) -> str:
+    lowered = text.lower()
+    for token in (
+        "float64",
+        "float32",
+        "float16",
+        "int64",
+        "int32",
+        "int16",
+        "int8",
+        "uint64",
+        "uint32",
+        "uint16",
+        "uint8",
+        "complex128",
+        "complex64",
+        "bool_",
+        "bool",
+        "float",
+        "int",
+        "str",
+    ):
+        if re.search(rf"(?<![a-z0-9_]){re.escape(token)}(?![a-z0-9_])", lowered):
+            return "bool" if token == "bool_" else token
+    return ""
+
+
+def _extract_ndim_and_shapes(constraints: str, witness_type_desc: str = "") -> tuple[int | None, list[str], list[str]]:
+    tags: list[str] = []
+    ndim: int | None = None
+    shapes: list[str] = []
+
+    w_norm = re.sub(r"[^a-z0-9]", "", witness_type_desc.lower())
+    for key, (tag, w_ndim) in _ABSTRACT_WITNESS_TAG_MAP.items():
+        if key in w_norm:
+            if tag not in tags:
+                tags.append(tag)
+            if ndim is None and w_ndim is not None:
+                ndim = w_ndim
+
+    c_text = str(constraints or "")
+    if c_text:
+        m_dim = re.search(r"\b([1234])d\b", c_text.lower())
+        if m_dim:
+            ndim = int(m_dim.group(1))
+        m_ndim = re.search(r"ndim\s*==\s*(\d+)", c_text.lower())
+        if m_ndim:
+            ndim = int(m_ndim.group(1))
+        m_shape = re.search(r"\(([A-Za-z0-9_+\-*/\s,]+)\)", c_text)
+        if m_shape and "," in m_shape.group(1):
+            dims = [d.strip() for d in m_shape.group(1).split(",") if d.strip()]
+            if dims:
+                shapes = dims
+                if ndim is None:
+                    ndim = len(dims)
+    return ndim, shapes, tags
+
+
+class PortTypeSpec(BaseModel):
+    """Structured, normalized port type specification derived from Python annotations."""
+
+    raw: str = "Any"
+    kind: str = "any"
+    dtype: str = ""
+    ndim: int | None = None
+    shape_symbols: list[str] = Field(default_factory=list)
+    domain_tags: list[str] = Field(default_factory=list)
+    optional: bool = False
+    default_json: str = ""
+    tuple_elements: list[PortTypeSpec] = Field(default_factory=list)
+
+    @classmethod
+    def from_type_desc(
+        cls,
+        type_desc: str,
+        *,
+        constraints: str = "",
+        data_kind: str = "",
+        required: bool = True,
+        default_value_repr: str = "",
+        witness_type_desc: str = "",
+    ) -> "PortTypeSpec":
+        raw = str(type_desc or "Any").strip().strip("'\"") or "Any"
+        optional = not required
+        cleaned = raw
+
+        # Unwrap Optional[T] or T | None / Union[T, None]
+        if cleaned.startswith("Optional[") and cleaned.endswith("]"):
+            optional = True
+            cleaned = cleaned[len("Optional[") : -1].strip()
+        elif cleaned.startswith("Union[") and cleaned.endswith("]"):
+            union_args = split_top_level_type_args(cleaned[len("Union[") : -1], ",")
+            non_none = [a for a in union_args if a not in {"None", "NoneType"}]
+            if len(non_none) < len(union_args):
+                optional = True
+            if len(non_none) == 1:
+                cleaned = non_none[0]
+        elif "|" in cleaned:
+            union_args = split_top_level_type_args(cleaned, "|")
+            non_none = [a for a in union_args if a not in {"None", "NoneType"}]
+            if len(non_none) < len(union_args):
+                optional = True
+            if len(non_none) == 1:
+                cleaned = non_none[0]
+
+        lower = cleaned.lower()
+        ndim, shape_symbols, domain_tags = _extract_ndim_and_shapes(
+            constraints, f"{raw} {witness_type_desc}".strip()
+        )
+        if data_kind and data_kind not in domain_tags:
+            domain_tags.append(data_kind)
+
+        # Tuple[A, B, ...]
+        if (lower.startswith("tuple[") or lower.startswith("typing.tuple[")) and cleaned.endswith("]"):
+            inner = cleaned[cleaned.index("[") + 1 : -1].strip()
+            elts = split_top_level_type_args(inner, ",")
+            if len(elts) == 2 and elts[1] == "...":
+                return cls(
+                    raw=raw,
+                    kind="sequence",
+                    dtype=_extract_dtype_token(elts[0]),
+                    ndim=ndim,
+                    shape_symbols=shape_symbols,
+                    domain_tags=domain_tags,
+                    optional=optional,
+                    default_json=default_value_repr,
+                )
+            return cls(
+                raw=raw,
+                kind="tuple",
+                optional=optional,
+                default_json=default_value_repr,
+                domain_tags=domain_tags,
+                tuple_elements=[cls.from_type_desc(e) for e in elts],
+            )
+
+        if lower in {"any", "object", "unknown", ""}:
+            # Witness can still supply semantic tags without replacing concrete python type
+            if witness_type_desc:
+                w_lower = witness_type_desc.lower()
+                if any(tok in w_lower for tok in ("signal", "peaks", "array", "matrix", "vector", "spectrum", "image")):
+                    return cls(
+                        raw=raw,
+                        kind="array",
+                        ndim=ndim,
+                        shape_symbols=shape_symbols,
+                        domain_tags=domain_tags,
+                        optional=optional,
+                        default_json=default_value_repr,
+                    )
+            return cls(
+                raw=raw,
+                kind="any",
+                ndim=ndim,
+                shape_symbols=shape_symbols,
+                domain_tags=domain_tags,
+                optional=optional,
+                default_json=default_value_repr,
+            )
+
+        if lower in {"none", "nonetype", "void"}:
+            return cls(raw=raw, kind="none", optional=True, default_json=default_value_repr)
+
+        # DataFrame / Series
+        if "dataframe" in lower:
+            return cls(
+                raw=raw,
+                kind="dataframe",
+                ndim=2 if ndim is None else ndim,
+                shape_symbols=shape_symbols,
+                domain_tags=domain_tags,
+                optional=optional,
+                default_json=default_value_repr,
+            )
+        if re.search(r"(?<![a-z0-9_])series(?![a-z0-9_])", lower):
+            return cls(
+                raw=raw,
+                kind="series",
+                dtype=_extract_dtype_token(cleaned),
+                ndim=1 if ndim is None else ndim,
+                shape_symbols=shape_symbols,
+                domain_tags=domain_tags,
+                optional=optional,
+                default_json=default_value_repr,
+            )
+
+        # Arrays / Tensors / Sparse matrices
+        if any(
+            tok in lower
+            for tok in (
+                "ndarray",
+                "arraylike",
+                "array_like",
+                "np.array",
+                "numpy.array",
+                "tensor",
+                "csr_matrix",
+                "csc_matrix",
+                "coo_matrix",
+                "csr_array",
+                "csc_array",
+                "spmatrix",
+                "sparse",
+                "abstractsignal",
+                "abstractarray",
+                "abstractmatrix",
+                "abstractvector",
+                "abstractpeaks",
+                "abstractimage",
+                "abstractspectrum",
+            )
+        ):
+            if "sparse" in lower or any(s in lower for s in ("csr_", "csc_", "coo_", "spmatrix")):
+                if "sparse" not in domain_tags:
+                    domain_tags.append("sparse")
+                if ndim is None:
+                    ndim = 2
+            return cls(
+                raw=raw,
+                kind="array",
+                dtype=_extract_dtype_token(cleaned),
+                ndim=ndim,
+                shape_symbols=shape_symbols,
+                domain_tags=domain_tags,
+                optional=optional,
+                default_json=default_value_repr,
+            )
+
+        # Scalars
+        if lower in {"float", "int", "bool", "str", "bytes", "complex", "number"} or lower.startswith("np.float") or lower.startswith("np.int") or lower.startswith("Literal[".lower()):
+            dtype = _extract_dtype_token(cleaned) or (lower if lower in {"bytes", "complex", "number"} else "literal")
+            return cls(
+                raw=raw,
+                kind="scalar",
+                dtype=dtype,
+                ndim=0,
+                domain_tags=domain_tags,
+                optional=optional,
+                default_json=default_value_repr,
+            )
+
+        # Callable
+        if lower.startswith("callable") or "->" in cleaned:
+            return cls(
+                raw=raw,
+                kind="callable",
+                domain_tags=domain_tags,
+                optional=optional,
+                default_json=default_value_repr,
+            )
+
+        # Mapping / dict
+        if lower == "dict" or lower.startswith("dict[") or lower.startswith("mapping[") or lower == "mapping":
+            return cls(
+                raw=raw,
+                kind="mapping",
+                domain_tags=domain_tags,
+                optional=optional,
+                default_json=default_value_repr,
+            )
+
+        # Sequence / list / set / iterable
+        if any(
+            lower == p or lower.startswith(p + "[")
+            for p in ("list", "sequence", "iterable", "set", "frozenset", "deque")
+        ):
+            inner_dtype = ""
+            if "[" in cleaned and cleaned.endswith("]"):
+                inner = cleaned[cleaned.index("[") + 1 : -1].strip()
+                inner_dtype = _extract_dtype_token(inner)
+            return cls(
+                raw=raw,
+                kind="sequence",
+                dtype=inner_dtype,
+                ndim=1 if ndim is None else ndim,
+                shape_symbols=shape_symbols,
+                domain_tags=domain_tags,
+                optional=optional,
+                default_json=default_value_repr,
+            )
+
+        # Explicit state / model / graph objects
+        if lower.endswith("state") or "statemodel" in lower or "model" in lower:
+            return cls(
+                raw=raw,
+                kind="state",
+                dtype=cleaned,
+                domain_tags=domain_tags,
+                optional=optional,
+                default_json=default_value_repr,
+            )
+
+        return cls(
+            raw=raw,
+            kind="object",
+            dtype=cleaned.lower(),
+            ndim=ndim,
+            shape_symbols=shape_symbols,
+            domain_tags=domain_tags,
+            optional=optional,
+            default_json=default_value_repr,
+        )
+
+    def is_compatible_with(self, target: "PortTypeSpec") -> bool:
+        """Return whether *self* can safely satisfy *target* without type breakage."""
+        if self.kind == "any" or target.kind == "any":
+            return True
+        if self.kind == "tuple" or target.kind == "tuple":
+            if self.kind != target.kind or len(self.tuple_elements) != len(target.tuple_elements):
+                return False
+            return all(
+                a.is_compatible_with(b)
+                for a, b in zip(self.tuple_elements, target.tuple_elements)
+            )
+        if self.kind != target.kind:
+            return False
+
+        # Check dimensionality when both ports constrain ndim
+        if self.ndim is not None and target.ndim is not None and self.ndim != target.ndim:
+            return False
+
+        # Check dtype compatibility
+        if not self.dtype or not target.dtype or self.dtype == target.dtype:
+            return True
+        if self.kind == "scalar":
+            if self.dtype in _INT_DTYPES and target.dtype in (_INT_DTYPES | _FLOAT_DTYPES):
+                return True
+            if self.dtype in _FLOAT_DTYPES and target.dtype in _FLOAT_DTYPES:
+                return True
+            return False
+        if self.kind in {"array", "series", "sequence"}:
+            if self.dtype in _NUMERIC_DTYPES and target.dtype in _NUMERIC_DTYPES:
+                if target.dtype in _INT_DTYPES and self.dtype in _FLOAT_DTYPES:
+                    return False
+                return True
+            return False
+        return self.dtype == target.dtype
+
+
+class StatePortSpec(BaseModel):
+    """State or artifact port contract on stateful / pretrained CDG nodes."""
+
+    model_config = ConfigDict(extra="allow", populate_by_name=True)
+
+    port_name: str = ""
+    direction: str = "consume"  # consume | produce | update
+    type_desc: str = "Any"
+    accepted_formats: list[str] = Field(default_factory=list)
+    required: bool = True
+    path_semantics: str = ""
+    multi_file: bool = False
+    files: list[dict[str, Any]] = Field(default_factory=list)
+
+    @model_validator(mode="before")
+    @classmethod
+    def _normalize_port_name(cls, value: Any) -> Any:
+        if isinstance(value, dict):
+            data = dict(value)
+            if not data.get("port_name") and data.get("name"):
+                data["port_name"] = str(data["name"])
+            return data
+        return value
+
+
 class IOSpec(BaseModel):
     """Type specification for a node's inputs/outputs."""
 
     name: str
-    type_desc: str  # e.g., "list[int]", "Graph", "nat -> nat -> Prop"
+    type_desc: str = "Any"  # e.g., "list[int]", "Graph", "nat -> nat -> Prop"
     constraints: str = ""  # e.g., "sorted", "non-empty", "n > 0"
     data_kind: str = ""
     time_basis: str = ""
@@ -88,6 +534,49 @@ class IOSpec(BaseModel):
     required: bool = True
     default_value_repr: str = ""
     dim_signature: str = ""  # compact dimensional signature, e.g. "M1L2T-3" for Power
+    port_type: PortTypeSpec | None = None
+
+    def resolved_port_type(self, *, witness_type_desc: str = "") -> PortTypeSpec:
+        """Return explicit ``port_type`` if present, else parse from ``type_desc``."""
+        if self.port_type is not None:
+            return self.port_type
+        return PortTypeSpec.from_type_desc(
+            self.type_desc,
+            constraints=self.constraints,
+            data_kind=self.data_kind,
+            required=self.required,
+            default_value_repr=self.default_value_repr,
+            witness_type_desc=witness_type_desc,
+        )
+
+
+def format_canonical_port(port: IOSpec) -> str:
+    """Format a single IOSpec in canonical signature notation."""
+    type_text = str(port.type_desc or "Any").strip() or "Any"
+    rendered = f"{port.name}: {type_text}"
+    if not port.required:
+        if port.default_value_repr:
+            rendered += f" = {port.default_value_repr}"
+        else:
+            rendered += " = ..."
+    return rendered
+
+
+def format_canonical_type_signature(
+    inputs: Sequence[IOSpec],
+    outputs: Sequence[IOSpec],
+) -> str:
+    """Format canonical ``(x: T1, y: T2 = d) -> R`` signature across all stages."""
+    in_sig = ", ".join(format_canonical_port(port) for port in inputs)
+    if not outputs:
+        out_sig = "None"
+    elif len(outputs) == 1:
+        out_sig = str(outputs[0].type_desc or "Any").strip() or "Any"
+    else:
+        out_sig = "tuple[" + ", ".join(
+            str(port.type_desc or "Any").strip() or "Any" for port in outputs
+        ) + "]"
+    return f"({in_sig}) -> {out_sig}"
 
 
 class NodeStatus(str, Enum):
@@ -107,6 +596,16 @@ class BoundaryKind(str, Enum):
     NONE = "none"
     ROOT_INPUT = "root_input"
     ROOT_OUTPUT = "root_output"
+
+
+class CommonPattern(BaseModel):
+    """A composition pattern declaring companion atoms for multi-step stages."""
+
+    pattern_id: str
+    description: str = ""
+    atoms: list[str]
+    ordering: str = "sequential"  # sequential, parallel, alternatives
+    when: str = ""
 
 
 class AlgorithmicNode(BaseModel):
@@ -142,6 +641,13 @@ class AlgorithmicNode(BaseModel):
     map_hop_size: int = 0  # 0 means not a MAP node; >0 = hop between windows
     boundary_kind: BoundaryKind = BoundaryKind.NONE
     boundary_port_name: str = ""
+    phase: str = "stateless"  # stateless | fit | transform | predict | score
+    state_ports: list[StatePortSpec] = Field(default_factory=list)
+    semantic_role: str = ""
+    time_complexity: str = ""
+    space_complexity: str = ""
+    aliases: list[str] = Field(default_factory=list)
+    common_patterns: list[CommonPattern] = Field(default_factory=list)
 
 
 class EdgeLossClass(str, Enum):
@@ -247,16 +753,6 @@ class PrimitiveParamSpec(BaseModel):
         return self
 
 
-class CommonPattern(BaseModel):
-    """A composition pattern declaring companion atoms for multi-step stages."""
-
-    pattern_id: str
-    description: str = ""
-    atoms: list[str]
-    ordering: str = "sequential"  # sequential, parallel, alternatives
-    when: str = ""
-
-
 class AlgorithmicPrimitive(BaseModel):
     """A known atomic operation from CLRS or a library."""
 
@@ -275,6 +771,11 @@ class AlgorithmicPrimitive(BaseModel):
     param_status: ParamStatus = ParamStatus.FIXED
     aliases: list[str] = Field(default_factory=list)
     common_patterns: list[CommonPattern] = Field(default_factory=list)
+    phase: str = "stateless"
+    state_ports: list[StatePortSpec] = Field(default_factory=list)
+    semantic_role: str = ""
+    time_complexity: str = ""
+    space_complexity: str = ""
 
 
 class BaselineComponentShape(str, Enum):

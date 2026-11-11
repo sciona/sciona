@@ -194,6 +194,18 @@ class CompileCheck(BaseNode[RepairState, RepairDeps, SkeletonFile]):
             state.best_source = state.skeleton.source_code
 
         if feedback.success:
+            remaining_sorries = find_sorry_locations(
+                state.skeleton.source_code, state.skeleton.prover
+            )
+            if remaining_sorries:
+                state.sorry_remaining = len(remaining_sorries)
+                if state.iteration >= state.max_iterations:
+                    if state.best_source and state.best_error_count < current_error_count:
+                        state.skeleton.source_code = state.best_source
+                    return End(state.skeleton)
+                state._source_snapshots.append(state.skeleton.source_code)
+                return SorryElimination()
+
             state.compiled_ok = True
             state.sorry_remaining = 0
             await _put_context(
@@ -251,6 +263,67 @@ class CompileCheck(BaseNode[RepairState, RepairDeps, SkeletonFile]):
         return LLMRepair()
 
 
+def _find_header_insert_line(lines: list[str], prover: str) -> int:
+    """Return 1-indexed line number *after* which top-level imports/opens should be inserted.
+
+    Returns ``0`` when fixes should be prepended before line 1 (e.g. no header
+    block comment or existing import block). Never splits ``/- ... -/``,
+    ``(* ... *)``, or Python ``\"\"\" ... \"\"\"`` header comments.
+    """
+    if not lines:
+        return 0
+    idx = 0
+    n = len(lines)
+    while idx < n:
+        stripped = lines[idx].strip()
+        if not stripped:
+            idx += 1
+            continue
+        if prover == "python":
+            if stripped.startswith("#"):
+                idx += 1
+                continue
+            if stripped.startswith(('"""', "'''")):
+                quote = stripped[:3]
+                if len(stripped) >= 6 and stripped.endswith(quote):
+                    idx += 1
+                    continue
+                idx += 1
+                while idx < n and quote not in lines[idx]:
+                    idx += 1
+                if idx < n:
+                    idx += 1
+                continue
+            if stripped.startswith(("from __future__", "import ", "from ")):
+                idx += 1
+                continue
+        elif prover == "coq":
+            if stripped.startswith("(*"):
+                while idx < n and "*)" not in lines[idx]:
+                    idx += 1
+                if idx < n:
+                    idx += 1
+                continue
+            if stripped.startswith(("Require ", "From ", "Import ")):
+                idx += 1
+                continue
+        else:  # lean4
+            if stripped.startswith("--"):
+                idx += 1
+                continue
+            if stripped.startswith("/-"):
+                while idx < n and "-/" not in lines[idx]:
+                    idx += 1
+                if idx < n:
+                    idx += 1
+                continue
+            if stripped.startswith("import "):
+                idx += 1
+                continue
+        break
+    return idx
+
+
 @dataclass
 class DeterministicFix(BaseNode[RepairState, RepairDeps, SkeletonFile]):
     """Apply deterministic fixes (e.g. missing imports).
@@ -278,14 +351,29 @@ class DeterministicFix(BaseNode[RepairState, RepairDeps, SkeletonFile]):
                 state.error_history.append((state.iteration, cat, text))
 
         if fixes_to_apply:
-            # Insert all fixes at top of file (after first line)
             combined_fix = "\n".join(fixes_to_apply)
-            patch = Patch(
-                line_start=1,
-                line_end=1,
-                replacement=lines[0] + "\n" + combined_fix if lines else combined_fix,
-                description=f"Deterministic fixes: {len(fixes_to_apply)} fix(es)",
-            )
+            insert_idx = _find_header_insert_line(lines, state.skeleton.prover)
+            if not lines:
+                patch = Patch(
+                    line_start=1,
+                    line_end=1,
+                    replacement=combined_fix,
+                    description=f"Deterministic fixes: {len(fixes_to_apply)} fix(es)",
+                )
+            elif insert_idx == 0:
+                patch = Patch(
+                    line_start=1,
+                    line_end=1,
+                    replacement=combined_fix + "\n" + lines[0],
+                    description=f"Deterministic fixes: {len(fixes_to_apply)} fix(es)",
+                )
+            else:
+                patch = Patch(
+                    line_start=insert_idx,
+                    line_end=insert_idx,
+                    replacement=lines[insert_idx - 1] + "\n" + combined_fix,
+                    description=f"Deterministic fixes: {len(fixes_to_apply)} fix(es)",
+                )
             state.skeleton.source_code = apply_patches(
                 state.skeleton.source_code, [patch]
             )
@@ -408,7 +496,9 @@ class LLMRepair(BaseNode[RepairState, RepairDeps, SkeletonFile]):
 class SorryElimination(BaseNode[RepairState, RepairDeps, SkeletonFile]):
     """Replace sorry/Admitted placeholders with LLM-generated tactic proofs."""
 
-    async def run(self, ctx: GraphRunContext[RepairState, RepairDeps]) -> CompileCheck:
+    async def run(
+        self, ctx: GraphRunContext[RepairState, RepairDeps]
+    ) -> CompileCheck | LLMRepair:
         state = ctx.state
         deps = ctx.deps
 
@@ -416,7 +506,8 @@ class SorryElimination(BaseNode[RepairState, RepairDeps, SkeletonFile]):
             state.skeleton.source_code, state.skeleton.prover
         )
         if not locations:
-            return CompileCheck()
+            state.iteration += 1
+            return LLMRepair()
 
         line_num, context = locations[0]  # Fix one sorry per iteration
 

@@ -11,7 +11,7 @@ from sciona.sources import load_sources, resolve_source
 def _primitive(name: str) -> AlgorithmicPrimitive:
     return AlgorithmicPrimitive(
         name=name,
-        source="sciona-atoms-signal-processing",
+        source="sciona-atoms-signal",
         category=ConceptType.SIGNAL_TRANSFORM,
         description=f"{name} description",
     )
@@ -21,7 +21,7 @@ def test_live_namespace_hyperparams_manifest_loads_and_attaches_signal_tunables(
     repo_root = Path(__file__).resolve().parents[1]
     config = load_sources(repo_root / "sources.yml")
     source = next(
-        src for src in config.sources if src.name == "sciona-atoms-signal-processing"
+        src for src in config.sources if src.name == "sciona-atoms-signal"
     )
 
     source_root = resolve_source(source, base_dir=repo_root)

@@ -15,7 +15,7 @@ from pathlib import Path
 from typing import Any
 
 from sciona.architect.handoff import CDGExport, to_pdg_nodes
-from sciona.architect.models import AlgorithmicNode, NodeStatus
+from sciona.architect.models import AlgorithmicNode, DependencyEdge, IOSpec, NodeStatus
 from sciona.llm_router import ORCHESTRATOR_REFINE, select_llm
 from sciona.telemetry import log_event, telemetry_scope, telemetry_stage, update_stage
 from sciona.types import (
@@ -66,25 +66,104 @@ def _find_cdg_node(cdg: CDGExport, node_id: str) -> AlgorithmicNode | None:
 def _apply_split_subnodes(
     cdg: CDGExport,
     original: AlgorithmicNode,
-    sub_nodes: list[dict[str, str]],
+    sub_nodes: list[dict[str, Any]],
 ) -> CDGExport:
+    bounded = sub_nodes[:3]
+    if not bounded:
+        return cdg
+
     original.status = NodeStatus.DECOMPOSED
     original.children = []
 
-    for i, sub in enumerate(sub_nodes[:3]):
+    orig_inputs = [inp.model_copy(deep=True) for inp in original.inputs] or [
+        IOSpec(name="input", type_desc="Any")
+    ]
+    orig_outputs = [out.model_copy(deep=True) for out in original.outputs] or [
+        IOSpec(name="output", type_desc=orig_inputs[0].type_desc or "Any")
+    ]
+
+    created: list[AlgorithmicNode] = []
+    n_subs = len(bounded)
+    for i, sub in enumerate(bounded):
         sub_id = f"{original.node_id}_sub{i}"
+        sig = str(sub.get("type_signature", "") or "")
+        inferred_in_type = "Any"
+        inferred_out_type = "Any"
+        if "->" in sig:
+            lhs, rhs = sig.rsplit("->", 1)
+            inferred_in_type = lhs.strip(" ()") or "Any"
+            inferred_out_type = rhs.strip() or "Any"
+
+        if i == 0:
+            sub_inputs = [inp.model_copy(deep=True) for inp in orig_inputs]
+        else:
+            prev_out = created[-1].outputs[0]
+            sub_inputs = [
+                IOSpec(
+                    name=prev_out.name,
+                    type_desc=(
+                        prev_out.type_desc
+                        if prev_out.type_desc != "Any"
+                        else inferred_in_type
+                    ),
+                )
+            ]
+
+        if i == n_subs - 1:
+            sub_outputs = [out.model_copy(deep=True) for out in orig_outputs]
+        else:
+            out_type = (
+                inferred_out_type
+                if inferred_out_type != "Any"
+                else sub_inputs[0].type_desc
+            )
+            sub_outputs = [IOSpec(name=f"stage_{i}_out", type_desc=out_type)]
+
         sub_node = AlgorithmicNode(
             node_id=sub_id,
             parent_id=original.node_id,
-            name=sub.get("name", f"sub_{i}"),
-            description=sub.get("description", ""),
+            name=str(sub.get("name", f"sub_{i}")),
+            description=str(sub.get("description", "")),
             concept_type=original.concept_type,
             status=NodeStatus.ATOMIC,
             depth=original.depth + 1,
-            type_signature=sub.get("type_signature", ""),
+            type_signature=sig or f"{sub_inputs[0].type_desc} -> {sub_outputs[0].type_desc}",
+            inputs=sub_inputs,
+            outputs=sub_outputs,
         )
         cdg.nodes.append(sub_node)
         original.children.append(sub_id)
+        created.append(sub_node)
+
+    # Rewire parent data-flow edges to first/last split sub-nodes
+    first_sub = created[0]
+    last_sub = created[-1]
+    rewired_edges: list[DependencyEdge] = []
+    for edge in cdg.edges:
+        updated = edge.model_copy(deep=True)
+        if updated.target_id == original.node_id:
+            updated.target_id = first_sub.node_id
+        if updated.source_id == original.node_id:
+            updated.source_id = last_sub.node_id
+        rewired_edges.append(updated)
+
+    # Add internal sequential data-flow edges across split sub-nodes
+    for idx in range(len(created) - 1):
+        src_node = created[idx]
+        dst_node = created[idx + 1]
+        src_port = src_node.outputs[0]
+        dst_port = dst_node.inputs[0]
+        rewired_edges.append(
+            DependencyEdge(
+                source_id=src_node.node_id,
+                target_id=dst_node.node_id,
+                output_name=src_port.name,
+                input_name=dst_port.name,
+                source_type=src_port.type_desc,
+                target_type=dst_port.type_desc,
+            )
+        )
+    cdg.edges = rewired_edges
     return cdg
 
 
@@ -650,6 +729,15 @@ async def run_orchestration(
                     )
 
         result.cdg = cdg
+        decomposed_ids = {
+            n.node_id for n in cdg.nodes if n.status == NodeStatus.DECOMPOSED
+        }
+        if decomposed_ids:
+            result.match_results = [
+                mr
+                for mr in result.match_results
+                if mr.pdg_node.predicate_id not in decomposed_ids
+            ]
 
     update_stage(
         stage="orchestration",

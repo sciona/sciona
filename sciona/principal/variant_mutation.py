@@ -5,7 +5,7 @@ from __future__ import annotations
 import logging
 import math
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Protocol
+from typing import TYPE_CHECKING, Any, Protocol
 
 from sciona.architect.handoff import CDGExport
 from sciona.architect.models import AlgorithmicNode, AlgorithmicPrimitive, NodeStatus
@@ -219,9 +219,18 @@ class LedgerVariantFamily:
 
     name = "ledger_bandit"
 
-    def __init__(self, ledger: AtomLedger, catalog: PrimitiveCatalog) -> None:
+    def __init__(
+        self,
+        ledger: AtomLedger,
+        catalog: PrimitiveCatalog,
+        *,
+        uncertainty_backend: Any | None = None,
+        uncertainty_report: Any | None = None,
+    ) -> None:
         self._ledger = ledger
         self._catalog = catalog
+        self._uncertainty_backend = uncertainty_backend
+        self._uncertainty_report = uncertainty_report
 
     def matches(self, cdg: CDGExport) -> bool:
         return True
@@ -260,7 +269,25 @@ class LedgerVariantFamily:
         if target.matched_primitive not in candidates:
             candidates.append(target.matched_primitive)
 
-        ranked = self._ledger.rank_candidates(slot, candidates)
+        benchmark_priors: dict[str, float] | None = None
+        if self._uncertainty_backend is not None or self._uncertainty_report is not None:
+            from sciona.uncertainty.gap_spec import uncertainty_priors_for_candidates
+
+            node_eval = None
+            if self._uncertainty_report is not None:
+                nodes_dict = getattr(self._uncertainty_report, "nodes", {})
+                node_eval = nodes_dict.get(target.node_id)
+            benchmark_priors = uncertainty_priors_for_candidates(
+                candidates,
+                node_eval=node_eval,
+                backend=self._uncertainty_backend,
+            )
+
+        ranked = self._ledger.rank_candidates(
+            slot,
+            candidates,
+            benchmark_priors=benchmark_priors,
+        )
         if not ranked:
             return VariantMutationResult(cdg=cdg, applied=False)
         ranked = self._apply_family_prior(target, ranked)
@@ -325,6 +352,8 @@ def maybe_apply_bottleneck_variant(
     bottleneck_name: str | None,
     atom_ledger: AtomLedger | None = None,
     catalog: PrimitiveCatalog | None = None,
+    uncertainty_backend: Any | None = None,
+    uncertainty_report: Any | None = None,
 ) -> VariantMutationResult:
     """Apply the first matching family-specific mutation for the bottleneck node.
 
@@ -338,7 +367,14 @@ def maybe_apply_bottleneck_variant(
 
     families: list[VariantFamily] = list(VARIANT_FAMILIES)
     if atom_ledger is not None and catalog is not None:
-        families.append(LedgerVariantFamily(atom_ledger, catalog))
+        families.append(
+            LedgerVariantFamily(
+                atom_ledger,
+                catalog,
+                uncertainty_backend=uncertainty_backend,
+                uncertainty_report=uncertainty_report,
+            )
+        )
 
     last_exhausted: VariantMutationResult | None = None
     for family in families:
@@ -369,17 +405,55 @@ def _is_primitive_structurally_compatible(
     node: AlgorithmicNode,
     primitive: AlgorithmicPrimitive,
 ) -> bool:
-    """Return whether a primitive is safe to slot into a node without rewiring."""
-    if len(node.inputs) != len(primitive.inputs):
+    """Return whether a primitive is safe to slot into a node without rewiring.
+
+    Uses structured ``PortTypeSpec`` compatibility (handling equivalent type
+    spellings like ``np.ndarray`` vs ``NDArray[np.float64]`` and trailing
+    optional primitive parameters with defaults) while rejecting incompatible
+    arities, kinds, phases, or dimensionalities.
+    """
+    node_phase = str(getattr(node, "phase", "stateless") or "stateless").lower()
+    prim_phase = str(getattr(primitive, "phase", "stateless") or "stateless").lower()
+    if node_phase != prim_phase:
         return False
+
     if len(node.outputs) != len(primitive.outputs):
         return False
 
-    node_input_types = [_normalize_type_desc(port.type_desc) for port in node.inputs]
-    prim_input_types = [_normalize_type_desc(port.type_desc) for port in primitive.inputs]
-    node_output_types = [_normalize_type_desc(port.type_desc) for port in node.outputs]
-    prim_output_types = [_normalize_type_desc(port.type_desc) for port in primitive.outputs]
-    return node_input_types == prim_input_types and node_output_types == prim_output_types
+    # Candidate primitive must accept all node inputs positionally, and any
+    # extra trailing inputs on the primitive must be optional (have defaults).
+    if len(primitive.inputs) < len(node.inputs):
+        return False
+    for extra_port in primitive.inputs[len(node.inputs) :]:
+        if extra_port.required and not extra_port.resolved_port_type().optional:
+            return False
+
+    for node_in, prim_in in zip(node.inputs, primitive.inputs[: len(node.inputs)]):
+        if _normalize_type_desc(node_in.type_desc) == _normalize_type_desc(prim_in.type_desc):
+            continue
+        node_spec = node_in.resolved_port_type()
+        prim_spec = prim_in.resolved_port_type()
+        # Data flowing into the node has type `node_spec`; primitive expects `prim_spec`
+        if node_spec.kind == "any" or prim_spec.kind == "any":
+            # Avoid wildcard-matching completely untyped 'Any' primitives unless both are Any
+            if node_spec.kind != prim_spec.kind:
+                return False
+        if not node_spec.is_compatible_with(prim_spec):
+            return False
+
+    for node_out, prim_out in zip(node.outputs, primitive.outputs):
+        if _normalize_type_desc(node_out.type_desc) == _normalize_type_desc(prim_out.type_desc):
+            continue
+        node_spec = node_out.resolved_port_type()
+        prim_spec = prim_out.resolved_port_type()
+        if node_spec.kind == "any" or prim_spec.kind == "any":
+            if node_spec.kind != prim_spec.kind:
+                return False
+        # Primitive output `prim_spec` flows into downstream consumers expecting `node_spec`
+        if not prim_spec.is_compatible_with(node_spec):
+            return False
+
+    return True
 
 
 def _apply_family_prior_score(score: float, *, same_family: bool, penalty: float = 0.15) -> float:

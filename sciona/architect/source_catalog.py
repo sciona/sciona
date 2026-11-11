@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from collections.abc import Iterable
-from dataclasses import dataclass
+from collections.abc import Iterable, Sequence
+from dataclasses import dataclass, field
 import ast
 import importlib
 import inspect
@@ -16,13 +16,22 @@ import sys
 from typing import TYPE_CHECKING, Any, get_args, get_origin
 
 from sciona.architect.catalog import CatalogReport, PrimitiveCatalog
-from sciona.architect.models import AlgorithmicPrimitive, ConceptType, IOSpec
+from sciona.architect.models import (
+    AlgorithmicPrimitive,
+    CommonPattern,
+    ConceptType,
+    IOSpec,
+    PortTypeSpec,
+    StatePortSpec,
+)
 from sciona.license_policy import load_license_policy_from_env
 from sciona.sources import (
     AtomSource,
     SourcesConfig,
     discover_cdgs,
+    excluded_import_prefixes,
     import_atoms,
+    is_excluded_module,
     load_sources,
     resolve_package_root,
 )
@@ -60,6 +69,13 @@ class _AtomicNodeMeta:
     outputs: list[IOSpec]
     type_signature: str
     matched_primitive: str
+    phase: str = "stateless"
+    state_ports: list[StatePortSpec] = field(default_factory=list)
+    semantic_role: str = ""
+    time_complexity: str = ""
+    space_complexity: str = ""
+    aliases: list[str] = field(default_factory=list)
+    common_patterns: list[CommonPattern] = field(default_factory=list)
 
 
 def _annotation_to_text(annotation: Any) -> str:
@@ -168,12 +184,15 @@ def _live_registry_entries_for_source(
     except Exception:
         pass
 
+    excluded = excluded_import_prefixes(source, base_dir)
     for registry_module in _iter_registry_modules():
         registry = getattr(registry_module, "REGISTRY", {})
         for name, meta in registry.items():
             impl = meta.get("impl")
             witness = meta.get("witness")
             module_name = getattr(impl, "__module__", "") or getattr(witness, "__module__", "")
+            if is_excluded_module(module_name, excluded) or is_excluded_module(str(name), excluded):
+                continue
             file_path = None
             for fn in (impl, witness):
                 try:
@@ -205,14 +224,42 @@ def _module_belongs_to_source(
     source: AtomSource,
     package_root: Path,
 ) -> bool:
-    if module_name == source.package or module_name.startswith(source.package + "."):
-        return True
     if path:
         try:
-            return Path(path).resolve().is_relative_to(package_root)
+            resolved_path = Path(path).resolve()
+            if resolved_path.is_relative_to(package_root):
+                return True
+            if package_root.exists():
+                return False
         except Exception:
-            return False
+            pass
+    if module_name == source.package or module_name.startswith(source.package + "."):
+        return True
     return False
+
+
+def _enrich_ports_with_witness(
+    ports: list[IOSpec],
+    witness_ports: list[IOSpec],
+) -> list[IOSpec]:
+    """Attach structured ``PortTypeSpec`` using concrete port types + witness tags."""
+    enriched: list[IOSpec] = []
+    witness_by_name = {w.name: w for w in witness_ports}
+    for idx, port in enumerate(ports):
+        w_port = witness_by_name.get(port.name)
+        if w_port is None and idx < len(witness_ports):
+            w_port = witness_ports[idx]
+        w_type = w_port.type_desc if w_port is not None else ""
+        spec = PortTypeSpec.from_type_desc(
+            port.type_desc,
+            constraints=port.constraints,
+            data_kind=port.data_kind,
+            required=port.required,
+            default_value_repr=port.default_value_repr,
+            witness_type_desc=w_type,
+        )
+        enriched.append(port.model_copy(update={"port_type": spec}))
+    return enriched
 
 
 def _load_atomic_node_index(
@@ -220,8 +267,8 @@ def _load_atomic_node_index(
 ) -> tuple[dict[str, list[_AtomicNodeMeta]], dict[str, str]]:
     """Load atomic node metadata and topo-hashes from CDG files.
 
-    Returns ``(atom_index, topo_hashes)`` where *topo_hashes* maps
-    ``topo_hash -> source_name`` for structural de-duplication.
+    Supports both canonical ``nodes``/``edges`` and legacy ``atomic_nodes``
+    CDG files. Returns ``(atom_index, topo_hashes)``.
     """
     from sciona.graph_store import _topo_hash
 
@@ -237,11 +284,18 @@ def _load_atomic_node_index(
         except Exception:
             continue
 
-        all_nodes_raw = payload.get("nodes", []) or []
+        all_nodes_raw = payload.get("nodes")
+        legacy_atomic = False
+        if all_nodes_raw is None and isinstance(payload.get("atomic_nodes"), list):
+            all_nodes_raw = payload["atomic_nodes"]
+            legacy_atomic = True
+        all_nodes_raw = all_nodes_raw or []
         all_edges_raw = payload.get("edges", []) or []
 
         # Compute topo_hashes for decomposed parent nodes.
         for raw in all_nodes_raw:
+            if not isinstance(raw, dict):
+                continue
             children = raw.get("children", []) or []
             status = raw.get("status", "")
             if status == "decomposed" and len(children) >= 2:
@@ -249,10 +303,15 @@ def _load_atomic_node_index(
                 nodes_dicts = [
                     {"node_id": str(n.get("node_id", "")), "parent_id": str(n.get("parent_id", ""))}
                     for n in all_nodes_raw
+                    if isinstance(n, dict)
                 ]
                 edges_dicts = [
-                    {"source_id": str(e.get("source_id", "")), "target_id": str(e.get("target_id", ""))}
+                    {
+                        "source_id": str(e.get("source_id") or e.get("source") or ""),
+                        "target_id": str(e.get("target_id") or e.get("target") or ""),
+                    }
                     for e in all_edges_raw
+                    if isinstance(e, dict)
                 ]
                 try:
                     h = _topo_hash(nodes_dicts, edges_dicts, node_id)
@@ -262,21 +321,61 @@ def _load_atomic_node_index(
                     pass
 
         for raw in all_nodes_raw:
-            if raw.get("status") != "atomic":
+            if not isinstance(raw, dict):
                 continue
+            if not legacy_atomic and raw.get("status") != "atomic":
+                continue
+            node_id = str(raw.get("node_id") or raw.get("name") or "")
+            name = str(raw.get("name") or node_id)
+            semantic_role = str(raw.get("semantic_role", "") or "")
+            description = str(raw.get("description") or semantic_role or "")
+            raw_ct = raw.get("concept_type")
             try:
-                concept_type = ConceptType(raw.get("concept_type", ConceptType.CUSTOM.value))
+                concept_type = (
+                    ConceptType(raw_ct)
+                    if raw_ct
+                    else _infer_concept_type(
+                        name=name or node_id,
+                        module=source.package,
+                        description=description,
+                    )
+                )
             except ValueError:
                 concept_type = ConceptType.CUSTOM
+            inputs = _enrich_ports_with_witness(
+                [IOSpec.model_validate(item) for item in (raw.get("inputs") or []) if isinstance(item, dict)],
+                [],
+            )
+            outputs = _enrich_ports_with_witness(
+                [IOSpec.model_validate(item) for item in (raw.get("outputs") or []) if isinstance(item, dict)],
+                [],
+            )
+            state_ports = [
+                StatePortSpec.model_validate(sp)
+                for sp in (raw.get("state_ports") or [])
+                if isinstance(sp, dict)
+            ]
+            common_patterns = [
+                CommonPattern.model_validate(cp)
+                for cp in (raw.get("common_patterns") or [])
+                if isinstance(cp, dict)
+            ]
             meta = _AtomicNodeMeta(
-                node_id=str(raw.get("node_id", "")),
-                name=str(raw.get("name", "")),
-                description=str(raw.get("description", "")),
+                node_id=node_id,
+                name=name,
+                description=description,
                 concept_type=concept_type,
-                inputs=[IOSpec.model_validate(item) for item in raw.get("inputs", []) or []],
-                outputs=[IOSpec.model_validate(item) for item in raw.get("outputs", []) or []],
+                inputs=inputs,
+                outputs=outputs,
                 type_signature=str(raw.get("type_signature", "")),
                 matched_primitive=str(raw.get("matched_primitive", "") or ""),
+                phase=str(raw.get("phase") or "stateless"),
+                state_ports=state_ports,
+                semantic_role=semantic_role,
+                time_complexity=str(raw.get("time_complexity") or ""),
+                space_complexity=str(raw.get("space_complexity") or ""),
+                aliases=[str(a) for a in (raw.get("aliases") or []) if a],
+                common_patterns=common_patterns,
             )
             for key in {
                 _normalize(meta.node_id),
@@ -413,14 +512,50 @@ def _ast_register_atom_spec(decorator: ast.AST) -> tuple[str, str] | None:
     return None
 
 
-def _parse_register_atom_functions(package_root: Path, package_name: str) -> dict[str, dict[str, Any]]:
+def _extract_ast_docstring(node: ast.FunctionDef | ast.AsyncFunctionDef) -> str:
+    """Extract docstring, including docstrings displaced below leading imports."""
+    doc = ast.get_docstring(node)
+    if doc:
+        return doc
+    idx = 0
+    while idx < len(node.body) and isinstance(node.body[idx], (ast.Import, ast.ImportFrom)):
+        idx += 1
+    if idx > 0 and idx < len(node.body):
+        stmt = node.body[idx]
+        if (
+            isinstance(stmt, ast.Expr)
+            and isinstance(stmt.value, ast.Constant)
+            and isinstance(stmt.value.value, str)
+        ):
+            return inspect.cleandoc(stmt.value.value)
+    return ""
+
+
+def _parse_register_atom_functions(
+    package_root: Path,
+    package_name: str,
+    *,
+    excluded_prefixes: tuple[str, ...] = (),
+) -> dict[str, dict[str, Any]]:
     parsed: dict[str, dict[str, Any]] = {}
+    pkg_parts = [p for p in package_name.split(".") if p]
+    depth = max(1, len(pkg_parts))
+    try:
+        import_root = package_root.parents[depth - 1]
+    except IndexError:
+        import_root = package_root.parent
+
     for py_file in _package_python_files(package_root):
+        try:
+            module_name = ".".join(py_file.relative_to(import_root).with_suffix("").parts)
+        except Exception:
+            module_name = ".".join(py_file.relative_to(package_root.parent).with_suffix("").parts)
+        if is_excluded_module(module_name, excluded_prefixes):
+            continue
         try:
             tree = ast.parse(py_file.read_text(), filename=str(py_file))
         except Exception:
             continue
-        module_name = ".".join(py_file.relative_to(package_root.parent).with_suffix("").parts)
         function_defs = {
             node.name: node
             for node in tree.body
@@ -438,8 +573,10 @@ def _parse_register_atom_functions(package_root: Path, package_name: str) -> dic
                 continue
             reg_name, witness_name = reg_spec
             atom_name = reg_name or node.name
+            if is_excluded_module(atom_name, excluded_prefixes):
+                continue
             inputs, outputs = _ports_from_ast_function(node)
-            doc = ast.get_docstring(node) or ""
+            doc = _extract_ast_docstring(node)
             witness_doc = ""
             witness_inputs: list[IOSpec] = []
             witness_outputs: list[IOSpec] = []
@@ -447,7 +584,7 @@ def _parse_register_atom_functions(package_root: Path, package_name: str) -> dic
             signature_source = "impl"
             witness_func = function_defs.get(witness_name)
             if witness_func is not None:
-                witness_doc = ast.get_docstring(witness_func) or ""
+                witness_doc = _extract_ast_docstring(witness_func)
                 witness_inputs, witness_outputs = _ports_from_ast_function(witness_func)
                 if not doc and witness_doc:
                     doc_source = "witness"
@@ -457,6 +594,8 @@ def _parse_register_atom_functions(package_root: Path, package_name: str) -> dic
                     inputs = witness_inputs
                     outputs = witness_outputs
                     signature_source = "witness"
+            inputs = _enrich_ports_with_witness(inputs, witness_inputs)
+            outputs = _enrich_ports_with_witness(outputs, witness_outputs)
             parsed[atom_name] = {
                 "impl": None,
                 "witness": None,
@@ -516,24 +655,72 @@ def _registration_to_primitive(
     if matched is not None:
         if report is not None:
             report.source_cdg_metadata_matches += 1
+        def _merge_ast_port_enrichment(
+            cdg_ports: list[IOSpec], ast_ports: list[IOSpec]
+        ) -> list[IOSpec]:
+            if not ast_ports or len(ast_ports) != len(cdg_ports):
+                return cdg_ports
+            merged: list[IOSpec] = []
+            for c_port, a_port in zip(cdg_ports, ast_ports):
+                a_pt = a_port.resolved_port_type()
+                c_pt = c_port.resolved_port_type()
+                new_tags = list(dict.fromkeys([*c_pt.domain_tags, *a_pt.domain_tags]))
+                new_ndim = c_pt.ndim if c_pt.ndim is not None else a_pt.ndim
+                new_dtype = c_pt.dtype or a_pt.dtype
+                updated_pt = c_pt.model_copy(
+                    update={
+                        "domain_tags": new_tags,
+                        "ndim": new_ndim,
+                        "dtype": new_dtype,
+                    }
+                )
+                merged.append(c_port.model_copy(update={"port_type": updated_pt}))
+            return merged
+
+        cdg_inputs = _merge_ast_port_enrichment(list(matched.inputs), list(meta.get("ast_inputs") or []))
+        cdg_outputs = _merge_ast_port_enrichment(list(matched.outputs), list(meta.get("ast_outputs") or []))
         primitive = AlgorithmicPrimitive(
             name=name,
             source=source.name,
             category=matched.concept_type,
             description=matched.description or description or name,
-            inputs=matched.inputs,
-            outputs=matched.outputs,
-            type_signature=matched.type_signature or _signature_from_ports(matched.inputs, matched.outputs),
+            inputs=cdg_inputs,
+            outputs=cdg_outputs,
+            type_signature=matched.type_signature or _signature_from_ports(cdg_inputs, cdg_outputs),
+            phase=matched.phase,
+            state_ports=matched.state_ports,
+            semantic_role=matched.semantic_role,
+            time_complexity=matched.time_complexity,
+            space_complexity=matched.space_complexity,
+            aliases=matched.aliases,
+            common_patterns=matched.common_patterns,
         )
-        aliases = [alias for alias in {matched.node_id, matched.name, matched.matched_primitive} if alias and alias != name]
+        aliases = [
+            alias
+            for alias in {matched.node_id, matched.name, matched.matched_primitive, *matched.aliases}
+            if alias and alias != name
+        ]
         return primitive, aliases
 
     if meta.get("ast_inputs") is not None:
         inputs = meta.get("ast_inputs", [])
         outputs = meta.get("ast_outputs", []) or [IOSpec(name="result", type_desc="Any")]
     else:
-        signature_source = witness or impl
-        inputs, outputs = _ports_from_callable(signature_source)
+        impl_inputs, impl_outputs = _ports_from_callable(impl) if impl is not None else ([], [])
+        witness_inputs, witness_outputs = _ports_from_callable(witness) if witness is not None else ([], [])
+        if impl is not None and not _ports_are_uninformative(impl_inputs, impl_outputs):
+            inputs = _enrich_ports_with_witness(impl_inputs, witness_inputs)
+            outputs = _enrich_ports_with_witness(impl_outputs, witness_outputs)
+        elif witness is not None and not _ports_are_uninformative(witness_inputs, witness_outputs):
+            inputs = _enrich_ports_with_witness(witness_inputs, witness_inputs)
+            outputs = _enrich_ports_with_witness(witness_outputs, witness_outputs)
+            if report is not None:
+                report.source_witness_signature_fallbacks += 1
+        else:
+            fallback_fn = impl or witness
+            raw_in, raw_out = _ports_from_callable(fallback_fn)
+            inputs = _enrich_ports_with_witness(raw_in, witness_inputs)
+            outputs = _enrich_ports_with_witness(raw_out, witness_outputs)
     primitive = AlgorithmicPrimitive(
         name=name,
         source=source.name,
@@ -727,12 +914,27 @@ def _manifest_io_specs_map(
     if "io_specs" not in tables:
         return {}
 
+    io_columns = _sqlite_table_columns(con, "io_specs")
+    has_port_type = "port_type_json" in io_columns
+    select_cols = [
+        "atom_id",
+        "port_name",
+        "direction",
+        "ordinal",
+        "type_desc",
+        "constraints",
+        "data_kind",
+        "required",
+        "default_value_repr",
+    ]
+    if has_port_type:
+        select_cols.append("port_type_json")
+
     grouped: dict[str, tuple[list[IOSpec], list[IOSpec]]] = {}
     try:
         rows = con.execute(
-            """
-            SELECT atom_id, port_name, direction, ordinal, type_desc, constraints,
-                   data_kind, required, default_value_repr
+            f"""
+            SELECT {", ".join(select_cols)}
             FROM io_specs
             ORDER BY atom_id ASC, COALESCE(ordinal, 0) ASC, port_name ASC
             """
@@ -744,6 +946,14 @@ def _manifest_io_specs_map(
         atom_id = _manifest_text(row["atom_id"])
         if not atom_id:
             continue
+        parsed_port_type: PortTypeSpec | None = None
+        if has_port_type:
+            raw_pt = _manifest_text(row["port_type_json"])
+            if raw_pt:
+                try:
+                    parsed_port_type = PortTypeSpec.model_validate_json(raw_pt)
+                except Exception:
+                    parsed_port_type = None
         port = IOSpec(
             name=_manifest_text(row["port_name"]),
             type_desc=_manifest_text(row["type_desc"]) or "Any",
@@ -751,6 +961,7 @@ def _manifest_io_specs_map(
             data_kind=_manifest_text(row["data_kind"]),
             required=_manifest_bool(row["required"]),
             default_value_repr=_manifest_text(row["default_value_repr"]),
+            port_type=parsed_port_type,
         )
         inputs, outputs = grouped.setdefault(atom_id, ([], []))
         direction = _manifest_text(row["direction"]).lower()
@@ -798,6 +1009,7 @@ def seed_catalog_from_manifest_sqlite(
     manifest_path: Path,
     *,
     skip_locally_installed: bool = True,
+    allowed_namespaces: Sequence[str] | None = None,
     dedup_threshold: float = 0.85,
     skill_index: SkillIndex | None = None,
     report: CatalogReport | None = None,
@@ -842,6 +1054,12 @@ def seed_catalog_from_manifest_sqlite(
             "license_expression",
             "license_status",
             "license_family",
+            "concept_type",
+            "phase",
+            "type_signature",
+            "state_ports_json",
+            "time_complexity",
+            "space_complexity",
         ):
             if optional in atom_columns:
                 select_columns.append(optional)
@@ -859,11 +1077,31 @@ def seed_catalog_from_manifest_sqlite(
     finally:
         con.close()
 
+    normalized_namespaces = tuple(
+        ns.strip().rstrip(".")
+        for ns in (allowed_namespaces or ())
+        if ns and ns.strip()
+    )
+
     added = 0
     for row in rows:
         fqdn = _manifest_text(row["fqdn"])
         if not fqdn:
             continue
+        if normalized_namespaces:
+            ns_root = _manifest_text(row["namespace_root"])
+            src_pkg = _manifest_text(row["source_package"])
+            candidates = [fqdn]
+            if src_pkg:
+                candidates.append(src_pkg)
+                if ns_root and not src_pkg.startswith(ns_root):
+                    candidates.append(f"{ns_root}.{src_pkg}")
+            if not any(
+                cand == ns or cand.startswith(f"{ns}.")
+                for cand in candidates
+                for ns in normalized_namespaces
+            ):
+                continue
         if not _manifest_license_allowed(row):
             continue
         if skip_locally_installed and catalog.get(fqdn) is not None:
@@ -878,6 +1116,59 @@ def seed_catalog_from_manifest_sqlite(
         inputs, outputs = io_specs_by_atom.get(atom_id, ([], []))
         source_repo_id = _manifest_text(row["source_repo_id"])
         source_package = _manifest_text(row["source_package"])
+        row_keys = set(row.keys())
+        explicit_concept: ConceptType | None = None
+        if "concept_type" in row_keys:
+            raw_ct = _manifest_text(row["concept_type"])
+            if raw_ct:
+                try:
+                    explicit_concept = ConceptType(raw_ct)
+                except ValueError:
+                    explicit_concept = None
+        category = explicit_concept or _manifest_concept_type(
+            fqdn=fqdn,
+            description=description,
+            domain_tags=_manifest_text(row["domain_tags"]),
+            source_kind=_manifest_text(row["source_kind"]),
+            source_package=source_package,
+            source_module_path=_manifest_text(row["source_module_path"]),
+            namespace_root=_manifest_text(row["namespace_root"]),
+            source_symbol=_manifest_text(row["source_symbol"]),
+        )
+        phase = (
+            _manifest_text(row["phase"])
+            if "phase" in row_keys and _manifest_text(row["phase"])
+            else "stateless"
+        )
+        state_ports: list[StatePortSpec] = []
+        if "state_ports_json" in row_keys:
+            raw_sp = _manifest_text(row["state_ports_json"])
+            if raw_sp:
+                try:
+                    parsed_sp = json.loads(raw_sp)
+                    if isinstance(parsed_sp, list):
+                        state_ports = [
+                            StatePortSpec.model_validate(item)
+                            for item in parsed_sp
+                            if isinstance(item, dict)
+                        ]
+                except Exception:
+                    state_ports = []
+        stored_sig = (
+            _manifest_text(row["type_signature"])
+            if "type_signature" in row_keys
+            else ""
+        )
+        time_complexity = (
+            _manifest_text(row["time_complexity"])
+            if "time_complexity" in row_keys
+            else ""
+        )
+        space_complexity = (
+            _manifest_text(row["space_complexity"])
+            if "space_complexity" in row_keys
+            else ""
+        )
         primitive = AlgorithmicPrimitive(
             name=fqdn,
             source=(
@@ -887,20 +1178,15 @@ def seed_catalog_from_manifest_sqlite(
                 if source_package
                 else "manifest"
             ),
-            category=_manifest_concept_type(
-                fqdn=fqdn,
-                description=description,
-                domain_tags=_manifest_text(row["domain_tags"]),
-                source_kind=_manifest_text(row["source_kind"]),
-                source_package=source_package,
-                source_module_path=_manifest_text(row["source_module_path"]),
-                namespace_root=_manifest_text(row["namespace_root"]),
-                source_symbol=_manifest_text(row["source_symbol"]),
-            ),
+            category=category,
             description=description,
             inputs=inputs,
             outputs=outputs,
-            type_signature=_manifest_signature_from_ports(inputs, outputs),
+            type_signature=stored_sig or _manifest_signature_from_ports(inputs, outputs),
+            phase=phase,
+            state_ports=state_ports,
+            time_complexity=time_complexity,
+            space_complexity=space_complexity,
         )
 
         if report is not None:
@@ -989,7 +1275,11 @@ def seed_catalog_from_sources(
             else:
                 seen_topo_hashes[h] = src_name
 
-        ast_entries = _parse_register_atom_functions(package_root, source.package)
+        ast_entries = _parse_register_atom_functions(
+            package_root,
+            source.package,
+            excluded_prefixes=excluded_import_prefixes(source, base_dir),
+        )
         seen_names: set[str] = set()
         if include_live_registries:
             for name, meta in _live_registry_entries_for_source(
@@ -1077,7 +1367,13 @@ def audit_source_registration_alignment(
         live_names: set[str] = set()
         try:
             package_root = resolve_package_root(source, base_dir).expanduser().resolve()
-            ast_names = set(_parse_register_atom_functions(package_root, source.package))
+            ast_names = set(
+                _parse_register_atom_functions(
+                    package_root,
+                    source.package,
+                    excluded_prefixes=excluded_import_prefixes(source, base_dir),
+                )
+            )
             try:
                 live_names = set(
                     _live_registry_entries_for_source(

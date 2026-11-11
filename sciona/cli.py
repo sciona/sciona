@@ -78,6 +78,7 @@ from sciona.commands.atom_cmds import _cmd_atom_publish  # noqa: F401
 from sciona.commands.bounty_cmds import _cmd_bounty_generate  # noqa: F401
 from sciona.commands.catalog_cmds import (  # noqa: F401
     _cmd_catalog_audit_providers,
+    _cmd_catalog_compile,
     _cmd_catalog_ingest_dataset,
     _cmd_catalog_install,
     _cmd_catalog_publish_providers,
@@ -903,6 +904,51 @@ def main() -> None:
     catalog_sync_parser.add_argument(
         "--output", type=str, default=None, help="Output path for manifest.sqlite"
     )
+    catalog_sync_parser.add_argument(
+        "--installed-only",
+        action="store_true",
+        default=False,
+        help="Prune downloaded manifest to installed PEP 420 sciona.atoms.* namespaces",
+    )
+    catalog_sync_parser.add_argument(
+        "--all",
+        dest="all_namespaces",
+        action="store_true",
+        default=False,
+        help="Keep all namespaces in manifest.sqlite without installed-namespace pruning",
+    )
+    catalog_compile_parser = catalog_sub.add_parser(
+        "compile",
+        help="Compile installed Plane-1 PEP 420 sources + Plane-2 overlays into manifest.sqlite",
+    )
+    catalog_compile_parser.add_argument(
+        "--output", type=str, default=None, help="Output path for manifest.sqlite"
+    )
+    catalog_compile_parser.add_argument(
+        "--sources-file", type=str, default=None, help="Path to sources.yml override"
+    )
+    catalog_compile_parser.add_argument(
+        "--workspace-root", type=str, default=None, help="Base directory for resolving sources"
+    )
+    catalog_compile_parser.add_argument(
+        "--plane2-db",
+        type=str,
+        default=None,
+        help="Optional Plane-2 SQLite DB providing benchmarks/uncertainty/descriptions",
+    )
+    catalog_compile_parser.add_argument(
+        "--all",
+        dest="all_namespaces",
+        action="store_true",
+        default=False,
+        help="Include all configured sources without installed-namespace scoping",
+    )
+    catalog_compile_parser.add_argument(
+        "--live-registries",
+        action="store_true",
+        default=False,
+        help="Import Python modules at compile time in addition to static AST/CDG discovery",
+    )
     catalog_search_parser = catalog_sub.add_parser(
         "search", help="Search the Postgres-backed atom catalog"
     )
@@ -1170,6 +1216,8 @@ def main() -> None:
         catalog_cmd = getattr(args, "catalog_command", None)
         if catalog_cmd == "sync":
             _run_async_command(_cmd_catalog_sync(args))
+        elif catalog_cmd == "compile":
+            _cmd_catalog_compile(args)
         elif catalog_cmd == "search":
             _run_async_command(_cmd_catalog_search(args))
         elif catalog_cmd == "install":

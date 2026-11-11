@@ -11,6 +11,11 @@ from pathlib import Path
 import types
 from typing import Literal
 
+try:
+    import tomllib
+except ModuleNotFoundError:  # pragma: no cover - Python 3.10 fallback
+    tomllib = None  # type: ignore[assignment]
+
 import yaml
 from pydantic import BaseModel, Field, model_validator
 
@@ -30,6 +35,7 @@ class AtomSource(BaseModel):
     git: str | None = None
     ref: str = "main"
     cdg_glob: str = _DEFAULT_CDG_GLOB
+    exclude_packages: list[str] = Field(default_factory=list)
 
     @model_validator(mode="after")
     def _require_path_or_git(self) -> "AtomSource":
@@ -104,6 +110,40 @@ def resolve_import_root(source: AtomSource, base_dir: Path | None = None) -> Pat
 def resolve_package_root(source: AtomSource, base_dir: Path | None = None) -> Path:
     """Return the filesystem root for ``source.package`` within *source*."""
     return resolve_import_root(source, base_dir).joinpath(*source.package.split("."))
+
+
+def excluded_import_prefixes(
+    source: AtomSource, base_dir: Path | None = None
+) -> tuple[str, ...]:
+    """Return excluded module prefixes for *source* (explicit + pyproject.toml)."""
+    prefixes: list[str] = [
+        p.strip().rstrip(".") for p in source.exclude_packages if p and p.strip()
+    ]
+    if source.path and tomllib is not None:
+        try:
+            pyproject_path = resolve_source(source, base_dir) / "pyproject.toml"
+            if pyproject_path.is_file():
+                data = tomllib.loads(pyproject_path.read_text(encoding="utf-8"))
+                provider_cfg = (
+                    data.get("tool", {})
+                    .get("sciona", {})
+                    .get("provider", {})
+                )
+                for raw in provider_cfg.get("excluded-import-prefixes", []) or []:
+                    token = str(raw or "").strip().rstrip(".")
+                    if token and token not in prefixes:
+                        prefixes.append(token)
+        except Exception:
+            pass
+    return tuple(prefixes)
+
+
+def is_excluded_module(modname: str, excluded_prefixes: tuple[str, ...]) -> bool:
+    """Return True if *modname* falls under any excluded module prefix."""
+    for prefix in excluded_prefixes:
+        if modname == prefix or modname.startswith(prefix + "."):
+            return True
+    return False
 
 
 def sync_source(source: AtomSource, base_dir: Path | None = None) -> Path:
@@ -183,6 +223,8 @@ def import_atoms(source: AtomSource, base_dir: Path | None = None) -> None:
         pkg_path = pkg.__path__
         fallback_scan_root = package_root
 
+    excluded = excluded_import_prefixes(source, base_dir)
+
     # Walk submodules to trigger @register_atom decorators
     if fallback_scan_root is not None:
         import_root = resolve_import_root(source, base_dir)
@@ -191,6 +233,8 @@ def import_atoms(source: AtomSource, base_dir: Path | None = None) -> None:
                 continue
             module_parts = py_file.relative_to(import_root).with_suffix("").parts
             modname = ".".join(module_parts)
+            if is_excluded_module(modname, excluded):
+                continue
             _import_module_from_file(modname, py_file)
         return
 
@@ -199,13 +243,21 @@ def import_atoms(source: AtomSource, base_dir: Path | None = None) -> None:
 
     import pkgutil
 
+    walk_paths = list(pkg_path)
+    if source.path:
+        local_pkg_root = resolve_package_root(source, base_dir)
+        if local_pkg_root.is_dir():
+            walk_paths = [str(local_pkg_root)]
+
     for _importer, modname, _ispkg in pkgutil.walk_packages(
-        pkg_path,
+        walk_paths,
         prefix=source.package + ".",
         onerror=lambda name: logger.debug(
             "Failed to enumerate %s for source %s", name, source.name, exc_info=True
         ),
     ):
+        if is_excluded_module(modname, excluded):
+            continue
         try:
             importlib.import_module(modname)
         except Exception:

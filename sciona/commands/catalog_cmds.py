@@ -83,7 +83,52 @@ async def _cmd_catalog_sync(args: argparse.Namespace) -> None:
         sys.exit(1)
 
     output_path.write_bytes(payload)
+    sync_all = bool(getattr(args, "all_namespaces", False))
+    installed_only = bool(getattr(args, "installed_only", False)) or (
+        not sync_all
+        and os.environ.get("SCIONA_MANIFEST_INSTALLED_ONLY", "").strip().lower()
+        in {"1", "true", "yes", "on"}
+    )
+    if installed_only:
+        from sciona.architect.compiled_catalog import (
+            discover_installed_atom_namespaces,
+            prune_manifest_to_namespaces,
+        )
+
+        namespaces = discover_installed_atom_namespaces()
+        if namespaces:
+            stats = prune_manifest_to_namespaces(output_path, namespaces)
+            print(
+                f"Scoped manifest to {len(namespaces)} installed namespace(s): "
+                f"{stats['kept_atoms']} kept, {stats['pruned_atoms']} pruned"
+            )
     print(f"Manifest written to {output_path}")
+
+
+def _cmd_catalog_compile(args: argparse.Namespace) -> None:
+    """Compile Plane-1 installed PEP 420 sources + Plane-2 overlays into manifest.sqlite."""
+    from sciona.architect.compiled_catalog import compile_local_manifest_sqlite
+    from sciona.sources import load_sources
+
+    output_path = (
+        Path(args.output)
+        if getattr(args, "output", None)
+        else Path.home() / ".sciona" / "manifest.sqlite"
+    )
+    sources_path = Path(args.sources_file) if getattr(args, "sources_file", None) else None
+    plane2_db = Path(args.plane2_db) if getattr(args, "plane2_db", None) else None
+    base_dir = Path(args.workspace_root) if getattr(args, "workspace_root", None) else Path.cwd()
+    cfg = load_sources(sources_path) if sources_path is not None else load_sources()
+    installed_only = not bool(getattr(args, "all_namespaces", False))
+    summary = compile_local_manifest_sqlite(
+        output_path,
+        config=cfg,
+        base_dir=base_dir,
+        plane2_source_db=plane2_db,
+        installed_only=installed_only,
+        include_live_registries=bool(getattr(args, "live_registries", False)),
+    )
+    print(json.dumps(summary, indent=2, sort_keys=True))
 
 
 async def _cmd_catalog_search(args: argparse.Namespace) -> None:

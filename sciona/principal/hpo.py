@@ -100,6 +100,10 @@ class OptunaManager:
     ) -> SuggestedParams:
         """Sample tunables for all atomic nodes in *cdg* from the scoped study."""
         study = self._ensure_study(signature)
+        if not study.trials and hasattr(study, "enqueue_trial"):
+            defaults = self._collect_default_params(cdg=cdg, catalog=catalog)
+            if defaults:
+                study.enqueue_trial(defaults)
         trial = study.ask()
         self._active_trials[(signature, trial.number)] = trial
 
@@ -127,6 +131,39 @@ class OptunaManager:
             trial_number=trial.number,
             assignments=assignments,
         )
+
+    @staticmethod
+    def _collect_default_params(
+        *, cdg: CDGExport, catalog: PrimitiveCatalog
+    ) -> dict[str, Any]:
+        """Collect valid default parameter assignments for Trial 0 enqueueing."""
+        defaults: dict[str, Any] = {}
+        for node in cdg.nodes:
+            primitive_name = str(getattr(node, "matched_primitive", "") or "").strip()
+            if not primitive_name:
+                continue
+            primitive = catalog.get(primitive_name)
+            if primitive is None or not primitive.tunable_params:
+                continue
+            for spec in primitive.tunable_params:
+                key = f"{node.node_id}.{spec.name}"
+                if spec.kind == "bool":
+                    choices = list(spec.choices or [True, False])
+                    if spec.default in choices:
+                        defaults[key] = spec.default
+                elif spec.kind == "categorical":
+                    choices = list(spec.choices or [spec.default])
+                    if spec.default in choices:
+                        defaults[key] = spec.default
+                elif spec.kind == "int" and spec.min_value is not None and spec.max_value is not None:
+                    dv = int(spec.default)
+                    if int(spec.min_value) <= dv <= int(spec.max_value):
+                        defaults[key] = dv
+                elif spec.kind == "float" and spec.min_value is not None and spec.max_value is not None:
+                    dv = float(spec.default)
+                    if float(spec.min_value) <= dv <= float(spec.max_value):
+                        defaults[key] = dv
+        return defaults
 
     def complete_trial(
         self,
@@ -167,15 +204,15 @@ class OptunaManager:
     @staticmethod
     def _suggest_param(trial: Any, *, name: str, spec: Any) -> Any:
         """Sample a single param from an Optuna trial, falling back to defaults."""
-        use_default = getattr(trial, "number", 0) == 0
+        fallback_default = getattr(trial, "number", 0) == 0 and optuna is None
         if spec.kind == "bool":
             choices = list(spec.choices or [True, False])
             suggested = trial.suggest_categorical(name, choices)
-            return spec.default if use_default and spec.default in choices else suggested
+            return spec.default if fallback_default and spec.default in choices else suggested
         if spec.kind == "categorical":
             choices = list(spec.choices or [spec.default])
             suggested = trial.suggest_categorical(name, choices)
-            return spec.default if use_default and spec.default in choices else suggested
+            return spec.default if fallback_default and spec.default in choices else suggested
         if spec.kind == "int":
             if spec.min_value is None or spec.max_value is None:
                 return spec.default
@@ -187,7 +224,7 @@ class OptunaManager:
                 log=bool(spec.log_scale),
             )
             default_value = int(spec.default)
-            if use_default and int(spec.min_value) <= default_value <= int(spec.max_value):
+            if fallback_default and int(spec.min_value) <= default_value <= int(spec.max_value):
                 return default_value
             return suggested
         if spec.kind == "float":
@@ -203,7 +240,7 @@ class OptunaManager:
                 **kwargs,
             )
             default_value = float(spec.default)
-            if use_default and float(spec.min_value) <= default_value <= float(spec.max_value):
+            if fallback_default and float(spec.min_value) <= default_value <= float(spec.max_value):
                 return default_value
             return suggested
         return spec.default
@@ -213,12 +250,20 @@ class OptunaManager:
     # ------------------------------------------------------------------
 
     @staticmethod
-    def check_early_prune(sim_report: GhostSimReport) -> None:
+    def check_early_prune(
+        sim_report: GhostSimReport,
+        *,
+        prune_on_infeasible_pullback: bool = True,
+        max_risk_ratio: float | None = None,
+    ) -> None:
         """Raise ``TrialPrunedEarly`` if the ghost report is hopeless.
 
         Conditions that trigger pruning:
         1. The simulation ran and *failed* (structural mismatch).
-        2. Any node's precision gradient is infinite or NaN.
+        2. Any node's precision gradient is infinite or NaN (with confidence > 0.3).
+        3. Any calibrated node's intrinsic noise violates the downstream precision
+           budget (``infeasible_pullback_nodes`` with confidence > 0.5).
+        4. Optional ``max_risk_ratio`` ceiling exceeded on a calibrated node.
         """
         if sim_report.ran and not sim_report.passed:
             raise TrialPrunedEarly(f"Ghost simulation failed: {sim_report.error}")
@@ -237,6 +282,23 @@ class OptunaManager:
                     conf,
                 )
 
+        if prune_on_infeasible_pullback:
+            for nid in getattr(sim_report, "infeasible_pullback_nodes", ()):
+                conf = sim_report.node_confidence.get(nid, 1.0)
+                if conf > 0.5:
+                    raise TrialPrunedEarly(
+                        f"Infeasible precision pullback at node '{nid}': "
+                        "intrinsic atom noise exceeds downstream risk budget"
+                    )
+
+        if max_risk_ratio is not None:
+            for nid, ratio in getattr(sim_report, "node_risk_ratios", {}).items():
+                conf = sim_report.node_confidence.get(nid, 1.0)
+                if conf > 0.5 and ratio > max_risk_ratio:
+                    raise TrialPrunedEarly(
+                        f"Node '{nid}' risk ratio {ratio:.3f} exceeds max_risk_ratio={max_risk_ratio:.3f}"
+                    )
+
     # ------------------------------------------------------------------
     # Importance analysis
     # ------------------------------------------------------------------
@@ -245,12 +307,16 @@ class OptunaManager:
         self,
         *,
         evaluator: Any | None = None,
+        signature: str | None = None,
     ) -> dict[str, float]:
         """Return fANOVA parameter importances from completed trials.
 
         Args:
             evaluator: Optional custom importance evaluator.  Defaults to
                 the fANOVA-based evaluator shipped with Optuna.
+            signature: Optional scoped structure signature. When omitted, selects
+                the scoped study with the most completed trials (falling back to
+                ``"global"``).
 
         Returns:
             Mapping of parameter name to importance score (0-1).
@@ -259,8 +325,23 @@ class OptunaManager:
         if optuna is None:
             return {}
 
+        target_study = self._study
+        if signature is not None and signature in self._studies:
+            target_study = self._studies[signature]
+        else:
+            best_count = -1
+            for candidate_study in self._studies.values():
+                cnt = sum(
+                    1
+                    for t in candidate_study.trials
+                    if t.state == optuna.trial.TrialState.COMPLETE
+                )
+                if cnt > best_count:
+                    best_count = cnt
+                    target_study = candidate_study
+
         completed = [
-            t for t in self._study.trials if t.state == optuna.trial.TrialState.COMPLETE
+            t for t in target_study.trials if t.state == optuna.trial.TrialState.COMPLETE
         ]
         if len(completed) < 2:
             logger.info(
@@ -269,7 +350,7 @@ class OptunaManager:
             )
             return {}
 
-        kwargs: dict[str, Any] = {"study": self._study}
+        kwargs: dict[str, Any] = {"study": target_study}
         if evaluator is not None:
             kwargs["evaluator"] = evaluator
 

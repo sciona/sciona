@@ -10,6 +10,7 @@ from pathlib import Path
 from sciona.atoms.supabase_backfill import (
     backfill_uncertainty,
     build_uncertainty_rows,
+    build_uncertainty_rows_from_payload,
     create_supabase_client_from_env,
 )
 

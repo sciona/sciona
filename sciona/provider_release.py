@@ -201,6 +201,7 @@ def validate_provider_release(
         source_root / "sciona" / "__init__.py",
         source_root / "sciona" / "atoms" / "__init__.py",
         source_root / "sciona" / "probes" / "__init__.py",
+        source_root / "sciona" / "_runtime" / "__init__.py",
     ):
         if namespace_init.exists():
             issues.append(ProviderReleaseIssue(
@@ -244,7 +245,12 @@ def validate_provider_release(
                 wheel_path = wheel.name
                 with zipfile.ZipFile(wheel) as archive:
                     names = set(archive.namelist())
-                for forbidden in ("sciona/__init__.py", "sciona/atoms/__init__.py", "sciona/probes/__init__.py"):
+                for forbidden in (
+                    "sciona/__init__.py",
+                    "sciona/atoms/__init__.py",
+                    "sciona/probes/__init__.py",
+                    "sciona/_runtime/__init__.py",
+                ):
                     if forbidden in names:
                         issues.append(ProviderReleaseIssue("wheel-namespace-initializer", f"wheel contains {forbidden}"))
                 missing = sorted(

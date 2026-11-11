@@ -11,9 +11,13 @@ import logging
 import math
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Protocol, runtime_checkable
+from typing import TYPE_CHECKING, Any, Protocol, runtime_checkable
 
 import numpy as np
+from numpy.typing import NDArray
+
+if TYPE_CHECKING:
+    from sciona.uncertainty.models import AtomUncertaintyProfile
 
 logger = logging.getLogger(__name__)
 
@@ -164,6 +168,21 @@ class ChainBackend:
                 return est
         return AtomUncertaintyEstimate(mode="unknown")
 
+    def estimate_profile(self, atom_name: str) -> AtomUncertaintyProfile:
+        from sciona.uncertainty.models import AtomUncertaintyProfile
+
+        for backend in self._backends:
+            prof_fn = getattr(backend, "estimate_profile", None)
+            if callable(prof_fn):
+                prof = prof_fn(atom_name)
+                if isinstance(prof, AtomUncertaintyProfile) and prof.mode != "unknown":
+                    return prof
+            est = backend.estimate(atom_name)
+            if est.mode != "unknown":
+                short = atom_name.rsplit(".", 1)[-1]
+                return AtomUncertaintyProfile.from_v1_estimate(short, est)
+        return AtomUncertaintyProfile(atom_name=atom_name, mode="unknown")
+
 
 # ---------------------------------------------------------------------------
 # AnalyticBackend — numerical Jacobian spectral norm
@@ -182,7 +201,7 @@ class AnalyticBackend:
     def __init__(
         self,
         atom_registry: dict[str, object],
-        base_inputs: dict[str, np.ndarray],
+        base_inputs: dict[str, NDArray[Any]],
         *,
         eps: float = 1e-7,
         stable_atoms: set[str] | None = None,
@@ -208,7 +227,7 @@ class AnalyticBackend:
             )
 
         try:
-            jac = _numerical_jacobian(fn, x0, self._eps)  # type: ignore[arg-type]
+            jac = _numerical_jacobian(fn, x0, self._eps)
             # Spectral norm (largest singular value) as factor
             factor = float(np.linalg.norm(jac, ord=2))
             return AtomUncertaintyEstimate(
@@ -224,9 +243,9 @@ class AnalyticBackend:
 
 def _numerical_jacobian(
     fn: object,
-    x0: np.ndarray,
+    x0: NDArray[Any],
     eps: float = 1e-7,
-) -> np.ndarray:
+) -> NDArray[np.float64]:
     """Compute the numerical Jacobian via central finite differences.
 
     Args:
@@ -277,14 +296,20 @@ def load_uncertainty_json(
         return ("", AtomUncertaintyEstimate(mode="unknown"))
 
     atom_name = data.get("atom", "")
+    if str(data.get("schema_version", "")).startswith("2") or "input_regimes" in data:
+        from sciona.uncertainty.models import AtomUncertaintyProfile
+
+        profile = AtomUncertaintyProfile.from_dict(data)
+        return (profile.atom_name, profile.to_v1_estimate())
+
     estimates = data.get("estimates", [])
     if not estimates:
         return (atom_name, AtomUncertaintyEstimate(mode="unknown"))
 
-    best: dict | None = None
+    best: dict[str, Any] | None = None
     best_confidence = -1.0
     for entry in estimates:
-        conf = entry.get("confidence", 0.0)
+        conf = float(entry.get("confidence", 0.0))
         if conf > best_confidence:
             best_confidence = conf
             best = entry
@@ -292,15 +317,48 @@ def load_uncertainty_json(
     if best is None:
         return (atom_name, AtomUncertaintyEstimate(mode="unknown"))
 
+    raw_sf = best.get("scalar_factor")
     return (
         atom_name,
         AtomUncertaintyEstimate(
-            mode=best.get("mode", "unknown"),
-            scalar_factor=best.get("scalar_factor"),
-            confidence=best.get("confidence", 0.0),
-            n_trials=best.get("n_trials", 0),
-            epsilon=best.get("epsilon", 0.0),
-            input_regime=best.get("input_regime", ""),
-            notes=best.get("notes", ""),
+            mode=str(best.get("mode", "unknown")),
+            scalar_factor=float(raw_sf) if isinstance(raw_sf, (int, float)) else None,
+            confidence=float(best.get("confidence", 0.0)),
+            n_trials=int(best.get("n_trials", 0)),
+            epsilon=float(best.get("epsilon", 0.0)),
+            input_regime=str(best.get("input_regime", "")),
+            notes=str(best.get("notes", "")),
         ),
     )
+
+
+class ProfileCatalogBackend:
+    """Backend backed by v2 ``AtomUncertaintyProfile`` records.
+
+    Satisfies ``UncertaintyBackend`` for legacy scalar callers while exposing
+    ``estimate_profile`` for directional mixture/Jacobian propagation.
+    """
+
+    def __init__(self, profiles: dict[str, AtomUncertaintyProfile]) -> None:
+        self._profiles = dict(profiles)
+
+    def estimate(self, atom_name: str) -> AtomUncertaintyEstimate:
+        prof = self._profiles.get(atom_name)
+        if prof is None:
+            short = atom_name.rsplit(".", 1)[-1]
+            prof = self._profiles.get(short)
+        if prof is None:
+            return AtomUncertaintyEstimate(mode="unknown")
+        return prof.to_v1_estimate()
+
+    def estimate_profile(self, atom_name: str) -> AtomUncertaintyProfile:
+        from sciona.uncertainty.models import AtomUncertaintyProfile
+
+        prof = self._profiles.get(atom_name)
+        if prof is None:
+            short = atom_name.rsplit(".", 1)[-1]
+            prof = self._profiles.get(short)
+        if prof is None:
+            return AtomUncertaintyProfile(atom_name=atom_name, mode="unknown")
+        return prof
+

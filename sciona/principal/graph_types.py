@@ -59,6 +59,8 @@ class PrincipalState:
     admissibility_summary: dict[str, Any] = field(default_factory=dict)
     admissibility_requires_refinement: bool = False
     admissibility_hard_rejected: bool = False
+    pending_redecompose_cdg: CDGExport | None = None
+    pending_redecompose_thread_id: str = ""
 
     # Bookkeeping
     done: bool = False

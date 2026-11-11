@@ -404,6 +404,40 @@ async def check_admissibility(state: PrincipalState, config: RunnableConfig) -> 
     state.admissibility_hard_rejected = report.hard_rejected
     state.admissibility_requires_refinement = report.routed_to_refinement
 
+    out_updates: dict[str, Any] = {
+        "trial_history": state.trial_history,
+        "admissibility_summary": summary,
+        "admissibility_hard_rejected": report.hard_rejected,
+        "admissibility_requires_refinement": report.routed_to_refinement,
+    }
+    if (
+        report.hard_rejected
+        and not state.bottleneck_node_id
+        and state.cdg is not None
+        and state.cdg.nodes
+    ):
+        target_nid = ""
+        reasons: list[str] = []
+        for dec in report.decisions:
+            dec_nid = str(getattr(dec, "node_id", "") or "").strip()
+            if dec_nid and not target_nid:
+                target_nid = dec_nid
+            rule_id = str(getattr(dec, "rule_id", "") or "").strip()
+            msg = str(getattr(dec, "message", "") or getattr(dec, "reason", "") or "").strip()
+            if rule_id or msg:
+                reasons.append(f"{rule_id}: {msg}".strip(": "))
+        if not target_nid:
+            leaves = state.cdg.leaf_nodes()
+            target_nid = leaves[-1].node_id if leaves else state.cdg.nodes[0].node_id
+        state.bottleneck_node_id = target_nid
+        state.bottleneck_reason = (
+            "Admissibility violation (" + "; ".join(reasons[:3]) + ")"
+            if reasons
+            else "Admissibility hard rejection"
+        )
+        out_updates["bottleneck_node_id"] = state.bottleneck_node_id
+        out_updates["bottleneck_reason"] = state.bottleneck_reason
+
     logger.info(
         "Trial %d admissibility: %d decision(s), hard_rejected=%s, routed_to_refinement=%s",
         state.current_trial,
@@ -412,12 +446,7 @@ async def check_admissibility(state: PrincipalState, config: RunnableConfig) -> 
         report.routed_to_refinement,
     )
 
-    return {
-        "trial_history": state.trial_history,
-        "admissibility_summary": summary,
-        "admissibility_hard_rejected": report.hard_rejected,
-        "admissibility_requires_refinement": report.routed_to_refinement,
-    }
+    return out_updates
 
 
 async def select_proposal(state: PrincipalState, config: RunnableConfig) -> dict:
@@ -623,6 +652,8 @@ async def select_proposal(state: PrincipalState, config: RunnableConfig) -> dict
         proposal_rows.append(candidate.history_row(baseline_loss))
 
     selected = select_best_proposal(candidates, baseline_loss=baseline_loss)
+    cached_redecompose_cdg: CDGExport | None = None
+    cached_redecompose_thread_id: str = ""
 
     if selected is None and state.bottleneck_node_id:
         redecomposition = await build_redecomposition_candidate(
@@ -632,6 +663,8 @@ async def select_proposal(state: PrincipalState, config: RunnableConfig) -> dict
         )
         if redecomposition is not None:
             redecompose_cdg, redecompose_thread_id = redecomposition
+            cached_redecompose_cdg = redecompose_cdg
+            cached_redecompose_thread_id = redecompose_thread_id
             loss, bundle, benchmark, match_results, ghost_report = await evaluate_proposal_candidate(
                 state,
                 deps,
@@ -749,6 +782,8 @@ async def select_proposal(state: PrincipalState, config: RunnableConfig) -> dict
         state.selected_proposal = ""
         state.selected_proposal_reason = selected_reason
         state.reuse_cached_evaluation = False
+        state.pending_redecompose_cdg = cached_redecompose_cdg
+        state.pending_redecompose_thread_id = cached_redecompose_thread_id
         return {
             "selected_proposal": "",
             "selected_proposal_reason": state.selected_proposal_reason,
@@ -757,7 +792,12 @@ async def select_proposal(state: PrincipalState, config: RunnableConfig) -> dict
             "expansion_applied": False,
             "expansion_rules_applied": [],
             "reuse_cached_evaluation": False,
+            "pending_redecompose_cdg": cached_redecompose_cdg,
+            "pending_redecompose_thread_id": cached_redecompose_thread_id,
         }
+
+    state.pending_redecompose_cdg = None
+    state.pending_redecompose_thread_id = ""
 
     state.cdg = selected.cdg
     state.planning_artifact = state.cdg.planning_artifact or state.cdg.metadata.get(
@@ -907,15 +947,23 @@ async def time_travel_update(state: PrincipalState, config: RunnableConfig) -> d
     if not state.bottleneck_node_id or state.cdg is None:
         return {"done": True}
 
-    bottleneck_name = next(
-        (node.name for node in state.cdg.nodes if node.node_id == state.bottleneck_node_id),
-        None,
-    )
-    candidate = await build_redecomposition_candidate(
-        state,
-        deps,
-        bottleneck_name=bottleneck_name,
-    )
+    if state.pending_redecompose_cdg is not None and state.pending_redecompose_thread_id:
+        candidate: tuple[CDGExport, str] | None = (
+            state.pending_redecompose_cdg,
+            state.pending_redecompose_thread_id,
+        )
+        state.pending_redecompose_cdg = None
+        state.pending_redecompose_thread_id = ""
+    else:
+        bottleneck_name = next(
+            (node.name for node in state.cdg.nodes if node.node_id == state.bottleneck_node_id),
+            None,
+        )
+        candidate = await build_redecomposition_candidate(
+            state,
+            deps,
+            bottleneck_name=bottleneck_name,
+        )
     if candidate is None:
         logger.warning("No checkpoint found for time-travel; ending loop.")
         return {"done": True}
@@ -941,6 +989,8 @@ async def time_travel_update(state: PrincipalState, config: RunnableConfig) -> d
         "planning_artifact": state.planning_artifact,
         "pending_param_search": state.pending_param_search,
         "param_trials_remaining": state.param_trials_remaining,
+        "pending_redecompose_cdg": None,
+        "pending_redecompose_thread_id": "",
     }
 
 

@@ -5,7 +5,9 @@ from __future__ import annotations
 import ast
 import logging
 import re
+from collections.abc import Mapping
 from datetime import datetime, timezone
+from typing import TYPE_CHECKING, Any
 
 logger = logging.getLogger(__name__)
 
@@ -20,6 +22,18 @@ from sciona.synthesizer.toposort import (
     toposort_with_fixed_points,
 )
 from sciona.types import MatchResult, Prover
+from sciona.uncertainty.conformal import TrustTierFilter
+from sciona.uncertainty.runtime_guard import (
+    ConfidenceGuardConfig,
+    NodeGuardSpec,
+    plan_cdg_confidence_guards,
+)
+
+if TYPE_CHECKING:
+    from sciona.synthesizer.uncertainty import UncertaintyBackend
+    from sciona.uncertainty.models import AtomUncertaintyProfile
+
+_UNSET_TIER: Any = object()
 
 # ---------------------------------------------------------------------------
 # Telemetry helper emitted into instrumented Python skeletons
@@ -67,13 +81,21 @@ _PYTHON_TELEMETRY_HELPER: list[str] = [
     "    return summaries",
     "",
     "",
-    "def _sciona_probe(node_id: str, fn, output_names=()):",
+    "def _sciona_probe(node_id: str, fn, output_names=(), guard_fn=None):",
     '    """Execute *fn* and append a JSON-lines telemetry record."""',
     "    result = None",
+    "    guard_info = None",
+    "    aborted_error = None",
     "    tracemalloc.start()",
     "    t0 = time.perf_counter()",
     "    try:",
+    "        if guard_fn is not None:",
+    "            guard_info = guard_fn()",
     "        result = fn()",
+    "    except Exception as _exc:",
+    "        guard_info = getattr(_exc, 'guard_summary', guard_info)",
+    "        aborted_error = f'{type(_exc).__name__}: {_exc}'",
+    "        raise",
     "    finally:",
     "        elapsed_ms = (time.perf_counter() - t0) * 1000.0",
     "        _, peak = tracemalloc.get_traced_memory()",
@@ -83,6 +105,10 @@ _PYTHON_TELEMETRY_HELPER: list[str] = [
     '            "execution_time_ms": elapsed_ms,',
     '            "peak_memory_bytes": peak,',
     "        }",
+    "        if guard_info is not None:",
+    '            record["confidence_guard"] = guard_info',
+    "        if aborted_error is not None:",
+    '            record["aborted_error"] = aborted_error',
     "        summaries = _sciona_summarize_outputs(output_names, result)",
     "        if summaries:",
     '            record["output_summaries"] = summaries',
@@ -110,6 +136,53 @@ def sanitize_name(name: str) -> str:
     if s and not s[0].isalpha():
         s = "n_" + s
     return s or "unnamed"
+
+
+def _unique_unit_names(units: list[AssemblyUnit]) -> dict[str, str]:
+    """Map ``unit.node_id`` -> unique sanitized identifier, preserving bare names when unique."""
+    counts: dict[str, int] = {}
+    for unit in units:
+        base = sanitize_name(unit.name)
+        counts[base] = counts.get(base, 0) + 1
+
+    used: set[str] = set()
+    mapping: dict[str, str] = {}
+    for unit in units:
+        base = sanitize_name(unit.name)
+        if counts[base] == 1 and base not in used:
+            candidate = base
+        else:
+            candidate = f"{base}_{sanitize_name(unit.node_id)}"
+            suffix = 2
+            while candidate in used:
+                candidate = f"{base}_{sanitize_name(unit.node_id)}_{suffix}"
+                suffix += 1
+        used.add(candidate)
+        mapping[unit.node_id] = candidate
+    return mapping
+
+
+def _collect_atomic_descendants(
+    root: AlgorithmicNode,
+    decomposed_map: dict[str, AlgorithmicNode],
+    unit_ids: set[str],
+) -> set[str]:
+    """Expand ``root.children`` transitively through nested DECOMPOSED nodes."""
+    if not root.children:
+        return set(unit_ids)
+    resolved: set[str] = set()
+    visited: set[str] = set()
+    stack = list(root.children)
+    while stack:
+        cid = stack.pop()
+        if cid in visited:
+            continue
+        visited.add(cid)
+        if cid in unit_ids:
+            resolved.add(cid)
+        elif cid in decomposed_map:
+            stack.extend(decomposed_map[cid].children)
+    return resolved
 
 
 _PORT_ALIAS_GROUPS: tuple[tuple[str, ...], ...] = (
@@ -307,6 +380,12 @@ class Assembler:
         *,
         with_telemetry: bool = False,
         aot_target: str = "numpy",
+        uncertainty_backend: UncertaintyBackend | None = None,
+        uncertainty_profiles: Mapping[str, AtomUncertaintyProfile] | None = None,
+        enable_confidence_guards: bool | None = None,
+        trust_tier: TrustTierFilter = 1,
+        confidence_alpha: float = 0.01,
+        require_conformal: bool = True,
     ) -> None:
         if isinstance(prover, str):
             self._prover = Prover(prover)
@@ -314,6 +393,14 @@ class Assembler:
             self._prover = prover
         self._with_telemetry = with_telemetry
         self._aot_target = aot_target
+        self._uncertainty_backend = uncertainty_backend
+        self._uncertainty_profiles = (
+            dict(uncertainty_profiles) if uncertainty_profiles is not None else None
+        )
+        self._enable_confidence_guards = enable_confidence_guards
+        self._trust_tier: TrustTierFilter = trust_tier
+        self._confidence_alpha = confidence_alpha
+        self._require_conformal = require_conformal
 
     def assemble(
         self,
@@ -322,6 +409,13 @@ class Assembler:
         *,
         with_telemetry: bool | None = None,
         tunable_params_by_primitive: dict[str, list[str]] | None = None,
+        uncertainty_backend: UncertaintyBackend | None = None,
+        uncertainty_profiles: Mapping[str, AtomUncertaintyProfile] | None = None,
+        enable_confidence_guards: bool | None = None,
+        trust_tier: TrustTierFilter | object = _UNSET_TIER,
+        confidence_alpha: float | None = None,
+        require_conformal: bool | None = None,
+        risk_weights: Mapping[str, float] | None = None,
     ) -> SkeletonFile:
         """Build a SkeletonFile from a CDG and its match results."""
         # Index match results by predicate_id (= node_id)
@@ -359,6 +453,7 @@ class Assembler:
                     name=leaf.name,
                     declaration_name=decl.name,
                     type_signature=decl.type_signature or leaf.type_signature,
+                    matched_primitive=primitive_name,
                     raw_code=decl.raw_code,
                     inputs=leaf.inputs,
                     outputs=leaf.outputs,
@@ -456,6 +551,75 @@ class Assembler:
             with_telemetry if with_telemetry is not None else self._with_telemetry
         )
 
+        eff_backend = (
+            uncertainty_backend
+            if uncertainty_backend is not None
+            else self._uncertainty_backend
+        )
+        eff_profiles = (
+            uncertainty_profiles
+            if uncertainty_profiles is not None
+            else self._uncertainty_profiles
+        )
+        eff_guards_enabled = (
+            enable_confidence_guards
+            if enable_confidence_guards is not None
+            else (
+                self._enable_confidence_guards
+                if self._enable_confidence_guards is not None
+                else (eff_backend is not None or eff_profiles is not None)
+            )
+        )
+        eff_trust_tier: TrustTierFilter = (
+            self._trust_tier if trust_tier is _UNSET_TIER else trust_tier  # type: ignore[assignment]
+        )
+        eff_alpha = float(
+            confidence_alpha if confidence_alpha is not None else self._confidence_alpha
+        )
+        eff_req_conformal = (
+            require_conformal
+            if require_conformal is not None
+            else self._require_conformal
+        )
+
+        guard_specs: dict[str, NodeGuardSpec] = {}
+        if eff_guards_enabled:
+            raw_cdg_tier = metadata.get("trust_tier")
+            default_tier = (
+                int(raw_cdg_tier)
+                if isinstance(raw_cdg_tier, int) and not isinstance(raw_cdg_tier, bool)
+                else None
+            )
+            guard_specs = plan_cdg_confidence_guards(
+                sorted_units,
+                backend=eff_backend,
+                profiles=eff_profiles,
+                trust_tier=eff_trust_tier,
+                global_alpha=eff_alpha,
+                require_conformal=eff_req_conformal,
+                abort_on_violation=True,
+                risk_weights=risk_weights,
+                default_trust_tier=default_tier,
+            )
+            guard_cfg = ConfidenceGuardConfig(
+                enabled=True,
+                trust_tier=eff_trust_tier,
+                global_alpha=eff_alpha,
+                require_conformal=eff_req_conformal,
+                abort_on_violation=True,
+            )
+            metadata["confidence_guards"] = {
+                **guard_cfg.to_metadata_dict(),
+                "guarded_nodes": {
+                    nid: {
+                        "atom_name": spec.atom_name,
+                        "trust_tier": spec.trust_tier,
+                        "allocated_alpha": spec.allocated_alpha,
+                    }
+                    for nid, spec in guard_specs.items()
+                },
+            }
+
         if self._prover == Prover.LEAN4:
             source, sorry_count = self._emit_lean4(
                 sorted_units,
@@ -475,6 +639,7 @@ class Assembler:
                 telemetry=telemetry,
                 cycle_node_ids=cycle_node_ids,
                 fp_bodies=combinator_bodies,
+                guard_specs=guard_specs,
             )
         else:
             source, sorry_count = self._emit_coq(
@@ -505,6 +670,9 @@ class Assembler:
         units: list[AssemblyUnit],
         glue_edges: list[GlueEdge],
         root: AlgorithmicNode,
+        *,
+        decomposed_map: dict[str, AlgorithmicNode] | None = None,
+        unit_names: dict[str, str] | None = None,
     ) -> list[str]:
         """Generate Python composition body for a root node.
 
@@ -512,9 +680,14 @@ class Assembler:
         connecting source outputs to target inputs.
         """
         unit_map = {u.node_id: u for u in units}
+        name_map = unit_names if unit_names is not None else _unique_unit_names(units)
 
-        # Edges relevant to this root's children
-        child_ids = set(root.children) if root.children else {u.node_id for u in units}
+        # Edges relevant to this root's transitive atomic children
+        child_ids = _collect_atomic_descendants(
+            root,
+            decomposed_map or {},
+            set(unit_map.keys()),
+        )
         relevant_edges = [
             e
             for e in glue_edges
@@ -533,7 +706,7 @@ class Assembler:
         for unit in units:
             if unit.node_id not in child_ids:
                 continue
-            sname = sanitize_name(unit.name)
+            sname = name_map[unit.node_id]
             # Determine input arguments from edges or function inputs
             args: list[str] = []
             for inp in unit.inputs:
@@ -550,13 +723,31 @@ class Assembler:
                 if edge_for_inp:
                     src_unit = unit_map.get(edge_for_inp.source_id)
                     if src_unit:
-                        src_var = sanitize_name(src_unit.name) + "_result"
+                        src_var = name_map[src_unit.node_id] + "_result"
+                        src_expr = src_var
+                        if len(src_unit.outputs) > 1 and edge_for_inp.output_name:
+                            out_idx = next(
+                                (
+                                    idx
+                                    for idx, out_spec in enumerate(src_unit.outputs)
+                                    if _port_names_compatible(
+                                        edge_for_inp.output_name, out_spec.name
+                                    )
+                                ),
+                                None,
+                            )
+                            if out_idx is not None:
+                                out_key = edge_for_inp.output_name
+                                src_expr = (
+                                    f"({src_var}[{out_idx}] if isinstance({src_var}, (tuple, list)) "
+                                    f"else ({src_var}[{out_key!r}] if isinstance({src_var}, dict) else {src_var}))"
+                                )
                         if edge_for_inp.cast_expr:
                             args.append(
-                                f"# cast: {edge_for_inp.cast_expr}\n    {src_var}"
+                                f"# cast: {edge_for_inp.cast_expr}\n    {src_expr}"
                             )
                         else:
-                            args.append(src_var)
+                            args.append(src_expr)
                     else:
                         args.append(inp.name)
                 else:
@@ -566,12 +757,25 @@ class Assembler:
             lines.append(f"    {sname}_result = {sname}({args_str})")
             called.add(unit.node_id)
 
-        # Return the last unit's result
+        # Return sink unit output(s)
         if called:
-            last_unit = [u for u in units if u.node_id in called]
-            if last_unit:
-                last_name = sanitize_name(last_unit[-1].name) + "_result"
+            called_units = [u for u in units if u.node_id in called]
+            internal_sources = {
+                e.source_id
+                for e in relevant_edges
+                if e.source_id in called and e.target_id in called
+            }
+            sink_units = [u for u in called_units if u.node_id not in internal_sources]
+            if not sink_units:
+                sink_units = [called_units[-1]]
+            if len(sink_units) == 1:
+                last_name = name_map[sink_units[0].node_id] + "_result"
                 lines.append(f"    return {last_name}")
+            else:
+                tuple_items = ", ".join(
+                    f"{name_map[u.node_id]}_result" for u in sink_units
+                )
+                lines.append(f"    return ({tuple_items})")
         else:
             lines.append("    # TODO: compose -- no atomic children resolved")
             lines.append(
@@ -996,6 +1200,7 @@ class Assembler:
         telemetry: bool = False,
         cycle_node_ids: set[str] | None = None,
         fp_bodies: dict[str, list[str]] | None = None,
+        guard_specs: Mapping[str, NodeGuardSpec] | None = None,
     ) -> tuple[str, int]:
         """Generate Python source. Returns (source_code, sorry_count)."""
         lines: list[str] = []
@@ -1048,11 +1253,37 @@ class Assembler:
             lines.append("import time")
             lines.append("import tracemalloc")
 
+        _guard_specs = dict(guard_specs or {})
+        if _guard_specs:
+            lines.append(
+                "from sciona.uncertainty.runtime_guard import "
+                "evaluate_runtime_guard as _sciona_eval_guard"
+            )
+
         lines.append("")
 
         # Telemetry helper
         if telemetry:
             lines.extend(_PYTHON_TELEMETRY_HELPER)
+            lines.append("")
+
+        # Runtime confidence guard specs & dispatcher
+        if _guard_specs:
+            serialized_guards = {
+                nid: spec.to_dict() for nid, spec in _guard_specs.items()
+            }
+            lines.append("# --- Calibrated runtime confidence guards ---")
+            lines.append(f"_SCIONA_CONFIDENCE_GUARDS = {serialized_guards!r}")
+            lines.append("")
+            lines.append(
+                "def _sciona_check_confidence(node_id, fn=None, ordered_names=(), **available):"
+            )
+            lines.append("    _spec = _SCIONA_CONFIDENCE_GUARDS.get(node_id)")
+            lines.append("    if _spec is None:")
+            lines.append("        return None")
+            lines.append(
+                "    return _sciona_eval_guard(_spec, available, callable_fn=fn, ordered_names=ordered_names)"
+            )
             lines.append("")
 
         # Params harness (only if any unit has tunables)
@@ -1125,8 +1356,9 @@ class Assembler:
         lines.append("")
 
         # Emit atomic leaf definitions
+        unit_names = _unique_unit_names(units)
         for unit in units:
-            sname = sanitize_name(unit.name)
+            sname = unit_names[unit.node_id]
             lines.append(f"# Node: {unit.name} ({unit.node_id})")
 
             # --- AOT path: if unit has a symbolic expression, emit inline NumPy/Mojo ---
@@ -1134,7 +1366,11 @@ class Assembler:
                 _GHOST_REGISTRY.get(unit.declaration_name)
                 or _GHOST_REGISTRY.get(unit.name)
             )
-            _symbolic = _reg_entry.get("symbolic") if _reg_entry else None
+            _symbolic = (
+                _reg_entry.get("symbolic")
+                if (_reg_entry and unit.node_id not in _guard_specs)
+                else None
+            )
             if _symbolic is not None:
                 try:
                     if self._aot_target == "mojo":
@@ -1179,8 +1415,13 @@ class Assembler:
                     params.append(inp.name)
 
             ret_type = ""
-            if unit.outputs:
+            if len(unit.outputs) == 1:
                 ret_type = _python_annotation_expr(unit.outputs[0].type_desc)
+            elif len(unit.outputs) > 1:
+                out_types = ", ".join(
+                    _python_annotation_expr(o.type_desc) for o in unit.outputs
+                )
+                ret_type = f"tuple[{out_types}]"
 
             param_str = ", ".join(params)
             ret_str = f" -> {ret_type}" if ret_type else ""
@@ -1211,10 +1452,37 @@ class Assembler:
 
             if telemetry:
                 output_names_expr = repr(tuple(out.name for out in unit.outputs))
-                lines.append(
-                    f"    return _sciona_probe({unit.node_id!r}, lambda: {call_expr}, output_names={output_names_expr})"
-                )
+                if unit.node_id in _guard_specs:
+                    if available_args:
+                        guard_expr = (
+                            f"lambda: _sciona_check_confidence({unit.node_id!r}, "
+                            f"{unit.declaration_name}, {ordered_names_expr}, {available_args})"
+                        )
+                    else:
+                        guard_expr = (
+                            f"lambda: _sciona_check_confidence({unit.node_id!r}, "
+                            f"{unit.declaration_name}, {ordered_names_expr})"
+                        )
+                    lines.append(
+                        f"    return _sciona_probe({unit.node_id!r}, lambda: {call_expr}, "
+                        f"output_names={output_names_expr}, guard_fn={guard_expr})"
+                    )
+                else:
+                    lines.append(
+                        f"    return _sciona_probe({unit.node_id!r}, lambda: {call_expr}, output_names={output_names_expr})"
+                    )
             else:
+                if unit.node_id in _guard_specs:
+                    if available_args:
+                        lines.append(
+                            f"    _sciona_check_confidence({unit.node_id!r}, "
+                            f"{unit.declaration_name}, {ordered_names_expr}, {available_args})"
+                        )
+                    else:
+                        lines.append(
+                            f"    _sciona_check_confidence({unit.node_id!r}, "
+                            f"{unit.declaration_name}, {ordered_names_expr})"
+                        )
                 lines.append(f"    return {call_expr}")
             lines.append("")
             lines.append("")
@@ -1241,8 +1509,13 @@ class Assembler:
             param_str = ", ".join(params) if params else ""
 
             ret_type = ""
-            if root.outputs:
+            if len(root.outputs) == 1:
                 ret_type = _python_annotation_expr(root.outputs[0].type_desc)
+            elif len(root.outputs) > 1:
+                out_types = ", ".join(
+                    _python_annotation_expr(o.type_desc) for o in root.outputs
+                )
+                ret_type = f"tuple[{out_types}]"
             ret_str = f" -> {ret_type}" if ret_type else ""
 
             lines.append(f"def {rname}_composition({param_str}){ret_str}:")
@@ -1260,7 +1533,7 @@ class Assembler:
                     fp_lines = self._emit_fixed_point_python(root, body_units, glue_edges)
                     lines.extend(fp_lines)
                     if body_units:
-                        last = sanitize_name(body_units[-1].name)
+                        last = unit_names[body_units[-1].node_id]
                         lines.append(f"    return {last}_result")
                     lines.append("")
                     lines.append("")
@@ -1277,7 +1550,13 @@ class Assembler:
                     lines.append("")
                     continue
 
-            composition = self._compose_python(units, glue_edges, root)
+            composition = self._compose_python(
+                units,
+                glue_edges,
+                root,
+                decomposed_map=node_map_py,
+                unit_names=unit_names,
+            )
 
             # If there are cycle nodes inside this root's children,
             # inject a while-loop for them

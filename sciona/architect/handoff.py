@@ -39,6 +39,22 @@ class HandoffValidationError(ValueError):
         )
 
 
+def _hierarchy_parent_ids(nodes: list[AlgorithmicNode]) -> set[str]:
+    """Return node IDs that act as decomposition parents in the CDG hierarchy.
+
+    Note: ``DependencyEdge`` represents *data-flow* between sibling/leaf stages,
+    NOT parent-child decomposition hierarchy.
+    """
+    existing_ids = {n.node_id for n in nodes}
+    parents: set[str] = set()
+    for node in nodes:
+        if node.children or node.status == NodeStatus.DECOMPOSED:
+            parents.add(node.node_id)
+        if node.parent_id and node.parent_id in existing_ids:
+            parents.add(node.parent_id)
+    return parents
+
+
 class CDGExport(BaseModel):
     """A complete CDG ready for Round 2 handoff."""
 
@@ -49,7 +65,12 @@ class CDGExport(BaseModel):
 
     def leaf_nodes(self) -> list[AlgorithmicNode]:
         """Return all leaf (atomic) nodes in the CDG."""
-        return [n for n in self.nodes if n.status == NodeStatus.ATOMIC]
+        parent_ids = _hierarchy_parent_ids(self.nodes)
+        return [
+            n
+            for n in self.nodes
+            if n.status == NodeStatus.ATOMIC and n.node_id not in parent_ids
+        ]
 
     def handoff_issues(self) -> list[str]:
         """Convenience: return validation issues for Round 2 handoff."""
@@ -57,10 +78,8 @@ class CDGExport(BaseModel):
 
     def non_atomic_leaves(self) -> list[AlgorithmicNode]:
         """Return leaf nodes that are NOT atomic (validation failures)."""
-        parent_ids = {e.source_id for e in self.edges}
+        parent_ids = _hierarchy_parent_ids(self.nodes)
 
-        # Leaves: nodes that have no children (not a source in any edge,
-        # or have no entries in children list)
         leaves = []
         for node in self.nodes:
             if not node.children and node.node_id not in parent_ids:
@@ -155,7 +174,7 @@ def validate_handoff(cdg: CDGExport) -> list[str]:
     - Flags non-atomic leaf nodes (they can't be handed off).
     """
     issues: list[str] = []
-    parent_ids = {e.source_id for e in cdg.edges}
+    parent_ids = _hierarchy_parent_ids(cdg.nodes)
 
     for node in cdg.nodes:
         is_leaf = not node.children and node.node_id not in parent_ids
@@ -191,7 +210,19 @@ def _validate_type_signature_syntax(
 
     if prover == Prover.PYTHON:
         try:
-            ast.parse(f"x: {sig}", mode="exec")
+            if "->" in sig:
+                lhs, rhs = sig.rsplit("->", 1)
+                lhs_clean = lhs.strip()
+                rhs_clean = rhs.strip()
+                if not rhs_clean:
+                    return f"Invalid Python type annotation '{sig}': empty return type"
+                if lhs_clean.startswith("(") and lhs_clean.endswith(")"):
+                    ast.parse(f"def _sig{lhs_clean} -> {rhs_clean}: pass", mode="exec")
+                else:
+                    ast.parse(f"x: tuple[{lhs_clean}]", mode="exec")
+                    ast.parse(f"y: {rhs_clean}", mode="exec")
+            else:
+                ast.parse(f"x: {sig}", mode="exec")
         except SyntaxError as exc:
             return f"Invalid Python type annotation '{sig}': {exc}"
         return None

@@ -437,11 +437,6 @@ async def _cmd_run(args: argparse.Namespace) -> None:
                     print("Running single-agent planner...")
                     artifact_retriever = await build_default_macro_retriever()
 
-                    async def _architect_factory():
-                        if architect_service is None:
-                            raise RuntimeError("Architect service unavailable in single_agent mode")
-                        return architect_service
-
                     planner = SingleAgentPlanner(
                         hunter=hunter_service,
                         architect_factory=_architect_factory,
@@ -588,6 +583,20 @@ async def _cmd_run(args: argparse.Namespace) -> None:
         matches_data = [mr.to_dict() for mr in result.match_results]
         with open(output_dir / "matches.json", "w") as f:
             json.dump(matches_data, f, indent=2)
+
+        if result.all_matched:
+            try:
+                from sciona.synthesizer.assembler import Assembler, AssemblyError
+
+                ext = (
+                    "py"
+                    if prover == Prover.PYTHON
+                    else ("v" if prover == Prover.COQ else "lean")
+                )
+                skeleton = Assembler(prover).assemble(result.cdg, result.match_results)
+                (output_dir / f"skeleton.{ext}").write_text(skeleton.source_code)
+            except Exception as exc:  # noqa: BLE001
+                logger.debug("Round 3 skeleton assembly skipped in run: %s", exc)
     matches_path = output_dir / "matches.json"
     cdg_path = output_dir / "cdg.json"
 

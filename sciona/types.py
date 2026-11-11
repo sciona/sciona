@@ -197,6 +197,14 @@ class MatchResult:
                 source_lib=d.get("source_lib", ""),
                 prover=Prover(d.get("prover", "lean4")),
                 raw_code=d.get("raw_code", ""),
+                provider_id=d.get("provider_id", ""),
+                distribution_name=d.get("distribution_name", ""),
+                distribution_version=d.get("distribution_version", ""),
+                install_requirement=d.get("install_requirement", ""),
+                import_module=d.get("import_module", ""),
+                import_symbol=d.get("import_symbol", ""),
+                wheel_url=d.get("wheel_url", ""),
+                wheel_sha256=d.get("wheel_sha256", ""),
             )
 
         def _candidate(d: dict) -> CandidateMatch:

@@ -335,7 +335,7 @@ def test_live_state_estimation_source_exposes_snake_case_kalman_symbols() -> Non
     repo_root = Path(__file__).resolve().parents[1]
     config = load_sources(repo_root / "sources.yml")
     source = next(
-        src for src in config.sources if src.name == "sciona-atoms-state-estimation"
+        src for src in config.sources if src.name == "sciona-atoms"
     )
 
     import sciona as matcher_sciona

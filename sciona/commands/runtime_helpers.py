@@ -51,6 +51,17 @@ def _load_semantic_index(
 
         return PostgresSemanticIndex(api_url=getattr(config, "api_url", None)), "postgres"
 
+    if backend in {"manifest", "manifest_fts", "sqlite", "fts"}:
+        from sciona.architect.compiled_catalog import ManifestFTSIndex
+
+        manifest_override = getattr(config, "manifest_path", None)
+        manifest_file = (
+            Path(manifest_override)
+            if manifest_override
+            else Path.home() / ".sciona" / "manifest.sqlite"
+        )
+        return ManifestFTSIndex(manifest_file), "manifest_fts"
+
     from sciona.indexer.builder import SemanticIndexImpl, build_index_from_manifest_sqlite
     from sciona.indexer.embedder import create_embedder
     from sciona.indexer.faiss_store import FAISSStore

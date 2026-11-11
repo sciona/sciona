@@ -117,6 +117,13 @@ def _normalize_io_spec_row(row: Mapping[str, Any]) -> dict[str, Any]:
     port_name = data.get("port_name")
     if not port_name:
         port_name = data.get("name", "")
+    port_type_raw = data.get("port_type_json")
+    if not port_type_raw and "port_type" in data and data["port_type"] is not None:
+        pt: Any = data["port_type"]
+        if hasattr(pt, "model_dump"):
+            port_type_raw = json.dumps(pt.model_dump(mode="json"), sort_keys=True)
+        elif isinstance(pt, Mapping):
+            port_type_raw = json.dumps(dict(pt), sort_keys=True)
     return {
         "io_spec_id": data.get("io_spec_id", ""),
         "atom_id": data.get("atom_id", ""),
@@ -129,6 +136,7 @@ def _normalize_io_spec_row(row: Mapping[str, Any]) -> dict[str, Any]:
         "required": data.get("required", True),
         "default_value_repr": data.get("default_value_repr", ""),
         "ordinal": data.get("ordinal", 0),
+        "port_type_json": _stringify(port_type_raw),
     }
 
 
@@ -532,6 +540,7 @@ def _coerce_manifest_data(
             "atoms": list(atoms_or_data.get("atoms", [])),
             "hyperparams": list(atoms_or_data.get("hyperparams", [])),
             "benchmarks": list(atoms_or_data.get("benchmarks", [])),
+            "uncertainty_profiles": list(atoms_or_data.get("uncertainty_profiles", [])),
             "rollups": list(atoms_or_data.get("rollups", [])),
             "descriptions": list(atoms_or_data.get("descriptions", [])),
             "io_specs": [
@@ -546,6 +555,7 @@ def _coerce_manifest_data(
         "atoms": list(atoms_or_data),
         "hyperparams": list(hyperparams or []),
         "benchmarks": list(benchmarks or []),
+        "uncertainty_profiles": [],
         "rollups": [],
         "descriptions": [],
         "io_specs": [],
@@ -555,10 +565,12 @@ def _coerce_manifest_data(
 def _create_schema(con: sqlite3.Connection) -> None:
     con.executescript(
         """
+        DROP TABLE IF EXISTS catalog_fts;
         DROP TABLE IF EXISTS atoms;
         DROP TABLE IF EXISTS hyperparams;
         DROP TABLE IF EXISTS io_specs;
         DROP TABLE IF EXISTS benchmarks;
+        DROP TABLE IF EXISTS uncertainty_profiles;
         DROP TABLE IF EXISTS audit_rollups;
         DROP TABLE IF EXISTS descriptions;
         DROP TABLE IF EXISTS manifest_metadata;
@@ -591,7 +603,13 @@ def _create_schema(con: sqlite3.Connection) -> None:
             license_source_path TEXT NOT NULL DEFAULT '',
             upstream_license_expression TEXT NOT NULL DEFAULT '',
             license_confidence TEXT NOT NULL DEFAULT 'unknown',
-            license_notes TEXT NOT NULL DEFAULT ''
+            license_notes TEXT NOT NULL DEFAULT '',
+            concept_type TEXT NOT NULL DEFAULT '',
+            phase TEXT NOT NULL DEFAULT 'stateless',
+            type_signature TEXT NOT NULL DEFAULT '',
+            state_ports_json TEXT NOT NULL DEFAULT '[]',
+            time_complexity TEXT NOT NULL DEFAULT '',
+            space_complexity TEXT NOT NULL DEFAULT ''
         );
 
         CREATE TABLE hyperparams (
@@ -621,6 +639,7 @@ def _create_schema(con: sqlite3.Connection) -> None:
             required INTEGER NOT NULL DEFAULT 1,
             default_value_repr TEXT NOT NULL DEFAULT '',
             ordinal INTEGER NOT NULL DEFAULT 0,
+            port_type_json TEXT NOT NULL DEFAULT '',
             PRIMARY KEY (atom_id, direction, port_name)
         );
 
@@ -634,6 +653,15 @@ def _create_schema(con: sqlite3.Connection) -> None:
             dataset_tag TEXT NOT NULL DEFAULT '',
             measured_at TEXT NOT NULL DEFAULT '',
             PRIMARY KEY (atom_fqdn, content_hash, benchmark_id, metric_name)
+        );
+
+        CREATE TABLE uncertainty_profiles (
+            atom_fqdn TEXT NOT NULL,
+            content_hash TEXT NOT NULL DEFAULT '',
+            version INTEGER NOT NULL DEFAULT 2,
+            profile_json TEXT NOT NULL DEFAULT '{}',
+            updated_at TEXT NOT NULL DEFAULT '',
+            PRIMARY KEY (atom_fqdn, content_hash)
         );
 
         CREATE TABLE audit_rollups (
@@ -682,9 +710,30 @@ def _create_schema(con: sqlite3.Connection) -> None:
         );
         """
     )
+    try:
+        con.execute(
+            """
+            CREATE VIRTUAL TABLE catalog_fts USING fts5(
+                fqdn,
+                description,
+                domain_tags,
+                concept_type,
+                type_signature,
+                tokenize='unicode61'
+            )
+            """
+        )
+    except sqlite3.OperationalError:
+        pass
 
 
 def _insert_atom(con: sqlite3.Connection, atom: Mapping[str, Any]) -> None:
+    state_ports_raw = atom.get("state_ports_json")
+    if state_ports_raw is None and atom.get("state_ports") is not None:
+        state_ports_raw = [
+            sp.model_dump(mode="json") if hasattr(sp, "model_dump") else dict(sp)
+            for sp in atom.get("state_ports", [])
+        ]
     con.execute(
         """
         INSERT OR REPLACE INTO atoms (
@@ -694,9 +743,10 @@ def _insert_atom(con: sqlite3.Connection, atom: Mapping[str, Any]) -> None:
             source_symbol, is_publishable, version_id, content_hash, semver,
             license_expression, license_status, license_family,
             license_source_kind, license_source_path, upstream_license_expression,
-            license_confidence, license_notes
+            license_confidence, license_notes, concept_type, phase,
+            type_signature, state_ports_json, time_complexity, space_complexity
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
         (
             _stringify(atom.get("atom_id")),
@@ -727,6 +777,12 @@ def _insert_atom(con: sqlite3.Connection, atom: Mapping[str, Any]) -> None:
             _stringify(atom.get("upstream_license_expression")),
             _stringify(atom.get("license_confidence")) or "unknown",
             _stringify(atom.get("license_notes")),
+            _stringify(atom.get("concept_type")),
+            _stringify(atom.get("phase")) or "stateless",
+            _stringify(atom.get("type_signature")),
+            _stringify(state_ports_raw if state_ports_raw is not None else []),
+            _stringify(atom.get("time_complexity")),
+            _stringify(atom.get("space_complexity")),
         ),
     )
 
@@ -765,9 +821,9 @@ def _insert_io_spec(con: sqlite3.Connection, io_spec: Mapping[str, Any]) -> None
         """
         INSERT OR REPLACE INTO io_specs (
             atom_id, port_name, direction, type_desc, constraints, data_kind,
-            required, default_value_repr, ordinal
+            required, default_value_repr, ordinal, port_type_json
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
         (
             _stringify(data.get("atom_id")),
@@ -779,6 +835,7 @@ def _insert_io_spec(con: sqlite3.Connection, io_spec: Mapping[str, Any]) -> None
             int(bool(data.get("required", True))),
             _stringify(data.get("default_value_repr")),
             int(data.get("ordinal", 0)),
+            _stringify(data.get("port_type_json")),
         ),
     )
 
@@ -805,6 +862,135 @@ def _insert_benchmark(con: sqlite3.Connection, bm: Mapping[str, Any]) -> None:
             _stringify(bm.get("measured_at")),
         ),
     )
+
+
+def _insert_uncertainty_profile(con: sqlite3.Connection, row: Mapping[str, Any]) -> None:
+    profile_raw = row.get("profile_json")
+    if not profile_raw and row.get("profile") is not None:
+        profile_raw = row.get("profile")
+    con.execute(
+        """
+        INSERT OR REPLACE INTO uncertainty_profiles (
+            atom_fqdn, content_hash, version, profile_json, updated_at
+        )
+        VALUES (?, ?, ?, ?, ?)
+        """,
+        (
+            _stringify(row.get("atom_fqdn")),
+            _stringify(row.get("content_hash")),
+            int(row.get("version", 2) or 2),
+            _stringify(profile_raw if profile_raw is not None else {}),
+            _stringify(row.get("updated_at")),
+        ),
+    )
+
+
+def rebuild_catalog_fts(con: sqlite3.Connection) -> None:
+    """Populate or refresh the SQLite FTS5 lexical/type search index."""
+    tables = {
+        str(row[0])
+        for row in con.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchall()
+    }
+    if "atoms" not in tables:
+        return
+    if "catalog_fts" not in tables:
+        try:
+            con.execute(
+                """
+                CREATE VIRTUAL TABLE catalog_fts USING fts5(
+                    fqdn,
+                    description,
+                    domain_tags,
+                    concept_type,
+                    type_signature,
+                    tokenize='unicode61'
+                )
+                """
+            )
+        except sqlite3.OperationalError:
+            return
+    else:
+        try:
+            con.execute("DELETE FROM catalog_fts")
+        except sqlite3.OperationalError:
+            return
+
+    atom_cols = {
+        str(r[1]) for r in con.execute("PRAGMA table_info(atoms)").fetchall()
+    }
+    has_concept = "concept_type" in atom_cols
+    has_sig = "type_signature" in atom_cols
+
+    desc_by_atom: dict[str, str] = {}
+    if "descriptions" in tables:
+        for atom_id, content in con.execute(
+            """
+            SELECT atom_id, content
+            FROM descriptions
+            WHERE content IS NOT NULL AND content != ''
+            ORDER BY atom_id ASC,
+                     CASE WHEN kind = 'dejargonized' THEN 0 ELSE 1 END,
+                     reviewed DESC,
+                     updated_at DESC
+            """
+        ).fetchall():
+            desc_by_atom.setdefault(str(atom_id), str(content))
+
+    ports_by_atom: dict[str, tuple[list[str], list[str]]] = {}
+    if "io_specs" in tables:
+        for atom_id, port_name, direction, type_desc in con.execute(
+            """
+            SELECT atom_id, port_name, direction, type_desc
+            FROM io_specs
+            ORDER BY atom_id ASC, COALESCE(ordinal, 0) ASC, port_name ASC
+            """
+        ).fetchall():
+            ins, outs = ports_by_atom.setdefault(str(atom_id), ([], []))
+            label = f"{port_name}: {type_desc or 'Any'}" if port_name else str(type_desc or "Any")
+            if str(direction).lower().startswith("out"):
+                outs.append(label)
+            else:
+                ins.append(label)
+
+    select_cols = ["atom_id", "fqdn", "description", "domain_tags"]
+    select_cols.append("concept_type" if has_concept else "'' AS concept_type")
+    select_cols.append("type_signature" if has_sig else "'' AS type_signature")
+
+    fts_rows: list[tuple[str, str, str, str, str]] = []
+    for atom_id, fqdn, raw_desc, domain_tags, concept_type, type_sig in con.execute(
+        f"""
+        SELECT {", ".join(select_cols)}
+        FROM atoms
+        WHERE status = 'approved'
+        ORDER BY fqdn ASC
+        """
+    ).fetchall():
+        aid = str(atom_id or "")
+        desc = desc_by_atom.get(aid) or str(raw_desc or "")
+        sig = str(type_sig or "")
+        if not sig and aid in ports_by_atom:
+            ins, outs = ports_by_atom[aid]
+            in_str = f"({', '.join(ins)})" if ins else "()"
+            out_str = outs[0] if len(outs) == 1 else (f"({', '.join(outs)})" if outs else "Any")
+            sig = f"{in_str} -> {out_str}"
+        fts_rows.append(
+            (
+                str(fqdn or ""),
+                desc,
+                str(domain_tags or ""),
+                str(concept_type or ""),
+                sig,
+            )
+        )
+
+    if fts_rows:
+        con.executemany(
+            """
+            INSERT INTO catalog_fts (fqdn, description, domain_tags, concept_type, type_signature)
+            VALUES (?, ?, ?, ?, ?)
+            """,
+            fts_rows,
+        )
 
 
 def _insert_rollup(con: sqlite3.Connection, rollup: Mapping[str, Any]) -> None:
@@ -923,11 +1109,14 @@ def generate_manifest_sqlite(
         _insert_io_spec(con, io_spec)
     for bm in data["benchmarks"]:
         _insert_benchmark(con, bm)
+    for up in data.get("uncertainty_profiles", []):
+        _insert_uncertainty_profile(con, up)
     for rollup in data["rollups"]:
         _insert_rollup(con, rollup)
     for desc in data["descriptions"]:
         _insert_description(con, desc)
     _insert_manifest_metadata(con, metadata)
+    rebuild_catalog_fts(con)
 
     con.commit()
     return con

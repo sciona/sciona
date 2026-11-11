@@ -18,6 +18,7 @@ class AssemblyUnit(BaseModel):
     name: str
     declaration_name: str
     type_signature: str
+    matched_primitive: str = ""
     raw_code: str = ""
     inputs: list[IOSpec] = Field(default_factory=list)
     outputs: list[IOSpec] = Field(default_factory=list)
@@ -47,7 +48,7 @@ class SkeletonFile(BaseModel):
     units: list[AssemblyUnit] = Field(default_factory=list)
     glue_edges: list[GlueEdge] = Field(default_factory=list)
     sorry_count: int = 0
-    metadata: dict = Field(default_factory=dict)
+    metadata: dict[str, Any] = Field(default_factory=dict)
 
 
 class AssemblyResult(BaseModel):

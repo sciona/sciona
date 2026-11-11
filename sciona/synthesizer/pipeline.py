@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 import logging
+from typing import TYPE_CHECKING
 
 from sciona.architect.handoff import CDGExport
 from sciona.protocols import ProofEnvironment
@@ -11,6 +13,11 @@ from sciona.synthesizer.compiler import SkeletonCompiler
 from sciona.synthesizer.ghost_sim import GhostSimReport, run_ghost_simulation
 from sciona.synthesizer.models import AssemblyResult
 from sciona.types import MatchResult
+from sciona.uncertainty.conformal import TrustTierFilter
+
+if TYPE_CHECKING:
+    from sciona.synthesizer.uncertainty import UncertaintyBackend
+    from sciona.uncertainty.models import AtomUncertaintyProfile
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +29,13 @@ async def assemble_and_check(
     *,
     skip_ghost_sim: bool = False,
     aot_target: str = "numpy",
+    uncertainty_backend: UncertaintyBackend | None = None,
+    uncertainty_profiles: Mapping[str, AtomUncertaintyProfile] | None = None,
+    enable_confidence_guards: bool | None = None,
+    trust_tier: TrustTierFilter = 1,
+    confidence_alpha: float = 0.01,
+    require_conformal: bool = True,
+    risk_weights: Mapping[str, float] | None = None,
 ) -> AssemblyResult:
     """Assemble a CDG + match results into a skeleton, then compile it.
 
@@ -52,8 +66,21 @@ async def assemble_and_check(
                 ghost_report.error,
             )
 
-    assembler = Assembler(prover=env.prover_name, aot_target=aot_target)
-    skeleton = assembler.assemble(cdg, match_results)
+    assembler = Assembler(
+        prover=env.prover_name,
+        aot_target=aot_target,
+        uncertainty_backend=uncertainty_backend,
+        uncertainty_profiles=uncertainty_profiles,
+        enable_confidence_guards=enable_confidence_guards,
+        trust_tier=trust_tier,
+        confidence_alpha=confidence_alpha,
+        require_conformal=require_conformal,
+    )
+    skeleton = assembler.assemble(
+        cdg,
+        match_results,
+        risk_weights=risk_weights,
+    )
 
     # Attach ghost report to skeleton metadata
     if ghost_report.ran:

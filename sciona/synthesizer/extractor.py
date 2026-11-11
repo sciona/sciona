@@ -173,12 +173,20 @@ def _sciona_summarize_outputs(output_names, result):
     return summaries
 
 
-def _sciona_probe(node_id: str, fn, output_names=()):
+def _sciona_probe(node_id: str, fn, output_names=(), guard_fn=None):
     result = None
+    guard_info = None
+    aborted_error = None
     tracemalloc.start()
     t0 = time.perf_counter()
     try:
+        if guard_fn is not None:
+            guard_info = guard_fn()
         result = fn()
+    except Exception as _exc:
+        guard_info = getattr(_exc, "guard_summary", guard_info)
+        aborted_error = f"{type(_exc).__name__}: {_exc}"
+        raise
     finally:
         elapsed_ms = (time.perf_counter() - t0) * 1000.0
         _, peak = tracemalloc.get_traced_memory()
@@ -188,6 +196,10 @@ def _sciona_probe(node_id: str, fn, output_names=()):
             "execution_time_ms": elapsed_ms,
             "peak_memory_bytes": peak,
         }
+        if guard_info is not None:
+            record["confidence_guard"] = guard_info
+        if aborted_error is not None:
+            record["aborted_error"] = aborted_error
         summaries = _sciona_summarize_outputs(output_names, result)
         if summaries:
             record["output_summaries"] = summaries

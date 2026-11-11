@@ -170,16 +170,40 @@ class DecompositionAgent:
         }
         final_state = await self._graph.ainvoke(initial_state, config=config)
 
-        # Filter out rejected nodes
-        active_nodes = [
+        # Filter out rejected nodes and stale pre-fork nodes unreachable from current roots
+        non_rejected = [
             n for n in final_state["nodes"] if n.status != NodeStatus.REJECTED
         ]
+        by_id = {n.node_id: n for n in non_rejected}
+        root_node = by_id.get("root")
+        if root_node is not None and (
+            root_node.children or root_node.status == NodeStatus.ATOMIC
+        ):
+            reachable: set[str] = set()
+            stack = ["root"]
+            while stack:
+                cur_id = stack.pop()
+                if cur_id in reachable or cur_id not in by_id:
+                    continue
+                reachable.add(cur_id)
+                stack.extend(by_id[cur_id].children)
+            active_nodes = [n for n in non_rejected if n.node_id in reachable]
+        else:
+            active_nodes = non_rejected
+
+        active_ids = {n.node_id for n in active_nodes}
+        active_edges = [
+            e
+            for e in final_state["edges"]
+            if e.source_id in active_ids and e.target_id in active_ids
+        ]
+
         blocked_nodes = [n for n in active_nodes if n.status == NodeStatus.BLOCKED]
         planning_artifact = final_state.get("planning_artifact")
         skeleton_asset = final_state.get("skeleton_asset")
         non_atomic_leaves = CDGExport(
             nodes=active_nodes,
-            edges=final_state["edges"],
+            edges=active_edges,
             planning_artifact=planning_artifact,
             metadata={},
         ).non_atomic_leaves()
@@ -187,7 +211,7 @@ class DecompositionAgent:
 
         return CDGExport(
             nodes=active_nodes,
-            edges=final_state["edges"],
+            edges=active_edges,
             planning_artifact=planning_artifact,
             metadata={
                 "goal": goal,

@@ -47,6 +47,8 @@ from sciona.architect.models import (
     CommonPattern,
     ConceptType,
     IOSpec,
+    StatePortSpec,
+    format_canonical_type_signature,
 )
 
 if TYPE_CHECKING:
@@ -76,8 +78,9 @@ def load_catalog_from_repos(
 ) -> PrimitiveCatalog:
     """Load a full PrimitiveCatalog from a list of atom repo directories.
 
-    Scans each repo for ``cdg.json`` files, extracts atomic nodes, and
-    registers them with their aliases.
+    Scans each repo for ``cdg.json`` files, extracts atomic nodes (supporting
+    both canonical ``nodes`` and legacy ``atomic_nodes`` schemas), and
+    registers them with their aliases and structured port types.
     """
     catalog = PrimitiveCatalog()
     seed_builtin_primitives(catalog)
@@ -94,38 +97,76 @@ def load_catalog_from_repos(
                 data = json.loads(cdg_path.read_text())
             except (json.JSONDecodeError, OSError):
                 continue
-            for node in data.get("nodes", []):
-                if node.get("status") != "atomic":
+            if not isinstance(data, dict):
+                continue
+            raw_nodes = data.get("nodes")
+            is_legacy_atomic = False
+            if raw_nodes is None and isinstance(data.get("atomic_nodes"), list):
+                raw_nodes = data["atomic_nodes"]
+                is_legacy_atomic = True
+            for node in raw_nodes or []:
+                if not isinstance(node, dict):
+                    continue
+                if not is_legacy_atomic and node.get("status") != "atomic":
+                    continue
+                node_id = str(node.get("node_id") or node.get("name") or "").strip()
+                if not node_id:
                     continue
                 try:
+                    inputs = [
+                        IOSpec(**inp)
+                        for inp in (node.get("inputs") or [])
+                        if isinstance(inp, dict)
+                    ]
+                    for port in inputs:
+                        if port.port_type is None:
+                            port.port_type = port.resolved_port_type()
+                    outputs = [
+                        IOSpec(**out)
+                        for out in (node.get("outputs") or [])
+                        if isinstance(out, dict)
+                    ]
+                    for port in outputs:
+                        if port.port_type is None:
+                            port.port_type = port.resolved_port_type()
+                    type_sig = str(node.get("type_signature", "") or "").strip()
+                    if not type_sig and (inputs or outputs):
+                        type_sig = format_canonical_type_signature(inputs, outputs)
+                    desc = str(
+                        node.get("description") or node.get("semantic_role") or ""
+                    ).strip()
                     catalog.add(
                         AlgorithmicPrimitive(
-                            name=node["node_id"],
+                            name=node_id,
                             source=str(cdg_path.parent.relative_to(repo)),
                             category=_safe_concept_type(
-                                node.get("concept_type", "custom")
+                                str(node.get("concept_type", "custom") or "custom")
                             ),
-                            description=node.get("description", ""),
-                            inputs=[
-                                IOSpec(**inp)
-                                for inp in node.get("inputs", [])
-                            ],
-                            outputs=[
-                                IOSpec(**out)
-                                for out in node.get("outputs", [])
-                            ],
-                            type_signature=node.get("type_signature", ""),
-                            aliases=node.get("aliases", []),
+                            description=desc,
+                            inputs=inputs,
+                            outputs=outputs,
+                            type_signature=type_sig,
+                            aliases=list(node.get("aliases") or []),
                             common_patterns=[
                                 CommonPattern(**p)
-                                for p in node.get("common_patterns", [])
+                                for p in (node.get("common_patterns") or [])
+                                if isinstance(p, dict)
                             ],
+                            phase=str(node.get("phase") or "stateless"),
+                            state_ports=[
+                                StatePortSpec.model_validate(sp)
+                                for sp in (node.get("state_ports") or [])
+                                if isinstance(sp, dict)
+                            ],
+                            semantic_role=str(node.get("semantic_role") or ""),
+                            time_complexity=str(node.get("time_complexity") or ""),
+                            space_complexity=str(node.get("space_complexity") or ""),
                         )
                     )
                 except Exception:  # noqa: BLE001
                     logger.debug(
                         "Skipping malformed atom %s in %s",
-                        node.get("node_id", "?"),
+                        node_id,
                         cdg_path,
                     )
 
@@ -317,14 +358,25 @@ class Sciona:
 
         # -- hunter agent ---------------------------------------------------
         hunter_agent = None
-        if llm is not None and semantic_index is not None:
+        if llm is not None and semantic_index is not None and proof_env is not None:
             try:
-                from sciona.hunter.agent import HunterAgent
+                from sciona.hunter.graph import HunterAgent
+                from sciona.judge.checker import VerificationOracleImpl
+                from sciona.types import Prover as ProverEnum
+
+                prover_enum = ProverEnum(prover)
+                if prover_enum == ProverEnum.PYTHON:
+                    oracle = VerificationOracleImpl(python_env=proof_env)
+                elif prover_enum == ProverEnum.COQ:
+                    oracle = VerificationOracleImpl(coq_env=proof_env)
+                else:
+                    oracle = VerificationOracleImpl(lean_env=proof_env)
 
                 hunter_agent = HunterAgent(
                     index=semantic_index,
+                    oracle=oracle,
                     llm=llm,
-                    prover=prover,
+                    live_catalog=catalog,
                 )
             except Exception:  # noqa: BLE001
                 logger.debug("Hunter agent not available")
@@ -556,15 +608,22 @@ class Sciona:
         # Phase 1: Try template matching
         template_used = None
         template_score = 0.0
+        top_cdg = None
         template_matches = self.find_matching_templates(goal, k=10)
 
         if template_matches:
             top_template, top_score = template_matches[0]
             template_used = top_template.name
             template_score = top_score
+            top_cdg = getattr(top_template, "cdg", None)
 
-        # Phase 2: Decompose (from template or from scratch)
-        cdg = await self.decompose(goal)
+        # Phase 2: Decompose (reuse high-confidence template or fallback when no LLM)
+        if top_cdg is not None and (
+            top_score >= 0.75 or self._architect_agent is None
+        ):
+            cdg = top_cdg.model_copy(deep=True) if hasattr(top_cdg, "model_copy") else top_cdg
+        else:
+            cdg = await self.decompose(goal)
 
         # Match stages
         matches = self._match_cdg_stages(cdg)
@@ -645,11 +704,24 @@ class Sciona:
         self,
         cdg: CDGExport,
         match_results: list[Any],
+        *,
+        prover: str | None = None,
     ) -> SkeletonFile:
         """Assemble a CDG + match results into a compilable skeleton."""
         from sciona.synthesizer.assembler import Assembler
+        from sciona.types import Prover as ProverEnum
 
-        assembler = Assembler()
+        resolved_prover = prover
+        if resolved_prover is None:
+            if match_results and hasattr(match_results[0], "pdg_node"):
+                resolved_prover = getattr(
+                    match_results[0].pdg_node.prover, "value", None
+                )
+            elif self._proof_env is not None:
+                resolved_prover = getattr(self._proof_env, "prover_name", None)
+        prover_enum = ProverEnum(resolved_prover or "python")
+
+        assembler = Assembler(prover_enum)
         return assembler.assemble(cdg, match_results)
 
     async def synthesize(
@@ -661,6 +733,8 @@ class Sciona:
         """Full assembly + compile + repair cycle."""
         from sciona.services import SynthesizerService
         from sciona.services.models import SynthesizerRepairRequest
+        from sciona.synthesizer.agent import SynthesizerAgent
+        from sciona.types import Prover as ProverEnum
 
         skeleton = self.assemble(cdg, match_results)
 
@@ -669,8 +743,19 @@ class Sciona:
                 "Proof environment not available. "
                 "Call Sciona.create() with a prover."
             )
+        if self._llm is None:
+            raise RuntimeError(
+                "LLM client not available for repair. "
+                "Call Sciona.create() with an LLM provider."
+            )
 
-        svc = SynthesizerService(prover=self._proof_env)
+        prover_enum = ProverEnum(skeleton.prover or "python")
+        repair_agent = SynthesizerAgent(
+            env=self._proof_env,
+            llm=self._llm,
+            max_iterations=max_iterations,
+        )
+        svc = SynthesizerService(prover=prover_enum, repair_agent=repair_agent)
         result = await svc.repair(SynthesizerRepairRequest(skeleton=skeleton))
         return result.result
 
@@ -684,16 +769,60 @@ class Sciona:
         Works without a proof environment — generates source code directly
         from the CDG and matched atoms.
         """
-        atoms_used = []
+        from sciona.synthesizer.assembler import Assembler
+        from sciona.types import (
+            CandidateMatch,
+            Declaration,
+            MatchResult,
+            PDGNode,
+            Prover as ProverEnum,
+            VerificationResult,
+        )
+
+        atoms_used: list[str] = []
         nodes = cdg.nodes if hasattr(cdg, "nodes") else []
+        synth_matches: list[Any] = list(match_results) if match_results is not None else []
+        build_synthetic = match_results is None
+
         for node in nodes:
             mp = getattr(node, "matched_primitive", None)
             if mp:
                 atoms_used.append(mp)
+                if build_synthetic and getattr(node, "status", None) != "decomposed":
+                    decl = Declaration(
+                        name=mp,
+                        type_signature=getattr(node, "type_signature", "") or "",
+                        docstring=getattr(node, "description", "") or "",
+                        prover=ProverEnum.PYTHON,
+                    )
+                    cand = CandidateMatch(
+                        declaration=decl, score=1.0, retrieval_method="matched_primitive"
+                    )
+                    vr = VerificationResult(candidate=cand, verified=True)
+                    pdg = PDGNode(
+                        predicate_id=node.node_id,
+                        statement=getattr(node, "type_signature", "") or mp,
+                        informal_desc=getattr(node, "description", "") or "",
+                        prover=ProverEnum.PYTHON,
+                    )
+                    synth_matches.append(
+                        MatchResult(
+                            pdg_node=pdg,
+                            verified_match=vr,
+                            all_candidates=[cand],
+                            all_verifications=[vr],
+                        )
+                    )
 
-        # For now, return a stub — full codegen requires the skeleton pipeline
+        if synth_matches:
+            skeleton = Assembler(ProverEnum.PYTHON).assemble(cdg, synth_matches)
+            return GeneratedCode(
+                source=skeleton.source_code,
+                atom_fqdns_used=atoms_used,
+            )
+
         return GeneratedCode(
-            source="# Code generation requires assembled skeleton",
+            source="# Ground at least one atomic leaf (matched_primitive or match_results) to generate code\n",
             atom_fqdns_used=atoms_used,
         )
 

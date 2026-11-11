@@ -43,6 +43,23 @@ _GHOST_PACKAGE_ROOT = ""
 class PlanError(Exception):
     """Fallback placeholder when no ghost backend is available."""
 
+    def __init__(
+        self,
+        function_name: str = "",
+        arg_name: str = "",
+        detail: str = "",
+        *args: Any,
+        **kwargs: Any,
+    ) -> None:
+        self.function_name = function_name
+        self.arg_name = arg_name
+        self.detail = detail
+        msg = detail or function_name or (str(args[0]) if args else "PlanError")
+        super().__init__(msg)
+
+
+_FallbackPlanError = PlanError
+
 
 SimNode: Any = object
 SimResult: Any = object
@@ -205,6 +222,14 @@ class GhostSimReport:
     """Number of message-passing iterations before convergence/deadlock."""
     signal_length: int = 0
     """Input signal length when structural heuristics need window-count context."""
+    uncertainty_report: Any | None = None
+    """Optional Phase 3 ``CDGUncertaintyReport`` from mixture/spectral propagation."""
+    node_risk_ratios: dict[str, float] = field(default_factory=dict)
+    """Per-node directional risk ratio ``lambda_max(Lambda_req^{1/2} Sigma_out Lambda_req^{1/2})``."""
+    infeasible_pullback_nodes: list[str] = field(default_factory=list)
+    """Nodes whose intrinsic noise ``Sigma_eps`` violates the required output precision."""
+    regime_violated_nodes: list[str] = field(default_factory=list)
+    """Nodes whose incoming belief falls outside calibrated ``PortRegimeSpec`` bounds."""
 
 
 def _extract_atom_name(declaration_name: str) -> str:
@@ -817,6 +842,8 @@ def run_ghost_simulation(
     match_results: list[MatchResult],
     *,
     uncertainty_backend: UncertaintyBackend | None = None,
+    risk_budget: Any | None = None,
+    source_regimes: Any | None = None,
 ) -> GhostSimReport:
     """Run the ghost witness simulation on a CDG.
 
@@ -830,6 +857,10 @@ def run_ghost_simulation(
         match_results: Verified match results for atomic leaves.
         uncertainty_backend: Optional backend for per-atom error estimates.
             Falls back to ``HeuristicBackend`` when ``None``.
+        risk_budget: Optional Phase 3 ``RiskBudget`` for directional precision
+            pullbacks and budget feasibility checks.
+        source_regimes: Optional mapping of root input port names to
+            ``ExponentialFamilyMixture`` input beliefs.
 
     Returns:
         GhostSimReport describing the simulation outcome.
@@ -897,6 +928,28 @@ def run_ghost_simulation(
         report.precision_gradients = pg_result.gradients
         report.uncalibrated_nodes = pg_result.uncalibrated_nodes
         report.node_confidence = pg_result.node_confidence
+
+        has_v2_backend = callable(getattr(uncertainty_backend, "estimate_profile", None))
+        if risk_budget is not None or source_regimes is not None or has_v2_backend:
+            from sciona.uncertainty.propagation import propagate_cdg_uncertainty
+
+            eff_backend = uncertainty_backend or _get_default_backend()
+            u_rep = propagate_cdg_uncertainty(
+                cdg,
+                match_results=match_results,
+                backend=eff_backend,
+                risk_budget=risk_budget,
+                source_regimes=source_regimes,
+            )
+            report.uncertainty_report = u_rep
+            report.node_risk_ratios = {
+                nid: neval.max_risk_ratio for nid, neval in u_rep.nodes.items()
+            }
+            report.infeasible_pullback_nodes = list(u_rep.infeasible_pullback_nodes)
+            report.regime_violated_nodes = list(u_rep.regime_violated_nodes)
+            for nid, neval in u_rep.nodes.items():
+                if nid not in report.precision_gradients and neval.scalar_width_expansion != 0.0:
+                    report.precision_gradients[nid] = neval.scalar_width_expansion
     except Exception as exc:
         logger.warning("Precision gradient computation failed: %s", exc)
 
@@ -980,19 +1033,20 @@ def run_ghost_simulation(
     # Build SimNodes and initial state
     sim_nodes: list[SimNode] = []
     initial_state: dict[str, Any] = {}
+    simulable_set = set(simulable_nodes)
 
     # Pre-populate initial state for root inputs
-    # (inputs to nodes that have no incoming edges from other atomic leaves)
+    # (inputs to nodes that have no incoming edges from other simulable leaves)
     for nid in simulable_nodes:
         node = node_map[nid]
         in_edges = incoming_edges.get(nid, [])
         mr = match_map[nid]
         declared_param_names = _declared_param_names(mr)
 
-        # Map incoming edges to state keys
+        # Map incoming edges from simulable nodes to state keys
         edge_inputs: dict[str, str] = {}
         for edge in in_edges:
-            if edge.source_id in atomic_leaves:
+            if edge.source_id in simulable_set:
                 source_output_name = _resolve_source_output_name(
                     edge.output_name,
                     node_map.get(edge.source_id),
@@ -1042,7 +1096,7 @@ def run_ghost_simulation(
             if any(
                 nid in cycle_ids
                 for nid in simulable_nodes
-                if node_map.get(nid, AlgorithmicNode(node_id="")).name == n.name
+                if nid in node_map and node_map[nid].name == n.name
             )
         ]
         acyclic_sim_nodes = [n for n in sim_nodes if n not in cyclic_sim_nodes]

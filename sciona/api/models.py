@@ -201,6 +201,8 @@ class CatalogEntry(BaseModel):
     fqdn: str
     description: str
     artifact_kind: str = "atom"
+    type_signature: str = ""
+    concept_type: str = ""
     domain_tags: list[str] = Field(default_factory=list)
     latest_semver: str = ""
     status: str = "approved"

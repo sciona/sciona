@@ -9,6 +9,7 @@ import shutil
 import tempfile
 from pathlib import Path
 
+from sciona.architect.models import split_top_level_type_args
 from sciona.atom_identity import (
     candidate_atom_provider_roots,
     known_atom_package_prefixes,
@@ -27,18 +28,49 @@ def _leaf(func_name: str) -> str:
     return func_name.rsplit(".", 1)[-1]
 
 
+def _extract_top_level_param_block(type_sig: str) -> str | None:
+    """Extract the top-level ``(...)`` parameter list from a function signature."""
+    sig = type_sig.strip()
+    if not sig.startswith("("):
+        return None
+    depth = 0
+    quote_char: str | None = None
+    for idx, ch in enumerate(sig):
+        if quote_char is not None:
+            if ch == quote_char:
+                quote_char = None
+            continue
+        if ch in {"'", '"'}:
+            quote_char = ch
+            continue
+        if ch == "(":
+            depth += 1
+        elif ch == ")":
+            depth -= 1
+            if depth == 0:
+                return sig[1:idx]
+    return None
+
+
 def _count_params_from_signature(type_sig: str) -> int | None:
     """Extract expected parameter count from a type signature like '(x: T, y: U) -> R'.
 
+    Uses bracket-aware splitting so nested generics like ``dict[str, int]`` or
+    ``tuple[float, float]`` are counted as a single parameter.
     Returns None if the signature cannot be parsed.
     """
-    match = re.match(r"\(([^)]*)\)", type_sig)
-    if not match:
+    params_block = _extract_top_level_param_block(type_sig)
+    if params_block is None:
         return None
-    params_str = match.group(1).strip()
-    if not params_str:
+    params_str = params_block.strip()
+    if not params_str or params_str.lower() == "void":
         return 0
-    return len([p.strip() for p in params_str.split(",") if p.strip()])
+    params = [
+        p.strip()
+        for p in split_top_level_type_args(params_str, ",")
+        if p.strip() and p.strip() not in {"*", "/"}
+    ]
+    return len(params)
 
 
 def _looks_like_dependency_environment_failure(raw: str) -> bool:
@@ -154,12 +186,19 @@ class PythonEnvironment:
             lines.extend([
                 "import inspect as _insp",
                 f"_sig = _insp.signature({leaf})",
-                "_params = [p for p in _sig.parameters.values()"
-                " if p.default is _insp.Parameter.empty"
-                " and p.kind not in (_insp.Parameter.VAR_POSITIONAL, _insp.Parameter.VAR_KEYWORD)]",
-                "_actual = len(_params)",
-                f'assert _actual <= {expected_arity + 2}, f"arity mismatch: expected ~{expected_arity}, got {{_actual}}"',
+                "_all_params = list(_sig.parameters.values())",
+                "_has_varargs = any(p.kind in (_insp.Parameter.VAR_POSITIONAL, _insp.Parameter.VAR_KEYWORD) for p in _all_params)",
+                "_explicit = [p for p in _all_params if p.kind not in (_insp.Parameter.VAR_POSITIONAL, _insp.Parameter.VAR_KEYWORD)]",
+                "_required = [p for p in _explicit if p.default is _insp.Parameter.empty]",
+                "_actual = len(_required)",
+                "_max_accept = len(_explicit)",
+                f'assert _actual <= {expected_arity + 2}, f"arity mismatch: expected ~{expected_arity}, got {{_actual}} required"',
             ])
+            if expected_arity > 0:
+                lines.append(
+                    f'assert _has_varargs or _max_accept >= {expected_arity}, '
+                    f'f"arity mismatch: expected at least {expected_arity} accepted params, got {{_max_accept}}"'
+                )
         lines.append('print("OK")')
         code = "\n".join(lines) + "\n"
         env = dict(os.environ)
@@ -298,10 +337,14 @@ class PythonEnvironment:
             pass
 
     async def _run_mypy(self, code: str) -> CompilerFeedback:
-        """Write code to a temp .py file and run mypy --strict."""
-        tmp_path = Path(self._tmpdir) / "_check.py"
-        tmp_path.write_text(code)
-        return await self._run_mypy_paths([str(tmp_path)])
+        """Write code to an isolated temp _check.py file and run mypy --strict."""
+        run_dir = Path(tempfile.mkdtemp(dir=self._tmpdir, prefix="mypy_"))
+        tmp_path = run_dir / "_check.py"
+        try:
+            tmp_path.write_text(code)
+            return await self._run_mypy_paths([str(tmp_path)])
+        finally:
+            shutil.rmtree(run_dir, ignore_errors=True)
 
     async def _run_mypy_paths(
         self,
@@ -336,8 +379,9 @@ class PythonEnvironment:
             )
 
     async def _run_file(self, code: str) -> CompilerFeedback:
-        """Write code to a temp .py file and execute it."""
-        tmp_path = Path(self._tmpdir) / "_check.py"
+        """Write code to an isolated temp _check.py file and execute it."""
+        run_dir = Path(tempfile.mkdtemp(dir=self._tmpdir, prefix="exec_"))
+        tmp_path = run_dir / "_check.py"
         tmp_path.write_text(code)
         env = dict(os.environ)
         env.setdefault("PYTHON_JULIACALL_INIT", "no")
@@ -389,6 +433,8 @@ class PythonEnvironment:
                 raw_output=f"python not found at '{self._python_path}'",
                 errors=[f"python not found at '{self._python_path}'"],
             )
+        finally:
+            shutil.rmtree(run_dir, ignore_errors=True)
 
 
 def _parse_mypy_output(raw: str) -> CompilerFeedback:

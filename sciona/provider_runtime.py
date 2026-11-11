@@ -462,10 +462,47 @@ class PostgresSemanticIndex:
         ).rstrip("/")
         self.token = token
         self._declarations: dict[str, Declaration] = {}
+        self._query_cache: dict[tuple[str, int], list[tuple[Declaration, float]]] = {}
+
+    def _entry_to_declaration(self, entry: CatalogEntry) -> Declaration:
+        provider = entry.provider
+        declaration = Declaration(
+            name=entry.fqdn,
+            type_signature=entry.type_signature or "",
+            docstring=entry.description,
+            conceptual_summary="; ".join(entry.domain_tags) if entry.domain_tags else "",
+            source_lib=provider.import_module if provider else "postgres_catalog",
+            prover=Prover.PYTHON,
+            provider_id=provider.provider_id if provider else "",
+            distribution_name=provider.distribution_name if provider else "",
+            distribution_version=provider.distribution_version if provider else "",
+            install_requirement=provider.install_requirement if provider else "",
+            import_module=provider.import_module if provider else "",
+            import_symbol=provider.import_symbol if provider else "",
+            wheel_url=provider.wheel_url if provider else "",
+            wheel_sha256=provider.wheel_sha256 if provider else "",
+        )
+        self._declarations[declaration.name] = declaration
+        return declaration
+
+    def _rows_to_results(
+        self, rows_payload: Any, k: int
+    ) -> list[tuple[Declaration, float]]:
+        entries = [CatalogEntry.model_validate(row) for row in (rows_payload or [])]
+        results: list[tuple[Declaration, float]] = []
+        for rank, entry in enumerate(entries[:k]):
+            declaration = self._entry_to_declaration(entry)
+            rank_score = 1.0 - (rank / max(1, len(entries)))
+            results.append((declaration, max(float(entry.score), rank_score)))
+        return results
 
     def search_by_embedding(
         self, query_text: str, k: int = 10
     ) -> list[tuple[Declaration, float]]:
+        key = (query_text.strip(), int(k))
+        cached = self._query_cache.get(key)
+        if cached is not None:
+            return list(cached)
         try:
             import httpx
         except ImportError as exc:
@@ -479,29 +516,62 @@ class PostgresSemanticIndex:
             follow_redirects=True,
         )
         response.raise_for_status()
-        entries = [CatalogEntry.model_validate(row) for row in response.json()]
-        results: list[tuple[Declaration, float]] = []
-        for rank, entry in enumerate(entries[:k]):
-            provider = entry.provider
-            declaration = Declaration(
-                name=entry.fqdn,
-                type_signature="",
-                docstring=entry.description,
-                source_lib=provider.import_module if provider else "postgres_catalog",
-                prover=Prover.PYTHON,
-                provider_id=provider.provider_id if provider else "",
-                distribution_name=provider.distribution_name if provider else "",
-                distribution_version=provider.distribution_version if provider else "",
-                install_requirement=provider.install_requirement if provider else "",
-                import_module=provider.import_module if provider else "",
-                import_symbol=provider.import_symbol if provider else "",
-                wheel_url=provider.wheel_url if provider else "",
-                wheel_sha256=provider.wheel_sha256 if provider else "",
-            )
-            self._declarations[declaration.name] = declaration
-            rank_score = 1.0 - (rank / max(1, len(entries)))
-            results.append((declaration, max(float(entry.score), rank_score)))
-        return results
+        results = self._rows_to_results(response.json(), k)
+        self._query_cache[key] = results
+        return list(results)
+
+    async def search_by_embedding_async_batch(
+        self,
+        queries: list[str],
+        *,
+        k: int = 10,
+        max_concurrency: int = 8,
+    ) -> list[tuple[Declaration, float]]:
+        """Execute multiple semantic queries concurrently over a single AsyncClient."""
+        import asyncio
+
+        try:
+            import httpx
+        except ImportError as exc:
+            raise RuntimeError("Postgres semantic search requires httpx") from exc
+
+        unique_queries: list[str] = []
+        seen_q: set[str] = set()
+        for raw_q in queries:
+            q = raw_q.strip()
+            if q and q not in seen_q:
+                seen_q.add(q)
+                unique_queries.append(q)
+        if not unique_queries:
+            return []
+
+        headers = {"Authorization": f"Bearer {self.token}"} if self.token else {}
+        semaphore = asyncio.Semaphore(max(1, max_concurrency))
+
+        async with httpx.AsyncClient(
+            timeout=60.0, follow_redirects=True, headers=headers
+        ) as client:
+            async def _fetch_one(q: str) -> list[tuple[Declaration, float]]:
+                cache_key = (q, int(k))
+                cached = self._query_cache.get(cache_key)
+                if cached is not None:
+                    return list(cached)
+                async with semaphore:
+                    resp = await client.get(
+                        f"{self.api_url}/catalog/search",
+                        params={"q": q, "limit": k},
+                    )
+                    resp.raise_for_status()
+                    parsed = self._rows_to_results(resp.json(), k)
+                    self._query_cache[cache_key] = parsed
+                    return list(parsed)
+
+            batches = await asyncio.gather(*(_fetch_one(q) for q in unique_queries))
+
+        combined: list[tuple[Declaration, float]] = []
+        for batch in batches:
+            combined.extend(batch)
+        return combined
 
     def search_by_type(self, type_signature: str, k: int = 10) -> list[Declaration]:
         return [decl for decl, _score in self.search_by_embedding(type_signature, k=k)]

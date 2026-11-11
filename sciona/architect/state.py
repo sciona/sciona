@@ -36,6 +36,20 @@ def _merge_nodes(
     return list(by_id.values())
 
 
+def _merge_edges(
+    existing: list[DependencyEdge], updates: list[DependencyEdge]
+) -> list[DependencyEdge]:
+    """Custom reducer: deduplicate edges by (source_id, target_id, output_name, input_name)."""
+    by_key: dict[tuple[str, str, str, str], DependencyEdge] = {}
+    for edge in existing:
+        key = (edge.source_id, edge.target_id, edge.output_name, edge.input_name)
+        by_key[key] = edge
+    for edge in updates:
+        key = (edge.source_id, edge.target_id, edge.output_name, edge.input_name)
+        by_key[key] = edge
+    return list(by_key.values())
+
+
 class DecompositionState(TypedDict):
     """LangGraph state for the decomposition cycle."""
 
@@ -45,7 +59,7 @@ class DecompositionState(TypedDict):
 
     # CDG accumulation
     nodes: Annotated[list[AlgorithmicNode], _merge_nodes]
-    edges: Annotated[list[DependencyEdge], operator.add]
+    edges: Annotated[list[DependencyEdge], _merge_edges]
     history: Annotated[list[dict], operator.add]
     planning_artifact: PlanningArtifact | dict[str, Any] | None
     skeleton_asset: dict[str, Any] | None

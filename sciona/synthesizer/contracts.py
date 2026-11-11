@@ -1,12 +1,26 @@
-"""Safe atom wrapper generator with icontract decorators."""
+"""Safe atom wrapper generator with icontract decorators and confidence guards."""
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass, field
+from typing import TYPE_CHECKING, Any
 
 from sciona.architect.models import IOSpec
 from sciona.synthesizer.models import AssemblyUnit
 from sciona.types import Declaration
+from sciona.uncertainty.conformal import TrustTierFilter, matches_trust_tier
+from sciona.uncertainty.runtime_guard import (
+    NodeGuardSpec,
+    resolve_unit_profile,
+    slim_profile_for_guard,
+)
+
+if TYPE_CHECKING:
+    from sciona.synthesizer.uncertainty import UncertaintyBackend
+    from sciona.uncertainty.models import AtomUncertaintyProfile
+
+_UNSET_TIER: Any = object()
 
 
 @dataclass
@@ -30,13 +44,41 @@ class SafeAtomWrapper:
     preconditions: list[ContractSpec] = field(default_factory=list)
     postconditions: list[ContractSpec] = field(default_factory=list)
     body: str = ""
+    confidence_guard_spec: dict[str, Any] | None = None
 
 
 class ContractGenerator:
-    """Generates icontract-decorated wrapper functions."""
+    """Generates icontract-decorated wrapper functions and runtime confidence guards."""
+
+    def __init__(
+        self,
+        *,
+        uncertainty_backend: UncertaintyBackend | None = None,
+        uncertainty_profiles: Mapping[str, AtomUncertaintyProfile] | None = None,
+        enable_confidence_guards: bool | None = None,
+        trust_tier: TrustTierFilter = 1,
+        confidence_alpha: float = 0.01,
+        require_conformal: bool = True,
+    ) -> None:
+        self._uncertainty_backend = uncertainty_backend
+        self._uncertainty_profiles = (
+            dict(uncertainty_profiles) if uncertainty_profiles is not None else None
+        )
+        self._enable_confidence_guards = enable_confidence_guards
+        self._trust_tier: TrustTierFilter = trust_tier
+        self._confidence_alpha = confidence_alpha
+        self._require_conformal = require_conformal
 
     def generate_wrapper(
-        self, unit: AssemblyUnit, declaration: Declaration
+        self,
+        unit: AssemblyUnit,
+        declaration: Declaration,
+        *,
+        profile: AtomUncertaintyProfile | None = None,
+        enable_confidence_guards: bool | None = None,
+        trust_tier: TrustTierFilter | object = _UNSET_TIER,
+        alpha: float | None = None,
+        require_conformal: bool | None = None,
     ) -> SafeAtomWrapper:
         """Generate a SafeAtomWrapper from an AssemblyUnit and Declaration."""
         # Parse parameters from the declaration's type signature
@@ -67,12 +109,84 @@ class ContractGenerator:
         if module:
             imports.append(f"import {module}")
 
-        # Build body
-        body = f"return {declaration.name}({', '.join(name for name, _ in parameters)})"
-
         function_name = (
             unit.name.replace(" ", "_").replace("-", "_").lower() + "_wrapper"
         )
+
+        # Optional runtime confidence guard emission
+        eff_enable = (
+            enable_confidence_guards
+            if enable_confidence_guards is not None
+            else (
+                self._enable_confidence_guards
+                if self._enable_confidence_guards is not None
+                else (
+                    profile is not None
+                    or self._uncertainty_backend is not None
+                    or self._uncertainty_profiles is not None
+                )
+            )
+        )
+        eff_tier: TrustTierFilter = (
+            self._trust_tier if trust_tier is _UNSET_TIER else trust_tier  # type: ignore[assignment]
+        )
+        eff_alpha = float(alpha if alpha is not None else self._confidence_alpha)
+        eff_req_conformal = (
+            require_conformal
+            if require_conformal is not None
+            else self._require_conformal
+        )
+
+        guard_spec_dict: dict[str, Any] | None = None
+        body_lines: list[str] = []
+        if eff_enable:
+            resolved_prof = (
+                profile
+                if profile is not None
+                else resolve_unit_profile(
+                    declaration.name,
+                    matched_primitive=unit.matched_primitive,
+                    unit_name=unit.name,
+                    backend=self._uncertainty_backend,
+                    profiles=self._uncertainty_profiles,
+                )
+            )
+            if matches_trust_tier(resolved_prof.trust_tier, eff_tier) and (
+                eff_req_conformal or bool(resolved_prof.input_regimes)
+            ):
+                guard_spec = NodeGuardSpec(
+                    node_id=unit.node_id,
+                    atom_name=resolved_prof.atom_name,
+                    trust_tier=resolved_prof.trust_tier,
+                    allocated_alpha=eff_alpha,
+                    require_conformal=eff_req_conformal,
+                    abort_on_violation=True,
+                    profile_dict=slim_profile_for_guard(resolved_prof),
+                )
+                guard_spec_dict = guard_spec.to_dict()
+                guard_import = (
+                    "from sciona.uncertainty.runtime_guard import "
+                    "evaluate_runtime_guard as _sciona_eval_guard"
+                )
+                if guard_import not in imports:
+                    imports.append(guard_import)
+                guard_const = f"_SCIONA_GUARD_{function_name.upper()}"
+                avail_expr = (
+                    "{"
+                    + ", ".join(f"{name!r}: {name}" for name, _ in parameters)
+                    + "}"
+                )
+                ordered_expr = repr(tuple(name for name, _ in parameters))
+                body_lines.append(
+                    f"_sciona_eval_guard({guard_const}, {avail_expr}, "
+                    f"callable_fn={declaration.name}, ordered_names={ordered_expr})"
+                )
+
+        # Build body
+        body_lines.append(
+            f"return {declaration.name}({', '.join(name for name, _ in parameters)})"
+        )
+        body = "\n".join(body_lines)
 
         return SafeAtomWrapper(
             function_name=function_name,
@@ -83,11 +197,17 @@ class ContractGenerator:
             preconditions=preconditions,
             postconditions=postconditions,
             body=body,
+            confidence_guard_spec=guard_spec_dict,
         )
 
     def render_wrapper(self, wrapper: SafeAtomWrapper) -> str:
         """Render a SafeAtomWrapper to Python source code."""
         lines: list[str] = []
+
+        if wrapper.confidence_guard_spec is not None:
+            guard_const = f"_SCIONA_GUARD_{wrapper.function_name.upper()}"
+            lines.append(f"{guard_const} = {wrapper.confidence_guard_spec!r}")
+            lines.append("")
 
         # Decorators
         for pre in wrapper.preconditions:

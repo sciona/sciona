@@ -8,6 +8,7 @@ Graph topology:
 
 from __future__ import annotations
 
+import inspect
 import json
 import re
 from dataclasses import dataclass, replace
@@ -654,11 +655,28 @@ class InitialSearch(BaseNode[HunterState, HunterDeps, MatchResult]):
             embedding_k = state.top_k_per_query
 
         embedding_results = []
-        for q in queries_to_use:
-            embedding_results.extend(deps.index.search_by_embedding(q, k=embedding_k))
+        has_async_batch = (
+            inspect.getattr_static(
+                type(deps.index), "search_by_embedding_async_batch", None
+            )
+            is not None
+        )
+        if has_async_batch and len(queries_to_use) > 1:
+            batch_fn = getattr(deps.index, "search_by_embedding_async_batch")
+            embedding_results.extend(
+                await batch_fn(queries_to_use, k=embedding_k)
+            )
+        else:
+            for q in queries_to_use:
+                embedding_results.extend(deps.index.search_by_embedding(q, k=embedding_k))
 
         # Type search
-        type_results = deps.index.search_by_type(node.statement, k=state.search_k)
+        if has_async_batch and node.statement.strip() in {q.strip() for q in queries_to_use}:
+            type_results = [
+                decl for decl, _score in deps.index.search_by_embedding(node.statement, k=state.search_k)
+            ]
+        else:
+            type_results = deps.index.search_by_type(node.statement, k=state.search_k)
 
         candidate_pool = {
             candidate.declaration.name: candidate for candidate in state.candidates_found
@@ -753,11 +771,23 @@ class RankCandidates(BaseNode[HunterState, HunterDeps, MatchResult]):
         state = ctx.state
         deps = ctx.deps
 
-        # Build candidate list for the LLM
-        candidates_text = "\n".join(
-            f"[{i}] {c.declaration.name} : {c.declaration.type_signature}"
-            for i, c in enumerate(state.candidates_found)
-        )
+        # Build candidate list for the LLM (include concise summary so ranker isn't blind)
+        candidate_lines: list[str] = []
+        for i, c in enumerate(state.candidates_found):
+            sig = c.declaration.type_signature or "Any"
+            summary_src = (
+                c.declaration.docstring or c.declaration.conceptual_summary or ""
+            ).strip()
+            first_line = summary_src.splitlines()[0].strip() if summary_src else ""
+            if len(first_line) > 160:
+                first_line = first_line[:157] + "..."
+            if first_line:
+                candidate_lines.append(
+                    f"[{i}] {c.declaration.name} : {sig} — {first_line}"
+                )
+            else:
+                candidate_lines.append(f"[{i}] {c.declaration.name} : {sig}")
+        candidates_text = "\n".join(candidate_lines)
 
         user_msg = SCORE_CANDIDATES_USER.format(
             statement=state.pdg_node.statement,

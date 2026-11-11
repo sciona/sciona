@@ -49,10 +49,14 @@ class HeuristicCandidateRanker:
         *,
         min_score: float = 1.0,
         min_margin: float = 0.2,
+        uncertainty_backend: Any | None = None,
+        node_eval: Any | None = None,
     ) -> None:
         self._fallback = fallback
         self._min_score = min_score
         self._min_margin = min_margin
+        self._uncertainty_backend = uncertainty_backend
+        self._node_eval = node_eval
         self._last_completion_metadata: dict[str, Any] = {}
         self._last_error_metadata: dict[str, Any] = {}
 
@@ -94,6 +98,16 @@ class HeuristicCandidateRanker:
         if not query_tokens or not candidates:
             return None
 
+        uncertainty_priors: dict[str, float] = {}
+        if self._uncertainty_backend is not None or self._node_eval is not None:
+            from sciona.uncertainty.gap_spec import uncertainty_priors_for_candidates
+
+            uncertainty_priors = uncertainty_priors_for_candidates(
+                [name for _i, name, _sig in candidates],
+                node_eval=self._node_eval,
+                backend=self._uncertainty_backend,
+            )
+
         scored: list[tuple[float, int]] = []
         for idx, name, type_signature in candidates:
             name_tokens = _tokenize(name)
@@ -117,6 +131,9 @@ class HeuristicCandidateRanker:
                 score += 0.5
             if "solution" in query_tokens and "solution" in type_tokens:
                 score += 0.5
+
+            if score > 0.0 and name in uncertainty_priors:
+                score += 0.6 * uncertainty_priors[name]
 
             scored.append((score, idx))
 

@@ -177,6 +177,51 @@ class CreditAssigner:
     ) -> list[NodeGradient]:
         gradients: list[NodeGradient] = []
 
+        # Phase 3 directional risk attribution when CDGUncertaintyReport is attached
+        u_rep = getattr(sim_report, "uncertainty_report", None)
+        if u_rep is not None and getattr(u_rep, "risk_budget", None) is not None:
+            dir_scored: dict[str, float] = {}
+            extra_tags: dict[str, list[str]] = {}
+            for nid in atomic_ids:
+                neval = u_rep.nodes.get(nid)
+                if neval is None:
+                    continue
+                conf = sim_report.node_confidence.get(nid, neval.profile.confidence or 1.0)
+                weight = max(conf, 0.25) if neval.profile.is_calibrated else 0.5
+                if neval.marginal_risk_score > 0.0:
+                    dir_scored[nid] = neval.marginal_risk_score * weight
+                tags: list[str] = []
+                if not neval.pullback_feasible:
+                    tags.append("pullback infeasible: intrinsic noise exceeds target precision")
+                if not neval.in_regime_bounds:
+                    tags.append("input regime OOD")
+                if neval.max_risk_ratio > 1.0 + 1e-9:
+                    tags.append(f"risk_ratio={neval.max_risk_ratio:.2f}x budget")
+                if not neval.profile.is_calibrated:
+                    tags.append("uncalibrated — uncertainty estimate unavailable")
+                extra_tags[nid] = tags
+
+            dir_total = sum(dir_scored.values())
+            if dir_total > 0.0:
+                for nid, raw in dir_scored.items():
+                    pct = raw / dir_total * 100.0
+                    reason = (
+                        f"Node '{node_names.get(nid, nid)}' contributed "
+                        f"{pct:.1f}% of directional CDG risk attribution"
+                    )
+                    if extra_tags.get(nid):
+                        reason += f" [{'; '.join(extra_tags[nid])}]"
+                    gradients.append(
+                        NodeGradient(
+                            node_id=nid,
+                            gradient_score=pct,
+                            metric_type=OptimizationMetric.PRECISION,
+                            bottleneck_reason=reason,
+                        )
+                    )
+                gradients.sort(key=lambda g: g.gradient_score, reverse=True)
+                return gradients
+
         # Combine empirical error_expansion with ghost-sim interval data.
         # Ghost-sim precision_gradients are the primary signal; telemetry
         # error_expansion is the fallback.
