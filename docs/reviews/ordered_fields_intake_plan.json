@@ -1,0 +1,82 @@
+{
+  "format": "ordered-fields-intake-plan.v1",
+  "passed": true,
+  "applied": false,
+  "approved": false,
+  "catalog_mutations": 0,
+  "owner": {
+    "owner_id": "33ed07a2-1bea-5b17-8b71-d6d0e590fdd9",
+    "source_repo_id": "27b787a0-27ed-4760-92b7-ad8e8b4b815c"
+  },
+  "new_providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.pipeline.ordered_fields.select_values",
+      "atom_id": "10599635-8173-5408-a7ef-95151b7a871c",
+      "version_id": "4abe4a41-69b9-5e16-a283-5aeda80d881d",
+      "content_hash": "d9229c623f34239ffad9efdd8fb366fd565b0ea0bd4aa1ae018e06a81a7f4926",
+      "provider_sha256": "70839e71411188f43e18e7a008fe0c05c6e624431412ec8d37d7d089837c9cc2",
+      "semver": "0.0.0+local.d9229c623f34",
+      "fingerprint": "9f815d7517394dacb9aad73607639e857c2df3c3eb1af0a530dd409c3b1cd1f4",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.pipeline.ordered_fields.select_values",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.pipeline.ordered_fields",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.pipeline.ordered_fields",
+        "import_module": "sciona.atoms.ml.pipeline.ordered_fields",
+        "source_symbol": "select_values",
+        "description": "Return borrowed mapping values in an explicit caller-selected order. Require a plain dict with nonblank string keys and a nonempty plain list or tuple of unique nonblank string names, all present in the dict. Extra mapping fields are permitted and ignored. Preserve exact names without trimming. Return a new outer list; values retain identity, dtype, shape and aliasing. Do not mutate inputs or copy, convert, inspect or validate values. Caller establishes field meanings, value contracts, alignment and units. Concrete execution only; this operation neither infers a schema nor runs models.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "mapping",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Plain dict only, with nonblank string keys. Extra fields are permitted and ignored. Values may be arbitrary caller-owned objects; this operation does not inspect, copy, convert or validate values. Caller establishes schema meanings, alignment, units and downstream value contracts."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "fields",
+          "type_desc": "list[str]",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty plain list or tuple of unique nonblank string field names, all present in the mapping. Preserve supplied order and exact names without trimming. Reject missing, duplicate, unordered or invalid field names and container subclasses. No field order or application schema is inferred."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "list",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "New outer Python list of selected borrowed values in explicit field order. Preserve value identity, aliasing, dtype and shape without mutating inputs. Downstream mutations of borrowed objects affect caller-owned values. No deep copy, value validation, model execution or unit conversion. Concrete in-process execution only; abstract witness rejects. Synthetic motion and electrical-power examples demonstrate constructed ordering reuse, not empirical effectiveness. No HTTP transport or whole-CDG approval claim."
+        }
+      ]
+    }
+  ],
+  "registered_provider_dependencies": [],
+  "execution_evidence_commit": "fa541de0",
+  "execution_evidence_sha256": "3bc0567e82ba9e0f0f7b006ee075f30b40e5143cf6bad44701d805d9d00a3ca5",
+  "provider_revision": "51fd789",
+  "planner_sha256": "3ced503343f6370f2ffb905d319e5abd1b0efa755acb3d6fdb381d77822d8eaf",
+  "implementation_sha256": "70839e71411188f43e18e7a008fe0c05c6e624431412ec8d37d7d089837c9cc2",
+  "execution_evidence_files": [
+    "docs/reviews/ordered_fields_provider.json",
+    "docs/reviews/osic_image_slice_graph.json"
+  ],
+  "limitations": [
+    "Draft plan only; transaction, semantic review and publication gates remain required.",
+    "The provider uses Python container operations and has no registered atom dependencies. Image-graph evidence is a composed use, not a dependency of field selection.",
+    "Borrowed values are not validated or copied; callers retain responsibility for downstream mutation, alignment and units.",
+    "The graph remains unapproved; original workflow execution and empirical transfer are separate."
+  ]
+}
