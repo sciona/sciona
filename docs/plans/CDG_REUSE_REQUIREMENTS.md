@@ -2796,8 +2796,18 @@ evidence, including exact fresh-process inference with fitting and HDF5 loading
 disabled, ten rejected state corruptions and unchanged private source files.
 State contains inference weights only; caller coordinates do not establish
 provenance, constructor checks consume RNG state and export writes are not
-atomic. All three interfaces are now non-serving catalog drafts: intake created
-39 rows after complete rollback checks at writes 1, 19 and 39. Semantic review
-and publication gates remain pending, as do complete image training and the
-original stored graph. See `osic_image_lifecycle_providers.json` and
+atomic. Intake created 39 draft rows after complete rollback checks at writes
+1, 19 and 39. See `osic_image_lifecycle_providers.json` and
 `osic_image_lifecycle_intake_transactions.json`.
+
+All three lifecycle interfaces now have automated Tier 3 approval and are served
+in both catalogs. Publication rejected 63 corruption cases, including invented
+parameters on the zero-argument constructor, and rolled back completely after
+writes 1, 17, 34 and 52. Fresh export and replay processes independently resolved
+the exact served bindings and reproduced the frozen numeric-state qualification.
+The export process executed construction, export and restore; its separate
+replay process constructed and restored the model with fitting and HDF5 loading
+disabled. Private source files remained unchanged. These approvals support
+explicit lifecycle edges; complete image training and the original stored graph
+remain pending. See `osic_image_lifecycle_provider_publication_gates.json` and
+`osic_image_lifecycle_served_verification.json`.
