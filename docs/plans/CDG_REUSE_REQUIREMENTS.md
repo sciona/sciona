@@ -2853,3 +2853,15 @@ deterministic seed and qualified predecessor; saved weights are not optimizer
 recovery state. The resumed worker is limited to one core, with a detached
 supervisor retaining private stdout and exit status. The full 63-fit budget is
 unchanged and incomplete. See `tgs_continuation_audit.json`.
+
+The generic ordered-field selector now has automated Tier 3 approval and is
+served in both catalogs. Publication rejected 21 corrupted-catalog cases and
+rolled back completely after writes 1, 5, 10 and 16. Fresh served-binding
+execution made 32 selector calls and reproduced the eight synthetic reuse cases,
+exact field naming, borrowed alias behavior and invalid-contract rejections.
+The operation has no registered atom dependencies: image preparation and model
+execution are downstream composition partners, not hidden selector behavior.
+All four providers used by the one-entity slice graph are now approved, but the
+graph and original CDG still require their remaining integration and publication
+work. See `ordered_fields_provider_publication_gates.json` and
+`ordered_fields_served_verification.json`.
