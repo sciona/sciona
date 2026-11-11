@@ -3126,3 +3126,16 @@ Six synthetic orchestration tests cover incomplete progress, missing replay
 inputs, dependency drift, changed inputs and failed replay results. They do not
 execute B5 or qualify the completed model. The live run has reached twenty-one
 epochs and 672 updates; full replay and original-CDG approval remain pending.
+
+The combined inference graph now also executes against the relocated ML
+implementations. The frozen qualification worker changes only three import
+locations; frozen graph builders use a temporary namespace and preserve the
+same canonical fifteen-node, twenty-six-edge graph identity. Two fresh
+600-epoch synthetic quantile fits and the intermediate image state reproduce
+exact branch predictions, features, independent coordinate declarations and
+the sorted weighted blend. All twenty-six missing-edge variants reject;
+fitting and HDF5 loading are disabled during inference, and inputs and private
+state remain unchanged. Current software identities are checked across the
+run. This is numerical relocation evidence, not renewal of catalog approvals,
+installation of archived graph builders, complete image training or original
+workflow completion. See `osic_relocated_combined_graph.json`.
