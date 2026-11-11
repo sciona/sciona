@@ -759,6 +759,13 @@ class LivePrototypingSandbox:
         key = str(bundle.source_path)
         entry = self._virtual_bundles.get(key)
         if entry is None:
+            src_p = Path(bundle.source_path)
+            if src_p.is_file() and src_p.suffix.lower() == ".json":
+                from sciona.architect.handoff import load_json
+
+                loaded_cdg = load_json(src_p)
+                self._virtual_bundles[key] = (loaded_cdg, [])
+                return loaded_cdg, []
             raise KeyError(
                 f"Virtual bundle '{key}' is not registered in this LivePrototypingSandbox"
             )

@@ -1,0 +1,1269 @@
+"""Deterministic-first 5-rung iterative CDG revision ladder.
+
+Orders candidate revisions strictly by marginal compute/LLM cost so >80% of
+refinement iterations complete in milliseconds with zero LLM calls:
+
+- **Rung 1 — Bounded Node HPO (0 LLM calls)**:
+  Tunes the bottleneck node's ``PrimitiveParamSpec``s (or auto-inferred Python
+  default parameters) via Optuna while reusing cached upstream intermediates.
+- **Rung 2 — Type-Compatible Sibling Swap (0 LLM calls, 0 Hunter re-matches)**:
+  Queries ``PrimitiveCatalog`` and Phase B ``ManifestFTSIndex`` by ``PortTypeSpec``
+  compatibility, ranks via ``AtomLedger`` UCB1 + ``benchmark_priors`` + Phase 3
+  ``uncertainty_priors_for_candidates`` (and ``mine_cdg_uncertainty_gaps`` rescues),
+  and binds directly onto the bottleneck slot.
+- **Rung 3 — Delta-Planned DPO Structural Expansion (0 LLM calls)**:
+  Builds ``ExpansionContext`` from cached live intermediates, runs
+  ``plan_expansion_delta`` + ``ExpansionEngine.expand``, and evaluates expanded CDGs.
+- **Rung 4a — Localized Subgraph Splice (1 scoped call)**:
+  Decomposes ONLY the bottleneck node's ``IOSpec`` boundary contract and splices
+  the child CDG via ``compose_cdg(..., operation="replacement")``.
+- **Rung 4b — Guided Micro-Atom Synthesis on True Catalog Gaps (1 scoped call)**:
+  Synthesizes a self-contained leaf Python function for an unrescued slot/gap,
+  verifies it against Tier 1 synthetic/metamorphic checks, registers it in
+  ``LiveCDGRunner``, and scores it on Tier 2 validation cases.
+"""
+
+from __future__ import annotations
+
+import ast
+import inspect
+import logging
+import math
+import time
+import types
+import uuid
+from collections.abc import Awaitable, Callable, Mapping, Sequence
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Any
+
+from sciona.architect.catalog import PrimitiveCatalog
+from sciona.architect.compiled_catalog import ManifestFTSIndex
+from sciona.architect.composition import compose_cdg
+from sciona.architect.handoff import CDGExport
+from sciona.architect.models import (
+    AlgorithmicNode,
+    AlgorithmicPrimitive,
+    EdgeKind,
+    IOSpec,
+    NodeStatus,
+    PortTypeSpec,
+    PrimitiveParamSpec,
+    format_canonical_type_signature,
+)
+from sciona.principal.atom_ledger import AtomLedger, compute_slot_signature
+from sciona.principal.benchmark_priors import load_benchmark_priors
+from sciona.principal.expansion import ExpansionContext, ExpansionEngine
+from sciona.principal.expansion_delta_planner import (
+    DeltaPlan,
+    DeltaPlanningQuery,
+    plan_expansion_delta,
+)
+from sciona.principal.models import BenchmarkResult, NodeGradient, OptimizationMetric
+from sciona.principal.proposal_helpers import build_expansion_context
+from sciona.principal.graph_types import PrincipalState
+from sciona.types import MatchResult
+from sciona.uncertainty.gap_spec import (
+    UncertaintyGapSpec,
+    mine_cdg_uncertainty_gaps,
+    uncertainty_priors_for_candidates,
+)
+from sciona.uncertainty.propagation import CDGUncertaintyReport, propagate_cdg_uncertainty
+
+from sciona.prototyping.funnel import EvaluationFunnel, FunnelEvaluationReport
+from sciona.prototyping.live_runner import resolve_atom_callable
+
+logger = logging.getLogger(__name__)
+
+optuna: Any = None
+try:
+    import optuna as _optuna
+
+    optuna = _optuna
+except ImportError:  # pragma: no cover
+    optuna = None
+
+
+@dataclass(frozen=True)
+class SubgraphSpliceRequest:
+    """Scoped contract passed to Rung 4a localized sub-decomposition."""
+
+    goal: str
+    bottleneck_node: AlgorithmicNode
+    bottleneck_reason: str
+    disfavored_atoms: tuple[str, ...] = ()
+    gap_spec: UncertaintyGapSpec | None = None
+
+
+@dataclass(frozen=True)
+class MicroAtomSynthesisSpec:
+    """Structured leaf specification passed to Rung 4b micro-atom synthesis."""
+
+    slot_node_id: str
+    slot_name: str
+    description: str
+    inputs: tuple[IOSpec, ...]
+    outputs: tuple[IOSpec, ...]
+    failure_reason: str = ""
+    gap_spec: UncertaintyGapSpec | None = None
+    suggested_function_name: str = ""
+
+
+@dataclass
+class LadderStepOutcome:
+    """Result of executing a single revision rung (or full ladder climb)."""
+
+    rung: str
+    improved: bool
+    accepted_cdg: CDGExport
+    accepted_node_params: dict[str, dict[str, Any]]
+    accepted_loss: float
+    accepted_report: FunnelEvaluationReport | None
+    baseline_loss: float
+    bottleneck_node_id: str
+    trials_evaluated: int = 0
+    elapsed_ms: float = 0.0
+    rationale: str = ""
+    synthesized_atom_fqn: str = ""
+    synthesized_source_code: str = ""
+    delta_plan: DeltaPlan | None = None
+    details: dict[str, Any] = field(default_factory=dict)
+
+
+SubdecomposeCallable = Callable[
+    [SubgraphSpliceRequest],
+    CDGExport | Awaitable[CDGExport | None] | None,
+]
+MicroAtomSynthesizerCallable = Callable[
+    [MicroAtomSynthesisSpec],
+    str | tuple[str, str] | Awaitable[str | tuple[str, str] | None] | None,
+]
+
+
+def infer_tunable_specs_for_node(
+    node: AlgorithmicNode,
+    *,
+    catalog: PrimitiveCatalog | None = None,
+    callable_fn: Callable[..., Any] | None = None,
+    wired_input_names: set[str] | None = None,
+) -> list[PrimitiveParamSpec]:
+    """Return tunable ``PrimitiveParamSpec``s from catalog metadata or Python signature defaults."""
+    prim_name = str(node.matched_primitive or "").strip()
+    if catalog is not None and prim_name:
+        prim = catalog.get(prim_name)
+        if prim is not None and prim.tunable_params:
+            approved = [p for p in prim.tunable_params if p.safe_to_optimize]
+            if approved:
+                return approved
+
+    wired = wired_input_names or set()
+    specs: list[PrimitiveParamSpec] = []
+    seen_names: set[str] = set()
+
+    # Inspect resolved Python callable signature defaults when available
+    if callable_fn is not None:
+        try:
+            sig = inspect.signature(callable_fn)
+            for pname, param in sig.parameters.items():
+                if pname in wired or param.default is inspect.Parameter.empty:
+                    continue
+                spec = _param_spec_from_default(pname, param.default)
+                if spec is not None:
+                    seen_names.add(pname)
+                    specs.append(spec)
+        except (TypeError, ValueError):
+            pass
+
+    # Also inspect optional IOSpec ports with literal default_value_repr
+    for inp in node.inputs:
+        if inp.name in wired or inp.name in seen_names or inp.required:
+            continue
+        if not inp.default_value_repr:
+            continue
+        try:
+            default_val = ast.literal_eval(inp.default_value_repr)
+        except Exception:
+            continue
+        spec = _param_spec_from_default(inp.name, default_val)
+        if spec is not None:
+            seen_names.add(inp.name)
+            specs.append(spec)
+
+    return specs
+
+
+def _param_spec_from_default(name: str, default_val: Any) -> PrimitiveParamSpec | None:
+    low = name.lower()
+    if low in {"seed", "random_state", "n_jobs", "verbose", "axis", "dtype", "copy"}:
+        return None
+    if isinstance(default_val, bool):
+        return PrimitiveParamSpec(
+            name=name,
+            kind="bool",
+            default=bool(default_val),
+            choices=[True, False],
+        )
+    if isinstance(default_val, int) and not isinstance(default_val, bool):
+        iv = int(default_val)
+        if iv > 0:
+            lo = max(1, iv // 3)
+            hi = max(iv + 6, iv * 3)
+        else:
+            lo = iv - 5
+            hi = iv + 5
+        return PrimitiveParamSpec(
+            name=name,
+            kind="int",
+            default=iv,
+            min_value=lo,
+            max_value=hi,
+        )
+    if isinstance(default_val, float) and math.isfinite(default_val):
+        fv = float(default_val)
+        if fv > 0.0:
+            lo_f = max(1e-6, fv * 0.2)
+            hi_f = fv * 5.0
+            use_log = (hi_f / lo_f) >= 20.0
+        elif fv < 0.0:
+            lo_f = fv * 3.0
+            hi_f = fv * 0.2
+            use_log = False
+        else:
+            lo_f = -1.0
+            hi_f = 1.0
+            use_log = False
+        return PrimitiveParamSpec(
+            name=name,
+            kind="float",
+            default=fv,
+            min_value=lo_f,
+            max_value=hi_f,
+            log_scale=use_log,
+        )
+    return None
+
+
+def _ports_compatible(
+    required_slot_inputs: Sequence[PortTypeSpec],
+    slot_outputs: Sequence[PortTypeSpec],
+    cand_inputs: Sequence[IOSpec],
+    cand_outputs: Sequence[IOSpec],
+) -> bool:
+    """Check whether a candidate primitive's ports satisfy a CDG node's wired boundary."""
+    req_cand_in = [p for p in cand_inputs if p.required]
+    if not (len(req_cand_in) <= len(required_slot_inputs) <= len(cand_inputs)):
+        return False
+    if slot_outputs and len(cand_outputs) != len(slot_outputs):
+        return False
+
+    for slot_in_pt, cand_in in zip(required_slot_inputs, cand_inputs):
+        if not slot_in_pt.is_compatible_with(cand_in.resolved_port_type()):
+            return False
+    for cand_out, slot_out_pt in zip(cand_outputs, slot_outputs):
+        if not cand_out.resolved_port_type().is_compatible_with(slot_out_pt):
+            return False
+    return True
+
+
+def compile_micro_atom_source(
+    source_code: str,
+    *,
+    preferred_name: str = "",
+) -> tuple[str, Callable[..., Any]]:
+    """Compile synthesized Python leaf code in an isolated namespace and extract its callable."""
+    cleaned = source_code.strip()
+    if cleaned.startswith("```"):
+        lines = cleaned.splitlines()
+        if lines and lines[0].startswith("```"):
+            lines = lines[1:]
+        if lines and lines[-1].strip() == "```":
+            lines = lines[:-1]
+        cleaned = "\n".join(lines).strip()
+
+    tree = ast.parse(cleaned, mode="exec")
+    fn_names = [node.name for node in tree.body if isinstance(node, ast.FunctionDef)]
+    if not fn_names:
+        raise ValueError("Synthesized micro-atom source contains no top-level 'def' function")
+
+    target_fn_name = (
+        preferred_name
+        if preferred_name and preferred_name in fn_names
+        else fn_names[-1]
+    )
+    mod_name = f"sciona_synthesized_micro_atom_{uuid.uuid4().hex[:10]}"
+    mod = types.ModuleType(mod_name)
+    mod.__dict__["__builtins__"] = __builtins__
+    exec(compile(tree, filename=f"<{mod_name}>", mode="exec"), mod.__dict__)
+    fn = getattr(mod, target_fn_name, None)
+    if not callable(fn):
+        raise ValueError(f"Compiled micro-atom '{target_fn_name}' is not callable")
+    return target_fn_name, fn
+
+
+class RevisionLadder:
+    """Executes Rungs 1 -> 4b in strict cost order against an ``EvaluationFunnel``."""
+
+    def __init__(
+        self,
+        funnel: EvaluationFunnel,
+        *,
+        catalog: PrimitiveCatalog | None = None,
+        manifest_index: ManifestFTSIndex | None = None,
+        manifest_sqlite_path: Path | None = None,
+        atom_ledger: AtomLedger | None = None,
+        expansion_engine: ExpansionEngine | None = None,
+        subdecompose_fn: SubdecomposeCallable | None = None,
+        micro_atom_synthesizer: MicroAtomSynthesizerCallable | None = None,
+        hpo_trials_per_rung: int = 8,
+        max_sibling_evals: int = 5,
+        improvement_tol: float = 1e-7,
+    ) -> None:
+        self.funnel = funnel
+        self.catalog = catalog
+        self.manifest_index = manifest_index
+        self.manifest_sqlite_path = manifest_sqlite_path
+        if self.manifest_index is None and manifest_sqlite_path is not None and manifest_sqlite_path.is_file():
+            self.manifest_index = ManifestFTSIndex(manifest_sqlite_path)
+        self.atom_ledger = atom_ledger if atom_ledger is not None else AtomLedger()
+        self.expansion_engine = expansion_engine
+        self.subdecompose_fn = subdecompose_fn
+        self.micro_atom_synthesizer = micro_atom_synthesizer
+        self.hpo_trials_per_rung = max(1, int(hpo_trials_per_rung))
+        self.max_sibling_evals = max(1, int(max_sibling_evals))
+        self.improvement_tol = float(improvement_tol)
+
+        self._benchmark_priors: dict[str, float] = {}
+        if manifest_sqlite_path is not None and manifest_sqlite_path.is_file():
+            try:
+                self._benchmark_priors = load_benchmark_priors(manifest_sqlite_path)
+            except Exception:
+                self._benchmark_priors = {}
+
+    def _is_better(self, new_loss: float, baseline_loss: float) -> bool:
+        if not math.isfinite(new_loss):
+            return False
+        if not math.isfinite(baseline_loss):
+            return True
+        return new_loss < (baseline_loss - self.improvement_tol)
+
+    # ------------------------------------------------------------------
+    # Rung 1: Bounded Node-Scoped HPO (0 LLM calls)
+    # ------------------------------------------------------------------
+
+    def run_rung1_node_hpo(
+        self,
+        cdg: CDGExport,
+        bottleneck_node_id: str,
+        *,
+        baseline_loss: float,
+        current_node_params: Mapping[str, Mapping[str, Any]] | None = None,
+        match_results: Sequence[MatchResult] | None = None,
+    ) -> LadderStepOutcome:
+        t0 = time.perf_counter()
+        base_params = {k: dict(v) for k, v in (current_node_params or {}).items()}
+        target_node = next((n for n in cdg.nodes if n.node_id == bottleneck_node_id), None)
+        if target_node is None:
+            return LadderStepOutcome(
+                rung="rung1_node_hpo",
+                improved=False,
+                accepted_cdg=cdg,
+                accepted_node_params=base_params,
+                accepted_loss=baseline_loss,
+                accepted_report=None,
+                baseline_loss=baseline_loss,
+                bottleneck_node_id=bottleneck_node_id,
+                elapsed_ms=(time.perf_counter() - t0) * 1000.0,
+                rationale=f"Bottleneck node '{bottleneck_node_id}' not found",
+            )
+
+        wired_inputs = {
+            e.input_name
+            for e in cdg.edges
+            if e.target_id == bottleneck_node_id
+        }
+        fn: Callable[..., Any] | None = None
+        try:
+            fn, _ = resolve_atom_callable(
+                target_node.matched_primitive or "",
+                node=target_node,
+                extra_callables=self.funnel.runner.extra_callables,
+            )
+        except Exception:
+            fn = None
+
+        specs = infer_tunable_specs_for_node(
+            target_node,
+            catalog=self.catalog,
+            callable_fn=fn,
+            wired_input_names=wired_inputs,
+        )
+        if not specs:
+            return LadderStepOutcome(
+                rung="rung1_node_hpo",
+                improved=False,
+                accepted_cdg=cdg,
+                accepted_node_params=base_params,
+                accepted_loss=baseline_loss,
+                accepted_report=None,
+                baseline_loss=baseline_loss,
+                bottleneck_node_id=bottleneck_node_id,
+                elapsed_ms=(time.perf_counter() - t0) * 1000.0,
+                rationale=f"Node '{bottleneck_node_id}' exposes no tunable parameters",
+            )
+
+        best_loss = baseline_loss
+        best_params = {k: dict(v) for k, v in base_params.items()}
+        best_report: FunnelEvaluationReport | None = None
+        trials_run = 0
+
+        if optuna is not None:
+            sampler = optuna.samplers.TPESampler(seed=42)
+            optuna.logging.set_verbosity(optuna.logging.WARNING)
+            study = optuna.create_study(direction="minimize", sampler=sampler)
+            existing_node_p = base_params.get(bottleneck_node_id, {})
+            enq: dict[str, Any] = {}
+            for sp in specs:
+                cur_v = existing_node_p.get(sp.name, sp.default)
+                if sp.kind in {"int", "float"} and sp.min_value is not None and sp.max_value is not None:
+                    if float(sp.min_value) <= float(cur_v) <= float(sp.max_value):
+                        enq[sp.name] = cur_v
+                else:
+                    enq[sp.name] = cur_v
+            if enq:
+                study.enqueue_trial(enq)
+
+            for _ in range(self.hpo_trials_per_rung):
+                trial = study.ask()
+                sampled: dict[str, Any] = {}
+                for sp in specs:
+                    if sp.kind == "bool":
+                        sampled[sp.name] = trial.suggest_categorical(sp.name, list(sp.choices or [True, False]))
+                    elif sp.kind == "categorical":
+                        sampled[sp.name] = trial.suggest_categorical(sp.name, list(sp.choices or [sp.default]))
+                    elif sp.kind == "int" and sp.min_value is not None and sp.max_value is not None:
+                        sampled[sp.name] = trial.suggest_int(sp.name, int(sp.min_value), int(sp.max_value))
+                    elif sp.kind == "float" and sp.min_value is not None and sp.max_value is not None:
+                        sampled[sp.name] = trial.suggest_float(
+                            sp.name,
+                            float(sp.min_value),
+                            float(sp.max_value),
+                            log=bool(sp.log_scale) and float(sp.min_value) > 0,
+                        )
+                    else:
+                        sampled[sp.name] = sp.default
+
+                cand_params = {k: dict(v) for k, v in base_params.items()}
+                cand_params[bottleneck_node_id] = {
+                    **cand_params.get(bottleneck_node_id, {}),
+                    **sampled,
+                }
+                rep = self.funnel.evaluate_candidate(
+                    cdg,
+                    node_params=cand_params,
+                    match_results=match_results,
+                )
+                trials_run += 1
+                if rep.passed and math.isfinite(rep.global_loss):
+                    study.tell(trial, rep.global_loss)
+                    if self._is_better(rep.global_loss, best_loss):
+                        best_loss = rep.global_loss
+                        best_params = cand_params
+                        best_report = rep
+                else:
+                    study.tell(trial, state=optuna.trial.TrialState.PRUNED)
+
+        improved = best_report is not None and self._is_better(best_loss, baseline_loss)
+        return LadderStepOutcome(
+            rung="rung1_node_hpo",
+            improved=improved,
+            accepted_cdg=cdg,
+            accepted_node_params=best_params if improved else base_params,
+            accepted_loss=best_loss if improved else baseline_loss,
+            accepted_report=best_report if improved else None,
+            baseline_loss=baseline_loss,
+            bottleneck_node_id=bottleneck_node_id,
+            trials_evaluated=trials_run,
+            elapsed_ms=(time.perf_counter() - t0) * 1000.0,
+            rationale=(
+                f"Tuned '{bottleneck_node_id}' params {best_params.get(bottleneck_node_id)} "
+                f"({baseline_loss:.5f} -> {best_loss:.5f})"
+                if improved
+                else f"No HPO gain across {trials_run} trials on '{bottleneck_node_id}'"
+            ),
+            details={"tunable_names": [s.name for s in specs]},
+        )
+
+    # ------------------------------------------------------------------
+    # Rung 2: Catalog / Manifest Type-Compatible Sibling Swap (0 LLM, 0 Hunter)
+    # ------------------------------------------------------------------
+
+    def discover_compatible_siblings(
+        self,
+        cdg: CDGExport,
+        bottleneck_node_id: str,
+    ) -> list[str]:
+        """Find type-compatible replacement primitives from ``PrimitiveCatalog`` & ``ManifestFTSIndex``."""
+        target = next((n for n in cdg.nodes if n.node_id == bottleneck_node_id), None)
+        if target is None:
+            return []
+
+        current_prim = str(target.matched_primitive or "").strip()
+        wired_in_names = {
+            e.input_name
+            for e in cdg.edges
+            if e.target_id == bottleneck_node_id and e.edge_kind != EdgeKind.CALLABLE_INJECTION
+        }
+        required_in_specs = [
+            inp.resolved_port_type()
+            for inp in target.inputs
+            if inp.required or inp.name in wired_in_names
+        ]
+        out_specs = [outp.resolved_port_type() for outp in target.outputs]
+
+        candidates: list[str] = []
+        seen: set[str] = {current_prim} if current_prim else set()
+
+        def _add_cand(name: str) -> None:
+            clean = name.strip()
+            if clean and clean not in seen:
+                seen.add(clean)
+                candidates.append(clean)
+
+        # 1. PrimitiveCatalog candidates (same ConceptType first, then general compatible)
+        if self.catalog is not None:
+            cat_same = self.catalog.search_by_category(target.concept_type)
+            for prim in cat_same:
+                if _ports_compatible(required_in_specs, out_specs, prim.inputs, prim.outputs):
+                    _add_cand(prim.name)
+            for prim in self.catalog.all_primitives():
+                if _ports_compatible(required_in_specs, out_specs, prim.inputs, prim.outputs):
+                    _add_cand(prim.name)
+
+        # 2. Phase B Compiled SQLite Manifest FTS5 + PortTypeSpec index (<1 ms)
+        if self.manifest_index is not None:
+            query_txt = f"{target.name} {target.description}"
+            req_ios = [
+                inp for inp in target.inputs if inp.required or inp.name in wired_in_names
+            ]
+            for decl, _score in self.manifest_index.search_compatible_ports(
+                req_ios,
+                target.outputs,
+                query_text=query_txt,
+                k=self.max_sibling_evals * 3,
+            ):
+                _add_cand(decl.name)
+
+        return candidates
+
+    def run_rung2_sibling_swap(
+        self,
+        cdg: CDGExport,
+        bottleneck_node_id: str,
+        *,
+        baseline_loss: float,
+        current_node_params: Mapping[str, Mapping[str, Any]] | None = None,
+        match_results: Sequence[MatchResult] | None = None,
+        uncertainty_report: CDGUncertaintyReport | None = None,
+        trial_index: int = 1,
+    ) -> LadderStepOutcome:
+        t0 = time.perf_counter()
+        base_params = {k: dict(v) for k, v in (current_node_params or {}).items()}
+        target = next((n for n in cdg.nodes if n.node_id == bottleneck_node_id), None)
+        if target is None:
+            return LadderStepOutcome(
+                rung="rung2_sibling_swap",
+                improved=False,
+                accepted_cdg=cdg,
+                accepted_node_params=base_params,
+                accepted_loss=baseline_loss,
+                accepted_report=None,
+                baseline_loss=baseline_loss,
+                bottleneck_node_id=bottleneck_node_id,
+                elapsed_ms=(time.perf_counter() - t0) * 1000.0,
+                rationale=f"Node '{bottleneck_node_id}' not found",
+            )
+
+        raw_candidates = self.discover_compatible_siblings(cdg, bottleneck_node_id)
+        if not raw_candidates:
+            return LadderStepOutcome(
+                rung="rung2_sibling_swap",
+                improved=False,
+                accepted_cdg=cdg,
+                accepted_node_params=base_params,
+                accepted_loss=baseline_loss,
+                accepted_report=None,
+                baseline_loss=baseline_loss,
+                bottleneck_node_id=bottleneck_node_id,
+                elapsed_ms=(time.perf_counter() - t0) * 1000.0,
+                rationale=f"No type-compatible catalog/manifest siblings found for '{bottleneck_node_id}'",
+            )
+
+        # Combine benchmark priors + Phase 3 directional uncertainty priors inside AtomLedger UCB1
+        node_map = {n.node_id: n for n in cdg.nodes}
+        parent_node = node_map.get(target.parent_id) if target.parent_id else None
+        slot = compute_slot_signature(target, parent_node)
+
+        u_rep = uncertainty_report
+        if u_rep is None and self.funnel.harness.risk_budget is not None:
+            try:
+                u_rep = propagate_cdg_uncertainty(
+                    cdg,
+                    match_results=match_results,
+                    profiles=self.funnel.runner.uncertainty_profiles,
+                    risk_budget=self.funnel.harness.risk_budget,
+                )
+            except Exception:
+                u_rep = None
+
+        neval = u_rep.nodes.get(bottleneck_node_id) if u_rep is not None else None
+        unc_priors = uncertainty_priors_for_candidates(
+            raw_candidates,
+            node_eval=neval,
+            profiles=self.funnel.runner.uncertainty_profiles,
+        )
+        merged_priors: dict[str, float] = {}
+        for cname in raw_candidates:
+            bp = self._benchmark_priors.get(cname)
+            up = unc_priors.get(cname)
+            if bp is not None and up is not None:
+                merged_priors[cname] = 0.5 * bp + 0.5 * up
+            elif bp is not None:
+                merged_priors[cname] = bp
+            elif up is not None:
+                merged_priors[cname] = up
+
+        ranked = [
+            cname
+            for cname, _score in self.atom_ledger.rank_candidates(
+                slot,
+                raw_candidates,
+                benchmark_priors=merged_priors,
+            )
+        ]
+
+        # Promote any Phase 3 uncertainty-rescue candidate to index 0
+        if u_rep is not None:
+            gap_rep = mine_cdg_uncertainty_gaps(
+                cdg,
+                u_rep,
+                candidates_by_node={bottleneck_node_id: ranked},
+                profiles=self.funnel.runner.uncertainty_profiles,
+            )
+            rescued_atom = gap_rep.rescued_by_existing_candidates.get(bottleneck_node_id)
+            if rescued_atom and rescued_atom in ranked:
+                ranked.remove(rescued_atom)
+                ranked.insert(0, rescued_atom)
+
+        best_cdg = cdg
+        best_loss = baseline_loss
+        best_params = base_params
+        best_report: FunnelEvaluationReport | None = None
+        best_sibling = ""
+        trials_run = 0
+
+        for cand_name in ranked[: self.max_sibling_evals]:
+            mutated_cdg = _bind_sibling_onto_node(
+                cdg,
+                bottleneck_node_id,
+                cand_name,
+                catalog=self.catalog,
+            )
+            cand_params = {k: dict(v) for k, v in base_params.items() if k != bottleneck_node_id}
+            rep = self.funnel.evaluate_candidate(
+                mutated_cdg,
+                node_params=cand_params,
+                match_results=match_results,
+            )
+            trials_run += 1
+            obs_grad = 0.0 if (rep.passed and self._is_better(rep.global_loss, baseline_loss)) else 85.0
+            self.atom_ledger.record(slot, cand_name, obs_grad, trial_index)
+
+            if rep.passed and self._is_better(rep.global_loss, best_loss):
+                best_cdg = mutated_cdg
+                best_loss = rep.global_loss
+                best_params = cand_params
+                best_report = rep
+                best_sibling = cand_name
+
+        improved = best_report is not None and self._is_better(best_loss, baseline_loss)
+        return LadderStepOutcome(
+            rung="rung2_sibling_swap",
+            improved=improved,
+            accepted_cdg=best_cdg if improved else cdg,
+            accepted_node_params=best_params if improved else base_params,
+            accepted_loss=best_loss if improved else baseline_loss,
+            accepted_report=best_report if improved else None,
+            baseline_loss=baseline_loss,
+            bottleneck_node_id=bottleneck_node_id,
+            trials_evaluated=trials_run,
+            elapsed_ms=(time.perf_counter() - t0) * 1000.0,
+            rationale=(
+                f"Swapped '{bottleneck_node_id}' -> '{best_sibling}' without Hunter re-match "
+                f"({baseline_loss:.5f} -> {best_loss:.5f})"
+                if improved
+                else f"Evaluated {trials_run} compatible sibling(s) for '{bottleneck_node_id}' without improvement"
+            ),
+            details={"evaluated_siblings": ranked[: self.max_sibling_evals], "selected_sibling": best_sibling},
+        )
+
+    # ------------------------------------------------------------------
+    # Rung 3: Delta-Planned DPO Structural Expansion (0 LLM calls)
+    # ------------------------------------------------------------------
+
+    def run_rung3_dpo_expansion(
+        self,
+        cdg: CDGExport,
+        bottleneck_node_id: str,
+        *,
+        baseline_loss: float,
+        baseline_benchmark: BenchmarkResult | None,
+        bottleneck_reason: str = "",
+        current_node_params: Mapping[str, Mapping[str, Any]] | None = None,
+        match_results: Sequence[MatchResult] | None = None,
+    ) -> LadderStepOutcome:
+        t0 = time.perf_counter()
+        base_params = {k: dict(v) for k, v in (current_node_params or {}).items()}
+        if self.expansion_engine is None:
+            return LadderStepOutcome(
+                rung="rung3_dpo_expansion",
+                improved=False,
+                accepted_cdg=cdg,
+                accepted_node_params=base_params,
+                accepted_loss=baseline_loss,
+                accepted_report=None,
+                baseline_loss=baseline_loss,
+                bottleneck_node_id=bottleneck_node_id,
+                elapsed_ms=(time.perf_counter() - t0) * 1000.0,
+                rationale="No ExpansionEngine configured",
+            )
+
+        state_stub = PrincipalState(
+            cdg=cdg,
+            benchmark=baseline_benchmark,
+            planning_artifact=cdg.planning_artifact,
+        )
+        exp_ctx: ExpansionContext = build_expansion_context(state_stub)
+
+        # Consult delta planner for structured coverage provenance
+        delta_plan: DeltaPlan | None = None
+        try:
+            leaves = cdg.leaf_nodes()
+            d_query = DeltaPlanningQuery(
+                missing_techniques=(bottleneck_reason,) if bottleneck_reason else (),
+                stage_names=tuple(n.name for n in leaves),
+                input_names=tuple(p.name for n in leaves for p in n.inputs),
+                output_names=tuple(p.name for n in leaves for p in n.outputs),
+                runtime_keys=tuple((exp_ctx.runtime_inputs or {}).keys()),
+                intermediate_keys=tuple(exp_ctx.intermediates.keys()),
+                base_coverage=0.5,
+            )
+            delta_plan = plan_expansion_delta(d_query, cdg=cdg)
+        except Exception:
+            delta_plan = None
+
+        exp_res = self.expansion_engine.expand(cdg, exp_ctx)
+        if not exp_res.expanded:
+            return LadderStepOutcome(
+                rung="rung3_dpo_expansion",
+                improved=False,
+                accepted_cdg=cdg,
+                accepted_node_params=base_params,
+                accepted_loss=baseline_loss,
+                accepted_report=None,
+                baseline_loss=baseline_loss,
+                bottleneck_node_id=bottleneck_node_id,
+                elapsed_ms=(time.perf_counter() - t0) * 1000.0,
+                rationale="No DPO expansion rules triggered on current intermediates",
+                delta_plan=delta_plan,
+            )
+
+        rep = self.funnel.evaluate_candidate(
+            exp_res.cdg,
+            node_params=base_params,
+            match_results=match_results,
+        )
+        improved = rep.passed and self._is_better(rep.global_loss, baseline_loss)
+        return LadderStepOutcome(
+            rung="rung3_dpo_expansion",
+            improved=improved,
+            accepted_cdg=exp_res.cdg if improved else cdg,
+            accepted_node_params=base_params,
+            accepted_loss=rep.global_loss if improved else baseline_loss,
+            accepted_report=rep if improved else None,
+            baseline_loss=baseline_loss,
+            bottleneck_node_id=bottleneck_node_id,
+            trials_evaluated=1,
+            elapsed_ms=(time.perf_counter() - t0) * 1000.0,
+            rationale=(
+                f"Applied DPO rule(s) {list(exp_res.applied_rules)} "
+                f"({baseline_loss:.5f} -> {rep.global_loss:.5f})"
+                if improved
+                else f"Expanded CDG via {list(exp_res.applied_rules)} did not improve loss (loss={rep.global_loss})"
+            ),
+            delta_plan=delta_plan,
+            details={"applied_rules": list(exp_res.applied_rules)},
+        )
+
+    # ------------------------------------------------------------------
+    # Rung 4a: Localized Subgraph Splice via compose_cdg (1 scoped call)
+    # ------------------------------------------------------------------
+
+    async def run_rung4a_localized_splice(
+        self,
+        cdg: CDGExport,
+        bottleneck_node_id: str,
+        *,
+        goal: str,
+        bottleneck_reason: str,
+        baseline_loss: float,
+        current_node_params: Mapping[str, Mapping[str, Any]] | None = None,
+        match_results: Sequence[MatchResult] | None = None,
+        gap_spec: UncertaintyGapSpec | None = None,
+    ) -> LadderStepOutcome:
+        t0 = time.perf_counter()
+        base_params = {k: dict(v) for k, v in (current_node_params or {}).items()}
+        if self.subdecompose_fn is None:
+            return LadderStepOutcome(
+                rung="rung4a_localized_splice",
+                improved=False,
+                accepted_cdg=cdg,
+                accepted_node_params=base_params,
+                accepted_loss=baseline_loss,
+                accepted_report=None,
+                baseline_loss=baseline_loss,
+                bottleneck_node_id=bottleneck_node_id,
+                elapsed_ms=(time.perf_counter() - t0) * 1000.0,
+                rationale="No subdecompose_fn configured for Rung 4a",
+            )
+
+        target = next((n for n in cdg.nodes if n.node_id == bottleneck_node_id), None)
+        if target is None:
+            return LadderStepOutcome(
+                rung="rung4a_localized_splice",
+                improved=False,
+                accepted_cdg=cdg,
+                accepted_node_params=base_params,
+                accepted_loss=baseline_loss,
+                accepted_report=None,
+                baseline_loss=baseline_loss,
+                bottleneck_node_id=bottleneck_node_id,
+                elapsed_ms=(time.perf_counter() - t0) * 1000.0,
+                rationale=f"Node '{bottleneck_node_id}' not found",
+            )
+
+        disfavored = (target.matched_primitive,) if target.matched_primitive else ()
+        req = SubgraphSpliceRequest(
+            goal=goal,
+            bottleneck_node=target,
+            bottleneck_reason=bottleneck_reason,
+            disfavored_atoms=disfavored,
+            gap_spec=gap_spec,
+        )
+        maybe_child = self.subdecompose_fn(req)
+        child_cdg = await maybe_child if inspect.isawaitable(maybe_child) else maybe_child
+        if child_cdg is None:
+            return LadderStepOutcome(
+                rung="rung4a_localized_splice",
+                improved=False,
+                accepted_cdg=cdg,
+                accepted_node_params=base_params,
+                accepted_loss=baseline_loss,
+                accepted_report=None,
+                baseline_loss=baseline_loss,
+                bottleneck_node_id=bottleneck_node_id,
+                elapsed_ms=(time.perf_counter() - t0) * 1000.0,
+                rationale="subdecompose_fn returned None",
+            )
+
+        try:
+            spliced_cdg = compose_cdg(
+                cdg,
+                child_cdg,
+                operation="replacement",
+                target_node_id=bottleneck_node_id,
+                workspace_id="proto",
+                version_id=uuid.uuid4().hex[:6],
+            )
+        except Exception as exc:
+            return LadderStepOutcome(
+                rung="rung4a_localized_splice",
+                improved=False,
+                accepted_cdg=cdg,
+                accepted_node_params=base_params,
+                accepted_loss=baseline_loss,
+                accepted_report=None,
+                baseline_loss=baseline_loss,
+                bottleneck_node_id=bottleneck_node_id,
+                elapsed_ms=(time.perf_counter() - t0) * 1000.0,
+                rationale=f"compose_cdg splice failed: {exc}",
+            )
+
+        spliced_params = {k: dict(v) for k, v in base_params.items() if k != bottleneck_node_id}
+        rep = self.funnel.evaluate_candidate(
+            spliced_cdg,
+            node_params=spliced_params,
+            match_results=match_results,
+        )
+        improved = rep.passed and self._is_better(rep.global_loss, baseline_loss)
+        return LadderStepOutcome(
+            rung="rung4a_localized_splice",
+            improved=improved,
+            accepted_cdg=spliced_cdg if improved else cdg,
+            accepted_node_params=spliced_params if improved else base_params,
+            accepted_loss=rep.global_loss if improved else baseline_loss,
+            accepted_report=rep if improved else None,
+            baseline_loss=baseline_loss,
+            bottleneck_node_id=bottleneck_node_id,
+            trials_evaluated=1,
+            elapsed_ms=(time.perf_counter() - t0) * 1000.0,
+            rationale=(
+                f"Locally spliced '{bottleneck_node_id}' with {len(child_cdg.nodes)}-node subgraph "
+                f"({baseline_loss:.5f} -> {rep.global_loss:.5f})"
+                if improved
+                else f"Localized splice on '{bottleneck_node_id}' did not improve loss (loss={rep.global_loss})"
+            ),
+        )
+
+    # ------------------------------------------------------------------
+    # Rung 4b: Guided Micro-Atom Synthesis on True Catalog Gaps
+    # ------------------------------------------------------------------
+
+    async def run_rung4b_micro_atom_synthesis(
+        self,
+        cdg: CDGExport,
+        bottleneck_node_id: str,
+        *,
+        failure_reason: str,
+        baseline_loss: float,
+        current_node_params: Mapping[str, Mapping[str, Any]] | None = None,
+        match_results: Sequence[MatchResult] | None = None,
+        gap_spec: UncertaintyGapSpec | None = None,
+    ) -> LadderStepOutcome:
+        t0 = time.perf_counter()
+        base_params = {k: dict(v) for k, v in (current_node_params or {}).items()}
+        if self.micro_atom_synthesizer is None:
+            return LadderStepOutcome(
+                rung="rung4b_micro_atom_synthesis",
+                improved=False,
+                accepted_cdg=cdg,
+                accepted_node_params=base_params,
+                accepted_loss=baseline_loss,
+                accepted_report=None,
+                baseline_loss=baseline_loss,
+                bottleneck_node_id=bottleneck_node_id,
+                elapsed_ms=(time.perf_counter() - t0) * 1000.0,
+                rationale="No micro_atom_synthesizer configured for Rung 4b",
+            )
+
+        target = next((n for n in cdg.nodes if n.node_id == bottleneck_node_id), None)
+        if target is None:
+            return LadderStepOutcome(
+                rung="rung4b_micro_atom_synthesis",
+                improved=False,
+                accepted_cdg=cdg,
+                accepted_node_params=base_params,
+                accepted_loss=baseline_loss,
+                accepted_report=None,
+                baseline_loss=baseline_loss,
+                bottleneck_node_id=bottleneck_node_id,
+                elapsed_ms=(time.perf_counter() - t0) * 1000.0,
+                rationale=f"Node '{bottleneck_node_id}' not found",
+            )
+
+        suggested_fn = f"micro_{target.node_id}".replace("-", "_").replace(".", "_")
+        spec = MicroAtomSynthesisSpec(
+            slot_node_id=target.node_id,
+            slot_name=target.name,
+            description=target.description,
+            inputs=tuple(target.inputs),
+            outputs=tuple(target.outputs),
+            failure_reason=failure_reason,
+            gap_spec=gap_spec,
+            suggested_function_name=suggested_fn,
+        )
+
+        raw_synth = self.micro_atom_synthesizer(spec)
+        synth_payload = await raw_synth if inspect.isawaitable(raw_synth) else raw_synth
+        if not synth_payload:
+            return LadderStepOutcome(
+                rung="rung4b_micro_atom_synthesis",
+                improved=False,
+                accepted_cdg=cdg,
+                accepted_node_params=base_params,
+                accepted_loss=baseline_loss,
+                accepted_report=None,
+                baseline_loss=baseline_loss,
+                bottleneck_node_id=bottleneck_node_id,
+                elapsed_ms=(time.perf_counter() - t0) * 1000.0,
+                rationale="micro_atom_synthesizer returned empty output",
+            )
+
+        if isinstance(synth_payload, tuple):
+            pref_name, src_code = synth_payload
+        else:
+            pref_name, src_code = suggested_fn, str(synth_payload)
+
+        try:
+            fn_name, fn_callable = compile_micro_atom_source(src_code, preferred_name=pref_name)
+        except Exception as exc:
+            return LadderStepOutcome(
+                rung="rung4b_micro_atom_synthesis",
+                improved=False,
+                accepted_cdg=cdg,
+                accepted_node_params=base_params,
+                accepted_loss=baseline_loss,
+                accepted_report=None,
+                baseline_loss=baseline_loss,
+                bottleneck_node_id=bottleneck_node_id,
+                elapsed_ms=(time.perf_counter() - t0) * 1000.0,
+                rationale=f"Synthesized micro-atom failed compilation: {exc}",
+            )
+
+        fqn = f"sciona.synthesized.{fn_name}_{uuid.uuid4().hex[:6]}"
+        self.funnel.runner.extra_callables[fqn] = fn_callable
+        mutated_cdg = _bind_sibling_onto_node(cdg, bottleneck_node_id, fqn, catalog=None)
+        cand_params = {k: dict(v) for k, v in base_params.items() if k != bottleneck_node_id}
+
+        rep = self.funnel.evaluate_candidate(
+            mutated_cdg,
+            node_params=cand_params,
+            match_results=match_results,
+        )
+        improved = rep.passed and self._is_better(rep.global_loss, baseline_loss)
+        if not improved:
+            # Remove rejected micro-atom from live callables so session stays clean
+            self.funnel.runner.extra_callables.pop(fqn, None)
+
+        return LadderStepOutcome(
+            rung="rung4b_micro_atom_synthesis",
+            improved=improved,
+            accepted_cdg=mutated_cdg if improved else cdg,
+            accepted_node_params=cand_params if improved else base_params,
+            accepted_loss=rep.global_loss if improved else baseline_loss,
+            accepted_report=rep if improved else None,
+            baseline_loss=baseline_loss,
+            bottleneck_node_id=bottleneck_node_id,
+            trials_evaluated=1,
+            elapsed_ms=(time.perf_counter() - t0) * 1000.0,
+            rationale=(
+                f"Synthesized & Tier-1/2 verified micro-atom '{fqn}' for '{bottleneck_node_id}' "
+                f"({baseline_loss:.5f} -> {rep.global_loss:.5f})"
+                if improved
+                else f"Synthesized micro-atom '{fqn}' rejected by funnel ({rep.prune_reason or rep.global_loss})"
+            ),
+            synthesized_atom_fqn=fqn if improved else "",
+            synthesized_source_code=src_code if improved else "",
+        )
+
+    # ------------------------------------------------------------------
+    # Full Cost-Ordered Climb Across Bottleneck Candidates
+    # ------------------------------------------------------------------
+
+    async def climb(
+        self,
+        cdg: CDGExport,
+        gradients: Sequence[NodeGradient],
+        *,
+        goal: str = "",
+        baseline_loss: float,
+        baseline_benchmark: BenchmarkResult | None = None,
+        current_node_params: Mapping[str, Mapping[str, Any]] | None = None,
+        match_results: Sequence[MatchResult] | None = None,
+        uncertainty_report: CDGUncertaintyReport | None = None,
+        max_rung: int = 4,
+        trial_index: int = 1,
+    ) -> LadderStepOutcome:
+        """Climb Rung 1 -> Rung 2 -> Rung 3 -> Rung 4a -> Rung 4b, accepting first strict gain."""
+        t_start = time.perf_counter()
+        base_params = {k: dict(v) for k, v in (current_node_params or {}).items()}
+        leaves = cdg.leaf_nodes()
+        ordered_bottlenecks = [g for g in gradients]
+        if not ordered_bottlenecks and leaves:
+            ordered_bottlenecks = [
+                NodeGradient(
+                    node_id=leaves[-1].node_id,
+                    gradient_score=100.0,
+                    metric_type=OptimizationMetric.PRECISION,
+                    bottleneck_reason="fallback leaf target",
+                )
+            ]
+        if not ordered_bottlenecks:
+            return LadderStepOutcome(
+                rung="none",
+                improved=False,
+                accepted_cdg=cdg,
+                accepted_node_params=base_params,
+                accepted_loss=baseline_loss,
+                accepted_report=None,
+                baseline_loss=baseline_loss,
+                bottleneck_node_id="",
+                rationale="CDG has no atomic leaves to refine",
+            )
+
+        primary = ordered_bottlenecks[0]
+        total_trials = 0
+        attempted_rungs: list[str] = []
+
+        # Rung 1: Bounded Node HPO (skip when baseline crashed/inf unless param violation caused it)
+        if max_rung >= 1:
+            for grad in ordered_bottlenecks[:2]:
+                r1 = self.run_rung1_node_hpo(
+                    cdg,
+                    grad.node_id,
+                    baseline_loss=baseline_loss,
+                    current_node_params=base_params,
+                    match_results=match_results,
+                )
+                total_trials += r1.trials_evaluated
+                attempted_rungs.append(r1.rung)
+                if r1.improved:
+                    r1.trials_evaluated = total_trials
+                    r1.elapsed_ms = (time.perf_counter() - t_start) * 1000.0
+                    r1.details["attempted_rungs"] = attempted_rungs
+                    return r1
+
+        # Rung 2: Catalog / Manifest Type-Compatible Sibling Swap (0 LLM calls, 0 Hunter calls)
+        if max_rung >= 2:
+            for grad in ordered_bottlenecks[:2]:
+                r2 = self.run_rung2_sibling_swap(
+                    cdg,
+                    grad.node_id,
+                    baseline_loss=baseline_loss,
+                    current_node_params=base_params,
+                    match_results=match_results,
+                    uncertainty_report=uncertainty_report,
+                    trial_index=trial_index,
+                )
+                total_trials += r2.trials_evaluated
+                attempted_rungs.append(r2.rung)
+                if r2.improved:
+                    r2.trials_evaluated = total_trials
+                    r2.elapsed_ms = (time.perf_counter() - t_start) * 1000.0
+                    r2.details["attempted_rungs"] = attempted_rungs
+                    return r2
+
+        # Rung 3: Delta-Planned DPO Structural Expansion (0 LLM calls)
+        if max_rung >= 3:
+            r3 = self.run_rung3_dpo_expansion(
+                cdg,
+                primary.node_id,
+                baseline_loss=baseline_loss,
+                baseline_benchmark=baseline_benchmark,
+                bottleneck_reason=primary.bottleneck_reason,
+                current_node_params=base_params,
+                match_results=match_results,
+            )
+            total_trials += r3.trials_evaluated
+            attempted_rungs.append(r3.rung)
+            if r3.improved:
+                r3.trials_evaluated = total_trials
+                r3.elapsed_ms = (time.perf_counter() - t_start) * 1000.0
+                r3.details["attempted_rungs"] = attempted_rungs
+                return r3
+
+        # Mine Phase 3 uncertainty gap specs if available for Rung 4a / 4b guidance
+        gaps_by_node: dict[str, UncertaintyGapSpec] = {}
+        if uncertainty_report is not None:
+            gap_rep = mine_cdg_uncertainty_gaps(
+                cdg,
+                uncertainty_report,
+                profiles=self.funnel.runner.uncertainty_profiles,
+            )
+            gaps_by_node = {g.node_id: g for g in gap_rep.gaps}
+
+        # Rung 4a: Localized Subgraph Splice via compose_cdg
+        if max_rung >= 4 and self.subdecompose_fn is not None:
+            for grad in ordered_bottlenecks[:2]:
+                r4a = await self.run_rung4a_localized_splice(
+                    cdg,
+                    grad.node_id,
+                    goal=goal,
+                    bottleneck_reason=grad.bottleneck_reason,
+                    baseline_loss=baseline_loss,
+                    current_node_params=base_params,
+                    match_results=match_results,
+                    gap_spec=gaps_by_node.get(grad.node_id),
+                )
+                total_trials += r4a.trials_evaluated
+                attempted_rungs.append(r4a.rung)
+                if r4a.improved:
+                    r4a.trials_evaluated = total_trials
+                    r4a.elapsed_ms = (time.perf_counter() - t_start) * 1000.0
+                    r4a.details["attempted_rungs"] = attempted_rungs
+                    return r4a
+
+        # Rung 4b: Guided Micro-Atom Synthesis on True Catalog Gaps
+        if max_rung >= 4 and self.micro_atom_synthesizer is not None:
+            for grad in ordered_bottlenecks[:2]:
+                r4b = await self.run_rung4b_micro_atom_synthesis(
+                    cdg,
+                    grad.node_id,
+                    failure_reason=grad.bottleneck_reason,
+                    baseline_loss=baseline_loss,
+                    current_node_params=base_params,
+                    match_results=match_results,
+                    gap_spec=gaps_by_node.get(grad.node_id),
+                )
+                total_trials += r4b.trials_evaluated
+                attempted_rungs.append(r4b.rung)
+                if r4b.improved:
+                    r4b.trials_evaluated = total_trials
+                    r4b.elapsed_ms = (time.perf_counter() - t_start) * 1000.0
+                    r4b.details["attempted_rungs"] = attempted_rungs
+                    return r4b
+
+        return LadderStepOutcome(
+            rung="exhausted",
+            improved=False,
+            accepted_cdg=cdg,
+            accepted_node_params=base_params,
+            accepted_loss=baseline_loss,
+            accepted_report=None,
+            baseline_loss=baseline_loss,
+            bottleneck_node_id=primary.node_id,
+            trials_evaluated=total_trials,
+            elapsed_ms=(time.perf_counter() - t_start) * 1000.0,
+            rationale=f"No improvement across rungs {attempted_rungs} on '{primary.node_id}'",
+            details={"attempted_rungs": attempted_rungs},
+        )
+
+
+def _bind_sibling_onto_node(
+    cdg: CDGExport,
+    node_id: str,
+    candidate_primitive: str,
+    *,
+    catalog: PrimitiveCatalog | None = None,
+) -> CDGExport:
+    """Bind *candidate_primitive* directly onto *node_id* while keeping existing edges intact."""
+    mutated = cdg.model_copy(deep=True)
+    prim_meta: AlgorithmicPrimitive | None = (
+        catalog.get(candidate_primitive) if catalog is not None else None
+    )
+
+    for idx, node in enumerate(mutated.nodes):
+        if node.node_id != node_id:
+            continue
+        updates: dict[str, Any] = {
+            "matched_primitive": candidate_primitive,
+            "status": NodeStatus.ATOMIC,
+        }
+        if prim_meta is not None and prim_meta.inputs:
+            # Preserve wired input/output port names on existing edges while appending
+            # any new optional hyperparameter IOSpecs exposed by the replacement primitive!
+            wired_in = {e.input_name for e in mutated.edges if e.target_id == node_id}
+            kept_required = [
+                inp for inp in node.inputs if inp.required or inp.name in wired_in
+            ]
+            existing_names = {inp.name for inp in kept_required}
+            extra_optional = [
+                inp.model_copy(deep=True)
+                for inp in prim_meta.inputs
+                if not inp.required and inp.name not in existing_names
+            ]
+            new_inputs = kept_required + extra_optional
+            updates["inputs"] = new_inputs
+            updates["type_signature"] = format_canonical_type_signature(new_inputs, node.outputs)
+        mutated.nodes[idx] = node.model_copy(update=updates)
+        break
+    return mutated

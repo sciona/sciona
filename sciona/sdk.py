@@ -919,6 +919,45 @@ class Sciona:
             max_depth=max_depth,
         )
 
+    # -- fast prototyping loop ----------------------------------------------
+
+    def proto(
+        self,
+        cdg: CDGExport,
+        *,
+        goal: str = "",
+        harness: Any = None,
+        manifest_sqlite_path: str | Path | None = None,
+        hpo_trials_per_rung: int = 8,
+        max_sibling_evals: int = 5,
+        subdecompose_fn: Any = None,
+        micro_atom_synthesizer: Any = None,
+    ) -> Any:
+        """Create an in-process ``PrototypingSession`` for iterative CDG refinement."""
+        from sciona.principal.expansion import ExpansionEngine
+        from sciona.principal.expansion_rules import default_rule_sets
+        from sciona.prototyping.session import PrototypingSession
+
+        m_path: Path | None = Path(manifest_sqlite_path) if manifest_sqlite_path else None
+        if m_path is None:
+            default_manifest = Path.home() / ".sciona" / "manifest.sqlite"
+            if default_manifest.is_file():
+                m_path = default_manifest
+
+        exp_engine = ExpansionEngine(default_rule_sets())
+        return PrototypingSession(
+            cdg,
+            goal=goal,
+            harness=harness,
+            catalog=self._catalog,
+            manifest_sqlite_path=m_path,
+            expansion_engine=exp_engine,
+            subdecompose_fn=subdecompose_fn,
+            micro_atom_synthesizer=micro_atom_synthesizer,
+            hpo_trials_per_rung=hpo_trials_per_rung,
+            max_sibling_evals=max_sibling_evals,
+        )
+
     # -- source management --------------------------------------------------
 
     def list_sources(self) -> list[dict[str, Any]]:

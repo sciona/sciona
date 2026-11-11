@@ -177,6 +177,24 @@ class CreditAssigner:
     ) -> list[NodeGradient]:
         gradients: list[NodeGradient] = []
 
+        failed_nid = str((benchmark.runtime_artifacts or {}).get("failed_node_id") or "").strip()
+        if failed_nid and failed_nid in atomic_ids:
+            err_msg = str(
+                (benchmark.runtime_artifacts or {}).get("prune_reason")
+                or (benchmark.runtime_artifacts or {}).get("error")
+                or "runtime contract or guard violation"
+            )
+            return [
+                NodeGradient(
+                    node_id=failed_nid,
+                    gradient_score=100.0,
+                    metric_type=OptimizationMetric.PRECISION,
+                    bottleneck_reason=(
+                        f"Node '{node_names.get(failed_nid, failed_nid)}' failed directly: {err_msg}"
+                    ),
+                )
+            ]
+
         # Phase 3 directional risk attribution when CDGUncertaintyReport is attached
         u_rep = getattr(sim_report, "uncertainty_report", None)
         if u_rep is not None and getattr(u_rep, "risk_budget", None) is not None:

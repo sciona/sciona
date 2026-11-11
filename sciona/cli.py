@@ -62,6 +62,7 @@ from sciona.commands.optimize_cmds import (  # noqa: F401
     _cmd_optimize,
     _cmd_profile,
 )
+from sciona.commands.proto_cmds import _cmd_proto  # noqa: F401
 from sciona.commands.run_cmds import (  # noqa: F401
     _cmd_run,
 )
@@ -433,6 +434,105 @@ def main() -> None:
         choices=["lean4", "coq", "python"],
         default="lean4",
         help="Proof assistant (default: lean4)",
+    )
+
+    # --- proto (fast in-process test-revise loop) ---
+    proto_parser = subparsers.add_parser(
+        "proto",
+        help="Run fast in-process CDG prototyping & 5-rung iterative refinement loop",
+    )
+    proto_parser.add_argument(
+        "--cdg", type=str, default=None, help="Path to seed CDG JSON file"
+    )
+    proto_parser.add_argument(
+        "--goal",
+        type=str,
+        default=None,
+        help="Problem description (used to propose a seed CDG when --cdg is omitted)",
+    )
+    proto_parser.add_argument(
+        "--data",
+        type=str,
+        default=None,
+        help="Optional slice file (.json, .npz, .npy, .csv, .parquet) for Tier 2/3 evaluation",
+    )
+    proto_parser.add_argument(
+        "--target-key",
+        type=str,
+        default=None,
+        help="Target column/key name in --data when evaluating supervised loss",
+    )
+    proto_parser.add_argument(
+        "--metric",
+        choices=["rmse", "mae", "mse", "logloss", "error_rate", "latency_ms"],
+        default="rmse",
+        help="Objective metric for ResidentSliceHarness (default: rmse)",
+    )
+    proto_parser.add_argument(
+        "--max-iterations",
+        type=int,
+        default=6,
+        help="Maximum diagnose-revise iterations (default: 6)",
+    )
+    proto_parser.add_argument(
+        "--budget",
+        type=float,
+        default=15.0,
+        help="Wall-clock budget in seconds (default: 15.0)",
+    )
+    proto_parser.add_argument(
+        "--target-loss",
+        type=float,
+        default=None,
+        help="Optional early-stopping target loss threshold",
+    )
+    proto_parser.add_argument(
+        "--max-rung",
+        type=int,
+        default=4,
+        help="Highest revision ladder rung to attempt (1..4, default: 4)",
+    )
+    proto_parser.add_argument(
+        "--hpo-trials",
+        type=int,
+        default=8,
+        help="Optuna trials per Rung 1 bounded node HPO step (default: 8)",
+    )
+    proto_parser.add_argument(
+        "--catalog",
+        type=str,
+        default=None,
+        help="Optional catalog JSON file for Rung 1/2 lookup",
+    )
+    proto_parser.add_argument(
+        "--manifest",
+        type=str,
+        default=None,
+        help="Optional compiled manifest.sqlite path for Rung 2 sibling search & priors",
+    )
+    proto_parser.add_argument(
+        "--output-cdg",
+        type=str,
+        default=None,
+        help="Write winning CDG JSON + tuned params to this path",
+    )
+    proto_parser.add_argument(
+        "--export",
+        type=str,
+        default=None,
+        help="Export standalone runnable Python pipeline module (.py) to this path",
+    )
+    proto_parser.add_argument(
+        "--no-holdout",
+        action="store_true",
+        default=False,
+        help="Skip Tier 3 holdout evaluation at the end of the session",
+    )
+    proto_parser.add_argument(
+        "--json",
+        action="store_true",
+        default=False,
+        help="Emit structured JSON summary to stdout",
     )
 
     # --- optimize (Principal) ---
@@ -1176,6 +1276,8 @@ def main() -> None:
                 file=sys.stderr,
             )
             sys.exit(1)
+    elif args.command == "proto":
+        _run_async_command(_cmd_proto(args))
     elif args.command == "optimize":
         _run_async_command(_cmd_optimize(args))
     elif args.command == "profile":

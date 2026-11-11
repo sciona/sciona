@@ -905,13 +905,33 @@ async def compute_gradients(state: PrincipalState, config: RunnableConfig) -> di
                 "bottleneck_reason": top.bottleneck_reason,
             }
 
-    assigner = CreditAssigner()
-    gradients = assigner.compute_gradients(
-        state.cdg,
-        state.benchmark,
-        state.ghost_report,
-        state.metric,
-    )
+    gradients = []
+    if deps.problem_harness is not None or hasattr(deps.sandbox, "funnel"):
+        from sciona.prototyping.credit import UniversalCreditAssigner
+
+        live_funnel = getattr(deps.sandbox, "funnel", None)
+        live_harness = deps.problem_harness or getattr(live_funnel, "harness", None)
+        live_runner = getattr(live_funnel, "runner", None)
+        u_assigner = UniversalCreditAssigner()
+        gradients = u_assigner.compute_gradients(
+            state.cdg,
+            state.benchmark,
+            sim_report=state.ghost_report,
+            target=state.metric,
+            harness=live_harness,
+            runner=live_runner,
+            node_params=state.node_params or None,
+            match_results=state.match_results or None,
+        )
+
+    if not gradients:
+        assigner = CreditAssigner()
+        gradients = assigner.compute_gradients(
+            state.cdg,
+            state.benchmark,
+            state.ghost_report,
+            state.metric,
+        )
 
     if not gradients:
         logger.info("No gradients computed; ending optimisation loop.")
