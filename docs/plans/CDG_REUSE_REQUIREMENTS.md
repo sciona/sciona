@@ -3212,3 +3212,13 @@ contracts, not a claim of new direct execution. No recipe, numeric policy,
 state format or reuse boundary changes. This automated Tier 3 review remains
 unpublished pending expanded transactional and served-execution gates. See
 `osic_relocated_version_review.json`.
+
+The rollback rehearsal now covers all fifteen reviewed replacement versions:
+seventy-five logical operations insert 192 rows before rollback. Failures after
+operations 1, 37 and 75 fully restore the prior snapshot, and a repeat rehearsal
+is identical. Interfaces for all fifteen non-latest versions appear through the
+document RPC inside the transaction, confirming the need for atomic publication
+rather than persistent draft staging. No version rows remain after these checks.
+This expands transactional coverage; approval, committed-publication idempotency
+and served replacement execution are still pending. See
+`osic_relocated_all_versions_rehearsal.json`.

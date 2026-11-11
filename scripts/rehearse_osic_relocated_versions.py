@@ -1,6 +1,7 @@
 """Rollback-only rehearsal of provider versions; never persist unreviewed rows."""
 import hashlib
 import json
+import argparse
 from pathlib import Path
 import subprocess
 from uuid import UUID
@@ -39,12 +40,13 @@ class InjectedFailure(RuntimeError):
     pass
 
 
-def validate():
-    raw=subprocess.check_output(['git','show',PLAN_REVISION+':'+PLAN_PATH],cwd=ROOT)
+def validate(*,plan_revision=PLAN_REVISION,plan_path=PLAN_PATH,plan_loader=plan,records_key='records'):
+    raw=subprocess.check_output(['git','show',plan_revision+':'+plan_path],cwd=ROOT)
     expected=json.loads(raw)
-    if raw!=(ROOT/PLAN_PATH).read_bytes() or plan()!=expected:
+    if raw!=(ROOT/plan_path).read_bytes() or plan_loader()!=expected:
         raise ValueError('Reviewed version plan changed')
-    records=[r for r in expected['records'] if r['action']=='new_provider_version_required']
+    records=[r for r in expected[records_key]
+             if r.get('action','new_provider_version_required')=='new_provider_version_required']
     ids=[UUID(r['artifact_id']) for r in records]
     with connect() as db:
         db.execute('SET TRANSACTION READ ONLY')
@@ -131,12 +133,12 @@ def validate():
         else:raise ValueError('Expected injected failure')
         unchanged()
     repeat=rehearse();unchanged()
-    if repeat!=dry or plan()!=expected:
+    if repeat!=dry or plan_loader()!=expected:
         raise ValueError('Repeat rehearsal or source identities changed')
     return dict(passed=True,approved=False,catalog_mutations=0,rollback_only=True,
         providers=len(records),rehearsal=dry,fault_after_operations=points,
         all_rollbacks_complete=True,repeat_rehearsal_exact=True,
-        plan_revision=PLAN_REVISION,plan_sha256=hashlib.sha256(raw).hexdigest(),
+        plan_revision=plan_revision,plan_sha256=hashlib.sha256(raw).hexdigest(),
         validator_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         limitations=[
             'No apply mode: proposed non-latest versions remain unreviewed and are rolled back.',
@@ -146,6 +148,16 @@ def validate():
 
 
 if __name__=='__main__':
-    result=validate()
-    (ROOT/'docs/reviews/osic_relocated_version_rehearsal.json').write_text(json.dumps(result,indent=2)+'\n')
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--all-reviewed',action='store_true')
+    args=parser.parse_args()
+    if args.all_reviewed:
+        from scripts.review_osic_relocated_versions import review
+        result=validate(plan_revision='50df8535',plan_path='docs/reviews/osic_relocated_version_review.json',
+                        plan_loader=review,records_key='providers')
+        name='osic_relocated_all_versions_rehearsal.json'
+    else:
+        result=validate()
+        name='osic_relocated_version_rehearsal.json'
+    (ROOT/'docs/reviews'/name).write_text(json.dumps(result,indent=2)+'\n')
     print(json.dumps(result,indent=2))
