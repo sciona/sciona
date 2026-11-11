@@ -1,0 +1,773 @@
+{
+  "format": "osic-image-lifecycle-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "providers": [
+    {
+      "artifact_id": "e437fce2-43b1-5824-83f2-c61a41037717",
+      "fqdn": "sciona.atoms.ml.domain_adapters.osic_image_lifecycle.build_image_model",
+      "version_id": "426dc2ca-5571-5060-874d-1e920f760571",
+      "content_hash": "ddbb28e4c83fc9dd67a1c18fc70ceeaec9a01ce1e389d0779c67bee7f2b43e95",
+      "interfaces": [
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "tf_keras.Model",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Uncompiled random-initialized fixed EfficientNetB5 image/metadata model with one scalar linear output, GaussianNoise(0.2) and Dropout(0.5). No fitting, optimizer, pretrained weights or input normalization. Construction consumes caller RNG state. Require qualified efficientnet 1.1.0 and legacy Keras; caller establishes seeds and bounds compute threads. Concrete provisioned runtime only; abstract witness rejects. Fixed source architecture is adapter policy, separate from generic bounded prediction. Intermediate synthetic-checkpoint qualification only; no complete-training, original-CDG, empirical transfer, clean-install or HTTP transport claim."
+        }
+      ],
+      "operation": "Construct the fixed random-initialized B5 slope model without fitting. Require the qualified efficientnet 1.1.0 and legacy-Keras runtime. Inputs are image tensors (N,512,512,1) and metadata (N,4), output is (N,1). Preserve GaussianNoise(0.2), Dropout(0.5) and the source linear head. No pretrained weights, optimizer or normalization are supplied. Construction consumes caller RNG state; caller owns seeding, units and feature policy.",
+      "plain_description": "Create the fixed image model with new random weights, ready for a separate training step.",
+      "validity_bounds": "Uncompiled random-initialized fixed EfficientNetB5 image/metadata model with one scalar linear output, GaussianNoise(0.2) and Dropout(0.5). No fitting, optimizer, pretrained weights or input normalization. Construction consumes caller RNG state. Require qualified efficientnet 1.1.0 and legacy Keras; caller establishes seeds and bounds compute threads. Concrete provisioned runtime only; abstract witness rejects. Fixed source architecture is adapter policy, separate from generic bounded prediction. Intermediate synthetic-checkpoint qualification only; no complete-training, original-CDG, empirical transfer, clean-install or HTTP transport claim.",
+      "reuse": "Separate fixed-model construction, inference-state export and restore support explicit graph lifecycle boundaries. Generic bounded prediction remains independent; the fixed architecture and private coordinate meanings are not generalized into a universal model-state format.",
+      "registered_provider_dependencies": []
+    },
+    {
+      "artifact_id": "5ed8793f-4d36-579c-956c-dc9291c42bcf",
+      "fqdn": "sciona.atoms.ml.domain_adapters.osic_image_lifecycle.export_image_prediction_state",
+      "version_id": "04a50d2e-4066-5221-9e03-219e5e412508",
+      "content_hash": "e8f9f8db5b917c58c3f18fd0279f0090c2f4b25c333d166597ca31462041ccef",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "model",
+          "type_desc": "tf_keras.Model",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact fixed local B5 topology with a positive optimizer update counter and a complete finite float32 weight inventory. The counter is not evidence of complete training. Caller controls authenticity and invokes export outside live training; validation consumes RNG state."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "directory",
+          "type_desc": "str | pathlib.Path",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Caller-owned private filesystem location. Export requires a new directory and writes numeric weights and a strict manifest; failed I/O may leave partial files. Restore requires stable existing files, validates identities and uses NPZ with pickle disabled. Caller controls permissions, path trust and provenance. No remote transport or atomic snapshot guarantee."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "image_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit nonempty image-coordinate declaration, exact-match bound into the numeric state. Caller establishes intensity normalization, shape (N,512,512,1), units and source policy; labels alone do not establish equivalence."
+        },
+        {
+          "direction": "input",
+          "ordinal": 3,
+          "name": "metadata_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit nonempty metadata-coordinate declaration, exact-match bound into the numeric state. Caller establishes ordered four-component feature meaning, units and encoding; no mapping or normalization is inferred."
+        },
+        {
+          "direction": "input",
+          "ordinal": 4,
+          "name": "response_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit nonempty scalar slope-coordinate declaration, exact-match bound into the numeric state. Caller establishes units and compatibility with downstream baseline and query time coordinates."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Strict manifest describing private finite float32 numeric weights written into the new directory. Fixed local graph, model-code identity, ordered shapes, archive digest and coordinate labels are bound. No optimizer, callback or RNG state: inference only, not training resumption. Constructor validation consumes RNG state; I/O is not atomic. Concrete provisioned runtime only; abstract witness rejects. Fixed source architecture is adapter policy, separate from generic bounded prediction. Intermediate synthetic-checkpoint qualification only; no complete-training, original-CDG, empirical transfer, clean-install or HTTP transport claim."
+        }
+      ],
+      "operation": "Export fixed-model finite float32 weights and a strict numeric manifest. Require the exact local topology, a positive optimizer update counter and explicit nonempty coordinate declarations. The counter is not evidence of complete training. Write only into a new caller-owned private directory; return its manifest. Constructor-based validation consumes RNG state: run outside live training. No optimizer, callbacks or RNG state are exported, so the result supports inference only. Writes are not an atomic transaction; failed I/O may leave a partial directory. Caller controls paths and provenance.",
+      "plain_description": "Save the trained model weights and their declared meanings for later predictions.",
+      "validity_bounds": "Exact fixed local B5 topology with a positive optimizer update counter and a complete finite float32 weight inventory. The counter is not evidence of complete training. Caller controls authenticity and invokes export outside live training; validation consumes RNG state. Caller-owned private filesystem location. Export requires a new directory and writes numeric weights and a strict manifest; failed I/O may leave partial files. Restore requires stable existing files, validates identities and uses NPZ with pickle disabled. Caller controls permissions, path trust and provenance. No remote transport or atomic snapshot guarantee. Explicit nonempty image-coordinate declaration, exact-match bound into the numeric state. Caller establishes intensity normalization, shape (N,512,512,1), units and source policy; labels alone do not establish equivalence. Explicit nonempty metadata-coordinate declaration, exact-match bound into the numeric state. Caller establishes ordered four-component feature meaning, units and encoding; no mapping or normalization is inferred. Explicit nonempty scalar slope-coordinate declaration, exact-match bound into the numeric state. Caller establishes units and compatibility with downstream baseline and query time coordinates. Strict manifest describing private finite float32 numeric weights written into the new directory. Fixed local graph, model-code identity, ordered shapes, archive digest and coordinate labels are bound. No optimizer, callback or RNG state: inference only, not training resumption. Constructor validation consumes RNG state; I/O is not atomic. Concrete provisioned runtime only; abstract witness rejects. Fixed source architecture is adapter policy, separate from generic bounded prediction. Intermediate synthetic-checkpoint qualification only; no complete-training, original-CDG, empirical transfer, clean-install or HTTP transport claim.",
+      "reuse": "Separate fixed-model construction, inference-state export and restore support explicit graph lifecycle boundaries. Generic bounded prediction remains independent; the fixed architecture and private coordinate meanings are not generalized into a universal model-state format.",
+      "registered_provider_dependencies": []
+    },
+    {
+      "artifact_id": "ffc75b55-10ba-5b42-9ca2-f814bc96c583",
+      "fqdn": "sciona.atoms.ml.domain_adapters.osic_image_lifecycle.restore_image_prediction_state",
+      "version_id": "917815ff-b2f9-5c66-8baf-5f911de1f9bd",
+      "content_hash": "009935fa351e801fca3449730494a2c4f6e56c0674c3b63dcc2d33b2d5e3bea6",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "directory",
+          "type_desc": "str | pathlib.Path",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Caller-owned private filesystem location. Export requires a new directory and writes numeric weights and a strict manifest; failed I/O may leave partial files. Restore requires stable existing files, validates identities and uses NPZ with pickle disabled. Caller controls permissions, path trust and provenance. No remote transport or atomic snapshot guarantee."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "image_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit nonempty image-coordinate declaration, exact-match bound into the numeric state. Caller establishes intensity normalization, shape (N,512,512,1), units and source policy; labels alone do not establish equivalence."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "metadata_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit nonempty metadata-coordinate declaration, exact-match bound into the numeric state. Caller establishes ordered four-component feature meaning, units and encoding; no mapping or normalization is inferred."
+        },
+        {
+          "direction": "input",
+          "ordinal": 3,
+          "name": "response_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit nonempty scalar slope-coordinate declaration, exact-match bound into the numeric state. Caller establishes units and compatibility with downstream baseline and query time coordinates."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "tf_keras.Model",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Uncompiled fixed local model with exact finite float32 weights restored after manifest, coordinate, graph, model-code, inventory and archive checks. No fitting, optimizer state or executable graph deserialization. Construction consumes RNG state. Digests do not establish provenance or defend against concurrent file changes. Concrete provisioned runtime only; abstract witness rejects. Fixed source architecture is adapter policy, separate from generic bounded prediction. Intermediate synthetic-checkpoint qualification only; no complete-training, original-CDG, empirical transfer, clean-install or HTTP transport claim."
+        }
+      ],
+      "operation": "Restore the fixed local model from private numeric inference state. Validate exact manifest fields, caller coordinates, local model-code and graph identities, archive digest and ordered finite float32 weight shapes. Load NPZ with pickle disabled and reconstruct locally; do not deserialize executable model graphs or fit. Return an uncompiled model without optimizer state. Construction consumes RNG state. Caller establishes authenticity, trusted directory access and stable files; hashes alone are not provenance.",
+      "plain_description": "Rebuild the fixed model from saved numeric weights without training it again.",
+      "validity_bounds": "Caller-owned private filesystem location. Export requires a new directory and writes numeric weights and a strict manifest; failed I/O may leave partial files. Restore requires stable existing files, validates identities and uses NPZ with pickle disabled. Caller controls permissions, path trust and provenance. No remote transport or atomic snapshot guarantee. Explicit nonempty image-coordinate declaration, exact-match bound into the numeric state. Caller establishes intensity normalization, shape (N,512,512,1), units and source policy; labels alone do not establish equivalence. Explicit nonempty metadata-coordinate declaration, exact-match bound into the numeric state. Caller establishes ordered four-component feature meaning, units and encoding; no mapping or normalization is inferred. Explicit nonempty scalar slope-coordinate declaration, exact-match bound into the numeric state. Caller establishes units and compatibility with downstream baseline and query time coordinates. Uncompiled fixed local model with exact finite float32 weights restored after manifest, coordinate, graph, model-code, inventory and archive checks. No fitting, optimizer state or executable graph deserialization. Construction consumes RNG state. Digests do not establish provenance or defend against concurrent file changes. Concrete provisioned runtime only; abstract witness rejects. Fixed source architecture is adapter policy, separate from generic bounded prediction. Intermediate synthetic-checkpoint qualification only; no complete-training, original-CDG, empirical transfer, clean-install or HTTP transport claim.",
+      "reuse": "Separate fixed-model construction, inference-state export and restore support explicit graph lifecycle boundaries. Generic bounded prediction remains independent; the fixed architecture and private coordinate meanings are not generalized into a universal model-state format.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "connected_execution": {
+    "passed": true,
+    "approved": false,
+    "catalog_mutations": 0,
+    "synthetic_only": true,
+    "state_qualification": {
+      "format": "osic-image-state.v1",
+      "passed": true,
+      "approved": false,
+      "catalog_mutations": 0,
+      "synthetic_only": true,
+      "full_training_schedule_complete": false,
+      "execution": {
+        "intermediate_optimizer_updates": 96,
+        "weight_arrays": 738,
+        "parameters": 28514709,
+        "fresh_process_replay": {
+          "passed": true,
+          "queries": 3,
+          "exact_predictions": true,
+          "fitting_disabled": true,
+          "hdf5_loading_disabled": true,
+          "optimizer_state_absent": true
+        },
+        "corruption_cases_rejected": [
+          "unknown_format",
+          "executable_field",
+          "architecture",
+          "image_coordinate",
+          "metadata_coordinate",
+          "response_coordinate",
+          "code_identity",
+          "archive_identity",
+          "graph_identity",
+          "weight_inventory"
+        ],
+        "private_artifacts_unchanged": true,
+        "runtime": {
+          "legacy_keras": "2.20.1",
+          "numpy": "2.2.6"
+        },
+        "resource_policy": {
+          "native_threads": 1,
+          "dataset_workers": 1,
+          "export_and_replay_sequential": true
+        }
+      },
+      "dependency_archive_sha256": {
+        "efficientnet-1.1.0-py3-none-any.whl": "4f8a56d15e9c44e9a62dae35404079724c4a1d9e9bfbcfd2a18077e5eda58bf7",
+        "Keras_Applications-1.0.8-py3-none-any.whl": "df4323692b8c1174af821bf906f1e442e63fa7589bf0f1230a0b6bdc5a810c95",
+        "keras-applications-source.zip": "ff87b242e5de063242132c7c8a1155679c084123b857d25adec626d1374a54b4"
+      },
+      "software_sha256": {
+        "sciona/osic_image_state.py": "876b5328b675634e0a18e42589aee8d444cf50eb1a5824cab8d01bc663817a54",
+        "sciona/osic_image_model.py": "403ff9e7f6f3a2ba362c599abc68910c527a831366cff8a2563b2828db7618df",
+        "sciona/osic_image_predictor.py": "337f73be79f20d9472c490d9efbe539d42f0c70581ae6e44dca16fbf748d077d",
+        "sciona/keras_bounded_prediction.py": "fe36ca313054cd1b6c3882f59139a6228d306fd92d06e469c1abc1ac3e570d55",
+        "scripts/validate_osic_image_state.py": "f37279187dc05185f4d2b86b69552f15143bf46f463368136b84a38462b39ddc"
+      },
+      "limitations": [
+        "Intermediate synthetic training checkpoint only; complete 30-epoch training is still pending.",
+        "Numeric inference state excludes optimizer/callback/random state and cannot resume training.",
+        "Coordinate labels are caller declarations; authenticity requires external artifact provenance.",
+        "Restore invokes only the fixed local model constructor and numeric weight loading; no serialized model graph is executed.",
+        "This does not complete raw-input trained inference, the final two-branch graph or publication gates."
+      ]
+    },
+    "provider_calls": {
+      "export": {
+        "build_image_model": 3,
+        "export_image_prediction_state": 1,
+        "restore_image_prediction_state": 10
+      },
+      "fresh_replay": {
+        "build_image_model": 1,
+        "export_image_prediction_state": 0,
+        "restore_image_prediction_state": 1
+      }
+    },
+    "private_source_unchanged": true,
+    "abstract_execution_rejected": true,
+    "provider_sha256": "2ecbb4534946cec76e88c0ac05426a8c97db4c97d3833028b6e36d364d4ac3d7",
+    "validator_sha256": "3a229e60b85f348b4eee4dcb5bcdb8b0282754379033eb58dc20af3ca298f6f8",
+    "limitations": [
+      "Fixed source B5 architecture and private numeric inference state; not a general model serialization format.",
+      "Intermediate synthetic checkpoint only; no full-training or original-CDG approval.",
+      "Coordinates and provenance are caller declarations; numeric digests do not establish authenticity.",
+      "Model construction consumes RNG state. Export is inference-only and may leave partial files on I/O failure.",
+      "Export and fresh replay run sequentially with one compute thread and one dataset worker."
+    ]
+  },
+  "software_sha256": {
+    "sciona/osic_image_model.py": "403ff9e7f6f3a2ba362c599abc68910c527a831366cff8a2563b2828db7618df",
+    "sciona/osic_image_state.py": "876b5328b675634e0a18e42589aee8d444cf50eb1a5824cab8d01bc663817a54",
+    "provider_dependencies": "118a04efead6c9b220cc88099e72e580c53eb223c8b40bcb793ae49ca2266a1f",
+    "provider": "2ecbb4534946cec76e88c0ac05426a8c97db4c97d3833028b6e36d364d4ac3d7",
+    "scripts/review_osic_image_lifecycle_semantics.py": "ee61c4c05228fe2385b33963b80148a3287819c20b06b3c3bf912225dd6a7faa",
+    "scripts/import_osic_image_lifecycle_drafts.py": "f3b567cae7beb58a1f2d70cc0f4864b8a7d630f48aba46e1549ecd0b0d57f4bb",
+    "scripts/plan_osic_image_lifecycle_intake.py": "ce13c667acb7314f4fb15bfa6a5f7f4aa204d5f7783f88c770c27b54ff63ad04",
+    "scripts/validate_osic_image_lifecycle_providers.py": "3a229e60b85f348b4eee4dcb5bcdb8b0282754379033eb58dc20af3ca298f6f8",
+    "scripts/validate_osic_image_state.py": "f37279187dc05185f4d2b86b69552f15143bf46f463368136b84a38462b39ddc",
+    "scripts/review_osic_runtime_integrity.py": "4b2cbc1751fd5262eb6c4bdb32afb32fb9d4366aa23d937797cbf6ff22e80797",
+    "scripts/review_video_numeric_runtime.py": "f0e5acb6f7820467a521c8186a54eca0591cdcbc0125c66c446539c506cdb3ac",
+    "scripts/review_osic_archive_notices.py": "a7a520f96453b5a41fe1aabd56b02e3fab0296165410423fa7ac830aa7be6eae"
+  },
+  "installed_packages": {
+    "absl-py": {
+      "version": "2.5.0",
+      "hashed_files_verified": 31,
+      "active_requirements": []
+    },
+    "annotated-types": {
+      "version": "0.7.0",
+      "hashed_files_verified": 7,
+      "active_requirements": []
+    },
+    "asttokens": {
+      "version": "2.4.1",
+      "hashed_files_verified": 13,
+      "active_requirements": [
+        "six>=1.12.0"
+      ]
+    },
+    "astunparse": {
+      "version": "1.6.3",
+      "hashed_files_verified": 11,
+      "active_requirements": [
+        "six<2.0,>=1.6.1",
+        "wheel<1.0,>=0.23.0"
+      ]
+    },
+    "certifi": {
+      "version": "2026.7.22",
+      "hashed_files_verified": 13,
+      "active_requirements": []
+    },
+    "charset-normalizer": {
+      "version": "3.5.1",
+      "hashed_files_verified": 23,
+      "active_requirements": []
+    },
+    "flatbuffers": {
+      "version": "25.12.19",
+      "hashed_files_verified": 14,
+      "active_requirements": []
+    },
+    "gast": {
+      "version": "0.7.0",
+      "hashed_files_verified": 13,
+      "active_requirements": []
+    },
+    "google-pasta": {
+      "version": "0.2.0",
+      "hashed_files_verified": 30,
+      "active_requirements": [
+        "six"
+      ]
+    },
+    "grpcio": {
+      "version": "1.83.1",
+      "hashed_files_verified": 67,
+      "active_requirements": [
+        "typing-extensions~=4.12"
+      ]
+    },
+    "h5py": {
+      "version": "3.16.0",
+      "hashed_files_verified": 103,
+      "active_requirements": [
+        "numpy>=1.21.2"
+      ]
+    },
+    "icontract": {
+      "version": "2.7.3",
+      "hashed_files_verified": 16,
+      "active_requirements": [
+        "asttokens<3,>=2",
+        "typing_extensions"
+      ]
+    },
+    "idna": {
+      "version": "3.19",
+      "hashed_files_verified": 18,
+      "active_requirements": []
+    },
+    "imageio": {
+      "version": "2.37.3",
+      "hashed_files_verified": 66,
+      "active_requirements": [
+        "numpy",
+        "pillow>=8.3.2"
+      ]
+    },
+    "joblib": {
+      "version": "1.5.3",
+      "hashed_files_verified": 143,
+      "active_requirements": []
+    },
+    "keras": {
+      "version": "3.15.1",
+      "hashed_files_verified": 910,
+      "active_requirements": [
+        "absl-py",
+        "h5py",
+        "ml-dtypes",
+        "namex",
+        "numpy",
+        "optree",
+        "packaging",
+        "rich"
+      ]
+    },
+    "lazy-loader": {
+      "version": "0.5",
+      "hashed_files_verified": 6,
+      "active_requirements": [
+        "packaging"
+      ]
+    },
+    "libclang": {
+      "version": "18.1.1",
+      "hashed_files_verified": 11,
+      "active_requirements": []
+    },
+    "markdown": {
+      "version": "3.10.3",
+      "hashed_files_verified": 41,
+      "active_requirements": []
+    },
+    "markdown-it-py": {
+      "version": "4.2.0",
+      "hashed_files_verified": 76,
+      "active_requirements": [
+        "mdurl~=0.1"
+      ]
+    },
+    "markupsafe": {
+      "version": "3.0.3",
+      "hashed_files_verified": 11,
+      "active_requirements": []
+    },
+    "mdurl": {
+      "version": "0.1.2",
+      "hashed_files_verified": 11,
+      "active_requirements": []
+    },
+    "ml-dtypes": {
+      "version": "0.6.0",
+      "hashed_files_verified": 11,
+      "active_requirements": [
+        "numpy>=2.0.0",
+        "numpy>=2.1.0; python_version >= \"3.13\""
+      ]
+    },
+    "namex": {
+      "version": "0.1.0",
+      "hashed_files_verified": 10,
+      "active_requirements": []
+    },
+    "networkx": {
+      "version": "3.6.1",
+      "hashed_files_verified": 602,
+      "active_requirements": []
+    },
+    "numpy": {
+      "version": "2.2.6",
+      "hashed_files_verified": 876,
+      "active_requirements": []
+    },
+    "opencv-python-headless": {
+      "version": "5.0.0.93",
+      "hashed_files_verified": 145,
+      "active_requirements": [
+        "numpy>=2; python_version >= \"3.9\""
+      ]
+    },
+    "opt-einsum": {
+      "version": "3.4.0",
+      "hashed_files_verified": 32,
+      "active_requirements": []
+    },
+    "optree": {
+      "version": "0.20.0",
+      "hashed_files_verified": 25,
+      "active_requirements": [
+        "typing-extensions>=4.10.0",
+        "typing-extensions>=4.12.0; python_version >= \"3.13\""
+      ]
+    },
+    "packaging": {
+      "version": "26.3",
+      "hashed_files_verified": 30,
+      "active_requirements": []
+    },
+    "pandas": {
+      "version": "2.3.3",
+      "hashed_files_verified": 1513,
+      "active_requirements": [
+        "numpy>=1.26.0; python_version >= \"3.12\"",
+        "python-dateutil>=2.8.2",
+        "pytz>=2020.1",
+        "tzdata>=2022.7"
+      ]
+    },
+    "pillow": {
+      "version": "12.3.0",
+      "hashed_files_verified": 140,
+      "active_requirements": []
+    },
+    "protobuf": {
+      "version": "6.33.5",
+      "hashed_files_verified": 60,
+      "active_requirements": []
+    },
+    "pydantic": {
+      "version": "2.12.5",
+      "hashed_files_verified": 111,
+      "active_requirements": [
+        "annotated-types>=0.6.0",
+        "pydantic-core==2.41.5",
+        "typing-extensions>=4.14.1",
+        "typing-inspection>=0.4.2"
+      ]
+    },
+    "pydantic-core": {
+      "version": "2.41.5",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.14.1"
+      ]
+    },
+    "pygments": {
+      "version": "2.21.0",
+      "hashed_files_verified": 351,
+      "active_requirements": []
+    },
+    "python-dateutil": {
+      "version": "2.9.0.post0",
+      "hashed_files_verified": 25,
+      "active_requirements": [
+        "six>=1.5"
+      ]
+    },
+    "pytz": {
+      "version": "2026.1.post1",
+      "hashed_files_verified": 616,
+      "active_requirements": []
+    },
+    "requests": {
+      "version": "2.34.2",
+      "hashed_files_verified": 27,
+      "active_requirements": [
+        "certifi>=2023.5.7",
+        "charset_normalizer<4,>=2",
+        "idna<4,>=2.5",
+        "urllib3<3,>=1.26"
+      ]
+    },
+    "rich": {
+      "version": "15.0.0",
+      "hashed_files_verified": 106,
+      "active_requirements": [
+        "markdown-it-py>=2.2.0",
+        "pygments<3.0.0,>=2.13.0"
+      ]
+    },
+    "scikit-image": {
+      "version": "0.26.0",
+      "hashed_files_verified": 310,
+      "active_requirements": [
+        "imageio!=2.35.0,>=2.33",
+        "lazy-loader>=0.4",
+        "networkx>=3.0",
+        "numpy>=1.24",
+        "packaging>=21",
+        "pillow>=10.1",
+        "scipy>=1.11.4",
+        "tifffile>=2022.8.12"
+      ]
+    },
+    "scikit-learn": {
+      "version": "1.8.0",
+      "hashed_files_verified": 960,
+      "active_requirements": [
+        "joblib>=1.3.0",
+        "numpy>=1.24.1",
+        "scipy>=1.10.0",
+        "threadpoolctl>=3.2.0"
+      ]
+    },
+    "scipy": {
+      "version": "1.17.1",
+      "hashed_files_verified": 1423,
+      "active_requirements": [
+        "numpy<2.7,>=1.26.4"
+      ]
+    },
+    "setuptools": {
+      "version": "80.9.0",
+      "hashed_files_verified": 513,
+      "active_requirements": []
+    },
+    "six": {
+      "version": "1.17.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "tensorboard": {
+      "version": "2.20.0",
+      "hashed_files_verified": 273,
+      "active_requirements": [
+        "absl-py>=0.4",
+        "grpcio>=1.48.2",
+        "markdown>=2.6.8",
+        "numpy>=1.12.0",
+        "packaging",
+        "pillow",
+        "protobuf!=4.24.0,>=3.19.6",
+        "setuptools>=41.0.0",
+        "tensorboard-data-server<0.8.0,>=0.7.0",
+        "werkzeug>=1.0.1"
+      ]
+    },
+    "tensorboard-data-server": {
+      "version": "0.7.2",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "tensorflow": {
+      "version": "2.20.0",
+      "hashed_files_verified": 11548,
+      "active_requirements": [
+        "absl-py>=1.0.0",
+        "astunparse>=1.6.0",
+        "flatbuffers>=24.3.25",
+        "gast!=0.5.0,!=0.5.1,!=0.5.2,>=0.2.1",
+        "google_pasta>=0.1.1",
+        "grpcio<2.0,>=1.24.3",
+        "h5py>=3.11.0",
+        "keras>=3.10.0",
+        "libclang>=13.0.0",
+        "ml_dtypes<1.0.0,>=0.5.1",
+        "numpy>=1.26.0",
+        "opt_einsum>=2.3.2",
+        "packaging",
+        "protobuf>=5.28.0",
+        "requests<3,>=2.21.0",
+        "setuptools",
+        "six>=1.12.0",
+        "tensorboard~=2.20.0",
+        "termcolor>=1.1.0",
+        "typing_extensions>=3.6.6",
+        "wrapt>=1.11.0"
+      ]
+    },
+    "termcolor": {
+      "version": "3.3.0",
+      "hashed_files_verified": 9,
+      "active_requirements": []
+    },
+    "tf-keras": {
+      "version": "2.20.1",
+      "hashed_files_verified": 591,
+      "active_requirements": [
+        "tensorflow<2.21,>=2.20"
+      ]
+    },
+    "threadpoolctl": {
+      "version": "3.6.0",
+      "hashed_files_verified": 5,
+      "active_requirements": []
+    },
+    "tifffile": {
+      "version": "2026.4.11",
+      "hashed_files_verified": 21,
+      "active_requirements": [
+        "numpy>=2.0"
+      ]
+    },
+    "typing-extensions": {
+      "version": "4.16.0",
+      "hashed_files_verified": 6,
+      "active_requirements": []
+    },
+    "typing-inspection": {
+      "version": "0.4.2",
+      "hashed_files_verified": 9,
+      "active_requirements": [
+        "typing-extensions>=4.12.0"
+      ]
+    },
+    "tzdata": {
+      "version": "2025.3",
+      "hashed_files_verified": 633,
+      "active_requirements": []
+    },
+    "urllib3": {
+      "version": "2.7.0",
+      "hashed_files_verified": 43,
+      "active_requirements": []
+    },
+    "werkzeug": {
+      "version": "3.1.8",
+      "hashed_files_verified": 64,
+      "active_requirements": [
+        "markupsafe>=2.1.1"
+      ]
+    },
+    "wheel": {
+      "version": "0.48.0",
+      "hashed_files_verified": 22,
+      "active_requirements": [
+        "packaging>=24.0"
+      ]
+    },
+    "wrapt": {
+      "version": "2.4.1",
+      "hashed_files_verified": 22,
+      "active_requirements": []
+    }
+  },
+  "intake_plan_sha256": "d71e7b838343663603f1856bbbd04441b3b42e9f919133e7195c654dc057a623",
+  "connected_execution_commit": "dc5718f3",
+  "connected_execution_sha256": "b7e3a9e9173f44dea915e5364a2bbcfa6507ed6229fb2b879ade8081f9cec201",
+  "archive_notices": {
+    "format": "osic-archive-notices.v1",
+    "passed": true,
+    "approved": false,
+    "catalog_mutations": 0,
+    "package_installations": 0,
+    "source_notice": {
+      "declared_license": "Unlicense",
+      "notice_sha256": "6b0382b16279f26ff69014300541967a356a666eb0b91b422f6862f6b7dad17e",
+      "retained_notice": "docs/licenses/OSIC-source-Unlicense.txt"
+    },
+    "dependency_notices": {
+      "efficientnet": {
+        "archive": "efficientnet-1.1.0-py3-none-any.whl",
+        "archive_sha256": "4f8a56d15e9c44e9a62dae35404079724c4a1d9e9bfbcfd2a18077e5eda58bf7",
+        "version": "1.1.0",
+        "declared_license": "Apache-2.0",
+        "notice_sha256": "e486cea90cab95bee73cbe32de74e5e8e84ba4e87228e837be71af9e41a55203",
+        "retained_notice": "docs/licenses/Cassava-qubvel-efficientnet-Apache-2.0.txt"
+      },
+      "keras-applications": {
+        "archive": "Keras_Applications-1.0.8-py3-none-any.whl",
+        "archive_sha256": "df4323692b8c1174af821bf906f1e442e63fa7589bf0f1230a0b6bdc5a810c95",
+        "version": "1.0.8",
+        "declared_license": "MIT",
+        "notice_sha256": "82e4461dcead03930115f469fd487dc1e60421119e36b25c5be707f1dba08170",
+        "retained_notice": "docs/licenses/OSIC-Keras-Applications-MIT.txt"
+      },
+      "pydicom": {
+        "archive": "pydicom-3.0.1-py3-none-any.whl",
+        "archive_sha256": "db32f78b2641bd7972096b8289111ddab01fb221610de8d7afa835eb938adb41",
+        "version": "3.0.1",
+        "declared_license": "MIT",
+        "notice_sha256": "39b3259cb15151df25167119087df1fef33624765e639af42447ba6fe86dada3",
+        "retained_notice": "docs/licenses/OSIC-pydicom-MIT.txt",
+        "additional_notice": "GDCM-derived private dictionary portions: three-clause BSD terms retained in the same file"
+      }
+    },
+    "keras_applications_source_wheel_notice_equal": true,
+    "active_direct_requirements": [
+      {
+        "distribution": "efficientnet",
+        "requirement": "keras-applications<=1.0.8,>=1.0.7",
+        "resolved_version": "1.0.8",
+        "resolution": "pinned_overlay"
+      },
+      {
+        "distribution": "efficientnet",
+        "requirement": "scikit-image",
+        "resolved_version": "0.26.0",
+        "resolution": "provisioned_environment"
+      },
+      {
+        "distribution": "keras-applications",
+        "requirement": "numpy>=1.9.1",
+        "resolved_version": "2.2.6",
+        "resolution": "provisioned_environment"
+      },
+      {
+        "distribution": "keras-applications",
+        "requirement": "h5py",
+        "resolved_version": "3.16.0",
+        "resolution": "provisioned_environment"
+      }
+    ],
+    "reviewer_sha256": "a7a520f96453b5a41fe1aabd56b02e3fab0296165410423fa7ac830aa7be6eae",
+    "limitations": [
+      "Exact declared source/archive notices only; not an independent legal opinion or complete redistribution approval.",
+      "Installed transitive runtime packages, native library notices and dependency provenance require their own review.",
+      "No optional extras are enabled by this review; codec availability and actual plugin selection remain separate runtime checks.",
+      "The existing efficientnet notice is reused byte-for-byte; its historical filename does not narrow its applicability.",
+      "Full original workflow training, provider registration and publication gates remain pending."
+    ]
+  },
+  "resource_policy": {
+    "native_threads": 1,
+    "dataset_workers": 1,
+    "foreground_cpu_budget": 2
+  },
+  "limitations": [
+    "Automated Tier 3 for provisioned concrete in-process execution only; abstract witnesses reject. No human Tier 1 or empirical Tier 2 claim.",
+    "The fixed B5 topology and source head remain explicit adapter policy. Generic bounded prediction remains independently reusable. Caller mappings and new-domain effectiveness require separate qualification.",
+    "Caller owns feature ordering, image normalization, metadata and response meanings, coordinate declarations, random seeds, model compute limits and private artifact provenance. Coordinate equality is not evidence of semantic equivalence.",
+    "Model construction consumes RNG state. State export constructs a reference model to validate topology, so it must run outside live training. Initialization does not reproduce the source notebook random stream consumed by unused architectures.",
+    "Export requires a positive optimizer update counter but does not establish schedule completion. Numeric state excludes optimizer, callback and random state and cannot resume training.",
+    "Export requires a new private directory; writes are not atomic and failed I/O can leave a partial directory. Caller controls trusted paths, permissions and stable files. This is not a concurrent storage protocol.",
+    "Restore reconstructs only the fixed local model, checks numeric weight inventory and uses NPZ with pickle disabled. Hash and graph checks do not authenticate artifact origin. The returned model is uncompiled and has no optimizer state.",
+    "Intermediate synthetic-checkpoint evidence covers exact fresh-process predictions with training and HDF5 loading disabled, plus ten manifest corruptions. It does not complete the 30-epoch image training schedule or the original CDG.",
+    "Qualified installed TensorFlow, legacy Keras and archive runtime are required. Installed RECORD and archive notice checks do not establish clean installation, publisher authenticity or redistribution approval.",
+    "Private model objects and local numeric state have no qualified HTTP transport or abstract simulation. Caller must bound compute threads; prediction additionally reserves one dataset worker."
+  ]
+}
