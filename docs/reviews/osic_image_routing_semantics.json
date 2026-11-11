@@ -1,0 +1,217 @@
+{
+  "format": "osic-image-routing-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "providers": [
+    {
+      "artifact_id": "ff9ae632-4ec5-5bfa-8886-58852ed4026c",
+      "fqdn": "sciona.atoms.ml.domain_adapters.osic_image_routing.route_and_predict",
+      "version_id": "51d708c7-4def-56c1-9f7d-b9f2bafa3921",
+      "content_hash": "ae9b805649e40235b4a785d6647628cf4334ef1eb56413eb86b701598ec15218",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "baselines",
+          "type_desc": "pandas.DataFrame",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty exact mapped columns entity,time,target,numeric,category_a,category_b,uncertainty with unique columns and unique nonempty string entities. Time,target,numeric,uncertainty must be finite int64 or float64. Preserve baseline entity order. Caller establishes category meanings, compatible time/response coordinates and availability; no source schema inference."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "queries",
+          "type_desc": "pandas.DataFrame",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Nonempty exact mapped columns key,entity,time with unique columns, unique nonempty string keys, nonempty string entities covered by baselines and int64 times. Preserve query order, including interleaved entities. Keys are opaque caller identities; no query ordering or availability inference."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "planes",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact baseline entity key coverage. Values are source-ordered encoded image records accepted by the injected preparation function. This adapter does not decode or inspect image payloads; caller establishes ordering and provenance."
+        },
+        {
+          "direction": "input",
+          "ordinal": 3,
+          "name": "model",
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Caller-trusted model accepted by predict_function, shared across entities. No construction, training, state loading, purity or concurrency guarantee."
+        },
+        {
+          "direction": "input",
+          "ordinal": 4,
+          "name": "batch_size",
+          "type_desc": "int",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit Python int exactly 32, excluding bool, to preserve this source policy. Generic bounded prediction is a separate callable and supports broader batch sizes."
+        },
+        {
+          "direction": "input",
+          "ordinal": 5,
+          "name": "prepare_function",
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Trusted callable invoked once per baseline entity as prepare_function(records,numeric,category_a,category_b). Return mapping containing images,metadata,selected_positions. Positions must be strictly increasing int64 rank-one array, at least two entries, within record bounds. Caller provides compatible selected image/metadata populations; source preparation policy is separately bound in the graph."
+        },
+        {
+          "direction": "input",
+          "ordinal": 6,
+          "name": "select_function",
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Trusted callable invoked as select_function(prepared,[\"images\",\"metadata\"]) once per entity, returning ordered predictor inputs. Caller binds explicit field selection semantics; no implicit conversion or schema inference."
+        },
+        {
+          "direction": "input",
+          "ordinal": 7,
+          "name": "predict_function",
+          "type_desc": "object",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Trusted callable invoked as predict_function(model,inputs,batch_size) once per entity. Return finite float32 or float64 ndarray of shape (selected_count,1), with consistent dtype across entities. Caller owns model compatibility, inference semantics, units, native thread limits and prediction dataset-worker allocation. Callbacks may retain references; no global memory bound."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "tuple",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Eight-item tuple in exact order: list of scalar slice prediction arrays; baseline time vector; baseline target vector; baseline uncertainty vector; int64 query entity-index vector into baseline order; query time vector; query-key list; list of selected-position arrays. Preserve prediction dtype and original baseline/query order. Vectors and prediction arrays may borrow references. Local prepared-image/input references are released between entities, but callbacks or returned views may retain data. No trajectory reduction or branch blending. Concrete in-process execution only; abstract witness rejects. Source-specific orchestration with separately injected computations. Synthetic evidence establishes routing and graph wiring over intermediate numeric state, not completed training, empirical effectiveness, HTTP transport or original-CDG approval."
+        }
+      ],
+      "operation": "Route image entities sequentially and expose inputs for separate reduction. Require exact mapped baseline/query tables, unique identities and full plane coverage. Preserve baseline entity and query order. Use explicit source batch size 32. Invoke supplied preparation, ordered field selection and prediction once per entity; callables and model code remain caller-trusted. Validate finite scalar slice predictions and consistent float32/float64 dtype. Release local prepared-image references between entities; arbitrary callbacks can retain their own references, so this is not a global memory bound. Return slice-slope lists, baseline time/value/uncertainty vectors, query entity indices, query times, query keys and selected positions as an eight-item tuple. No trajectory reduction, model construction, fitting or branch blending is performed by this dispatcher. Caller owns units, mappings and availability. Bound compute threads and reserve the prediction callback's dataset worker.",
+      "plain_description": "Route each mapped entity through explicit preparation, selection and prediction, then return scalar predictions and aligned coordinates for separate reduction.",
+      "validity_bounds": "Nonempty exact mapped columns entity,time,target,numeric,category_a,category_b,uncertainty with unique columns and unique nonempty string entities. Time,target,numeric,uncertainty must be finite int64 or float64. Preserve baseline entity order. Caller establishes category meanings, compatible time/response coordinates and availability; no source schema inference. Nonempty exact mapped columns key,entity,time with unique columns, unique nonempty string keys, nonempty string entities covered by baselines and int64 times. Preserve query order, including interleaved entities. Keys are opaque caller identities; no query ordering or availability inference. Exact baseline entity key coverage. Values are source-ordered encoded image records accepted by the injected preparation function. This adapter does not decode or inspect image payloads; caller establishes ordering and provenance. Caller-trusted model accepted by predict_function, shared across entities. No construction, training, state loading, purity or concurrency guarantee. Explicit Python int exactly 32, excluding bool, to preserve this source policy. Generic bounded prediction is a separate callable and supports broader batch sizes. Trusted callable invoked once per baseline entity as prepare_function(records,numeric,category_a,category_b). Return mapping containing images,metadata,selected_positions. Positions must be strictly increasing int64 rank-one array, at least two entries, within record bounds. Caller provides compatible selected image/metadata populations; source preparation policy is separately bound in the graph. Trusted callable invoked as select_function(prepared,[\"images\",\"metadata\"]) once per entity, returning ordered predictor inputs. Caller binds explicit field selection semantics; no implicit conversion or schema inference. Trusted callable invoked as predict_function(model,inputs,batch_size) once per entity. Return finite float32 or float64 ndarray of shape (selected_count,1), with consistent dtype across entities. Caller owns model compatibility, inference semantics, units, native thread limits and prediction dataset-worker allocation. Callbacks may retain references; no global memory bound. Eight-item tuple in exact order: list of scalar slice prediction arrays; baseline time vector; baseline target vector; baseline uncertainty vector; int64 query entity-index vector into baseline order; query time vector; query-key list; list of selected-position arrays. Preserve prediction dtype and original baseline/query order. Vectors and prediction arrays may borrow references. Local prepared-image/input references are released between entities, but callbacks or returned views may retain data. No trajectory reduction or branch blending. Concrete in-process execution only; abstract witness rejects. Source-specific orchestration with separately injected computations. Synthetic evidence establishes routing and graph wiring over intermediate numeric state, not completed training, empirical effectiveness, HTTP transport or original-CDG approval.",
+      "reuse": "Narrow source population adapter preserves independent reuse of injected preparation, field selection, prediction and downstream reduction. Changing application requires explicit compatible mappings, coordinates and policies; no empirical cross-domain transfer claim.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "connected_execution": {
+    "passed": true,
+    "approved": false,
+    "catalog_mutations": 0,
+    "synthetic_only": true,
+    "cases": [
+      {
+        "dtype": "float32",
+        "entities": 2,
+        "queries": 4,
+        "exact_source_routing": true,
+        "query_order_preserved": true,
+        "prepared_arrays_released": true,
+        "calls": {
+          "prepare": 2,
+          "select": 2,
+          "predict": 2
+        }
+      },
+      {
+        "dtype": "float64",
+        "entities": 2,
+        "queries": 4,
+        "exact_source_routing": true,
+        "query_order_preserved": true,
+        "prepared_arrays_released": true,
+        "calls": {
+          "prepare": 2,
+          "select": 2,
+          "predict": 2
+        }
+      }
+    ],
+    "rejected_contracts": [
+      "duplicate_entity",
+      "unknown_entity",
+      "duplicate_keys",
+      "fractional_time_dtype",
+      "nonfinite",
+      "missing_planes",
+      "wrong_batch",
+      "boolean_batch",
+      "abstract_execution"
+    ],
+    "provider_sha256": "c2945ee1e9be250c855d38b987b818e2b7fff72692dd804fd45750a789de785b",
+    "software_sha256": {
+      "sciona/osic_image_routing.py": "d725d917b2e3fdb9d598d39d31096aabe757c8b7b1286e0f396c96b975d18f0f",
+      "sciona/osic_image_inference.py": "944467b578e0725ac666a32ff84ffc57a9de857143537bb5a305541ff4047bab",
+      "sciona/osic_predictions.py": "6e3dbca24d78302ae74ea525fe8d2f380cda9308dc76a4a3f225c4cd863ebace",
+      "scripts/validate_osic_image_routing.py": "54df73a628e6a5abe5c640fbc8b7ec714cf2582982e4bf48f80d2ff87d974507"
+    },
+    "limitations": [
+      "Synthetic callbacks qualify population routing and lifetime behavior, not image decoding or model execution.",
+      "Prepared-array release is local to the dispatcher; arbitrary callbacks may retain references.",
+      "Source-specific mapped tables, query order and batch size remain explicit policy; dispatcher is not catalog-approved."
+    ]
+  },
+  "callback_contracts": {
+    "passed": true,
+    "synthetic_only": true,
+    "rejected_contracts": [
+      "positions_list",
+      "positions_float",
+      "positions_rank",
+      "positions_short",
+      "positions_negative",
+      "positions_outside",
+      "positions_duplicate",
+      "positions_reversed",
+      "predictions_list",
+      "predictions_rank",
+      "predictions_count",
+      "predictions_integer",
+      "predictions_nonfinite",
+      "predictions_mixed_dtype",
+      "noncallable_0",
+      "noncallable_1",
+      "noncallable_2"
+    ],
+    "validation_order_verified": true,
+    "consistent_prediction_dtype_required": true
+  },
+  "software_sha256": {
+    "provider": "c2945ee1e9be250c855d38b987b818e2b7fff72692dd804fd45750a789de785b",
+    "registry": "793723a75d07a88eed39f59d8d4dc327c54adbf75db7a03003516a6f74c81b51",
+    "dispatcher": "d725d917b2e3fdb9d598d39d31096aabe757c8b7b1286e0f396c96b975d18f0f",
+    "scripts/review_osic_image_routing_semantics.py": "42647115cf4b6298696286b54f6328ecf82f1d6da3d60f0c938652e4fbe4b25f",
+    "scripts/import_osic_image_routing_drafts.py": "eabce0142f95900e8fda67ef0cb0a65e475355942389afd7fcde5b8cdddb8395",
+    "scripts/plan_osic_image_routing_intake.py": "c085c99768f9a1293c2230f3da810b39d26859bfe3fcea479cfa6562d9f61de0",
+    "scripts/validate_osic_image_routing.py": "54df73a628e6a5abe5c640fbc8b7ec714cf2582982e4bf48f80d2ff87d974507"
+  },
+  "runtime": {
+    "python": "3.13.11",
+    "numpy": "2.2.6",
+    "pandas": "2.3.3"
+  },
+  "intake_plan_sha256": "27c37a954ab020f7fb8063f70c7219099a3534b2bcfe0cc69bb28c17d933f71f",
+  "connected_execution_commit": "ba481f9b",
+  "connected_execution_sha256": "4f057147e422ab8db49f3c2acad103cca8b31e424f0c7574f8d51cfdf97d1160",
+  "resource_policy": {
+    "native_threads": 1,
+    "foreground_cpu_budget": 1
+  },
+  "limitations": [
+    "Automated Tier 3 concrete in-process routing only; abstract execution rejects. No human Tier 1 or empirical Tier 2 claim.",
+    "Source-specific population mapping, fixed batch size 32 and query-order policy remain explicit. Preparation, selection and prediction are injected trusted callables; no fixed registered numerical operation is hidden inside the dispatcher.",
+    "Baseline and query mappings, category meanings, time and response coordinates, observation availability and compatible model inputs remain caller-owned.",
+    "Finite aligned scalar predictions and ordered positions are validated. Returned vectors, positions or prediction views may borrow data. Local reference release is not a global memory bound and arbitrary callbacks may mutate inputs or retain references.",
+    "Fresh synthetic tests cover routing and invalid callback outputs. The pinned population graph is supplementary prior wiring evidence over intermediate numeric state; this review does not rerun image inference or complete training.",
+    "Reuse is through separate preparation, selection, prediction and reduction components, with a narrow source adapter. No claim that the source population schema or uncertainty policy transfers unchanged to other domains.",
+    "No HTTP transport, serialization, concurrent-mutation safety, empirical effectiveness or original-CDG approval is established."
+  ]
+}
