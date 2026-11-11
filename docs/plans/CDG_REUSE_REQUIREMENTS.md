@@ -2841,3 +2841,15 @@ new independent source-notebook comparison. The selector is not catalog-approved
 population routing, trajectory reduction, final blend, complete training and
 original-CDG approval remain pending. See `ordered_fields_provider.json` and
 `osic_image_slice_graph.json`.
+
+The long-running TGS process was confirmed absent after it recorded eleven
+completed fits and no completed rounds. Its termination cause was not recovered.
+Before continuation, the unchanged runner verified the saved code, runtime and
+reference context, all completed-fit contracts matched the reviewed plan, and
+twelve unique referenced tensor checkpoints passed digest, length, finite-value
+and tensor-count checks. The private workflow state remained unchanged.
+Continuation preserves completed fits and restarts any unrecorded fit from its
+deterministic seed and qualified predecessor; saved weights are not optimizer
+recovery state. The resumed worker is limited to one core, with a detached
+supervisor retaining private stdout and exit status. The full 63-fit budget is
+unchanged and incomplete. See `tgs_continuation_audit.json`.
