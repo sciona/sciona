@@ -2909,3 +2909,15 @@ dispatcher, with explicit caller-owned mappings and injected computations, not
 the complete graph or completed image training. See
 `osic_image_routing_provider_publication_gates.json` and
 `osic_image_routing_served_verification.json`.
+
+Fresh population-graph execution now resolves all six nodes against exact Tier 3
+version, content-hash and import bindings in both served catalogs, checks their
+registry identities and callable signatures, and reproduces the entire pinned
+graph execution result. Removal of each of the ten projected edges is rejected,
+including callable injections. Generated images and intermediate numeric state
+remain the fixture: no fitting or HDF5 loading occurs, private state is unchanged,
+and the original CDG is still draft. Explicit discovery and intercepted
+intermediate persistence remain qualification limits. The next graph integration
+boundary is quantile feature-state replay and conversion to the prepared-fold
+interface, followed by keyed branch blending. See
+`osic_population_graph_served.json`.
