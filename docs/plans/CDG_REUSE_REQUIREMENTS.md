@@ -3188,3 +3188,16 @@ Recovery of the claimed source or an explicitly authorized, reviewed attribution
 correction must precede implementation qualification. Historical intake and draft
 catalog state are preserved. See `santa2021_source_identity.json` for the source
 links, retrieval limitations and required evidence.
+
+The qualified OSIC provider/runtime subset now has an immutable source anchor
+on the separate sciona-atoms-ml branch `qualification/osic-relocated-runtime`,
+commit `c5d9098ee9c6f3e1dc6da34e5ffd2a31efd434d5`. All thirty-eight source files
+match the numerical qualification, and twenty-two implementation modules retain
+their original normalized AST after import relocation. Imports were resolved
+from the isolated checkout, namespace package discovery includes the runtime,
+and both feature-replay dtype cases passed. Upstream notices are retained.
+The larger shared-worktree migration was not staged or altered. This supplies
+the source anchor needed for subsequent review without claiming a merged release
+or renewed approval. The six changed modules contain fifteen changed callables;
+the combined-graph correction plan covers nine, so six additional callable
+versions need review before publication. See `osic_relocated_source_anchor.json`.
