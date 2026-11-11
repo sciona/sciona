@@ -3163,3 +3163,18 @@ test bodies are unchanged apart from explicit runtime import relocation and
 source-hash path resolution. These checks complement the combined numerical
 run but do not renew approval or establish a global callback memory bound.
 See `osic_relocated_provider_contracts.json`.
+
+Rollback-only rehearsal now covers the nine proposed replacement versions in
+both catalogs, including copied interfaces and registered dependencies. Forty-five
+logical operations insert 121 rows inside a transaction; a complete dry run,
+failures after operations 1, 22 and 45, and a repeated rehearsal all restore the
+prior catalog snapshot. Existing latest versions and served entries are preserved
+during the rehearsal. However, the document RPC includes new non-latest version
+interfaces for all nine providers inside the transaction: non-latest status is
+not a publication isolation boundary. Therefore the rehearsal has no apply mode,
+and no draft versions remain in the catalog. Final publication must atomically
+install reviewed replacement versions after committed source anchoring; dependent
+graphs need separately reviewed replacement versions with exact new bindings,
+while historical graph versions remain unchanged. This is rollback evidence,
+not semantic approval or committed-publication idempotency. See
+`osic_relocated_version_rehearsal.json`.
