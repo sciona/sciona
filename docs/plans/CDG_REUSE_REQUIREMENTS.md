@@ -3024,3 +3024,15 @@ audit remain preserved. Projection approval, query-key routing, final branch
 blending and full-CDG qualification remain outstanding. See
 `typed_inputs_provider_publication_gates.json` and
 `typed_inputs_served_verification.json`.
+
+The frozen-feature output projection now has automated Tier 3 approval and is
+served in both catalogs. Its role is limited to exposing four borrowed values
+in fixed order; reusable casting, descriptor encoding and numerical replay stay
+separate. All 24 mapping insertion orders preserve identity, aliases and input
+mapping order; ten invalid contracts reject. Draft intake rolled back failures
+after writes 1, 4 and 9. Publication rejected 21 catalog faults and rolled back
+failures after writes 1, 4, 9 and 14. Fresh served verification reproduced the
+qualification through 34 resolved calls. Repeat publication changed no rows.
+The original workflow remains draft. Fresh served quantile-graph execution,
+query-key routing, final branch blending and full-workflow qualification remain
+outstanding. See `osic_feature_projection_served_verification.json`.
