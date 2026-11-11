@@ -3092,3 +3092,15 @@ replay receives only the routed entity/time rows. This is structural evidence
 only: combined numerical execution and coordinate-provider promotion remain
 pending, and opaque coordinate labels do not establish unit compatibility.
 See `osic_combined_graph_structure.json`.
+
+The combined fifteen-node graph now passes numerical execution on generated
+encoded images and mapped synthetic tables. Two fresh 600-epoch quantile folds
+and a fixed intermediate numeric image checkpoint feed both branches. With
+fitting and executable model loading disabled during replay, image predictions,
+quantile features and predictions, and the final sorted keyed blend match direct
+branch execution exactly. An independent 0.45/0.55 weighted sum also matches;
+distinct slope/response coordinate declarations reach the correct branches.
+Private states and input tables remain unchanged. This qualifies combined
+inference wiring, not complete image training, empirical effectiveness or the
+original CDG. Coordinate-provider publication and served combined-graph
+verification remain pending. See `osic_combined_inference_graph.json`.
