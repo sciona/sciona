@@ -3036,3 +3036,13 @@ qualification through 34 resolved calls. Repeat publication changed no rows.
 The original workflow remains draft. Fresh served quantile-graph execution,
 query-key routing, final branch blending and full-workflow qualification remain
 outstanding. See `osic_feature_projection_served_verification.json`.
+
+The six-node quantile replay graph now executes with exact Tier 3 bindings from
+both served catalogs, matched to immutable semantic reviews and provider bytes.
+Two fresh 600-epoch synthetic fold fits supply private numeric states to a fresh
+replay process with feature fitting and model updates disabled. Features and
+predictions exactly reproduce the qualified raw replay, all eight missing-edge
+projections reject, and private inputs remain unchanged. This establishes served
+composition of the branch, not graph publication or original-CDG approval.
+Query-key routing and final image/quantile blending remain outstanding. See
+`osic_quantile_graph_served.json`.
