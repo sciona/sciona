@@ -3114,3 +3114,15 @@ runtime-package relocation and competition-ingestion archival appeared in the
 workspace. They record that pre-relocation state; served combined-graph
 verification and qualification of relocated implementations remain outstanding.
 See `osic_coordinate_routing_served_verification.json`.
+
+The source relocation also removed the original path used by the live image
+trainer's final replay subprocess. `scripts/replay_osic_completed_training.py`
+provides a separate recovery path using the unchanged launch-time replay script
+from Git. It requires thirty contiguous completed epochs, 960 updates, verified
+launch identities and the original saved replay inputs. It copies the inputs
+into temporary storage, verifies their stability, runs replay with one native
+thread and writes separate evidence without replacing the original result.
+Six synthetic orchestration tests cover incomplete progress, missing replay
+inputs, dependency drift, changed inputs and failed replay results. They do not
+execute B5 or qualify the completed model. The live run has reached twenty-one
+epochs and 672 updates; full replay and original-CDG approval remain pending.
