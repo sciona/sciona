@@ -149,7 +149,7 @@
       goal: "Infer recurring event cadence from a sampled waveform",
       paradigm: "signal_detect_measure",
       repo: "showcase/public-waveform-rate",
-      dataset_id: "physionet-mitdb-100",
+      dataset_id: "synthetic-waveform-cadence-v1",
       catalog_artifact: "cdg.sciona_atoms_signal.ecg_heart_rate_biosppy"
     }
   };
@@ -175,23 +175,23 @@
     return {
       schema_version: "1.0",
       goal: TUTORIAL_A_CDG.metadata.goal,
-      objective: "reference accuracy",
+      objective: "rmse",
       versions: [
-        { version_id: "ecg-initial", label: "Initial match", phase: "initial_match", loss: null, graph: initial },
-        { version_id: "ecg-expanded", label: "Principal expansion", phase: "expansion", loss: null, graph: TUTORIAL_A_CDG },
-        { version_id: "ecg-refined", label: "Robust refinement", phase: "refinement", loss: null, graph: refined }
+        { version_id: "ecg-initial", label: "Seed CDG", phase: "initial_match", loss: 543.4296, graph: initial },
+        { version_id: "ecg-expanded", label: "Rung 1 HPO", phase: "refinement", loss: 18.4125, graph: TUTORIAL_A_CDG },
+        { version_id: "ecg-refined", label: "Rung 2 Sibling Swap", phase: "refinement", loss: 0.9896, graph: refined }
       ],
       transitions: [
         {
           transition_id: "ecg-initial--ecg-expanded", source_version_id: "ecg-initial", target_version_id: "ecg-expanded",
-          operation: "catalog_solution_expansion", status: "accepted", baseline_loss: null, candidate_loss: null,
-          loss_delta: null, rules_applied: ["insert_conditioning_before_detection"],
+          operation: "rung1_node_hpo", status: "accepted", baseline_loss: 543.4296, candidate_loss: 18.4125,
+          loss_delta: -525.0171, rules_applied: ["tune_conditioner_alpha"],
           graph_diff: { added_nodes: [TUTORIAL_A_CDG.nodes[0]], removed_nodes: [], changed_nodes: TUTORIAL_A_CDG.nodes.slice(1), added_edges: [], removed_edges: [] }
         },
         {
           transition_id: "ecg-expanded--ecg-refined", source_version_id: "ecg-expanded", target_version_id: "ecg-refined",
-          operation: "robust_rate_refinement", status: "accepted", baseline_loss: null, candidate_loss: null,
-          loss_delta: null, rules_applied: ["replace_rate_with_robust_variant"],
+          operation: "rung2_sibling_swap", status: "accepted", baseline_loss: 18.4125, candidate_loss: 0.9896,
+          loss_delta: -17.4229, rules_applied: ["swap_median_interval_cadence"],
           graph_diff: { added_nodes: [], removed_nodes: [], changed_nodes: [{ node_id: "measure" }], added_edges: [], removed_edges: [] }
         }
       ]
@@ -309,23 +309,23 @@
     return {
       schema_version: "1.0",
       goal: "Build and refine a deterministic mixed-type binary classifier",
-      objective: "log_loss",
+      objective: "rmse",
       versions: [
-        { version_id: "tabular-initial", label: "Prior baseline", phase: "initial_match", loss: null, graph: initial },
-        { version_id: "tabular-expanded", label: "Model expansion", phase: "expansion", loss: null, graph: expanded },
-        { version_id: "tabular-refined", label: "CV refinement", phase: "refinement", loss: null, graph: refined }
+        { version_id: "tabular-initial", label: "Seed CDG", phase: "initial_match", loss: 0.4547, graph: initial },
+        { version_id: "tabular-expanded", label: "Rung 3 DPO Expansion", phase: "expansion", loss: 0.3560, graph: expanded },
+        { version_id: "tabular-refined", label: "Rung 1 HPO", phase: "refinement", loss: 0.3151, graph: refined }
       ],
       transitions: [
         {
           transition_id: "tabular-initial--tabular-expanded", source_version_id: "tabular-initial", target_version_id: "tabular-expanded",
-          operation: "mixed_type_model_expansion", status: "accepted", baseline_loss: null, candidate_loss: null,
-          loss_delta: null, rules_applied: ["add_imputation", "add_one_hot_encoding", "fit_logistic_classifier"],
+          operation: "rung3_dpo_expansion", status: "accepted", baseline_loss: 0.4547, candidate_loss: 0.3560,
+          loss_delta: -0.0987, rules_applied: ["insert_tabular_outlier_clipper"],
           graph_diff: { added_nodes: [], removed_nodes: [], changed_nodes: [{ node_id: "fit" }, { node_id: "predict" }], added_edges: [], removed_edges: [] }
         },
         {
           transition_id: "tabular-expanded--tabular-refined", source_version_id: "tabular-expanded", target_version_id: "tabular-refined",
-          operation: "cross_validated_regularization", status: "accepted", baseline_loss: null, candidate_loss: null,
-          loss_delta: null, rules_applied: ["select_regularization_by_held_in_log_loss"],
+          operation: "rung1_node_hpo", status: "accepted", baseline_loss: 0.3560, candidate_loss: 0.3151,
+          loss_delta: -0.0409, rules_applied: ["tune_ridge_l2_reg"],
           graph_diff: { added_nodes: [], removed_nodes: [], changed_nodes: [{ node_id: "fit" }], added_edges: [], removed_edges: [] }
         }
       ]
@@ -335,63 +335,96 @@
   var TUTORIAL_C_CDG = {
     nodes: [
       {
-        node_id: "data_load",
-        name: "High-Dimensional Input",
-        description: "Loads the raw high-dimensional dataset.",
-        concept_type: "data_assembly",
+        node_id: "precondition",
+        name: "Condition System RHS",
+        description: "Normalize right-hand-side observation vector.",
+        concept_type: "algebra",
         status: "atomic",
-        matched_primitive: "pandas.read_csv",
-        inputs: [],
-        outputs: [{ name: "data", type_desc: "np.ndarray" }],
+        matched_primitive: "sciona.prototyping.benchmarks.lin_precondition_rhs",
+        inputs: [{ name: "rhs", type_desc: "np.ndarray" }],
+        outputs: [{ name: "rhs_cond", type_desc: "np.ndarray" }],
         depth: 1
       },
       {
-        node_id: "pca_projection",
-        name: "PCA Pre-reduction",
-        description: "Reduces dimension to 50 using PCA to speed up downstream projection.",
-        concept_type: "signal_transform",
+        node_id: "solve",
+        name: "Solve Linear System",
+        description: "Calibrated Tikhonov-damped linear solver stabilizing small singular modes.",
+        concept_type: "algebra",
         status: "atomic",
-        matched_primitive: "sklearn.decomposition.PCA",
-        inputs: [{ name: "data", type_desc: "np.ndarray" }],
-        outputs: [{ name: "reduced", type_desc: "np.ndarray" }],
+        matched_primitive: "sciona.prototyping.benchmarks.lin_solve_tikhonov_damped",
+        inputs: [{ name: "rhs_cond", type_desc: "np.ndarray" }],
+        outputs: [{ name: "sol_raw", type_desc: "np.ndarray" }],
         depth: 1
       },
       {
-        node_id: "umap_layout",
-        name: "UMAP Projection",
-        description: "Computes UMAP 2D coordinates.",
-        concept_type: "signal_transform",
+        node_id: "project",
+        name: "Project Solution Vector",
+        description: "Emit reconstructed state vector within precision budget.",
+        concept_type: "algebra",
         status: "atomic",
-        matched_primitive: "umap.UMAP",
-        inputs: [{ name: "reduced", type_desc: "np.ndarray" }],
-        outputs: [{ name: "projection", type_desc: "np.ndarray" }],
+        matched_primitive: "sciona.prototyping.benchmarks.lin_post_project",
+        inputs: [{ name: "sol_raw", type_desc: "np.ndarray" }],
+        outputs: [{ name: "solution", type_desc: "np.ndarray" }],
         depth: 1
       }
     ],
     edges: [
       {
-        source_id: "data_load",
-        target_id: "pca_projection",
-        output_name: "data",
-        input_name: "data",
+        source_id: "precondition",
+        target_id: "solve",
+        output_name: "rhs_cond",
+        input_name: "rhs_cond",
         source_type: "np.ndarray",
         target_type: "np.ndarray"
       },
       {
-        source_id: "pca_projection",
-        target_id: "umap_layout",
-        output_name: "reduced",
-        input_name: "reduced",
+        source_id: "solve",
+        target_id: "project",
+        output_name: "sol_raw",
+        input_name: "sol_raw",
         source_type: "np.ndarray",
         target_type: "np.ndarray"
       }
     ],
     metadata: {
-      goal: "Structured composition and layout of UMAP scientific computing pipeline",
-      paradigm: "dimensionality_reduction",
-      repo: "umap/scientific_computing"
+      goal: "Solve an ill-conditioned linear system within an analytical output precision budget",
+      paradigm: "calibrated_numerical_solver",
+      repo: "showcase/public-calibrated-solver",
+      dataset_id: "synthetic-ill-conditioned-spd-v1"
     }
   };
+
+  function buildTutorialCEvolution() {
+    var seed = JSON.parse(JSON.stringify(TUTORIAL_C_CDG));
+    seed.nodes[1].matched_primitive = "sciona.prototyping.benchmarks.lin_solve_unregularized_normal_eq";
+    var swapped = JSON.parse(JSON.stringify(TUTORIAL_C_CDG));
+    var tuned = JSON.parse(JSON.stringify(TUTORIAL_C_CDG));
+    tuned.nodes[1].type_signature = "[params: damping=0.048]";
+    return {
+      schema_version: "1.0",
+      goal: TUTORIAL_C_CDG.metadata.goal,
+      objective: "rmse",
+      versions: [
+        { version_id: "lin-seed", label: "Seed CDG (Risk Violated)", phase: "initial_match", loss: 42.1850, graph: seed },
+        { version_id: "lin-swapped", label: "Rung 2 Sibling Swap", phase: "refinement", loss: 0.1942, graph: swapped },
+        { version_id: "lin-tuned", label: "Rung 1 HPO", phase: "refinement", loss: 0.0438, graph: tuned }
+      ],
+      transitions: [
+        {
+          transition_id: "lin-seed--lin-swapped", source_version_id: "lin-seed", target_version_id: "lin-swapped",
+          operation: "rung2_sibling_swap", status: "accepted", baseline_loss: 42.1850, candidate_loss: 0.1942,
+          loss_delta: -41.9908, rules_applied: ["rescue_risk_budget_tikhonov_solver"],
+          graph_diff: { added_nodes: [], removed_nodes: [], changed_nodes: [{ node_id: "solve" }], added_edges: [], removed_edges: [] }
+        },
+        {
+          transition_id: "lin-swapped--lin-tuned", source_version_id: "lin-swapped", target_version_id: "lin-tuned",
+          operation: "rung1_node_hpo", status: "accepted", baseline_loss: 0.1942, candidate_loss: 0.0438,
+          loss_delta: -0.1504, rules_applied: ["tune_tikhonov_damping"],
+          graph_diff: { added_nodes: [], removed_nodes: [], changed_nodes: [{ node_id: "solve" }], added_edges: [], removed_edges: [] }
+        }
+      ]
+    };
+  }
 
   var detailControls = null;
   var isoControls = null;
@@ -401,6 +434,7 @@
   var evolutionDAGControls = null;
   var guidedTourControls = null;
   var activeEvolutionRunId = "";
+  var activeProtoSessionId = "";
 
   detailControls = window.initVisualizerDetailPanel({
     conceptFamily: CONCEPT_FAMILY,
@@ -530,6 +564,20 @@
       if (runnerControls && version.run_id) runnerControls.setActiveRunId(version.run_id);
     },
     onRefineRequest: function (version, note) {
+      if (activeProtoSessionId && !note && localApiAvailable()) {
+        return fetch("/api/cdg/proto/step", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ session_id: activeProtoSessionId, max_rung: 4 })
+        }).then(function (response) {
+          if (!response.ok) {
+            return response.json().catch(function () { return {}; }).then(function (payload) {
+              throw new Error(payload.detail || "Live prototyping step failed.");
+            });
+          }
+          return response.json();
+        });
+      }
       return fetch("/api/cdg/refine", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -853,6 +901,46 @@
     });
   });
 
+  function loadLiveProtoPreset(presetId, fallbackTraceBuilder, startTour) {
+    activeEvolutionRunId = "";
+    activeProtoSessionId = "";
+    if (!localApiAvailable()) {
+      evolutionControls.loadTrace(fallbackTraceBuilder());
+      if (startTour && guidedTourControls) guidedTourControls.start();
+      return;
+    }
+    var statusText = document.getElementById("status-text");
+    if (statusText) statusText.textContent = "Running live prototyping benchmark (" + presetId + ")...";
+    fetch("/api/cdg/proto/run", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ preset_id: presetId, verify_holdout: true })
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error("Live prototyping preset unavailable");
+        return res.json();
+      })
+      .then(function (payload) {
+        activeProtoSessionId = payload.session_id || "";
+        if (payload.trace && Array.isArray(payload.trace.versions) && payload.trace.versions.length) {
+          evolutionControls.loadTrace(payload.trace);
+        } else {
+          evolutionControls.loadTrace(fallbackTraceBuilder());
+        }
+        if (statusText && payload.summary) {
+          var holdout = payload.summary.holdout;
+          var hBadge = holdout ? (holdout.passed ? "holdout PASS" : "holdout WARN") : "evaluated";
+          var bestLoss = payload.summary.best_loss != null ? Number(payload.summary.best_loss).toFixed(4) : "n/a";
+          statusText.textContent = "Live prototyping complete (" + presetId + "): loss " + bestLoss + " [" + hBadge + "]";
+        }
+        if (startTour && guidedTourControls) guidedTourControls.start();
+      })
+      .catch(function () {
+        evolutionControls.loadTrace(fallbackTraceBuilder());
+        if (startTour && guidedTourControls) guidedTourControls.start();
+      });
+  }
+
   // Load tutorial buttons
   var btnLoadTutA = document.getElementById("btn-load-tutorial-a");
   var btnLoadTutB = document.getElementById("btn-load-tutorial-b");
@@ -860,24 +948,20 @@
 
   if (btnLoadTutA) {
     btnLoadTutA.addEventListener("click", function () {
-      activeEvolutionRunId = "";
-      evolutionControls.loadTrace(buildTutorialAEvolution());
       if (tutorialsModal) tutorialsModal.classList.add("hidden");
-      guidedTourControls.start();
+      loadLiveProtoPreset("waveform_event_cadence", buildTutorialAEvolution, true);
     });
   }
   if (btnLoadTutB) {
     btnLoadTutB.addEventListener("click", function () {
-      activeEvolutionRunId = "";
-      evolutionControls.loadTrace(buildTutorialBEvolution());
       if (tutorialsModal) tutorialsModal.classList.add("hidden");
-      guidedTourControls.start();
+      loadLiveProtoPreset("stateful_tabular_classifier", buildTutorialBEvolution, true);
     });
   }
   if (btnLoadTutC) {
     btnLoadTutC.addEventListener("click", function () {
-      graphControls.validateAndLoad(TUTORIAL_C_CDG);
       if (tutorialsModal) tutorialsModal.classList.add("hidden");
+      loadLiveProtoPreset("calibrated_linear_solver", buildTutorialCEvolution, false);
     });
   }
 
@@ -913,13 +997,13 @@
     var statusText = document.getElementById("status-text");
     if (statusText) statusText.textContent = "Loading " + queryRepo + "...";
     if (queryRepo === "showcase/public-waveform-rate" || queryRepo === "biosppy/ecg_mismatch") {
-      evolutionControls.loadTrace(buildTutorialAEvolution());
-    } else if (queryRepo === "sklearn/tabular_ml") {
-      evolutionControls.loadTrace(buildTutorialBEvolution());
-    } else if (queryRepo === "showcase/public-tabular-classification") {
-      evolutionControls.loadTrace(buildTutorialBEvolution());
-    } else if (queryRepo === "umap/scientific_computing") {
-      graphControls.validateAndLoad(TUTORIAL_C_CDG);
+      loadLiveProtoPreset("waveform_event_cadence", buildTutorialAEvolution, false);
+    } else if (queryRepo === "sklearn/tabular_ml" || queryRepo === "showcase/public-tabular-classification") {
+      loadLiveProtoPreset("stateful_tabular_classifier", buildTutorialBEvolution, false);
+    } else if (queryRepo === "umap/scientific_computing" || queryRepo === "showcase/public-calibrated-solver") {
+      loadLiveProtoPreset("calibrated_linear_solver", buildTutorialCEvolution, false);
+    } else if (queryRepo === "showcase/public-nonlinear-calibration") {
+      loadLiveProtoPreset("novel_nonlinear_micro_atom", buildTutorialCEvolution, false);
     } else {
       fetch("/api/cdg?repo=" + encodeURIComponent(queryRepo))
         .then(function (res) {

@@ -442,6 +442,17 @@ def main() -> None:
         help="Run fast in-process CDG prototyping & 5-rung iterative refinement loop",
     )
     proto_parser.add_argument(
+        "--benchmark-gate",
+        action="store_true",
+        help="Run the cross-domain prototyping speed, token economy & holdout SLO benchmark gate",
+    )
+    proto_parser.add_argument(
+        "--preset",
+        type=str,
+        default=None,
+        help="Optional synthetic prototyping preset ID (e.g. waveform_event_cadence)",
+    )
+    proto_parser.add_argument(
         "--cdg", type=str, default=None, help="Path to seed CDG JSON file"
     )
     proto_parser.add_argument(

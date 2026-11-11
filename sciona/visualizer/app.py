@@ -9,6 +9,7 @@ from fastapi import FastAPI
 from sciona.visualizer.cdg import router as cdg_router
 from sciona.visualizer.dashboard import router as dashboard_router
 from sciona.visualizer.isomorphisms import router as isomorphism_router
+from sciona.visualizer.proto_api import router as proto_router
 from sciona.visualizer.runner_api import router as runner_router
 from sciona.visualizer.static import mount_static_assets
 
@@ -65,6 +66,7 @@ def create_app() -> FastAPI:
     app.include_router(cdg_router)
     app.include_router(isomorphism_router)
     app.include_router(runner_router)
+    app.include_router(proto_router)
     mount_static_assets(app)
     return app
 

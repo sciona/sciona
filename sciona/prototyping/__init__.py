@@ -2,6 +2,20 @@
 
 from __future__ import annotations
 
+from sciona.prototyping.benchmark_gate import (
+    BaselineComparisonMetrics,
+    GateSLOs,
+    PrototypingBenchmarkGateReport,
+    TaskBenchmarkResult,
+    run_prototyping_benchmark_suite,
+)
+from sciona.prototyping.benchmarks import (
+    BENCHMARK_PRESETS,
+    PrototypingBenchmarkPreset,
+    build_benchmark_session,
+    list_benchmark_presets,
+    resolve_preset_id,
+)
 from sciona.prototyping.cache import (
     CacheEntry,
     IntermediateCache,
@@ -58,10 +72,14 @@ from sciona.prototyping.session import (
     PrototypingSession,
     PrototypingSessionSummary,
     PrototypingStepRecord,
+    compute_cdg_graph_diff,
+    render_cdg_python_source,
 )
 
 __all__ = [
     "AtomResolutionError",
+    "BENCHMARK_PRESETS",
+    "BaselineComparisonMetrics",
     "CacheEntry",
     "CaseScore",
     "CounterfactualNodeSensitivity",
@@ -71,6 +89,7 @@ __all__ = [
     "FunnelConfig",
     "FunnelEvaluationReport",
     "FunnelTierResult",
+    "GateSLOs",
     "IntermediateCache",
     "LadderStepOutcome",
     "LiveCDGRunner",
@@ -81,6 +100,8 @@ __all__ = [
     "MicroAtomSynthesisSpec",
     "MicroAtomSynthesizerCallable",
     "ProblemHarness",
+    "PrototypingBenchmarkGateReport",
+    "PrototypingBenchmarkPreset",
     "PrototypingSession",
     "PrototypingSessionSummary",
     "PrototypingStepRecord",
@@ -89,11 +110,14 @@ __all__ = [
     "SubdecomposeCallable",
     "SubgraphSpliceRequest",
     "SyntheticSuiteHarness",
+    "TaskBenchmarkResult",
     "UniversalCreditAssigner",
+    "build_benchmark_session",
     "callable_impl_digest",
     "check_output_invariants",
     "check_static_edge_port_types",
     "compile_micro_atom_source",
+    "compute_cdg_graph_diff",
     "compute_node_cache_key",
     "compute_objective_metric",
     "estimate_value_bytes",
@@ -101,7 +125,11 @@ __all__ = [
     "hash_runtime_value",
     "infer_cdg_root_ports",
     "infer_tunable_specs_for_node",
+    "list_benchmark_presets",
     "perturb_runtime_value",
+    "render_cdg_python_source",
     "resolve_atom_callable",
+    "resolve_preset_id",
+    "run_prototyping_benchmark_suite",
     "summarize_runtime_value",
 ]

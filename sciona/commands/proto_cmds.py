@@ -40,65 +40,108 @@ def load_slice_harness(
 
 async def _cmd_proto(args: argparse.Namespace) -> None:
     """Execute ``sciona proto``."""
-    cdg_arg = getattr(args, "cdg", None)
-    goal_arg = getattr(args, "goal", None) or ""
-    if not cdg_arg and not goal_arg:
-        print("Error: provide either --cdg <cdg.json> or --goal <problem>", file=sys.stderr)
-        sys.exit(1)
+    if getattr(args, "benchmark_gate", False):
+        from sciona.prototyping.benchmark_gate import run_prototyping_benchmark_suite
 
-    catalog: PrimitiveCatalog | None = None
-    cat_arg = getattr(args, "catalog", None)
-    if cat_arg:
-        catalog = PrimitiveCatalog.load(Path(cat_arg))
-    else:
-        try:
-            from sciona.architect.catalog import seed_builtin_primitives
-
-            catalog = PrimitiveCatalog()
-            seed_builtin_primitives(catalog)
-        except Exception:
-            catalog = None
-
-    if cdg_arg:
-        cdg = load_json(Path(cdg_arg))
-    else:
-        from sciona.sdk import Sciona
-
-        sdk = await Sciona.create()
-        catalog = sdk.catalog
-        prop = await sdk.propose(problem=goal_arg)
-        cdg = prop.cdg
-
-    metric_name = str(getattr(args, "metric", "rmse") or "rmse")
-    data_arg = getattr(args, "data", None)
-    target_key = getattr(args, "target_key", None)
-    harness: ProblemHarness
-    if data_arg:
-        harness = load_slice_harness(
-            Path(data_arg),
-            cdg,
-            metric=metric_name,
-            target_key=target_key,
+        preset_filter = getattr(args, "preset", None)
+        report = await run_prototyping_benchmark_suite(
+            preset_ids=[str(preset_filter)] if preset_filter else None
         )
+        if getattr(args, "json", False):
+            print(json.dumps(report.to_dict(), indent=2))
+        else:
+            gate_badge = "PASS" if report.passed else "FAIL"
+            print(
+                f"Prototyping Benchmark Gate [{gate_badge}]: "
+                f"{len(report.tasks)} domains in {report.total_wall_clock_ms:.1f} ms "
+                f"(subprocesses={report.total_subprocess_spawns}, "
+                f"zero_llm_steps={report.zero_llm_step_ratio:.1%}, "
+                f"cache_hit_rate={report.aggregate_cache_hit_rate:.1%}, "
+                f"token_reduction={report.token_reduction_vs_iterative_pct:.1f}%)"
+            )
+            for t in report.tasks:
+                h_mark = "PASS" if t.holdout_passed else "FAIL"
+                print(
+                    f"  - {t.preset_id} ({t.domain}): "
+                    f"val={t.initial_loss:.4g}->{t.best_validation_loss:.4g}, "
+                    f"holdout={t.holdout_loss:.4g} [{h_mark}] vs single_shot={t.single_shot_baseline.holdout_loss:.4g}, "
+                    f"rungs={t.accepted_rungs}, {t.wall_clock_ms:.1f} ms"
+                )
+            if report.violations:
+                for v in report.violations:
+                    print(f"  [VIOLATION] {v}", file=sys.stderr)
+        if not report.passed:
+            sys.exit(1)
+        return
+
+    preset_arg = getattr(args, "preset", None)
+    if preset_arg:
+        from sciona.prototyping.benchmarks import build_benchmark_session
+
+        session = build_benchmark_session(preset_arg)
     else:
-        harness = SyntheticSuiteHarness.from_cdg(cdg)
+        cdg_arg = getattr(args, "cdg", None)
+        goal_arg = getattr(args, "goal", None) or ""
+        if not cdg_arg and not goal_arg:
+            print(
+                "Error: provide --cdg <cdg.json>, --goal <problem>, --preset <id>, or --benchmark-gate",
+                file=sys.stderr,
+            )
+            sys.exit(1)
 
-    manifest_arg = getattr(args, "manifest", None)
-    manifest_path: Path | None = Path(manifest_arg) if manifest_arg else None
-    if manifest_path is None:
-        default_manifest = Path.home() / ".sciona" / "manifest.sqlite"
-        if default_manifest.is_file():
-            manifest_path = default_manifest
+        catalog: PrimitiveCatalog | None = None
+        cat_arg = getattr(args, "catalog", None)
+        if cat_arg:
+            catalog = PrimitiveCatalog.load(Path(cat_arg))
+        else:
+            try:
+                from sciona.architect.catalog import seed_builtin_primitives
 
-    session = PrototypingSession(
-        cdg,
-        goal=goal_arg or str(cdg.metadata.get("goal") or "sciona proto"),
-        harness=harness,
-        catalog=catalog,
-        manifest_sqlite_path=manifest_path,
-        expansion_engine=ExpansionEngine(default_rule_sets()),
-        hpo_trials_per_rung=int(getattr(args, "hpo_trials", 8)),
-    )
+                catalog = PrimitiveCatalog()
+                seed_builtin_primitives(catalog)
+            except Exception:
+                catalog = None
+
+        if cdg_arg:
+            cdg = load_json(Path(cdg_arg))
+        else:
+            from sciona.sdk import Sciona
+
+            sdk = await Sciona.create()
+            catalog = sdk.catalog
+            prop = await sdk.propose(problem=goal_arg)
+            cdg = prop.cdg
+
+        metric_name = str(getattr(args, "metric", "rmse") or "rmse")
+        data_arg = getattr(args, "data", None)
+        target_key = getattr(args, "target_key", None)
+        harness: ProblemHarness
+        if data_arg:
+            harness = load_slice_harness(
+                Path(data_arg),
+                cdg,
+                metric=metric_name,
+                target_key=target_key,
+            )
+        else:
+            harness = SyntheticSuiteHarness.from_cdg(cdg)
+
+        manifest_arg = getattr(args, "manifest", None)
+        manifest_path: Path | None = Path(manifest_arg) if manifest_arg else None
+        if manifest_path is None:
+            default_manifest = Path.home() / ".sciona" / "manifest.sqlite"
+            if default_manifest.is_file():
+                manifest_path = default_manifest
+
+        session = PrototypingSession(
+            cdg,
+            goal=goal_arg or str(cdg.metadata.get("goal") or "sciona proto"),
+            harness=harness,
+            catalog=catalog,
+            manifest_sqlite_path=manifest_path,
+            expansion_engine=ExpansionEngine(default_rule_sets()),
+            hpo_trials_per_rung=int(getattr(args, "hpo_trials", 8)),
+        )
 
     summary = await session.run(
         max_iterations=int(getattr(args, "max_iterations", 6)),

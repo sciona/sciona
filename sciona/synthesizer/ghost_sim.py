@@ -957,8 +957,9 @@ def run_ghost_simulation(
         logger.info("Ghost simulation skipped: no ghost backend available")
         return report
 
-    # Ensure atom modules are imported so witnesses are registered
-    _ensure_atoms_imported()
+    # Ensure atom modules are imported once per working directory when MatchResults exist
+    if any(mr.success for mr in match_results):
+        _ensure_atoms_imported_once()
 
     registered = set(list_registered())
     if not registered:
@@ -1020,11 +1021,17 @@ def run_ghost_simulation(
                         if hasattr(node, "concept_type")
                         else "unknown"
                     )
-        logger.warning(
-            "Ghost simulation coverage is low (%.0f%%): unsimulated categories: %s",
-            report.coverage * 100,
-            sorted(unsimulated_categories),
-        )
+        if unsimulated_categories:
+            logger.warning(
+                "Ghost simulation coverage is low (%.0f%%): unsimulated categories: %s",
+                report.coverage * 100,
+                sorted(unsimulated_categories),
+            )
+        else:
+            logger.debug(
+                "Ghost simulation coverage is low (%.0f%%): no MatchResult atoms supplied",
+                report.coverage * 100,
+            )
 
     if not simulable_nodes:
         logger.info("Ghost simulation skipped: no simulable nodes")
@@ -1282,6 +1289,20 @@ def _simulate_with_bayesian_checks(
         final_state=state,
         trace=trace,
     )
+
+
+_ATOMS_IMPORTED_CWDS: set[str] = set()
+
+
+def _ensure_atoms_imported_once() -> None:
+    """Memoized wrapper around ``_ensure_atoms_imported`` keyed by working directory."""
+    import os
+
+    cwd = os.getcwd()
+    if cwd in _ATOMS_IMPORTED_CWDS:
+        return
+    _ensure_atoms_imported()
+    _ATOMS_IMPORTED_CWDS.add(cwd)
 
 
 def _ensure_atoms_imported() -> None:

@@ -158,6 +158,57 @@ class EvaluationFunnel:
         self.harness = harness
         self.runner = runner if runner is not None else LiveCDGRunner()
         self.config = config if config is not None else FunnelConfig()
+        self._tier0_cache: dict[
+            str,
+            tuple[FunnelTierResult, GhostSimReport | None, CDGUncertaintyReport | None],
+        ] = {}
+
+    @staticmethod
+    def _tier0_structural_key(
+        cdg: CDGExport,
+        match_results: Sequence[MatchResult] | None,
+    ) -> str:
+        node_sig = tuple(
+            (
+                n.node_id,
+                str(n.status),
+                str(n.concept_type),
+                str(n.matched_primitive or ""),
+                tuple((p.name, p.type_desc, p.constraints) for p in n.inputs),
+                tuple((p.name, p.type_desc, p.constraints) for p in n.outputs),
+            )
+            for n in sorted(cdg.nodes, key=lambda item: item.node_id)
+        )
+        edge_sig = tuple(
+            (
+                e.source_id,
+                e.target_id,
+                e.output_name,
+                e.input_name,
+                str(getattr(e, "edge_kind", "")),
+                str(getattr(e, "data_kind", "")),
+            )
+            for e in sorted(
+                cdg.edges,
+                key=lambda item: (
+                    item.source_id,
+                    item.target_id,
+                    item.output_name,
+                    item.input_name,
+                ),
+            )
+        )
+        mr_sig = tuple(
+            (
+                mr.pdg_node.predicate_id,
+                mr.success,
+                mr.verified_match.candidate.declaration.name
+                if mr.verified_match is not None
+                else "",
+            )
+            for mr in (match_results or ())
+        )
+        return repr((node_sig, edge_sig, mr_sig))
 
     def _execute_case(
         self,
@@ -199,14 +250,36 @@ class EvaluationFunnel:
         match_results: Sequence[MatchResult] | None = None,
     ) -> tuple[FunnelTierResult, GhostSimReport | None, CDGUncertaintyReport | None]:
         """Tier 0: Static PortTypeSpec check + Ghost Simulation + Analytic Uncertainty Gate."""
+        cache_key = self._tier0_structural_key(cdg, match_results)
+        cached = self._tier0_cache.get(cache_key)
+        if cached is not None:
+            cached_res, cached_ghost, cached_unc = cached
+            return (
+                FunnelTierResult(
+                    tier=cached_res.tier,
+                    passed=cached_res.passed,
+                    loss=cached_res.loss,
+                    elapsed_ms=0.0,
+                    failed_node_id=cached_res.failed_node_id,
+                    prune_reason=cached_res.prune_reason,
+                    case_scores=cached_res.case_scores,
+                    details=dict(cached_res.details),
+                ),
+                cached_ghost,
+                cached_unc,
+            )
+
         t0 = time.perf_counter()
         ghost_report: GhostSimReport | None = None
         unc_report: CDGUncertaintyReport | None = None
 
+        out: tuple[
+            FunnelTierResult, GhostSimReport | None, CDGUncertaintyReport | None
+        ]
         if self.config.enable_tier0_type_check:
             ok_types, bad_nid, reason = check_static_edge_port_types(cdg)
             if not ok_types:
-                return (
+                out = (
                     FunnelTierResult(
                         tier=0,
                         passed=False,
@@ -217,6 +290,8 @@ class EvaluationFunnel:
                     None,
                     None,
                 )
+                self._tier0_cache[cache_key] = out
+                return out
 
         if self.config.enable_tier0_ghost_sim:
             ghost_report = run_ghost_simulation(cdg, list(match_results or []))
@@ -226,7 +301,7 @@ class EvaluationFunnel:
                 bad_nid = ghost_report.error_node or (
                     ghost_report.deadlock_nodes[0] if ghost_report.deadlock_nodes else ""
                 )
-                return (
+                out = (
                     FunnelTierResult(
                         tier=0,
                         passed=False,
@@ -237,6 +312,8 @@ class EvaluationFunnel:
                     ghost_report,
                     None,
                 )
+                self._tier0_cache[cache_key] = out
+                return out
 
         budget = self.harness.risk_budget
         if self.config.enable_tier0_uncertainty_gate and budget is not None:
@@ -249,10 +326,15 @@ class EvaluationFunnel:
             if not unc_report.meets_budget:
                 ranked = unc_report.ranked_bottlenecks()
                 worst_nid = (
-                    (unc_report.budget_violated_nodes or unc_report.infeasible_pullback_nodes or unc_report.regime_violated_nodes or ("",))[0]
-                    or (ranked[0].node_id if ranked else "")
+                    (ranked[0].node_id if ranked else "")
+                    or (
+                        unc_report.infeasible_pullback_nodes
+                        or unc_report.regime_violated_nodes
+                        or unc_report.budget_violated_nodes
+                        or ("",)
+                    )[0]
                 )
-                return (
+                out = (
                     FunnelTierResult(
                         tier=0,
                         passed=False,
@@ -268,8 +350,10 @@ class EvaluationFunnel:
                     ghost_report,
                     unc_report,
                 )
+                self._tier0_cache[cache_key] = out
+                return out
 
-        return (
+        out = (
             FunnelTierResult(
                 tier=0,
                 passed=True,
@@ -279,6 +363,8 @@ class EvaluationFunnel:
             ghost_report,
             unc_report,
         )
+        self._tier0_cache[cache_key] = out
+        return out
 
     def evaluate_tier1(
         self,

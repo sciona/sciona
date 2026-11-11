@@ -492,122 +492,88 @@ async def refine_cdg(body: GuidedRefinementRequest) -> dict[str, Any]:
     return result
 
 
-_REWRITE_RULE_LOGS = {
-    "apply_kfold_ensemble": {
-        "logs": (
-            "[INFO] Compiling CDG for ml_model_selection...\n"
-            "[INFO] Rule 'apply_kfold_ensemble' matched.\n"
-            "[INFO] Performing graph expansion...\n"
-            "[INFO] Replaced fit/score nodes with 5-Fold Cross Validation loop.\n"
-            "[INFO] Synthesis successful. Generating patch diff..."
-        ),
-        "diff": (
-            "--- base_estimator.py\n"
-            "+++ kfold_ensemble.py\n"
-            "@@ -10,6 +10,10 @@\n"
-            "- model.fit(X_train, y_train)\n"
-            "- score = model.score(X_val, y_val)\n"
-            "+ from sklearn.model_selection import KFold\n"
-            "+ kf = KFold(n_splits=5)\n"
-            "+ for train_idx, val_idx in kf.split(X):\n"
-            "+     model.fit(X[train_idx], y[train_idx])\n"
-            "+     scores.append(model.score(X[val_idx], y[val_idx]))"
+def _build_real_rewrite_logs_and_diff(
+    rule_name: str,
+    before_cdg: CDGExport,
+    after_cdg: CDGExport,
+) -> tuple[str, str]:
+    """Compute real structural logs and a unified Python source diff for a DPO rewrite."""
+    import difflib
+    from sciona.prototyping.session import compute_cdg_graph_diff, render_cdg_python_source
+
+    gdiff = compute_cdg_graph_diff(before_cdg, after_cdg)
+    added_ids = [n.get("node_id", "") for n in gdiff.get("added_nodes", [])]
+    removed_ids = [n.get("node_id", "") for n in gdiff.get("removed_nodes", [])]
+    changed_ids = [n.get("node_id", "") for n in gdiff.get("changed_nodes", [])]
+    added_edges = len(gdiff.get("added_edges", []))
+    removed_edges = len(gdiff.get("removed_edges", []))
+
+    goal_str = str((after_cdg.metadata or before_cdg.metadata or {}).get("goal") or "CDG Pipeline")
+    before_py = render_cdg_python_source(before_cdg, goal=goal_str)
+    after_py = render_cdg_python_source(after_cdg, goal=goal_str)
+
+    rule_stem = re.sub(r"^(apply|insert)_", "", rule_name).strip("_") or rule_name
+    from_file = "base_pipeline.py"
+    to_file = f"{rule_stem}.py"
+
+    diff_lines = list(
+        difflib.unified_diff(
+            before_py.splitlines(),
+            after_py.splitlines(),
+            fromfile=from_file,
+            tofile=to_file,
+            lineterm="",
         )
-    },
-    "apply_stacking_ensemble": {
-        "logs": (
-            "[INFO] Compiling CDG for ml_model_selection...\n"
-            "[INFO] Rule 'apply_stacking_ensemble' matched.\n"
-            "[INFO] Performing graph expansion...\n"
-            "[INFO] Replaced model predictor with Stacking Classifier meta-learner.\n"
-            "[INFO] Synthesis successful. Generating patch diff..."
-        ),
-        "diff": (
-            "--- single_predictor.py\n"
-            "+++ stacking_ensemble.py\n"
-            "@@ -15,4 +15,7 @@\n"
-            "- prediction = model.predict(X)\n"
-            "+ from sklearn.ensemble import StackingClassifier\n"
-            "+ meta_learner = LogisticRegression()\n"
-            "+ stacked_predictions = [m.predict(X) for m in base_models]\n"
-            "+ prediction = meta_learner.fit_predict(stacked_predictions, y)"
+    )
+    if not diff_lines:
+        # Fallback structural JSON diff if only non-leaf metadata changed
+        before_json = json.dumps(before_cdg.model_dump(mode="json"), indent=2).splitlines()
+        after_json = json.dumps(after_cdg.model_dump(mode="json"), indent=2).splitlines()
+        diff_lines = list(
+            difflib.unified_diff(
+                before_json,
+                after_json,
+                fromfile=from_file,
+                tofile=to_file,
+                lineterm="",
+            )
         )
-    },
-    "insert_jump_removal_before_filter": {
-        "logs": (
-            "[INFO] Compiling CDG for signal_event_rate...\n"
-            "[INFO] Rule 'insert_jump_removal_before_filter' matched.\n"
-            "[INFO] Performing graph refinement...\n"
-            "[INFO] Inserted jump removal filter before the lowpass filter stage.\n"
-            "[INFO] Synthesis successful. Generating patch diff..."
+
+    log_lines = [
+        f"[INFO] Rule '{rule_name}' matched and applied via DPO GraphRewriter.",
+        (
+            f"[INFO] Topology delta: nodes {len(before_cdg.nodes)} -> {len(after_cdg.nodes)} "
+            f"(+{len(added_ids)} / -{len(removed_ids)} / ~{len(changed_ids)}), "
+            f"edges {len(before_cdg.edges)} -> {len(after_cdg.edges)} (+{added_edges} / -{removed_edges})."
         ),
-        "diff": (
-            "--- raw_filtering.py\n"
-            "+++ clean_filtering.py\n"
-            "@@ -5,4 +5,6 @@\n"
-            "- filtered = butterworth_filter(signal)\n"
-            "+ clean_signal = remove_jumps(signal)\n"
-            "+ filtered = butterworth_filter(clean_signal)"
-        )
-    },
-    "insert_stiffness_detection_before_advance": {
-        "logs": (
-            "[INFO] Compiling CDG for ode_solver...\n"
-            "[INFO] Rule 'insert_stiffness_detection_before_advance' matched.\n"
-            "[INFO] Performing graph refinement...\n"
-            "[INFO] Inserted stiffness detection guard before the state advancement.\n"
-            "[INFO] Synthesis successful. Generating patch diff..."
-        ),
-        "diff": (
-            "--- standard_solver.py\n"
-            "+++ adaptive_solver.py\n"
-            "@@ -20,4 +20,7 @@\n"
-            "- next_state = advance_state(state, derivative)\n"
-            "+ if detect_stiffness(state, derivative):\n"
-            "+     next_state = advance_stiff_state(state, derivative)\n"
-            "+ else:\n"
-            "+     next_state = advance_state(state, derivative)"
-        )
-    },
-    "insert_transient_detection_after_apply_filter": {
-        "logs": (
-            "[INFO] Compiling CDG for signal_filter...\n"
-            "[INFO] Rule 'insert_transient_detection_after_apply_filter' matched.\n"
-            "[INFO] Performing graph refinement...\n"
-            "[INFO] Inserted transient detection guard after apply filter.\n"
-            "[INFO] Synthesis successful. Generating patch diff..."
-        ),
-        "diff": (
-            "--- simple_filtering.py\n"
-            "+++ transient_guarded_filtering.py\n"
-            "@@ -15,4 +15,6 @@\n"
-            "- filtered = apply_filter(coefficients, sig)\n"
-            "+ filtered = apply_filter(coefficients, sig)\n"
-            "+ clean_filtered = detect_and_suppress_transients(filtered)"
-        )
-    }
-}
+    ]
+    if added_ids:
+        log_lines.append(f"[INFO] Inserted nodes: {', '.join(added_ids)}")
+    if removed_ids:
+        log_lines.append(f"[INFO] Removed nodes: {', '.join(removed_ids)}")
+    if changed_ids:
+        log_lines.append(f"[INFO] Updated nodes: {', '.join(changed_ids)}")
+    log_lines.append(f"[INFO] Synthesized pipeline patch ({len(diff_lines)} diff lines) -> {to_file}")
+    return "\n".join(log_lines), "\n".join(diff_lines)
 
 
 @router.post("/api/delta_planner/apply_fix")
 async def apply_fix(body: ApplyFixRequest) -> dict[str, Any]:
     from sciona.principal.expansion import ExpansionEngine
     from sciona.principal.expansion_rules import default_rule_sets
-    
+
     engine = ExpansionEngine(default_rule_sets())
     rule = engine._rule_index.get(body.rule_name)
     if not rule:
         raise HTTPException(status_code=404, detail=f"Rewrite rule '{body.rule_name}' not found")
-        
+
     result = engine._rewriter.apply_rule(rule, body.cdg)
     if result.is_failure:
         raise HTTPException(status_code=400, detail=f"Failed to apply rewrite rule: {result.error}")
-        
+
     updated_cdg = result.unwrap()
-    
-    logs = _REWRITE_RULE_LOGS.get(body.rule_name, {}).get("logs", f"[INFO] Rule '{body.rule_name}' applied.\n[INFO] Synthesis successful.")
-    diff = _REWRITE_RULE_LOGS.get(body.rule_name, {}).get("diff", f"--- original.py\n+++ patched.py\n# Applied {body.rule_name}")
-    
+    logs, diff = _build_real_rewrite_logs_and_diff(body.rule_name, body.cdg, updated_cdg)
+
     return {
         "updated_cdg": updated_cdg.model_dump(),
         "logs": logs,
