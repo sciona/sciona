@@ -1,0 +1,114 @@
+{
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "graph_execution": {
+    "graph_sha256": "ae1586ae71407376a8406a60e7f7f90f45edd0e0c7caba451d03c16b2fac7104",
+    "nodes": 7,
+    "edges": 9,
+    "missing_edges_rejected": 9,
+    "query_keys_exact": true,
+    "query_rows_exact": true,
+    "keyed_input_unchanged": true,
+    "synthetic_integer_times_exact": true,
+    "projection_borrows_values": true,
+    "projection_rejections": 3,
+    "node_order": [
+      "query_route",
+      "features",
+      "project",
+      "cast",
+      "columns",
+      "replay",
+      "reduce"
+    ],
+    "provider_sha256": {
+      "sciona.atoms.ml.domain_adapters.osic_query_routing": "f9d9625ffd0c52574366caad20da3cde0b237d65c48833bd78700cf73455f58d",
+      "sciona.atoms.ml.domain_adapters.osic_feature_replay": "3f73748d3909bff463e3eb5dabd1f5c2ca9af729c00b16b7afe92f8eb3061104",
+      "sciona.atoms.ml.domain_adapters.osic_feature_projection": "61e15ea639750c6757b1f62a676ffb0f1b44b632ec30559a069c5e86db9eb776",
+      "sciona.atoms.ml.pipeline.typed_inputs": "a5545e5b2e1727fc10865fdc8f5fadc9fd72202a7357b1503817d65ec88695cf",
+      "sciona.atoms.ml.domain_adapters.osic_quantile": "1d39499ed4ea783f460257e947e9789130be5c1be1165837bc8f22b79d42538f"
+    }
+  },
+  "software_sha256": {
+    "sciona/osic_quantile_replay_graph.py": "944e01c1fcf3773cc89264ab6abde123703d4a7bc1e53796e15570eebee19937",
+    "sciona/osic_keyed_quantile_graph.py": "db90a853b2302209beeedac6773383ccdf6a62206b64a0964b9fe84a73175302",
+    "scripts/validate_osic_keyed_quantile_graph.py": "6e3257ff17c91ec5964232e39b55f13b2f26d9a6df9a57b3e4bc679db62b6246",
+    "sciona/visualizer/runner.py": "22a49655e61c10d800aa2a6a9b5115cd873a9e699ea9903fa0f856aea8af67a4",
+    "sciona/services/execution_graph_codec.py": "1ad42332f8e28adf4ee3f8d53184a4af8351f66304efa1703c63ed32989082a6"
+  },
+  "raw_replay_qualification": {
+    "format": "osic-raw-table-replay.v1",
+    "passed": true,
+    "approved": false,
+    "catalog_mutations": 0,
+    "synthetic_only": true,
+    "fresh_process_replay": {
+      "passed": true,
+      "raw_queries": 5,
+      "feature_values": 45,
+      "features_exact": true,
+      "predictions_exact": true,
+      "feature_fitting_disabled": true,
+      "model_updates_disabled": true
+    },
+    "fitted_dtype_cases": [
+      "float64",
+      "float32"
+    ],
+    "corruption_cases_rejected": [
+      "format",
+      "executable_field",
+      "coordinate",
+      "query_scope",
+      "feature_order",
+      "missing_baseline",
+      "duplicate_baseline",
+      "nonfinite_baseline",
+      "zero_range",
+      "object_dtype"
+    ],
+    "model_training_epochs": [
+      600,
+      600
+    ],
+    "software_sha256": {
+      "scripts/validate_osic_raw_table_replay.py": "5eab7a6d040ff65b95c9097c59846c7687da114ad8fe0f4396115542d80f1d8c",
+      "sciona/osic_feature_state.py": "4d2dfba5ad2e367591586bf8be1f7896290a492a7394a0ee536e5e196cfe4136",
+      "sciona/osic_quantile_features.py": "7db2c03ec342165e8a93325dd21a0746575adde4363f325eea6bed8406553d2b",
+      "sciona/osic_quantile_training.py": "c0f81b5b4ccb3926ec6cc030c8b121e828e962f8ab7313ba1daac43287f46fbd",
+      "sciona/osic_quantile_state.py": "5776cb1ba94373672b937e9324c478a2e46da26b5be5e2f2bda93b6077633802",
+      "sciona/osic_quantile_model.py": "80bb8d8e135c96be73c046cd05882d48c5fa5779d39a2a01b5f6284f7708d8e8",
+      "sciona/osic_quantile_objective.py": "b1726979feb3375c7193764c8de69fd9dafdc203ce99b2c41c41ab8fd9459804",
+      "sciona/tensorflow_distribution_losses.py": "0d2e7b87f1fab0d3181b6eae412a4ff27af501e202b306b46b224e5e24bb8be6",
+      "sciona/osic_predictions.py": "6e3dbca24d78302ae74ea525fe8d2f380cda9308dc76a4a3f225c4cd863ebace",
+      "sciona.atoms.ml.tensorflow_distribution_losses": "6d5e93c25ced4e359c38d44273612a0d6a92105d033dfb413a0b4e88692cd658",
+      "sciona.atoms.numerical.statistics.ordered_sum": "893e4fb0c884d1732d9bba0ae2e203b72170bba11fbc89443306e6fd1b6ea359"
+    },
+    "private_artifacts_unchanged": true,
+    "fitted_state_unchanged": true,
+    "runtime": {
+      "tensorflow": "2.20.0",
+      "tf_keras": "2.20.1",
+      "numpy": "2.2.6",
+      "pandas": "2.3.3"
+    },
+    "resource_policy": {
+      "native_threads": 1,
+      "serial_training_and_replay": true
+    },
+    "limitations": [
+      "Replay is bound to the exact declared query batch and order; a new transductive query population requires new preparation and training.",
+      "Saved preprocessing state includes caller-specific baselines and query scope and must remain private runtime material.",
+      "Feature and model state validation is structural; authenticity requires external artifact integrity/provenance controls.",
+      "Only the quantile branch is connected; image training, final two-branch graph, dependency qualification and catalog publication remain pending."
+    ]
+  },
+  "limitations": [
+    "Graph executes generated query rows and two freshly trained 600-epoch synthetic fold states; no empirical effectiveness claim.",
+    "Query routing is locally qualified, not catalog-approved; graph and original workflow remain unapproved.",
+    "Explicit provider discovery and intercepted intermediate persistence; HTTP transport, default discovery and caching remain unqualified.",
+    "Keys and quantile predictions are aligned boundary outputs; final image/quantile blending remains outstanding."
+  ]
+}

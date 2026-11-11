@@ -3057,3 +3057,14 @@ catalog intake and composed execution remain pending. The combined graph must
 also route image slope and quantile response coordinate declarations explicitly
 because both existing provider interfaces use the name response_coordinate.
 See `osic_query_routing.json`.
+
+The keyed quantile graph now connects query routing to frozen feature replay
+and exposes keys alongside reduced predictions as aligned boundary outputs.
+Seven nodes and nine edges execute through the canonical codec and real runner;
+all nine missing-edge projections reject. Fresh synthetic fold states reproduce
+the prior features and predictions exactly, preserving supplied reverse-ordered
+keys and input rows. The historical quantile fixture's integral floating times
+are explicitly converted to int64 with exact-value verification when constructing
+the shared-branch fixture; production query routing still rejects floating
+times. Query-provider promotion and final image/quantile composition remain
+pending. See `osic_keyed_quantile_graph.json`.
