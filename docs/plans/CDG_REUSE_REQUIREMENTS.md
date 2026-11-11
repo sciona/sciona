@@ -3012,3 +3012,15 @@ Failure points 1, 6 and 13 rolled back completely; application changed thirteen
 rows and repeat changed none. Both providers remain non-serving pending semantic
 review and publication of the corrected contracts. See
 `typed_inputs_correction_transactions.json` and `typed_inputs_correction_apply.json`.
+
+Both generic conversions now have automated Tier 3 approval and are served in
+both catalogs. Review freshly reproduced the Unicode correction and verified
+round-to-even behavior, signed underflow, negative zero, scalar shape and
+independent strided-tensor copies. Publication rejected 42 catalog corruptions
+and rolled back failures after writes 1, 9, 19 and 29. Served verification made
+twenty casting calls and thirteen descriptor-encoding calls with exact results;
+repeat publication changed no rows. The superseded encoder version and failed
+audit remain preserved. Projection approval, query-key routing, final branch
+blending and full-CDG qualification remain outstanding. See
+`typed_inputs_provider_publication_gates.json` and
+`typed_inputs_served_verification.json`.
