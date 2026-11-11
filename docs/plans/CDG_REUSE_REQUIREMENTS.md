@@ -3080,3 +3080,15 @@ branch-composition evidence; final image/quantile blending and complete original
 workflow qualification are outstanding. See
 `osic_query_routing_served_verification.json` and
 `osic_keyed_quantile_graph_served.json`.
+
+The combined inference graph now explicitly connects both branches and the
+approved keyed blend as fifteen nodes and twenty-six edges. A small coordinate
+routing provider preserves independent image-slope and quantile-response
+declarations, avoiding accidental sharing of the same root parameter name.
+Three declaration cases and eleven rejection checks pass; canonical graph
+round-trip, exact registered signatures and all twenty-six missing-edge
+rejections pass. Both branches share keyed queries, while quantile feature
+replay receives only the routed entity/time rows. This is structural evidence
+only: combined numerical execution and coordinate-provider promotion remain
+pending, and opaque coordinate labels do not establish unit compatibility.
+See `osic_combined_graph_structure.json`.
