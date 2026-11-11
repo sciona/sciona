@@ -2747,3 +2747,22 @@ two complete quantile fits and the aligned final blend exactly, with fitting
 disabled during replay. This remains intermediate-checkpoint evidence; no image
 provider or original intake is approved by this change. See
 `osic_image_inference.json` and `osic_intermediate_composition.json`.
+
+
+The four image preparation/reduction interfaces now have automated Tier 3
+approval in both catalogs. They expose raw training-population preparation,
+per-entity encoded-slice preparation, trajectory reduction and keyed branch
+blending. Affine fitting and ordered weighted summation remain independent
+approved dependencies. The source's normalization, metadata interpretation,
+exclusions, uncertainty heuristic and fixed branch weights remain explicit
+adapter policies rather than general-purpose claims.
+
+Publication rejected 100 corruption cases and passed complete rollback checks
+after writes 1, 27, 55 and 83. A fresh isolated worker resolved all four served
+bindings and executed each against the pinned synthetic source composition;
+training preparation, intermediate-checkpoint inference, quantile replay and
+the final blend matched exactly. This qualifies the four interfaces, not image
+model training or the original OSIC intake. Complete image training and final
+stored-graph qualification remain pending. See
+`osic_image_provider_publication_gates.json` and
+`osic_image_served_verification.json`.
