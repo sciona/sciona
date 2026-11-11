@@ -3046,3 +3046,14 @@ projections reject, and private inputs remain unchanged. This establishes served
 composition of the branch, not graph publication or original-CDG approval.
 Query-key routing and final image/quantile blending remain outstanding. See
 `osic_quantile_graph_served.json`.
+
+A source query-boundary adapter now splits keyed image queries into copied
+entity/time rows and a key list for quantile replay and final blending. It
+preserves row order, repeated coordinates, duplicate indexes, exact strings and
+native int64 times without key generation or sorting. Six column permutations,
+independent output cell mutations, integer extremes and eighteen rejected
+contracts pass synthetic checks. This adapter is locally qualified only;
+catalog intake and composed execution remain pending. The combined graph must
+also route image slope and quantile response coordinate declarations explicitly
+because both existing provider interfaces use the name response_coordinate.
+See `osic_query_routing.json`.
