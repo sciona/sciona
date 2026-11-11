@@ -88,8 +88,14 @@ with psycopg.connect(dotenv_values(root/'.env')['SCIONA_DATA_CATALOG_DATABASE_UR
  report['served_versions_with_execution_envelope_and_exact_approved_bindings']=sum(
   r['served'] and r['execution_envelope_valid'] and r['active_bindings_complete'] and r['approved_provider_versions_exact']
   and r['passed_version_audit'] and not r['failed_version_audits'] for r in selected)
+ remaining=[r for r in reports if not r['selected_catalog_version']['served']]
+ remaining_outcomes=Counter()
+ for r in remaining:remaining_outcomes.update(r['outcomes'])
+ report['original_artifacts_not_served']=len(remaining)
+ report['unserved_original_stage_outcomes']=dict(sorted(remaining_outcomes.items()))
+ report['unserved_originals_with_direct_served_provenance']=sum(bool(r['served_realizations_with_direct_provenance']) for r in remaining)
  report['scope']='Historical intake keyword coverage, direct source provenance and separately reported current-version catalog integrity. A served corrected version does not make its historical placeholder interfaces executable. This audit does not rerun semantic/source/runtime qualification or establish completion of an entire source solution. Dataset content and identifying metadata excluded.'
  (root/'docs/reviews/competition_current_readiness.json').write_text(json.dumps(report,indent=2)+'\n')
  print(json.dumps({k:v for k,v in report.items() if k!='templates_detail'},indent=2))
- ranked=sorted(reports,key=lambda r:(-r['outcomes'].get('keyword_compatible',0),-r['outcomes'].get('adapter_or_missing_computation',0),r['stages']))
- print('ranked',json.dumps(ranked[:8],indent=2))
+ ranked=sorted(remaining,key=lambda r:(-r['served_realizations_with_direct_provenance'],-r['outcomes'].get('keyword_compatible',0),-r['outcomes'].get('adapter_or_missing_computation',0),r['stages'],r['version_id']))
+ print('unserved_originals_for_review',json.dumps(ranked[:8],indent=2))
