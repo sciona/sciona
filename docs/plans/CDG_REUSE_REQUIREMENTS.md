@@ -2980,3 +2980,11 @@ generic conversions remain unapproved; graph publication, query-key routing and
 final image/quantile blending remain pending. Explicit discovery and intercepted
 intermediate persistence remain qualification limits. See
 `osic_quantile_replay_graph.json`.
+
+The generic floating cast and descriptor encoder now have non-serving drafts
+in both catalogs. Intake pins their synthetic conversion evidence and their
+composed quantile-graph execution without treating the graph as a fixed provider
+dependency. Failures after writes 1, 10 and 20 rolled back completely. The
+applied import created twenty rows for two providers and the repeat created
+none. Semantic review and publication gates remain pending. See
+`typed_inputs_intake_transactions.json` and `typed_inputs_intake_apply.json`.
