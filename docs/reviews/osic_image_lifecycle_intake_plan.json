@@ -1,0 +1,217 @@
+{
+  "format": "osic-image-lifecycle-intake-plan.v1",
+  "passed": true,
+  "applied": false,
+  "approved": false,
+  "catalog_mutations": 0,
+  "owner": {
+    "owner_id": "33ed07a2-1bea-5b17-8b71-d6d0e590fdd9",
+    "source_repo_id": "27b787a0-27ed-4760-92b7-ad8e8b4b815c"
+  },
+  "new_providers": [
+    {
+      "runtime_fqdn": "sciona.atoms.ml.domain_adapters.osic_image_lifecycle.build_image_model",
+      "atom_id": "e437fce2-43b1-5824-83f2-c61a41037717",
+      "version_id": "426dc2ca-5571-5060-874d-1e920f760571",
+      "content_hash": "ddbb28e4c83fc9dd67a1c18fc70ceeaec9a01ce1e389d0779c67bee7f2b43e95",
+      "provider_sha256": "2ecbb4534946cec76e88c0ac05426a8c97db4c97d3833028b6e36d364d4ac3d7",
+      "semver": "0.0.0+local.ddbb28e4c83f",
+      "fingerprint": "5282fce59fcc5c63a37951a4a165e7f5ad5f06879683381ccaf7ac0e8d4c6186",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.domain_adapters.osic_image_lifecycle.build_image_model",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.domain_adapters.osic_image_lifecycle",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.domain_adapters.osic_image_lifecycle",
+        "import_module": "sciona.atoms.ml.domain_adapters.osic_image_lifecycle",
+        "source_symbol": "build_image_model",
+        "description": "Construct the fixed random-initialized B5 slope model without fitting. Require the qualified efficientnet 1.1.0 and legacy-Keras runtime. Inputs are image tensors (N,512,512,1) and metadata (N,4), output is (N,1). Preserve GaussianNoise(0.2), Dropout(0.5) and the source linear head. No pretrained weights, optimizer or normalization are supplied. Construction consumes caller RNG state; caller owns seeding, units and feature policy.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "interfaces": [
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "tf_keras.Model",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Uncompiled random-initialized fixed EfficientNetB5 image/metadata model with one scalar linear output, GaussianNoise(0.2) and Dropout(0.5). No fitting, optimizer, pretrained weights or input normalization. Construction consumes caller RNG state. Require qualified efficientnet 1.1.0 and legacy Keras; caller establishes seeds and bounds compute threads. Concrete provisioned runtime only; abstract witness rejects. Fixed source architecture is adapter policy, separate from generic bounded prediction. Intermediate synthetic-checkpoint qualification only; no complete-training, original-CDG, empirical transfer, clean-install or HTTP transport claim."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.domain_adapters.osic_image_lifecycle.export_image_prediction_state",
+      "atom_id": "5ed8793f-4d36-579c-956c-dc9291c42bcf",
+      "version_id": "04a50d2e-4066-5221-9e03-219e5e412508",
+      "content_hash": "e8f9f8db5b917c58c3f18fd0279f0090c2f4b25c333d166597ca31462041ccef",
+      "provider_sha256": "2ecbb4534946cec76e88c0ac05426a8c97db4c97d3833028b6e36d364d4ac3d7",
+      "semver": "0.0.0+local.e8f9f8db5b91",
+      "fingerprint": "377be144f6fa99bddf68cf20e3e2d365a967d6c840fc9b2ba7ece3378d0fd609",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.domain_adapters.osic_image_lifecycle.export_image_prediction_state",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.domain_adapters.osic_image_lifecycle",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.domain_adapters.osic_image_lifecycle",
+        "import_module": "sciona.atoms.ml.domain_adapters.osic_image_lifecycle",
+        "source_symbol": "export_image_prediction_state",
+        "description": "Export fixed-model finite float32 weights and a strict numeric manifest. Require the exact local topology, a positive optimizer update counter and explicit nonempty coordinate declarations. The counter is not evidence of complete training. Write only into a new caller-owned private directory; return its manifest. Constructor-based validation consumes RNG state: run outside live training. No optimizer, callbacks or RNG state are exported, so the result supports inference only. Writes are not an atomic transaction; failed I/O may leave a partial directory. Caller controls paths and provenance.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "model",
+          "type_desc": "tf_keras.Model",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Exact fixed local B5 topology with a positive optimizer update counter and a complete finite float32 weight inventory. The counter is not evidence of complete training. Caller controls authenticity and invokes export outside live training; validation consumes RNG state."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "directory",
+          "type_desc": "str | pathlib.Path",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Caller-owned private filesystem location. Export requires a new directory and writes numeric weights and a strict manifest; failed I/O may leave partial files. Restore requires stable existing files, validates identities and uses NPZ with pickle disabled. Caller controls permissions, path trust and provenance. No remote transport or atomic snapshot guarantee."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "image_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit nonempty image-coordinate declaration, exact-match bound into the numeric state. Caller establishes intensity normalization, shape (N,512,512,1), units and source policy; labels alone do not establish equivalence."
+        },
+        {
+          "direction": "input",
+          "ordinal": 3,
+          "name": "metadata_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit nonempty metadata-coordinate declaration, exact-match bound into the numeric state. Caller establishes ordered four-component feature meaning, units and encoding; no mapping or normalization is inferred."
+        },
+        {
+          "direction": "input",
+          "ordinal": 4,
+          "name": "response_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit nonempty scalar slope-coordinate declaration, exact-match bound into the numeric state. Caller establishes units and compatibility with downstream baseline and query time coordinates."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Strict manifest describing private finite float32 numeric weights written into the new directory. Fixed local graph, model-code identity, ordered shapes, archive digest and coordinate labels are bound. No optimizer, callback or RNG state: inference only, not training resumption. Constructor validation consumes RNG state; I/O is not atomic. Concrete provisioned runtime only; abstract witness rejects. Fixed source architecture is adapter policy, separate from generic bounded prediction. Intermediate synthetic-checkpoint qualification only; no complete-training, original-CDG, empirical transfer, clean-install or HTTP transport claim."
+        }
+      ]
+    },
+    {
+      "runtime_fqdn": "sciona.atoms.ml.domain_adapters.osic_image_lifecycle.restore_image_prediction_state",
+      "atom_id": "ffc75b55-10ba-5b42-9ca2-f814bc96c583",
+      "version_id": "917815ff-b2f9-5c66-8baf-5f911de1f9bd",
+      "content_hash": "009935fa351e801fca3449730494a2c4f6e56c0674c3b63dcc2d33b2d5e3bea6",
+      "provider_sha256": "2ecbb4534946cec76e88c0ac05426a8c97db4c97d3833028b6e36d364d4ac3d7",
+      "semver": "0.0.0+local.009935fa351e",
+      "fingerprint": "3cf2eea60685b9acf7a5060a3fa9e25b388e95799678e5c65ca65f7dbe4e4a43",
+      "seed_fields": {
+        "fqdn": "sciona.atoms.ml.domain_adapters.osic_image_lifecycle.restore_image_prediction_state",
+        "namespace_root": "sciona.atoms",
+        "namespace_path": "ml.domain_adapters.osic_image_lifecycle",
+        "repo_name": "sciona-atoms-ml",
+        "source_module_path": "ml.domain_adapters.osic_image_lifecycle",
+        "import_module": "sciona.atoms.ml.domain_adapters.osic_image_lifecycle",
+        "source_symbol": "restore_image_prediction_state",
+        "description": "Restore the fixed local model from private numeric inference state. Validate exact manifest fields, caller coordinates, local model-code and graph identities, archive digest and ordered finite float32 weight shapes. Load NPZ with pickle disabled and reconstruct locally; do not deserialize executable model graphs or fit. Return an uncompiled model without optimizer state. Construction consumes RNG state. Caller establishes authenticity, trusted directory access and stable files; hashes alone are not provenance.",
+        "domain_tags": [
+          "ml"
+        ],
+        "source_kind": "hand_written",
+        "is_ffi": false
+      },
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "directory",
+          "type_desc": "str | pathlib.Path",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Caller-owned private filesystem location. Export requires a new directory and writes numeric weights and a strict manifest; failed I/O may leave partial files. Restore requires stable existing files, validates identities and uses NPZ with pickle disabled. Caller controls permissions, path trust and provenance. No remote transport or atomic snapshot guarantee."
+        },
+        {
+          "direction": "input",
+          "ordinal": 1,
+          "name": "image_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit nonempty image-coordinate declaration, exact-match bound into the numeric state. Caller establishes intensity normalization, shape (N,512,512,1), units and source policy; labels alone do not establish equivalence."
+        },
+        {
+          "direction": "input",
+          "ordinal": 2,
+          "name": "metadata_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit nonempty metadata-coordinate declaration, exact-match bound into the numeric state. Caller establishes ordered four-component feature meaning, units and encoding; no mapping or normalization is inferred."
+        },
+        {
+          "direction": "input",
+          "ordinal": 3,
+          "name": "response_coordinate",
+          "type_desc": "str",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Explicit nonempty scalar slope-coordinate declaration, exact-match bound into the numeric state. Caller establishes units and compatibility with downstream baseline and query time coordinates."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "tf_keras.Model",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Uncompiled fixed local model with exact finite float32 weights restored after manifest, coordinate, graph, model-code, inventory and archive checks. No fitting, optimizer state or executable graph deserialization. Construction consumes RNG state. Digests do not establish provenance or defend against concurrent file changes. Concrete provisioned runtime only; abstract witness rejects. Fixed source architecture is adapter policy, separate from generic bounded prediction. Intermediate synthetic-checkpoint qualification only; no complete-training, original-CDG, empirical transfer, clean-install or HTTP transport claim."
+        }
+      ]
+    }
+  ],
+  "registered_provider_dependencies": [],
+  "execution_evidence_commit": "dc5718f3",
+  "execution_evidence_sha256": "b7e3a9e9173f44dea915e5364a2bbcfa6507ed6229fb2b879ade8081f9cec201",
+  "provider_revision": "bc4642e",
+  "planner_sha256": "ce13c667acb7314f4fb15bfa6a5f7f4aa204d5f7783f88c770c27b54ff63ad04",
+  "implementation_sha256": {
+    "sciona/osic_image_model.py": "403ff9e7f6f3a2ba362c599abc68910c527a831366cff8a2563b2828db7618df",
+    "sciona/osic_image_state.py": "876b5328b675634e0a18e42589aee8d444cf50eb1a5824cab8d01bc663817a54"
+  },
+  "execution_evidence_files": [
+    "docs/reviews/osic_image_lifecycle_providers.json"
+  ],
+  "limitations": [
+    "Draft plan only; transaction, semantic review and publication gates remain required.",
+    "Fixed model construction and state implementation are hash-bound software calls, not registered provider-to-provider calls. No new registered atom dependency is asserted.",
+    "Caller owns private state paths, coordinates, authenticity and stable file access. Inference state cannot resume training.",
+    "Intermediate synthetic qualification does not complete image training, the stored original CDG or empirical transfer."
+  ]
+}
