@@ -2954,3 +2954,15 @@ Input conversion, quantile graph integration, branch blending and complete
 original-CDG qualification remain outstanding. See
 `osic_feature_replay_provider_publication_gates.json` and
 `osic_feature_replay_served_verification.json`.
+
+Two generic conversion providers now make the next quantile boundary explicit:
+finite floating-array casting to a caller-specified float32/float64 dtype, and
+compact JSON encoding of structured feature descriptors. Neither embeds source
+population policy. Casting always copies, preserves shape/order and rejects
+nonfinite inputs or overflow; ordinary narrowing rounding and underflow remain
+explicit precision limits. Descriptor encoding preserves component order and
+exact strings, avoids delimiter collisions and does not infer column meanings.
+Eight constructed motion/power casting cases, descriptor round trips and
+eighteen invalid contracts pass. These providers are locally qualified only;
+catalog promotion and quantile graph composition remain pending. See
+`typed_inputs_provider.json`.
