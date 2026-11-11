@@ -3002,3 +3002,13 @@ drafts remain non-serving; their pinned provider bytes no longer match and a
 reviewed intake/version update is required before publication. See
 `typed_inputs_unicode_correction.json` and
 `osic_quantile_replay_graph_unicode_correction.json`.
+
+The Unicode correction is now staged in both catalogs. Only the encoder gained
+a new version; the cast version is unchanged. The prior encoder version and
+its exact ports remain present, with only its latest flag cleared. A completed
+failed semantic audit records the reproduced counterexample against that old
+version, while new integrity evidence records the corrected non-serving draft.
+Failure points 1, 6 and 13 rolled back completely; application changed thirteen
+rows and repeat changed none. Both providers remain non-serving pending semantic
+review and publication of the corrected contracts. See
+`typed_inputs_correction_transactions.json` and `typed_inputs_correction_apply.json`.
