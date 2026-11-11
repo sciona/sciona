@@ -3178,3 +3178,13 @@ graphs need separately reviewed replacement versions with exact new bindings,
 while historical graph versions remain unchanged. This is rollback evidence,
 not semantic approval or committed-publication idempotency. See
 `osic_relocated_version_rehearsal.json`.
+
+Independent triage of the remaining Santa 2021 intake found a source-identity
+gap before implementation. Its stored competition title differs from the official
+title, and the cited discussion returned HTTP 404. Indexed primary-source
+writeups found during this review identify third- and thirtieth-place solutions,
+not the claimed first-place recipe. They are not substituted for the intake.
+Recovery of the claimed source or an explicitly authorized, reviewed attribution
+correction must precede implementation qualification. Historical intake and draft
+catalog state are preserved. See `santa2021_source_identity.json` for the source
+links, retrieval limitations and required evidence.
