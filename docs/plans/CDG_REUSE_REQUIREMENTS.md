@@ -3139,3 +3139,15 @@ state remain unchanged. Current software identities are checked across the
 run. This is numerical relocation evidence, not renewal of catalog approvals,
 installation of archived graph builders, complete image training or original
 workflow completion. See `osic_relocated_combined_graph.json`.
+
+A read-only provider-version reconciliation now reproduces all fifteen current
+catalog identities from the committed pre-relocation provider source and checks
+agreement between both served catalogs. Nine callable identities change under
+the relocated imports; six remain identical. Normalized AST comparison confirms
+that the wrapper edits are limited to ML runtime import relocation. The plan
+records deterministic proposed versions and hashes, linked to the successful
+combined numerical qualification, without updating any catalog row. The nine
+changed callables are still uncommitted in the provider repository. Their new
+immutable revisions, transitive-runtime review, transactional gates and fresh
+served execution must precede promotion; existing approval flags alone do not
+qualify the changed bytes. See `osic_relocated_provider_version_plan.json`.
