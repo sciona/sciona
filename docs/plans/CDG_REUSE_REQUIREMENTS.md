@@ -2933,3 +2933,12 @@ invalid or abstract contracts are rejected. This state is tied to the exact
 declared transductive query batch; it is not a general train-only scaler.
 Model-input casting and descriptor serialization remain separate graph work.
 The provider is not yet catalog-approved. See `osic_feature_replay_provider.json`.
+
+Frozen feature replay now has a non-serving draft in both catalogs with four
+explicit input contracts and a structured mapping output. The contracts retain
+the exact transductive query scope, private-state provenance responsibility and
+the distinction between saved arithmetic dtype and promoted stacked-array dtype.
+Intake failure points 1, 7 and 15 rolled back completely. The applied import
+created fifteen rows; a repeated import created none. Semantic review and
+publication remain pending. See `osic_feature_replay_intake_transactions.json`
+and `osic_feature_replay_intake_apply.json`.
