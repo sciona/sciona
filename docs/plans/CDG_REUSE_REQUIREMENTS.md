@@ -2786,3 +2786,16 @@ dataset worker in addition to bounded model compute. This atom approval does
 not increase the count of approved competition originals. See
 `keras_bounded_provider_publication_gates.json` and
 `keras_bounded_served_verification.json`.
+
+
+Three separate image lifecycle interfaces now expose fixed B5 construction,
+numeric inference-state export and numeric state restore. They preserve the
+source architecture as explicit policy and leave generic prediction separate.
+Their synthetic qualification reproduces the frozen intermediate-checkpoint
+evidence, including exact fresh-process inference with fitting and HDF5 loading
+disabled, ten rejected state corruptions and unchanged private source files.
+State contains inference weights only; caller coordinates do not establish
+provenance, constructor checks consume RNG state and export writes are not
+atomic. These interfaces are not yet catalog-approved. Intake, semantic review
+and publication gates remain pending, as do complete image training and the
+original stored graph. See `osic_image_lifecycle_providers.json`.
