@@ -3068,3 +3068,15 @@ are explicitly converted to int64 with exact-value verification when constructin
 the shared-branch fixture; production query routing still rejects floating
 times. Query-provider promotion and final image/quantile composition remain
 pending. See `osic_keyed_quantile_graph.json`.
+
+Query routing now has automated Tier 3 approval in both served catalogs. Draft
+intake rolled back failures at writes 1, 4 and 9; publication rejected 21 catalog
+faults and rolled back failures at writes 1, 4, 9 and 14. Direct served execution
+reproduced all qualification checks through 24 resolved calls, and repeat
+publication changed no rows. The complete seven-node keyed quantile graph then
+reproduced exact features, predictions and key alignment using immutable reviewed
+bindings from both served catalogs. All nine missing edges reject. This remains
+branch-composition evidence; final image/quantile blending and complete original
+workflow qualification are outstanding. See
+`osic_query_routing_served_verification.json` and
+`osic_keyed_quantile_graph_served.json`.
