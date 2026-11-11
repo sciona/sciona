@@ -2942,3 +2942,15 @@ Intake failure points 1, 7 and 15 rolled back completely. The applied import
 created fifteen rows; a repeated import created none. Semantic review and
 publication remain pending. See `osic_feature_replay_intake_transactions.json`
 and `osic_feature_replay_intake_apply.json`.
+
+Frozen feature replay is now approved at automated Tier 3 and served in both
+catalogs. Fresh semantic qualification reproduced float32/float64 arithmetic,
+known-observation outputs and thirteen rejected contracts. Publication rejected
+21 catalog corruptions and rolled back injected failures after writes 1, 6, 13
+and 20. The served-binding verifier made fourteen calls and reproduced the
+qualification exactly; repeat publication changed zero rows. The approval
+retains exact-query-scope, private-provenance and numeric-representability limits.
+Input conversion, quantile graph integration, branch blending and complete
+original-CDG qualification remain outstanding. See
+`osic_feature_replay_provider_publication_gates.json` and
+`osic_feature_replay_served_verification.json`.
