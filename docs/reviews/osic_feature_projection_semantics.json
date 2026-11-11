@@ -1,0 +1,108 @@
+{
+  "format": "osic-feature-projection-semantics.v1",
+  "passed": true,
+  "approved": false,
+  "proposed_tier": 3,
+  "verdict": "acceptable_with_limits",
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "providers": [
+    {
+      "artifact_id": "9702e7bc-3705-5a81-9126-dee8e9957e0d",
+      "fqdn": "sciona.atoms.ml.domain_adapters.osic_feature_projection.unpack_quantile_features",
+      "version_id": "e14d34fb-2b8b-5475-a79e-114749828272",
+      "content_hash": "e05c716ca7a8059a68cdba34241d9605a256b9a391835078a1370046570ab14c",
+      "interfaces": [
+        {
+          "direction": "input",
+          "ordinal": 0,
+          "name": "prepared",
+          "type_desc": "dict",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "Plain dict with exactly features, feature_columns, observed_mask and observed_values. Upstream replay owns value validation; this adapter accepts arbitrary borrowed values. Caller owns availability, units, row alignment and downstream mutation."
+        },
+        {
+          "direction": "output",
+          "ordinal": 0,
+          "name": "result",
+          "type_desc": "tuple",
+          "required": true,
+          "default_value_repr": "",
+          "constraints": "New outer tuple in fixed order: features, feature_columns, observed_mask, observed_values. Preserve borrowed identity and shared aliases. No copying, numerical validation, casting, field renaming or model execution. Concrete in-process projection only; abstract witness rejects. Source-schema adapter, not a generic numerical algorithm. No empirical transfer, HTTP transport or whole-CDG approval claim."
+        }
+      ],
+      "operation": "Expose features, structured columns, observation mask and values in order. Require a plain mapping with exactly the four frozen-replay fields. Return borrowed values as a tuple without conversion or mutation. This operation only projects ports: upstream replay owns value validation and caller owns units, availability, alignment and downstream mutation of borrowed values.",
+      "plain_description": "Expose four supplied values in a fixed order without changing them.",
+      "validity_bounds": "Plain dict with exactly features, feature_columns, observed_mask and observed_values. Upstream replay owns value validation; this adapter accepts arbitrary borrowed values. Caller owns availability, units, row alignment and downstream mutation. New outer tuple in fixed order: features, feature_columns, observed_mask, observed_values. Preserve borrowed identity and shared aliases. No copying, numerical validation, casting, field renaming or model execution. Concrete in-process projection only; abstract witness rejects. Source-schema adapter, not a generic numerical algorithm. No empirical transfer, HTTP transport or whole-CDG approval claim.",
+      "reuse": "Narrow source-schema boundary that keeps port projection separate from reusable casting, descriptor encoding and numerical replay. Values, units and downstream interpretation remain caller-owned.",
+      "registered_provider_dependencies": []
+    }
+  ],
+  "connected_execution": {
+    "passed": true,
+    "approved": false,
+    "synthetic_only": true,
+    "catalog_mutations": 0,
+    "insertion_orders_checked": 24,
+    "fixed_output_order": [
+      "features",
+      "feature_columns",
+      "observed_mask",
+      "observed_values"
+    ],
+    "borrowed_identity_preserved": true,
+    "input_mapping_unchanged": true,
+    "shared_aliases_preserved": true,
+    "downstream_mutation_visible": true,
+    "outer_projection_independent": true,
+    "arbitrary_values_not_validated": true,
+    "rejected_contracts": [
+      "not_mapping",
+      "mapping_subclass",
+      "empty_mapping",
+      "extra_field",
+      "missing_features",
+      "missing_feature_columns",
+      "missing_observed_mask",
+      "missing_observed_values",
+      "no_implicit_key_trim",
+      "abstract_execution"
+    ],
+    "provider_sha256": "61e15ea639750c6757b1f62a676ffb0f1b44b632ec30559a069c5e86db9eb776",
+    "validator_sha256": "c732e0c9daa99ad8c4e9c31b42450351d413cd1a004a7ff551c0529d51e65cc3",
+    "limitations": [
+      "Source-schema port adapter only; no numerical algorithm or empirical transfer claim.",
+      "Upstream replay validates values; caller owns units, alignment, availability and downstream mutation.",
+      "No copying, casting, field renaming, training, inference or catalog approval.",
+      "Composed graph execution is qualified separately; these checks establish the local container contract."
+    ]
+  },
+  "software_sha256": {
+    "provider": "61e15ea639750c6757b1f62a676ffb0f1b44b632ec30559a069c5e86db9eb776",
+    "registry": "793723a75d07a88eed39f59d8d4dc327c54adbf75db7a03003516a6f74c81b51",
+    "scripts/review_osic_feature_projection_semantics.py": "fdf612e645fe1a97c6dd450fb3b4503034475e452230d7d4605cf3776eb339c3",
+    "scripts/import_osic_feature_projection_drafts.py": "8c8af96a1fa6d62cc313bfbe7db4091e65778e6f22bf35f4c9af57446482fa25",
+    "scripts/plan_osic_feature_projection_intake.py": "70716841ae450b5c73f551a2adf5f68c3ede8041d45a2b738670cc50a556728c",
+    "scripts/validate_osic_feature_projection.py": "c732e0c9daa99ad8c4e9c31b42450351d413cd1a004a7ff551c0529d51e65cc3"
+  },
+  "runtime": {
+    "python": "3.13.11"
+  },
+  "intake_plan_sha256": "24cb6d73b117c30de351e4ff3ef6eb027f756fe03f20758e7f6392b19c069f39",
+  "connected_execution_commit": "2c54a813",
+  "connected_execution_sha256": "eeca451e55e136c3ed0b1024182fb7552cf36bb766728de2a6f70f1ab018ea27",
+  "resource_policy": {
+    "native_threads": 1,
+    "foreground_cpu_budget": 1
+  },
+  "limitations": [
+    "Automated Tier 3 concrete in-process projection only; no human Tier 1 or empirical Tier 2 claim.",
+    "Exact plain mapping with four fixed source-schema fields. No inferred schema, field renaming or default missing values.",
+    "Return a new outer tuple of borrowed values in fixed order. No value inspection, copying, validation or conversion. Aliases and downstream mutation remain visible.",
+    "Caller owns field meanings, shapes, dtypes, row alignment, units, observation availability and downstream compatibility.",
+    "Source-schema adapter only. Reusable numerical operations remain separate; this provider makes no cross-disciplinary numerical or empirical effectiveness claim.",
+    "All 24 insertion orders and ten rejected contracts are freshly checked. The pinned six-node quantile graph is supplementary prior execution evidence; no training is rerun by this review.",
+    "No HTTP transport, serialization, thread-safety under concurrent mutation or original-CDG approval is established."
+  ]
+}
