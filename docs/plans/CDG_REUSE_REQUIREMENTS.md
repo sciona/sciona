@@ -2966,3 +2966,17 @@ Eight constructed motion/power casting cases, descriptor round trips and
 eighteen invalid contracts pass. These providers are locally qualified only;
 catalog promotion and quantile graph composition remain pending. See
 `typed_inputs_provider.json`.
+
+The quantile replay graph now exposes frozen feature transformation, borrowed
+port projection, explicit float32 casting, descriptor encoding, numeric fold
+replay and source reduction as six nodes with eight edges. A fresh child process
+executes the canonical projection through the real runner with fitting disabled.
+Features and reduced predictions exactly match the existing raw-query replay
+qualification using two freshly trained 600-epoch synthetic fold states. All
+eight missing-edge projections are rejected, projected values preserve identity,
+and private fixture artifacts remain unchanged. Trace files are isolated from
+the fixture integrity boundary. The narrow projection adapter and the two
+generic conversions remain unapproved; graph publication, query-key routing and
+final image/quantile blending remain pending. Explicit discovery and intercepted
+intermediate persistence remain qualification limits. See
+`osic_quantile_replay_graph.json`.
