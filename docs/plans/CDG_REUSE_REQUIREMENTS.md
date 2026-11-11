@@ -3104,3 +3104,13 @@ Private states and input tables remain unchanged. This qualifies combined
 inference wiring, not complete image training, empirical effectiveness or the
 original CDG. Coordinate-provider publication and served combined-graph
 verification remain pending. See `osic_combined_inference_graph.json`.
+
+Coordinate declaration routing received automated Tier 3 approval in both
+served catalogs. Intake rollback points 1, 5 and 11 and publication rollback
+points 1, 5, 10 and 16 all restored prior state. Publication rejected 21 catalog
+faults; served verification reproduced thirteen resolved calls, and repeat
+publication changed no rows. These checks completed before the concurrent
+runtime-package relocation and competition-ingestion archival appeared in the
+workspace. They record that pre-relocation state; served combined-graph
+verification and qualification of relocated implementations remain outstanding.
+See `osic_coordinate_routing_served_verification.json`.
