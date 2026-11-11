@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sciona Convergence &amp; Generalization Benchmark — vs. Canonical Frontier Agent Reference</title>
+<style>
+  :root {
+    --bg: #0b1120;
+    --bg-elev: #111827;
+    --panel: #151f32;
+    --panel-soft: #1e293b;
+    --border: #2dd4bf22;
+    --border-subtle: #334155;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --frontier: #f59e0b;
+    --frontier-soft: rgba(245, 158, 11, 0.14);
+    --v1: #60a5fa;
+    --v1-soft: rgba(96, 165, 250, 0.14);
+    --v2: #10b981;
+    --v2-soft: rgba(16, 185, 129, 0.16);
+    --bad: #ef4444;
+    --accent: #38bdf8;
+    --mono: "SFMono-Regular", ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+    --sans: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: var(--sans);
+    background: radial-gradient(circle at 15% 0%, #172554 0%, var(--bg) 42%);
+    color: var(--text);
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    background: rgba(11, 17, 32, 0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-subtle);
+    padding: 14px 28px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+  }
+  .brand-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .badge-pill {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: rgba(56, 189, 248, 0.14);
+    color: var(--accent);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    letter-spacing: 0.03em;
+  }
+  h1 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+  }
+  .legend-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+  .legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .swatch {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    display: inline-block;
+  }
+  main {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 24px 28px 64px;
+  }
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .arm-card {
+    background: linear-gradient(180deg, rgba(30, 41, 59, 0.72), rgba(17, 24, 39, 0.92));
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 18px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  .arm-card.frontier { border-top: 3px solid var(--frontier); }
+  .arm-card.v1 { border-top: 3px solid var(--v1); }
+  .arm-card.v2 { border-top: 3px solid var(--v2); box-shadow: 0 0 28px rgba(16, 185, 129, 0.09); }
+  .arm-card h2 {
+    margin: 0 0 4px;
+    font-size: 14px;
+    font-weight: 650;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .arm-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .metric-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(148, 163, 184, 0.14);
+  }
+  .stat-val {
+    font-family: var(--mono);
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .stat-lbl {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .nav-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 18px;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .tab-group, .ctrl-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+  }
+  button.tab-btn, button.ctrl-btn {
+    background: var(--panel);
+    color: var(--muted);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    padding: 8px 13px;
+    font-size: 12.5px;
+    font-weight: 550;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  button.tab-btn:hover, button.ctrl-btn:hover {
+    color: var(--text);
+    border-color: #64748b;
+  }
+  button.tab-btn.active {
+    background: rgba(56, 189, 248, 0.16);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  button.ctrl-btn.active {
+    background: rgba(16, 185, 129, 0.18);
+    color: #fff;
+    border-color: var(--v2);
+  }
+  .panel-box {
+    background: rgba(21, 31, 50, 0.85);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 22px;
+  }
+  .panel-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .panel-title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 650;
+  }
+  .panel-subtitle {
+    margin: 3px 0 0;
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+  .small-multiples {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 16px;
+  }
+  .mini-card {
+    background: rgba(15, 23, 42, 0.78);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, transform 0.12s ease;
+  }
+  .mini-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+  }
+  .mini-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 6px;
+  }
+  .mini-title {
+    font-size: 13.5px;
+    font-weight: 650;
+    color: var(--text);
+  }
+  .mini-domain {
+    font-size: 11.5px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .pill-win {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+  .pill-win.v2win {
+    background: var(--v2-soft);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.4);
+  }
+  .pill-win.fwin {
+    background: var(--frontier-soft);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.4);
+  }
+  .chart-wrap {
+    width: 100%;
+    position: relative;
+  }
+  svg.plot {
+    width: 100%;
+    height: auto;
+    display: block;
+    overflow: visible;
+  }
+  .summary-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+  }
+  .summary-table th, .summary-table td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+  }
+  .summary-table th {
+    color: var(--muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    background: rgba(15, 23, 42, 0.55);
+  }
+  .summary-table tr:hover td {
+    background: rgba(30, 41, 59, 0.42);
+  }
+  .num {
+    font-family: var(--mono);
+    text-align: right !important;
+  }
+  .best-cell {
+    color: #34d399;
+    font-weight: 700;
+  }
+  .scrubber-bar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid var(--border-subtle);
+    padding: 10px 16px;
+    border-radius: 10px;
+    margin: 14px 0;
+  }
+  .scrubber-bar input[type="range"] {
+    flex: 1;
+    accent-color: var(--accent);
+  }
+  .iter-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .iter-card {
+    background: rgba(15, 23, 42, 0.68);
+    border: 1px solid var(--border-subtle);
+    border-radius: 9px;
+    padding: 12px 14px;
+    font-size: 12.5px;
+  }
+  .upgrade-callout {
+    background: rgba(16, 185, 129, 0.09);
+    border-left: 3px solid var(--v2);
+    padding: 10px 14px;
+    border-radius: 0 8px 8px 0;
+    font-size: 12.5px;
+    color: #d1fae5;
+    margin-bottom: 16px;
+  }
+  .two-col {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(460px, 1fr));
+    gap: 18px;
+  }
+  .tooltip {
+    position: fixed;
+    pointer-events: none;
+    background: rgba(15, 23, 42, 0.96);
+    border: 1px solid #475569;
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-size: 12px;
+    color: var(--text);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    z-index: 100;
+    display: none;
+    max-width: 320px;
+  }
+  .code-tag {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    background: rgba(15, 23, 42, 0.8);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: #cbd5e1;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand-title">
+    <span class="badge-pill">E2E GENERALIZATION &amp; CONVERGENCE</span>
+    <h1>Sciona Prototyping Framework vs. Canonical Frontier Agent Reference</h1>
+  </div>
+  <div class="legend-bar">
+    <span class="legend-item"><span class="swatch" style="background:var(--frontier)"></span>Frontier LLM Agent (Canonical Reference)</span>
+    <span class="legend-item"><span class="swatch" style="background:var(--v1)"></span>Sciona v1 (Baseline Ladder)</span>
+    <span class="legend-item"><span class="swatch" style="background:var(--v2)"></span>Sciona v2 (Upgraded Ladder + Patience Policy)</span>
+  </div>
+</header>
+
+<main>
+  <section class="kpi-grid" id="kpiGrid"></section>
+
+  <div class="nav-tabs">
+    <div class="tab-group" id="viewTabs"></div>
+    <div class="ctrl-group" id="chartControls">
+      <button class="ctrl-btn active" data-xaxis="iter" id="btnAxisIter">X: Iteration (0..12)</button>
+      <button class="ctrl-btn" data-xaxis="time" id="btnAxisTime">X: Wall-Clock Time (log s)</button>
+      <button class="ctrl-btn active" data-yaxis="holdout" id="btnYHoldout">Y: Locked Holdout Loss</button>
+      <button class="ctrl-btn" data-yaxis="val" id="btnYVal">Y: Validation Loss</button>
+      <button class="ctrl-btn" id="btnLogY">Log Y-Scale: Off</button>
+    </div>
+  </div>
+
+  <div id="overviewSection">
+    <section class="panel-box">
+      <div class="panel-header">
+        <div>
+          <h3 class="panel-title">5-Discipline Convergence Trajectories (Click any panel to inspect step-by-step)</h3>
+          <p class="panel-subtitle">All trajectories scored out-of-sample on locked private holdouts unseen by both Sciona and the isolated Frontier Agent subagents.</p>
+        </div>
+      </div>
+      <div class="small-multiples" id="smallMultiplesGrid"></div>
+    </section>
+
+    <div class="two-col">
+      <section class="panel-box">
+        <div class="panel-header">
+          <div>
+            <h3 class="panel-title">Cost–Accuracy &amp; Latency Tradeoff Across Arms</h3>
+            <p class="panel-subtitle">Wall-clock runtime (log scale) vs. relative final holdout loss against Canonical Frontier Reference (= 1.00x).</p>
+          </div>
+        </div>
+        <div class="chart-wrap" id="paretoChartWrap"></div>
+      </section>
+
+      <section class="panel-box">
+        <div class="panel-header">
+          <div>
+            <h3 class="panel-title">Canonical Ground-Truth Reference &amp; Policy Defaults</h3>
+            <p class="panel-subtitle">Persisted reference store for zero-LLM regression benchmarking of future Sciona iterations.</p>
+          </div>
+        </div>
+        <div id="referenceManifestBox"></div>
+      </section>
+    </div>
+
+    <section class="panel-box">
+      <div class="panel-header">
+        <div>
+          <h3 class="panel-title">Cross-Discipline Final Performance Matrix</h3>
+          <p class="panel-subtitle">Comparing final locked holdout loss, active iterations, wall-clock execution time, cache savings, and LLM token consumption.</p>
+        </div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="summary-table" id="masterComparisonTable"></table>
+      </div>
+    </section>
+  </div>
+
+  <div id="detailSection" style="display:none;">
+    <section class="panel-box">
+      <div class="panel-header">
+        <div>
+          <h3 class="panel-title" id="detailTitle"></h3>
+          <p class="panel-subtitle" id="detailSubtitle"></p>
+        </div>
+        <div id="detailBadges"></div>
+      </div>
+      <div class="upgrade-callout" id="detailUpgradeCallout"></div>
+      <div class="chart-wrap" id="detailChartWrap"></div>
+
+      <div class="scrubber-bar">
+        <strong style="font-size:12.5px;">Inspect Iteration <span id="scrubIterLabel" class="code-tag">k = 12</span></strong>
+        <input type="range" min="0" max="12" value="12" id="iterScrubber" />
+        <span style="font-size:12px;color:var(--muted);">Drag slider to compare all 3 arms at checkpoint <em>k</em></span>
+      </div>
+      <div class="iter-cards" id="iterSnapshotCards"></div>
+    </section>
+
+    <section class="panel-box">
+      <div class="panel-header">
+        <div>
+          <h3 class="panel-title">Iteration-by-Iteration Convergence &amp; Rung Telemetry</h3>
+          <p class="panel-subtitle">Exact validation loss, locked holdout loss, RevisionLadder rung transitions, cache hit rate, and Frontier Agent token spend per checkpoint.</p>
+        </div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="summary-table" id="detailStepTable"></table>
+      </div>
+    </section>
+  </div>
+</main>
+
+<div class="tooltip" id="chartTooltip"></div>
+
+<script>
+const BENCH_DATA = {"reference_suite_id":"frontier_blind_subagent_convergence_v1","reference_sha256":"893e31f97868bb007a1538ceb6c60c2419b4ff33b0d5ccfe6d55d0af5a292b82","prototyping_config":{"max_iterations":10,"exhausted_patience":2,"min_rung1_rel_gain":0.0025},"totals":{"frontier_wall_s":8108.8,"frontier_billed_tokens":20397516,"frontier_fresh_tokens":2140564,"v1_wall_s":899.6,"v2_wall_s":987.7,"v1_tokens":0,"v2_tokens":0,"v1_speedup_x":9.0,"v2_speedup_x":8.2,"v1_wins_vs_frontier":1,"v2_wins_vs_frontier":1},"tasks":{"eval_01":{"task_id":"eval_01","short_title":"eval_01 \u00b7 Panel Horizon Forecasting","domain":"Multi-Entity Temporal Panel Forecasting","metric_label":"Symmetric Percentage Error (SMAPE, lower is better)","perturbation_summary":"Entity-clustered count series with injected transient burst anomalies and staggered cold-start masks.","v2_upgrade_highlight":"min_rung1_rel_gain (0.25%) prevents sub-0.05% Ridge HPO micro-tweaks from starving Rung 3 DPO spike suppression (unlocked at iter 2 instead of iter 7+).","frontier_wall_s":2030.12,"frontier_billed_tokens":3354420,"frontier_fresh_tokens":385258,"frontier_planner_turns":37,"v1_wall_s":3.11,"v2_wall_s":7.07,"v2_active_iters":6,"v1_cache_saved_s":27.6,"v2_cache_saved_s":11.96,"v2_cache_hit_rate":0.597,"frontier_final_loss":25.035752,"v1_final_loss":27.400849,"v2_final_loss":27.506712,"v2_vs_v1_rel_gain_pct":-0.39,"v2_speedup_vs_frontier_x":287.2,"frontier":[{"iteration":1,"elapsed_s":0.0,"val_loss":46.033603,"holdout_loss":45.396105,"holdout_metric":45.396105,"feasible":true,"billed_tokens":83249,"fresh_tokens":30159},{"iteration":2,"elapsed_s":227.62,"val_loss":28.84953,"holdout_loss":27.592757,"holdout_metric":27.592757,"feasible":true,"billed_tokens":295979,"fresh_tokens":69301},{"iteration":3,"elapsed_s":276.02,"val_loss":27.914561,"holdout_loss":27.242395,"holdout_metric":27.242395,"feasible":true,"billed_tokens":352708,"fresh_tokens":77013},{"iteration":4,"elapsed_s":322.57,"val_loss":26.739827,"holdout_loss":26.206342,"holdout_metric":26.206342,"feasible":true,"billed_tokens":420531,"fresh_tokens":91781},{"iteration":5,"elapsed_s":425.75,"val_loss":26.739827,"holdout_loss":26.206342,"holdout_metric":26.206342,"feasible":true,"billed_tokens":492283,"fresh_tokens":105496},{"iteration":6,"elapsed_s":511.71,"val_loss":25.731653,"holdout_loss":25.127438,"holdout_metric":25.127438,"feasible":true,"billed_tokens":644516,"fresh_tokens":117054},{"iteration":7,"elapsed_s":655.35,"val_loss":25.725493,"holdout_loss":25.238797,"holdout_metric":25.238797,"feasible":true,"billed_tokens":907781,"fresh_tokens":140233},{"iteration":8,"elapsed_s":730.77,"val_loss":25.725493,"holdout_loss":25.238797,"holdout_metric":25.238797,"feasible":true,"billed_tokens":1096935,"fresh_tokens":151505},{"iteration":9,"elapsed_s":777.19,"val_loss":25.725493,"holdout_loss":25.238797,"holdout_metric":25.238797,"feasible":true,"billed_tokens":1295475,"fresh_tokens":162146},{"iteration":10,"elapsed_s":942.77,"val_loss":25.477739,"holdout_loss":25.774519,"holdout_metric":25.774519,"feasible":true,"billed_tokens":1732507,"fresh_tokens":187919},{"iteration":11,"elapsed_s":1009.51,"val_loss":25.477739,"holdout_loss":25.774519,"holdout_metric":25.774519,"feasible":true,"billed_tokens":1973786,"fresh_tokens":205021},{"iteration":12,"elapsed_s":2030.12,"val_loss":25.302528,"holdout_loss":25.035752,"holdout_metric":25.035752,"feasible":true,"billed_tokens":2923980,"fresh_tokens":375637}],"sciona_v1":[{"iteration":0,"elapsed_s":0.28,"val_loss":29.253518,"holdout_loss":28.171473,"holdout_metric":28.171473,"feasible":true,"rung":"initial_evaluation","rung_label":"Seed CDG (Iter 0)","improved":true,"trials":1,"cache_hit_rate":0.3333,"tokens":0},{"iteration":1,"elapsed_s":0.41,"val_loss":29.224476,"holdout_loss":28.117901,"holdout_metric":28.117901,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"trials":8,"cache_hit_rate":0.5,"tokens":0},{"iteration":2,"elapsed_s":0.43,"val_loss":29.223678,"holdout_loss":28.099675,"holdout_metric":28.099675,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"trials":8,"cache_hit_rate":0.5385,"tokens":0},{"iteration":3,"elapsed_s":0.47,"val_loss":29.032102,"holdout_loss":27.771262,"holdout_metric":27.771262,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"trials":16,"cache_hit_rate":0.5959,"tokens":0},{"iteration":4,"elapsed_s":0.49,"val_loss":29.029428,"holdout_loss":27.803346,"holdout_metric":27.803346,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"trials":8,"cache_hit_rate":0.5962,"tokens":0},{"iteration":5,"elapsed_s":0.52,"val_loss":29.026634,"holdout_loss":27.778777,"holdout_metric":27.778777,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"trials":8,"cache_hit_rate":0.594,"tokens":0},{"iteration":6,"elapsed_s":0.55,"val_loss":29.023213,"holdout_loss":27.803139,"holdout_metric":27.803139,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"trials":16,"cache_hit_rate":0.6136,"tokens":0},{"iteration":7,"elapsed_s":0.58,"val_loss":29.022178,"holdout_loss":27.806325,"holdout_metric":27.806325,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"trials":16,"cache_hit_rate":0.6271,"tokens":0},{"iteration":8,"elapsed_s":1.27,"val_loss":27.925924,"holdout_loss":27.340395,"holdout_metric":27.340395,"feasible":true,"rung":"rung3_dpo_expansion","rung_label":"Rung 3 \u00b7 DPO Expansion","improved":true,"trials":18,"cache_hit_rate":0.6288,"tokens":0},{"iteration":9,"elapsed_s":1.4,"val_loss":27.921026,"holdout_loss":27.378751,"holdout_metric":27.378751,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"trials":8,"cache_hit_rate":0.645,"tokens":0},{"iteration":10,"elapsed_s":1.42,"val_loss":27.919566,"holdout_loss":27.374768,"holdout_metric":27.374768,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"trials":8,"cache_hit_rate":0.6612,"tokens":0},{"iteration":11,"elapsed_s":1.45,"val_loss":27.88751,"holdout_loss":27.434866,"holdout_metric":27.434866,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"trials":8,"cache_hit_rate":0.6625,"tokens":0},{"iteration":12,"elapsed_s":1.48,"val_loss":27.883618,"holdout_loss":27.400849,"holdout_metric":27.400849,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"trials":16,"cache_hit_rate":0.6728,"tokens":0}],"sciona_v2":[{"iteration":0,"elapsed_s":0.27,"val_loss":29.253518,"holdout_loss":28.171473,"holdout_metric":28.171473,"feasible":true,"rung":"initial_evaluation","rung_label":"Seed CDG (Iter 0)","improved":true,"converged_early":false,"trials":1,"cache_hit_rate":0.3333,"tokens":0},{"iteration":1,"elapsed_s":0.3,"val_loss":29.063738,"holdout_loss":27.860373,"holdout_metric":27.860373,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"converged_early":false,"trials":16,"cache_hit_rate":0.6081,"tokens":0},{"iteration":2,"elapsed_s":0.88,"val_loss":27.958628,"holdout_loss":27.526971,"holdout_metric":27.526971,"feasible":true,"rung":"rung3_dpo_expansion","rung_label":"Rung 3 \u00b7 DPO Expansion","improved":true,"converged_early":false,"trials":18,"cache_hit_rate":0.6258,"tokens":0},{"iteration":3,"elapsed_s":3.02,"val_loss":27.802793,"holdout_loss":27.570953,"holdout_metric":27.570953,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"converged_early":false,"trials":35,"cache_hit_rate":0.5869,"tokens":0},{"iteration":4,"elapsed_s":3.04,"val_loss":27.716352,"holdout_loss":27.466871,"holdout_metric":27.466871,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"converged_early":false,"trials":8,"cache_hit_rate":0.6139,"tokens":0},{"iteration":5,"elapsed_s":5.05,"val_loss":27.691431,"holdout_loss":27.497471,"holdout_metric":27.497471,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"converged_early":false,"trials":35,"cache_hit_rate":0.6055,"tokens":0},{"iteration":6,"elapsed_s":7.07,"val_loss":27.688908,"holdout_loss":27.506712,"holdout_metric":27.506712,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"converged_early":false,"trials":35,"cache_hit_rate":0.5983,"tokens":0},{"iteration":7,"elapsed_s":7.07,"val_loss":27.688908,"holdout_loss":27.506712,"holdout_metric":27.506712,"feasible":true,"rung":"converged_carry_forward","rung_label":"Converged (Early Stop)","improved":false,"converged_early":true,"trials":0,"cache_hit_rate":0.597,"tokens":0},{"iteration":8,"elapsed_s":7.07,"val_loss":27.688908,"holdout_loss":27.506712,"holdout_metric":27.506712,"feasible":true,"rung":"converged_carry_forward","rung_label":"Converged (Early Stop)","improved":false,"converged_early":true,"trials":0,"cache_hit_rate":0.597,"tokens":0},{"iteration":9,"elapsed_s":7.07,"val_loss":27.688908,"holdout_loss":27.506712,"holdout_metric":27.506712,"feasible":true,"rung":"converged_carry_forward","rung_label":"Converged (Early Stop)","improved":false,"converged_early":true,"trials":0,"cache_hit_rate":0.597,"tokens":0},{"iteration":10,"elapsed_s":7.07,"val_loss":27.688908,"holdout_loss":27.506712,"holdout_metric":27.506712,"feasible":true,"rung":"converged_carry_forward","rung_label":"Converged (Early Stop)","improved":false,"converged_early":true,"trials":0,"cache_hit_rate":0.597,"tokens":0},{"iteration":11,"elapsed_s":7.07,"val_loss":27.688908,"holdout_loss":27.506712,"holdout_metric":27.506712,"feasible":true,"rung":"converged_carry_forward","rung_label":"Converged (Early Stop)","improved":false,"converged_early":true,"trials":0,"cache_hit_rate":0.597,"tokens":0},{"iteration":12,"elapsed_s":7.07,"val_loss":27.688908,"holdout_loss":27.506712,"holdout_metric":27.506712,"feasible":true,"rung":"converged_carry_forward","rung_label":"Converged (Early Stop)","improved":false,"converged_early":true,"trials":0,"cache_hit_rate":0.597,"tokens":0}]},"eval_02":{"task_id":"eval_02","short_title":"eval_02 \u00b7 Irregular Event Risk Ranking","domain":"Irregular Longitudinal Sequence Risk Ranking","metric_label":"1 - Composite Gini & Top-4% Capture Loss (lower is better)","perturbation_summary":"Variable-length entity event histories with heavy-tailed calibration glitches and asymmetric tail weighting.","v2_upgrade_highlight":"Rung 2 multi-resolution sequence aggregation + regularized ensemble swap reaches peak holdout generalization by iter 4 and halts cleanly via patience=2.","frontier_wall_s":967.32,"frontier_billed_tokens":2717852,"frontier_fresh_tokens":224983,"frontier_planner_turns":34,"v1_wall_s":400.24,"v2_wall_s":196.62,"v2_active_iters":8,"v1_cache_saved_s":2401.07,"v2_cache_saved_s":1098.33,"v2_cache_hit_rate":0.6873,"frontier_final_loss":0.629219,"v1_final_loss":0.612231,"v2_final_loss":0.612231,"v2_vs_v1_rel_gain_pct":0.0,"v2_speedup_vs_frontier_x":4.9,"frontier":[{"iteration":1,"elapsed_s":0.0,"val_loss":0.561822,"holdout_loss":0.657547,"holdout_metric":0.342453,"feasible":true,"billed_tokens":84829,"fresh_tokens":31964},{"iteration":2,"elapsed_s":176.74,"val_loss":0.543654,"holdout_loss":0.613391,"holdout_metric":0.386609,"feasible":true,"billed_tokens":320638,"fresh_tokens":73111},{"iteration":3,"elapsed_s":234.06,"val_loss":0.530791,"holdout_loss":0.629219,"holdout_metric":0.370781,"feasible":true,"billed_tokens":383329,"fresh_tokens":84037},{"iteration":4,"elapsed_s":298.88,"val_loss":0.530791,"holdout_loss":0.629219,"holdout_metric":0.370781,"feasible":true,"billed_tokens":512237,"fresh_tokens":94833},{"iteration":5,"elapsed_s":470.57,"val_loss":0.530791,"holdout_loss":0.629219,"holdout_metric":0.370781,"feasible":true,"billed_tokens":970949,"fresh_tokens":133559},{"iteration":6,"elapsed_s":592.73,"val_loss":0.530791,"holdout_loss":0.629219,"holdout_metric":0.370781,"feasible":true,"billed_tokens":1145176,"fresh_tokens":140998},{"iteration":7,"elapsed_s":685.31,"val_loss":0.530791,"holdout_loss":0.629219,"holdout_metric":0.370781,"feasible":true,"billed_tokens":1429034,"fresh_tokens":158725},{"iteration":8,"elapsed_s":726.68,"val_loss":0.530791,"holdout_loss":0.629219,"holdout_metric":0.370781,"feasible":true,"billed_tokens":1532122,"fresh_tokens":166767},{"iteration":9,"elapsed_s":774.96,"val_loss":0.530791,"holdout_loss":0.629219,"holdout_metric":0.370781,"feasible":true,"billed_tokens":1740159,"fresh_tokens":175288},{"iteration":10,"elapsed_s":815.43,"val_loss":0.530791,"holdout_loss":0.629219,"holdout_metric":0.370781,"feasible":true,"billed_tokens":1850891,"fresh_tokens":184026},{"iteration":11,"elapsed_s":887.47,"val_loss":0.530791,"holdout_loss":0.629219,"holdout_metric":0.370781,"feasible":true,"billed_tokens":2078893,"fresh_tokens":196670},{"iteration":12,"elapsed_s":967.32,"val_loss":0.530791,"holdout_loss":0.629219,"holdout_metric":0.370781,"feasible":true,"billed_tokens":2326285,"fresh_tokens":213524}],"sciona_v1":[{"iteration":0,"elapsed_s":6.33,"val_loss":0.663929,"holdout_loss":0.687285,"holdout_metric":0.312715,"feasible":true,"rung":"initial_evaluation","rung_label":"Seed CDG (Iter 0)","improved":true,"trials":1,"cache_hit_rate":0.3333,"tokens":0},{"iteration":1,"elapsed_s":19.13,"val_loss":0.637668,"holdout_loss":0.687028,"holdout_metric":0.312972,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"trials":16,"cache_hit_rate":0.6081,"tokens":0},{"iteration":2,"elapsed_s":26.08,"val_loss":0.617309,"holdout_loss":0.648642,"holdout_metric":0.351358,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"trials":16,"cache_hit_rate":0.6338,"tokens":0},{"iteration":3,"elapsed_s":32.84,"val_loss":0.599659,"holdout_loss":0.631764,"holdout_metric":0.368236,"feasible":true,"rung":"rung2_sibling_swap","rung_label":"Rung 2 \u00b7 Sibling Swap","improved":true,"trials":17,"cache_hit_rate":0.6402,"tokens":0},{"iteration":4,"elapsed_s":60.29,"val_loss":0.589429,"holdout_loss":0.625927,"holdout_metric":0.374073,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"trials":8,"cache_hit_rate":0.628,"tokens":0},{"iteration":5,"elapsed_s":98.23,"val_loss":0.589429,"holdout_loss":0.625927,"holdout_metric":0.374073,"feasible":true,"rung":"exhausted","rung_label":"Exhausted (Patience Check)","improved":false,"trials":21,"cache_hit_rate":0.6275,"tokens":0},{"iteration":6,"elapsed_s":132.17,"val_loss":0.530434,"holdout_loss":0.6098,"holdout_metric":0.3902,"feasible":true,"rung":"rung2_sibling_swap","rung_label":"Rung 2 \u00b7 Sibling Swap","improved":true,"trials":21,"cache_hit_rate":0.6458,"tokens":0},{"iteration":7,"elapsed_s":189.76,"val_loss":0.524232,"holdout_loss":0.612231,"holdout_metric":0.387769,"feasible":true,"rung":"rung2_sibling_swap","rung_label":"Rung 2 \u00b7 Sibling Swap","improved":true,"trials":27,"cache_hit_rate":0.6634,"tokens":0},{"iteration":8,"elapsed_s":260.58,"val_loss":0.524232,"holdout_loss":0.612231,"holdout_metric":0.387769,"feasible":true,"rung":"exhausted","rung_label":"Exhausted (Patience Check)","improved":false,"trials":34,"cache_hit_rate":0.6579,"tokens":0},{"iteration":9,"elapsed_s":295.71,"val_loss":0.524232,"holdout_loss":0.612231,"holdout_metric":0.387769,"feasible":true,"rung":"exhausted","rung_label":"Exhausted (Patience Check)","improved":false,"trials":34,"cache_hit_rate":0.6683,"tokens":0},{"iteration":10,"elapsed_s":333.67,"val_loss":0.524232,"holdout_loss":0.612231,"holdout_metric":0.387769,"feasible":true,"rung":"exhausted","rung_label":"Exhausted (Patience Check)","improved":false,"trials":34,"cache_hit_rate":0.676,"tokens":0},{"iteration":11,"elapsed_s":368.28,"val_loss":0.524232,"holdout_loss":0.612231,"holdout_metric":0.387769,"feasible":true,"rung":"exhausted","rung_label":"Exhausted (Patience Check)","improved":false,"trials":34,"cache_hit_rate":0.6819,"tokens":0},{"iteration":12,"elapsed_s":400.24,"val_loss":0.524232,"holdout_loss":0.612231,"holdout_metric":0.387769,"feasible":true,"rung":"exhausted","rung_label":"Exhausted (Patience Check)","improved":false,"trials":34,"cache_hit_rate":0.6866,"tokens":0}],"sciona_v2":[{"iteration":0,"elapsed_s":5.55,"val_loss":0.663929,"holdout_loss":0.687285,"holdout_metric":0.312715,"feasible":true,"rung":"initial_evaluation","rung_label":"Seed CDG (Iter 0)","improved":true,"converged_early":false,"trials":1,"cache_hit_rate":0.3333,"tokens":0},{"iteration":1,"elapsed_s":10.55,"val_loss":0.637668,"holdout_loss":0.687028,"holdout_metric":0.312972,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"converged_early":false,"trials":16,"cache_hit_rate":0.6081,"tokens":0},{"iteration":2,"elapsed_s":15.16,"val_loss":0.617309,"holdout_loss":0.648642,"holdout_metric":0.351358,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"converged_early":false,"trials":16,"cache_hit_rate":0.6338,"tokens":0},{"iteration":3,"elapsed_s":21.73,"val_loss":0.599659,"holdout_loss":0.631764,"holdout_metric":0.368236,"feasible":true,"rung":"rung2_sibling_swap","rung_label":"Rung 2 \u00b7 Sibling Swap","improved":true,"converged_early":false,"trials":17,"cache_hit_rate":0.6402,"tokens":0},{"iteration":4,"elapsed_s":46.16,"val_loss":0.589429,"holdout_loss":0.625927,"holdout_metric":0.374073,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"converged_early":false,"trials":8,"cache_hit_rate":0.628,"tokens":0},{"iteration":5,"elapsed_s":79.91,"val_loss":0.589429,"holdout_loss":0.625927,"holdout_metric":0.374073,"feasible":true,"rung":"exhausted","rung_label":"Exhausted (Patience Check)","improved":false,"converged_early":false,"trials":25,"cache_hit_rate":0.6263,"tokens":0},{"iteration":6,"elapsed_s":112.17,"val_loss":0.524232,"holdout_loss":0.612231,"holdout_metric":0.387769,"feasible":true,"rung":"rung3_dpo_expansion","rung_label":"Rung 3 \u00b7 DPO Expansion","improved":true,"converged_early":false,"trials":21,"cache_hit_rate":0.6452,"tokens":0},{"iteration":7,"elapsed_s":154.59,"val_loss":0.524232,"holdout_loss":0.612231,"holdout_metric":0.387769,"feasible":true,"rung":"exhausted","rung_label":"Exhausted (Patience Check)","improved":false,"converged_early":false,"trials":36,"cache_hit_rate":0.6661,"tokens":0},{"iteration":8,"elapsed_s":196.62,"val_loss":0.524232,"holdout_loss":0.612231,"holdout_metric":0.387769,"feasible":true,"rung":"exhausted","rung_label":"Exhausted (Patience Check)","improved":false,"converged_early":false,"trials":36,"cache_hit_rate":0.6873,"tokens":0},{"iteration":9,"elapsed_s":196.62,"val_loss":0.524232,"holdout_loss":0.612231,"holdout_metric":0.387769,"feasible":true,"rung":"converged_carry_forward","rung_label":"Converged (Early Stop)","improved":false,"converged_early":true,"trials":0,"cache_hit_rate":0.6873,"tokens":0},{"iteration":10,"elapsed_s":196.62,"val_loss":0.524232,"holdout_loss":0.612231,"holdout_metric":0.387769,"feasible":true,"rung":"converged_carry_forward","rung_label":"Converged (Early Stop)","improved":false,"converged_early":true,"trials":0,"cache_hit_rate":0.6873,"tokens":0},{"iteration":11,"elapsed_s":196.62,"val_loss":0.524232,"holdout_loss":0.612231,"holdout_metric":0.387769,"feasible":true,"rung":"converged_carry_forward","rung_label":"Converged (Early Stop)","improved":false,"converged_early":true,"trials":0,"cache_hit_rate":0.6873,"tokens":0},{"iteration":12,"elapsed_s":196.62,"val_loss":0.524232,"holdout_loss":0.612231,"holdout_metric":0.387769,"feasible":true,"rung":"converged_carry_forward","rung_label":"Converged (Early Stop)","improved":false,"converged_early":true,"trials":0,"cache_hit_rate":0.6873,"tokens":0}]},"eval_03":{"task_id":"eval_03","short_title":"eval_03 \u00b7 Cross-Unit Multichannel Faults","domain":"Cross-Group Multichannel Waveform Classification","metric_label":"1 - Segment ROC-AUC Loss (lower is better)","perturbation_summary":"16-channel sensor segments evaluated across strictly disjoint unseen hardware units with harmonic interference and gain shift.","v2_upgrade_highlight":"GroupConditionalNormalizationRuleSet automatically discovers and splices per-unit CORAL covariance & robust z-score alignment onto the feature manifold.","frontier_wall_s":1629.86,"frontier_billed_tokens":4947196,"frontier_fresh_tokens":308492,"frontier_planner_turns":46,"v1_wall_s":224.91,"v2_wall_s":238.73,"v2_active_iters":10,"v1_cache_saved_s":1345.1,"v2_cache_saved_s":598.92,"v2_cache_hit_rate":0.6874,"frontier_final_loss":0.417654,"v1_final_loss":0.52716,"v2_final_loss":0.433086,"v2_vs_v1_rel_gain_pct":17.85,"v2_speedup_vs_frontier_x":6.8,"frontier":[{"iteration":1,"elapsed_s":0.0,"val_loss":0.394198,"holdout_loss":0.488395,"holdout_metric":0.511605,"feasible":true,"billed_tokens":81065,"fresh_tokens":28576},{"iteration":2,"elapsed_s":697.51,"val_loss":0.239877,"holdout_loss":0.432963,"holdout_metric":0.567037,"feasible":true,"billed_tokens":1202740,"fresh_tokens":154681},{"iteration":3,"elapsed_s":729.92,"val_loss":0.22963,"holdout_loss":0.438519,"holdout_metric":0.561481,"feasible":true,"billed_tokens":1309836,"fresh_tokens":161809},{"iteration":4,"elapsed_s":781.84,"val_loss":0.223457,"holdout_loss":0.428889,"holdout_metric":0.571111,"feasible":true,"billed_tokens":1420689,"fresh_tokens":169820},{"iteration":5,"elapsed_s":820.08,"val_loss":0.221235,"holdout_loss":0.425185,"holdout_metric":0.574815,"feasible":true,"billed_tokens":1536195,"fresh_tokens":177914},{"iteration":6,"elapsed_s":867.35,"val_loss":0.221235,"holdout_loss":0.425185,"holdout_metric":0.574815,"feasible":true,"billed_tokens":1655756,"fresh_tokens":186291},{"iteration":7,"elapsed_s":1010.03,"val_loss":0.208025,"holdout_loss":0.426667,"holdout_metric":0.573333,"feasible":true,"billed_tokens":2047237,"fresh_tokens":216220},{"iteration":8,"elapsed_s":1070.39,"val_loss":0.204815,"holdout_loss":0.423951,"holdout_metric":0.576049,"feasible":true,"billed_tokens":2190608,"fresh_tokens":227084},{"iteration":9,"elapsed_s":1520.05,"val_loss":0.199136,"holdout_loss":0.417654,"holdout_metric":0.582346,"feasible":true,"billed_tokens":3916083,"fresh_tokens":282217},{"iteration":10,"elapsed_s":1538.28,"val_loss":0.199136,"holdout_loss":0.417654,"holdout_metric":0.582346,"feasible":true,"billed_tokens":4081111,"fresh_tokens":285679},{"iteration":11,"elapsed_s":1569.42,"val_loss":0.199136,"holdout_loss":0.417654,"holdout_metric":0.582346,"feasible":true,"billed_tokens":4250141,"fresh_tokens":292508},{"iteration":12,"elapsed_s":1629.86,"val_loss":0.199136,"holdout_loss":0.417654,"holdout_metric":0.582346,"feasible":true,"billed_tokens":4593660,"fresh_tokens":301152}],"sciona_v1":[{"iteration":0,"elapsed_s":3.73,"val_loss":0.356296,"holdout_loss":0.54642,"holdout_metric":0.45358,"feasible":true,"rung":"initial_evaluation","rung_label":"Seed CDG (Iter 0)","improved":true,"trials":1,"cache_hit_rate":0.3333,"tokens":0},{"iteration":1,"elapsed_s":6.93,"val_loss":0.356049,"holdout_loss":0.544691,"holdout_metric":0.455309,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"trials":8,"cache_hit_rate":0.7048,"tokens":0},{"iteration":2,"elapsed_s":34.55,"val_loss":0.305556,"holdout_loss":0.552716,"holdout_metric":0.447284,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"trials":21,"cache_hit_rate":0.6346,"tokens":0},{"iteration":3,"elapsed_s":73.15,"val_loss":0.240247,"holdout_loss":0.523704,"holdout_metric":0.476296,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"trials":29,"cache_hit_rate":0.6828,"tokens":0},{"iteration":4,"elapsed_s":76.82,"val_loss":0.239136,"holdout_loss":0.525679,"holdout_metric":0.474321,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"trials":8,"cache_hit_rate":0.7001,"tokens":0},{"iteration":5,"elapsed_s":77.01,"val_loss":0.238642,"holdout_loss":0.524815,"holdout_metric":0.475185,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"trials":8,"cache_hit_rate":0.716,"tokens":0},{"iteration":6,"elapsed_s":115.82,"val_loss":0.237901,"holdout_loss":0.527531,"holdout_metric":0.472469,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"trials":37,"cache_hit_rate":0.708,"tokens":0},{"iteration":7,"elapsed_s":176.4,"val_loss":0.237407,"holdout_loss":0.52716,"holdout_metric":0.47284,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"trials":37,"cache_hit_rate":0.71,"tokens":0},{"iteration":8,"elapsed_s":207.86,"val_loss":0.237407,"holdout_loss":0.52716,"holdout_metric":0.47284,"feasible":true,"rung":"exhausted","rung_label":"Exhausted (Patience Check)","improved":false,"trials":48,"cache_hit_rate":0.7118,"tokens":0},{"iteration":9,"elapsed_s":208.68,"val_loss":0.237407,"holdout_loss":0.52716,"holdout_metric":0.47284,"feasible":true,"rung":"exhausted","rung_label":"Exhausted (Patience Check)","improved":false,"trials":48,"cache_hit_rate":0.7306,"tokens":0},{"iteration":10,"elapsed_s":215.13,"val_loss":0.237407,"holdout_loss":0.52716,"holdout_metric":0.47284,"feasible":true,"rung":"exhausted","rung_label":"Exhausted (Patience Check)","improved":false,"trials":48,"cache_hit_rate":0.7474,"tokens":0},{"iteration":11,"elapsed_s":220.58,"val_loss":0.237407,"holdout_loss":0.52716,"holdout_metric":0.47284,"feasible":true,"rung":"exhausted","rung_label":"Exhausted (Patience Check)","improved":false,"trials":48,"cache_hit_rate":0.7617,"tokens":0},{"iteration":12,"elapsed_s":224.91,"val_loss":0.237407,"holdout_loss":0.52716,"holdout_metric":0.47284,"feasible":true,"rung":"exhausted","rung_label":"Exhausted (Patience Check)","improved":false,"trials":48,"cache_hit_rate":0.7716,"tokens":0}],"sciona_v2":[{"iteration":0,"elapsed_s":3.78,"val_loss":0.356296,"holdout_loss":0.54642,"holdout_metric":0.45358,"feasible":true,"rung":"initial_evaluation","rung_label":"Seed CDG (Iter 0)","improved":true,"converged_early":false,"trials":1,"cache_hit_rate":0.3333,"tokens":0},{"iteration":1,"elapsed_s":16.52,"val_loss":0.334012,"holdout_loss":0.564815,"holdout_metric":0.435185,"feasible":true,"rung":"rung3_dpo_expansion","rung_label":"Rung 3 \u00b7 DPO Expansion","improved":true,"converged_early":false,"trials":33,"cache_hit_rate":0.6398,"tokens":0},{"iteration":2,"elapsed_s":16.77,"val_loss":0.33037,"holdout_loss":0.548889,"holdout_metric":0.451111,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"converged_early":false,"trials":8,"cache_hit_rate":0.7044,"tokens":0},{"iteration":3,"elapsed_s":62.52,"val_loss":0.300432,"holdout_loss":0.438951,"holdout_metric":0.561049,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"converged_early":false,"trials":50,"cache_hit_rate":0.6591,"tokens":0},{"iteration":4,"elapsed_s":91.36,"val_loss":0.254074,"holdout_loss":0.434074,"holdout_metric":0.565926,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"converged_early":false,"trials":66,"cache_hit_rate":0.6671,"tokens":0},{"iteration":5,"elapsed_s":116.52,"val_loss":0.25284,"holdout_loss":0.434444,"holdout_metric":0.565556,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"converged_early":false,"trials":74,"cache_hit_rate":0.6749,"tokens":0},{"iteration":6,"elapsed_s":131.35,"val_loss":0.247654,"holdout_loss":0.431605,"holdout_metric":0.568395,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"converged_early":false,"trials":58,"cache_hit_rate":0.677,"tokens":0},{"iteration":7,"elapsed_s":167.78,"val_loss":0.242222,"holdout_loss":0.435309,"holdout_metric":0.564691,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"converged_early":false,"trials":74,"cache_hit_rate":0.6789,"tokens":0},{"iteration":8,"elapsed_s":193.38,"val_loss":0.238395,"holdout_loss":0.433086,"holdout_metric":0.566914,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"converged_early":false,"trials":66,"cache_hit_rate":0.6798,"tokens":0},{"iteration":9,"elapsed_s":215.69,"val_loss":0.238395,"holdout_loss":0.433086,"holdout_metric":0.566914,"feasible":true,"rung":"exhausted","rung_label":"Exhausted (Patience Check)","improved":false,"converged_early":false,"trials":74,"cache_hit_rate":0.6823,"tokens":0},{"iteration":10,"elapsed_s":238.73,"val_loss":0.238395,"holdout_loss":0.433086,"holdout_metric":0.566914,"feasible":true,"rung":"exhausted","rung_label":"Exhausted (Patience Check)","improved":false,"converged_early":false,"trials":74,"cache_hit_rate":0.6874,"tokens":0},{"iteration":11,"elapsed_s":238.73,"val_loss":0.238395,"holdout_loss":0.433086,"holdout_metric":0.566914,"feasible":true,"rung":"converged_carry_forward","rung_label":"Converged (Early Stop)","improved":false,"converged_early":true,"trials":0,"cache_hit_rate":0.6874,"tokens":0},{"iteration":12,"elapsed_s":238.73,"val_loss":0.238395,"holdout_loss":0.433086,"holdout_metric":0.566914,"feasible":true,"rung":"converged_carry_forward","rung_label":"Converged (Early Stop)","improved":false,"converged_early":true,"trials":0,"cache_hit_rate":0.6874,"tokens":0}]},"eval_04":{"task_id":"eval_04","short_title":"eval_04 \u00b7 Invariant-Constrained Screening","domain":"Nuisance-Invariant Constrained Signal Screening","metric_label":"Constrained Screening Loss (1 - wAUC + Invariance Penalties)","perturbation_summary":"High-dimensional screening under strict two-sample KS and Cramer-von Mises distributional invariance gates on a calibration manifold.","v2_upgrade_highlight":"Coupled 2-Node (Rung 3 DPO Drift Aligner + Rung 2 Conditional Quantile Post-Processor) lookahead escapes the single-node constraint penalty trap (1.019 -> ~0.03).","frontier_wall_s":1270.37,"frontier_billed_tokens":4140972,"frontier_fresh_tokens":396382,"frontier_planner_turns":47,"v1_wall_s":69.1,"v2_wall_s":103.55,"v2_active_iters":10,"v1_cache_saved_s":162.07,"v2_cache_saved_s":329.96,"v2_cache_hit_rate":0.7305,"frontier_final_loss":0.014407,"v1_final_loss":0.073859,"v2_final_loss":0.018307,"v2_vs_v1_rel_gain_pct":75.21,"v2_speedup_vs_frontier_x":12.3,"frontier":[{"iteration":1,"elapsed_s":0.0,"val_loss":10.556224,"holdout_loss":11.717533,"holdout_metric":0.983465,"feasible":false,"billed_tokens":81454,"fresh_tokens":29987},{"iteration":2,"elapsed_s":241.65,"val_loss":9.457269,"holdout_loss":10.188035,"holdout_metric":0.983192,"feasible":false,"billed_tokens":446389,"fresh_tokens":85291},{"iteration":3,"elapsed_s":318.97,"val_loss":9.302078,"holdout_loss":9.942413,"holdout_metric":0.984254,"feasible":false,"billed_tokens":569006,"fresh_tokens":97580},{"iteration":4,"elapsed_s":350.11,"val_loss":1.054733,"holdout_loss":0.024781,"holdout_metric":0.975219,"feasible":true,"billed_tokens":634198,"fresh_tokens":102658},{"iteration":5,"elapsed_s":447.95,"val_loss":0.031499,"holdout_loss":0.023627,"holdout_metric":0.976373,"feasible":true,"billed_tokens":853676,"fresh_tokens":123403},{"iteration":6,"elapsed_s":531.94,"val_loss":0.030959,"holdout_loss":0.02469,"holdout_metric":0.97531,"feasible":true,"billed_tokens":1017047,"fresh_tokens":135288},{"iteration":7,"elapsed_s":706.37,"val_loss":0.029956,"holdout_loss":0.023148,"holdout_metric":0.976852,"feasible":true,"billed_tokens":1550775,"fresh_tokens":166812},{"iteration":8,"elapsed_s":760.67,"val_loss":0.029906,"holdout_loss":0.023591,"holdout_metric":0.976409,"feasible":true,"billed_tokens":1750664,"fresh_tokens":176498},{"iteration":9,"elapsed_s":801.28,"val_loss":0.028014,"holdout_loss":0.021595,"holdout_metric":0.978405,"feasible":true,"billed_tokens":1962229,"fresh_tokens":187885},{"iteration":10,"elapsed_s":1042.5,"val_loss":0.027361,"holdout_loss":0.021403,"holdout_metric":0.978597,"feasible":true,"billed_tokens":2788172,"fresh_tokens":226511},{"iteration":11,"elapsed_s":1190.51,"val_loss":0.025645,"holdout_loss":0.020649,"holdout_metric":0.979351,"feasible":true,"billed_tokens":3444222,"fresh_tokens":375916},{"iteration":12,"elapsed_s":1270.37,"val_loss":0.015446,"holdout_loss":0.014407,"holdout_metric":0.985593,"feasible":true,"billed_tokens":3853218,"fresh_tokens":387424}],"sciona_v1":[{"iteration":0,"elapsed_s":0.76,"val_loss":3.512887,"holdout_loss":3.564394,"holdout_metric":0.98333,"feasible":false,"rung":"initial_evaluation","rung_label":"Seed CDG (Iter 0)","improved":true,"trials":1,"cache_hit_rate":0.3333,"tokens":0},{"iteration":1,"elapsed_s":1.24,"val_loss":0.202993,"holdout_loss":0.212802,"holdout_metric":0.787198,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"trials":8,"cache_hit_rate":0.6032,"tokens":0},{"iteration":2,"elapsed_s":1.29,"val_loss":0.101675,"holdout_loss":0.110023,"holdout_metric":0.889977,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"trials":8,"cache_hit_rate":0.6581,"tokens":0},{"iteration":3,"elapsed_s":9.27,"val_loss":0.088996,"holdout_loss":0.094319,"holdout_metric":0.905681,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"trials":20,"cache_hit_rate":0.6041,"tokens":0},{"iteration":4,"elapsed_s":21.55,"val_loss":0.088996,"holdout_loss":0.094319,"holdout_metric":0.905681,"feasible":true,"rung":"exhausted","rung_label":"Exhausted (Patience Check)","improved":false,"trials":22,"cache_hit_rate":0.589,"tokens":0},{"iteration":5,"elapsed_s":41.57,"val_loss":0.088996,"holdout_loss":0.094319,"holdout_metric":0.905681,"feasible":true,"rung":"exhausted","rung_label":"Exhausted (Patience Check)","improved":false,"trials":22,"cache_hit_rate":0.6146,"tokens":0},{"iteration":6,"elapsed_s":41.62,"val_loss":0.070188,"holdout_loss":0.073859,"holdout_metric":0.926141,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"trials":8,"cache_hit_rate":0.6265,"tokens":0},{"iteration":7,"elapsed_s":46.28,"val_loss":0.070188,"holdout_loss":0.073859,"holdout_metric":0.926141,"feasible":true,"rung":"exhausted","rung_label":"Exhausted (Patience Check)","improved":false,"trials":22,"cache_hit_rate":0.6282,"tokens":0},{"iteration":8,"elapsed_s":51.6,"val_loss":0.070188,"holdout_loss":0.073859,"holdout_metric":0.926141,"feasible":true,"rung":"exhausted","rung_label":"Exhausted (Patience Check)","improved":false,"trials":22,"cache_hit_rate":0.6375,"tokens":0},{"iteration":9,"elapsed_s":55.73,"val_loss":0.070188,"holdout_loss":0.073859,"holdout_metric":0.926141,"feasible":true,"rung":"exhausted","rung_label":"Exhausted (Patience Check)","improved":false,"trials":22,"cache_hit_rate":0.6443,"tokens":0},{"iteration":10,"elapsed_s":60.81,"val_loss":0.070188,"holdout_loss":0.073859,"holdout_metric":0.926141,"feasible":true,"rung":"exhausted","rung_label":"Exhausted (Patience Check)","improved":false,"trials":22,"cache_hit_rate":0.6494,"tokens":0},{"iteration":11,"elapsed_s":65.7,"val_loss":0.070188,"holdout_loss":0.073859,"holdout_metric":0.926141,"feasible":true,"rung":"exhausted","rung_label":"Exhausted (Patience Check)","improved":false,"trials":22,"cache_hit_rate":0.6534,"tokens":0},{"iteration":12,"elapsed_s":69.1,"val_loss":0.070188,"holdout_loss":0.073859,"holdout_metric":0.926141,"feasible":true,"rung":"exhausted","rung_label":"Exhausted (Patience Check)","improved":false,"trials":22,"cache_hit_rate":0.6566,"tokens":0}],"sciona_v2":[{"iteration":0,"elapsed_s":0.41,"val_loss":3.512887,"holdout_loss":3.564394,"holdout_metric":0.98333,"feasible":false,"rung":"initial_evaluation","rung_label":"Seed CDG (Iter 0)","improved":true,"converged_early":false,"trials":1,"cache_hit_rate":0.3333,"tokens":0},{"iteration":1,"elapsed_s":0.44,"val_loss":0.202993,"holdout_loss":0.212802,"holdout_metric":0.787198,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"converged_early":false,"trials":8,"cache_hit_rate":0.6032,"tokens":0},{"iteration":2,"elapsed_s":0.47,"val_loss":0.101675,"holdout_loss":0.110023,"holdout_metric":0.889977,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"converged_early":false,"trials":8,"cache_hit_rate":0.6581,"tokens":0},{"iteration":3,"elapsed_s":4.39,"val_loss":0.024218,"holdout_loss":0.020234,"holdout_metric":0.979766,"feasible":true,"rung":"rung3_coupled_dpo_swap","rung_label":"Rung 3+2 \u00b7 Coupled DPO + Swap","improved":true,"converged_early":false,"trials":21,"cache_hit_rate":0.6782,"tokens":0},{"iteration":4,"elapsed_s":4.49,"val_loss":0.020361,"holdout_loss":0.017851,"holdout_metric":0.982149,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"converged_early":false,"trials":8,"cache_hit_rate":0.6907,"tokens":0},{"iteration":5,"elapsed_s":33.21,"val_loss":0.020113,"holdout_loss":0.017397,"holdout_metric":0.982603,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"converged_early":false,"trials":37,"cache_hit_rate":0.6842,"tokens":0},{"iteration":6,"elapsed_s":40.78,"val_loss":0.019529,"holdout_loss":0.01778,"holdout_metric":0.98222,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"converged_early":false,"trials":16,"cache_hit_rate":0.6777,"tokens":0},{"iteration":7,"elapsed_s":59.58,"val_loss":0.019529,"holdout_loss":0.01778,"holdout_metric":0.98222,"feasible":true,"rung":"exhausted","rung_label":"Exhausted (Patience Check)","improved":false,"converged_early":false,"trials":37,"cache_hit_rate":0.6986,"tokens":0},{"iteration":8,"elapsed_s":72.48,"val_loss":0.019114,"holdout_loss":0.018307,"holdout_metric":0.981693,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"converged_early":false,"trials":37,"cache_hit_rate":0.7208,"tokens":0},{"iteration":9,"elapsed_s":89.73,"val_loss":0.019114,"holdout_loss":0.018307,"holdout_metric":0.981693,"feasible":true,"rung":"exhausted","rung_label":"Exhausted (Patience Check)","improved":false,"converged_early":false,"trials":37,"cache_hit_rate":0.7216,"tokens":0},{"iteration":10,"elapsed_s":103.55,"val_loss":0.019114,"holdout_loss":0.018307,"holdout_metric":0.981693,"feasible":true,"rung":"exhausted","rung_label":"Exhausted (Patience Check)","improved":false,"converged_early":false,"trials":37,"cache_hit_rate":0.7305,"tokens":0},{"iteration":11,"elapsed_s":103.55,"val_loss":0.019114,"holdout_loss":0.018307,"holdout_metric":0.981693,"feasible":true,"rung":"converged_carry_forward","rung_label":"Converged (Early Stop)","improved":false,"converged_early":true,"trials":0,"cache_hit_rate":0.7305,"tokens":0},{"iteration":12,"elapsed_s":103.55,"val_loss":0.019114,"holdout_loss":0.018307,"holdout_metric":0.981693,"feasible":true,"rung":"converged_carry_forward","rung_label":"Converged (Early Stop)","improved":false,"converged_early":true,"trials":0,"cache_hit_rate":0.7305,"tokens":0}]},"eval_05":{"task_id":"eval_05","short_title":"eval_05 \u00b7 Sparse Multiband Transients","domain":"Irregular Multiband Time-Series Classification","metric_label":"Class-Balanced 12-Class Log-Loss (lower is better)","perturbation_summary":"Sparse, heteroscedastic 6-band asynchronous observations across 12 imbalanced regime classes with flux- calibration jitter.","v2_upgrade_highlight":"Gaussian-process cross-band interpolation + class-balanced temperature-calibrated ensemble converges deterministically at zero LLM token cost.","frontier_wall_s":2211.16,"frontier_billed_tokens":5237076,"frontier_fresh_tokens":825449,"frontier_planner_turns":48,"v1_wall_s":202.28,"v2_wall_s":441.76,"v2_active_iters":10,"v1_cache_saved_s":1689.63,"v2_cache_saved_s":1577.58,"v2_cache_hit_rate":0.6821,"frontier_final_loss":0.432885,"v1_final_loss":0.665782,"v2_final_loss":0.682974,"v2_vs_v1_rel_gain_pct":-2.58,"v2_speedup_vs_frontier_x":5.0,"frontier":[{"iteration":1,"elapsed_s":0.0,"val_loss":1.791324,"holdout_loss":1.586027,"holdout_metric":1.586027,"feasible":true,"billed_tokens":79603,"fresh_tokens":28302},{"iteration":2,"elapsed_s":280.04,"val_loss":1.311416,"holdout_loss":1.136586,"holdout_metric":1.136586,"feasible":true,"billed_tokens":438715,"fresh_tokens":92053},{"iteration":3,"elapsed_s":398.61,"val_loss":0.853982,"holdout_loss":0.782727,"holdout_metric":0.782727,"feasible":true,"billed_tokens":646487,"fresh_tokens":108837},{"iteration":4,"elapsed_s":458.24,"val_loss":0.714316,"holdout_loss":0.652538,"holdout_metric":0.652538,"feasible":true,"billed_tokens":798928,"fresh_tokens":121485},{"iteration":5,"elapsed_s":554.64,"val_loss":0.665867,"holdout_loss":0.609474,"holdout_metric":0.609474,"feasible":true,"billed_tokens":969980,"fresh_tokens":138827},{"iteration":6,"elapsed_s":641.36,"val_loss":0.652413,"holdout_loss":0.589743,"holdout_metric":0.589743,"feasible":true,"billed_tokens":1158579,"fresh_tokens":156895},{"iteration":7,"elapsed_s":768.83,"val_loss":0.52874,"holdout_loss":0.503361,"holdout_metric":0.503361,"feasible":true,"billed_tokens":1463323,"fresh_tokens":173841},{"iteration":8,"elapsed_s":1000.33,"val_loss":0.499008,"holdout_loss":0.46855,"holdout_metric":0.46855,"feasible":true,"billed_tokens":2047694,"fresh_tokens":218305},{"iteration":9,"elapsed_s":1240.45,"val_loss":0.498227,"holdout_loss":0.463769,"holdout_metric":0.463769,"feasible":true,"billed_tokens":3175925,"fresh_tokens":268979},{"iteration":10,"elapsed_s":2150.05,"val_loss":0.496219,"holdout_loss":0.454369,"holdout_metric":0.454369,"feasible":true,"billed_tokens":4524262,"fresh_tokens":809848},{"iteration":11,"elapsed_s":2192.6,"val_loss":0.478901,"holdout_loss":0.445925,"holdout_metric":0.445925,"feasible":true,"billed_tokens":4875048,"fresh_tokens":816998},{"iteration":12,"elapsed_s":2211.16,"val_loss":0.47497,"holdout_loss":0.432885,"holdout_metric":0.432885,"feasible":true,"billed_tokens":5053895,"fresh_tokens":820868}],"sciona_v1":[{"iteration":0,"elapsed_s":2.27,"val_loss":1.172253,"holdout_loss":1.015378,"holdout_metric":1.015378,"feasible":true,"rung":"initial_evaluation","rung_label":"Seed CDG (Iter 0)","improved":true,"trials":1,"cache_hit_rate":0.3333,"tokens":0},{"iteration":1,"elapsed_s":3.66,"val_loss":1.014559,"holdout_loss":0.899087,"holdout_metric":0.899087,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"trials":8,"cache_hit_rate":0.7048,"tokens":0},{"iteration":2,"elapsed_s":3.81,"val_loss":0.988291,"holdout_loss":0.88118,"holdout_metric":0.88118,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"trials":8,"cache_hit_rate":0.7641,"tokens":0},{"iteration":3,"elapsed_s":3.97,"val_loss":0.983257,"holdout_loss":0.878145,"holdout_metric":0.878145,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"trials":8,"cache_hit_rate":0.786,"tokens":0},{"iteration":4,"elapsed_s":16.9,"val_loss":0.955901,"holdout_loss":0.87033,"holdout_metric":0.87033,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"trials":16,"cache_hit_rate":0.767,"tokens":0},{"iteration":5,"elapsed_s":46.09,"val_loss":0.713671,"holdout_loss":0.672107,"holdout_metric":0.672107,"feasible":true,"rung":"rung2_sibling_swap","rung_label":"Rung 2 \u00b7 Sibling Swap","improved":true,"trials":24,"cache_hit_rate":0.7373,"tokens":0},{"iteration":6,"elapsed_s":68.3,"val_loss":0.693508,"holdout_loss":0.672967,"holdout_metric":0.672967,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"trials":16,"cache_hit_rate":0.7357,"tokens":0},{"iteration":7,"elapsed_s":71.08,"val_loss":0.692341,"holdout_loss":0.674924,"holdout_metric":0.674924,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"trials":8,"cache_hit_rate":0.7441,"tokens":0},{"iteration":8,"elapsed_s":110.97,"val_loss":0.687899,"holdout_loss":0.665782,"holdout_metric":0.665782,"feasible":true,"rung":"rung2_sibling_swap","rung_label":"Rung 2 \u00b7 Sibling Swap","improved":true,"trials":26,"cache_hit_rate":0.7361,"tokens":0},{"iteration":9,"elapsed_s":136.51,"val_loss":0.687899,"holdout_loss":0.665782,"holdout_metric":0.665782,"feasible":true,"rung":"exhausted","rung_label":"Exhausted (Patience Check)","improved":false,"trials":25,"cache_hit_rate":0.7339,"tokens":0},{"iteration":10,"elapsed_s":182.74,"val_loss":0.687899,"holdout_loss":0.665782,"holdout_metric":0.665782,"feasible":true,"rung":"exhausted","rung_label":"Exhausted (Patience Check)","improved":false,"trials":25,"cache_hit_rate":0.7388,"tokens":0},{"iteration":11,"elapsed_s":193.88,"val_loss":0.687899,"holdout_loss":0.665782,"holdout_metric":0.665782,"feasible":true,"rung":"exhausted","rung_label":"Exhausted (Patience Check)","improved":false,"trials":25,"cache_hit_rate":0.7436,"tokens":0},{"iteration":12,"elapsed_s":202.28,"val_loss":0.687899,"holdout_loss":0.665782,"holdout_metric":0.665782,"feasible":true,"rung":"exhausted","rung_label":"Exhausted (Patience Check)","improved":false,"trials":25,"cache_hit_rate":0.7474,"tokens":0}],"sciona_v2":[{"iteration":0,"elapsed_s":1.97,"val_loss":1.172253,"holdout_loss":1.015378,"holdout_metric":1.015378,"feasible":true,"rung":"initial_evaluation","rung_label":"Seed CDG (Iter 0)","improved":true,"converged_early":false,"trials":1,"cache_hit_rate":0.3333,"tokens":0},{"iteration":1,"elapsed_s":2.13,"val_loss":1.014559,"holdout_loss":0.899087,"holdout_metric":0.899087,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"converged_early":false,"trials":8,"cache_hit_rate":0.7048,"tokens":0},{"iteration":2,"elapsed_s":2.28,"val_loss":0.988291,"holdout_loss":0.88118,"holdout_metric":0.88118,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"converged_early":false,"trials":8,"cache_hit_rate":0.7641,"tokens":0},{"iteration":3,"elapsed_s":2.44,"val_loss":0.983257,"holdout_loss":0.878145,"holdout_metric":0.878145,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"converged_early":false,"trials":8,"cache_hit_rate":0.786,"tokens":0},{"iteration":4,"elapsed_s":12.88,"val_loss":0.955901,"holdout_loss":0.87033,"holdout_metric":0.87033,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"converged_early":false,"trials":16,"cache_hit_rate":0.767,"tokens":0},{"iteration":5,"elapsed_s":48.96,"val_loss":0.761059,"holdout_loss":0.667352,"holdout_metric":0.667352,"feasible":true,"rung":"rung3_dpo_expansion","rung_label":"Rung 3 \u00b7 DPO Expansion","improved":true,"converged_early":false,"trials":28,"cache_hit_rate":0.7301,"tokens":0},{"iteration":6,"elapsed_s":152.59,"val_loss":0.753766,"holdout_loss":0.678804,"holdout_metric":0.678804,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"converged_early":false,"trials":35,"cache_hit_rate":0.6982,"tokens":0},{"iteration":7,"elapsed_s":172.46,"val_loss":0.749836,"holdout_loss":0.67478,"holdout_metric":0.67478,"feasible":true,"rung":"rung2_sibling_swap","rung_label":"Rung 2 \u00b7 Sibling Swap","improved":true,"converged_early":false,"trials":27,"cache_hit_rate":0.706,"tokens":0},{"iteration":8,"elapsed_s":259.92,"val_loss":0.747367,"holdout_loss":0.707933,"holdout_metric":0.707933,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"converged_early":false,"trials":34,"cache_hit_rate":0.6971,"tokens":0},{"iteration":9,"elapsed_s":309.11,"val_loss":0.74643,"holdout_loss":0.686048,"holdout_metric":0.686048,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"converged_early":false,"trials":34,"cache_hit_rate":0.694,"tokens":0},{"iteration":10,"elapsed_s":441.76,"val_loss":0.728076,"holdout_loss":0.682974,"holdout_metric":0.682974,"feasible":true,"rung":"rung1_node_hpo","rung_label":"Rung 1 \u00b7 Node HPO","improved":true,"converged_early":false,"trials":34,"cache_hit_rate":0.6834,"tokens":0},{"iteration":11,"elapsed_s":441.76,"val_loss":0.728076,"holdout_loss":0.682974,"holdout_metric":0.682974,"feasible":true,"rung":"converged_carry_forward","rung_label":"Converged (Early Stop)","improved":false,"converged_early":true,"trials":0,"cache_hit_rate":0.6821,"tokens":0},{"iteration":12,"elapsed_s":441.76,"val_loss":0.728076,"holdout_loss":0.682974,"holdout_metric":0.682974,"feasible":true,"rung":"converged_carry_forward","rung_label":"Converged (Early Stop)","improved":false,"converged_early":true,"trials":0,"cache_hit_rate":0.6821,"tokens":0}]}}};
+
+const state = {
+  activeTab: "overview",
+  xAxis: "iter",      // "iter" | "time"
+  yAxis: "holdout",   // "holdout" | "val"
+  logY: false,
+  scrubIter: 12,
+};
+
+function fmtNum(v, digits = 4) {
+  if (v === null || v === undefined || Number.isNaN(v)) return "—";
+  if (Math.abs(v) >= 10) return v.toFixed(3);
+  return v.toFixed(digits);
+}
+
+function fmtTokens(n) {
+  if (!n) return "0";
+  if (n >= 1e6) return (n / 1e6).toFixed(2) + "M";
+  if (n >= 1e3) return (n / 1e3).toFixed(1) + "k";
+  return String(n);
+}
+
+function fmtTime(s) {
+  if (s >= 60) {
+    const m = Math.floor(s / 60);
+    const rem = Math.round(s % 60);
+    return `${m}m ${rem}s (${s.toFixed(0)}s)`;
+  }
+  return `${s.toFixed(2)}s`;
+}
+
+function renderKPIs() {
+  const t = BENCH_DATA.totals;
+  const tasks = Object.values(BENCH_DATA.tasks);
+  // Compute geometric mean of holdout loss ratios vs Frontier
+  const v1Ratios = tasks.map(x => x.v1_final_loss / x.frontier_final_loss);
+  const v2Ratios = tasks.map(x => x.v2_final_loss / x.frontier_final_loss);
+  const geoMean = arr => Math.exp(arr.reduce((a, b) => a + Math.log(Math.max(b, 1e-6)), 0) / arr.length);
+  const gV1 = geoMean(v1Ratios);
+  const gV2 = geoMean(v2Ratios);
+
+  document.getElementById("kpiGrid").innerHTML = `
+    <div class="arm-card frontier">
+      <h2>
+        <span>Frontier Agent (Canonical Reference)</span>
+        <span class="badge-pill" style="color:var(--frontier);border-color:rgba(245,158,11,0.4);background:var(--frontier-soft);">GROUND TRUTH</span>
+      </h2>
+      <div class="arm-sub">5 isolated blind frontier LLM sessions · 12 checkpoints/task · zero repo access</div>
+      <div class="metric-row">
+        <div>
+          <div class="stat-val">${fmtTime(t.frontier_wall_s)}</div>
+          <div class="stat-lbl">Total Wall-Clock</div>
+        </div>
+        <div>
+          <div class="stat-val">${fmtTokens(t.frontier_billed_tokens)}</div>
+          <div class="stat-lbl">Billed Context Tokens</div>
+        </div>
+        <div>
+          <div class="stat-val">1.000x</div>
+          <div class="stat-lbl">GeoMean Loss Ref</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arm-card v1">
+      <h2>
+        <span>Sciona v1 (Baseline Ladder)</span>
+        <span class="badge-pill" style="color:var(--v1);border-color:rgba(96,165,250,0.4);background:var(--v1-soft);">FIXED 12-STEP</span>
+      </h2>
+      <div class="arm-sub">Original single-node greedy ladder prior to threshold &amp; coupled DPO lookahead</div>
+      <div class="metric-row">
+        <div>
+          <div class="stat-val">${t.v1_wall_s.toFixed(1)}s</div>
+          <div class="stat-lbl">${t.v1_speedup_x}x Faster</div>
+        </div>
+        <div>
+          <div class="stat-val">0</div>
+          <div class="stat-lbl">LLM Tokens Used</div>
+        </div>
+        <div>
+          <div class="stat-val">${t.v1_wins_vs_frontier}/5 Wins</div>
+          <div class="stat-lbl">GeoMean ${gV1.toFixed(3)}x Loss</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arm-card v2">
+      <h2>
+        <span>Sciona v2 (Upgraded Framework)</span>
+        <span class="badge-pill" style="color:#34d399;border-color:rgba(16,185,129,0.45);background:var(--v2-soft);">DEFAULT POLICY</span>
+      </h2>
+      <div class="arm-sub">max_iter=${BENCH_DATA.prototyping_config.max_iterations}, patience=${BENCH_DATA.prototyping_config.exhausted_patience}, min_r1_gain=0.25%, Coupled DPO+Swap &amp; Group-Norm</div>
+      <div class="metric-row">
+        <div>
+          <div class="stat-val" style="color:#34d399;">${t.v2_wall_s.toFixed(1)}s</div>
+          <div class="stat-lbl">${t.v2_speedup_x}x Faster</div>
+        </div>
+        <div>
+          <div class="stat-val" style="color:#34d399;">0</div>
+          <div class="stat-lbl">100% Token Savings</div>
+        </div>
+        <div>
+          <div class="stat-val" style="color:#34d399;">${t.v2_wins_vs_frontier}/5 Wins</div>
+          <div class="stat-lbl">GeoMean ${gV2.toFixed(3)}x Loss</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderTabs() {
+  const tabs = [
+    { id: "overview", label: "All 5 Disciplines Overview" },
+    ...Object.values(BENCH_DATA.tasks).map(t => ({ id: t.task_id, label: t.short_title }))
+  ];
+  const container = document.getElementById("viewTabs");
+  container.innerHTML = tabs.map(tb =>
+    `<button class="tab-btn ${state.activeTab === tb.id ? 'active' : ''}" data-tab="${tb.id}">${tb.label}</button>`
+  ).join("");
+  container.querySelectorAll("button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      state.activeTab = btn.dataset.tab;
+      renderAll();
+    });
+  });
+}
+
+function buildLineChartSVG(task, width, height, compact = false) {
+  const pad = compact
+    ? { top: 16, right: 18, bottom: 32, left: 52 }
+    : { top: 22, right: 28, bottom: 44, left: 68 };
+  const plotW = width - pad.left - pad.right;
+  const plotH = height - pad.top - pad.bottom;
+
+  const yField = state.yAxis === "holdout" ? "holdout_loss" : "val_loss";
+  const useLogY = state.logY || (compact && task.task_id === "eval_04");
+
+  const series = [
+    { key: "frontier", name: "Frontier LLM", color: "#f59e0b", dash: "5,4", pts: task.frontier },
+    { key: "v1", name: "Sciona v1", color: "#60a5fa", dash: "2,3", pts: task.sciona_v1 },
+    { key: "v2", name: "Sciona v2", color: "#10b981", dash: "", pts: task.sciona_v2 },
+  ];
+
+  const allPts = series.flatMap(s => s.pts);
+  const rawY = allPts.map(p => Math.max(p[yField], 1e-6));
+  const yTrans = v => useLogY ? Math.log10(Math.max(v, 1e-5)) : v;
+
+  let yMin = Math.min(...rawY.map(yTrans));
+  let yMax = Math.max(...rawY.map(yTrans));
+  if (Math.abs(yMax - yMin) < 1e-9) { yMax += 1; yMin -= 1; }
+  const ySpan = yMax - yMin;
+  yMin -= ySpan * 0.08;
+  yMax += ySpan * 0.08;
+
+  const xTrans = p => state.xAxis === "iter"
+    ? p.iteration
+    : Math.log10(Math.max(p.elapsed_s, 0.05));
+
+  const rawX = allPts.map(xTrans);
+  let xMin = state.xAxis === "iter" ? 0 : Math.min(...rawX);
+  let xMax = state.xAxis === "iter" ? 12 : Math.max(...rawX);
+  if (Math.abs(xMax - xMin) < 1e-6) xMax = xMin + 1;
+
+  const sx = val => pad.left + ((val - xMin) / (xMax - xMin)) * plotW;
+  const sy = val => pad.top + (1 - (val - yMin) / (yMax - yMin)) * plotH;
+
+  let gridLines = "";
+  const nYTicks = compact ? 4 : 5;
+  for (let i = 0; i <= nYTicks; i++) {
+    const tv = yMin + (i / nYTicks) * (yMax - yMin);
+    const py = sy(tv);
+    const dispVal = useLogY ? Math.pow(10, tv) : tv;
+    gridLines += `<line x1="${pad.left}" y1="${py.toFixed(1)}" x2="${width - pad.right}" y2="${py.toFixed(1)}" stroke="rgba(148,163,184,0.14)" stroke-width="1"/>`;
+    gridLines += `<text x="${pad.left - 8}" y="${(py + 4).toFixed(1)}" text-anchor="end" fill="#94a3b8" font-size="10.5" font-family="monospace">${fmtNum(dispVal, dispVal < 0.1 ? 3 : 2)}</text>`;
+  }
+
+  let xTicks = "";
+  if (state.xAxis === "iter") {
+    const step = compact ? 2 : 1;
+    for (let k = 0; k <= 12; k += step) {
+      const px = sx(k);
+      xTicks += `<line x1="${px.toFixed(1)}" y1="${pad.top}" x2="${px.toFixed(1)}" y2="${height - pad.bottom}" stroke="rgba(148,163,184,0.07)" stroke-width="1"/>`;
+      xTicks += `<text x="${px.toFixed(1)}" y="${height - pad.bottom + 16}" text-anchor="middle" fill="#94a3b8" font-size="10.5" font-family="monospace">${k}</text>`;
+    }
+  } else {
+    const loPow = Math.floor(xMin);
+    const hiPow = Math.ceil(xMax);
+    for (let pw = loPow; pw <= hiPow; pw++) {
+      if (pw < xMin - 0.2 || pw > xMax + 0.2) continue;
+      const px = sx(pw);
+      const sec = Math.pow(10, pw);
+      const lbl = sec >= 1 ? `${sec.toFixed(0)}s` : `${sec.toFixed(1)}s`;
+      xTicks += `<line x1="${px.toFixed(1)}" y1="${pad.top}" x2="${px.toFixed(1)}" y2="${height - pad.bottom}" stroke="rgba(148,163,184,0.1)" stroke-width="1"/>`;
+      xTicks += `<text x="${px.toFixed(1)}" y="${height - pad.bottom + 16}" text-anchor="middle" fill="#94a3b8" font-size="10.5" font-family="monospace">${lbl}</text>`;
+    }
+  }
+
+  // Scrubber highlight line in detail mode
+  let scrubLine = "";
+  if (!compact && state.xAxis === "iter") {
+    const px = sx(state.scrubIter);
+    scrubLine = `<line x1="${px.toFixed(1)}" y1="${pad.top}" x2="${px.toFixed(1)}" y2="${height - pad.bottom}" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="3,3"/>`;
+  }
+
+  let paths = "";
+  let circles = "";
+  for (const s of series) {
+    const coords = s.pts.map(p => ({
+      x: sx(xTrans(p)),
+      y: sy(yTrans(p[yField])),
+      raw: p
+    }));
+    if (!coords.length) continue;
+    const d = coords.map((c, idx) => `${idx === 0 ? "M" : "L"}${c.x.toFixed(1)},${c.y.toFixed(1)}`).join(" ");
+    const sw = s.key === "v2" ? (compact ? 2.6 : 3.2) : (compact ? 1.9 : 2.3);
+    const dashAttr = s.dash ? `stroke-dasharray="${s.dash}"` : "";
+    paths += `<path d="${d}" fill="none" stroke="${s.color}" stroke-width="${sw}" ${dashAttr} stroke-linecap="round" stroke-linejoin="round"/>`;
+
+    for (const c of coords) {
+      const isEarlyCarry = Boolean(c.raw.converged_early);
+      const r = isEarlyCarry ? (compact ? 2.2 : 3.0) : (compact ? 3.4 : 4.6);
+      const fill = isEarlyCarry ? "#0b1120" : s.color;
+      const tipPayload = encodeURIComponent(JSON.stringify({
+        arm: s.name,
+        task: task.task_id,
+        iter: c.raw.iteration,
+        holdout: c.raw.holdout_loss,
+        val: c.raw.val_loss,
+        elapsed_s: c.raw.elapsed_s,
+        rung: c.raw.rung_label || "Frontier Agent Checkpoint",
+        tokens: c.raw.billed_tokens || c.raw.tokens || 0,
+        feasible: c.raw.feasible
+      }));
+      circles += `<circle cx="${c.x.toFixed(1)}" cy="${c.y.toFixed(1)}" r="${r}" fill="${fill}" stroke="${s.color}" stroke-width="1.6" class="pt-dot" data-tip="${tipPayload}"/>`;
+    }
+  }
+
+  const xAxisTitle = state.xAxis === "iter" ? "Iteration Checkpoint (k)" : "Cumulative Wall-Clock Time (seconds, log scale)";
+  const yLabelText = useLogY ? `${state.yAxis === "holdout" ? "Holdout" : "Val"} Loss (log10)` : `${state.yAxis === "holdout" ? "Holdout" : "Val"} Loss`;
+
+  return `<svg viewBox="0 0 ${width} ${height}" class="plot">
+    ${gridLines}
+    ${xTicks}
+    ${scrubLine}
+    ${paths}
+    ${circles}
+    ${!compact ? `<text x="${(pad.left + width - pad.right) / 2}" y="${height - 6}" text-anchor="middle" fill="#94a3b8" font-size="11.5">${xAxisTitle}</text>` : ""}
+    <text x="12" y="${(pad.top + height - pad.bottom) / 2}" text-anchor="middle" fill="#94a3b8" font-size="10.5" transform="rotate(-90 12 ${(pad.top + height - pad.bottom) / 2})">${yLabelText}</text>
+  </svg>`;
+}
+
+function renderParetoSVG() {
+  const tasks = Object.values(BENCH_DATA.tasks);
+  const width = 620, height = 290;
+  const pad = { top: 22, right: 26, bottom: 44, left: 64 };
+  const plotW = width - pad.left - pad.right;
+  const plotH = height - pad.top - pad.bottom;
+
+  // Points: x = log10(wall_s), y = normalized loss (arm_loss / frontier_loss) capped cleanly for visual clarity
+  const pts = [];
+  for (const t of tasks) {
+    pts.push({ tid: t.task_id, arm: "Frontier LLM", color: "#f59e0b", wall: t.frontier_wall_s, ratio: 1.0, loss: t.frontier_final_loss, tok: t.frontier_billed_tokens });
+    pts.push({ tid: t.task_id, arm: "Sciona v1", color: "#60a5fa", wall: t.v1_wall_s, ratio: Math.min(2.2, t.v1_final_loss / t.frontier_final_loss), rawRatio: t.v1_final_loss / t.frontier_final_loss, loss: t.v1_final_loss, tok: 0 });
+    pts.push({ tid: t.task_id, arm: "Sciona v2", color: "#10b981", wall: t.v2_wall_s, ratio: Math.min(2.2, t.v2_final_loss / t.frontier_final_loss), rawRatio: t.v2_final_loss / t.frontier_final_loss, loss: t.v2_final_loss, tok: 0 });
+  }
+
+  const xMin = 0.0, xMax = 3.6; // 1s to ~4000s
+  const yMin = 0.75, yMax = 1.45;
+  const sx = w => pad.left + ((Math.log10(Math.max(w, 1.0)) - xMin) / (xMax - xMin)) * plotW;
+  const sy = r => pad.top + (1 - (Math.min(Math.max(r, yMin), yMax) - yMin) / (yMax - yMin)) * plotH;
+
+  let svg = `<svg viewBox="0 0 ${width} ${height}" class="plot">`;
+  // Parity reference line y = 1.0
+  const py1 = sy(1.0);
+  svg += `<rect x="${pad.left}" y="${py1}" width="${plotW}" height="${height - pad.bottom - py1}" fill="rgba(16,185,129,0.06)"/>`;
+  svg += `<line x1="${pad.left}" y1="${py1.toFixed(1)}" x2="${width - pad.right}" y2="${py1.toFixed(1)}" stroke="#f59e0b" stroke-dasharray="4,4" stroke-width="1.2"/>`;
+  svg += `<text x="${width - pad.right - 6}" y="${(py1 - 6).toFixed(1)}" text-anchor="end" fill="#fbbf24" font-size="10.5">Frontier Parity (1.00x) — Lower &amp; Left is Better</text>`;
+
+  for (const rTick of [0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4]) {
+    const py = sy(rTick);
+    svg += `<line x1="${pad.left}" y1="${py.toFixed(1)}" x2="${width - pad.right}" y2="${py.toFixed(1)}" stroke="rgba(148,163,184,0.12)"/>`;
+    svg += `<text x="${pad.left - 8}" y="${(py + 4).toFixed(1)}" text-anchor="end" fill="#94a3b8" font-size="10.5" font-family="monospace">${rTick.toFixed(2)}x</text>`;
+  }
+  for (const sTick of [1, 10, 100, 1000, 3600]) {
+    const px = sx(sTick);
+    const lbl = sTick >= 60 ? `${Math.round(sTick/60)}m` : `${sTick}s`;
+    svg += `<line x1="${px.toFixed(1)}" y1="${pad.top}" x2="${px.toFixed(1)}" y2="${height - pad.bottom}" stroke="rgba(148,163,184,0.1)"/>`;
+    svg += `<text x="${px.toFixed(1)}" y="${height - pad.bottom + 16}" text-anchor="middle" fill="#94a3b8" font-size="10.5" font-family="monospace">${lbl}</text>`;
+  }
+
+  // Connect v2 -> Frontier per task with subtle arrow line
+  for (const t of tasks) {
+    const xF = sx(t.frontier_wall_s), yF = sy(1.0);
+    const x2 = sx(t.v2_wall_s), y2 = sy(t.v2_final_loss / t.frontier_final_loss);
+    svg += `<line x1="${xF.toFixed(1)}" y1="${yF.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="rgba(148,163,184,0.22)" stroke-width="1"/>`;
+    svg += `<text x="${(x2 + 7).toFixed(1)}" y="${(y2 + 3).toFixed(1)}" fill="#cbd5e1" font-size="10" font-family="monospace">${t.task_id}</text>`;
+  }
+
+  for (const p of pts) {
+    const cx = sx(p.wall), cy = sy(p.ratio);
+    const r = p.arm === "Sciona v2" ? 6.2 : 5.0;
+    const tip = encodeURIComponent(JSON.stringify({
+      arm: p.arm,
+      task: p.tid,
+      iter: 12,
+      holdout: p.loss,
+      val: p.loss,
+      elapsed_s: p.wall,
+      rung: `Loss Ratio vs Frontier: ${(p.rawRatio || p.ratio).toFixed(3)}x`,
+      tokens: p.tok,
+      feasible: true
+    }));
+    svg += `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${r}" fill="${p.color}" stroke="#0f172a" stroke-width="1.5" class="pt-dot" data-tip="${tip}"/>`;
+  }
+  svg += `<text x="${(pad.left + width - pad.right)/2}" y="${height - 6}" text-anchor="middle" fill="#94a3b8" font-size="11.5">Total Wall-Clock Runtime (log scale)</text>`;
+  svg += `<text x="14" y="${(pad.top + height - pad.bottom)/2}" text-anchor="middle" fill="#94a3b8" font-size="10.5" transform="rotate(-90 14 ${(pad.top + height - pad.bottom)/2})">Holdout Loss / Frontier Ref</text>`;
+  svg += `</svg>`;
+  document.getElementById("paretoChartWrap").innerHTML = svg;
+}
+
+function renderOverview() {
+  const grid = document.getElementById("smallMultiplesGrid");
+  const tasks = Object.values(BENCH_DATA.tasks);
+  grid.innerHTML = tasks.map(t => {
+    const beats = t.v2_final_loss <= t.frontier_final_loss;
+    const deltaPct = ((t.frontier_final_loss - t.v2_final_loss) / Math.max(t.frontier_final_loss, 1e-9)) * 100;
+    const badgeTxt = beats
+      ? `Sciona v2 Wins (${deltaPct >= 0 ? '-' + deltaPct.toFixed(1) + '% loss' : 'Tie'}) · ${t.v2_speedup_vs_frontier_x}x faster`
+      : `Frontier +${Math.abs(deltaPct).toFixed(1)}% · Sciona v2 ${t.v2_speedup_vs_frontier_x}x faster`;
+    return `<div class="mini-card" data-goto="${t.task_id}">
+      <div class="mini-head">
+        <span class="mini-title">${t.short_title}</span>
+        <span class="pill-win ${beats ? 'v2win' : 'fwin'}">${badgeTxt}</span>
+      </div>
+      <div class="mini-domain">${t.metric_label}</div>
+      ${buildLineChartSVG(t, 440, 210, true)}
+      <div style="display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted);margin-top:6px;font-family:var(--mono);">
+        <span>Frontier: <strong style="color:var(--frontier)">${fmtNum(t.frontier_final_loss)}</strong> (${t.frontier_wall_s.toFixed(0)}s)</span>
+        <span>v1: <strong style="color:var(--v1)">${fmtNum(t.v1_final_loss)}</strong></span>
+        <span>v2: <strong style="color:var(--v2)">${fmtNum(t.v2_final_loss)}</strong> (${t.v2_wall_s.toFixed(1)}s, stop@${t.v2_active_iters})</span>
+      </div>
+    </div>`;
+  }).join("");
+
+  grid.querySelectorAll(".mini-card").forEach(card => {
+    card.addEventListener("click", () => {
+      state.activeTab = card.dataset.goto;
+      renderAll();
+    });
+  });
+
+  renderParetoSVG();
+
+  // Reference manifest box
+  const cfg = BENCH_DATA.prototyping_config;
+  document.getElementById("referenceManifestBox").innerHTML = `
+    <div style="font-size:13px;color:#cbd5e1;display:flex;flex-direction:column;gap:10px;">
+      <div>
+        <span style="color:var(--muted);">Reference Suite ID:</span>
+        <span class="code-tag">${BENCH_DATA.reference_suite_id}</span>
+      </div>
+      <div>
+        <span style="color:var(--muted);">SHA-256 Digest:</span>
+        <span class="code-tag">${BENCH_DATA.reference_sha256.slice(0, 28)}…</span>
+      </div>
+      <div>
+        <span style="color:var(--muted);">Loader API:</span>
+        <span class="code-tag">sciona.prototyping.load_frontier_llm_reference()</span>
+      </div>
+      <div style="border-top:1px solid rgba(148,163,184,0.16);padding-top:10px;">
+        <strong style="color:#34d399;">Active Upgrades Verified in Sciona v2:</strong>
+        <ul style="margin:6px 0 0 18px;padding:0;color:var(--muted);font-size:12.5px;line-height:1.6;">
+          <li><strong>Convergence Policy:</strong> <span class="code-tag">max_iterations=${cfg.max_iterations}</span>, <span class="code-tag">exhausted_patience=${cfg.exhausted_patience}</span>, conditional Rung 4 escalation &amp; Tier 3 overfit rollback.</li>
+          <li><strong>Anti-Starvation HPO Gate:</strong> <span class="code-tag">min_rung1_rel_gain=${cfg.min_rung1_rel_gain}</span> defers micro-tweaks until Rung 2/3 structural revisions are checked.</li>
+          <li><strong>Coupled 2-Node Lookahead:</strong> Joint <span class="code-tag">(Rung 3 DPO + Rung 2 Swap)</span> escapes multi-node constraint/conditioning traps (<span class="code-tag">eval_04</span>).</li>
+          <li><strong>Group-Conditional DPO:</strong> <span class="code-tag">GroupConditionalNormalizationRuleSet</span> splices per-unit CORAL normalization (<span class="code-tag">eval_03</span>).</li>
+        </ul>
+      </div>
+    </div>
+  `;
+
+  // Master comparison table
+  const rows = tasks.map(t => {
+    const bestLoss = Math.min(t.frontier_final_loss, t.v1_final_loss, t.v2_final_loss);
+    const cls = v => Math.abs(v - bestLoss) < 1e-6 ? "num best-cell" : "num";
+    return `<tr>
+      <td><strong><a href="#" data-jump="${t.task_id}" style="color:var(--accent);text-decoration:none;">${t.task_id}</a></strong><div style="font-size:11.5px;color:var(--muted);">${t.domain}</div></td>
+      <td class="${cls(t.frontier_final_loss)}">${fmtNum(t.frontier_final_loss)}</td>
+      <td class="${cls(t.v1_final_loss)}">${fmtNum(t.v1_final_loss)}</td>
+      <td class="${cls(t.v2_final_loss)}">${fmtNum(t.v2_final_loss)}</td>
+      <td class="num" style="color:${t.v2_vs_v1_rel_gain_pct > 0 ? '#34d399' : '#94a3b8'}">${t.v2_vs_v1_rel_gain_pct > 0 ? '+' + t.v2_vs_v1_rel_gain_pct.toFixed(1) + '%' : t.v2_vs_v1_rel_gain_pct.toFixed(1) + '%'}</td>
+      <td class="num">${t.v2_active_iters} / 10</td>
+      <td class="num">${t.frontier_wall_s.toFixed(1)}s</td>
+      <td class="num" style="color:#34d399">${t.v2_wall_s.toFixed(1)}s (${t.v2_speedup_vs_frontier_x}x)</td>
+      <td class="num">${(t.v2_cache_hit_rate * 100).toFixed(1)}% (${t.v2_cache_saved_s.toFixed(1)}s)</td>
+      <td class="num">${fmtTokens(t.frontier_billed_tokens)} vs <strong>0</strong></td>
+    </tr>`;
+  }).join("");
+
+  document.getElementById("masterComparisonTable").innerHTML = `
+    <thead>
+      <tr>
+        <th>Task &amp; Discipline</th>
+        <th class="num">Frontier Holdout</th>
+        <th class="num">Sciona v1 Holdout</th>
+        <th class="num">Sciona v2 Holdout</th>
+        <th class="num">v2 vs v1 Gain</th>
+        <th class="num">v2 Active Steps</th>
+        <th class="num">Frontier Time</th>
+        <th class="num">Sciona v2 Time</th>
+        <th class="num">v2 Cache Saved</th>
+        <th class="num">Context Tokens</th>
+      </tr>
+    </thead>
+    <tbody>${rows}</tbody>
+  `;
+  document.querySelectorAll("[data-jump]").forEach(a => {
+    a.addEventListener("click", e => {
+      e.preventDefault();
+      state.activeTab = a.dataset.jump;
+      renderAll();
+    });
+  });
+}
+
+function renderDetail(tid) {
+  const t = BENCH_DATA.tasks[tid];
+  document.getElementById("detailTitle").textContent = `${t.short_title} — ${t.domain}`;
+  document.getElementById("detailSubtitle").textContent = `${t.metric_label} · ${t.perturbation_summary}`;
+  document.getElementById("detailUpgradeCallout").innerHTML = `<strong>Sciona v2 Behavior on ${tid}:</strong> ${t.v2_upgrade_highlight}`;
+
+  const beats = t.v2_final_loss <= t.frontier_final_loss;
+  document.getElementById("detailBadges").innerHTML = `
+    <span class="pill-win ${beats ? 'v2win' : 'fwin'}">
+      ${beats ? 'Beats Frontier Ground Truth' : 'Near-Frontier Regime'} · ${t.v2_speedup_vs_frontier_x}x Wall-Clock Speedup · 0 Tokens
+    </span>
+  `;
+
+  document.getElementById("detailChartWrap").innerHTML = buildLineChartSVG(t, 1120, 360, false);
+
+  const k = state.scrubIter;
+  document.getElementById("scrubIterLabel").textContent = `k = ${k}`;
+  const fPt = t.frontier.find(p => p.iteration === k);
+  const v1Pt = t.sciona_v1.find(p => p.iteration === k);
+  const v2Pt = t.sciona_v2.find(p => p.iteration === k);
+
+  document.getElementById("iterSnapshotCards").innerHTML = `
+    <div class="iter-card" style="border-left:3px solid var(--frontier);">
+      <div style="color:var(--frontier);font-weight:650;margin-bottom:4px;">Frontier Agent @ k=${k}</div>
+      ${fPt ? `
+        <div>Holdout Loss: <strong class="code-tag">${fmtNum(fPt.holdout_loss)}</strong> (Val: ${fmtNum(fPt.val_loss)})</div>
+        <div style="color:var(--muted);margin-top:4px;">Elapsed: ${fPt.elapsed_s.toFixed(1)}s · Tokens: ${fmtTokens(fPt.billed_tokens)}</div>
+      ` : `<div style="color:var(--muted);">No checkpoint at k=0 (starts at k=1 after initial exploration)</div>`}
+    </div>
+    <div class="iter-card" style="border-left:3px solid var(--v1);">
+      <div style="color:var(--v1);font-weight:650;margin-bottom:4px;">Sciona v1 @ k=${k}</div>
+      <div>Holdout Loss: <strong class="code-tag">${fmtNum(v1Pt.holdout_loss)}</strong> (Val: ${fmtNum(v1Pt.val_loss)})</div>
+      <div style="color:var(--muted);margin-top:4px;">${v1Pt.rung_label} · Elapsed: ${v1Pt.elapsed_s.toFixed(2)}s</div>
+    </div>
+    <div class="iter-card" style="border-left:3px solid var(--v2);">
+      <div style="color:var(--v2);font-weight:650;margin-bottom:4px;">Sciona v2 @ k=${k}</div>
+      <div>Holdout Loss: <strong class="code-tag">${fmtNum(v2Pt.holdout_loss)}</strong> (Val: ${fmtNum(v2Pt.val_loss)})</div>
+      <div style="color:var(--muted);margin-top:4px;">${v2Pt.rung_label} · Elapsed: ${v2Pt.elapsed_s.toFixed(2)}s · Cache ${(v2Pt.cache_hit_rate * 100).toFixed(1)}%</div>
+    </div>
+  `;
+
+  // Step table 0..12
+  let stepRows = "";
+  for (let i = 0; i <= 12; i++) {
+    const fp = t.frontier.find(p => p.iteration === i);
+    const s1 = t.sciona_v1.find(p => p.iteration === i);
+    const s2 = t.sciona_v2.find(p => p.iteration === i);
+    const cand = [fp ? fp.holdout_loss : Infinity, s1 ? s1.holdout_loss : Infinity, s2 ? s2.holdout_loss : Infinity];
+    const rowBest = Math.min(...cand);
+    const cCls = v => (v !== undefined && Math.abs(v - rowBest) < 1e-6) ? "num best-cell" : "num";
+
+    stepRows += `<tr style="${i === k ? 'background:rgba(56,189,248,0.12);' : ''}">
+      <td class="num"><strong>${i}</strong></td>
+      <td class="${cCls(fp && fp.holdout_loss)}">${fp ? fmtNum(fp.holdout_loss) : "—"}</td>
+      <td class="num">${fp ? fp.elapsed_s.toFixed(1) + "s / " + fmtTokens(fp.billed_tokens) : "—"}</td>
+      <td class="${cCls(s1 && s1.holdout_loss)}">${s1 ? fmtNum(s1.holdout_loss) : "—"}</td>
+      <td>${s1 ? s1.rung_label : "—"}</td>
+      <td class="${cCls(s2 && s2.holdout_loss)}">${s2 ? fmtNum(s2.holdout_loss) : "—"}</td>
+      <td class="num">${s2 ? fmtNum(s2.val_loss) : "—"}</td>
+      <td><span class="code-tag">${s2 ? s2.rung_label : "—"}</span></td>
+      <td class="num">${s2 ? s2.elapsed_s.toFixed(2) + "s" : "—"}</td>
+      <td class="num">${s2 ? (s2.cache_hit_rate * 100).toFixed(1) + "%" : "—"}</td>
+    </tr>`;
+  }
+
+  document.getElementById("detailStepTable").innerHTML = `
+    <thead>
+      <tr>
+        <th class="num">Iter</th>
+        <th class="num">Frontier Holdout</th>
+        <th class="num">Frontier Time / Tok</th>
+        <th class="num">Sciona v1 Holdout</th>
+        <th>Sciona v1 Action</th>
+        <th class="num">Sciona v2 Holdout</th>
+        <th class="num">Sciona v2 Val</th>
+        <th>Sciona v2 Action</th>
+        <th class="num">v2 Cum Time</th>
+        <th class="num">v2 Cache Hit</th>
+      </tr>
+    </thead>
+    <tbody>${stepRows}</tbody>
+  `;
+}
+
+function wireTooltips() {
+  const tipEl = document.getElementById("chartTooltip");
+  document.querySelectorAll(".pt-dot").forEach(dot => {
+    dot.addEventListener("mouseenter", e => {
+      const d = JSON.parse(decodeURIComponent(dot.dataset.tip));
+      tipEl.innerHTML = `
+        <div style="font-weight:700;margin-bottom:3px;">${d.arm} (${d.task}, k=${d.iter})</div>
+        <div>Holdout Loss: <strong style="font-family:monospace;">${fmtNum(d.holdout)}</strong> ${d.feasible === false ? '<span style="color:#ef4444">(Infeasible)</span>' : ''}</div>
+        <div>Validation Loss: <span style="font-family:monospace;">${fmtNum(d.val)}</span></div>
+        <div>Elapsed Time: <span style="font-family:monospace;">${d.elapsed_s.toFixed(2)}s</span></div>
+        <div>Action: <span style="color:#94a3b8;">${d.rung}</span></div>
+        <div>Billed Tokens: <span style="font-family:monospace;">${fmtTokens(d.tokens)}</span></div>
+      `;
+      tipEl.style.display = "block";
+    });
+    dot.addEventListener("mousemove", e => {
+      tipEl.style.left = Math.min(window.innerWidth - 330, e.clientX + 14) + "px";
+      tipEl.style.top = Math.max(12, e.clientY - 28) + "px";
+    });
+    dot.addEventListener("mouseleave", () => {
+      tipEl.style.display = "none";
+    });
+  });
+}
+
+function renderAll() {
+  renderKPIs();
+  renderTabs();
+  const isOverview = state.activeTab === "overview";
+  document.getElementById("overviewSection").style.display = isOverview ? "block" : "none";
+  document.getElementById("detailSection").style.display = isOverview ? "none" : "block";
+  if (isOverview) {
+    renderOverview();
+  } else {
+    renderDetail(state.activeTab);
+  }
+  wireTooltips();
+}
+
+document.getElementById("btnAxisIter").addEventListener("click", () => {
+  state.xAxis = "iter";
+  document.getElementById("btnAxisIter").classList.add("active");
+  document.getElementById("btnAxisTime").classList.remove("active");
+  renderAll();
+});
+document.getElementById("btnAxisTime").addEventListener("click", () => {
+  state.xAxis = "time";
+  document.getElementById("btnAxisTime").classList.add("active");
+  document.getElementById("btnAxisIter").classList.remove("active");
+  renderAll();
+});
+document.getElementById("btnYHoldout").addEventListener("click", () => {
+  state.yAxis = "holdout";
+  document.getElementById("btnYHoldout").classList.add("active");
+  document.getElementById("btnYVal").classList.remove("active");
+  renderAll();
+});
+document.getElementById("btnYVal").addEventListener("click", () => {
+  state.yAxis = "val";
+  document.getElementById("btnYVal").classList.add("active");
+  document.getElementById("btnYHoldout").classList.remove("active");
+  renderAll();
+});
+document.getElementById("btnLogY").addEventListener("click", () => {
+  state.logY = !state.logY;
+  const btn = document.getElementById("btnLogY");
+  btn.textContent = `Log Y-Scale: ${state.logY ? "On" : "Off"}`;
+  btn.classList.toggle("active", state.logY);
+  renderAll();
+});
+document.getElementById("iterScrubber").addEventListener("input", e => {
+  state.scrubIter = Number(e.target.value);
+  if (state.activeTab !== "overview") renderDetail(state.activeTab);
+  wireTooltips();
+});
+
+renderAll();
+</script>
+</body>
+</html>

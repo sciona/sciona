@@ -128,6 +128,19 @@ class PrototypingSessionSummary:
         }
 
 
+@dataclass(frozen=True)
+class PrototypingConfig:
+    """Default iteration-budget, patience, and rung-escalation policy for prototyping sessions."""
+
+    max_iterations: int = 10
+    exhausted_patience: int = 2
+    time_budget_s: float = 15.0
+    target_loss: float | None = None
+    max_rung: int = 4
+    escalate_rung4_on_exhaustion: bool = True
+    min_rung1_rel_gain: float = 0.0025
+
+
 class PrototypingSession:
     """Interactive and batch in-memory CDG prototyping & refinement session."""
 
@@ -152,6 +165,7 @@ class PrototypingSession:
         initial_node_params: Mapping[str, Mapping[str, Any]] | None = None,
         hpo_trials_per_rung: int = 8,
         max_sibling_evals: int = 5,
+        min_rung1_rel_gain: float = 0.0025,
     ) -> None:
         self.session_id = session_id
         self.goal = goal or str(cdg.metadata.get("goal") or "Prototyping pipeline")
@@ -184,6 +198,7 @@ class PrototypingSession:
             micro_atom_synthesizer=micro_atom_synthesizer,
             hpo_trials_per_rung=hpo_trials_per_rung,
             max_sibling_evals=max_sibling_evals,
+            min_rung1_rel_gain=min_rung1_rel_gain,
         )
 
         self.initial_loss: float = float("inf")
@@ -194,6 +209,9 @@ class PrototypingSession:
         self.synthesized_micro_atoms: dict[str, str] = {}
         self._trace_versions: list[dict[str, Any]] = []
         self._trace_transitions: list[dict[str, Any]] = []
+        self._accepted_snapshots: list[
+            tuple[CDGExport, dict[str, dict[str, Any]], float, FunnelEvaluationReport]
+        ] = []
         self._active_version_id: str = ""
         self._active_version_cdg: CDGExport = self.best_cdg.model_copy(deep=True)
         self._active_version_params: dict[str, dict[str, Any]] = dict(self.best_node_params)
@@ -350,6 +368,14 @@ class PrototypingSession:
             self.best_node_params = dict(outcome.accepted_node_params)
             self.best_loss = outcome.accepted_loss
             self.best_report = outcome.accepted_report
+            self._accepted_snapshots.append(
+                (
+                    self.best_cdg.model_copy(deep=True),
+                    {k: dict(v) for k, v in self.best_node_params.items()},
+                    float(self.best_loss),
+                    outcome.accepted_report,
+                )
+            )
             if outcome.synthesized_atom_fqn and outcome.synthesized_source_code:
                 self.synthesized_micro_atoms[outcome.synthesized_atom_fqn] = outcome.synthesized_source_code
 
@@ -434,10 +460,12 @@ class PrototypingSession:
     async def run(
         self,
         *,
-        max_iterations: int = 6,
+        max_iterations: int = 10,
+        exhausted_patience: int = 2,
         time_budget_s: float = 15.0,
         target_loss: float | None = None,
         max_rung: int = 4,
+        escalate_rung4_on_exhaustion: bool = True,
         verify_holdout: bool = True,
     ) -> PrototypingSessionSummary:
         """Run iterative refinement until convergence, target loss, or budget expiry."""
@@ -446,14 +474,41 @@ class PrototypingSession:
             self.evaluate_initial()
 
         stop_loss = target_loss if target_loss is not None else 1e-12
+        consecutive_exhausted = 0
+        has_r4 = max_rung >= 4 and (
+            self.ladder.subdecompose_fn is not None
+            or self.ladder.micro_atom_synthesizer is not None
+        )
         for _ in range(max(0, int(max_iterations))):
             if math.isfinite(self.best_loss) and self.best_loss <= stop_loss:
                 break
             if (time.perf_counter() - t_start) >= time_budget_s:
                 break
-            step_rec = await self.step(max_rung=max_rung)
-            if not step_rec.improved:
-                break
+
+            has_tunables = self.ladder.has_any_tunable_params(self.best_cdg)
+            effective_patience = max(1, int(exhausted_patience)) if has_tunables else 1
+            step_max_rung = (
+                3
+                if (
+                    has_r4
+                    and escalate_rung4_on_exhaustion
+                    and has_tunables
+                    and consecutive_exhausted < (effective_patience - 1)
+                )
+                else max_rung
+            )
+
+            step_rec = await self.step(max_rung=step_max_rung)
+            is_substantial = step_rec.improved and (
+                step_rec.rung != "rung1_node_hpo"
+                or self.ladder._is_substantial_gain(step_rec.loss_after, step_rec.loss_before)
+            )
+            if is_substantial:
+                consecutive_exhausted = 0
+            else:
+                consecutive_exhausted += 1
+                if consecutive_exhausted >= effective_patience:
+                    break
 
         holdout_res: FunnelTierResult | None = None
         if verify_holdout and math.isfinite(self.best_loss):
@@ -463,6 +518,28 @@ class PrototypingSession:
                 node_params=self.best_node_params or None,
                 match_results=self.match_results,
             )
+            if (
+                not holdout_res.passed
+                and holdout_res.details.get("overfit_detected")
+                and len(self._accepted_snapshots) >= 2
+            ):
+                # Roll back late-iteration validation overfit to most recent generalizing snapshot
+                for snap_cdg, snap_params, snap_loss, snap_rep in reversed(
+                    self._accepted_snapshots[:-1]
+                ):
+                    cand_hold = self.funnel.evaluate_tier3_holdout(
+                        snap_cdg,
+                        validation_loss=snap_loss,
+                        node_params=snap_params or None,
+                        match_results=self.match_results,
+                    )
+                    if cand_hold.passed:
+                        self.best_cdg = snap_cdg
+                        self.best_node_params = snap_params
+                        self.best_loss = snap_loss
+                        self.best_report = snap_rep
+                        holdout_res = cand_hold
+                        break
 
         total_trials = sum(r.trials_evaluated for r in self.history)
         return PrototypingSessionSummary(

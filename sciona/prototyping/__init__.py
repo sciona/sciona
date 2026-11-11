@@ -29,6 +29,14 @@ from sciona.prototyping.credit import (
     UniversalCreditAssigner,
     perturb_runtime_value,
 )
+from sciona.prototyping.frontier_reference import (
+     DEFAULT_FRONTIER_REFERENCE_PATH,
+    FrontierCheckpoint,
+    FrontierReferenceSuite,
+    FrontierTaskReference,
+    compare_sciona_to_frontier,
+    load_frontier_llm_reference,
+)
 from sciona.prototyping.funnel import (
     EvaluationFunnel,
     FunnelConfig,
@@ -51,6 +59,7 @@ from sciona.prototyping.harness import (
     infer_cdg_root_ports,
 )
 from sciona.prototyping.ladder import (
+    GroupConditionalNormalizationRuleSet,
     LadderStepOutcome,
     MicroAtomSynthesisSpec,
     MicroAtomSynthesizerCallable,
@@ -69,6 +78,7 @@ from sciona.prototyping.live_runner import (
     summarize_runtime_value,
 )
 from sciona.prototyping.session import (
+    PrototypingConfig,
     PrototypingSession,
     PrototypingSessionSummary,
     PrototypingStepRecord,
@@ -83,13 +93,18 @@ __all__ = [
     "CacheEntry",
     "CaseScore",
     "CounterfactualNodeSensitivity",
+    "DEFAULT_FRONTIER_REFERENCE_PATH",
     "DEFAULT_SYNTHETIC_REGIMES",
     "EvalCase",
     "EvaluationFunnel",
+    "FrontierCheckpoint",
+    "FrontierReferenceSuite",
+    "FrontierTaskReference",
     "FunnelConfig",
     "FunnelEvaluationReport",
     "FunnelTierResult",
     "GateSLOs",
+    "GroupConditionalNormalizationRuleSet",
     "IntermediateCache",
     "LadderStepOutcome",
     "LiveCDGRunner",
@@ -102,6 +117,7 @@ __all__ = [
     "ProblemHarness",
     "PrototypingBenchmarkGateReport",
     "PrototypingBenchmarkPreset",
+    "PrototypingConfig",
     "PrototypingSession",
     "PrototypingSessionSummary",
     "PrototypingStepRecord",
@@ -116,6 +132,7 @@ __all__ = [
     "callable_impl_digest",
     "check_output_invariants",
     "check_static_edge_port_types",
+    "compare_sciona_to_frontier",
     "compile_micro_atom_source",
     "compute_cdg_graph_diff",
     "compute_node_cache_key",
@@ -126,6 +143,7 @@ __all__ = [
     "infer_cdg_root_ports",
     "infer_tunable_specs_for_node",
     "list_benchmark_presets",
+    "load_frontier_llm_reference",
     "perturb_runtime_value",
     "render_cdg_python_source",
     "resolve_atom_callable",

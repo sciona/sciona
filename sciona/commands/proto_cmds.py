@@ -144,7 +144,8 @@ async def _cmd_proto(args: argparse.Namespace) -> None:
         )
 
     summary = await session.run(
-        max_iterations=int(getattr(args, "max_iterations", 6)),
+        max_iterations=int(getattr(args, "max_iterations", 10)),
+        exhausted_patience=int(getattr(args, "exhausted_patience", 2)),
         time_budget_s=float(getattr(args, "budget", 15.0)),
         target_loss=getattr(args, "target_loss", None),
         max_rung=int(getattr(args, "max_rung", 4)),

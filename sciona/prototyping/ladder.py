@@ -40,10 +40,13 @@ from typing import Any
 from sciona.architect.catalog import PrimitiveCatalog
 from sciona.architect.compiled_catalog import ManifestFTSIndex
 from sciona.architect.composition import compose_cdg
+from sciona.architect.graph_rewriter import GraphState, Morphism, RewriteRule
 from sciona.architect.handoff import CDGExport
 from sciona.architect.models import (
     AlgorithmicNode,
     AlgorithmicPrimitive,
+    ConceptType,
+    DependencyEdge,
     EdgeKind,
     IOSpec,
     NodeStatus,
@@ -53,7 +56,12 @@ from sciona.architect.models import (
 )
 from sciona.principal.atom_ledger import AtomLedger, compute_slot_signature
 from sciona.principal.benchmark_priors import load_benchmark_priors
-from sciona.principal.expansion import ExpansionContext, ExpansionEngine
+from sciona.principal.expansion import (
+    ExpansionContext,
+    ExpansionDiagnostic,
+    ExpansionEngine,
+    ExpansionRuleSet,
+)
 from sciona.principal.expansion_delta_planner import (
     DeltaPlan,
     DeltaPlanningQuery,
@@ -300,6 +308,201 @@ def compile_micro_atom_source(
     return target_fn_name, fn
 
 
+class GroupConditionalNormalizationRuleSet:
+    """DPO rule set proposing group/unit/subject normalization when group structure exists.
+
+    Addresses cross-unit / cross-subject covariate shift by discovering single-port
+    ``(T -> T)`` group-conditional standardization or covariance alignment primitives
+    in ``PrimitiveCatalog`` and splicing them onto the corresponding conditioning edge.
+    """
+
+    _GROUP_SIGNAL_TOKENS = ("group", "unit", "subject", "cohort", "unseen")
+    _NORMALIZER_TOKENS = (
+        "group_norm",
+        "group_standardiz",
+        "unit_norm",
+        "unit_standardiz",
+        "unit_align",
+        "subject_norm",
+        "coral",
+        "per_unit",
+        "per_group",
+    )
+
+    def __init__(self, catalog: PrimitiveCatalog | None = None) -> None:
+        self._catalog = catalog
+
+    @property
+    def name(self) -> str:
+        return "group_conditional_normalization"
+
+    @property
+    def domain(self) -> str:
+        return "cross_group_generalization"
+
+    def _has_group_context(self, cdg: CDGExport, context: ExpansionContext | None = None) -> bool:
+        meta_blob = " ".join(
+            [
+                str((cdg.metadata or {}).get("goal") or ""),
+                *(f"{k} {v}" for k, v in (cdg.metadata or {}).items()),
+                *(p.name for n in cdg.nodes for p in (*n.inputs, *n.outputs)),
+            ]
+        ).lower()
+        if any(tok in meta_blob for tok in self._GROUP_SIGNAL_TOKENS):
+            return True
+        if context is not None:
+            ctx_keys = " ".join(
+                [
+                    *((context.runtime_inputs or {}).keys()),
+                    *(context.intermediates.keys()),
+                ]
+            ).lower()
+            if any(tok in ctx_keys for tok in self._GROUP_SIGNAL_TOKENS):
+                return True
+        return False
+
+    def _find_candidate_primitive(self, cdg: CDGExport) -> tuple[AlgorithmicPrimitive, DependencyEdge] | None:
+        if self._catalog is None:
+            return None
+        used_prims = {str(n.matched_primitive or "").strip() for n in cdg.nodes}
+        for prim in self._catalog.all_primitives():
+            if prim.name in used_prims:
+                continue
+            blob = f"{prim.name} {prim.description}".lower()
+            if not any(tok in blob for tok in self._NORMALIZER_TOKENS):
+                continue
+            req_ins = [inp for inp in prim.inputs if inp.required]
+            if len(req_ins) != 1 or len(prim.outputs) != 1:
+                continue
+            p_in = req_ins[0].name
+            p_out = prim.outputs[0].name
+            if p_in != p_out:
+                continue
+            for edge in cdg.edges:
+                if (
+                    edge.edge_kind != EdgeKind.CALLABLE_INJECTION
+                    and edge.output_name == p_in
+                    and edge.input_name == p_out
+                ):
+                    return prim, edge
+        return None
+
+    def diagnose(
+        self,
+        cdg: CDGExport,
+        context: ExpansionContext,
+    ) -> list[ExpansionDiagnostic]:
+        if not self._has_group_context(cdg, context):
+            return []
+        found = self._find_candidate_primitive(cdg)
+        if found is None:
+            return []
+        prim, edge = found
+        return [
+            ExpansionDiagnostic(
+                rule_name="insert_group_conditional_normalizer",
+                severity=0.88,
+                evidence=(
+                    f"Group/unit shift context detected; splicing '{prim.name}' on "
+                    f"edge {edge.source_id} -> {edge.target_id}"
+                ),
+                metric_name="group_shift_exposure",
+                metric_value=1.0,
+                threshold=0.5,
+                source_domain=self.domain,
+            )
+        ]
+
+    def rules(self) -> list[RewriteRule]:
+        sentinel = AlgorithmicNode(
+            node_id="semantic_only_group_cond_norm",
+            name="semantic_only_group_cond_norm",
+            description="semantic_only_group_cond_norm",
+            concept_type=ConceptType.CUSTOM,
+            status=NodeStatus.ATOMIC,
+            matched_primitive="__semantic_only__.insert_group_conditional_normalizer",
+        )
+        empty = CDGExport(nodes=[], edges=[])
+        graph = CDGExport(nodes=[sentinel], edges=[])
+
+        def _apply(target_cdg: CDGExport) -> GraphState[CDGExport]:
+            found = self._find_candidate_primitive(target_cdg)
+            if found is None:
+                return GraphState.failure("No matching group-conditional normalizer candidate")
+            prim, target_edge = found
+            mutated = target_cdg.model_copy(deep=True)
+            existing_ids = {n.node_id for n in mutated.nodes}
+            base_id = "n_group_cond_norm"
+            ins_id = base_id
+            idx = 2
+            while ins_id in existing_ids:
+                ins_id = f"{base_id}_{idx}"
+                idx += 1
+
+            ins_node = AlgorithmicNode(
+                node_id=ins_id,
+                name="Group-Conditional Normalization",
+                description=prim.description or prim.name,
+                concept_type=prim.category,
+                status=NodeStatus.ATOMIC,
+                matched_primitive=prim.name,
+                inputs=[inp.model_copy(deep=True) for inp in prim.inputs],
+                outputs=[outp.model_copy(deep=True) for outp in prim.outputs],
+                type_signature=format_canonical_type_signature(prim.inputs, prim.outputs),
+            )
+            new_edges: list[DependencyEdge] = []
+            spliced = False
+            for e in mutated.edges:
+                if (
+                    not spliced
+                    and e.source_id == target_edge.source_id
+                    and e.target_id == target_edge.target_id
+                    and e.output_name == target_edge.output_name
+                    and e.input_name == target_edge.input_name
+                ):
+                    spliced = True
+                    new_edges.append(
+                        DependencyEdge(
+                            source_id=e.source_id,
+                            target_id=ins_id,
+                            output_name=e.output_name,
+                            input_name=e.input_name,
+                            source_type=e.source_type,
+                            target_type=e.target_type,
+                        )
+                    )
+                    new_edges.append(
+                        DependencyEdge(
+                            source_id=ins_id,
+                            target_id=e.target_id,
+                            output_name=e.output_name,
+                            input_name=e.input_name,
+                            source_type=e.source_type,
+                            target_type=e.target_type,
+                        )
+                    )
+                else:
+                    new_edges.append(e)
+            if not spliced:
+                return GraphState.failure("Target edge for group normalizer not found")
+            mutated.nodes.append(ins_node)
+            mutated.edges = new_edges
+            return GraphState.success(mutated)
+
+        return [
+            RewriteRule(
+                name="insert_group_conditional_normalizer",
+                lhs=graph,
+                rhs=graph,
+                interface=empty,
+                l_morphism=Morphism(node_map={}, edge_map={}),
+                r_morphism=Morphism(node_map={}, edge_map={}),
+                priority=4,
+                semantic_apply=_apply,
+            )
+        ]
+
+
 class RevisionLadder:
     """Executes Rungs 1 -> 4b in strict cost order against an ``EvaluationFunnel``."""
 
@@ -317,6 +520,7 @@ class RevisionLadder:
         hpo_trials_per_rung: int = 8,
         max_sibling_evals: int = 5,
         improvement_tol: float = 1e-7,
+        min_rung1_rel_gain: float = 0.0025,
     ) -> None:
         self.funnel = funnel
         self.catalog = catalog
@@ -325,12 +529,26 @@ class RevisionLadder:
         if self.manifest_index is None and manifest_sqlite_path is not None and manifest_sqlite_path.is_file():
             self.manifest_index = ManifestFTSIndex(manifest_sqlite_path)
         self.atom_ledger = atom_ledger if atom_ledger is not None else AtomLedger()
-        self.expansion_engine = expansion_engine
+        if catalog is not None:
+            group_rs: ExpansionRuleSet = GroupConditionalNormalizationRuleSet(catalog=catalog)
+            if expansion_engine is not None:
+                existing_rs = list(getattr(expansion_engine, "_rule_sets", []))
+                if not any(getattr(r, "name", "") == group_rs.name for r in existing_rs):
+                    self.expansion_engine: ExpansionEngine | None = ExpansionEngine(
+                        [*existing_rs, group_rs]
+                    )
+                else:
+                    self.expansion_engine = expansion_engine
+            else:
+                self.expansion_engine = ExpansionEngine([group_rs])
+        else:
+            self.expansion_engine = expansion_engine
         self.subdecompose_fn = subdecompose_fn
         self.micro_atom_synthesizer = micro_atom_synthesizer
         self.hpo_trials_per_rung = max(1, int(hpo_trials_per_rung))
         self.max_sibling_evals = max(1, int(max_sibling_evals))
         self.improvement_tol = float(improvement_tol)
+        self.min_rung1_rel_gain = max(0.0, float(min_rung1_rel_gain))
 
         self._benchmark_priors: dict[str, float] = {}
         if manifest_sqlite_path is not None and manifest_sqlite_path.is_file():
@@ -346,6 +564,40 @@ class RevisionLadder:
             return True
         return new_loss < (baseline_loss - self.improvement_tol)
 
+    def _is_substantial_gain(self, new_loss: float, baseline_loss: float) -> bool:
+        """Return True when ``new_loss`` improves over ``baseline_loss`` by at least ``min_rung1_rel_gain``."""
+        if not self._is_better(new_loss, baseline_loss):
+            return False
+        if not math.isfinite(baseline_loss):
+            return True
+        if self.min_rung1_rel_gain <= 0.0:
+            return True
+        rel_gain = (baseline_loss - new_loss) / max(abs(baseline_loss), 1e-9)
+        return rel_gain >= self.min_rung1_rel_gain
+
+    def has_any_tunable_params(self, cdg: CDGExport) -> bool:
+        """Return True if at least one atomic leaf exposes bounded tunable parameters."""
+        for node in cdg.leaf_nodes():
+            wired_in = {e.input_name for e in cdg.edges if e.target_id == node.node_id}
+            fn: Callable[..., Any] | None = None
+            try:
+                fn, _ = resolve_atom_callable(
+                    node.matched_primitive or "",
+                    node=node,
+                    extra_callables=self.funnel.runner.extra_callables,
+                )
+            except Exception:
+                fn = None
+            specs = infer_tunable_specs_for_node(
+                node,
+                catalog=self.catalog,
+                callable_fn=fn,
+                wired_input_names=wired_in,
+            )
+            if specs:
+                return True
+        return False
+
     # ------------------------------------------------------------------
     # Rung 1: Bounded Node-Scoped HPO (0 LLM calls)
     # ------------------------------------------------------------------
@@ -358,6 +610,7 @@ class RevisionLadder:
         baseline_loss: float,
         current_node_params: Mapping[str, Mapping[str, Any]] | None = None,
         match_results: Sequence[MatchResult] | None = None,
+        trial_index: int = 1,
     ) -> LadderStepOutcome:
         t0 = time.perf_counter()
         base_params = {k: dict(v) for k, v in (current_node_params or {}).items()}
@@ -417,7 +670,8 @@ class RevisionLadder:
         trials_run = 0
 
         if optuna is not None:
-            sampler = optuna.samplers.TPESampler(seed=42)
+            hpo_seed = 42 + max(0, int(trial_index) - 1) * 101
+            sampler = optuna.samplers.TPESampler(seed=hpo_seed)
             optuna.logging.set_verbosity(optuna.logging.WARNING)
             study = optuna.create_study(direction="minimize", sampler=sampler)
             existing_node_p = base_params.get(bottleneck_node_id, {})
@@ -744,7 +998,23 @@ class RevisionLadder:
         )
         exp_ctx: ExpansionContext = build_expansion_context(state_stub)
 
-        # Consult delta planner for structured coverage provenance
+        exp_res = self.expansion_engine.expand(cdg, exp_ctx)
+        if not exp_res.expanded:
+            return LadderStepOutcome(
+                rung="rung3_dpo_expansion",
+                improved=False,
+                accepted_cdg=cdg,
+                accepted_node_params=base_params,
+                accepted_loss=baseline_loss,
+                accepted_report=None,
+                baseline_loss=baseline_loss,
+                bottleneck_node_id=bottleneck_node_id,
+                elapsed_ms=(time.perf_counter() - t0) * 1000.0,
+                rationale="No DPO expansion rules triggered on current intermediates",
+                delta_plan=None,
+            )
+
+        # Consult delta planner for structured coverage provenance when expansion triggers
         delta_plan: DeltaPlan | None = None
         try:
             leaves = cdg.leaf_nodes()
@@ -760,22 +1030,6 @@ class RevisionLadder:
             delta_plan = plan_expansion_delta(d_query, cdg=cdg)
         except Exception:
             delta_plan = None
-
-        exp_res = self.expansion_engine.expand(cdg, exp_ctx)
-        if not exp_res.expanded:
-            return LadderStepOutcome(
-                rung="rung3_dpo_expansion",
-                improved=False,
-                accepted_cdg=cdg,
-                accepted_node_params=base_params,
-                accepted_loss=baseline_loss,
-                accepted_report=None,
-                baseline_loss=baseline_loss,
-                bottleneck_node_id=bottleneck_node_id,
-                elapsed_ms=(time.perf_counter() - t0) * 1000.0,
-                rationale="No DPO expansion rules triggered on current intermediates",
-                delta_plan=delta_plan,
-            )
 
         rep = self.funnel.evaluate_candidate(
             exp_res.cdg,
@@ -801,7 +1055,139 @@ class RevisionLadder:
                 else f"Expanded CDG via {list(exp_res.applied_rules)} did not improve loss (loss={rep.global_loss})"
             ),
             delta_plan=delta_plan,
-            details={"applied_rules": list(exp_res.applied_rules)},
+            details={
+                "applied_rules": list(exp_res.applied_rules),
+                "expanded_cdg": exp_res.cdg,
+            },
+        )
+
+    def run_coupled_dpo_and_sibling_swap(
+        self,
+        expanded_cdg: CDGExport,
+        applied_rules: Sequence[str],
+        candidate_node_ids: Sequence[str],
+        *,
+        baseline_loss: float,
+        current_node_params: Mapping[str, Mapping[str, Any]] | None = None,
+        match_results: Sequence[MatchResult] | None = None,
+        uncertainty_report: CDGUncertaintyReport | None = None,
+        trial_index: int = 1,
+    ) -> LadderStepOutcome:
+        """Evaluate coupled 2-node ``(Rung 3 DPO + Rung 2 Sibling Swap)`` transitions.
+
+        Resolves multi-node Pareto traps under hard constraints or domain shift where
+        upstream conditioning and downstream representation/calibration must change together.
+        """
+        t0 = time.perf_counter()
+        base_params = {k: dict(v) for k, v in (current_node_params or {}).items()}
+        existing_ids = {n.node_id for n in expanded_cdg.nodes}
+        best_outcome: LadderStepOutcome | None = None
+        best_loss = baseline_loss
+        trials_run = 0
+
+        for nid in candidate_node_ids:
+            if nid not in existing_ids:
+                continue
+            r2 = self.run_rung2_sibling_swap(
+                expanded_cdg,
+                nid,
+                baseline_loss=best_loss,
+                current_node_params=base_params,
+                match_results=match_results,
+                uncertainty_report=uncertainty_report,
+                trial_index=trial_index,
+            )
+            trials_run += r2.trials_evaluated
+            if r2.improved and self._is_better(r2.accepted_loss, best_loss):
+                best_loss = r2.accepted_loss
+                best_outcome = r2
+
+        # If 1-node swap on expanded_cdg did not break a multi-stage constraint trap,
+        # evaluate up to 4 coordinated 2-stage compatible sibling pairs with clean node params.
+        if best_outcome is None:
+            valid_nodes = [nid for nid in dict.fromkeys(candidate_node_ids) if nid in existing_ids]
+            sib_map = {
+                nid: self.discover_compatible_siblings(expanded_cdg, nid)[:2]
+                for nid in valid_nodes
+            }
+            sib_nodes = [nid for nid in valid_nodes if sib_map.get(nid)]
+            pairs_checked = 0
+            for idx_a, nid_a in enumerate(sib_nodes):
+                for nid_b in sib_nodes[idx_a + 1 :]:
+                    for sib_a in sib_map[nid_a]:
+                        for sib_b in sib_map[nid_b]:
+                            if pairs_checked >= 4:
+                                break
+                            pairs_checked += 1
+                            pair_cdg = _bind_sibling_onto_node(
+                                expanded_cdg, nid_a, sib_a, catalog=self.catalog
+                            )
+                            pair_cdg = _bind_sibling_onto_node(
+                                pair_cdg, nid_b, sib_b, catalog=self.catalog
+                            )
+                            clean_params = {
+                                k: dict(v)
+                                for k, v in base_params.items()
+                                if k not in {nid_a, nid_b}
+                            }
+                            rep = self.funnel.evaluate_candidate(
+                                pair_cdg,
+                                node_params=clean_params or None,
+                                match_results=match_results,
+                            )
+                            trials_run += 1
+                            if rep.passed and self._is_better(rep.global_loss, best_loss):
+                                best_loss = rep.global_loss
+                                best_outcome = LadderStepOutcome(
+                                    rung="rung3_dpo_expansion",
+                                    improved=True,
+                                    accepted_cdg=pair_cdg,
+                                    accepted_node_params=clean_params,
+                                    accepted_loss=rep.global_loss,
+                                    accepted_report=rep,
+                                    baseline_loss=baseline_loss,
+                                    bottleneck_node_id=f"{nid_a}+{nid_b}",
+                                    trials_evaluated=1,
+                                    details={"selected_sibling": f"{sib_a}, {sib_b}"},
+                                )
+
+        if best_outcome is not None and best_outcome.accepted_report is not None:
+            sel_sib = best_outcome.details.get("selected_sibling", "")
+            return LadderStepOutcome(
+                rung="rung3_dpo_expansion",
+                improved=True,
+                accepted_cdg=best_outcome.accepted_cdg,
+                accepted_node_params=best_outcome.accepted_node_params,
+                accepted_loss=best_outcome.accepted_loss,
+                accepted_report=best_outcome.accepted_report,
+                baseline_loss=baseline_loss,
+                bottleneck_node_id=best_outcome.bottleneck_node_id,
+                trials_evaluated=trials_run,
+                elapsed_ms=(time.perf_counter() - t0) * 1000.0,
+                rationale=(
+                    f"Applied coupled DPO {list(applied_rules)} + sibling swap "
+                    f"'{best_outcome.bottleneck_node_id}' -> '{sel_sib}' "
+                    f"({baseline_loss:.5f} -> {best_outcome.accepted_loss:.5f})"
+                ),
+                details={
+                    "applied_rules": list(applied_rules),
+                    "coupled_sibling_node": best_outcome.bottleneck_node_id,
+                    "selected_sibling": sel_sib,
+                },
+            )
+
+        return LadderStepOutcome(
+            rung="rung3_dpo_expansion",
+            improved=False,
+            accepted_cdg=expanded_cdg,
+            accepted_node_params=base_params,
+            accepted_loss=baseline_loss,
+            accepted_report=None,
+            baseline_loss=baseline_loss,
+            bottleneck_node_id=candidate_node_ids[0] if candidate_node_ids else "",
+            trials_evaluated=trials_run,
+            elapsed_ms=(time.perf_counter() - t0) * 1000.0,
+            rationale="Coupled DPO + sibling swap did not improve loss",
         )
 
     # ------------------------------------------------------------------
@@ -1103,24 +1489,32 @@ class RevisionLadder:
         primary = ordered_bottlenecks[0]
         total_trials = 0
         attempted_rungs: list[str] = []
+        deferred_micro_r1: LadderStepOutcome | None = None
+        structural_target = baseline_loss
 
-        # Rung 1: Bounded Node HPO (skip when baseline crashed/inf unless param violation caused it)
+        # Rung 1: Bounded Node HPO (require >= min_rung1_rel_gain to preempt Rung 2/3;
+        # smaller micro-tweaks are held as a zero-LLM fallback if Rung 2/3 do not beat them)
         if max_rung >= 1:
             for grad in ordered_bottlenecks[:2]:
                 r1 = self.run_rung1_node_hpo(
                     cdg,
                     grad.node_id,
-                    baseline_loss=baseline_loss,
+                    baseline_loss=structural_target,
                     current_node_params=base_params,
                     match_results=match_results,
+                    trial_index=trial_index,
                 )
                 total_trials += r1.trials_evaluated
                 attempted_rungs.append(r1.rung)
                 if r1.improved:
-                    r1.trials_evaluated = total_trials
-                    r1.elapsed_ms = (time.perf_counter() - t_start) * 1000.0
-                    r1.details["attempted_rungs"] = attempted_rungs
-                    return r1
+                    if self._is_substantial_gain(r1.accepted_loss, baseline_loss):
+                        r1.baseline_loss = baseline_loss
+                        r1.trials_evaluated = total_trials
+                        r1.elapsed_ms = (time.perf_counter() - t_start) * 1000.0
+                        r1.details["attempted_rungs"] = attempted_rungs
+                        return r1
+                    deferred_micro_r1 = r1
+                    structural_target = r1.accepted_loss
 
         # Rung 2: Catalog / Manifest Type-Compatible Sibling Swap (0 LLM calls, 0 Hunter calls)
         if max_rung >= 2:
@@ -1128,7 +1522,7 @@ class RevisionLadder:
                 r2 = self.run_rung2_sibling_swap(
                     cdg,
                     grad.node_id,
-                    baseline_loss=baseline_loss,
+                    baseline_loss=structural_target,
                     current_node_params=base_params,
                     match_results=match_results,
                     uncertainty_report=uncertainty_report,
@@ -1137,29 +1531,112 @@ class RevisionLadder:
                 total_trials += r2.trials_evaluated
                 attempted_rungs.append(r2.rung)
                 if r2.improved:
+                    r2.baseline_loss = baseline_loss
                     r2.trials_evaluated = total_trials
                     r2.elapsed_ms = (time.perf_counter() - t_start) * 1000.0
                     r2.details["attempted_rungs"] = attempted_rungs
                     return r2
 
-        # Rung 3: Delta-Planned DPO Structural Expansion (0 LLM calls)
+        # Rung 3: Delta-Planned DPO Structural Expansion (+ Coupled 2-Node DPO + Sibling Swap)
+        expanded_candidate_cdg: CDGExport | None = None
+        expanded_applied_rules: list[str] = []
         if max_rung >= 3:
             r3 = self.run_rung3_dpo_expansion(
                 cdg,
                 primary.node_id,
-                baseline_loss=baseline_loss,
+                baseline_loss=structural_target,
                 baseline_benchmark=baseline_benchmark,
                 bottleneck_reason=primary.bottleneck_reason,
                 current_node_params=base_params,
                 match_results=match_results,
             )
+            maybe_exp = r3.details.pop("expanded_cdg", None)
+            if isinstance(maybe_exp, CDGExport):
+                expanded_candidate_cdg = maybe_exp
+                expanded_applied_rules = list(r3.details.get("applied_rules", []))
             total_trials += r3.trials_evaluated
             attempted_rungs.append(r3.rung)
             if r3.improved:
+                r3.baseline_loss = baseline_loss
                 r3.trials_evaluated = total_trials
                 r3.elapsed_ms = (time.perf_counter() - t_start) * 1000.0
                 r3.details["attempted_rungs"] = attempted_rungs
                 return r3
+
+            # Coupled 2-node lookahead: if DPO expanded the topology without standalone gain,
+            # evaluate compatible Rung 2 sibling swaps jointly on the expanded CDG!
+            if expanded_candidate_cdg is not None and max_rung >= 2:
+                coupled = self.run_coupled_dpo_and_sibling_swap(
+                    expanded_candidate_cdg,
+                    expanded_applied_rules,
+                    [g.node_id for g in ordered_bottlenecks],
+                    baseline_loss=structural_target,
+                    current_node_params=base_params,
+                    match_results=match_results,
+                    uncertainty_report=uncertainty_report,
+                    trial_index=trial_index,
+                )
+                total_trials += coupled.trials_evaluated
+                if coupled.trials_evaluated > 0:
+                    attempted_rungs.append("rung3_coupled_dpo_swap")
+                if coupled.improved:
+                    coupled.baseline_loss = baseline_loss
+                    coupled.trials_evaluated = total_trials
+                    coupled.elapsed_ms = (time.perf_counter() - t_start) * 1000.0
+                    coupled.details["attempted_rungs"] = attempted_rungs
+                    return coupled
+
+        # Extended deterministic sweep over secondary CDG leaves (ranks 2..N-1)
+        # before escalating to LLM Rung 4a/4b on multi-stage competition graphs.
+        if len(ordered_bottlenecks) > 2:
+            if max_rung >= 2:
+                for grad in ordered_bottlenecks[2:]:
+                    r2_ext = self.run_rung2_sibling_swap(
+                        cdg,
+                        grad.node_id,
+                        baseline_loss=structural_target,
+                        current_node_params=base_params,
+                        match_results=match_results,
+                        uncertainty_report=uncertainty_report,
+                        trial_index=trial_index,
+                    )
+                    total_trials += r2_ext.trials_evaluated
+                    attempted_rungs.append(r2_ext.rung)
+                    if r2_ext.improved:
+                        r2_ext.baseline_loss = baseline_loss
+                        r2_ext.trials_evaluated = total_trials
+                        r2_ext.elapsed_ms = (time.perf_counter() - t_start) * 1000.0
+                        r2_ext.details["attempted_rungs"] = attempted_rungs
+                        return r2_ext
+            if max_rung >= 1:
+                for grad in ordered_bottlenecks[2:]:
+                    r1_ext = self.run_rung1_node_hpo(
+                        cdg,
+                        grad.node_id,
+                        baseline_loss=structural_target,
+                        current_node_params=base_params,
+                        match_results=match_results,
+                        trial_index=trial_index,
+                    )
+                    total_trials += r1_ext.trials_evaluated
+                    attempted_rungs.append(r1_ext.rung)
+                    if r1_ext.improved:
+                        if self._is_substantial_gain(r1_ext.accepted_loss, baseline_loss):
+                            r1_ext.baseline_loss = baseline_loss
+                            r1_ext.trials_evaluated = total_trials
+                            r1_ext.elapsed_ms = (time.perf_counter() - t_start) * 1000.0
+                            r1_ext.details["attempted_rungs"] = attempted_rungs
+                            return r1_ext
+                        deferred_micro_r1 = r1_ext
+                        structural_target = r1_ext.accepted_loss
+
+        # Accept deferred micro Rung 1 gain when no structural Rung 2/3 move beat it
+        if deferred_micro_r1 is not None:
+            deferred_micro_r1.baseline_loss = baseline_loss
+            deferred_micro_r1.trials_evaluated = total_trials
+            deferred_micro_r1.elapsed_ms = (time.perf_counter() - t_start) * 1000.0
+            deferred_micro_r1.details["attempted_rungs"] = attempted_rungs
+            return deferred_micro_r1
 
         # Mine Phase 3 uncertainty gap specs if available for Rung 4a / 4b guidance
         gaps_by_node: dict[str, UncertaintyGapSpec] = {}

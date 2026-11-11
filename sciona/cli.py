@@ -482,8 +482,14 @@ def main() -> None:
     proto_parser.add_argument(
         "--max-iterations",
         type=int,
-        default=6,
-        help="Maximum diagnose-revise iterations (default: 6)",
+        default=10,
+        help="Maximum diagnose-revise iterations (default: 10)",
+    )
+    proto_parser.add_argument(
+        "--exhausted-patience",
+        type=int,
+        default=2,
+        help="Consecutive non-improving deterministic passes before stopping/escalating (default: 2)",
     )
     proto_parser.add_argument(
         "--budget",
