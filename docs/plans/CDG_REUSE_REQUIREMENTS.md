@@ -3151,3 +3151,15 @@ changed callables are still uncommitted in the provider repository. Their new
 immutable revisions, transitive-runtime review, transactional gates and fresh
 served execution must precede promotion; existing approval flags alone do not
 qualify the changed bytes. See `osic_relocated_provider_version_plan.json`.
+
+Frozen feature replay and image population routing now also reproduce their
+pre-relocation contract-test outcomes against current provider imports. Four
+float32/float64 cases and twenty-two rejection cases pass. Feature replay
+preserves state, query rows and independently copied output metadata while
+fitting is disabled; malformed state and changed query order reject. Routing
+preserves source query alignment and releases its prepared arrays between
+entities, with invalid populations rejected before callbacks execute. Frozen
+test bodies are unchanged apart from explicit runtime import relocation and
+source-hash path resolution. These checks complement the combined numerical
+run but do not renew approval or establish a global callback memory bound.
+See `osic_relocated_provider_contracts.json`.

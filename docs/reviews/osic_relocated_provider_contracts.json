@@ -1,0 +1,124 @@
+{
+  "passed": true,
+  "approved": false,
+  "catalog_mutations": 0,
+  "synthetic_only": true,
+  "frozen_revision": "5ed15bda",
+  "fixture_sha256": "9d42e5baa3f8d3bf5e53180368af8e32e6fc9b3ecfc7f02ead4b0c83723a97c6",
+  "validator_sha256": "ff5eafdce5c4cbe0826e81c6731a6a8d5cbcb953949c91d2430afbb95bcb1f52",
+  "reports": [
+    {
+      "validator": "validate_osic_feature_replay_provider",
+      "frozen_validator_sha256": "551391e670f9f6620f18bc666ba4354117db0ee531b0fcc75c57c7c31fb872f2",
+      "relocated_imports": [
+        "osic_feature_state",
+        "osic_quantile_features"
+      ],
+      "cases": [
+        {
+          "arithmetic_dtype": "float32",
+          "queries": 5,
+          "exact_fitted_features": true,
+          "exact_observation_mask": true,
+          "exact_observation_values": true,
+          "state_and_queries_unchanged": true,
+          "output_columns_independent": true,
+          "fitting_disabled": true
+        },
+        {
+          "arithmetic_dtype": "float64",
+          "queries": 5,
+          "exact_fitted_features": true,
+          "exact_observation_mask": true,
+          "exact_observation_values": true,
+          "state_and_queries_unchanged": true,
+          "output_columns_independent": true,
+          "fitting_disabled": true
+        }
+      ],
+      "rejected_contracts": [
+        "format",
+        "extra_field",
+        "feature_coordinate",
+        "response_coordinate",
+        "query_scope",
+        "column_order",
+        "missing_observation",
+        "duplicate_observation",
+        "nonfinite_observation",
+        "degenerate_range",
+        "object_dtype",
+        "query_order",
+        "abstract_execution"
+      ],
+      "current_provider_sha256": "2613297fa283e215a3bbf7cde4343680ef57803fe55a51ee495b4397d61bce88",
+      "historical_contract_outcomes_reproduced": true
+    },
+    {
+      "validator": "validate_osic_image_routing",
+      "frozen_validator_sha256": "54df73a628e6a5abe5c640fbc8b7ec714cf2582982e4bf48f80d2ff87d974507",
+      "relocated_imports": [
+        "osic_image_inference"
+      ],
+      "cases": [
+        {
+          "dtype": "float32",
+          "entities": 2,
+          "queries": 4,
+          "exact_source_routing": true,
+          "query_order_preserved": true,
+          "prepared_arrays_released": true,
+          "calls": {
+            "prepare": 2,
+            "select": 2,
+            "predict": 2
+          }
+        },
+        {
+          "dtype": "float64",
+          "entities": 2,
+          "queries": 4,
+          "exact_source_routing": true,
+          "query_order_preserved": true,
+          "prepared_arrays_released": true,
+          "calls": {
+            "prepare": 2,
+            "select": 2,
+            "predict": 2
+          }
+        }
+      ],
+      "rejected_contracts": [
+        "duplicate_entity",
+        "unknown_entity",
+        "duplicate_keys",
+        "fractional_time_dtype",
+        "nonfinite",
+        "missing_planes",
+        "wrong_batch",
+        "boolean_batch",
+        "abstract_execution"
+      ],
+      "current_provider_sha256": "15059498684c4c6f901c0269bd678c8fc93b5c1a9cc17e955d5a296de972b54b",
+      "historical_contract_outcomes_reproduced": true
+    }
+  ],
+  "resolved_software_sha256": {
+    "sciona-atoms-ml/src/sciona/_runtime/ml/osic_feature_state.py": "3e6135e338d914715f244ccffab4407c89ae45a20c7a74b85fab1479451a5843",
+    "sciona-atoms-ml/src/sciona/_runtime/ml/osic_quantile_features.py": "7db2c03ec342165e8a93325dd21a0746575adde4363f325eea6bed8406553d2b",
+    "git:5ed15bda:scripts/validate_osic_quantile_features.py": "9d42e5baa3f8d3bf5e53180368af8e32e6fc9b3ecfc7f02ead4b0c83723a97c6",
+    "git:5ed15bda:scripts/validate_osic_feature_replay_provider.py": "551391e670f9f6620f18bc666ba4354117db0ee531b0fcc75c57c7c31fb872f2",
+    "sciona-atoms-ml/src/sciona/atoms/ml/domain_adapters/osic_feature_replay.py": "2613297fa283e215a3bbf7cde4343680ef57803fe55a51ee495b4397d61bce88",
+    "sciona-atoms-ml/src/sciona/atoms/ml/domain_adapters/osic_image_routing.py": "15059498684c4c6f901c0269bd678c8fc93b5c1a9cc17e955d5a296de972b54b",
+    "sciona-atoms-ml/src/sciona/_runtime/ml/osic_image_routing.py": "d725d917b2e3fdb9d598d39d31096aabe757c8b7b1286e0f396c96b975d18f0f",
+    "sciona-atoms-ml/src/sciona/_runtime/ml/osic_image_inference.py": "d8fb89f59cba25b55beb847a264d99a859f19d7568159f05289288b4186ddab7",
+    "sciona-atoms-ml/src/sciona/_runtime/ml/osic_predictions.py": "6e3dbca24d78302ae74ea525fe8d2f380cda9308dc76a4a3f225c4cd863ebace",
+    "git:5ed15bda:scripts/validate_osic_image_routing.py": "54df73a628e6a5abe5c640fbc8b7ec714cf2582982e4bf48f80d2ff87d974507"
+  },
+  "limitations": [
+    "Frozen feature replay and mapped population routing contracts only; no catalog mutation or approval renewal.",
+    "Routing uses synthetic callbacks and local lifetime checks, not a decoder/model or global memory bound.",
+    "These checks complement combined inference evidence; full training and original workflow remain outstanding.",
+    "Provider/runtime relocation remains uncommitted and requires immutable version anchoring before publication."
+  ]
+}
