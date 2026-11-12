@@ -546,6 +546,24 @@ def main() -> None:
         help="Skip Tier 3 holdout evaluation at the end of the session",
     )
     proto_parser.add_argument(
+        "--llm-guided",
+        action="store_true",
+        default=False,
+        help="Enable bounded-context LLM direction navigation and residual-informed Rung 4b micro-atom synthesis",
+    )
+    proto_parser.add_argument(
+        "--llm-provider",
+        choices=["anthropic", "codex", "llama_cpp", "claude_cli", "codex_cli", "gemini_cli", "claude_shim", "codex_shim", "gemini_shim"],
+        default=None,
+        help="Optional LLM provider override when --llm-guided is enabled",
+    )
+    proto_parser.add_argument(
+        "--llm-model",
+        type=str,
+        default=None,
+        help="Optional LLM model override when --llm-guided is enabled",
+    )
+    proto_parser.add_argument(
         "--json",
         action="store_true",
         default=False,

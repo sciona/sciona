@@ -54,6 +54,10 @@ INGESTER_DECOMPOSE = "ingester_decompose"
 # Orchestrator
 ORCHESTRATOR_REFINE = "orchestrator_refine"
 
+# Prototyping (Neuro-symbolic RevisionLadder navigator & micro-atom synthesizer)
+PROTOTYPING_NAVIGATE = "prototyping_navigate"
+PROTOTYPING_SYNTHESIZE = "prototyping_synthesize"
+
 ALL_PROMPT_KEYS = [
     ARCHITECT_STRATEGY,
     ARCHITECT_DECOMPOSE,
@@ -72,6 +76,8 @@ ALL_PROMPT_KEYS = [
     INGESTER_FIX_MESSAGE_CYCLE,
     INGESTER_DECOMPOSE,
     ORCHESTRATOR_REFINE,
+    PROTOTYPING_NAVIGATE,
+    PROTOTYPING_SYNTHESIZE,
 ]
 
 PROMPT_TIMEOUTS_S: dict[str, float] = {
@@ -86,6 +92,8 @@ PROMPT_TIMEOUTS_S: dict[str, float] = {
     INGESTER_ABSTRACT: 60.0,
     INGESTER_DECOMPOSE: 90.0,
     INGESTER_FIX_TYPE: 60.0,
+    PROTOTYPING_NAVIGATE: 45.0,
+    PROTOTYPING_SYNTHESIZE: 60.0,
 }
 
 

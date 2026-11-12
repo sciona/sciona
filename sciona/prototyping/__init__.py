@@ -68,6 +68,15 @@ from sciona.prototyping.ladder import (
     SubgraphSpliceRequest,
     compile_micro_atom_source,
     infer_tunable_specs_for_node,
+    sync_node_optional_ports_to_callable,
+)
+from sciona.prototyping.llm_navigator import (
+    LLMCallRecord,
+    LLMPrototypingNavigator,
+    LLMUsageLedger,
+    NavigationPlan,
+    TrackedLLMClient,
+    build_compact_telemetry_digest,
 )
 from sciona.prototyping.live_runner import (
     AtomResolutionError,
@@ -106,6 +115,9 @@ __all__ = [
     "GateSLOs",
     "GroupConditionalNormalizationRuleSet",
     "IntermediateCache",
+    "LLMCallRecord",
+    "LLMPrototypingNavigator",
+    "LLMUsageLedger",
     "LadderStepOutcome",
     "LiveCDGRunner",
     "LiveExecutionError",
@@ -114,6 +126,7 @@ __all__ = [
     "MetamorphicRelation",
     "MicroAtomSynthesisSpec",
     "MicroAtomSynthesizerCallable",
+    "NavigationPlan",
     "ProblemHarness",
     "PrototypingBenchmarkGateReport",
     "PrototypingBenchmarkPreset",
@@ -127,8 +140,10 @@ __all__ = [
     "SubgraphSpliceRequest",
     "SyntheticSuiteHarness",
     "TaskBenchmarkResult",
+    "TrackedLLMClient",
     "UniversalCreditAssigner",
     "build_benchmark_session",
+    "build_compact_telemetry_digest",
     "callable_impl_digest",
     "check_output_invariants",
     "check_static_edge_port_types",
@@ -150,4 +165,5 @@ __all__ = [
     "resolve_preset_id",
     "run_prototyping_benchmark_suite",
     "summarize_runtime_value",
+    "sync_node_optional_ports_to_callable",
 ]

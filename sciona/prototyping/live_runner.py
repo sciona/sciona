@@ -579,9 +579,14 @@ class LiveCDGRunner:
             if param.kind in (inspect.Parameter.VAR_POSITIONAL, inspect.Parameter.VAR_KEYWORD):
                 continue
             found, val = _claim(param.name)
-            if not found and param.kind in (
-                inspect.Parameter.POSITIONAL_ONLY,
-                inspect.Parameter.POSITIONAL_OR_KEYWORD,
+            if (
+                not found
+                and param.default is inspect.Parameter.empty
+                and param.kind
+                in (
+                    inspect.Parameter.POSITIONAL_ONLY,
+                    inspect.Parameter.POSITIONAL_OR_KEYWORD,
+                )
             ):
                 # Positional fallback along declared node.inputs order when CDG port
                 # names differ from underlying library parameter names.

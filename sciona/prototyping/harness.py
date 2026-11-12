@@ -254,19 +254,20 @@ def _values_close(a: Any, b: Any, *, atol: float = 1e-4, rtol: float = 1e-4) -> 
 
 def check_output_invariants(
     outputs: Mapping[str, Any],
-    expected_specs: Sequence[IOSpec],
+    expected_specs: Sequence[IOSpec] | None,
     *,
     allow_nonfinite: bool = False,
 ) -> list[str]:
     """Validate finiteness, non-emptiness, and ``PortTypeSpec`` compatibility on outputs."""
     violations: list[str] = []
-    if not outputs and expected_specs:
+    specs = list(expected_specs) if expected_specs else []
+    if not outputs and specs:
         violations.append("CDG produced empty outputs dict")
         return violations
 
-    for spec in expected_specs:
+    for spec in specs:
         if spec.name not in outputs:
-            if len(expected_specs) == 1 and outputs:
+            if len(specs) == 1 and outputs:
                 val = _pick_output_value(outputs)
             elif spec.required:
                 violations.append(f"Missing required output port '{spec.name}'")

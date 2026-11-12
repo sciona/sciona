@@ -220,6 +220,12 @@ class AgeomConfig(BaseSettings):
     orchestrator_refine_llm_model: str = "qwen3:14b"  # medium: predicate splitting
     orchestrator_hunter_concurrency: int = 4
 
+    # Prototyping per-prompt (LLM-steered RevisionLadder navigation & leaf synthesis)
+    prototyping_navigate_llm_provider: str = ""
+    prototyping_navigate_llm_model: str = ""
+    prototyping_synthesize_llm_provider: str = ""
+    prototyping_synthesize_llm_model: str = ""
+
     # Python target
     python_path: str = "python"
     python_mypy_path: str = "mypy"

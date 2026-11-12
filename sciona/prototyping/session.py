@@ -13,7 +13,11 @@ import time
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from sciona.hunter.llm import LLMClient
+    from sciona.prototyping.llm_navigator import LLMPrototypingNavigator
 
 from sciona.architect.catalog import PrimitiveCatalog
 from sciona.architect.compiled_catalog import ManifestFTSIndex
@@ -58,6 +62,8 @@ class PrototypingStepRecord:
     rationale: str
     gradients: list[NodeGradient] = field(default_factory=list)
     synthesized_atom_fqn: str = ""
+    llm_calls: int = 0
+    llm_tokens: int = 0
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -73,6 +79,8 @@ class PrototypingStepRecord:
             "cache_hit_rate": round(self.cache_hit_rate, 4),
             "rationale": self.rationale,
             "synthesized_atom_fqn": self.synthesized_atom_fqn,
+            "llm_calls": self.llm_calls,
+            "llm_tokens": self.llm_tokens,
             "gradients": [
                 {
                     "node_id": g.node_id,
@@ -101,6 +109,7 @@ class PrototypingSessionSummary:
     history: list[PrototypingStepRecord]
     cache_stats: dict[str, Any]
     synthesized_micro_atoms: dict[str, str]
+    llm_usage: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -125,6 +134,7 @@ class PrototypingSessionSummary:
             "history": [h.to_dict() for h in self.history],
             "cache_stats": self.cache_stats,
             "synthesized_micro_atom_count": len(self.synthesized_micro_atoms),
+            "llm_usage": self.llm_usage,
         }
 
 
@@ -139,6 +149,7 @@ class PrototypingConfig:
     max_rung: int = 4
     escalate_rung4_on_exhaustion: bool = True
     min_rung1_rel_gain: float = 0.0025
+    llm_guided: bool = False
 
 
 class PrototypingSession:
@@ -166,6 +177,8 @@ class PrototypingSession:
         hpo_trials_per_rung: int = 8,
         max_sibling_evals: int = 5,
         min_rung1_rel_gain: float = 0.0025,
+        llm_client: LLMClient | None = None,
+        navigator: LLMPrototypingNavigator | None = None,
     ) -> None:
         self.session_id = session_id
         self.goal = goal or str(cdg.metadata.get("goal") or "Prototyping pipeline")
@@ -201,6 +214,14 @@ class PrototypingSession:
             min_rung1_rel_gain=min_rung1_rel_gain,
         )
 
+        self.navigator: LLMPrototypingNavigator | None = navigator
+        if self.navigator is None and llm_client is not None:
+            from sciona.prototyping.llm_navigator import LLMPrototypingNavigator
+
+            self.navigator = LLMPrototypingNavigator(llm_client)
+        if self.navigator is not None and self.ladder.micro_atom_synthesizer is None:
+            self.ladder.micro_atom_synthesizer = self.navigator.build_micro_atom_synthesizer(self)
+
         self.initial_loss: float = float("inf")
         self.best_loss: float = float("inf")
         self.best_report: FunnelEvaluationReport | None = None
@@ -216,6 +237,7 @@ class PrototypingSession:
         self._active_version_cdg: CDGExport = self.best_cdg.model_copy(deep=True)
         self._active_version_params: dict[str, dict[str, Any]] = dict(self.best_node_params)
         self._initialized = False
+        self._navigation_initialized = False
 
     def _materialize_version_graph(
         self,
@@ -270,6 +292,15 @@ class PrototypingSession:
         self.initial_loss = rep.global_loss
         self.best_loss = rep.global_loss
         self.best_report = rep
+        if rep.passed and math.isfinite(rep.global_loss):
+            self._accepted_snapshots = [
+                (
+                    self.best_cdg.model_copy(deep=True),
+                    {k: dict(v) for k, v in self.best_node_params.items()},
+                    float(self.best_loss),
+                    rep,
+                )
+            ]
         self.last_gradients = self.credit_assigner.compute_gradients(
             self.best_cdg,
             rep.benchmark,
@@ -333,6 +364,11 @@ class PrototypingSession:
 
         iter_idx = len(self.history)
         loss_before = self.best_loss
+        calls_before, tokens_before, _ = (
+            self.navigator.usage_ledger.snapshot_counts()
+            if self.navigator is not None
+            else (0, 0, 0.0)
+        )
 
         # Refresh gradients on current best state
         self.last_gradients = self.credit_assigner.compute_gradients(
@@ -345,6 +381,26 @@ class PrototypingSession:
             node_params=self.best_node_params or None,
             match_results=self.match_results,
         )
+
+        if self.navigator is not None:
+            if not self._navigation_initialized:
+                await self.navigator.propose_direction(self)
+                self._navigation_initialized = True
+            elif (
+                max_rung >= 4
+                and self.navigator.repropose_on_exhaustion
+                and not self.navigator._exhaustion_reproposed
+                and self.navigator._synthesis_calls_used == 0
+                and (
+                    self.navigator.last_plan is None
+                    or not self.navigator.last_plan.synthesis_targets
+                )
+            ):
+                await self.navigator.propose_direction(
+                    self, post_deterministic_exhaustion=True
+                )
+            elif self.navigator.last_plan is not None:
+                self.navigator.apply_plan_to_session(self, self.navigator.last_plan)
 
         outcome = await self.ladder.climb(
             self.best_cdg,
@@ -381,6 +437,11 @@ class PrototypingSession:
 
         top_g = self.last_gradients[0] if self.last_gradients else None
         cstats = self.runner.cache.stats()
+        calls_after, tokens_after, _ = (
+            self.navigator.usage_ledger.snapshot_counts()
+            if self.navigator is not None
+            else (0, 0, 0.0)
+        )
         rec = PrototypingStepRecord(
             iteration=iter_idx,
             rung=outcome.rung,
@@ -395,6 +456,8 @@ class PrototypingSession:
             rationale=outcome.rationale,
             gradients=list(self.last_gradients),
             synthesized_atom_fqn=outcome.synthesized_atom_fqn,
+            llm_calls=max(0, calls_after - calls_before),
+            llm_tokens=max(0, tokens_after - tokens_before),
         )
         self.history.append(rec)
 
@@ -542,6 +605,11 @@ class PrototypingSession:
                         break
 
         total_trials = sum(r.trials_evaluated for r in self.history)
+        llm_usage_dict = (
+            self.navigator.usage_ledger.to_dict()
+            if self.navigator is not None
+            else {"call_count": 0, "total_billed_tokens": 0, "total_fresh_tokens": 0, "calls": []}
+        )
         return PrototypingSessionSummary(
             session_id=self.session_id,
             goal=self.goal,
@@ -556,6 +624,7 @@ class PrototypingSession:
             history=list(self.history),
             cache_stats=self.runner.cache.stats(),
             synthesized_micro_atoms=dict(self.synthesized_micro_atoms),
+            llm_usage=llm_usage_dict,
         )
 
     def to_evolution_trace(self, *, objective: str = "") -> dict[str, Any]:

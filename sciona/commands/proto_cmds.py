@@ -133,6 +133,20 @@ async def _cmd_proto(args: argparse.Namespace) -> None:
             if default_manifest.is_file():
                 manifest_path = default_manifest
 
+        llm_client = None
+        if getattr(args, "llm_guided", False):
+            from sciona.commands.llm_helpers import _create_llm_router
+            from sciona.config import AgeomConfig
+            from sciona.llm_router import PROTOTYPING_NAVIGATE, PROTOTYPING_SYNTHESIZE
+
+            cfg = AgeomConfig()
+            llm_client = _create_llm_router(
+                args,
+                cfg,
+                "prototyping",
+                [PROTOTYPING_NAVIGATE, PROTOTYPING_SYNTHESIZE],
+            )
+
         session = PrototypingSession(
             cdg,
             goal=goal_arg or str(cdg.metadata.get("goal") or "sciona proto"),
@@ -141,6 +155,7 @@ async def _cmd_proto(args: argparse.Namespace) -> None:
             manifest_sqlite_path=manifest_path,
             expansion_engine=ExpansionEngine(default_rule_sets()),
             hpo_trials_per_rung=int(getattr(args, "hpo_trials", 8)),
+            llm_client=llm_client,
         )
 
     summary = await session.run(

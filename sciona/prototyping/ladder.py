@@ -549,6 +549,9 @@ class RevisionLadder:
         self.max_sibling_evals = max(1, int(max_sibling_evals))
         self.improvement_tol = float(improvement_tol)
         self.min_rung1_rel_gain = max(0.0, float(min_rung1_rel_gain))
+        self.llm_preferred_siblings: dict[str, list[str]] = {}
+        self.llm_param_priors: dict[str, dict[str, Any]] = {}
+        self.llm_synthesis_nodes: list[str] = []
 
         self._benchmark_priors: dict[str, float] = {}
         if manifest_sqlite_path is not None and manifest_sqlite_path.is_file():
@@ -686,6 +689,35 @@ class RevisionLadder:
             if enq:
                 study.enqueue_trial(enq)
 
+            prior_raw = self.llm_param_priors.get(bottleneck_node_id, {})
+            if prior_raw:
+                prior_enq: dict[str, Any] = {}
+                for sp in specs:
+                    pv = prior_raw.get(sp.name, enq.get(sp.name, sp.default))
+                    try:
+                        if sp.kind == "bool":
+                            prior_enq[sp.name] = bool(pv)
+                        elif sp.kind == "categorical":
+                            choices = list(sp.choices or [sp.default])
+                            prior_enq[sp.name] = pv if pv in choices else choices[0]
+                        elif sp.kind == "int" and sp.min_value is not None and sp.max_value is not None:
+                            clamped_i = max(
+                                int(sp.min_value),
+                                min(int(sp.max_value), int(round(float(pv)))),
+                            )
+                            prior_enq[sp.name] = clamped_i
+                        elif sp.kind == "float" and sp.min_value is not None and sp.max_value is not None:
+                            clamped_f = max(
+                                float(sp.min_value),
+                                min(float(sp.max_value), float(pv)),
+                            )
+                            prior_enq[sp.name] = clamped_f
+                    except (TypeError, ValueError):
+                        if sp.name in enq:
+                            prior_enq[sp.name] = enq[sp.name]
+                if prior_enq and prior_enq != enq:
+                    study.enqueue_trial(prior_enq)
+
             for _ in range(self.hpo_trials_per_rung):
                 trial = study.ask()
                 sampled: dict[str, Any] = {}
@@ -807,6 +839,11 @@ class RevisionLadder:
             ):
                 _add_cand(decl.name)
 
+        for pref_name in reversed(self.llm_preferred_siblings.get(bottleneck_node_id, [])):
+            if pref_name in candidates:
+                candidates.remove(pref_name)
+                candidates.insert(0, pref_name)
+
         return candidates
 
     def run_rung2_sibling_swap(
@@ -907,6 +944,11 @@ class RevisionLadder:
             if rescued_atom and rescued_atom in ranked:
                 ranked.remove(rescued_atom)
                 ranked.insert(0, rescued_atom)
+
+        for pref_name in reversed(self.llm_preferred_siblings.get(bottleneck_node_id, [])):
+            if pref_name in ranked:
+                ranked.remove(pref_name)
+                ranked.insert(0, pref_name)
 
         best_cdg = cdg
         best_loss = baseline_loss
@@ -1103,53 +1145,72 @@ class RevisionLadder:
                 best_outcome = r2
 
         # If 1-node swap on expanded_cdg did not break a multi-stage constraint trap,
-        # evaluate up to 4 coordinated 2-stage compatible sibling pairs with clean node params.
+        # evaluate coordinated 2-stage compatible sibling pairs (top-1 sibling per node pair first,
+        # excluding primitives already present in expanded_cdg to avoid redundant double stages).
         if best_outcome is None:
+            already_bound = {
+                str(n.matched_primitive or "").strip()
+                for n in expanded_cdg.nodes
+                if n.matched_primitive
+            }
             valid_nodes = [nid for nid in dict.fromkeys(candidate_node_ids) if nid in existing_ids]
             sib_map = {
-                nid: self.discover_compatible_siblings(expanded_cdg, nid)[:2]
+                nid: [
+                    s
+                    for s in self.discover_compatible_siblings(expanded_cdg, nid)
+                    if s not in already_bound
+                ][:2]
                 for nid in valid_nodes
             }
             sib_nodes = [nid for nid in valid_nodes if sib_map.get(nid)]
-            pairs_checked = 0
+            ordered_pair_specs: list[tuple[str, str, str, str]] = []
+            # Pass 1: top-1 preferred sibling across every node pair
             for idx_a, nid_a in enumerate(sib_nodes):
                 for nid_b in sib_nodes[idx_a + 1 :]:
-                    for sib_a in sib_map[nid_a]:
-                        for sib_b in sib_map[nid_b]:
-                            if pairs_checked >= 4:
-                                break
-                            pairs_checked += 1
-                            pair_cdg = _bind_sibling_onto_node(
-                                expanded_cdg, nid_a, sib_a, catalog=self.catalog
-                            )
-                            pair_cdg = _bind_sibling_onto_node(
-                                pair_cdg, nid_b, sib_b, catalog=self.catalog
-                            )
-                            clean_params = {
-                                k: dict(v)
-                                for k, v in base_params.items()
-                                if k not in {nid_a, nid_b}
-                            }
-                            rep = self.funnel.evaluate_candidate(
-                                pair_cdg,
-                                node_params=clean_params or None,
-                                match_results=match_results,
-                            )
-                            trials_run += 1
-                            if rep.passed and self._is_better(rep.global_loss, best_loss):
-                                best_loss = rep.global_loss
-                                best_outcome = LadderStepOutcome(
-                                    rung="rung3_dpo_expansion",
-                                    improved=True,
-                                    accepted_cdg=pair_cdg,
-                                    accepted_node_params=clean_params,
-                                    accepted_loss=rep.global_loss,
-                                    accepted_report=rep,
-                                    baseline_loss=baseline_loss,
-                                    bottleneck_node_id=f"{nid_a}+{nid_b}",
-                                    trials_evaluated=1,
-                                    details={"selected_sibling": f"{sib_a}, {sib_b}"},
-                                )
+                    ordered_pair_specs.append(
+                        (nid_a, nid_b, sib_map[nid_a][0], sib_map[nid_b][0])
+                    )
+            # Pass 2: secondary sibling combinations if budget remains
+            for idx_a, nid_a in enumerate(sib_nodes):
+                for nid_b in sib_nodes[idx_a + 1 :]:
+                    for i_a, sib_a in enumerate(sib_map[nid_a]):
+                        for i_b, sib_b in enumerate(sib_map[nid_b]):
+                            if i_a == 0 and i_b == 0:
+                                continue
+                            ordered_pair_specs.append((nid_a, nid_b, sib_a, sib_b))
+
+            for nid_a, nid_b, sib_a, sib_b in ordered_pair_specs[:6]:
+                pair_cdg = _bind_sibling_onto_node(
+                    expanded_cdg, nid_a, sib_a, catalog=self.catalog
+                )
+                pair_cdg = _bind_sibling_onto_node(
+                    pair_cdg, nid_b, sib_b, catalog=self.catalog
+                )
+                clean_params = {
+                    k: dict(v)
+                    for k, v in base_params.items()
+                    if k not in {nid_a, nid_b}
+                }
+                rep = self.funnel.evaluate_candidate(
+                    pair_cdg,
+                    node_params=clean_params or None,
+                    match_results=match_results,
+                )
+                trials_run += 1
+                if rep.passed and self._is_better(rep.global_loss, best_loss):
+                    best_loss = rep.global_loss
+                    best_outcome = LadderStepOutcome(
+                        rung="rung3_dpo_expansion",
+                        improved=True,
+                        accepted_cdg=pair_cdg,
+                        accepted_node_params=clean_params,
+                        accepted_loss=rep.global_loss,
+                        accepted_report=rep,
+                        baseline_loss=baseline_loss,
+                        bottleneck_node_id=f"{nid_a}+{nid_b}",
+                        trials_evaluated=1,
+                        details={"selected_sibling": f"{sib_a}, {sib_b}"},
+                    )
 
         if best_outcome is not None and best_outcome.accepted_report is not None:
             sel_sib = best_outcome.details.get("selected_sibling", "")
@@ -1408,6 +1469,17 @@ class RevisionLadder:
         fqn = f"sciona.synthesized.{fn_name}_{uuid.uuid4().hex[:6]}"
         self.funnel.runner.extra_callables[fqn] = fn_callable
         mutated_cdg = _bind_sibling_onto_node(cdg, bottleneck_node_id, fqn, catalog=None)
+        wired_in = {
+            e.input_name
+            for e in mutated_cdg.edges
+            if e.target_id == bottleneck_node_id and e.edge_kind != EdgeKind.CALLABLE_INJECTION
+        }
+        for idx, n_mut in enumerate(mutated_cdg.nodes):
+            if n_mut.node_id == bottleneck_node_id:
+                mutated_cdg.nodes[idx] = sync_node_optional_ports_to_callable(
+                    n_mut, fn_callable, wired_in
+                )
+                break
         cand_params = {k: dict(v) for k, v in base_params.items() if k != bottleneck_node_id}
 
         rep = self.funnel.evaluate_candidate(
@@ -1630,14 +1702,6 @@ class RevisionLadder:
                         deferred_micro_r1 = r1_ext
                         structural_target = r1_ext.accepted_loss
 
-        # Accept deferred micro Rung 1 gain when no structural Rung 2/3 move beat it
-        if deferred_micro_r1 is not None:
-            deferred_micro_r1.baseline_loss = baseline_loss
-            deferred_micro_r1.trials_evaluated = total_trials
-            deferred_micro_r1.elapsed_ms = (time.perf_counter() - t_start) * 1000.0
-            deferred_micro_r1.details["attempted_rungs"] = attempted_rungs
-            return deferred_micro_r1
-
         # Mine Phase 3 uncertainty gap specs if available for Rung 4a / 4b guidance
         gaps_by_node: dict[str, UncertaintyGapSpec] = {}
         if uncertainty_report is not None:
@@ -1656,7 +1720,7 @@ class RevisionLadder:
                     grad.node_id,
                     goal=goal,
                     bottleneck_reason=grad.bottleneck_reason,
-                    baseline_loss=baseline_loss,
+                    baseline_loss=structural_target,
                     current_node_params=base_params,
                     match_results=match_results,
                     gap_spec=gaps_by_node.get(grad.node_id),
@@ -1664,6 +1728,7 @@ class RevisionLadder:
                 total_trials += r4a.trials_evaluated
                 attempted_rungs.append(r4a.rung)
                 if r4a.improved:
+                    r4a.baseline_loss = baseline_loss
                     r4a.trials_evaluated = total_trials
                     r4a.elapsed_ms = (time.perf_counter() - t_start) * 1000.0
                     r4a.details["attempted_rungs"] = attempted_rungs
@@ -1671,23 +1736,50 @@ class RevisionLadder:
 
         # Rung 4b: Guided Micro-Atom Synthesis on True Catalog Gaps
         if max_rung >= 4 and self.micro_atom_synthesizer is not None:
+            grad_reason_map = {g.node_id: g.bottleneck_reason for g in ordered_bottlenecks}
+            existing_leaf_ids = {n.node_id for n in leaves}
+            r4b_candidates: list[tuple[str, str]] = []
+            seen_r4b: set[str] = set()
+            for synth_nid in self.llm_synthesis_nodes:
+                if synth_nid in existing_leaf_ids and synth_nid not in seen_r4b:
+                    seen_r4b.add(synth_nid)
+                    r4b_candidates.append(
+                        (
+                            synth_nid,
+                            grad_reason_map.get(synth_nid, "LLM-diagnosed accuracy bottleneck"),
+                        )
+                    )
             for grad in ordered_bottlenecks[:2]:
+                if grad.node_id not in seen_r4b:
+                    seen_r4b.add(grad.node_id)
+                    r4b_candidates.append((grad.node_id, grad.bottleneck_reason))
+
+            for cand_nid, cand_reason in r4b_candidates[:2]:
                 r4b = await self.run_rung4b_micro_atom_synthesis(
                     cdg,
-                    grad.node_id,
-                    failure_reason=grad.bottleneck_reason,
-                    baseline_loss=baseline_loss,
+                    cand_nid,
+                    failure_reason=cand_reason,
+                    baseline_loss=structural_target,
                     current_node_params=base_params,
                     match_results=match_results,
-                    gap_spec=gaps_by_node.get(grad.node_id),
+                    gap_spec=gaps_by_node.get(cand_nid),
                 )
                 total_trials += r4b.trials_evaluated
                 attempted_rungs.append(r4b.rung)
                 if r4b.improved:
+                    r4b.baseline_loss = baseline_loss
                     r4b.trials_evaluated = total_trials
                     r4b.elapsed_ms = (time.perf_counter() - t_start) * 1000.0
                     r4b.details["attempted_rungs"] = attempted_rungs
                     return r4b
+
+        # Accept deferred micro Rung 1 gain when no structural or Rung 4a/4b move beat it
+        if deferred_micro_r1 is not None:
+            deferred_micro_r1.baseline_loss = baseline_loss
+            deferred_micro_r1.trials_evaluated = total_trials
+            deferred_micro_r1.elapsed_ms = (time.perf_counter() - t_start) * 1000.0
+            deferred_micro_r1.details["attempted_rungs"] = attempted_rungs
+            return deferred_micro_r1
 
         return LadderStepOutcome(
             rung="exhausted",
@@ -1744,3 +1836,52 @@ def _bind_sibling_onto_node(
         mutated.nodes[idx] = node.model_copy(update=updates)
         break
     return mutated
+
+
+def sync_node_optional_ports_to_callable(
+    node: AlgorithmicNode,
+    fn: Callable[..., Any],
+    wired_in_names: set[str],
+) -> AlgorithmicNode:
+    """Rebuild optional ``IOSpec`` ports on *node* from *fn*'s Python default parameters."""
+    kept_req = [inp for inp in node.inputs if inp.required or inp.name in wired_in_names]
+    existing_names = {inp.name for inp in kept_req}
+    extra_opt: list[IOSpec] = []
+    try:
+        sig = inspect.signature(fn)
+        for pname, param in sig.parameters.items():
+            if (
+                pname in existing_names
+                or param.kind
+                in (inspect.Parameter.VAR_POSITIONAL, inspect.Parameter.VAR_KEYWORD)
+                or param.default is inspect.Parameter.empty
+            ):
+                continue
+            dv = param.default
+            if isinstance(dv, bool):
+                td = "bool"
+            elif isinstance(dv, int):
+                td = "int"
+            elif isinstance(dv, float):
+                td = "float"
+            else:
+                continue
+            extra_opt.append(
+                IOSpec(
+                    name=pname,
+                    type_desc=td,
+                    required=False,
+                    default_value_repr=repr(dv),
+                    port_type=PortTypeSpec(raw=td, kind="scalar", dtype=td),
+                )
+            )
+    except Exception:
+        pass
+
+    new_inputs = kept_req + extra_opt
+    return node.model_copy(
+        update={
+            "inputs": new_inputs,
+            "type_signature": format_canonical_type_signature(new_inputs, node.outputs),
+        }
+    )
